@@ -1,0 +1,447 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:38.034Z",
+  "units": "mm",
+  "source": {
+    "id": "1753848399069",
+    "slug": "legacy-1753848399069",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1753848399069.json",
+    "savedAt": "2025-07-30T04:06:39.069Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 245,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 2440,
+      "height": 1022,
+      "dpr": 1.409999966621399
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 245,
+      "height_mm": 200,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "SCOTT",
+        "font": {
+          "family": "Adorable",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Merton Gonzales",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.371
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "&apos;Bill&apos;",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.371
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -27
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "\"Up to Sh!t, but thanks for asking\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 8
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Forever Loved",
+        "font": {
+          "family": "Adorable",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 18
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "11. 11. 1940 ~ 16. 03. 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -2
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_143_20",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 52,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_143_20",
+        "path": "/shapes/motifs/1_143_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "00c2764227d1599b03075b956fca9aa271b15ac9b0b885615d25996484ebe9cb",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:38.034Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 262.47,
+        "quantity": 1,
+        "width": 245,
+        "height": 200,
+        "_length": 15,
+        "init_width": 2200,
+        "init_height": 803.0039863586426,
+        "device": "desktop",
+        "dpr": 1.409999966621399,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250716,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 2440x1022"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "TAPSALL",
+        "font": "901.1671053987533px Adorable",
+        "font_size": 25,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "William Raymond",
+        "font": "901.1671053987533px Garamond",
+        "font_size": 25.37142857142857,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": -52,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "&apos;Bill&apos;",
+        "font": "901.1671053987533px Garamond",
+        "font_size": 25.37142857142857,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": -27,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "\"Up to Sh!t, but thanks for asking\"",
+        "font": "901.1671053987533px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": 8,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Forever Loved",
+        "font": "901.1671053987533px Adorable",
+        "font_size": 19,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": 18,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "11. 11. 1940 ~ 16. 03. 2024",
+        "font": "901.1671053987533px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": -2,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1753847995957,
+        "path": "../upload/2025/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1753847995957tapsall_heifer_black_bac.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7268548571099531,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Tapsall Heifer black background.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 64.84827304674172,
+        "width": "206",
+        "height": "292",
+        "itemID": 7
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1753848141137,
+        "path": "../upload/2025/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1753848141137bill_tapsall_pic_plaque_.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8134650211470318,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Bill Tapsall Pic Plaque.png",
+        "price": 0,
+        "quantity": 1,
+        "size": "72.57542725250903",
+        "width": "230",
+        "height": "327",
+        "itemID": 8
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_20",
+        "item": "1_143_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 52,
+        "ratio": 0.06905710491367861,
+        "itemID": 9
+      }
+    ]
+  }
+}

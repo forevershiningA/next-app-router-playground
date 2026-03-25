@@ -1,0 +1,556 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.476Z",
+  "units": "mm",
+  "source": {
+    "id": "1657585775749",
+    "slug": "legacy-1657585775749",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1657585775749.json",
+    "savedAt": "2022-07-12T00:29:35.749Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 810,
+      "height": 1080,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-23",
+        "text": "and receive you unto myself, that where I am, there you may be also”",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": 676
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Hannah Acosta",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -14
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Our Dad ~ Our Grandpa",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 134
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "8 March 1932 ~ 1 November 1996",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 16,
+          "y_px": 76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "”At Home by  your Mum.”",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 28,
+          "y_px": 205
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Very much Loved and Missed.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 20,
+          "y_px": 293
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "“Ones of you.”",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 377
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Elizabeth Moran",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -536,
+          "y_px": 627
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": ".And if I go and prepare a place for you, I will come again,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 638
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-18",
+        "asset": "1_171_12",
+        "position": {
+          "x_px": -414,
+          "y_px": 332
+        },
+        "height_px": 174,
+        "rotation": {
+          "z_deg": -2
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_171_12",
+        "path": "/shapes/motifs/1_171_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "400053721ec4d5a9bcb3748c30d7680c18840a4a56e8550fb186ba1bcfd05554",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.476Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Curved Top",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black-TILE-900-X-900.jpg",
+        "price": 1434.94,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 840,
+        "init_height": 676,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220708,
+        "mode": "2d",
+        "navigator": "MacIntel, Apple Computer, Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15, 810x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black-TILE-900-X-900.jpg",
+        "price": 580,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 840,
+        "init_height": 676,
+        "mode": "2d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1657586507434,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1657586507434779f347aa2d449c88459987c.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": -14,
+        "y": -284,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.002857142857143,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "779F347A-A2D4-49C8-8459-987CD0CECC0A.jpeg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_171_12",
+        "item": "1_171_12",
+        "price": 257.45678,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -414,
+        "y": 332,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -2,
+        "height": 174,
+        "ratio": 0.1851063829787234,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 55,
+        "label": "and receive you unto myself, that where I am, there you may be also”",
+        "font": "37.66285714285714px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 24,
+        "y": 676,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 23
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "Wi Taukamo",
+        "font": "71.55942857142857px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6,
+        "y": -14,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 17,
+        "label": "Our Dad ~ Our Grandpa",
+        "font": "58.377428571428574px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 12,
+        "y": 134,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 24,
+        "label": "8 March 1932 ~ 1 November 1996",
+        "font": "33.89657142857143px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 16,
+        "y": 76,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 18,
+        "label": "”At Home by  your Mum.”",
+        "font": "56.494285714285716px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 28,
+        "y": 205,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 23,
+        "label": "Very much Loved and Missed.",
+        "font": "50.844857142857144px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 20,
+        "y": 293,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 12,
+        "label": "“Ones of you.”",
+        "font": "62.14371428571429px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2,
+        "y": 377,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 8,
+        "label": "John 14:3",
+        "font": "33.89657142857143px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -536,
+        "y": 627,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 47,
+        "label": ".And if I go and prepare a place for you, I will come again,",
+        "font": "39.546px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 12,
+        "y": 638,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 20
+      }
+    ]
+  }
+}

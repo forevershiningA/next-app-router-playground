@@ -1,0 +1,607 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.704Z",
+  "units": "mm",
+  "source": {
+    "id": "1657310549397",
+    "slug": "legacy-1657310549397",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1657310549397.json",
+    "savedAt": "2022-07-08T20:02:29.397Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "TENDER 2916",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": -212
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "PRESENTED BY THE MEMBERS",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 170
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "OF WOODLAND FIRE",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": 197
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "01 NOVEMBER 2022",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 233
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "THIS APPARATUS IS THANKS TO THE WOODLAND TOWNSHIP",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": -157
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "COMMITTEE THROUGH HARD WORK AND DEDICATION",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 13,
+          "y_px": -130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "WILLIAM DEGROFF, MAYOR",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 16,
+          "y_px": 10
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "MARK HERNDON, PUBLIC SAFETY DIRECTOR",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 21,
+          "y_px": 29
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "DERRICK DANIELS, COMMITTEEMAN",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 16,
+          "y_px": 48.094
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "GARFIELD OLIVER",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 21,
+          "y_px": 67
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "SHAWN VISCARDI, FIRE CHIEF",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 16,
+          "y_px": 107
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "MARYALICE BROWN, TWP. CLERK",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 86
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b328ed73a9d51ad9310cdc856a152298e1f4ef098e856c5312d7fb358055ad1b",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.704Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Screws (visible from front)",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 3,
+        "shape": "Bronze Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": 922.3,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 863,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220707,
+        "mode": "2d",
+        "navigator": "Win32, , Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0, 1920x1080"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 10,
+        "label": "TENDER 2916",
+        "font": "66.25393700787401px Franklin Gothic",
+        "font_size": 24,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 12,
+        "y": -212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 21,
+        "label": "PRESENTED BY THE MEMBERS",
+        "font": "27.605807086614178px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 7,
+        "y": 170,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 14,
+        "label": "OF WOODLAND FIRE",
+        "font": "27.605807086614178px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 10,
+        "y": 197,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 14,
+        "label": "01 NOVEMBER 2022",
+        "font": "44.16929133858268px Franklin Gothic",
+        "font_size": 16,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 8,
+        "y": 233,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 42,
+        "label": "THIS APPARATUS IS THANKS TO THE WOODLAND TOWNSHIP",
+        "font": "27.605807086614178px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": -157,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "COMMITTEE THROUGH HARD WORK AND DEDICATION",
+        "font": "27.605807086614178px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 13,
+        "y": -130,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 7
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2022/07/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1657309492379woodlandlogo_cropped.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": 23,
+        "y": -59,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2556093248760572,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "woodlandlogo.png",
+        "price": 180,
+        "quantity": 1,
+        "size": "30 x 40 mm",
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "WILLIAM DEGROFF, MAYOR",
+        "font": "22.08464566929134px Franklin Gothic",
+        "font_size": 8,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 16,
+        "y": 10,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "MARK HERNDON, PUBLIC SAFETY DIRECTOR",
+        "font": "22.08464566929134px Franklin Gothic",
+        "font_size": 8,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 21,
+        "y": 29,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "DERRICK DANIELS, COMMITTEEMAN",
+        "font": "22.08464566929134px Franklin Gothic",
+        "font_size": 8,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 16,
+        "y": 48.09366861979163,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "DONNA MULL, COUNCILWOMAN",
+        "font": "22.08464566929134px Franklin Gothic",
+        "font_size": 8,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 21,
+        "y": 67,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "SHAWN VISCARDI, FIRE CHIEF",
+        "font": "22.08464566929134px Franklin Gothic",
+        "font_size": 8,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 16,
+        "y": 107,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "MARYALICE BROWN, TWP. CLERK",
+        "font": "22.08464566929134px Franklin Gothic",
+        "font_size": 8,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 14,
+        "y": 86,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 11
+      }
+    ]
+  }
+}

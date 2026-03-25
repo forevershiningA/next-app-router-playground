@@ -1,0 +1,114 @@
+<project name="Engine3D" default="dist" basedir=".">
+
+	<description>
+		Engine3D builder
+	</description>
+	
+	<property name="lzma" location="../utils/lzma/lzma.exe" />
+	
+	<property name="project" location="project.xml" />
+	<property name="src" location="src" />
+	<property name="out" location="bin/html5/bin" />
+	<property name="out-js" location="${out}/Engine3D.min.js" />
+	<property name="out-js-obfuscated" location="${out}/Engine3D.obfuscated.js" />
+	<property name="out-js-bin" location="${out}/Engine3D.bin" />
+	<property name="doc-xml" location="${out}/../types.xml" />
+	<property name="doc-html" location="doc" />
+	<property name="dist" location="../distribution" />
+	<property name="dist-engine-js" location="${dist}/Engine3D.js" />
+	<property name="dist-engine-bin" location="${dist}/Engine3D.bin" />
+	<property name="dist-doc" location="${dist}/doc/haxe-reference" />
+	
+	<target name="debug">
+		<antcall target="-compile-to-js">
+			<param name="build-target" value="debug"/>
+		</antcall>
+	</target>
+	
+	<target name="release">
+		<antcall target="-compile-to-js">
+			<param name="build-target" value="release"/>
+		</antcall>
+	</target>
+	
+	<target name="distribution">
+		<antcall target="-compile-to-js">
+			<param name="build-target" value="release"/>
+		</antcall>
+		<antcall target="-obfuscate-js" />
+		<antcall target="-package-to-bin" />
+		<antcall target="-generate-doc" />
+		
+		<copy file="${out-js-obfuscated}" tofile="${dist-engine-js}" />
+		<copy file="${out-js-bin}" tofile="${dist-engine-bin}" />
+		
+		<mkdir dir="${dist}"/>
+		<delete dir="${dist-doc}" quiet="true" />
+		<copydir src="${doc-html}" dest="${dist-doc}"/>
+		
+		<echo>Generated distridution version of Engine3D in directory ${dist}</echo>
+	</target>
+	
+	<target name="-compile-to-js">
+		<exec executable="haxelib">
+			<arg value="run" />
+			<arg value="lime" />
+			<arg value="build" />
+			<arg value="${project}" />
+			<arg value="html5" />
+			<arg value="-${build-target}" />
+			<!--<arg value="-Dfdb" />-->
+			<arg value="-xml" />
+		</exec>
+	</target>
+	
+	<target name="-obfuscate-js">
+		<exec executable="javascript-obfuscator.cmd">
+			<arg value="${out-js}" />
+			<arg value="--compact" />
+			<arg value="true" />
+			<arg value="--identifier-names-generator" />
+			<arg value="mangled" />
+			<arg value="--control-flow-flattening" />
+			<arg value="true" />
+			<arg value="--control-flow-flattening-threshold" />
+			<arg value="0.2" />
+			<arg value="--self-defending" />
+			<arg value="true" />
+			<arg value="--string-array" />
+			<arg value="true" />
+			<arg value="--string-array-rotate" />
+			<arg value="true" />
+			<arg value="--output" />
+			<arg value="${out-js-obfuscated}" />
+		</exec>
+	</target>
+	
+	<target name="-package-to-bin">
+		<delete file="${out-js-obfuscated}.lzma" quiet="true" />
+		<exec executable="${lzma}">
+			<arg value="-z" />
+			<arg value="-9" />
+			<arg value="-e" />
+			<arg value="-k" />
+			<arg value="--format=lzma" />
+			<arg value="${out-js-obfuscated}" />
+		</exec>
+		<move file="${out-js-obfuscated}.lzma" tofile="${out-js-bin}" />
+	</target>
+	
+	<target name="-generate-doc">
+		<delete dir="${doc-html}" quiet="true" />
+		<exec executable="haxelib">
+			<arg value="run" />
+			<arg value="dox" />
+			<arg value="-i" />
+			<arg value="${doc-xml}" />
+			<arg value="-o" />
+			<arg value="${doc-html}" />
+			<arg value="--toplevel-package" />
+			<arg value="pl.pkapusta.engine" />
+		</exec>
+	</target>
+
+</project>

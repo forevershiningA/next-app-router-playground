@@ -1,0 +1,893 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.026Z",
+  "units": "mm",
+  "source": {
+    "id": "1693266720896",
+    "slug": "legacy-1693266720896",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1693266720896.json",
+    "savedAt": "2023-08-28T23:52:00.896Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 762,
+      "height_mm": 1104.8999999999999
+    },
+    "viewportPx": {
+      "width": 1067,
+      "height": 600,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 762,
+      "height_mm": 1104.8999999999999,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "CHRISTINE MICHELLE MCDONALD",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 23,
+          "y_px": -13
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "LOVING DAUGHTER, SISTER AND FRIEND",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 31,
+          "y_px": 203.995
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "DANCE LIKE NO ONE IS WATCHING",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 23,
+          "y_px": 253
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "JANUARY 31, 1992",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -31,
+          "y_px": 300
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "MARTIN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 822,
+          "y_px": 103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "MARCH 3, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 92,
+          "y_px": 301
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "SING LIKE NO ONE IS LISTENING",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 29,
+          "y_px": 229
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "LIVE EACH DAY LIKE IT&apos;S YOUR LAST",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 28,
+          "y_px": 275
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": 55,
+          "y_px": -77
+        },
+        "rotation": {
+          "z_deg": 60
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "=======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 138,
+          "y_px": -34
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "=======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -80
+        },
+        "rotation": {
+          "z_deg": -65
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "=======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -90,
+          "y_px": -33
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "=======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 153,
+          "y_px": 17
+        },
+        "rotation": {
+          "z_deg": -45
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "=======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": -109,
+          "y_px": 17
+        },
+        "rotation": {
+          "z_deg": 45
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "=======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": 129,
+          "y_px": 116
+        },
+        "rotation": {
+          "z_deg": 69
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "=======",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -79,
+          "y_px": 119
+        },
+        "rotation": {
+          "z_deg": -69
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "=========",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -33.504,
+          "y_px": 146.497
+        },
+        "rotation": {
+          "z_deg": -35
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "=========",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 93.497,
+          "y_px": 144.494
+        },
+        "rotation": {
+          "z_deg": 33
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "41f74c7f7b02599344cdebe80a334c6352f1ef33668dd08b2c44b0c44c851e14",
+    "sourceItemCount": 22,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.026Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 5485.79,
+        "quantity": 1,
+        "width": 762,
+        "height": 1104.8999999999999,
+        "_length": 100,
+        "init_width": 827,
+        "init_height": 433,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1067x600"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "CHRISTINE MICHELLE MCDONALD",
+        "font": "12.60908226988868px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 23,
+        "y": -13,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "LOVING DAUGHTER, SISTER AND FRIEND",
+        "font": "16.047922888949227px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 31,
+        "y": 203.9953810623557,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1693265404558,
+        "path": "../upload/2023/08/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1693265404558fb_img_1647491131547_cro.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 142,
+        "y": -165,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.588987294969664,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1647491131547.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "223",
+        "width": "90",
+        "height": "128",
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "DANCE LIKE NO ONE IS WATCHING",
+        "font": "10.889661960358405px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 23,
+        "y": 253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1693265707172,
+        "path": "../upload/2023/08/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1693265707172christine_microphone_3_c.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -125,
+        "y": -166,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6497348635091359,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Christine Microphone (3).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "246",
+        "width": "106",
+        "height": "141",
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "JANUARY 31, 1992",
+        "font": "12.035942166711921px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -31,
+        "y": 300,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1693266026711,
+        "path": "../upload/2023/08/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1693266026711tina_4_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 27,
+        "y": 46,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3961797948226438,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "tina 4.jpg",
+        "price": 450,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "TO",
+        "font": "9.743381754004888px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 822,
+        "y": 103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "MARCH 3, 2023",
+        "font": "13.182222373065438px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 92,
+        "y": 301,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "SING LIKE NO ONE IS LISTENING",
+        "font": "13.182222373065438px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 29,
+        "y": 229,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "LIVE EACH DAY LIKE IT&apos;S YOUR LAST",
+        "font": "13.182222373065438px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 28,
+        "y": 275,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "======",
+        "font": "32.668985881075216px Garamond",
+        "font_size": 57,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 55,
+        "y": -77,
+        "rotation": 60,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "=======",
+        "font": "27.510724952484388px Garamond",
+        "font_size": 48,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 138,
+        "y": -34,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "=======",
+        "font": "28.083865055661146px Garamond",
+        "font_size": 49,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": -80,
+        "rotation": -65,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "=======",
+        "font": "28.657005158837904px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -90,
+        "y": -33,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "=======",
+        "font": "28.657005158837904px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 153,
+        "y": 17,
+        "rotation": -45,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "=======",
+        "font": "29.80328536519142px Garamond",
+        "font_size": 52,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -109,
+        "y": 17,
+        "rotation": 45,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "=======",
+        "font": "29.80328536519142px Garamond",
+        "font_size": 52,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 129,
+        "y": 116,
+        "rotation": 69,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "=======",
+        "font": "28.657005158837904px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -79,
+        "y": 119,
+        "rotation": -69,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "=========",
+        "font": "28.657005158837904px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -33.50423216444983,
+        "y": 146.49653579676675,
+        "rotation": -35,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "=========",
+        "font": "28.657005158837904px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 93.49697702539311,
+        "y": 144.4942263279446,
+        "rotation": 33,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 21
+      }
+    ]
+  }
+}

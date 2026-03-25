@@ -1,0 +1,427 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.279Z",
+  "units": "mm",
+  "source": {
+    "id": "1669096599238",
+    "slug": "legacy-1669096599238",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1669096599238.json",
+    "savedAt": "2022-11-22T05:56:39.238Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 180
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 180,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Cornelia Wolfe",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 5.998,
+          "y_px": -160.402
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "14.10.1936 - 07.10.2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 1.499,
+          "y_px": -104.396
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Your life was a blessing,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -169.443,
+          "y_px": -32.424
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "your memory a treasure...",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 137.954,
+          "y_px": -33.383
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Sadly missed by beloved wife, children,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -5.998,
+          "y_px": 141.028
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "daughter-in-law and grandchildren",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 176.024
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "you  are loved beyond words &",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -5.998,
+          "y_px": 10.09
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "missed  beyond measure....",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 2.999,
+          "y_px": 46.585
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c5b49b5957e87cf4e8fb04f0931d566bcba653d019e80c7ab51346e6d9358dcd",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.279Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 770.72,
+        "quantity": 1,
+        "width": 250,
+        "height": 180,
+        "_length": 10,
+        "init_width": 993,
+        "init_height": 545,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221121,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1280x720"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Stephen Peter Joseph",
+        "font": "54.20025px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 5.997985901309107,
+        "y": -160.40183486238536,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "14.10.1936 - 07.10.2022",
+        "font": "38.259px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 1.499496475327419,
+        "y": -104.39633027522933,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Your life was a blessing,",
+        "font": "31.8825px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -169.4431017119838,
+        "y": -32.423853211009146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "your memory a treasure...",
+        "font": "31.8825px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 137.95367573011072,
+        "y": -33.38348623853204,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Sadly missed by beloved wife, children,",
+        "font": "28.69425px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -5.997985901309107,
+        "y": 141.02752293577987,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "daughter-in-law and grandchildren",
+        "font": "28.69425px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 176.02385321100928,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "you  are loved beyond words &",
+        "font": "28.69425px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -5.997985901309221,
+        "y": 10.08990825688079,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "missed  beyond measure....",
+        "font": "28.69425px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2.9989929506546105,
+        "y": 46.58532110091744,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 14
+      }
+    ]
+  }
+}

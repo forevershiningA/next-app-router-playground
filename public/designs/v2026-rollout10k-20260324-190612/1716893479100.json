@@ -1,0 +1,536 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.772Z",
+  "units": "mm",
+  "source": {
+    "id": "1716893479100",
+    "slug": "legacy-1716893479100",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1716893479100.json",
+    "savedAt": "2024-05-28T10:51:19.100Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1092.2,
+      "height_mm": 533.4000000000001
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1092.2,
+      "height_mm": 533.4000000000001,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "WATTS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 78
+        },
+        "position": {
+          "x_px": -19,
+          "y_px": -37
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "wife, sister and grandmother",
+        "font": {
+          "family": "Garamond",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "She served and kept the faith",
+        "font": {
+          "family": "Adorable",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 66
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "March 23, 1946 - December 2, 2023",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": 103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "God&apos;s Grace & Mercy",
+        "font": {
+          "family": "Adorable",
+          "size_px": 77
+        },
+        "position": {
+          "x_px": 28,
+          "y_px": -93
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Asa Nelson",
+        "font": {
+          "family": "Adorable",
+          "size_px": 85
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 39
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-13",
+        "asset": "flower5_full_flower",
+        "position": {
+          "x_px": 37,
+          "y_px": -37
+        },
+        "height_px": 79,
+        "rotation": {
+          "z_deg": 46
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "flower5_full_flower",
+        "position": {
+          "x_px": -75.767,
+          "y_px": -39
+        },
+        "height_px": 79,
+        "rotation": {
+          "z_deg": -49
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "flower5_full_flower",
+        "path": "/shapes/motifs/flower5_full_flower.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a28fa88e319f2d87dd2b34b5de703aa898c32b1e70de7c88fb40d99cd1b410f2",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.772Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4398,
+        "quantity": 1,
+        "width": 1092.2,
+        "height": 533.4000000000001,
+        "_length": 80,
+        "init_width": 991,
+        "init_height": 499,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1366x768"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "MOM",
+        "font": "34.745422083867425px Garamond",
+        "font_size": 78,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -19,
+        "y": -37,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1716889662183,
+        "path": "../upload/2024/05/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1716889662183monochromemystique_cropp.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 412,
+        "y": 123,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9247627723860099,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "monochrome-mystique.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 519,
+        "width": "229",
+        "height": "231",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1716890592431,
+        "path": "../upload/2024/05/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1716890592431praying_hands_with_rose_.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 410,
+        "y": -140,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8998173411463102,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "praying hands with rose.png",
+        "price": 0,
+        "quantity": 1,
+        "size": "505",
+        "width": "112",
+        "height": "225",
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "wife, sister and grandmother",
+        "font": "21.381798205456874px Garamond",
+        "font_size": 48,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": -12,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "She served and kept the faith",
+        "font": "22.71816059329793px Adorable",
+        "font_size": 51,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 9,
+        "y": 66,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 7
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1716891150886,
+        "path": "../upload/2024/05/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1716891150886screenshot_2024052806141.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -181,
+        "y": 1,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8998173411463102,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20240528-061417_Gallery[1].jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "505",
+        "width": "115",
+        "height": "225",
+        "itemID": 11
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1716893537233,
+        "path": "../upload/2024/05/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1716893537233eternal_faith_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 175,
+        "y": -1,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5879994506500641,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "eternal faith.png",
+        "price": 80,
+        "quantity": 1,
+        "size": 330,
+        "width": "127",
+        "height": "147",
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "March 23, 1946 - December 2, 2023",
+        "font": "22.71816059329793px Great Vibes",
+        "font_size": 51,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 5,
+        "y": 103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "God&apos;s Grace & Mercy",
+        "font": "34.29996795458707px Adorable",
+        "font_size": 77,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 28,
+        "y": -93,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 74,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Sara Scott",
+        "font": "37.86360098882988px Adorable",
+        "font_size": 85,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": 39,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower5_full_flower",
+        "item": "flower5_full_flower",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 37,
+        "y": -37,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 46,
+        "height": 79,
+        "ratio": 0.1,
+        "itemID": 13
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower5_full_flower",
+        "item": "flower5_full_flower",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -75.7672953671489,
+        "y": -39,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -49,
+        "height": 79,
+        "ratio": 0.1,
+        "itemID": 14
+      }
+    ]
+  }
+}

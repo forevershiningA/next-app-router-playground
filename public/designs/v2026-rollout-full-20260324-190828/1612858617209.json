@@ -1,0 +1,191 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.254Z",
+  "units": "mm",
+  "source": {
+    "id": "1612858617209",
+    "slug": "legacy-1612858617209",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1612858617209.json",
+    "savedAt": "2021-02-09T08:16:57.209Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/15.jpg",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 482.6000000000006,
+      "height_mm": 285.75
+    },
+    "viewportPx": {
+      "width": 784,
+      "height": 634,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 482.6000000000006,
+      "height_mm": 285.75,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Asa Stanley",
+        "font": {
+          "family": "Arial",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -180,
+          "y_px": -259
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Lucien Watts",
+        "font": {
+          "family": "Arial",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": -11
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2f26b3d503690a1191bd201766d7104d4f3f14dc10d21c42fc3c23352c0305c2",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.254Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - White - Flat Back",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 1,
+        "shape": "Square",
+        "color": "#ffffff",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/15.jpg",
+        "price": 886.34,
+        "quantity": 1,
+        "width": 482.6000000000006,
+        "height": 285.75,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 634,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Exam Pull",
+        "font": "168.73385826771656px Arial",
+        "font_size": 39,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -180,
+        "y": -259,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Trial Imoney",
+        "font": "168.73385826771656px Arial",
+        "font_size": 39,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 24,
+        "y": -11,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 2
+      }
+    ]
+  }
+}

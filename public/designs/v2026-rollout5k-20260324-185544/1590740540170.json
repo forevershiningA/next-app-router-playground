@@ -1,0 +1,147 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.107Z",
+  "units": "mm",
+  "source": {
+    "id": "1590740540170",
+    "slug": "legacy-1590740540170",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590740540170.json",
+    "savedAt": "2020-05-29T08:22:20.170Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 661,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "test 1",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "df3d89d04491de76ff5b6aca75e9139f022d6600369b1b524a64a53dfae91932",
+    "sourceItemCount": 2,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.107Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1952.72",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 661
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "test 1",
+        "font": "21.4825px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 1
+      }
+    ]
+  }
+}

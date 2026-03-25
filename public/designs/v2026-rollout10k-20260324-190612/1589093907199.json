@@ -1,0 +1,367 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.149Z",
+  "units": "mm",
+  "source": {
+    "id": "1589093907199",
+    "slug": "legacy-1589093907199",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589093907199.json",
+    "savedAt": "2020-05-10T06:58:27.199Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 572,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-28",
+        "text": "Erma Evans",
+        "font": {
+          "family": "French Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 53.426,
+          "y_px": -87.942
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "Elizabeth White",
+        "font": {
+          "family": "French Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 58.294,
+          "y_px": -48.468
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "18/02/1981 - 27/08/2017",
+        "font": {
+          "family": "French Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 55.298,
+          "y_px": -12.991
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "Niece, Cousin & Friend",
+        "font": {
+          "family": "French Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 52.302,
+          "y_px": 52.465
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "Beloved Daughter, Sister, Aunty,",
+        "font": {
+          "family": "French Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 49.307,
+          "y_px": 19.487
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-33",
+        "text": "&apos;Shine Bright Like A Diamond'",
+        "font": {
+          "family": "French Script",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -2.621,
+          "y_px": 94.688
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "89619cbb0e1da0bd17008743fe66378420f4323d3ad70021aaec95349ccd1995",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.149Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "428.77",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 572,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1589092169407img_20170914_152304_343_.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -116.4632568359375,
+        "y": -38.974334716796875,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5236363636363636,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_20170914_152304_343.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 128,
+        "width": "116",
+        "height": "150",
+        "itemID": 34
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "In Memory Of",
+        "font": "35.099999999999994px French Script",
+        "font_size": 30,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 53.425811767578125,
+        "y": -87.942138671875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 28
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Clarissa Cheree Cohen",
+        "font": "35.099999999999994px French Script",
+        "font_size": 30,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 58.29402160644531,
+        "y": -48.4681396484375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 29
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "18/02/1981 - 27/08/2017",
+        "font": "23.4px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 55.29821014404297,
+        "y": -12.991455078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 30
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Niece, Cousin & Friend",
+        "font": "23.4px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 52.30236053466797,
+        "y": 52.4654541015625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 31
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Beloved Daughter, Sister, Aunty,",
+        "font": "23.4px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 49.30652618408203,
+        "y": 19.4871826171875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 32
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "&apos;Shine Bright Like A Diamond'",
+        "font": "31.589999999999996px French Script",
+        "font_size": 27,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2.6213455200195312,
+        "y": 94.68768310546875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 33
+      }
+    ]
+  }
+}

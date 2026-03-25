@@ -1,0 +1,513 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.418Z",
+  "units": "mm",
+  "source": {
+    "id": "1737819036529",
+    "slug": "legacy-1737819036529",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1737819036529.json",
+    "savedAt": "2025-01-25T15:30:36.529Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/02.jpg",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 393.69999999999976,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 800,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 393.69999999999976,
+      "height_mm": 400,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "She was his Princess",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 229.914
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "He was her Rock",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 284.407
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Ellie Garrett",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 335.905
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Grandy",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -9.5,
+          "y_px": -44.533
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "ACOSTA",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -19,
+          "y_px": -248.409
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Oct 9, 1926 - Aug 9. 2011",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -9.5,
+          "y_px": -201.907
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Feb 1, 1931 - May 9, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 7.968
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Lue Walters",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -316.907
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Earl Swanson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -3.5,
+          "y_px": -112.026
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-15",
+        "asset": "cross_002",
+        "position": {
+          "x_px": -3.479,
+          "y_px": 108.894
+        },
+        "height_px": 62,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "14b6e5304411eef9043c172ba16a9cf9b4b20c24d278ec5aaec27e4eccbd8f1f",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.419Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 2",
+        "shape_url": "shapes/photos/border2.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#48280f",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/02.jpg",
+        "name": "Bronze Plaque - Brown - Lugs with Studs",
+        "price": 1732.61,
+        "quantity": 1,
+        "width": 393.69999999999976,
+        "height": 400,
+        "_length": 0,
+        "init_width": 1040,
+        "init_height": 567,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1280x800"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "She was his Princess",
+        "font": "43.53496875px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6,
+        "y": 229.91358024691363,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "He was her Rock",
+        "font": "43.53496875px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7,
+        "y": 284.4074074074074,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Together Forever",
+        "font": "43.53496875px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 335.9047619047618,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Grandy",
+        "font": "51.82734375px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -9.5,
+        "y": -44.53262786596116,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "GP",
+        "font": "53.900437499999995px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -19,
+        "y": -248.4091710758377,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Oct 9, 1926 - Aug 9. 2011",
+        "font": "41.461875px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -9.5,
+        "y": -201.9065255731922,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Feb 1, 1931 - May 9, 2023",
+        "font": "41.461875px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 7.968253968253919,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": -3.4792394334532446,
+        "y": 108.89417989417996,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 62,
+        "ratio": 0.22302158273381295,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "George Phillips",
+        "font": "74.63137499999999px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14,
+        "y": -316.9065255731922,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Dorothy Phillips",
+        "font": "74.63137499999999px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -3.5,
+        "y": -112.02645502645498,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 8
+      }
+    ]
+  }
+}

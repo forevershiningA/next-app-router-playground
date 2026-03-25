@@ -1,0 +1,375 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.871Z",
+  "units": "mm",
+  "source": {
+    "id": "1624421606090",
+    "slug": "legacy-1624421606090",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1624421606090.json",
+    "savedAt": "2021-06-23T04:13:26.090Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1808,
+      "height": 821,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Gracie Banks",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -19.642,
+          "y_px": -64.042
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "08.05.1977 - 26.08.2020",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -19.913,
+          "y_px": 36.551
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "Hmov thiab tshua koj yuav nco koj mus tag ib txhi me tub.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 2.226,
+          "y_px": 256.935
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "A beloved son, father (to Felicity & Zachary) & brother.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -6.41,
+          "y_px": 105.668
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "You will be forever in our hearts and missed everyday.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -10.536,
+          "y_px": 153.256
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "We will never forgot you, your laughter & smile.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -3.439,
+          "y_px": 205.328
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "898d0b4c0cb86dcfaee478d75e6085fb87dd1b2b3712fb8c4a8b9e6eb29b692f",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.871Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 824.32,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1808,
+        "init_height": 821,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210616,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.106 Safari/537.36"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Lay Ly",
+        "font": "103.3946875px Lucida Calligraphy",
+        "font_size": 31,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -19.641998784698444,
+        "y": -64.04225814162987,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "08.05.1977 - 26.08.2020",
+        "font": "36.6884375px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -19.913082067393816,
+        "y": 36.55069570963349,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "Hmov thiab tshua koj yuav nco koj mus tag ib txhi me tub.",
+        "font": "36.6884375px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2.226333164541302,
+        "y": 256.9345493491504,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 29
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 47,
+        "label": "A beloved son, father (to Felicity & Zachary) & brother.",
+        "font": "36.6884375px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -6.410083367091602,
+        "y": 105.6680140096264,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 26
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "You will be forever in our hearts and missed everyday.",
+        "font": "36.6884375px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -10.536166666666759,
+        "y": 153.25646038982495,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 23
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "We will never forgot you, your laughter & smile.",
+        "font": "36.6884375px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -3.4393332489373734,
+        "y": 205.32794347179322,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 27
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1624422693829,
+        "path": "../upload/2021/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1624422693829young_man_lay_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 318.7499784790325,
+        "y": -51.2375114162125,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6492092457420924,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Young man lay.jpg",
+        "price": 270,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,388 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.002Z",
+  "units": "mm",
+  "source": {
+    "id": "1626417914040",
+    "slug": "legacy-1626417914040",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1626417914040.json",
+    "savedAt": "2021-07-16T06:45:14.040Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 147,
+      "height_mm": 120
+    },
+    "viewportPx": {
+      "width": 827,
+      "height": 593,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 147,
+      "height_mm": 120,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "JACK MILTON WILLIAMS",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 22.491,
+          "y_px": -58.422
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Erma Evans",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -5.998,
+          "y_px": -134.924
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Forever in our Hearts",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 23.99,
+          "y_px": 250.046
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "19.03.1928 - 30.09.2021",
+        "font": {
+          "family": "Arial",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -1.499,
+          "y_px": 5.587
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Adored Grandad & Great Grandad",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": 22.491,
+          "y_px": 169.998
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Cherished Father of Pamela & Shane",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": 17.993,
+          "y_px": 122.025
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Beloved Husband of Eva",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": 13.495,
+          "y_px": 67.035
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "61a3bea3fa26c526098398d6df7e1dd158daf04631431dc97f0ce9c96f6cd11a",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.002Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "border": "Border 9",
+        "shape_url": "shapes/photos/border9.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": 415.19,
+        "quantity": 1,
+        "width": 147,
+        "height": 120,
+        "_length": 1,
+        "init_width": 827,
+        "init_height": 593,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210629,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "JACK MILTON WILLIAMS",
+        "font": "70.7969387755102px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 22.490931076178754,
+        "y": -58.421585160202426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "In Memory Of",
+        "font": "58.99744897959184px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -5.9975816203143495,
+        "y": -134.92411467116352,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever in our Hearts",
+        "font": "64.89719387755102px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 23.990326481257625,
+        "y": 250.0455311973019,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "19.03.1928 - 30.09.2021",
+        "font": "47.19795918367347px Arial",
+        "font_size": 8,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.4993954050786442,
+        "y": 5.586846543001627,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Adored Grandad & Great Grandad",
+        "font": "41.29821428571429px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 22.490931076179095,
+        "y": 169.99831365935916,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Cherished Father of Pamela & Shane",
+        "font": "41.29821428571429px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 17.992744860943162,
+        "y": 122.02529510961244,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Beloved Husband of Eva",
+        "font": "41.29821428571429px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 13.494558645707457,
+        "y": 67.03541315345689,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 6
+      }
+    ]
+  }
+}

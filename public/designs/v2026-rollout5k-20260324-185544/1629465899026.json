@@ -1,0 +1,233 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.890Z",
+  "units": "mm",
+  "source": {
+    "id": "1629465899026",
+    "slug": "legacy-1629465899026",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1629465899026.json",
+    "savedAt": "2021-08-20T13:24:59.026Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/05.jpg",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 342.9000000000001,
+      "height_mm": 209.55
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 858,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 342.9000000000001,
+      "height_mm": 209.55,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "1929 South Shore Drive",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -1.546,
+          "y_px": 104.363
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Delavan Wisconsin 53115",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -1.685,
+          "y_px": 155.931
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "DeLong",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 100
+        },
+        "position": {
+          "x_px": -1.812,
+          "y_px": -45.796
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d802ffeacf50a9f6c1744c971a63c84cf1f2937c86d5be9102d9c7bb25115d49",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.890Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Green - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#1a391a",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/05.jpg",
+        "price": 833.61,
+        "quantity": 1,
+        "width": 342.9000000000001,
+        "height": 209.55,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 858,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210816,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "1929 South Shore Drive",
+        "font": "56.11154855643043px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.54638967369101,
+        "y": 104.36291430831,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Delavan Wisconsin 53115",
+        "font": "56.11154855643043px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.6850822530122969,
+        "y": 155.93078813469128,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "DeLong",
+        "font": "243.96325459317575px Great Vibes",
+        "font_size": 100,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.8121901272934338,
+        "y": -45.7958861860385,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 117,
+        "itemID": 6
+      }
+    ]
+  }
+}

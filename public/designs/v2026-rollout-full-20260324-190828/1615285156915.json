@@ -1,0 +1,492 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.394Z",
+  "units": "mm",
+  "source": {
+    "id": "1615285156915",
+    "slug": "legacy-1615285156915",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1615285156915.json",
+    "savedAt": "2021-03-09T10:19:16.915Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 1360,
+      "height": 606,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 150,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "SIMON FIELDS",
+        "font": {
+          "family": "Arial",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -109.2,
+          "y_px": -135.565
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Love You Wherever You Are",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 107.972
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "O&apos;SULLIVAN",
+        "font": {
+          "family": "Arial",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -115.2,
+          "y_px": -83.978
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "8 APRIL 2019",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -52.8,
+          "y_px": 19.195
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "French Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -94.8,
+          "y_px": -200.348
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Forever Missed by",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -171.6,
+          "y_px": 169.156
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Sonia & His  Sisters & Brothers",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 70.8,
+          "y_px": 221.152
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "10 JAN. 1946 -",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -103.2,
+          "y_px": -31.192
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_171_12",
+        "position": {
+          "x_px": -273.6,
+          "y_px": -23.994
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_171_12",
+        "path": "/shapes/motifs/1_171_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "55a491fe568921585d9117a38ddc93dc2c9a7003a1715930ce2d51630926a6b3",
+    "sourceItemCount": 11,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.394Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Flat Back",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 1,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": 508.48,
+        "quantity": 1,
+        "width": 200,
+        "height": 150,
+        "_length": 1,
+        "init_width": 1360,
+        "init_height": 606,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_171_12",
+        "item": "1_171_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -273.60000000000036,
+        "y": -23.993812580368115,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.0425531914893617,
+        "itemID": 3
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/03/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1615282806418img_0474_2_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 209.99999999999977,
+        "y": -74.38081899914107,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0530000418424605,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_0474 (2).JPG",
+        "price": 232,
+        "quantity": 1,
+        "size": "70 x 90 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "RICHARD PATRICK",
+        "font": "46.08630183130503px Arial",
+        "font_size": 13,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -109.19999999999993,
+        "y": -135.56504107907983,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Love You Wherever You Are",
+        "font": "38.99610154956579px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": 107.9721566116566,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "O&apos;SULLIVAN",
+        "font": "49.63140197217464px Arial",
+        "font_size": 14,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -115.20000000000005,
+        "y": -83.97834403128843,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "8 APRIL 2019",
+        "font": "46.08630183130503px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -52.80000000000018,
+        "y": 19.195050064294435,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "In Loving Memory of",
+        "font": "53.176502113044265px French Script",
+        "font_size": 15,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -94.80000000000007,
+        "y": -200.34833504607377,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Forever Missed by",
+        "font": "35.45100140869617px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -171.60000000000048,
+        "y": 169.15637869159514,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "Sonia & His  Sisters & Brothers",
+        "font": "38.99610154956579px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 70.79999999999961,
+        "y": 221.15173812687112,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "10 JAN. 1946 -",
+        "font": "42.54120169043541px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -103.19999999999993,
+        "y": -31.19195635447852,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 12
+      }
+    ]
+  }
+}

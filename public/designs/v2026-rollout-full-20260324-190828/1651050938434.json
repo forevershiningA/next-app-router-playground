@@ -1,0 +1,335 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.623Z",
+  "units": "mm",
+  "source": {
+    "id": "1651050938434",
+    "slug": "legacy-1651050938434",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1651050938434.json",
+    "savedAt": "2022-04-27T09:15:38.434Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 304.79999999999995
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 304.79999999999995,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Arial",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Danny and  Annie Mary Breen",
+        "font": {
+          "family": "Arial",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -24.072
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "They called Springwood home",
+        "font": {
+          "family": "Arial",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": 24.73
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "for many a year",
+        "font": {
+          "family": "Arial",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 74.64
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "clover_001",
+        "position": {
+          "x_px": 203,
+          "y_px": -90
+        },
+        "height_px": 51,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "clover_001",
+        "path": "/shapes/motifs/clover_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "79653fc85d7d222201c6b25f2c5e2e2ba22dfbdedd80494695e6f092d298dffe",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.623Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Flat Back",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 1,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": 1964.41,
+        "quantity": 1,
+        "width": 560,
+        "height": 304.79999999999995,
+        "_length": 1,
+        "init_width": 1096,
+        "init_height": 517,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220424,
+        "mode": "2d",
+        "navigator": "MacIntel, Google Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36, 1366x768"
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br161-crucifix",
+        "color": "#ffb35a",
+        "x": -201,
+        "y": -90,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.1765513651406508,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br161-crucifix",
+        "price": 99,
+        "quantity": 1,
+        "size": "50.8 x 50.8 mm",
+        "itemID": 9
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "clover_001",
+        "item": "clover_001",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 203,
+        "y": -90,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 51,
+        "ratio": 0.1440677966101695,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "25.203749999999996px Arial",
+        "font_size": 28,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -76,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Danny and  Annie Mary Breen",
+        "font": "31.504687499999992px Arial",
+        "font_size": 35,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": -24.072002410888672,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "They called Springwood home",
+        "font": "25.203749999999996px Arial",
+        "font_size": 28,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 10,
+        "y": 24.729999542236328,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "for many a year",
+        "font": "25.203749999999996px Arial",
+        "font_size": 28,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 7,
+        "y": 74.64000129699707,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 8
+      }
+    ]
+  }
+}

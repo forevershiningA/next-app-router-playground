@@ -1,0 +1,304 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.046Z",
+  "units": "mm",
+  "source": {
+    "id": "1693783580461",
+    "slug": "legacy-1693783580461",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1693783580461.json",
+    "savedAt": "2023-09-03T23:26:20.461Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 704.8499999999999,
+      "height_mm": 577.85
+    },
+    "viewportPx": {
+      "width": 347,
+      "height": 772,
+      "dpr": 2.075000047683716
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 704.8499999999999,
+      "height_mm": 577.85,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 804.8499999999999,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Lucille Thompson",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 69
+        },
+        "position": {
+          "x_px": -34.951,
+          "y_px": -165.649
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1996 -2001",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 73
+        },
+        "position": {
+          "x_px": -82.883,
+          "y_px": -92.546
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "We miss you your in the angels arms now..",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -25.963,
+          "y_px": 220.398
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "57a2416f6ff511c41088ea782243e89e86c9f46b54b0649f44aed38fa9c7ad27",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.046Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2852.21,
+        "quantity": 1,
+        "width": 704.8499999999999,
+        "height": 577.85,
+        "_length": 80,
+        "init_width": 347,
+        "init_height": 582.0060272216797,
+        "device": "mobile",
+        "dpr": 2.075000047683716,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 347x772"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 699,
+        "quantity": 1,
+        "width": 804.8499999999999,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 347,
+        "init_height": 582.0060272216797,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1693783916065,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1693783916065screenshot_2023090318240.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 197.72105128180795,
+        "y": 5.265858269037947,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.212569227105679,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20230903-182405~2.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 418,
+        "width": "125",
+        "height": "354",
+        "itemID": 1
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1693784616199,
+        "path": "../upload/2023/09/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1693784616199screenshot_2023090318243.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -200.71685932567763,
+        "y": 78.99567091389767,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6962119964243133,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20230903-182436~2.png",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "David Morris",
+        "font": "58.446997099821104px Franklin Gothic",
+        "font_size": 69,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -34.95068752513117,
+        "y": -165.64870839310743,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1996 -2001",
+        "font": "61.835228815752764px Franklin Gothic",
+        "font_size": 73,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -82.88307798494822,
+        "y": -92.54586710510274,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "We miss you your in the angels arms now..",
+        "font": "29.64702751440201px Franklin Gothic",
+        "font_size": 35,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -25.963405869371798,
+        "y": 220.39806490463295,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 7
+      }
+    ]
+  }
+}

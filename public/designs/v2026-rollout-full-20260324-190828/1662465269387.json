@@ -1,0 +1,595 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.774Z",
+  "units": "mm",
+  "source": {
+    "id": "1662465269387",
+    "slug": "legacy-1662465269387",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1662465269387.json",
+    "savedAt": "2022-09-06T11:54:29.387Z"
+  },
+  "product": {
+    "id": "102",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 0,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Sherman Blair",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Of",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Scott Bowen",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": 7.28,
+          "y_px": -161.276
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-36",
+        "text": "13.12.1936 - 9.12.2021",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -161.276
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-39",
+        "text": "TE NAMU",
+        "font": {
+          "family": "Adorable",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -161.276
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-42",
+        "text": "Beloved Wife, Mother and Nana",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -161.276
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-17",
+        "asset": "1_154_16",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": -25
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "1_154_16",
+        "position": {
+          "x_px": 164.064,
+          "y_px": -129.832
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 100
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-23",
+        "asset": "1_154_16",
+        "position": {
+          "x_px": 141.267,
+          "y_px": -214.769
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": -78
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-31",
+        "asset": "1_154_16",
+        "position": {
+          "x_px": 74.791,
+          "y_px": -217.198
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": -53
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-34",
+        "asset": "flower5_full_flower",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 95,
+        "rotation": {
+          "z_deg": -11
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_16",
+        "path": "/shapes/motifs/1_154_16.svg"
+      },
+      {
+        "id": "flower5_full_flower",
+        "path": "/shapes/motifs/flower5_full_flower.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ec89cd127d194153ce66765154d2970d3702e652f695e792ffb91c2604e8e039",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.774Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+        "price": 2186.5,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1172,
+        "init_height": 645,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220822,
+        "mode": "3d",
+        "navigator": "MacIntel, , Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:103.0) Gecko/20100101 Firefox/103.0, 1440x900"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+        "price": 1328.6,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "init_width": 1172,
+        "init_height": 645,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "Wonderful Memories",
+        "font": "359.3571428571428px Dobkin",
+        "font_size": 45,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 2,
+        "label": "Of",
+        "font": "359.3571428571428px Dobkin",
+        "font_size": 45,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 13,
+        "label": "Mary Josephine",
+        "font": "359.3571428571428px Chopin Script",
+        "font_size": 55,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 7.280320821830209,
+        "y": -161.27575661854894,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 7
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1662465796935,
+        "path": "../upload/2022/09/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1662465796935keridockallimages2958_cr.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0013047324192834,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "keri-dock-all-images-2958.jpg",
+        "price": 440,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 13
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_16",
+        "item": "1_154_16",
+        "price": 233.11069999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -25,
+        "height": 75,
+        "ratio": 0.08021390374331551,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_16",
+        "item": "1_154_16",
+        "price": 233.11069999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 164.06409883073192,
+        "y": -129.8323879893228,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 100,
+        "height": 75,
+        "ratio": 0.08021390374331551,
+        "itemID": 19
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_16",
+        "item": "1_154_16",
+        "price": 233.11069999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 141.26662990115062,
+        "y": -214.76946424402,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -78,
+        "height": 75,
+        "ratio": 0.08021390374331551,
+        "itemID": 23
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_16",
+        "item": "1_154_16",
+        "price": 233.11069999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 74.79138786222794,
+        "y": -217.19803188834533,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -53,
+        "height": 75,
+        "ratio": 0.08021390374331551,
+        "itemID": 31
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower5_full_flower",
+        "item": "flower5_full_flower",
+        "price": 238.02910000000003,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -11,
+        "height": 95,
+        "ratio": 0.12025316455696203,
+        "itemID": 34
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 20,
+        "label": "13.12.1936 - 9.12.2021",
+        "font": "359.3571428571428px Chopin Script",
+        "font_size": 25,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -161.27575661854894,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 36
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 6,
+        "label": "TE NAMU",
+        "font": "359.3571428571428px Adorable",
+        "font_size": 45,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -161.27575661854894,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 39
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 25,
+        "label": "Beloved Wife, Mother and Nana",
+        "font": "359.3571428571428px Chopin Script",
+        "font_size": 43,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -161.27575661854894,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 42
+      }
+    ]
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:12.964Z",
+  "units": "mm",
+  "source": {
+    "id": "1583279851888",
+    "slug": "legacy-1583279851888",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1583279851888.json",
+    "savedAt": "2020-03-03T23:57:31.888Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 220,
+      "height_mm": 170
+    },
+    "viewportPx": {
+      "width": 1128,
+      "height": 672,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 220,
+      "height_mm": 170,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "25.11.2950 - 19.02.2019",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -129,
+          "y_px": -139
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Loving Husband, Father",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -137,
+          "y_px": -69
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Grandfather and Brother.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -134,
+          "y_px": -30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "May he Rest In Peace",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -136,
+          "y_px": 49
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Never to be forgotten",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -132,
+          "y_px": 92
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "\"Another Thread Woven In The",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -20,
+          "y_px": 182
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Rich Tapestry Of Life\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 228
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Peter Ford O.A.M",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -209
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "cae6d8ff729842a62024f78e2e146f790bd4c484213cc71d5326b8adbcbd706b",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:12.965Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "367.19",
+        "quantity": 1,
+        "width": 220,
+        "height": 170,
+        "_length": 1,
+        "init_width": 1128,
+        "init_height": 672
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1583280945581,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1583280945581photo_for_plaque_head_sh.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 186,
+        "y": -7,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8863636363636361,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "photo for plaque head shot only no beer.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 100,
+        "width": "245 mm",
+        "height": "298 mm",
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "25.11.2950 - 19.02.2019",
+        "font": "32.75999999999999px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -129,
+        "y": -139,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Loving Husband, Father",
+        "font": "32.75999999999999px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -137,
+        "y": -69,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Grandfather and Brother.",
+        "font": "32.75999999999999px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -134,
+        "y": -30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "May he Rest In Peace",
+        "font": "32.75999999999999px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -136,
+        "y": 49,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Never to be forgotten",
+        "font": "32.75999999999999px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -132,
+        "y": 92,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "\"Another Thread Woven In The",
+        "font": "32.75999999999999px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -20,
+        "y": 182,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Rich Tapestry Of Life\"",
+        "font": "32.75999999999999px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2,
+        "y": 228,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Peter Ford O.A.M",
+        "font": "80.41090909090907px Franklin Gothic",
+        "font_size": 27,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1,
+        "y": -209,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      }
+    ]
+  }
+}

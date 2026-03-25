@@ -1,0 +1,350 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.301Z",
+  "units": "mm",
+  "source": {
+    "id": "1591014085348",
+    "slug": "legacy-1591014085348",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1591014085348.json",
+    "savedAt": "2020-06-01T12:21:25.348Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 190,
+      "height_mm": 100
+    },
+    "viewportPx": {
+      "width": 784,
+      "height": 504,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 190,
+      "height_mm": 100,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Freda Lane",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0.635,
+          "y_px": -69.968
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Wife, Mother, Nanna, Friend",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 2.156,
+          "y_px": 38.248
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Always Loved By Those Who Met Her",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 1.104,
+          "y_px": 82.097
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "20/6/1944----29/5/2019",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 6.635,
+          "y_px": -16.498
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_159_25",
+        "position": {
+          "x_px": -198.994,
+          "y_px": 3.631
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_159_25",
+        "position": {
+          "x_px": 201.355,
+          "y_px": 5.135
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_159_25",
+        "path": "/shapes/motifs/1_159_25.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0a0a0de72b14ce2ee8d80f69ea5577d4813e5c1e1592af03817cb6c01ed1da91",
+    "sourceItemCount": 7,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.301Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Screws (visible from front)",
+        "border": "Border 9",
+        "shape_url": "shapes/photos/border9.svg",
+        "fixingSystem": 3,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": "412.12",
+        "quantity": 1,
+        "width": 190,
+        "height": 100,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 504,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_159_25",
+        "item": "1_159_25",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -198.99366724768345,
+        "y": 3.6306262481235763,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06666666666666667,
+        "itemID": 5
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_159_25",
+        "item": "1_159_25",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 201.35540895683835,
+        "y": 5.134886428619836,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06666666666666667,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Margaret Lynda Heslin",
+        "font": "41.38105263157894px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0.6348991394042969,
+        "y": -69.96807521523743,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Wife, Mother, Nanna, Friend",
+        "font": "25.863157894736837px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2.15625,
+        "y": 38.24833968804734,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Always Loved By Those Who Met Her",
+        "font": "25.863157894736837px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 1.1041259765625,
+        "y": 82.09680868217526,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "20/6/1944----29/5/2019",
+        "font": "28.44947368421052px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6.6345062255859375,
+        "y": -16.498019363427716,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 2
+      }
+    ]
+  }
+}

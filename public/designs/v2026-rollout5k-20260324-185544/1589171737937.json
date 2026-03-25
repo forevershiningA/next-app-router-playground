@@ -1,0 +1,358 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.933Z",
+  "units": "mm",
+  "source": {
+    "id": "1589171737937",
+    "slug": "legacy-1589171737937",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589171737937.json",
+    "savedAt": "2020-05-11T04:35:37.937Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 2320,
+      "height": 1198,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-15",
+        "text": "Geldart",
+        "font": {
+          "family": "Adorable",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Luther Bailey",
+        "font": {
+          "family": "Adorable",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 100
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "04/09/1992-26/06/2017",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 185
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "2_090_16",
+        "position": {
+          "x_px": -381,
+          "y_px": 300
+        },
+        "height_px": 48,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_129_12",
+        "position": {
+          "x_px": 451,
+          "y_px": 291
+        },
+        "height_px": 84,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_090_16",
+        "path": "/shapes/motifs/2_090_16.svg"
+      },
+      {
+        "id": "1_129_12",
+        "path": "/shapes/motifs/1_129_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "63bf9616cd13ae0d1aeaf5ee25e0b79f85f1e5a2b2d13a90d6329b66f139fc3d",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.933Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": "1071.66",
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 2320,
+        "init_height": 1198
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_090_16",
+        "item": "2_090_16",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -381,
+        "y": 300,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 48,
+        "ratio": 0.1605351170568562,
+        "itemID": 5
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_129_12",
+        "item": "1_129_12",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 451,
+        "y": 291,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 84,
+        "ratio": 0.14,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "132.1740789473684px Adorable",
+        "font_size": 43,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": -169,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 0,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Geldart",
+        "font": "107.58355263157894px Adorable",
+        "font_size": 35,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Benjamin Thomas",
+        "font": "86.06684210526315px Adorable",
+        "font_size": 28,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 100,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "04/09/1992-26/06/2017",
+        "font": "52.25486842105263px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 185,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "52.25486842105263px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 226,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 0,
+        "itemID": 18
+      }
+    ]
+  }
+}

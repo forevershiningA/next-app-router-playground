@@ -1,0 +1,307 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.727Z",
+  "units": "mm",
+  "source": {
+    "id": "1757865755770",
+    "slug": "legacy-1757865755770",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1757865755770.json",
+    "savedAt": "2025-09-14T16:02:35.770Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 838.1999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 838.1999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "GAMBLE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 77
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": -231.046
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -161.108
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "DAVID A Dear Husband Father and Grandfather",
+        "font": {
+          "family": "Garamond",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": -115.334
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Called Home 4th April 2045",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 12.5,
+          "y_px": -70.374
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Jacob Gonzalez",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": 246.845
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9dbcb69d350a3fb591da27e9686513ca0966ae34d868893f7be6db1d01f3dce2",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.727Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2076.6,
+        "quantity": 1,
+        "width": 838.1999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1296,
+        "init_height": 679,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "GAMBLE",
+        "font": "76.01993110236221px Garamond",
+        "font_size": 77,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2.5,
+        "y": -231.04565537555231,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "45.414504294917684px Great Vibes",
+        "font_size": 46,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -5,
+        "y": -161.10751104565534,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 37,
+        "label": "DAVID A Dear Husband Father and Grandfather",
+        "font": "42.45268879742305px Garamond",
+        "font_size": 43,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2.5,
+        "y": -115.33431516936673,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 22,
+        "label": "Called Home 4th April 2045",
+        "font": "41.46541696492484px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 12.5,
+        "y": -70.37407952871871,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 21,
+        "label": "In Heavenly Love Abiding",
+        "font": "41.46541696492484px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1.25,
+        "y": 246.84536082474233,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.284Z",
+  "units": "mm",
+  "source": {
+    "id": "1669179706820",
+    "slug": "legacy-1669179706820",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1669179706820.json",
+    "savedAt": "2022-11-23T05:01:46.820Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Stainless Steel Plaque",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 150,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In honour of Vincent Stanley Harding",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 3.5,
+          "y_px": -137.173
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Forever 32• South",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 85.901
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "rosellasolid",
+        "position": {
+          "x_px": -290,
+          "y_px": 72
+        },
+        "height_px": 63,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "numbatsolid",
+        "position": {
+          "x_px": 272,
+          "y_px": 10
+        },
+        "height_px": 34,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "rosellasolid",
+        "path": "/shapes/motifs/rosellasolid.svg"
+      },
+      {
+        "id": "numbatsolid",
+        "path": "/shapes/motifs/numbatsolid.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bf4e3a0d0e44512ea66c881ec1bf47e13e9894e785c69271acf485a17304ef12",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.284Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "shape": "Stainless Steel Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque",
+        "price": 256.03,
+        "quantity": 1,
+        "width": 200,
+        "height": 150,
+        "_length": 2,
+        "init_width": 414,
+        "init_height": 656,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.43",
+        "version_date": 20221121,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "In honour of Vincent Stanley Harding",
+        "font": "52.47449999999999px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 3.5,
+        "y": -137.17283950617283,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Forever 32• South",
+        "font": "56.51099999999999px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -12,
+        "y": 85.90123456790127,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "rosellasolid",
+        "item": "rosellasolid",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -290,
+        "y": 72,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 63,
+        "ratio": 0.08045977011494253,
+        "itemID": 7
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "numbatsolid",
+        "item": "numbatsolid",
+        "price": 7.488130000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 272,
+        "y": 10,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 34,
+        "ratio": 0.06692913385826772,
+        "itemID": 8
+      }
+    ]
+  }
+}

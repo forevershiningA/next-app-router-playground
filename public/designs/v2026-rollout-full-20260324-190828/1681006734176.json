@@ -1,0 +1,474 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.158Z",
+  "units": "mm",
+  "source": {
+    "id": "1681006734176",
+    "slug": "legacy-1681006734176",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1681006734176.json",
+    "savedAt": "2023-04-09T02:18:54.176Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 768,
+      "height": 1024,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Keith (Cornelis)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -10.555,
+          "y_px": -94.546
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "I will never leave you nor forsake you - Joshua 1:5",
+        "font": {
+          "family": "Adorable",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -11.167,
+          "y_px": 281.972
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Promoted to Glory",
+        "font": {
+          "family": "Adorable",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 1.861,
+          "y_px": -270.804
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "POWELL",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -186.12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "21.08.1947 - 22.12.2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 23.584,
+          "y_px": 6.237
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "A loving and devoted husband,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 7.445,
+          "y_px": 115.394
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "father and grandfather",
+        "font": {
+          "family": "Adorable",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 3.722,
+          "y_px": 188.912
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_140_23",
+        "position": {
+          "x_px": -359.211,
+          "y_px": -126.562
+        },
+        "height_px": 56,
+        "rotation": {
+          "z_deg": -39
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_141_13",
+        "position": {
+          "x_px": 348,
+          "y_px": -126
+        },
+        "height_px": 45,
+        "rotation": {
+          "z_deg": 37
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_140_23",
+        "path": "/shapes/motifs/1_140_23.svg"
+      },
+      {
+        "id": "1_141_13",
+        "path": "/shapes/motifs/1_141_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "589af53a26b7bc98964678602f132f38893cf604f9f834273660f7de23d3a0f3",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.158Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "price": 906.75,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 10,
+        "init_width": 719,
+        "init_height": 590,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 768x1024"
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_23",
+        "item": "1_140_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -359.21135646687696,
+        "y": -126.5615141955836,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -39,
+        "height": 56,
+        "ratio": 0.109375,
+        "itemID": 4
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_141_13",
+        "item": "1_141_13",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 348,
+        "y": -126,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 37,
+        "height": 45,
+        "ratio": 0.11597938144329897,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Keith (Cornelis)",
+        "font": "76.7px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -10.555205047318623,
+        "y": -94.54574132492115,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "I will never leave you nor forsake you - Joshua 1:5",
+        "font": "46.019999999999996px Adorable",
+        "font_size": 12,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -11.167192429022082,
+        "y": 281.9716088328076,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Promoted to Glory",
+        "font": "61.36px Adorable",
+        "font_size": 16,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1.861198738170347,
+        "y": -270.80441640378547,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "KOOLE",
+        "font": "99.71px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -186.1198738170347,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "21.08.1947 - 22.12.2022",
+        "font": "65.195px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 23.58359621451109,
+        "y": 6.236593059936922,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "A loving and devoted husband,",
+        "font": "61.36px Adorable",
+        "font_size": 16,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 7.444794952681388,
+        "y": 115.39432176656152,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "father and grandfather",
+        "font": "61.36px Adorable",
+        "font_size": 16,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3.722397476340694,
+        "y": 188.91167192429023,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 9
+      }
+    ]
+  }
+}

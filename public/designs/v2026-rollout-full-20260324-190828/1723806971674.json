@@ -1,0 +1,220 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.983Z",
+  "units": "mm",
+  "source": {
+    "id": "1723806971674",
+    "slug": "legacy-1723806971674",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1723806971674.json",
+    "savedAt": "2024-08-16T11:16:11.674Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 44",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 495,
+      "height_mm": 495.29999999999995
+    },
+    "viewportPx": {
+      "width": 1470,
+      "height": 956,
+      "dpr": 1.7999999523162842
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 495,
+      "height_mm": 495.29999999999995,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 595,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "slaayyy",
+        "font": {
+          "family": "Adorable",
+          "size_px": 66
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 212
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_008_30",
+        "position": {
+          "x_px": 6.799,
+          "y_px": 399.799
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_008_30",
+        "path": "/shapes/motifs/1_008_30.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3b66bea98c0e93dcfdb01b367c8d2beaba5615b64536cee2cf8372f1dad45fb9",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.983Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 44",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1795.47,
+        "quantity": 1,
+        "width": 495,
+        "height": 495.29999999999995,
+        "_length": 80,
+        "init_width": 1390,
+        "init_height": 677.0069427490234,
+        "device": "desktop",
+        "dpr": 1.7999999523162842,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1470x956"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 591,
+        "quantity": 1,
+        "width": 595,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1390,
+        "init_height": 677.0069427490234,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "slaayyy",
+        "font": "131.3749574489184px Adorable",
+        "font_size": 66,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 64,
+        "itemID": 1
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_30",
+        "item": "1_008_30",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6.799280417526234,
+        "y": 399.7990997880103,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 180,
+        "height": 40,
+        "ratio": 0.13513513513513514,
+        "itemID": 3
+      }
+    ]
+  }
+}

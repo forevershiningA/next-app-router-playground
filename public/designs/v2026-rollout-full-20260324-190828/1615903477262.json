@@ -1,0 +1,451 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.440Z",
+  "units": "mm",
+  "source": {
+    "id": "1615903477262",
+    "slug": "legacy-1615903477262",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1615903477262.json",
+    "savedAt": "2021-03-16T14:04:37.262Z"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "monument",
+    "slug": "traditional-monument",
+    "category": "full-monument",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Imperial-Red-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Imperial-Red-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1800,
+      "height_mm": 389
+    },
+    "viewportPx": {
+      "width": 1194,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1800,
+      "height_mm": 389,
+      "thickness_mm": 476,
+      "surface": "front",
+      "texture": "/textures/forever/l/Imperial-Red-TILE-900-X-900.webp"
+    },
+    "base": {
+      "width_mm": 1900,
+      "height_mm": 350,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 109.339
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Napoleon Phillips",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 103.111
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Napoleon Phillips",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 116.095
+        },
+        "position": {
+          "x_px": -14.856,
+          "y_px": 162.221
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "ivy(hedera)copy",
+        "position": {
+          "x_px": -157.743,
+          "y_px": 258.642
+        },
+        "height_px": 134,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#799a05",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "ivy(hedera)copy",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 134,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#799a05",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "dove_001",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 290,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "dove_001",
+        "position": {
+          "x_px": 557.219,
+          "y_px": 89.297
+        },
+        "height_px": 658,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "ivy(hedera)copy",
+        "path": "/shapes/motifs/ivy(hedera)copy.svg"
+      },
+      {
+        "id": "dove_001",
+        "path": "/shapes/motifs/dove_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1eeb5d2d2647330427d0339f250bfd919d336c81e01dc521af3a8ec6c97cd7da",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.440Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Imperial-Red-TILE-900-X-900.jpg",
+        "price": 6816.14,
+        "quantity": 1,
+        "width": 1800,
+        "height": 389,
+        "_length": 476,
+        "init_width": 1194,
+        "init_height": 873,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 131,
+        "version_date": 20210314,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": 7236.57,
+        "quantity": 1,
+        "width": 1900,
+        "height": 350,
+        "_length": 100,
+        "init_width": 1194,
+        "init_height": 873,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": 5649.8,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1194,
+        "init_height": 873,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": 3833.08,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1194,
+        "init_height": 873,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "ivy(hedera)copy",
+        "item": "ivy(hedera)copy",
+        "price": 209.10063200000002,
+        "quantity": 1,
+        "color": "#799a05",
+        "colorName": "Paint Fill",
+        "x": -157.7431860948787,
+        "y": 258.6423787184532,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 134,
+        "ratio": 0.15349369988545247,
+        "itemID": 8
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "ivy(hedera)copy",
+        "item": "ivy(hedera)copy",
+        "price": 209.10063200000002,
+        "quantity": 1,
+        "color": "#799a05",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 134,
+        "ratio": 0.15349369988545247,
+        "itemID": 7
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 317.99781,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 290,
+        "ratio": 0.3321878579610538,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 894.4546,
+        "quantity": 1,
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": 557.2194184681678,
+        "y": 89.29675215329496,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 658,
+        "ratio": 0.7537227949599083,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 10,
+        "quantity": 19,
+        "label": "In Loving Memory of",
+        "font": "49.78305142083897px Garamond",
+        "font_size": 109.33883986284907,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 109,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.5,
+        "quantity": 26,
+        "label": "Richard Patrick O’Sullivan",
+        "font": "49.78305142083897px Great Vibes",
+        "font_size": 103.11138015443899,
+        "font_family": "Great Vibes",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 103,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.5,
+        "quantity": 26,
+        "label": "Richard Patrick O’Sullivan",
+        "font": "49.78305142083897px Great Vibes",
+        "font_size": 116.09494218734693,
+        "font_family": "Great Vibes",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -14.856263302286322,
+        "y": 162.22125227599702,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 116,
+        "itemID": 1
+      }
+    ]
+  }
+}

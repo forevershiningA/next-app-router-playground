@@ -1,0 +1,232 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.801Z",
+  "units": "mm",
+  "source": {
+    "id": "1758859000479",
+    "slug": "legacy-1758859000479",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1758859000479.json",
+    "savedAt": "2025-09-26T03:56:40.479Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Triangle",
+    "material": {
+      "name": "src/backgrounds/colors/l/07.jpg",
+      "texture": "/textures/forever/l/07.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 254,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1307,
+      "height": 735,
+      "dpr": 1.2244897959183674
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 254,
+      "height_mm": 203.2,
+      "thickness_mm": 50.8,
+      "surface": "front",
+      "texture": "/textures/forever/l/07.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Gabriel Schultz",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 15.912,
+          "y_px": 88.092
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Lina Payne",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 3.672,
+          "y_px": 204.761
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "07/25/1984-02/30/2060",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 6.12,
+          "y_px": 146.8
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "662e39277916852797cdc0bc63bb5e1297506d83bb967e6acca25831f5a3243d",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.801Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "border": "Border Triangle",
+        "shape_url": "shapes/photos/bordertriangle.svg",
+        "shape": "Triangle",
+        "color": "../upload/2025/09/1758859305476background_38_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/07.jpg",
+        "name": "Stainless Steel Vitreous Enamel Inlaid Urn",
+        "price": 2250.48,
+        "quantity": 1,
+        "width": 254,
+        "height": 203.2,
+        "_length": 50.8,
+        "init_width": 1067,
+        "init_height": 519,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1.2244897959183674,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1307x735"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Patrick B Heard",
+        "font": "48.789169210991474px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 15.911902530459201,
+        "y": 88.09248554913296,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 1
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "It Was Fun While It Lasted",
+        "font": "48.789169210991474px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 3.6719775070290552,
+        "y": 204.76073373939533,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "07/25/1984-02/30/2060",
+        "font": "34.15241844769403px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 6.119962511715016,
+        "y": 146.80033767170397,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 2
+      }
+    ]
+  }
+}

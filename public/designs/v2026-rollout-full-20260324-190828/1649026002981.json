@@ -1,0 +1,487 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.607Z",
+  "units": "mm",
+  "source": {
+    "id": "1649026002981",
+    "slug": "legacy-1649026002981",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1649026002981.json",
+    "savedAt": "2022-04-03T22:46:42.981Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 355.59999999999997,
+      "height_mm": 336.55000000000024
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 355.59999999999997,
+      "height_mm": 336.55000000000024,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In honour of Sir Isaac Brock 1769-1812",
+        "font": {
+          "family": "French Script",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -880
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "At The Battle of Queenston Heights 1812",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -704
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "The bottom of the painting reads brock&apos;s dying words",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 18
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "“Push on York Volunteers!\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 96
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "The Painting above is an interpertation of Brock&apos;s death durign the War of 1812.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": -142
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "In honour of The Battle of Queenston Heights",
+        "font": {
+          "family": "French Script",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -420
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "In honour of Sir Isaac Brock 1769-1812",
+        "font": {
+          "family": "French Script",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -880
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "At The Battle of Queenston Heights 1812",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -704
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "General Brock served as a military commander for Upper Canada.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": -96
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8f69bd95d5f115de303afb4542f6251e92c09b2817c4dbba642ee94c4f85f2e5",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.607Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 1401.53,
+        "quantity": 1,
+        "width": 355.59999999999997,
+        "height": 336.55000000000024,
+        "_length": 1,
+        "init_width": 1098,
+        "init_height": 673,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220402,
+        "mode": "2d",
+        "navigator": "MacIntel, Apple Computer, Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.3 Safari/605.1.15, 1440x900"
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br139l-gum-leaves",
+        "color": "#ffb35a",
+        "x": 2,
+        "y": 392,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8344743535396353,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br139l-gum-leaves",
+        "price": 99,
+        "quantity": 1,
+        "size": "76.19999999999999 x 76.19999999999999 mm",
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "In honour of Sir Isaac Brock 1769-1812",
+        "font": "77.5009842519685px French Script",
+        "font_size": 21,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": -880,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "At The Battle of Queenston Heights 1812",
+        "font": "55.35784589426322px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -704,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "The bottom of the painting reads brock&apos;s dying words",
+        "font": "44.28627671541058px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 14,
+        "y": 18,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "“Push on York Volunteers!\"",
+        "font": "55.35784589426322px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": 96,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 67,
+        "label": "The Painting above is an interpertation of Brock&apos;s death durign the War of 1812.",
+        "font": "36.90523059617548px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": -142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "In honour of The Battle of Queenston Heights",
+        "font": "88.57255343082116px French Script",
+        "font_size": 24,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": -420,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "In honour of Sir Isaac Brock 1769-1812",
+        "font": "77.5009842519685px French Script",
+        "font_size": 21,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": -880,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "At The Battle of Queenston Heights 1812",
+        "font": "55.35784589426322px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -704,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 53,
+        "label": "General Brock served as a military commander for Upper Canada.",
+        "font": "36.90523059617548px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 10,
+        "y": -96,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,335 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.455Z",
+  "units": "mm",
+  "source": {
+    "id": "1706413973216",
+    "slug": "legacy-1706413973216",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1706413973216.json",
+    "savedAt": "2024-01-28T03:52:53.216Z"
+  },
+  "product": {
+    "id": "22",
+    "name": "Laser-etched Black Granite Mini Headstone",
+    "type": "headstone",
+    "slug": "mini-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 780,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 50,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Lilian Spencer",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -16.875,
+          "y_px": -234.482
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Brother to Jessica & Alyshia",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -23.203,
+          "y_px": 121.799
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Half brother to Michelle",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -39.287,
+          "y_px": 183.151
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loved Son of Ken & Natalie",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -28.213,
+          "y_px": 59.319
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Taken to soon forever missed",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -22.939,
+          "y_px": 255.842
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2bc07fe0ba3cd56c7b8816ab6b37278bfb1f360c6188c64d9d03a46c60143884",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.455Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "installationMethod": 2,
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Mini Headstone",
+        "price": 572.87,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 50,
+        "init_width": 360,
+        "init_height": 589,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 360x780"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1706414324298,
+        "path": "../upload/2024/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1706414324298screenshot_2023032219480.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -19.248046875,
+        "y": -99.0234375,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 84,
+        "ratio": 1.0827457627118644,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20230322-194805_Gallery.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 91,
+        "width": "224",
+        "height": "319",
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "William Craig Ezzy",
+        "font": "87.75px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -16.875,
+        "y": -234.482421875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Brother to Jessica & Alyshia",
+        "font": "42.12px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -23.203125,
+        "y": 121.7991174768518,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Half brother to Michelle",
+        "font": "38.61px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -39.287109375,
+        "y": 183.15060763888897,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Loved Son of Ken & Natalie",
+        "font": "56.16px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -28.212890625,
+        "y": 59.31879340277783,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Taken to soon forever missed",
+        "font": "49.14px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -22.939453125,
+        "y": 255.84223090277783,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      }
+    ]
+  }
+}

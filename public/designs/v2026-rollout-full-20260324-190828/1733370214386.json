@@ -1,0 +1,518 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.957Z",
+  "units": "mm",
+  "source": {
+    "id": "1733370214386",
+    "slug": "legacy-1733370214386",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1733370214386.json",
+    "savedAt": "2024-12-05T03:43:34.386Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 820,
+      "height": 1180,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 400,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "CROTHERS",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": -13.311,
+          "y_px": -298.557
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "13 May 1962 to 24 Aug 1962",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -13.311,
+          "y_px": -86.525
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "28 Dec 1934 to 26 Mar 1994",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -0.098,
+          "y_px": 102.885
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "2 Mar 1940 to 18 Oct 2024",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -1.311,
+          "y_px": 293.803
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Nicholas Marquez",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -9.508,
+          "y_px": -163.836
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Clifford Brewer",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -19.016,
+          "y_px": 15.213
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Marguerite Jordan",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0.295,
+          "y_px": 219.279
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "teddy-bear_003",
+        "position": {
+          "x_px": 380.918,
+          "y_px": -131.311
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "2_122_06",
+        "position": {
+          "x_px": -453.41,
+          "y_px": 61.541
+        },
+        "height_px": 97,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "2_103_15",
+        "position": {
+          "x_px": 423.18,
+          "y_px": 253.738
+        },
+        "height_px": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "teddy-bear_003",
+        "path": "/shapes/motifs/teddy-bear_003.svg"
+      },
+      {
+        "id": "2_122_06",
+        "path": "/shapes/motifs/2_122_06.svg"
+      },
+      {
+        "id": "2_103_15",
+        "path": "/shapes/motifs/2_103_15.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "5d32edff736389213e4079c2d409f10142282c967cc05fd76e681c73e42fa794",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.957Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 2",
+        "shape_url": "shapes/photos/border2.svg",
+        "fixingSystem": 1,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Flat Back",
+        "price": 2274.78,
+        "quantity": 1,
+        "width": 560,
+        "height": 400,
+        "_length": 10,
+        "init_width": 940,
+        "init_height": 638,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 820x1180"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_003",
+        "item": "teddy-bear_003",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 380.9180327868853,
+        "y": -131.31147540983602,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 60,
+        "ratio": 0.11214953271028037,
+        "itemID": 8
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_122_06",
+        "item": "2_122_06",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -453.40983606557376,
+        "y": 61.54098360655735,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 97,
+        "ratio": 0.10706401766004416,
+        "itemID": 10
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_103_15",
+        "item": "2_103_15",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 423.1803278688524,
+        "y": 253.7377049180327,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 70,
+        "ratio": 0.1440329218106996,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "CROTHERS",
+        "font": "151.0692857142857px Franklin Gothic",
+        "font_size": 68,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -13.311475409836065,
+        "y": -298.55737704918033,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "13 May 1962 to 24 Aug 1962",
+        "font": "44.43214285714285px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -13.311475409836065,
+        "y": -86.52459016393442,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "28 Dec 1934 to 26 Mar 1994",
+        "font": "55.54017857142857px Franklin Gothic",
+        "font_size": 25,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -0.09836065573767883,
+        "y": 102.88524590163934,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "2 Mar 1940 to 18 Oct 2024",
+        "font": "44.43214285714285px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1.3114754098360208,
+        "y": 293.80327868852464,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Mark Alwyn",
+        "font": "88.8642857142857px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -9.508196721311492,
+        "y": -163.8360655737705,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Lyell Alwyn",
+        "font": "88.8642857142857px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -19.01639344262295,
+        "y": 15.21311475409836,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Margaret Francis",
+        "font": "88.8642857142857px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0.29508196721315016,
+        "y": 219.27868852459017,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 6
+      }
+    ]
+  }
+}

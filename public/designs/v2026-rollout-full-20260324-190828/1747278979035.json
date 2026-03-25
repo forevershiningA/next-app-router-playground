@@ -1,0 +1,434 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.731Z",
+  "units": "mm",
+  "source": {
+    "id": "1747278979035",
+    "slug": "legacy-1747278979035",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1747278979035.json",
+    "savedAt": "2025-05-15T03:16:19.035Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/10.jpg",
+      "texture": "/textures/phoenix/l/10.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 310,
+      "height_mm": 170
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1200,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 310,
+      "height_mm": 170,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/10.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Arial",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -182
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "1929 - 2017 & 1934 - 2025",
+        "font": {
+          "family": "Arial",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": -60
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "CHRIS JANSEN AND JENNY JANSEN",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -119
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "IN GOD&apos;S LOVING EMBRACE",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": 175
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "and their many grandies and great-grandies.",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 108
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "David, Ian and Carolyn",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 66
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Beloved Parents of Ingrid, Christopher,",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 26
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "1_184_13",
+        "position": {
+          "x_px": -399,
+          "y_px": 13
+        },
+        "height_px": 52,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_184_13",
+        "path": "/shapes/motifs/1_184_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4778623ab74028311ce7678a7f5f47cfa296315d9e5aca138e368b31dd00208f",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.731Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 3,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#2c2c76",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/10.jpg",
+        "name": "Bronze Plaque - Navy Blue - Screws (visible from front)",
+        "price": 867.88,
+        "quantity": 1,
+        "width": 310,
+        "height": 170,
+        "_length": 10,
+        "init_width": 1680,
+        "init_height": 1007,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250508,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1200"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "44.34048387096774px Arial",
+        "font_size": 14,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": -182,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "1929 - 2017 & 1934 - 2025",
+        "font": "44.34048387096774px Arial",
+        "font_size": 14,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6,
+        "y": -60,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "CHRIS JANSEN AND JENNY JANSEN",
+        "font": "50.67483870967742px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -119,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_13",
+        "item": "1_184_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -399,
+        "y": 13,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 52,
+        "ratio": 0.056768558951965066,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "IN GOD&apos;S LOVING EMBRACE",
+        "font": "34.83895161290322px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 10,
+        "y": 175,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "and their many grandies and great-grandies.",
+        "font": "34.83895161290322px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 108,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "David, Ian and Carolyn",
+        "font": "34.83895161290322px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1,
+        "y": 66,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Beloved Parents of Ingrid, Christopher,",
+        "font": "34.83895161290322px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 26,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      }
+    ]
+  }
+}

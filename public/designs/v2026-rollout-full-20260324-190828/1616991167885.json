@@ -1,0 +1,309 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.297Z",
+  "units": "mm",
+  "source": {
+    "id": "1616991167885",
+    "slug": "legacy-1616991167885",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1616991167885.json",
+    "savedAt": "2021-03-29T04:12:47.885Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 663,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "PORTER",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -166
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "PORTER",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -92
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "PORTER",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -18
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "PORTER",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 56
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "PORTER",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "27a8ac3cdcc397fcfd8e974dad802f1629cba7f475b79556eb92c2ecc940aa8c",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.297Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 495.45,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 1,
+        "init_width": 414,
+        "init_height": 663,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": 136,
+        "version_date": 20210328,
+        "mode": "2d"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "INSCRIPTION",
+        "font": "97.99901574803151px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -14,
+        "y": -166,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "INSCRIPTION",
+        "font": "97.99901574803151px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -14,
+        "y": -92,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "INSCRIPTION",
+        "font": "97.99901574803151px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -14,
+        "y": -18,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "INSCRIPTION",
+        "font": "97.99901574803151px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -14,
+        "y": 56,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "INSCRIPTION",
+        "font": "97.99901574803151px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -14,
+        "y": 130,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 6
+      }
+    ]
+  }
+}

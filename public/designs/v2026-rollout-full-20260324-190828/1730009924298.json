@@ -1,0 +1,717 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.788Z",
+  "units": "mm",
+  "source": {
+    "id": "1730009924298",
+    "slug": "legacy-1730009924298",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1730009924298.json",
+    "savedAt": "2024-10-27T06:18:44.298Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/09.jpg",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 300,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Mother of Reinhard-Matthias (Matt) and David Hermann",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": 40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "\"The meaning of life is fulfilled where there is love\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 135
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "...Dietrich Bonhoeffer",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -162,
+          "y_px": 183
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "In Loving Memory of:",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -106,
+          "y_px": -181
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Wally Brandenburg (Nee Engler)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -136,
+          "y_px": -138
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "10 January 1929 to 7 July 2024 (95)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -116,
+          "y_px": -95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Grandmother of Adolf        , Melanie, Michael and Andrew",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 90
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_061_20",
+        "position": {
+          "x_px": 165,
+          "y_px": -148
+        },
+        "height_px": 67,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "gun_002",
+        "position": {
+          "x_px": 189,
+          "y_px": -91
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_140_18",
+        "position": {
+          "x_px": 95,
+          "y_px": -30
+        },
+        "height_px": 47,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "rifle_001",
+        "position": {
+          "x_px": -43,
+          "y_px": -33
+        },
+        "height_px": 67,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_079_03",
+        "position": {
+          "x_px": -342,
+          "y_px": -48
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "2_081_24",
+        "position": {
+          "x_px": -48,
+          "y_px": 86
+        },
+        "height_px": 44,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_061_20",
+        "path": "/shapes/motifs/1_061_20.svg"
+      },
+      {
+        "id": "gun_002",
+        "path": "/shapes/motifs/gun_002.svg"
+      },
+      {
+        "id": "1_140_18",
+        "path": "/shapes/motifs/1_140_18.svg"
+      },
+      {
+        "id": "rifle_001",
+        "path": "/shapes/motifs/rifle_001.svg"
+      },
+      {
+        "id": "2_079_03",
+        "path": "/shapes/motifs/2_079_03.svg"
+      },
+      {
+        "id": "2_081_24",
+        "path": "/shapes/motifs/2_081_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c1e34681ac8dcfdcfeed52de4aa4f268ecc45501124ba75bf469d14ed34f7cc9",
+    "sourceItemCount": 17,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.788Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#4c0f1e",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/09.jpg",
+        "name": "Bronze Plaque - Maroon - Lugs with Studs",
+        "price": 1948.76,
+        "quantity": 1,
+        "width": 560,
+        "height": 300,
+        "_length": 10,
+        "init_width": 1610,
+        "init_height": 904,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240925,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1920x1080"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1729492534050,
+        "path": "../upload/2024/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1729492534050y_0_wb_car_pic_scanned_d.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 292,
+        "y": -91,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.41785714285714287,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "y_0_wb car pic Scanned Document.jpg",
+        "price": 380,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 1
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_061_20",
+        "item": "1_061_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": 165,
+        "y": -148,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 67,
+        "ratio": 0.07519640852974187,
+        "itemID": 2
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "gun_002",
+        "item": "gun_002",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": 189,
+        "y": -91,
+        "flipx": -1,
+        "flipy": "1",
+        "rotation": 0,
+        "height": 43,
+        "ratio": 0.11528150134048257,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "Mother of Reinhard-Matthias (Matt) and David Hermann",
+        "font": "31.478571428571428px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -24,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "\"The meaning of life is fulfilled where there is love\"",
+        "font": "29.904642857142857px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": 135,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "...Dietrich Bonhoeffer",
+        "font": "26.756785714285712px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -162,
+        "y": 183,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "In Loving Memory of:",
+        "font": "31.478571428571428px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -106,
+        "y": -181,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 7
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_18",
+        "item": "1_140_18",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": 95,
+        "y": -30,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 47,
+        "ratio": 0.06308724832214765,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Wally Brandenburg (Nee Engler)",
+        "font": "39.348214285714285px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -136,
+        "y": -138,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "10 January 1929 to 7 July 2024 (95)",
+        "font": "25.18285714285714px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -116,
+        "y": -95,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 10
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "rifle_001",
+        "item": "rifle_001",
+        "price": 183.3,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": -43,
+        "y": -33,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 67,
+        "ratio": 0.24632352941176472,
+        "itemID": 11
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_079_03",
+        "item": "2_079_03",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": -342,
+        "y": -48,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.07725321888412018,
+        "itemID": 12
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_081_24",
+        "item": "2_081_24",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": -48,
+        "y": 86,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 44,
+        "ratio": 0.05425400739827373,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 43,
+        "label": "Grandmother of Adolf        , Melanie, Michael and Andrew",
+        "font": "28.330714285714283px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6,
+        "y": 90,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 14
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br121-fossicker",
+        "color": "#ffb35a",
+        "x": 191,
+        "y": -25,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.17410714285714285,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br121-fossicker",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 15
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br4231-forever-springtime",
+        "color": "#ffb35a",
+        "x": 149,
+        "y": 177,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.10063481914504932,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br4231-forever-springtime",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 16
+      }
+    ]
+  }
+}

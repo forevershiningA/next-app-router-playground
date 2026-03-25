@@ -1,0 +1,330 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.801Z",
+  "units": "mm",
+  "source": {
+    "id": "1744855265871",
+    "slug": "legacy-1744855265871",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1744855265871.json",
+    "savedAt": "2025-04-17T02:01:05.871Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 832,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "WALKER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 86
+        },
+        "position": {
+          "x_px": -7.962,
+          "y_px": -264.337
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Hanna Mann",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -9.554,
+          "y_px": -95.543
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1914 - 1999",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Sandy Wilson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -4.777,
+          "y_px": 103.505
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "1949 -  xxxx",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -11.147,
+          "y_px": 202.234
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "72813e8edeb1b923856b4cc28ed76c9d007d708dd5ebe12dae923cc9c5479aa2",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.801Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1040,
+        "init_height": 586,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1280x832"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 650,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1040,
+        "init_height": 586,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "WEBBER",
+        "font": "138.17800899887513px Garamond",
+        "font_size": 86,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -7.961956521739131,
+        "y": -264.3369565217391,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Margaret Caroline",
+        "font": "80.33605174353205px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9.554347826086957,
+        "y": -95.54347826086956,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1914 - 1999",
+        "font": "80.33605174353205px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Winston Kimball",
+        "font": "80.33605174353205px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4.7771739130434785,
+        "y": 103.5054347826087,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1949 -  xxxx",
+        "font": "80.33605174353205px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -11.146739130434783,
+        "y": 202.23369565217394,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 5
+      }
+    ]
+  }
+}

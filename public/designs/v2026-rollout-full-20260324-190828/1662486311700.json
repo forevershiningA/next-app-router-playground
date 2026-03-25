@@ -1,0 +1,114 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.777Z",
+  "units": "mm",
+  "source": {
+    "id": "1662486311700",
+    "slug": "legacy-1662486311700",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1662486311700.json",
+    "savedAt": "2022-09-06T17:45:11.700Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Heart",
+    "material": {
+      "name": "src/backgrounds/colors/l/34.jpg",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 302,
+      "height_mm": 307
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 302,
+      "height_mm": 307,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0db80aaeb38d354ace59e25660a8c68204f2776cfc11f33ea42be5652af528e8",
+    "sourceItemCount": 1,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.777Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "border": "Border Heart",
+        "shape_url": "shapes/photos/borderheart.svg",
+        "shape": "Heart",
+        "color": "../upload/2022/09/1662486316917background_1_cropped.jpg",
+        "fixed": 0,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "name": "Stainless Steel Vitreous Enamel Inlaid Urn",
+        "price": 2606.62,
+        "quantity": 1,
+        "width": 302,
+        "height": 307,
+        "_length": 1,
+        "init_width": 1140,
+        "init_height": 873,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220906,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36, 1920x1080"
+      }
+    ]
+  }
+}

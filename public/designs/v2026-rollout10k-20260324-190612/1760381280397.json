@@ -1,0 +1,468 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:19.857Z",
+  "units": "mm",
+  "source": {
+    "id": "1760381280397",
+    "slug": "legacy-1760381280397",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1760381280397.json",
+    "savedAt": "2025-10-13T18:48:00.397Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/06.jpg",
+      "texture": "/textures/phoenix/l/06.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 355.60000000000014,
+      "height_mm": 279.4000000000001
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 355.60000000000014,
+      "height_mm": 279.4000000000001,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/06.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "A lifelong lover of books and learning.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": 22.823
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "This gift enriches minds and inspire generations.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": 64.315
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Your generosity touches lives and builds a better",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -6.25,
+          "y_px": 104.277
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "future for the community of Shamrock.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 7.5,
+          "y_px": 143.273
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Lynn Lucas",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8.75,
+          "y_px": -232.279
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Ernestine (Tena) Holmes",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -6.25,
+          "y_px": -101.092
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Librarian 1950 - 2005",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 1.25,
+          "y_px": -55.853
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -146.537
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "To The Family",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 1.25,
+          "y_px": -185.791
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "18f3835298a38870f809fff98e0a429b60cc3dc7a3b287707e4cf8f11cb7e7e0",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:19.857Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Bronze Plaque",
+        "color": "#6d696a",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/06.jpg",
+        "name": "Bronze Plaque - Grey - Lugs with Studs",
+        "price": 1215.21,
+        "quantity": 1,
+        "width": 355.60000000000014,
+        "height": 279.4000000000001,
+        "_length": 0,
+        "init_width": 1296,
+        "init_height": 631,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 33,
+        "label": "A lifelong lover of books and learning.",
+        "font": "34.60208098987625px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2.5,
+        "y": 22.822503961965083,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 43,
+        "label": "This gift enriches minds and inspire generations.",
+        "font": "34.60208098987625px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1.25,
+        "y": 64.31537242472268,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 42,
+        "label": "Your generosity touches lives and builds a better",
+        "font": "34.60208098987625px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.25,
+        "y": 104.2773375594295,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "future for the community of Shamrock.",
+        "font": "34.60208098987625px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 7.5,
+        "y": 143.27258320126782,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "With Deepest Appreciation",
+        "font": "43.25260123734531px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 8.75,
+        "y": -232.27892234548332,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Ernestine (Tena) Holmes",
+        "font": "45.41523129921258px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.25,
+        "y": -101.09191759112514,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Librarian 1950 - 2005",
+        "font": "38.92734111361078px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1.25,
+        "y": -55.852614896988996,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "of",
+        "font": "43.25260123734531px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -146.53724247226623,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "To The Family",
+        "font": "43.25260123734531px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1.25,
+        "y": -185.79080824088746,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 2
+      }
+    ]
+  }
+}

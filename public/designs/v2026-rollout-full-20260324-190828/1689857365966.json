@@ -1,0 +1,690 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.680Z",
+  "units": "mm",
+  "source": {
+    "id": "1689857365966",
+    "slug": "legacy-1689857365966",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1689857365966.json",
+    "savedAt": "2023-07-20T12:49:25.966Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Portrait)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/03.jpg",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 290,
+      "height_mm": 330
+    },
+    "viewportPx": {
+      "width": 834,
+      "height": 1194,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 290,
+      "height_mm": 330,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "MORRISON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 16.883,
+          "y_px": -566.666
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "1.5.1943 - 9.5.2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 14.094,
+          "y_px": -404.107
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "78YRS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 19.132,
+          "y_px": -342.425
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "MCKENZIE, TRENT & KAYDEN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -7.495,
+          "y_px": 454.513
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "ADORED POPPY TO",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 1.19,
+          "y_px": 398.143
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "ALVIE MASON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 41.007,
+          "y_px": 338.868
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "ED MONTGOMERY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 20.061,
+          "y_px": 229.922
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "LOVED & CHERISHED BY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -15.742,
+          "y_px": 166.424
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "ASHLEY WILLIAM",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -25.935,
+          "y_px": -483.139
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "DOCIA GRAY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -15.088,
+          "y_px": 284.652
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "NEVER FORGOTTEN",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -6.516,
+          "y_px": 538.632
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "FOREVER IN OUR HEARTS",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 2.537,
+          "y_px": 583.592
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-17",
+        "asset": "1_143_20",
+        "position": {
+          "x_px": -416,
+          "y_px": -122
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_143_20",
+        "position": {
+          "x_px": 402.734,
+          "y_px": -118
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_143_20",
+        "path": "/shapes/motifs/1_143_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "001eaf1371a2bcebac04e6d0e79a869df939ce75585d8eaa41539930bda05fda",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.680Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Portrait)",
+        "color": "#0c1137",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/03.jpg",
+        "name": "Bronze Plaque - Casino Blue - Lugs with Studs",
+        "price": 1166.3,
+        "quantity": 1,
+        "width": 290,
+        "height": 330,
+        "_length": 10,
+        "init_width": 954,
+        "init_height": 663,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 834x1194"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1689760910594,
+        "path": "../upload/2023/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1689760910594b7946133a0b1409abb09cde7.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": -4.687214592237751,
+        "y": -88.5335169880625,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.84169921875,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "B7946133-A0B1-409A-BB09-CDE70627AC05.jpeg",
+        "price": 450,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 5,
+        "label": "PHOLI",
+        "font": "113.6140909090909px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 16.883291337363858,
+        "y": -566.6658200672726,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 17,
+        "label": "1.5.1943 - 9.5.2021",
+        "font": "86.19px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 14.093629218188994,
+        "y": -404.10652142933634,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 5,
+        "label": "78YRS",
+        "font": "82.27227272727272px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 19.13220926221777,
+        "y": -342.4246176600297,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 21,
+        "label": "MCKENZIE, TRENT & KAYDEN",
+        "font": "58.76590909090909px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7.494569190151424,
+        "y": 454.513008876645,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "ADORED POPPY TO",
+        "font": "70.5190909090909px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1.1902288422012361,
+        "y": 398.1432506887054,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "SON-INLAW TERRY",
+        "font": "70.5190909090909px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 41.006570290933155,
+        "y": 338.8677685950413,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "WIFE BERNICE",
+        "font": "74.43681818181818px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 20.06110198570707,
+        "y": 229.92194674012853,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "LOVED & CHERISHED BY",
+        "font": "74.43681818181818px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -15.741935483870975,
+        "y": 166.4242424242425,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "ASHLEY WILLIAM",
+        "font": "109.69636363636363px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -25.93524680745429,
+        "y": -483.1393001726084,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "SON WAYNE, DAUGHTER JULIE",
+        "font": "54.848181818181814px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -15.087537946870157,
+        "y": 284.6519742883379,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "NEVER FORGOTTEN",
+        "font": "39.17727272727272px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.51612903225805,
+        "y": 538.6317722681358,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "FOREVER IN OUR HEARTS",
+        "font": "39.17727272727272px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2.536656891495568,
+        "y": 583.5922865013777,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 7
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_20",
+        "item": "1_143_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -416,
+        "y": -122,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06640106241699867,
+        "itemID": 17
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_20",
+        "item": "1_143_20",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 402.73379210430994,
+        "y": -118,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06640106241699867,
+        "itemID": 18
+      }
+    ]
+  }
+}

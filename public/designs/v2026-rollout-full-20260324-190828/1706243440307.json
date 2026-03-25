@@ -1,0 +1,707 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.434Z",
+  "units": "mm",
+  "source": {
+    "id": "1706243440307",
+    "slug": "legacy-1706243440307",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1706243440307.json",
+    "savedAt": "2024-01-26T04:30:40.307Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Portrait)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 257,
+      "height_mm": 382
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 257,
+      "height_mm": 382,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -323.442
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "A Pioneer of Gympie & Croydon Goldfields",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": -276.968
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "nee BENSON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -150.838
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Died 1 Nov  1922      Aged 74",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -7.5,
+          "y_px": -73.412
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "to  Catherine Brown & William Benson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -6.25,
+          "y_px": 49.258
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "SUSAN BURTON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": -193.298
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Mother of 8     Husband James",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -38.445
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Lived her life on Qld&apos;s frontier",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 1.25,
+          "y_px": 145.417
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Remembered by the Noonan family",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -8.75,
+          "y_px": 304.978
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "and her many descendants",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -6.25,
+          "y_px": 331.203
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Sailed to Aust 1865 on the Charlie Palmer",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 110.163
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Born in Limerick 1844",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -21.25,
+          "y_px": 15.254
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "The courage, grit & hard work",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -13.75,
+          "y_px": 207.857
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "of one generation builds the next",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -13.75,
+          "y_px": 235.331
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-16",
+        "asset": "cross_002",
+        "position": {
+          "x_px": 210,
+          "y_px": 315.949
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ed6da23069d727cd17687c72927e91e62b4fba8bf5faa90cc368268decff6926",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.434Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Portrait)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 1228.25,
+        "quantity": 1,
+        "width": 257,
+        "height": 382,
+        "_length": 10,
+        "init_width": 1296,
+        "init_height": 631,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "22.144878926701573px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -10,
+        "y": -323.44215530903324,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 34,
+        "label": "A Pioneer of Gympie & Croydon Goldfields",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1.25,
+        "y": -276.96830427892235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 9,
+        "label": "nee BENSON",
+        "font": "36.237074607329845px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -10,
+        "y": -150.83835182250397,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 18,
+        "label": "Died 1 Nov  1922      Aged 74",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7.5,
+        "y": -73.41204437400955,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 30,
+        "label": "to  Catherine Brown & William Benson",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.25,
+        "y": 49.25832012678296,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 15,
+        "label": "MARY  JANE  WHYBROW",
+        "font": "36.237074607329845px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2.5,
+        "y": -193.29793977812994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Mother of 8     Husband James",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -10,
+        "y": -38.44532488114089,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Lived her life on Qld&apos;s frontier",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1.25,
+        "y": 145.41679873217095,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Remembered by the Noonan family",
+        "font": "24.158049738219894px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8.75,
+        "y": 304.9778129952456,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "and her many descendants",
+        "font": "24.158049738219894px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.25,
+        "y": 331.20285261489687,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Sailed to Aust 1865 on the Charlie Palmer",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 110.16323296354994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Born in Limerick 1844",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -21.25,
+        "y": 15.253565768621229,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "The courage, grit & hard work",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -13.75,
+        "y": 207.8573692551505,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "of one generation builds the next",
+        "font": "26.17122054973822px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -13.75,
+        "y": 235.33122028526145,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 15
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 210,
+        "y": 315.94928684627564,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.14388489208633093,
+        "itemID": 16
+      }
+    ]
+  }
+}

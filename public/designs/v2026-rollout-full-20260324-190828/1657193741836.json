@@ -1,0 +1,644 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.445Z",
+  "units": "mm",
+  "source": {
+    "id": "1657193741836",
+    "slug": "legacy-1657193741836",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1657193741836.json",
+    "savedAt": "2022-07-07T11:35:41.836Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -166
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "You never said I&apos;m leaving",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": -66
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "You never said Good Bye",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": -42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "You were gone before we knew it",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "and only God knows why.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "In life we loved you dearly",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 69
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "In death we love you still",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 91
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "In our hearts we hold a place",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -13,
+          "y_px": 115
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "that only you can fill.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -17,
+          "y_px": 138
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "It broke our hearts to loose you",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 186
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "But you didn&apos;t go alone",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 207
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "A part of us went with you",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 231
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "the day God took you home.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 257
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1e408730baea931e789de1b56caa29b1ebbb52aac0f6d244a5efc5afbc68dcc5",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.445Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 2479.4,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 585,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220707,
+        "mode": "2d",
+        "navigator": "Linux x86_64, Google Inc., Mozilla/5.0 (X11; CrOS x86_64 14816.82.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36, 1366x768"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 833,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 585,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "40.74107142857143px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": -166,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 63,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "You never said I&apos;m leaving",
+        "font": "24.444642857142856px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -11,
+        "y": -65.99999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "You never said Good Bye",
+        "font": "24.444642857142856px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -11,
+        "y": -41.99999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "You were gone before we knew it",
+        "font": "24.444642857142856px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -9,
+        "y": -15.999999999999972,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "and only God knows why.",
+        "font": "24.444642857142856px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": 12.000000000000028,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "In life we loved you dearly",
+        "font": "24.444642857142856px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -14,
+        "y": 69.00000000000003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "In death we love you still",
+        "font": "24.444642857142856px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -14,
+        "y": 91.00000000000003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "In our hearts we hold a place",
+        "font": "23.62982142857143px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -13,
+        "y": 115.00000000000003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "that only you can fill.",
+        "font": "22.815px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -17,
+        "y": 138.00000000000003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "It broke our hearts to loose you",
+        "font": "23.62982142857143px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -10,
+        "y": 186.00000000000003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 22
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "But you didn&apos;t go alone",
+        "font": "23.62982142857143px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": 207.00000000000003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "A part of us went with you",
+        "font": "23.62982142857143px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": 230.99999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 26
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "the day God took you home.",
+        "font": "23.62982142857143px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": 257,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 29
+      }
+    ]
+  }
+}

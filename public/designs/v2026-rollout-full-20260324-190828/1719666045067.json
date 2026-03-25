@@ -1,0 +1,470 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.638Z",
+  "units": "mm",
+  "source": {
+    "id": "1719666045067",
+    "slug": "legacy-1719666045067",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1719666045067.json",
+    "savedAt": "2024-06-29T13:00:45.067Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 304.7999999999988
+    },
+    "viewportPx": {
+      "width": 1489,
+      "height": 838,
+      "dpr": 1.2899999618530273
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 304.7999999999988,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "1939      2039",
+        "font": {
+          "family": "Garamond",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 1.289,
+          "y_px": -58.518
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "LOVING MOTHER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -1.289,
+          "y_px": 9.851
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "AND GRANDMOTHER OF",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 1.289,
+          "y_px": 59.2
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "DARLENE, DORTHEA,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 1.289,
+          "y_px": 100.65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "DEBBIE & DWAYNE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 2.579,
+          "y_px": 143.94
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "ANTHONY GREENE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 66
+        },
+        "position": {
+          "x_px": -7.736,
+          "y_px": -122.548
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "cross_004",
+        "position": {
+          "x_px": 0,
+          "y_px": -60.629
+        },
+        "height_px": 42,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_210_26",
+        "position": {
+          "x_px": -336.506,
+          "y_px": 125.128
+        },
+        "height_px": 83,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_210_26",
+        "position": {
+          "x_px": 341.318,
+          "y_px": 125.128
+        },
+        "height_px": 83,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_004",
+        "path": "/shapes/motifs/cross_004.svg"
+      },
+      {
+        "id": "1_210_26",
+        "path": "/shapes/motifs/1_210_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8bff93f29554a0e68ad5ddfd926337574cf96015195933b29236b1ad2972b218",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.638Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 963.19,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 304.7999999999988,
+        "_length": 80,
+        "init_width": 1241,
+        "init_height": 669.0101737976074,
+        "device": "desktop",
+        "dpr": 1.2899999618530273,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1489x838"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_004",
+        "item": "cross_004",
+        "price": 214.775885,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -60.62889919941375,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 42,
+        "ratio": 0.21212121212121213,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 8,
+        "label": "1939      2039",
+        "font": "64.87538303301929px Garamond",
+        "font_size": 47,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1.28929488439951,
+        "y": -58.51793892656201,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_210_26",
+        "item": "1_210_26",
+        "price": 224.40084,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -336.50596482827314,
+        "y": 125.12772813496031,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -90,
+        "height": 83,
+        "ratio": 0.11976911976911978,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_210_26",
+        "item": "1_210_26",
+        "price": 224.40084,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 341.3177448504857,
+        "y": 125.12772813496053,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": -90,
+        "height": 83,
+        "ratio": 0.11976911976911978,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "LOVING MOTHER",
+        "font": "46.93112815154587px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1.28929488439951,
+        "y": 9.850819745117462,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "AND GRANDMOTHER OF",
+        "font": "46.93112815154587px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1.28929488439951,
+        "y": 59.20046842578142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "DARLENE, DORTHEA,",
+        "font": "46.93112815154587px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1.28929488439951,
+        "y": 100.6503513193361,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "DEBBIE & DWAYNE",
+        "font": "46.93112815154587px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 2.57858976879902,
+        "y": 143.94032789804703,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 12,
+        "label": "CLARA  BURNETT",
+        "font": "91.10160170594197px Garamond",
+        "font_size": 66,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -7.73576930639706,
+        "y": -122.54777497753844,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 1
+      }
+    ]
+  }
+}

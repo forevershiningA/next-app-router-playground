@@ -1,0 +1,312 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.096Z",
+  "units": "mm",
+  "source": {
+    "id": "1628254845960",
+    "slug": "legacy-1628254845960",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1628254845960.json",
+    "savedAt": "2021-08-06T13:00:45.960Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 659,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Fishing up in Heaven,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 155
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Where no shoes are required.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 20,
+          "y_px": 206
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Beverly Harrison",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 97.5,
+          "y_px": -58.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Dearly Loved Father and Poppy",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 93.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-12",
+        "asset": "1_015_08",
+        "position": {
+          "x_px": -120,
+          "y_px": -102
+        },
+        "height_px": 114,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_015_08",
+        "path": "/shapes/motifs/1_015_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3a5033ad908ed634a07e7a6c63afec3a723e1c99d656cf33c18a6d11cbbab8a0",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.096Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 464.37,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 414,
+        "init_height": 659,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20210802,
+        "mode": "2d",
+        "navigator": "iPhone, Apple Computer, Inc., Mozilla/5.0 (iPhone; CPU iPhone OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.1 Mobile/15E148 Safari/604.1"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Fishing up in Heaven,",
+        "font": "53.81999999999999px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 12,
+        "y": 155,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Where no shoes are required.",
+        "font": "53.81999999999999px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 20,
+        "y": 206,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 7
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_08",
+        "item": "1_015_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -120,
+        "y": -102,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 114,
+        "ratio": 0.2608695652173913,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Evan Dryden",
+        "font": "107.63999999999999px Chopin Script",
+        "font_size": 40,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 97.5,
+        "y": -58.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Dearly Loved Father and Poppy",
+        "font": "53.81999999999999px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 93.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 3
+      }
+    ]
+  }
+}

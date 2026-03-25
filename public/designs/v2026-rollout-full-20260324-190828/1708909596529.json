@@ -1,0 +1,296 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.936Z",
+  "units": "mm",
+  "source": {
+    "id": "1708909596529",
+    "slug": "legacy-1708909596529",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1708909596529.json",
+    "savedAt": "2024-02-26T01:06:36.529Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 762.0000000000005,
+      "height_mm": 507.99999999999955
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 844,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 762.0000000000005,
+      "height_mm": 507.99999999999955,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 762.0000000000005,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "RILLA",
+        "font": {
+          "family": "Garamond",
+          "size_px": 110
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": -118
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Eva Ball",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 147
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Jacob Webb",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": 212
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "2_070_07",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 46,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_070_07",
+        "path": "/shapes/motifs/2_070_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e9331700d58b2f1feec4c6a24c618e107f525696bf3114cc40f0363684b6bb17",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.936Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2794.96,
+        "quantity": 1,
+        "width": 762.0000000000005,
+        "height": 507.99999999999955,
+        "_length": 80,
+        "init_width": 390,
+        "init_height": 607,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 390x844"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 677,
+        "quantity": 1,
+        "width": 762.0000000000005,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 390,
+        "init_height": 607,
+        "mode": "2d"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_070_07",
+        "item": "2_070_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 46,
+        "ratio": 0.048625792811839326,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "ANDERSON",
+        "font": "137.22933070866128px Garamond",
+        "font_size": 110,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -18,
+        "y": -118,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 79,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Those We Treasure Never Go Away",
+        "font": "44.9114173228346px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6,
+        "y": 147,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "They Stand Beside Us Every Dsy",
+        "font": "46.15895669291334px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 18,
+        "y": 212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 2
+      }
+    ]
+  }
+}

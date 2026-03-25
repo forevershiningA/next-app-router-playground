@@ -1,0 +1,267 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:18.024Z",
+  "units": "mm",
+  "source": {
+    "id": "1604610375435",
+    "slug": "legacy-1604610375435",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1604610375435.json",
+    "savedAt": "2020-11-05T21:06:15.435Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/02.jpg",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "203.2",
+      "height_mm": "101.6"
+    },
+    "viewportPx": {
+      "width": 1332,
+      "height": 712,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "203.2",
+      "height_mm": "101.6",
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -99
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Joanna Santiago",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Feb. 16, 1890                       Feb. 14, 1894",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Oct. 14, 1967                        Apr. 2, 1967",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 64
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "dccce68483b8ddca583a7803bc8f72716166e1b9ee5c92c6592b2a68c307e238",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:18.024Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Brown - Lugs with Studs",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#48280f",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/02.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": "203.2",
+        "height": "101.6",
+        "_length": 1,
+        "init_width": 1332,
+        "init_height": 712
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Loving Memory Of",
+        "font": "34.16338582677165px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -99,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "J. Dwight Gill               Jenny Ruth Gill",
+        "font": "37.579724409448815px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": -12,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Feb. 16, 1890                       Feb. 14, 1894",
+        "font": "30.74704724409449px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": 30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Oct. 14, 1967                        Apr. 2, 1967",
+        "font": "30.74704724409449px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": 64,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 5
+      }
+    ]
+  }
+}

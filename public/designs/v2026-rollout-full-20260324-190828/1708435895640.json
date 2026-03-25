@@ -1,0 +1,663 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.603Z",
+  "units": "mm",
+  "source": {
+    "id": "1708435895640",
+    "slug": "legacy-1708435895640",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1708435895640.json",
+    "savedAt": "2024-02-20T13:31:35.640Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/03.jpg",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 190,
+      "height_mm": 190
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 190,
+      "height_mm": 190,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": -490
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "3.8.2023",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 186,
+          "y_px": -281.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "31.10.1928 -",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -158,
+          "y_px": -281.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "&apos;Nothing Loved is Ever Lost&apos;",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -161.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "&apos;I&apos;ve Gone Fishin\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -32,
+          "y_px": 520.021
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Adored Bups of James,Jess,Tom,",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 176.021
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Alex,Ben,Kate,Sally,Luke,Abby.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 252.021
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Matthew & Graeme.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -16,
+          "y_px": 86.021
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Loved Father of Michael,Thea,",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": 18.021
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Devoted Husband of Beverley.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": -59.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "GEOFFREY LEDGER",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -74,
+          "y_px": -369.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "(JOE)",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 424,
+          "y_px": -367.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Father in Law of Llew,Karen",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 320.021
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "& Lynn(dec)",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -30,
+          "y_px": 384.021
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ac6f2017a506eefdd02ba2c03b659882439362d0d937f0a1635aa34f0397d5ad",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.603Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#0c1137",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/03.jpg",
+        "name": "Bronze Plaque - Casino Blue - Lugs with Studs",
+        "price": 673.56,
+        "quantity": 1,
+        "width": 190,
+        "height": 190,
+        "_length": 10,
+        "init_width": 1200,
+        "init_height": 658,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1440x900"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "60.77842105263158px Lucida Calligraphy",
+        "font_size": 9,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 14,
+        "y": -490,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 8,
+        "label": "3.8.2023",
+        "font": "67.53157894736842px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 186,
+        "y": -281.9794921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 11,
+        "label": "31.10.1928 -",
+        "font": "67.53157894736842px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -158,
+        "y": -281.9794921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 24,
+        "label": "&apos;Nothing Loved is Ever Lost&apos;",
+        "font": "67.53157894736842px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14,
+        "y": -161.9794921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 16,
+        "label": "&apos;I&apos;ve Gone Fishin\"",
+        "font": "74.28473684210526px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -32,
+        "y": 520.0205078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 27,
+        "label": "Adored Bups of James,Jess,Tom,",
+        "font": "60.77842105263158px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14,
+        "y": 176.0205078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Alex,Ben,Kate,Sally,Luke,Abby.",
+        "font": "60.77842105263158px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14,
+        "y": 252.0205078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Matthew & Graeme.",
+        "font": "74.28473684210526px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -16,
+        "y": 86.0205078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Loved Father of Michael,Thea,",
+        "font": "67.53157894736842px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -18,
+        "y": 18.0205078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Devoted Husband of Beverley.",
+        "font": "67.53157894736842px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -18,
+        "y": -59.9794921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "GEOFFREY LEDGER",
+        "font": "94.54421052631578px Franklin Gothic",
+        "font_size": 14,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -74,
+        "y": -369.9794921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "(JOE)",
+        "font": "81.0378947368421px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 424,
+        "y": -367.9794921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Father in Law of Llew,Karen",
+        "font": "60.77842105263158px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 12,
+        "y": 320.0205078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "& Lynn(dec)",
+        "font": "60.77842105263158px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -30,
+        "y": 384.0205078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 14
+      }
+    ]
+  }
+}

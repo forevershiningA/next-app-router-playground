@@ -1,0 +1,429 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.828Z",
+  "units": "mm",
+  "source": {
+    "id": "1603066650984",
+    "slug": "legacy-1603066650984",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1603066650984.json",
+    "savedAt": "2020-10-19T00:17:30.984Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 265,
+      "height_mm": 180
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 265,
+      "height_mm": 180,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-12",
+        "text": "OF",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 37,
+          "y_px": -132
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "IN LOVING MEMORY",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 69,
+          "y_px": -208
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "ROGER DELGADO",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 59,
+          "y_px": -44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "A DEAR DAUGHTER OF CHARLES & ALMA",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 46,
+          "y_px": 48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "LITTLE SISTER TO MAVIS & EILEEN",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 47,
+          "y_px": 95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "11th May 1949 - 13th May 1949",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 45,
+          "y_px": 146
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "ALWAYS REMEMBERED",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 81,
+          "y_px": 233
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "2_152_08",
+        "position": {
+          "x_px": -318,
+          "y_px": -4
+        },
+        "height_px": 150,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_152_08",
+        "path": "/shapes/motifs/2_152_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b162e7abe2b7128f1fbf8b3adaf73ecc2fed7458fd70aabecc8b8064c2d06501",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.828Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Flat Back",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 1,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "661.05",
+        "quantity": 1,
+        "width": 265,
+        "height": 180,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "mode": "2d"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_08",
+        "item": "2_152_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -318,
+        "y": -4,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 150,
+        "ratio": 0.17772511848341233,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "OF",
+        "font": "64.23962264150943px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 37,
+        "y": -132,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "IN LOVING MEMORY",
+        "font": "70.66358490566037px Franklin Gothic",
+        "font_size": 22,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 69,
+        "y": -208,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "DAWN BARKER",
+        "font": "99.57141509433961px Franklin Gothic",
+        "font_size": 31,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 59,
+        "y": -44,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "A DEAR DAUGHTER OF CHARLES & ALMA",
+        "font": "32.119811320754714px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 46,
+        "y": 48,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "LITTLE SISTER TO MAVIS & EILEEN",
+        "font": "35.331792452830186px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 47,
+        "y": 95,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "11th May 1949 - 13th May 1949",
+        "font": "32.119811320754714px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 45,
+        "y": 146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "ALWAYS REMEMBERED",
+        "font": "61.027641509433955px Franklin Gothic",
+        "font_size": 19,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 81,
+        "y": 233,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 10
+      }
+    ]
+  }
+}

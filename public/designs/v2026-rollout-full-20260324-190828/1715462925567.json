@@ -1,0 +1,550 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.987Z",
+  "units": "mm",
+  "source": {
+    "id": "1715462925567",
+    "slug": "legacy-1715462925567",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1715462925567.json",
+    "savedAt": "2024-05-11T21:28:45.567Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/11.jpg",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 780,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "French Script",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": -235
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "(Matthews/Crowther/ Lewis)",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -17,
+          "y_px": -51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "2/12/1947 - 27/8/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -16.074,
+          "y_px": -7.144
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Your love was a blessing,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -209.373,
+          "y_px": 218.856
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "You are loved beyond words and missed beyond measure",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -13.637,
+          "y_px": 268.428
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Your memory a treasure.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 161.736,
+          "y_px": 216
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "GREAT GRANDMOTHER SISTER AUNT AND FRIEND",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -6.846,
+          "y_px": 120.857
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "BELOVED MOTHER GRANDMOTHER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -7.055,
+          "y_px": 69.429
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Christopher Riley",
+        "font": {
+          "family": "French Script",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": -130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-12",
+        "asset": "cross_002",
+        "position": {
+          "x_px": 405,
+          "y_px": -19.424
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "cross_002",
+        "position": {
+          "x_px": -404.997,
+          "y_px": -17.139
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4a2b55986cac78db3a855934f50c538837071d5e9c1bfdbd1a8e81ddd90a3b52",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.987Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#513a68",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/11.jpg",
+        "name": "Bronze Plaque - Purple - Lugs with Studs",
+        "price": 906.75,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 10,
+        "init_width": 360,
+        "init_height": 593,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 360x780"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 405,
+        "y": -19.423828125,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.14388489208633093,
+        "itemID": 12
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -404.997420188849,
+        "y": -17.138671875,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.14388489208633093,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "63.17999999999999px French Script",
+        "font_size": 18,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -11,
+        "y": -235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "(Matthews/Crowther/ Lewis)",
+        "font": "24.57px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -17,
+        "y": -51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "2/12/1947 - 27/8/2023",
+        "font": "24.57px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -16.07421875,
+        "y": -7.1435546875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Your love was a blessing,",
+        "font": "38.61px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -209.373046875,
+        "y": 218.8564453125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "You are loved beyond words and missed beyond measure",
+        "font": "38.61px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -13.63671875,
+        "y": 268.427734375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Your memory a treasure.",
+        "font": "38.61px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 161.736328125,
+        "y": 216,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "GREAT GRANDMOTHER SISTER AUNT AND FRIEND",
+        "font": "35.099999999999994px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.845703125,
+        "y": 120.857421875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "BELOVED MOTHER GRANDMOTHER",
+        "font": "38.61px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7.0546875,
+        "y": 69.4287109375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Dianne Joy Mary Therese",
+        "font": "108.80999999999999px French Script",
+        "font_size": 31,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -11,
+        "y": -130,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 11
+      }
+    ]
+  }
+}

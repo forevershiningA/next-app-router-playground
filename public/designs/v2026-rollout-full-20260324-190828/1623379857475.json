@@ -1,0 +1,504 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.821Z",
+  "units": "mm",
+  "source": {
+    "id": "1623379857475",
+    "slug": "legacy-1623379857475",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1623379857475.json",
+    "savedAt": "2021-06-11T02:50:57.475Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1234,
+      "height": 687,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-13",
+        "text": "Andres Moore",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 1.25,
+          "y_px": 14.691
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of Our Beloved",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -6.248,
+          "y_px": -248.533
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "born 18th September 1936  Bega NSW",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 4.998,
+          "y_px": -136.54
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "died 8th March 2021 Camden NSW",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 2.499,
+          "y_px": -107.747
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Your loving husband Neville Schneider",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -2.499,
+          "y_px": -21.595
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Forever in Our Hearts",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 3.749,
+          "y_px": -56.711
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Jason Bishop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": -192.24
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-22",
+        "asset": "1_009_16",
+        "position": {
+          "x_px": -2.499,
+          "y_px": -298.489
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_009_16",
+        "path": "/shapes/motifs/1_009_16.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "518fa53ca9d1ca5fdce652770c0524c128fc0acfb8255cc703be20f590635dc1",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.821Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1220.19,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1234,
+        "init_height": 687,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": 142,
+        "version_date": 20210610,
+        "mode": "2d",
+        "navigator": "Win32, , Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 552,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1234,
+        "init_height": 687,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 38,
+        "label": "& devoted children David, Annette & John King",
+        "font": "29.90290178571428px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 1.2495948136141806,
+        "y": 14.691425984256227,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 26,
+        "label": "In Loving Memory of Our Beloved",
+        "font": "29.90290178571428px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -6.247974068071358,
+        "y": -248.532751091703,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 28,
+        "label": "born 18th September 1936  Bega NSW",
+        "font": "23.922321428571426px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 4.99837925445695,
+        "y": -136.54019186416912,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 25,
+        "label": "died 8th March 2021 Camden NSW",
+        "font": "23.922321428571426px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 2.4991896272285885,
+        "y": -107.7474745038295,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 33,
+        "label": "Your loving husband Neville Schneider",
+        "font": "29.90290178571428px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -2.499189627228475,
+        "y": -21.59474115774276,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 11
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1623384617893,
+        "path": "../upload/2021/06/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "162338461789311c_2_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 70,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "11c (2).jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 18
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1623384917183,
+        "path": "../upload/2021/06/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "162338491718311c_2_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -278.6596434359805,
+        "y": -96.1659388646288,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.41724979235880394,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "11c (2).jpg",
+        "price": 285,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 20
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 18,
+        "label": "Forever in Our Hearts",
+        "font": "38.27571428571428px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 3.748784440842769,
+        "y": -56.711283016066034,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 35,
+        "label": "Judith Constance Schneider (nee Wilson)",
+        "font": "40.66794642857142px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -1.2495948136142943,
+        "y": -192.24013431832256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_009_16",
+        "item": "1_009_16",
+        "price": null,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -2.4991896272285885,
+        "y": -298.48908296943233,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.08908685968819599,
+        "itemID": 22
+      }
+    ]
+  }
+}

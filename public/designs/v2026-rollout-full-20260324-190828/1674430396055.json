@@ -1,0 +1,178 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.707Z",
+  "units": "mm",
+  "source": {
+    "id": "1674430396055",
+    "slug": "legacy-1674430396055",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1674430396055.json",
+    "savedAt": "2023-01-22T23:33:16.055Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 883,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Old man",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 219.537,
+          "y_px": -255.017
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ff5221eca2ff476748944b37554dd98a4cae67155f726ce324b78350ecaffedc",
+    "sourceItemCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.707Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 534.03,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 15,
+        "init_width": 412,
+        "init_height": 694,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230116,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x883"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1674430430351,
+        "path": "../upload/2023/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1674430430351screenshot_20230113_0129.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -274.3555515252271,
+        "y": 38.88155758693662,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.1271577809798266,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20230113_012920_Photoshop Express.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 210,
+        "width": "517",
+        "height": "738",
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Old man",
+        "font": "70.29749999999999px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 219.5370883015754,
+        "y": -255.01738674508593,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 2
+      }
+    ]
+  }
+}

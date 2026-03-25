@@ -1,0 +1,278 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.347Z",
+  "units": "mm",
+  "source": {
+    "id": "1721089090837",
+    "slug": "legacy-1721089090837",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1721089090837.json",
+    "savedAt": "2024-07-16T00:18:10.837Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Portrait)",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 844,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "dzhgihaiohgioaoigh",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 15,
+          "y_px": -438
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "sjdtuishiughds",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 15,
+          "y_px": 417
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_127_02",
+        "position": {
+          "x_px": 138,
+          "y_px": 24
+        },
+        "height_px": 159,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_154_26",
+        "position": {
+          "x_px": -219,
+          "y_px": 372
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_127_02",
+        "path": "/shapes/motifs/1_127_02.svg"
+      },
+      {
+        "id": "1_154_26",
+        "path": "/shapes/motifs/1_154_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "551b1d24c3cef9965ab6495adb75b3af3de56e1c294fd226eee9517ff228ac2f",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.347Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Portrait)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 243.43,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 15,
+        "init_width": 390,
+        "init_height": 608,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20240715,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 390x844"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "dzhgihaiohgioaoigh",
+        "font": "68.44500000000001px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 15,
+        "y": -438,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_127_02",
+        "item": "1_127_02",
+        "price": 242.24222,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 138,
+        "y": 24,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 159,
+        "ratio": 0.17549668874172186,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "sjdtuishiughds",
+        "font": "76.05000000000001px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 15,
+        "y": 417,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_26",
+        "item": "1_154_26",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -219,
+        "y": 372,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.11061946902654868,
+        "itemID": 4
+      }
+    ]
+  }
+}

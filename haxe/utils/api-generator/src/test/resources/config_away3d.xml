@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<config>
+    <input>
+        <source-dir>C:/HaxeToolkit/haxe/lib/away3d/5,0,9</source-dir>
+        <classes>
+            <include>away3d.cameras.Camera3D</include>
+            <include>away3d.cameras.lenses.FreeMatrixLens</include>
+            <include>away3d.cameras.lenses.LensBase</include>
+            <include>away3d.cameras.lenses.ObliqueNearPlaneLens</include>
+            <include>away3d.cameras.lenses.OrthographicLens</include>
+            <include>away3d.cameras.lenses.OrthographicOffCenterLens</include>
+            <include>away3d.cameras.lenses.PerspectiveLens</include>
+            <include>away3d.cameras.lenses.PerspectiveOffCenterLens</include>
+            <include>away3d.containers.ObjectContainer3D</include>
+            <include>away3d.containers.Scene3D</include>
+            <include>away3d.containers.View3D</include>
+            <include>away3d.core.base.Geometry</include>
+            <include>away3d.core.base.Object3D</include>
+            <!--<include>away3d.core.base.IRenderable</include>-->
+            <include>away3d.core.pick.HaxePickingCollider</include>
+            <include>away3d.entities.Entity</include>
+            <include>away3d.entities.Mesh</include>
+            <include>away3d.library.assets.IAsset</include>
+            <include>away3d.library.assets.NamedAssetBase</include>
+            <include>away3d.lights.DirectionalLight</include>
+            <include>away3d.lights.LightBase</include>
+            <include>away3d.lights.shadowmaps.CascadeShadowMapper</include>
+            <include>away3d.lights.shadowmaps.DirectionalShadowMapper</include>
+            <include>away3d.lights.shadowmaps.ShadowMapperBase</include>
+            <include>away3d.materials.lightpickers.LightPickerBase</include>
+            <include>away3d.materials.lightpickers.StaticLightPicker</include>
+            <include>away3d.materials.methods.BasicSpecularMethod</include>
+            <include>away3d.materials.methods.CascadeShadowMapMethod</include>
+            <include>away3d.materials.methods.CelSpecularMethod</include>
+            <include>away3d.materials.methods.CompositeSpecularMethod</include>
+            <include>away3d.materials.methods.EffectMethodBase</include>
+            <include>away3d.materials.methods.FilteredShadowMapMethod</include>
+            <include>away3d.materials.methods.FresnelPlanarReflectionMethod</include>
+            <include>away3d.materials.methods.FresnelEnvMapMethod</include>
+            <include>away3d.materials.methods.ShadingMethodBase</include>
+            <include>away3d.materials.methods.ShadowMapMethodBase</include>
+            <include>away3d.materials.methods.SimpleShadowMapMethodBase</include>
+            <include>away3d.materials.ColorMaterial</include>
+            <include>away3d.materials.ColorMultiPassMaterial</include>
+            <include>away3d.materials.MaterialBase</include>
+            <include>away3d.materials.MultiPassMaterialBase</include>
+            <include>away3d.materials.SinglePassMaterialBase</include>
+            <include>away3d.materials.TextureMaterial</include>
+            <include>away3d.materials.TextureMultiPassMaterial</include>
+            <include>away3d.primitives.PlaneGeometry</include>
+            <include>away3d.primitives.PrimitiveBase</include>
+            <include>away3d.primitives.SkyBox</include>
+            <include>away3d.primitives.SphereGeometry</include>
+            <include>away3d.textures.BitmapCubeTexture</include>
+            <include>away3d.textures.BitmapTexture</include>
+            <include>away3d.textures.CubeTextureBase</include>
+            <include>away3d.textures.CubeReflectionTexture</include>
+            <include>away3d.textures.PlanarReflectionTexture</include>
+            <include>away3d.textures.RenderCubeTexture</include>
+            <include>away3d.textures.Texture2DBase</include>
+            <include>away3d.textures.TextureProxyBase</include>
+            <include>away3d.tools.utils.Bounds</include>
+            <include>away3d.tools.utils.TextureUtils</include>
+        </classes>
+        <ccparams>
+            <param name="openfl" value="&quot;8.9.5&quot;" />
+            <param name="flash" value="false" />
+        </ccparams>
+        <mapping>
+            <source>away3d.*</source>
+            <target>Engine3D.core.*</target>
+        </mapping>
+    </input>
+    <goals>
+        <goal type="Copy">
+            <destination>D:\GIT\dyo_haxe\api_libs\away3d</destination>
+            <delete-if-exists>true</delete-if-exists>
+        </goal>
+        <goal type="GenerateExpose">
+            <destination>D:\GIT\dyo_haxe\api_libs\away3d</destination>
+        </goal>
+        <goal type="GenerateExtern">
+            <destination>D:\GIT\dyo_haxe\source_api\src</destination>
+            <delete-if-exists>false</delete-if-exists>
+        </goal>
+    </goals>
+</config>

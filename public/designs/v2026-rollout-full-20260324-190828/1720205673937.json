@@ -1,0 +1,419 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.703Z",
+  "units": "mm",
+  "source": {
+    "id": "1720205673937",
+    "slug": "legacy-1720205673937",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1720205673937.json",
+    "savedAt": "2024-07-05T18:54:33.937Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 920.75,
+      "height_mm": 654.05
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 920.75,
+      "height_mm": 654.05,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": 1020.75,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "RILLA",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 96
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -32.978
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Frances Stephens",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 68.471
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Jan 12, 2024",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -153,
+          "y_px": 128.43
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Jun 17, 1948                                    Sep 4, 1948",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 1.5,
+          "y_px": 101.448
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": -244.5,
+          "y_px": -56.962
+        },
+        "height_px": 209,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_152_07",
+        "position": {
+          "x_px": 237,
+          "y_px": -56.962
+        },
+        "height_px": 142,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_116_01",
+        "position": {
+          "x_px": 6,
+          "y_px": -128.913
+        },
+        "height_px": 131,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      },
+      {
+        "id": "1_152_07",
+        "path": "/shapes/motifs/1_152_07.svg"
+      },
+      {
+        "id": "2_116_01",
+        "path": "/shapes/motifs/2_116_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "daafb3f910237c3c4a1079417d659362ef76b7d1bae104910c560cc8b53981c3",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.704Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2405.45,
+        "quantity": 1,
+        "width": 920.75,
+        "height": 654.05,
+        "_length": 80,
+        "init_width": 1040,
+        "init_height": 495,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1280x720"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G654.jpg",
+        "price": 739,
+        "quantity": 1,
+        "width": 1020.75,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1040,
+        "init_height": 495,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 253.97997,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -244.5,
+        "y": -56.961616161616206,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 209,
+        "ratio": 0.28708791208791207,
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_152_07",
+        "item": "1_152_07",
+        "price": 238.25138499999997,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 237,
+        "y": -56.96161616161612,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 142,
+        "ratio": 0.19478737997256515,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 8,
+        "label": "ANDERSON",
+        "font": "66.69574084445232px Franklin Gothic",
+        "font_size": 96,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -32.97777777777782,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 68,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_01",
+        "item": "2_116_01",
+        "price": 235.66907999999998,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 6,
+        "y": -128.91313131313126,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 131,
+        "ratio": 0.23518850987432674,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "Diane E                      Donald G",
+        "font": "34.73736502315225px Franklin Gothic",
+        "font_size": 50,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 6,
+        "y": 68.47070707070708,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "Jan 12, 2024",
+        "font": "21.537166314354394px Franklin Gothic",
+        "font_size": 31,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -153,
+        "y": 128.43030303030304,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Jun 17, 1948                                    Sep 4, 1948",
+        "font": "21.537166314354394px Franklin Gothic",
+        "font_size": 31,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1.5,
+        "y": 101.4484848484849,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 6
+      }
+    ]
+  }
+}

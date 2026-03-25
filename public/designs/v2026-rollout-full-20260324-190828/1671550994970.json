@@ -1,0 +1,493 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.459Z",
+  "units": "mm",
+  "source": {
+    "id": "1671550994970",
+    "slug": "legacy-1671550994970",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1671550994970.json",
+    "savedAt": "2022-12-20T15:43:14.970Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 644,
+      "height_mm": 704
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 644,
+      "height_mm": 704,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Beloved by all who knew them",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -14.508,
+          "y_px": 54.886
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Love is enough",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -5.44,
+          "y_px": -36.543
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Here lies",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -425.658,
+          "y_px": -113.883
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Dearly beloved",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 10.881,
+          "y_px": 148.503
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Deep peace of the quiet earth",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 3.627,
+          "y_px": 279.446
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Traditional Engraved Plaque - 20/12/2022",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 9.067,
+          "y_px": 425.636
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Safari - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 1.813,
+          "y_px": 503.251
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Adored",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 434.218,
+          "y_px": -125.588
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 20.135,
+          "y_px": -391.297
+        },
+        "height_px": 245,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0c5a7cdec80522010b9db1cbe2f9433e6ef1ac814950938f53701490ff9361bd",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.460Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 829.54,
+        "quantity": 1,
+        "width": 644,
+        "height": 704,
+        "_length": 15,
+        "init_width": 700,
+        "init_height": 772,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20221220,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1440x900"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 274.9171,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 20.134715025906758,
+        "y": -391.29671717171715,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 245,
+        "ratio": 0.33242876526458615,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Beloved by all who knew them",
+        "font": "63.984375px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -14.507772020725389,
+        "y": 54.88636363636364,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "Love is enough",
+        "font": "63.984375px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -5.4404145077720205,
+        "y": -36.542508417508394,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 8,
+        "label": "Here lies",
+        "font": "63.984375px Great Vibes",
+        "font_size": 33,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -425.6580310880829,
+        "y": -113.8834175084175,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "Dearly beloved",
+        "font": "63.984375px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 10.880829015544041,
+        "y": 148.5029461279461,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "Deep peace of the quiet earth",
+        "font": "63.984375px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3.626943005181347,
+        "y": 279.446127946128,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 36,
+        "label": "Traditional Engraved Plaque - 20/12/2022",
+        "font": "63.984375px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 9.067357512953368,
+        "y": 425.635521885522,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Safari - desktop",
+        "font": "63.984375px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.8134715025906736,
+        "y": 503.2508417508418,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 8
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1671551095704,
+        "path": "../upload/2022/12/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1671551095704img_0186_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -398,
+        "y": -406,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9041597974564296,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_0186.jpeg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 6,
+        "label": "Adored",
+        "font": "63.984375px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 434.21761658031096,
+        "y": -125.58796296296305,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 2
+      }
+    ]
+  }
+}

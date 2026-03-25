@@ -1,0 +1,308 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.783Z",
+  "units": "mm",
+  "source": {
+    "id": "1645402659855",
+    "slug": "legacy-1645402659855",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1645402659855.json",
+    "savedAt": "2022-02-21T00:17:39.855Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Stainless Steel Plaque",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 150,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 150,
+      "height_mm": 150,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-10",
+        "text": "Leslie Wright",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 56.327,
+          "y_px": 188.776
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Taken too soon",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 53.022,
+          "y_px": -0.341
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Son of Peter",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": -327.26
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of Jake",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 15.674,
+          "y_px": -982.232
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "00.00.1995 - 15.8.2018",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 58.45,
+          "y_px": -663.639
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "26a03beb1865be547c185c77998ef361df68e764a2fc5250f3c0090df42c9fe8",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.783Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "name": "Stainless Steel Plaque",
+        "shape": "Stainless Steel Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "price": 240.12,
+        "quantity": 1,
+        "width": 150,
+        "height": 150,
+        "_length": 1,
+        "init_width": 1893,
+        "init_height": 977.0069427490234,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 3,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220217,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.56, 1920x1080"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Forever Remembered",
+        "font": "190.51635383605955px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 56.32661648222984,
+        "y": 188.77630208148662,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 10
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Taken too soon",
+        "font": "190.51635383605955px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 53.021768238555524,
+        "y": -0.341436678411128,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 8
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Son of Peter",
+        "font": "190.51635383605955px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 24.00017488489175,
+        "y": -327.25986507654125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 6
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "In Loving Memory of Jake",
+        "font": "247.67125998687743px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 15.673908172444227,
+        "y": -982.2315788065049,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "00.00.1995 - 15.8.2018",
+        "font": "190.51635383605955px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 58.44962188474619,
+        "y": -663.6393261986093,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 7
+      }
+    ]
+  }
+}

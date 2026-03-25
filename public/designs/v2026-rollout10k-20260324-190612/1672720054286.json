@@ -1,0 +1,271 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:18.781Z",
+  "units": "mm",
+  "source": {
+    "id": "1672720054286",
+    "slug": "legacy-1672720054286",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1672720054286.json",
+    "savedAt": "2023-01-03T04:27:34.286Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 428,
+      "height": 926,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "The Fearn - Syson - Hunter House",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -66.785
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Circa 1905 Architect George Bigelow Rogers",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 21,
+          "y_px": 33.392
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "1802 Old Government",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": -206.425
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "The style is the Mediterranean revival style",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 30,
+          "y_px": 115.355
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c7e82c853c4324fd5e0204c223b1df212b62db507a4cb2499721315776066057",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:18.781Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "price": 922.3,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 0,
+        "init_width": 428,
+        "init_height": 681,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20221214,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 428x926"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "The Fearn - Syson - Hunter House",
+        "font": "86.25295275590553px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": -66.78454680534918,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "Circa 1905 Architect George Bigelow Rogers",
+        "font": "57.501968503937015px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 21,
+        "y": 33.39227340267459,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "1802 Old Government",
+        "font": "123.21850393700788px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6,
+        "y": -206.42496285289747,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "The style is the Mediterranean revival style",
+        "font": "61.60925196850394px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 30,
+        "y": 115.35512630014858,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 11
+      }
+    ]
+  }
+}

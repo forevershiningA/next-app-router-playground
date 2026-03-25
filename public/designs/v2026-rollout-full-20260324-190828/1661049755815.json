@@ -1,0 +1,351 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.666Z",
+  "units": "mm",
+  "source": {
+    "id": "1661049755815",
+    "slug": "legacy-1661049755815",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1661049755815.json",
+    "savedAt": "2022-08-21T02:42:35.815Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 150,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 150,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-30",
+        "text": "October 2010 - August 2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 187.06
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-40",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -13,
+          "y_px": -44.273
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-33",
+        "text": "Forever in our hearts",
+        "font": {
+          "family": "Adorable",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": 369.547
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-36",
+        "text": "Our little ratbag,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 278.78
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Ziggy",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 52.76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-29",
+        "asset": "1_132_03",
+        "position": {
+          "x_px": -6,
+          "y_px": -256.733
+        },
+        "height_px": 66,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_132_03",
+        "path": "/shapes/motifs/1_132_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "939f69faa7cb754e390fe1817d209d6c5d71568450c69a7cbe0f27b6a9994471",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.666Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "name": "Rectangle (Portrait)",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "price": 256.03,
+        "quantity": 1,
+        "width": 150,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 905,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220819,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_132_03",
+        "item": "1_132_03",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": -256.7333333333333,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 66,
+        "ratio": 0.12571428571428572,
+        "itemID": 29
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "October 2010 - August 2022",
+        "font": "52.9425px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": 187.05999999999995,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 30
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "48.530625px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -13,
+        "y": -44.27333333333331,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 40
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever in our hearts",
+        "font": "70.59px Adorable",
+        "font_size": 16,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -9,
+        "y": 369.5466666666666,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 33
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Our little ratbag,",
+        "font": "57.354375000000005px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": 278.78,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 36
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Ziggy",
+        "font": "119.120625px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": 52.75999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      }
+    ]
+  }
+}

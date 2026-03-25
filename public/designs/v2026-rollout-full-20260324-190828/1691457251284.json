@@ -1,0 +1,309 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.764Z",
+  "units": "mm",
+  "source": {
+    "id": "1691457251284",
+    "slug": "legacy-1691457251284",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1691457251284.json",
+    "savedAt": "2023-08-08T01:14:11.284Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 220,
+      "height_mm": 120
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 220,
+      "height_mm": 120,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Jack Alexander GIBSON",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -103.882
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -230
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Everett Hill",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 204.432
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Always Loved",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 119.033
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "12.11.1996 - 1.11.2022",
+        "font": {
+          "family": "Adorable",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 13.033
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "efd0924e9bb985ee90ca0c7c977d4d6c9167cea57344eff267e9e21dbcb6fab8",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.765Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (No drilled holes)",
+        "price": 248.91,
+        "quantity": 1,
+        "width": 220,
+        "height": 120,
+        "_length": 2,
+        "init_width": 1197,
+        "init_height": 575,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230630,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Jack Alexander GIBSON",
+        "font": "86.64204545454544px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -8,
+        "y": -103.8817138671875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "50.96590909090908px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -2,
+        "y": -230,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Always Golden",
+        "font": "66.25568181818181px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -6,
+        "y": 204.4317855834961,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 5
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Always Loved",
+        "font": "66.25568181818181px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -4,
+        "y": 119.03276062011719,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "12.11.1996 - 1.11.2022",
+        "font": "71.35227272727272px Adorable",
+        "font_size": 14,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 13.032760620117188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      }
+    ]
+  }
+}

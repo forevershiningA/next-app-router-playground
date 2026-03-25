@@ -1,0 +1,152 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.688Z",
+  "units": "mm",
+  "source": {
+    "id": "1620706369168",
+    "slug": "legacy-1620706369168",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1620706369168.json",
+    "savedAt": "2021-05-11T04:12:49.168Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Urn Rectangle",
+    "material": {
+      "name": "src/backgrounds/colors/l/34.jpg",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 270
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 631,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 270,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "hjkj",
+        "font": {
+          "family": "Garamond",
+          "size_px": 84
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3cff0ce29c0aae3e024e5511eec4240d0f4a4a60c8526003ef0359b4a73bceda",
+    "sourceItemCount": 2,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.688Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Rectangle",
+        "border": "Border Rectangle",
+        "shape_url": "shapes/photos/borderrectangle.svg",
+        "shape": "Urn Rectangle",
+        "color": "#000000",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "price": 2475.62,
+        "quantity": 1,
+        "width": 200,
+        "height": 270,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 631,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 140,
+        "version_date": 20210428,
+        "mode": "2d"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "hjkj",
+        "font": "191.40333333333334px Garamond",
+        "font_size": 84,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 83,
+        "itemID": 1
+      }
+    ]
+  }
+}

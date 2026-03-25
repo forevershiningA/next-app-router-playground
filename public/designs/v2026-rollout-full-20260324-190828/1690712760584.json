@@ -1,0 +1,535 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.726Z",
+  "units": "mm",
+  "source": {
+    "id": "1690712760584",
+    "slug": "legacy-1690712760584",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1690712760584.json",
+    "savedAt": "2023-07-30T10:26:00.584Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/03.jpg",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 220,
+      "height_mm": 205
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 220,
+      "height_mm": 205,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "(PHOLI)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -30,
+          "y_px": -18
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "SHIRLEY CLARE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -20,
+          "y_px": 86
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "DEARLY LOVED BY HUSBAND JOHN, SON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 330.312
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "JENKINS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": -108
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "TREASURED GRANDCHILDREN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 480.688
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "LOGAN AND ALEXIS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 551.516
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "30.06.1944 - 24.09.2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 176
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "76 YEARS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": 258.312
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "ELIZA TORRES",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 400.312
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-17",
+        "asset": "1_171_12",
+        "position": {
+          "x_px": -560,
+          "y_px": -422
+        },
+        "height_px": 59,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_171_12",
+        "path": "/shapes/motifs/1_171_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "30af2bb76059ed8c006abca96f3c31969a857cd8517bb73e4f3f672881872de3",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.726Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#0c1137",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/03.jpg",
+        "name": "Bronze Plaque - Casino Blue - Lugs with Studs",
+        "price": 761.01,
+        "quantity": 1,
+        "width": 220,
+        "height": 205,
+        "_length": 10,
+        "init_width": 1200,
+        "init_height": 751,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 7,
+        "label": "(PHOLI)",
+        "font": "79.87909090909092px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -30,
+        "y": -18,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "SHIRLEY CLARE",
+        "font": "93.19227272727274px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -20,
+        "y": 86,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "DEARLY LOVED BY HUSBAND JOHN, SON",
+        "font": "59.909318181818186px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": 330.3116035461426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 10
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1690713602457,
+        "path": "../upload/2023/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "16907136024571bacc7902f244bfcb9609901.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -28,
+        "y": -398,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.2392589458413927,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1BACC790-2F24-4BFC-B960-99013936A661_1_201_a.jpeg",
+        "price": 280,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "BRERETON",
+        "font": "99.84886363636365px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -18,
+        "y": -108,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "TREASURED GRANDCHILDREN",
+        "font": "59.909318181818186px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": 480.68750762939453,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "LOGAN AND ALEXIS",
+        "font": "59.909318181818186px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": 551.5160102844238,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 15
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_171_12",
+        "item": "1_171_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -560,
+        "y": -422,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 59,
+        "ratio": 0.0627659574468085,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "30.06.1944 - 24.09.2021",
+        "font": "79.87909090909092px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14,
+        "y": 176,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "76 YEARS",
+        "font": "73.22250000000001px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -18,
+        "y": 258.3116035461426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "SCOTT, DAUGHTER IN LAW LEAH,",
+        "font": "59.909318181818186px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 400.3116035461426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 11
+      }
+    ]
+  }
+}

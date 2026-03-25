@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const ROOT = path.resolve(__dirname, '..');
 const VERSION = '2026.01';
@@ -264,6 +265,10 @@ function round(value) {
   return Math.round(value * 1000) / 1000;
 }
 
+function hashJson(value) {
+  return crypto.createHash('sha256').update(JSON.stringify(value)).digest('hex');
+}
+
 function buildCoordinateSystem(mlDir) {
   const normalizedMlDir = String(mlDir || '').toLowerCase();
   return {
@@ -339,6 +344,7 @@ function convertDesign(designId) {
   }
 
   const saved = JSON.parse(fs.readFileSync(legacyPath, 'utf8'));
+  const conversionWarnings = [];
   const headstone = saved.find((item) => item.type === 'Headstone' || item.type === 'Plaque');
   if (!headstone) {
     console.error(`Design ${designId} missing headstone data`);
@@ -349,8 +355,13 @@ function convertDesign(designId) {
 
   const viewport = parseViewport(headstone);
   let dpr = headstone.dpr || 1;
-  if ((headstone.device || '').toLowerCase() === 'desktop') {
+  if ((headstone.device || '').toLowerCase() === 'desktop' && !headstone.dpr) {
     dpr = 1;
+  }
+  if (!headstone.device) conversionWarnings.push('missing-device');
+  if (headstone.dpr == null) conversionWarnings.push('missing-dpr');
+  if (!headstone.navigator && (!headstone.init_width || !headstone.init_height)) {
+    conversionWarnings.push('missing-viewport-metadata');
   }
 
   const canvasPxW = viewport.width * dpr;
@@ -444,6 +455,16 @@ function convertDesign(designId) {
         id: asset,
         path: `/shapes/motifs/${asset}.svg`,
       })),
+    },
+    migration: {
+      pipeline: 'legacy2d-to-canonical3d',
+      converter: 'convert-saved-design.js',
+      converterVersion: VERSION,
+      sourceHash: hashJson(saved),
+      sourceItemCount: saved.length,
+      warnings: conversionWarnings,
+      confidence: conversionWarnings.length ? 'medium' : 'high',
+      migratedAt: new Date().toISOString(),
     },
     legacy: {
       raw: saved,

@@ -1,0 +1,393 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.584Z",
+  "units": "mm",
+  "source": {
+    "id": "1718852991151",
+    "slug": "legacy-1718852991151",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1718852991151.json",
+    "savedAt": "2024-06-20T03:09:51.151Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1164,
+      "height": 655,
+      "dpr": 1.649999976158142
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "R.I.P.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 136
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -99
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Walter Serf School of Business",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 127
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1992 - 2000",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 203
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Addie Wade",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 15,
+          "y_px": 264
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Rush Garrett",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": 322
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "1_154_07",
+        "position": {
+          "x_px": -10,
+          "y_px": 26
+        },
+        "height_px": 82,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "129-21",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_07",
+        "path": "/shapes/motifs/1_154_07.svg"
+      },
+      {
+        "id": "129-21",
+        "path": "/shapes/motifs/129-21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "32c0f50a51a9e7195c5f42e5f3123677598005664f4691f06cf239957ed6fa30",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.584Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 924,
+        "init_height": 456.0037841796875,
+        "device": "desktop",
+        "dpr": 1.649999976158142,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1164x655"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "R.I.P.",
+        "font": "163.66316682914967px Franklin Gothic",
+        "font_size": 136,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": -99,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 91,
+        "itemID": 1
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_07",
+        "item": "1_154_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": 26,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 82,
+        "ratio": 0.08541666666666667,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Walter Serf School of Business",
+        "font": "46.932819899535566px Chopin Script",
+        "font_size": 39,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": 127,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "129-21",
+        "item": "129-21",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.132013201320132,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1992 - 2000",
+        "font": "31.288546599690378px Franklin Gothic",
+        "font_size": 26,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 203,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Champlain College",
+        "font": "33.69535787658964px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 15,
+        "y": 264,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Burlington Vermont",
+        "font": "36.102169153488894px Franklin Gothic",
+        "font_size": 30,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 18,
+        "y": 322,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 5
+      }
+    ]
+  }
+}

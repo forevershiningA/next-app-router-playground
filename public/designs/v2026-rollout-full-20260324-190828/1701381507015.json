@@ -1,0 +1,574 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.458Z",
+  "units": "mm",
+  "source": {
+    "id": "1701381507015",
+    "slug": "legacy-1701381507015",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1701381507015.json",
+    "savedAt": "2023-11-30T21:58:27.015Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1104.8999999999999,
+      "height_mm": 717.55
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1104.8999999999999,
+      "height_mm": 717.55,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "Letesselasie E. Mesgun",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": 136,
+          "y_px": -72
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Chidane T. Andu",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": -149,
+          "y_px": -71
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "02/23/1953",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -166,
+          "y_px": -12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "03/01/1955",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 154,
+          "y_px": -7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "ኪዳነ ታድላ ዓንዱ",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -147,
+          "y_px": -48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "ለተስላሴ ኣንድርያስ ምስጉን",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 122,
+          "y_px": -44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Born in Hebo to be one on Earth & in Heaven",
+        "font": {
+          "family": "French Script",
+          "size_px": 79
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 193
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_154_07",
+        "position": {
+          "x_px": -196,
+          "y_px": 115
+        },
+        "height_px": 197,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_154_07",
+        "position": {
+          "x_px": 199.104,
+          "y_px": 118
+        },
+        "height_px": 197,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": -1,
+          "y_px": 67
+        },
+        "height_px": 425,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_169_04",
+        "position": {
+          "x_px": -3,
+          "y_px": -100
+        },
+        "height_px": 233,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_07",
+        "path": "/shapes/motifs/1_154_07.svg"
+      },
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      },
+      {
+        "id": "1_169_04",
+        "path": "/shapes/motifs/1_169_04.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "986e06e2572ae1e02afabb76ec564917137bcd34957d5e0634adbb017fb4410c",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.458Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 5285.4,
+        "quantity": 1,
+        "width": 1104.8999999999999,
+        "height": 717.55,
+        "_length": 90,
+        "init_width": 1126,
+        "init_height": 587,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1366x768"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1098,
+        "quantity": 1,
+        "width": 1200,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1126,
+        "init_height": 587,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_07",
+        "item": "1_154_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -196,
+        "y": 115,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 197,
+        "ratio": 0.20520833333333333,
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_07",
+        "item": "1_154_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 199.1043917294552,
+        "y": 118,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 197,
+        "ratio": 0.20520833333333333,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1,
+        "y": 67,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 425,
+        "ratio": 0.576662143826323,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_169_04",
+        "item": "1_169_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": -100,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 233,
+        "ratio": 0.2824242424242424,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Letesselasie E. Mesgun",
+        "font": "26.317472340747134px Dobkin",
+        "font_size": 57,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 136,
+        "y": -72,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Chidane T. Andu",
+        "font": "26.317472340747134px Dobkin",
+        "font_size": 57,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -149,
+        "y": -71,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "02/23/1953",
+        "font": "23.08550205328696px Dobkin",
+        "font_size": 50,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -166,
+        "y": -12,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "03/01/1955",
+        "font": "23.08550205328696px Dobkin",
+        "font_size": 50,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 154,
+        "y": -7,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "ኪዳነ ታድላ ዓንዱ",
+        "font": "23.08550205328696px Dobkin",
+        "font_size": 50,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -147,
+        "y": -48,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "ለተስላሴ ኣንድርያስ ምስጉን",
+        "font": "23.08550205328696px Dobkin",
+        "font_size": 50,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 122,
+        "y": -44,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Born in Hebo to be one on Earth & in Heaven",
+        "font": "36.475093244193395px French Script",
+        "font_size": 79,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 193,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 12
+      }
+    ]
+  }
+}

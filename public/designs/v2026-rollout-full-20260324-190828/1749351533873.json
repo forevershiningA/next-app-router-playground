@@ -1,0 +1,684 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.822Z",
+  "units": "mm",
+  "source": {
+    "id": "1749351533873",
+    "slug": "legacy-1749351533873",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1749351533873.json",
+    "savedAt": "2025-06-08T02:58:53.873Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 590,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 0.800000011920929
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 590,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Antonia Baldwin",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 99.186,
+          "y_px": -202.96
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 43.194,
+          "y_px": -262.09
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "March 23, 1966 -  September 19, 2021",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 104.786,
+          "y_px": -167.801
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Beloved Wife of Apakuki \"Kuki\" Tuisue",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 114.384,
+          "y_px": -106.274
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Devoted Mother of Sisilia \"Sis\" Tuisue",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 115.184,
+          "y_px": -73.513
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Cherished Daughter Of Ian and Lorna",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 104.786,
+          "y_px": -40.752
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Adored Aunt to many",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 86.388,
+          "y_px": 19.976
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Remembering you is Dignified",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 87.988,
+          "y_px": 47.943
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Minta Lyons",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 83.988,
+          "y_px": 74.312
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Remembering you is an Inflict",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 63.991,
+          "y_px": 101.48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "That time cannot Alliviate",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 3.2,
+          "y_px": 140.634
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Olive Barnett",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -0.8,
+          "y_px": 176.591
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Forever In Our Hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 3.999,
+          "y_px": 287.66
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Sister to Joanne, Erin and many Fijian ones",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 103.186,
+          "y_px": -11.986
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7fbe543c3cb8e278e2c7f384ccfd1b7ed27f4647c304aa6d9713461ef3937b14",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.822Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2434.32,
+        "quantity": 1,
+        "width": 590,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1809,
+        "init_height": 846.015625,
+        "device": "desktop",
+        "dpr": 0.800000011920929,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250508,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1366x768"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1749351833799,
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "174935183379920250608_121248_8gif_cro.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -187.69691186868556,
+        "y": -115.77514948811626,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.147226377547591,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "20250608_121248_8.gif",
+        "price": 0,
+        "quantity": 1,
+        "size": 363,
+        "width": "251",
+        "height": "399",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Maureen Ann Tuisue",
+        "font": "46.19245381332119px Great Vibes",
+        "font_size": 42,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 99.18629076838022,
+        "y": -202.95981087470454,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "35.19425052443519px Great Vibes",
+        "font_size": 32,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 43.19402985074623,
+        "y": -262.0898345153664,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "March 23, 1966 -  September 19, 2021",
+        "font": "21.996406577771992px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 104.78551686014362,
+        "y": -167.80141843971626,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Beloved Wife of Apakuki \"Kuki\" Tuisue",
+        "font": "23.096226906660593px Great Vibes",
+        "font_size": 21,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 114.38419016030957,
+        "y": -106.27423167848698,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Devoted Mother of Sisilia \"Sis\" Tuisue",
+        "font": "23.096226906660593px Great Vibes",
+        "font_size": 21,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 115.1840796019901,
+        "y": -73.51300236406615,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Cherished Daughter Of Ian and Lorna",
+        "font": "21.996406577771992px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 104.78551686014373,
+        "y": -40.75177304964541,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Adored Aunt to many",
+        "font": "25.295867564437792px Great Vibes",
+        "font_size": 23,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 86.3880597014927,
+        "y": 19.976359338061457,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Remembering you is Dignified",
+        "font": "24.196047235549194px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 87.98783858485365,
+        "y": 47.94326241134752,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Always Everyday",
+        "font": "24.196047235549194px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 83.98839137645109,
+        "y": 74.31205673758865,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Remembering you is an Inflict",
+        "font": "23.096226906660593px Great Vibes",
+        "font_size": 21,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 63.99115533443887,
+        "y": 101.47990543735222,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "That time cannot Alliviate",
+        "font": "31.89478953776939px Great Vibes",
+        "font_size": 29,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3.199557766722023,
+        "y": 140.6335697399527,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Sleep Well Beautiful",
+        "font": "23.096226906660593px Great Vibes",
+        "font_size": 21,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -0.7998894416805342,
+        "y": 176.59101654846336,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever In Our Hearts",
+        "font": "41.79317249776679px Great Vibes",
+        "font_size": 38,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3.9994472084024437,
+        "y": 287.6595744680851,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Sister to Joanne, Erin and many Fijian ones",
+        "font": "21.996406577771992px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 103.18573797678278,
+        "y": -11.985815602836908,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 8
+      }
+    ]
+  }
+}

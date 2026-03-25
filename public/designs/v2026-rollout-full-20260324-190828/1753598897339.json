@@ -1,0 +1,375 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:38.019Z",
+  "units": "mm",
+  "source": {
+    "id": "1753598897339",
+    "slug": "legacy-1753598897339",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1753598897339.json",
+    "savedAt": "2025-07-27T06:48:17.339Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Mathilda Rogers",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 110,
+          "y_px": -121.177
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In loving memory",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 108.75,
+          "y_px": -206.126
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Tillie Gonzalez 53 - 12th April 2025",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 121.25,
+          "y_px": -41.225
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Adored Poppy to Matilda, Harriet & Audrey",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -42.5,
+          "y_px": 211.649
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Beloved Father to Kylie & Vanessa",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -68.75,
+          "y_px": 149.186
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Loving husband to Noelene",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -63.75,
+          "y_px": 87.447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "663acea20e089aeb5898e9c91c86487382dbe3bc40bf5d13afd83164339101de",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:38.019Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 534.03,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 15,
+        "init_width": 1296,
+        "init_height": 666,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250724,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1753599072656,
+        "path": "../upload/2025/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1753599072656messenger_creation_bdcbd.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -288.75,
+        "y": -119.92792792792795,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.836875,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Messenger_creation_BDCBD287-28A5-4E68-94EF-EE9E47D17C9B.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 103,
+        "width": "219",
+        "height": "279",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "John David Mainwaring",
+        "font": "62.229375px Great Vibes",
+        "font_size": 23,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 110,
+        "y": -121.1771771771771,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In loving memory",
+        "font": "37.87875px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 108.75,
+        "y": -206.12612612612617,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "24th June 1953 - 12th April 2025",
+        "font": "37.87875px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 121.25,
+        "y": -41.22522522522519,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Adored Poppy to Matilda, Harriet & Audrey",
+        "font": "37.87875px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -42.5,
+        "y": 211.64864864864865,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Beloved Father to Kylie & Vanessa",
+        "font": "37.87875px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -68.75,
+        "y": 149.1861861861862,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Loving husband to Noelene",
+        "font": "37.87875px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -63.75,
+        "y": 87.44744744744742,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 5
+      }
+    ]
+  }
+}

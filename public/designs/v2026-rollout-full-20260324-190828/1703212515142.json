@@ -1,0 +1,390 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.224Z",
+  "units": "mm",
+  "source": {
+    "id": "1703212515142",
+    "slug": "legacy-1703212515142",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1703212515142.json",
+    "savedAt": "2023-12-22T02:35:15.142Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1334,
+      "height": 800,
+      "dpr": 1.9503486156463623
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "RUBEN WONG",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 19.963,
+          "y_px": -97.584
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In loving memory of Kevin Burnside",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 12.981,
+          "y_px": -58.956
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "His enduring spirit and unwavering",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 13.991,
+          "y_px": -32.631
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Dedication inspire us daily",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 15.991,
+          "y_px": -7.801
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "May this home stand tribute to his lasting",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 8.994,
+          "y_px": 43.928
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Impact and legacy",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 10.993,
+          "y_px": 70.793
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 34.978,
+          "y_px": 113.245
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a57aa1b9fa88eea99ab795483c7a0af2e2cae47d6e7ab42a97a5e57ca2bb4228",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.224Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 1,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Flat Back",
+        "price": 922.3,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 0,
+        "init_width": 786,
+        "init_height": 446.0050277709961,
+        "device": "tablet",
+        "dpr": 1.9503486156463623,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (tablet(android)), 1334x800"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "BURNSIDE COTTAGE",
+        "font": "69.56353808008267px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 19.962594137000565,
+        "y": -97.58378566346524,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "In loving memory of Kevin Burnside",
+        "font": "47.30320589445621px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 12.981348867893871,
+        "y": -58.95587547374447,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "His enduring spirit and unwavering",
+        "font": "50.08574741765952px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 13.990951235383704,
+        "y": -32.63122799442481,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Dedication inspire us daily",
+        "font": "50.08574741765952px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 15.990735326668982,
+        "y": -7.801225275025517,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "May this home stand tribute to his lasting",
+        "font": "47.30320589445621px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 8.9941999319758,
+        "y": 43.927550172502144,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Impact and legacy",
+        "font": "55.65083046406613px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 10.992924246259804,
+        "y": 70.79331275616374,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2023",
+        "font": "47.30320589445621px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 34.978091876084136,
+        "y": 113.244949611812,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 8
+      }
+    ]
+  }
+}

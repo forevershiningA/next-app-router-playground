@@ -1,0 +1,271 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:18.823Z",
+  "units": "mm",
+  "source": {
+    "id": "1677559670846",
+    "slug": "legacy-1677559670846",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1677559670846.json",
+    "savedAt": "2023-02-28T04:47:50.846Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 152.39999999999998
+    },
+    "viewportPx": {
+      "width": 834,
+      "height": 1194,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 152.39999999999998,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "BUTLER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": -188
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "“Where flowers bloom,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -10
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "so does hope.”",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 16,
+          "y_px": 72
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Allie Berry",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 302,
+          "y_px": 212
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2300e63919628c09f8cf349ba6113603e911c68c6fed6aa69b3584b606c0daea",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:18.823Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "price": 823.58,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 152.39999999999998,
+        "_length": 0,
+        "init_width": 954,
+        "init_height": 663,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230222,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 834x1194"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "GARDEN",
+        "font": "165.42372047244095px Garamond",
+        "font_size": 39,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -12,
+        "y": -188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "“Where flowers bloom,",
+        "font": "110.28248031496064px Chopin Script",
+        "font_size": 26,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": -10,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "so does hope.”",
+        "font": "110.28248031496064px Chopin Script",
+        "font_size": 26,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 16,
+        "y": 72,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "- Lady Bird Johnson",
+        "font": "67.86614173228347px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 302,
+        "y": 212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 4
+      }
+    ]
+  }
+}

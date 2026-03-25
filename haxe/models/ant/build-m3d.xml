@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="build-m3d" default="build-m3d">
+	<import file="config.xml"/>
+	
+	<property name="IGNORE_CHECKSUM" value="true"/>
+	<property name="COMPILE_DEBUG" value="false"/>
+	
+	<target name="build-m3d">
+		
+		<echo>Buildind executors...</echo>
+		
+		<parallel threadCount="4">
+			<sequential>
+				<condition property="executor.file.set" else="false"><isset property="executor.file"/></condition>
+				<if>
+					<equals arg1="${executor.file.set}" arg2="true" />
+					<then>
+						<condition property="executor.out_file.var" value="${executor.out_file}" else="${executor.file}.compiled.js"><isset property="executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${executor.file}"/>
+							<param name="out_file" location="${executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset1.executor.file.set" else="false"><isset property="asset1.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset1.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset1.executor.out_file.var" value="${asset1.executor.out_file}" else="${asset1.executor.file}.compiled.js"><isset property="asset1.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset1.executor.file}"/>
+							<param name="out_file" location="${asset1.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset2.executor.file.set" else="false"><isset property="asset2.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset2.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset2.executor.out_file.var" value="${asset2.executor.out_file}" else="${asset2.executor.file}.compiled.js"><isset property="asset2.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset2.executor.file}"/>
+							<param name="out_file" location="${asset2.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset3.executor.file.set" else="false"><isset property="asset3.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset3.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset3.executor.out_file.var" value="${asset3.executor.out_file}" else="${asset3.executor.file}.compiled.js"><isset property="asset3.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset3.executor.file}"/>
+							<param name="out_file" location="${asset3.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset4.executor.file.set" else="false"><isset property="asset4.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset4.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset4.executor.out_file.var" value="${asset4.executor.out_file}" else="${asset4.executor.file}.compiled.js"><isset property="asset4.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset4.executor.file}"/>
+							<param name="out_file" location="${asset4.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset5.executor.file.set" else="false"><isset property="asset5.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset5.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset5.executor.out_file.var" value="${asset5.executor.out_file}" else="${asset5.executor.file}.compiled.js"><isset property="asset5.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset5.executor.file}"/>
+							<param name="out_file" location="${asset5.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset6.executor.file.set" else="false"><isset property="asset6.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset6.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset6.executor.out_file.var" value="${asset6.executor.out_file}" else="${asset6.executor.file}.compiled.js"><isset property="asset6.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset6.executor.file}"/>
+							<param name="out_file" location="${asset6.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset7.executor.file.set" else="false"><isset property="asset7.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset7.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset7.executor.out_file.var" value="${asset7.executor.out_file}" else="${asset7.executor.file}.compiled.js"><isset property="asset7.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset7.executor.file}"/>
+							<param name="out_file" location="${asset7.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+			<sequential>
+				<condition property="asset8.executor.file.set" else="false"><isset property="asset8.executor.file"/></condition>
+				<if>
+					<equals arg1="${asset8.executor.file.set}" arg2="true" />
+					<then>
+						<condition property="asset8.executor.out_file.var" value="${asset8.executor.out_file}" else="${asset8.executor.file}.compiled.js"><isset property="asset8.executor.out_file"/></condition>
+						<antcall target="-build-executor">
+							<param name="file" value="${asset8.executor.file}"/>
+							<param name="out_file" location="${asset8.executor.out_file.var}"/>
+						</antcall>
+					</then>
+				</if>
+			</sequential>
+		</parallel>
+		
+		<echo />
+		<echo>Buildind M3D...</echo>
+		
+		
+		<condition property="version.arg" value="-version ${version}" else=""><isset property="version"/></condition>
+		<condition property="definition.file.arg" value="-definition &quot;${definition.file}&quot;" else=""><isset property="definition.file"/></condition>
+		<condition property="executor.out_file.arg" value="-executor &quot;${executor.out_file.var}&quot;" else=""><isset property="executor.out_file.var"/></condition>
+		<condition property="output.file.arg" value="-output &quot;${output.file}&quot;" else=""><isset property="output.file"/></condition>
+		
+		<condition property="asset1.executor.arg" value=" &quot;${asset1.executor.out_file.var}&quot;" else=""><isset property="asset1.executor.out_file.var"/></condition>
+		<condition property="asset1.arg" value="-asset &quot;${asset1.type}&quot; &quot;${asset1.id}&quot; &quot;${asset1.file}&quot;${asset1.executor.arg}" else="">
+			<and>
+				<isset property="asset1.id"/>
+				<isset property="asset1.type"/>
+				<isset property="asset1.file"/>
+				<available file="${asset1.file}"/>
+			</and>
+		</condition>
+		<condition property="asset2.executor.arg" value=" &quot;${asset2.executor.out_file.var}&quot;" else=""><isset property="asset2.executor.out_file.var"/></condition>
+		<condition property="asset2.arg" value="-asset &quot;${asset2.type}&quot; &quot;${asset2.id}&quot; &quot;${asset2.file}&quot;${asset2.executor.arg}" else="">
+			<and>
+				<isset property="asset2.id"/>
+				<isset property="asset2.type"/>
+				<isset property="asset2.file"/>
+				<available file="${asset2.file}"/>
+			</and>
+		</condition>
+		<condition property="asset3.executor.arg" value=" &quot;${asset3.executor.out_file.var}&quot;" else=""><isset property="asset3.executor.out_file.var"/></condition>
+		<condition property="asset3.arg" value="-asset &quot;${asset3.type}&quot; &quot;${asset3.id}&quot; &quot;${asset3.file}&quot;${asset3.executor.arg}" else="">
+			<and>
+				<isset property="asset3.id"/>
+				<isset property="asset3.type"/>
+				<isset property="asset3.file"/>
+				<available file="${asset3.file}"/>
+			</and>
+		</condition>
+		<condition property="asset4.executor.arg" value=" &quot;${asset4.executor.out_file.var}&quot;" else=""><isset property="asset4.executor.out_file.var"/></condition>
+		<condition property="asset4.arg" value="-asset &quot;${asset4.type}&quot; &quot;${asset4.id}&quot; &quot;${asset4.file}&quot;${asset4.executor.arg}" else="">
+			<and>
+				<isset property="asset4.id"/>
+				<isset property="asset4.type"/>
+				<isset property="asset4.file"/>
+				<available file="${asset4.file}"/>
+			</and>
+		</condition>
+		<condition property="asset5.executor.arg" value=" &quot;${asset5.executor.out_file.var}&quot;" else=""><isset property="asset5.executor.out_file.var"/></condition>
+		<condition property="asset5.arg" value="-asset &quot;${asset5.type}&quot; &quot;${asset5.id}&quot; &quot;${asset5.file}&quot;${asset5.executor.arg}" else="">
+			<and>
+				<isset property="asset5.id"/>
+				<isset property="asset5.type"/>
+				<isset property="asset5.file"/>
+				<available file="${asset5.file}"/>
+			</and>
+		</condition>
+		<condition property="asset6.executor.arg" value=" &quot;${asset6.executor.out_file.var}&quot;" else=""><isset property="asset6.executor.out_file.var"/></condition>
+		<condition property="asset6.arg" value="-asset &quot;${asset6.type}&quot; &quot;${asset6.id}&quot; &quot;${asset6.file}&quot;${asset6.executor.arg}" else="">
+			<and>
+				<isset property="asset6.id"/>
+				<isset property="asset6.type"/>
+				<isset property="asset6.file"/>
+				<available file="${asset6.file}"/>
+			</and>
+		</condition>
+		<condition property="asset7.executor.arg" value=" &quot;${asset7.executor.out_file.var}&quot;" else=""><isset property="asset7.executor.out_file.var"/></condition>
+		<condition property="asset7.arg" value="-asset &quot;${asset7.type}&quot; &quot;${asset7.id}&quot; &quot;${asset7.file}&quot;${asset7.executor.arg}" else="">
+			<and>
+				<isset property="asset7.id"/>
+				<isset property="asset7.type"/>
+				<isset property="asset7.file"/>
+				<available file="${asset7.file}"/>
+			</and>
+		</condition>
+		<condition property="asset8.executor.arg" value=" &quot;${asset8.executor.out_file.var}&quot;" else=""><isset property="asset8.executor.out_file.var"/></condition>
+		<condition property="asset8.arg" value="-asset &quot;${asset8.type}&quot; &quot;${asset8.id}&quot; &quot;${asset8.file}&quot;${asset8.executor.arg}" else="">
+			<and>
+				<isset property="asset8.id"/>
+				<isset property="asset8.type"/>
+				<isset property="asset8.file"/>
+				<available file="${asset8.file}"/>
+			</and>
+		</condition>
+		
+		<java jar="${M3DPACKER.JAR}" fork="true" failonerror="true">
+			<arg line="${version.arg}" />
+			<arg line="${definition.file.arg}" />
+			<arg line="${asset1.arg}" />
+			<arg line="${asset2.arg}" />
+			<arg line="${asset3.arg}" />
+			<arg line="${asset4.arg}" />
+			<arg line="${asset5.arg}" />
+			<arg line="${asset6.arg}" />
+			<arg line="${asset7.arg}" />
+			<arg line="${asset8.arg}" />
+			<arg line="${executor.out_file.arg}" />
+			<arg line="${output.file.arg}" />
+		</java>
+		
+		<condition property="copy-to-build.dir.set" else="false"><isset property="copy-to-build.dir"/></condition>
+		<if>
+			<equals arg1="${copy-to-build.dir.set}" arg2="true" />
+			<then>
+				<copy file="${output.file}" todir="${BUILD_HOME}/${copy-to-build.dir}" />
+			</then>
+		</if>
+		
+		<antcall target="-after-build"><param name="m3d.file" value="${output.file}"/></antcall>
+		
+	</target>
+	
+	<target name="-build-executor">
+		<!-- 
+		
+			Kompiluje JS z kodu żródłowego HAXE.
+			
+			Kompilacja następuje w przypadku gdy plik .hx jest nowy, zmieniła się jego zawartość (sprawdzana jest suma kontrolna pliku .hx) lub brakuje pliku js.
+			Można pominąć sprawdzanie sumy kontrolnej ustawiając tymczasowo parametr IGNORE_CHECKSUM na true.
+			W przypadku przetwarzania dużej liczby plików ignorowanie sprawdzania sumy kontrolnej może wielokrotnie wydłużyć tworzenie plików m3d.
+		
+		-->
+		<checksum file="${file}" fileext=".checksum" verifyProperty="checksumOk" />
+		<if>
+			<or>
+				<equals arg1="${checksumOk}" arg2="false" />
+				<equals arg1="${IGNORE_CHECKSUM}" arg2="true" />
+				<not><available file="${out_file}"/></not>
+			</or>
+			<then>
+				<condition property="debug.mode" value="-debug" else=""><istrue value="${COMPILE_DEBUG}"/></condition>
+				
+				<propertyregex property="class.name"
+					input="${file}"
+					regexp="\Q${SOURCE_DIR}\\E(.*)\.hx"
+					select="\1"
+					casesensitive="false" />
+				
+				<propertyregex property="class.name"
+					input="${class.name}"
+					override="true"
+					regexp="\\"
+					replace="."
+					casesensitive="false" />
+				
+				<echo>Class name for compiling: ${class.name}</echo>
+				
+				<echo>Compiling executor file ${out_file}</echo>
+				<exec executable="${HAXE}" dir="${SOURCE_DIR}">
+					<arg value="${debug.mode}"/>
+					<arg value="-lib"/>
+					<arg value="${API.LIBRARY}"/>
+					<arg value="-D"/>
+					<arg value="shallow-expose"/>
+					<arg value="${class.name}"/>
+					<arg value="-js"/>
+					<arg value="${out_file}"/>
+				</exec>
+				
+				<replace file="${out_file}">
+					<replacetoken><![CDATA[var $hx_exports = typeof exports != "undefined" ? exports : typeof window != "undefined" ? window : typeof self != "undefined" ? self : this;]]></replacetoken>
+					<replacevalue><![CDATA[var $hx_exports = $hx_exports || {};]]></replacevalue>
+				</replace>
+				
+				<checksum file="${file}" fileext=".checksum" />
+			</then>
+		</if>
+	</target>
+	
+	<target name="-after-build">
+		<!--<copy file="${m3d.file}" todir="${PROJECT_HOME}/source/bin/html5/bin/models" />-->
+	</target>
+	
+</project>

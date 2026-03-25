@@ -1,0 +1,363 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.671Z",
+  "units": "mm",
+  "source": {
+    "id": "1759692619517",
+    "slug": "legacy-1759692619517",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1759692619517.json",
+    "savedAt": "2025-10-05T19:30:19.517Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/Sandstone.jpg",
+      "texture": "/textures/forever/l/Sandstone.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 832,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Sandstone.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Alford Munoz",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 69
+        },
+        "position": {
+          "x_px": -15.293,
+          "y_px": 288.401
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "March 19,1949-December 21,2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 2.109,
+          "y_px": 375.97
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Beloved husband and Father",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": 11.338,
+          "y_px": -138.224
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_153_10",
+        "position": {
+          "x_px": -349.102,
+          "y_px": -336.373
+        },
+        "height_px": 146,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_153_10",
+        "position": {
+          "x_px": 343.564,
+          "y_px": -348.366
+        },
+        "height_px": 137,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_153_10",
+        "path": "/shapes/motifs/1_153_10.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b53f62f4cf6cbaff27f5626368ff638ad5023654ce743a6074f7337ca5cb9854",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.671Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Sandstone.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1413.96,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 384,
+        "init_height": 642,
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x832"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 565,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 384,
+        "init_height": 642,
+        "mode": "2d"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1759692951741,
+        "path": "../upload/2025/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "17596929517411000000271_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 6.064453125,
+        "y": 56.538040303738285,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "ratio": 0.8302408460624666,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000000271.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_10",
+        "item": "1_153_10",
+        "price": 224.64988000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -349.1015625,
+        "y": -336.372785241433,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 146,
+        "ratio": 0.21128798842257598,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_10",
+        "item": "1_153_10",
+        "price": 222.66556000000003,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 343.564453125,
+        "y": -348.36570288162,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 137,
+        "ratio": 0.19826338639652677,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 6.25,
+        "quantity": 15,
+        "label": "Joe Casas Pacheco",
+        "font": "102.16113610798652px Dobkin",
+        "font_size": 69,
+        "font_family": "Dobkin",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -15.29296875,
+        "y": 288.40111468068505,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 28,
+        "label": "March 19,1949-December 21,2024",
+        "font": "42.9372890888639px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2.109375,
+        "y": 375.96984521028014,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 6.25,
+        "quantity": 23,
+        "label": "Beloved husband and Father",
+        "font": "84.39398200224973px Dobkin",
+        "font_size": 57,
+        "font_family": "Dobkin",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 11.337890625,
+        "y": -138.22352024922145,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 4
+      }
+    ]
+  }
+}

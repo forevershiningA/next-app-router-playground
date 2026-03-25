@@ -1,0 +1,132 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.897Z",
+  "units": "mm",
+  "source": {
+    "id": "1588842583920",
+    "slug": "legacy-1588842583920",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1588842583920.json",
+    "savedAt": "2020-05-07T09:09:43.920Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle Landscape",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "40",
+      "height_mm": "60"
+    },
+    "viewportPx": {
+      "width": 958,
+      "height": 773,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "40",
+      "height_mm": "60",
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2ddd7232f13b6b128ee5e9d53c072d3800f32e23f3c341f00367c3f2f3f52012",
+    "sourceItemCount": 2,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.898Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "shape": "Rectangle Landscape",
+        "color": "#000000",
+        "fixed": 2,
+        "texture": "src/ceramic/l/01.jpg",
+        "price": "140.00",
+        "quantity": 1,
+        "width": "40",
+        "height": "60",
+        "_length": 1,
+        "init_width": 958,
+        "init_height": 773
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1588842676067,
+        "type": "Photo",
+        "item": "1588842676067d889929a30e7466799ab118a.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.136030361757106,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "D889929A-30E7-4667-99AB-118A4CE4693C.jpeg",
+        "price": null,
+        "quantity": 1,
+        "size": 35,
+        "width": "626",
+        "height": "440",
+        "itemID": 1
+      }
+    ]
+  }
+}

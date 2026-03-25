@@ -1,0 +1,440 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.972Z",
+  "units": "mm",
+  "source": {
+    "id": "1723691873424",
+    "slug": "legacy-1723691873424",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1723691873424.json",
+    "savedAt": "2024-08-15T03:17:53.424Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 749.3,
+      "height_mm": 533.4
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 749.3,
+      "height_mm": 533.4,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 946.15,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Beers-Laxamana",
+        "font": {
+          "family": "Garamond",
+          "size_px": 108
+        },
+        "position": {
+          "x_px": 7.506,
+          "y_px": -116.786
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Baxter",
+        "font": {
+          "family": "Garamond",
+          "size_px": 73
+        },
+        "position": {
+          "x_px": -263.515,
+          "y_px": -37.498
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Sylvester",
+        "font": {
+          "family": "Garamond",
+          "size_px": 86
+        },
+        "position": {
+          "x_px": 225.515,
+          "y_px": -40.991
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "April 24, 1970",
+        "font": {
+          "family": "Garamond",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -261.269,
+          "y_px": 11.773
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "“To love another person is to see the face of God”",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 210
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "November 6, 1961",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 224.264,
+          "y_px": 11.773
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_208_03",
+        "path": "/shapes/motifs/1_208_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ed07c376e52a20a752a2b49e5b055613511c79c41ef7a1f5f85991b62786266f",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.972Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2852.21,
+        "quantity": 1,
+        "width": 749.3,
+        "height": 533.4,
+        "_length": 80,
+        "init_width": 1246,
+        "init_height": 679,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 771,
+        "quantity": 1,
+        "width": 946.15,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1246,
+        "init_height": 679,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Beers-Laxamana",
+        "font": "103.24515334312024px Garamond",
+        "font_size": 108,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7.505617977528118,
+        "y": -116.78645066273933,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 73,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Jason",
+        "font": "69.78607587081275px Garamond",
+        "font_size": 73,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -263.5152487961477,
+        "y": -37.49779086892488,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 63,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Marcus",
+        "font": "82.21373321766983px Garamond",
+        "font_size": 86,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 225.5152487961476,
+        "y": -40.99116347569952,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1719580969533,
+        "path": "../upload/2024/06/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1719580969533img_1141_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -35.7552166934189,
+        "y": 32.777614138438935,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5567140621442759,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1141.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "198",
+        "width": "276",
+        "height": "189",
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "April 24, 1970",
+        "font": "28.679209261977846px Garamond",
+        "font_size": 30,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -261.26886035313,
+        "y": 11.77319587628864,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 5
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_03",
+        "item": "1_208_03",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05442176870748299,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "“To love another person is to see the face of God”",
+        "font": "34.41505111437341px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 210,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "November 6, 1961",
+        "font": "32.50310383024156px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 224.26404494382018,
+        "y": 11.773195876288696,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 7
+      }
+    ]
+  }
+}

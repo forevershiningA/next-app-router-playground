@@ -1,0 +1,480 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.832Z",
+  "units": "mm",
+  "source": {
+    "id": "1745250359825",
+    "slug": "legacy-1745250359825",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1745250359825.json",
+    "savedAt": "2025-04-21T15:45:59.825Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 800.0999999999999,
+      "height_mm": 412.75
+    },
+    "viewportPx": {
+      "width": 1140,
+      "height": 760,
+      "dpr": 2.4
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 800.0999999999999,
+      "height_mm": 412.75,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 900.0999999999999,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Lawrence \"Lorenzo\" Nevarez",
+        "font": {
+          "family": "Garamond",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": -130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Dec. 16, 1955 to May 31, 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": -75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Gone Fishing in Heaven!!",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": 19,
+          "y_px": -7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Beloved Husband, Father, Grandfather, Son & Brother",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 320
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "2 Timothy 4:7",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 370
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "cross_002",
+        "position": {
+          "x_px": -19,
+          "y_px": -204
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "cross_002",
+        "position": {
+          "x_px": 284,
+          "y_px": 94
+        },
+        "height_px": 77,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "cross_002",
+        "position": {
+          "x_px": -257,
+          "y_px": 105
+        },
+        "height_px": 76,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "82b341150273af9b29cc75f3c1c9d7830108fcac1b19c0ac0824a525f1705f7b",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.832Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2537.33,
+        "quantity": 1,
+        "width": 800.0999999999999,
+        "height": 412.75,
+        "_length": 80,
+        "init_width": 900,
+        "init_height": 544,
+        "device": "desktop",
+        "dpr": 2.4,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1140x760"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 934,
+        "quantity": 1,
+        "width": 900.0999999999999,
+        "height": 100,
+        "_length": 250,
+        "init_width": 900,
+        "init_height": 544,
+        "mode": "2d"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -19,
+        "y": -204,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 55,
+        "ratio": 0.19784172661870503,
+        "itemID": 1
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 284,
+        "y": 94,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 77,
+        "ratio": 0.27697841726618705,
+        "itemID": 2
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -257,
+        "y": 105,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 76,
+        "ratio": 0.2733812949640288,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Lawrence \"Lorenzo\" Nevarez",
+        "font": "60.35524645645918px Garamond",
+        "font_size": 45,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7,
+        "y": -130,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Dec. 16, 1955 to May 31, 2024",
+        "font": "37.55437557290793px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 12,
+        "y": -75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Gone Fishing in Heaven!!",
+        "font": "69.74384034968615px Great Vibes",
+        "font_size": 52,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 19,
+        "y": -7,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "Beloved Husband, Father, Grandfather, Son & Brother",
+        "font": "50.966652563232195px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7,
+        "y": 320,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "2 Timothy 4:7",
+        "font": "41.57805867000521px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": 370,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 8
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1745250372747,
+        "path": "../upload/2025/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1745250372747img_0877_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -2.400000000000091,
+        "y": 153.52941176470586,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8727842012086009,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_0877.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 177,
+        "width": "172",
+        "height": "237",
+        "itemID": 9
+      }
+    ]
+  }
+}

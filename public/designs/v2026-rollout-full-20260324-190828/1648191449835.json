@@ -1,0 +1,561 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.917Z",
+  "units": "mm",
+  "source": {
+    "id": "1648191449835",
+    "slug": "legacy-1648191449835",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1648191449835.json",
+    "savedAt": "2022-03-25T06:57:29.835Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 450,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 1664,
+      "height": 1110,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 450,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -19.278,
+          "y_px": -379.141
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "DOMENICO CICCONE",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -11.246,
+          "y_px": -282.749
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Born Solano, Reggio Calabria, Italy",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -3.213,
+          "y_px": -200.816
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "18/01/1941 - 21/09/2021",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -8.033,
+          "y_px": -149.407
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Dearly Loved and Respected",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -11.246,
+          "y_px": -57.835
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Brother, Uncle, Brother-in-Law,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 9.639,
+          "y_px": 52.908
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Sadly Missed Each & Every Day",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 16.065,
+          "y_px": 374.321
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Father-in-Law & Friend",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -1.607,
+          "y_px": 101.211
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Husband, Father, Nonno,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 6.426,
+          "y_px": -1.392
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_185_22",
+        "position": {
+          "x_px": 15.639,
+          "y_px": 230.697
+        },
+        "height_px": 86,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_185_22",
+        "path": "/shapes/motifs/1_185_22.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4ae8ee75444f4fc3cb4f4a2a59e1a4d51f3c41fd1266fd2ee02d4050aa94d35f",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.917Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Flat Back",
+        "border": "Border 2",
+        "shape_url": "shapes/photos/border2.svg",
+        "fixingSystem": 1,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": 1590.13,
+        "quantity": 1,
+        "width": 450,
+        "height": 300,
+        "_length": 1,
+        "init_width": 1424,
+        "init_height": 935,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220323,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36, 1664x1110"
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_185_22",
+        "item": "1_185_22",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 15.63917525773195,
+        "y": 230.69725269676758,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 86,
+        "ratio": 0.15955473098330242,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "36.464999999999996px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -19.278350515463917,
+        "y": -379.1408934707904,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "DOMENICO CICCONE",
+        "font": "69.89125px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -11.245704467353951,
+        "y": -282.7491408934708,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "Born Solano, Reggio Calabria, Italy",
+        "font": "36.464999999999996px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -3.2130584192439864,
+        "y": -200.81615120274913,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "18/01/1941 - 21/09/2021",
+        "font": "36.464999999999996px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -8.032646048109966,
+        "y": -149.40721649484536,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Dearly Loved and Respected",
+        "font": "42.5425px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -11.245704467353951,
+        "y": -57.83505154639175,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Brother, Uncle, Brother-in-Law,",
+        "font": "36.464999999999996px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 9.63917525773195,
+        "y": 52.90839994854548,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Sadly Missed Each & Every Day",
+        "font": "42.5425px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 16.06529209621993,
+        "y": 374.3213058419244,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Father-in-Law & Friend",
+        "font": "33.426249999999996px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.6065292096219932,
+        "y": 101.21134020618557,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Husband, Father, Nonno,",
+        "font": "39.50375px Lucida Calligraphy",
+        "font_size": 13,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6.426116838488042,
+        "y": -1.3924012716614698,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 11
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1648191753898,
+        "path": "../upload/2022/03/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "164819175389801_dad__revised_and_corr.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -484.5,
+        "y": -49.48235294117649,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9739583333333334,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "01 Dad - Revised and Corrected.jpg",
+        "price": 320,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 14
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1648191884107,
+        "path": "../upload/2022/03/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "164819188410702_dad__portrait_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 487.5,
+        "y": -40.485561497326216,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9739583333333334,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "02 Dad - Portrait.jpg",
+        "price": 320,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 15
+      }
+    ]
+  }
+}

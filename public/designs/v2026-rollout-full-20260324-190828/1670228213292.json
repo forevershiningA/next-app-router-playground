@@ -1,0 +1,531 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.349Z",
+  "units": "mm",
+  "source": {
+    "id": "1670228213292",
+    "slug": "legacy-1670228213292",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1670228213292.json",
+    "savedAt": "2022-12-05T08:16:53.292Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 486,
+      "height_mm": 351
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 486,
+      "height_mm": 351,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In everloving memory of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -200
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "May his memory be eternal",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -152
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "So loved",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -104
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dance on...",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -56
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Rest in Peace",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Traditional Engraved Headstone - 05/12/2022",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 250
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 290
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Beloved",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_184_24",
+        "position": {
+          "x_px": -378,
+          "y_px": -172
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_184_24",
+        "position": {
+          "x_px": 375.691,
+          "y_px": -173
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_184_24",
+        "path": "/shapes/motifs/1_184_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c8c2cdc0cb5b854263920bec42f17d3fed3aaf6888686532da30eec268d3783f",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.349Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 874.44,
+        "quantity": 1,
+        "width": 486,
+        "height": 351,
+        "_length": 80,
+        "init_width": 1332,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20221201,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_24",
+        "item": "1_184_24",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -378,
+        "y": -172,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.060514372163388806,
+        "itemID": 9
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_24",
+        "item": "1_184_24",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 375.6914607497058,
+        "y": -173,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.060514372163388806,
+        "itemID": 10
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1670228258338,
+        "path": "../upload/2022/12/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1670228258338traditionalheadstone_cro.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -249,
+        "y": -9,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3606979405034324,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "traditional-headstone.jpg",
+        "price": 282,
+        "quantity": 1,
+        "size": "70 x 90 mm",
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 20,
+        "label": "In everloving memory of",
+        "font": "31.524999999999995px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 0,
+        "y": -200,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "May his memory be eternal",
+        "font": "31.524999999999995px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 0,
+        "y": -152,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 7,
+        "label": "So loved",
+        "font": "31.524999999999995px Franklin Gothic",
+        "font_size": 18,
+        "font_family": "Franklin Gothic",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 0,
+        "y": -104,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 10,
+        "label": "Dance on...",
+        "font": "40.28194444444444px Dobkin",
+        "font_size": 23,
+        "font_family": "Dobkin",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -56,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Rest in Peace",
+        "font": "38.53055555555555px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 39,
+        "label": "Traditional Engraved Headstone - 05/12/2022",
+        "font": "31.524999999999995px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 250,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "31.524999999999995px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 290,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 7,
+        "label": "Beloved",
+        "font": "57.79583333333333px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -7,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 5
+      }
+    ]
+  }
+}

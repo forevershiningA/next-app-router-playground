@@ -1,0 +1,583 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:48.541Z",
+  "units": "mm",
+  "source": {
+    "id": "1668786815086",
+    "slug": "legacy-1668786815086",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1668786815086.json",
+    "savedAt": "2022-11-18T15:53:35.086Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/05.jpg",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 552.4499999999999,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1200,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 552.4499999999999,
+      "height_mm": 400,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Julie’s Garden",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -252
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "This remarkable garden was created by the love and passion of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -173
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Ezekiel Phillips",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Julie has never rested!!",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": 301
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Voltaire: ",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 112
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Her appreciation of natural splendor ",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -38
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "and her devotion to cultivating beauty with ",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "plants has created this magnificent landscape  ",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 46
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "We must cultivate our own garden. ",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": 148
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "When man was put in the garden of Eden he was put there so ",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 181
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "that he should work, which proves that man was not ",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 218
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-33",
+        "text": "born to rest.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 252
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "685363334228525bfb3d2fd771159aeb3eab3177aeb32d59138beebfbba7e5ca",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:48.541Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 8",
+        "shape_url": "shapes/photos/border8.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#1a391a",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/05.jpg",
+        "name": "Bronze Plaque - Dark Green - Lugs with Studs",
+        "price": 2250.17,
+        "quantity": 1,
+        "width": 552.4499999999999,
+        "height": 400,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 1025,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221020,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36, 1920x1200"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 13,
+        "label": "Julie’s Garden",
+        "font": "110.3482215585121px Lucida Calligraphy",
+        "font_size": 61,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1,
+        "y": -252,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 65,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 51,
+        "label": "This remarkable garden was created by the love and passion of",
+        "font": "27.134808579961987px Lucida Calligraphy",
+        "font_size": 15,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": -173,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Juliann Menke Gill",
+        "font": "56.07860439858811px Lucida Calligraphy",
+        "font_size": 31,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -9,
+        "y": -98,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Julie has never rested!!",
+        "font": "50.651642682595714px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -9,
+        "y": 301,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 18
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Voltaire: ",
+        "font": "36.17974477328265px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": 112,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 19
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Her appreciation of natural splendor ",
+        "font": "30.752783057290255px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -10,
+        "y": -38,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 20
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "and her devotion to cultivating beauty with ",
+        "font": "32.56177029595439px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": 3,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 22
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "plants has created this magnificent landscape  ",
+        "font": "32.56177029595439px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 3,
+        "y": 46,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 24
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "We must cultivate our own garden. ",
+        "font": "28.94379581862612px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -18,
+        "y": 148,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 25
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "When man was put in the garden of Eden he was put there so ",
+        "font": "28.94379581862612px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": 181,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 29
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "that he should work, which proves that man was not ",
+        "font": "28.94379581862612px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 3,
+        "y": 218,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 31
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "born to rest.",
+        "font": "30.752783057290255px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 252,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 33
+      }
+    ]
+  }
+}

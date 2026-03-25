@@ -1,0 +1,335 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.156Z",
+  "units": "mm",
+  "source": {
+    "id": "1680962985991",
+    "slug": "legacy-1680962985991",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1680962985991.json",
+    "savedAt": "2023-04-08T14:09:45.991Z"
+  },
+  "product": {
+    "id": "22",
+    "name": "Laser-etched Black Granite Mini Headstone",
+    "type": "headstone",
+    "slug": "mini-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 50,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Brent Robert WILLIAMSON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 7.38,
+          "y_px": 186.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Born: 10 May 1977",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -14.759,
+          "y_px": 225.748
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Died:6th March 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -7.379,
+          "y_px": 265.152
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Forever Missed by his loving  Family and his Mates",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0.627,
+          "y_px": 307.083
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Here lays one of the last of good country men.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 5.535,
+          "y_px": 144.117
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "66728ae310fed79a60353aa1e602409a1f27442e288187138a995f4ad19d7702",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.156Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "installationMethod": 2,
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Mini Headstone",
+        "price": 572.87,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 50,
+        "init_width": 412,
+        "init_height": 717,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x915"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1680963024176,
+        "path": "../upload/2023/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1680963024176received_528788522017733.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -2.3719612047510736,
+        "y": -109.88854993710522,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.8210772980501388,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_528788522017733.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 186,
+        "width": "459",
+        "height": "654",
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Brent Robert WILLIAMSON",
+        "font": "42.17849999999999px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7.379519379254361,
+        "y": 186.74968722280542,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Born: 10 May 1977",
+        "font": "31.633874999999996px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -14.758798543689295,
+        "y": 225.7476508196085,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Died:6th March 2023",
+        "font": "31.633874999999996px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -7.379399271844704,
+        "y": 265.1523301046592,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "Forever Missed by his loving  Family and his Mates",
+        "font": "35.14874999999999px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0.6268097960831938,
+        "y": 307.0830275931997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "Here lays one of the last of good country men.",
+        "font": "38.663624999999996px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 5.534649543391652,
+        "y": 144.11743083981233,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 15
+      }
+    ]
+  }
+}

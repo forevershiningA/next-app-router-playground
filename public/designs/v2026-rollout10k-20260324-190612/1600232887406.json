@@ -1,0 +1,449 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.702Z",
+  "units": "mm",
+  "source": {
+    "id": "1600232887406",
+    "slug": "legacy-1600232887406",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1600232887406.json",
+    "savedAt": "2020-09-16T05:08:07.406Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 589,
+      "height_mm": 459
+    },
+    "viewportPx": {
+      "width": 770,
+      "height": 514,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 589,
+      "height_mm": 459,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Jesus Ray",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": 17,
+          "y_px": -92
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "16-01-1926 - 25-08-2018",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -124,
+          "y_px": 157
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "29-08-1930 - 04-04-2019",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 119,
+          "y_px": 155
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Catharine Rios",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 11,
+          "y_px": 43
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Lund",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 105
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 15,
+          "y_px": -9
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "2020",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": -53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "2_130_07",
+        "position": {
+          "x_px": -1,
+          "y_px": -157
+        },
+        "height_px": 68,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_130_07",
+        "path": "/shapes/motifs/2_130_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "db3a1eec6b7daf1cb256437cfd6e9f4ec797bae4b54af66358212618d60be5f9",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.702Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1477.29",
+        "quantity": 1,
+        "width": 589,
+        "height": 459,
+        "_length": 1,
+        "init_width": 770,
+        "init_height": 514,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_130_07",
+        "item": "2_130_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -1,
+        "y": -157,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 68,
+        "ratio": 0.10429447852760736,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Trees Planted",
+        "font": "37.43735144312394px Lucida Calligraphy",
+        "font_size": 44,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 17,
+        "y": -92,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "16-01-1926 - 25-08-2018",
+        "font": "17.016977928692697px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -124,
+        "y": 157,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "29-08-1930 - 04-04-2019",
+        "font": "17.016977928692697px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 119,
+        "y": 155,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Dave & Mary",
+        "font": "43.39329371816638px Lucida Calligraphy",
+        "font_size": 51,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 11,
+        "y": 43,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "43.39329371816638px Lucida Calligraphy",
+        "font_size": 51,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -9,
+        "y": 135,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 1,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Lund",
+        "font": "51.90178268251273px Lucida Calligraphy",
+        "font_size": 61,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6,
+        "y": 105,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "In Loving Memory Of",
+        "font": "28.07801358234295px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 15,
+        "y": -9,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2020",
+        "font": "40.840747028862474px Lucida Calligraphy",
+        "font_size": 48,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 9,
+        "y": -53,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 5
+      }
+    ]
+  }
+}

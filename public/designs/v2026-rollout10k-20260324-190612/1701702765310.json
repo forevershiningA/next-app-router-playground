@@ -1,0 +1,375 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:19.194Z",
+  "units": "mm",
+  "source": {
+    "id": "1701702765310",
+    "slug": "legacy-1701702765310",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1701702765310.json",
+    "savedAt": "2023-12-04T15:12:45.310Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1024,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "IN LOVING MEMORY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -138
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "MARSHALL",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -77
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "FOREVER IN OUR HEARTS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 96
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "GONE BUT NOT FORGOTTEN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 131
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "PAROLE OFFICERS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -36
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "829c061e3775b4c4b8b481b3603d94cd34c839a965c35c73c3f3bc4e57188770",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:19.194Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 5",
+        "shape_url": "shapes/photos/border5.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "price": 922.3,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 0,
+        "init_width": 784,
+        "init_height": 587,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1024x768"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "IN LOVING MEMORY",
+        "font": "52.57578740157481px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": -138,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "NYSDOCCS",
+        "font": "41.30954724409449px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": -77,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "FOREVER IN OUR HEARTS",
+        "font": "37.55413385826772px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 8,
+        "y": 96,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "GONE BUT NOT FORGOTTEN",
+        "font": "37.55413385826772px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": 131,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 5
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br120r-angel-kneeling",
+        "color": "#ffb35a",
+        "x": -198,
+        "y": 21,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.32444727891156466,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br120r-angel-kneeling",
+        "price": 99,
+        "quantity": 1,
+        "size": "50.8 x 50.8 mm",
+        "itemID": 9
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br120l-angel-kneeling",
+        "color": "#ffb35a",
+        "x": 209,
+        "y": 20,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.32444727891156466,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br120l-angel-kneeling",
+        "price": 99,
+        "quantity": 1,
+        "size": "50.8 x 50.8 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br139r-gum-leaves",
+        "color": "#ffb35a",
+        "x": -1,
+        "y": 27,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.266445530726257,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br139r-gum-leaves",
+        "price": 99,
+        "quantity": 1,
+        "size": "50.8 x 50.8 mm",
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "PAROLE OFFICERS",
+        "font": "41.30954724409449px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2,
+        "y": -36,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      }
+    ]
+  }
+}

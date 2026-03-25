@@ -1,0 +1,180 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.033Z",
+  "units": "mm",
+  "source": {
+    "id": "1761536503792",
+    "slug": "legacy-1761536503792",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1761536503792.json",
+    "savedAt": "2025-10-27T03:41:43.792Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 622.3,
+      "height_mm": 711.2000000000003
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 960,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 622.3,
+      "height_mm": 711.2000000000003,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Mr. W.S.J. Anand",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 138.813
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "165ab14a2a9eef1c3655daf279118e054eba11e1637efdb3fb6b143ba676ec8a",
+    "sourceItemCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.033Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 3081.22,
+        "quantity": 1,
+        "width": 622.3,
+        "height": 711.2000000000003,
+        "_length": 90,
+        "init_width": 1288,
+        "init_height": 770,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x960"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Mr. W.S.J. Anand",
+        "font": "65.9756397637795px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -7,
+        "y": 138.81298701298704,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1761228957318,
+        "path": "../upload/2025/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1761228957318inspector_photo_only_pic.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -3,
+        "y": -133.74025974025972,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0624648481439816,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Inspector photo only pic.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 310,
+        "width": "312",
+        "height": "409",
+        "itemID": 2
+      }
+    ]
+  }
+}

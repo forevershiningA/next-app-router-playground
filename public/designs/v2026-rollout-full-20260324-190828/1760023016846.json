@@ -1,0 +1,644 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.865Z",
+  "units": "mm",
+  "source": {
+    "id": "1760023016846",
+    "slug": "legacy-1760023016846",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1760023016846.json",
+    "savedAt": "2025-10-09T15:16:56.846Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 717.55,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 717.55,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Dolly Soto",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 238,
+          "y_px": -128
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Nels Cox",
+        "font": {
+          "family": "Garamond",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": -252,
+          "y_px": -128
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "4.11.1930 - 26.1.2017",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 237,
+          "y_px": -74
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "3.9.1935 -",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -301,
+          "y_px": -68
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "MARRIED for 60 years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -22
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "KLYATON, CORY, GLYN & JAYDEN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 262
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "ADAM, TROY, RHYS, NEKESHA,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 230
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "GRAND PARENTS TO",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": 190
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "FISH",
+        "font": {
+          "family": "Garamond",
+          "size_px": 141
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -256
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "FOREVER IN OUR HEARTS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 354
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "PARENTS TO",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "EMILY TORRES",
+        "font": {
+          "family": "Garamond",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 118
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "GREAT GRANDPARENTS TO MANY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 303
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "34432f60b11058c38e031b80d6ee7a7729a98c4a8dca0ac80dd8d63d598e3f19",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.865Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 3052.59,
+        "quantity": 1,
+        "width": 717.55,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1893,
+        "init_height": 928.0069427490234,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "George Jonathan",
+        "font": "63.048342915497024px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 238,
+        "y": -128,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Evelyn Jean",
+        "font": "65.5702766321169px Garamond",
+        "font_size": 52,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -252,
+        "y": -128,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "4.11.1930 - 26.1.2017",
+        "font": "46.6557737574678px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 237,
+        "y": -74,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "3.9.1935 -",
+        "font": "46.6557737574678px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -301,
+        "y": -68,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "MARRIED for 60 years",
+        "font": "47.91674061577774px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2.000051008093351,
+        "y": -21.99992752102844,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "KLYATON, CORY, GLYN & JAYDEN",
+        "font": "42.87287318253798px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 262,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "ADAM, TROY, RHYS, NEKESHA,",
+        "font": "45.39480689915786px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 4,
+        "y": 230,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 7
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1760018214286,
+        "path": "../upload/2025/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1760018214286geroge_j_fish_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 386,
+        "y": -224,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.24405810160837557,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Geroge J FISH.png",
+        "price": 282,
+        "quantity": 1,
+        "size": "70 x 90 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "GRAND PARENTS TO",
+        "font": "50.43867433239762px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9,
+        "y": 190,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "FISH",
+        "font": "177.79632702170161px Garamond",
+        "font_size": 141,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9,
+        "y": -256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 95,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "FOREVER IN OUR HEARTS",
+        "font": "63.048342915497024px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1,
+        "y": 354,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "PARENTS TO",
+        "font": "41.61190632422804px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4.00003643435241,
+        "y": 69.99998474126915,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "BARBARA  &  DAVID",
+        "font": "55.48254176563738px Garamond",
+        "font_size": 44,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 4,
+        "y": 117.999973297221,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "GREAT GRANDPARENTS TO MANY",
+        "font": "42.87287318253798px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": 303,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 14
+      }
+    ]
+  }
+}

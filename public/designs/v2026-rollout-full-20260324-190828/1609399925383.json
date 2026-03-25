@@ -1,0 +1,372 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.151Z",
+  "units": "mm",
+  "source": {
+    "id": "1609399925383",
+    "slug": "legacy-1609399925383",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1609399925383.json",
+    "savedAt": "2020-12-31T07:32:05.383Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 512,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "In Loving  Memory of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 17.55,
+          "y_px": -45.129
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "NOAH RILEY",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 5.85,
+          "y_px": 0.836
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "1945 - 2020",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 10.029,
+          "y_px": 52.65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Lloyd Lynch",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 6.686,
+          "y_px": 112.821
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Forever in our Hearts",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 10.864,
+          "y_px": 139.564
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_169_04",
+        "position": {
+          "x_px": 7.521,
+          "y_px": -132.043
+        },
+        "height_px": 154,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_169_04",
+        "path": "/shapes/motifs/1_169_04.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "876cb2a04b57eb980b75637ed7374e83bc1a1a0eac7f6a04d6d45d4bee4d8638",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.151Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 1220.19,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 512,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 552,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 512,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_169_04",
+        "item": "1_169_04",
+        "price": 217.10270139999997,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 7.5214285714285705,
+        "y": -132.04285714285712,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 154,
+        "ratio": 0.18666666666666668,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "In Loving  Memory of",
+        "font": "20.241px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 17.549999999999997,
+        "y": -45.128571428571426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "MAUREEN EVA BRUSHWOOD",
+        "font": "20.241px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 5.85,
+        "y": 0.8357142857142856,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "1945 - 2020",
+        "font": "16.626535714285712px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 10.028571428571428,
+        "y": 52.64999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Our Beautiful Mum",
+        "font": "13.734964285714286px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 6.685714285714285,
+        "y": 112.82142857142856,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Forever in our Hearts",
+        "font": "14.457857142857142px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 10.864285714285714,
+        "y": 139.5642857142857,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 8
+      }
+    ]
+  }
+}

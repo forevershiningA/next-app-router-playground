@@ -1,0 +1,1190 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.667Z",
+  "units": "mm",
+  "source": {
+    "id": "1706374033059",
+    "slug": "legacy-1706374033059",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1706374033059.json",
+    "savedAt": "2024-01-27T16:47:13.059Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 17",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 584,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 834,
+      "height": 1194,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 584,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 675,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "and rest in peace",
+        "font": {
+          "family": "Garamond",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -182,
+          "y_px": 555.585
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "- Milica",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -360,
+          "y_px": -35.404
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "- Old Crnka",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -310,
+          "y_px": 8.147
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "- Joca",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -378,
+          "y_px": 53.613
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Ona Powers",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -72,
+          "y_px": -30.538
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "- Lirja",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -90,
+          "y_px": 14.661
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "- Marta",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -72,
+          "y_px": 59.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "- Crnka",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -364,
+          "y_px": 247.027
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "- Zlatko",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -64,
+          "y_px": 110.973
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "- Simba",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -356,
+          "y_px": 197.39
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "- Mrvka",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -358,
+          "y_px": 100.116
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "- Ruža",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -376,
+          "y_px": 151.753
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "- Srećko",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -358,
+          "y_px": 300.664
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Alonzo Meyer",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": -306.576
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Fly High 🕊️",
+        "font": {
+          "family": "French Script",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": -16,
+          "y_px": 475.695
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Grandma’s",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -336,
+          "y_px": -111
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Kittens",
+        "font": {
+          "family": "French Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -214,
+          "y_px": -166
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "Puppies",
+        "font": {
+          "family": "French Script",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": 234,
+          "y_px": -169
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Family Pets since 2005",
+        "font": {
+          "family": "Arial",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -247.116
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "- Vikica",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 176,
+          "y_px": -38.538
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "Grandma’s",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 214,
+          "y_px": -98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "- Floki",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 164,
+          "y_px": 22.462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "- Laki",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 384,
+          "y_px": 92.462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "- Lakiša",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 178,
+          "y_px": 89.462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Aunt’s",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -80,
+          "y_px": -102
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "Relatives’",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -40,
+          "y_px": 186.462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "Ours",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 392,
+          "y_px": 10.462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bec4995bca0f264a37543ac2ada655003c69c865b2da04ce4a4e00566f2f4e0a",
+    "sourceItemCount": 29,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.668Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 17",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2450.55,
+        "quantity": 1,
+        "width": 584,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 954,
+        "init_height": 651,
+        "device": "tablet",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (tablet(ios)), 834x1194"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 821,
+        "quantity": 1,
+        "width": 675,
+        "height": 100,
+        "_length": 250,
+        "init_width": 954,
+        "init_height": 651,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "and rest in peace",
+        "font": "78.71448703494929px Garamond",
+        "font_size": 44,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -182,
+        "y": 555.5851648982499,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "- Milica",
+        "font": "55.45793404735063px Franklin Gothic",
+        "font_size": 31,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -360,
+        "y": -35.40410958904113,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "- Old Crnka",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -310,
+        "y": 8.14726027397262,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "- Joca",
+        "font": "55.45793404735063px Franklin Gothic",
+        "font_size": 31,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -378,
+        "y": 53.6130136986302,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "- Oliver",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -72,
+        "y": -30.537671232876733,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "- Lirja",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -90,
+        "y": 14.660958904109634,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "- Marta",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -72,
+        "y": 59.25,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "- Crnka",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -364,
+        "y": 247.02739726027391,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "- Zlatko",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -64,
+        "y": 110.97260273972609,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "- Simba",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -356,
+        "y": 197.3904109589041,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "- Mrvka",
+        "font": "57.2468996617813px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -358,
+        "y": 100.1164383561644,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "- Ruža",
+        "font": "53.66896843291997px Franklin Gothic",
+        "font_size": 30,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -376,
+        "y": 151.7534246575342,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "- Srećko",
+        "font": "53.66896843291997px Franklin Gothic",
+        "font_size": 30,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -358,
+        "y": 300.66438356164383,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "In Memory Of Our Beloved",
+        "font": "57.2468996617813px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 18,
+        "y": -306.57637500989784,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Fly High 🕊️",
+        "font": "121.64966178128526px French Script",
+        "font_size": 68,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -16,
+        "y": 475.69497268192254,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 79,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Grandma’s",
+        "font": "66.19172773393463px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -336,
+        "y": -111,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Kittens",
+        "font": "89.44828072153328px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -214,
+        "y": -166,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Puppies",
+        "font": "94.81517756482528px French Script",
+        "font_size": 53,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 234,
+        "y": -169,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Family Pets since 2005",
+        "font": "62.613796505073296px Arial",
+        "font_size": 35,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": -247.1164383561644,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "- Vikica",
+        "font": "59.035865276211965px Franklin Gothic",
+        "font_size": 33,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 176,
+        "y": -38.53767123287673,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 22
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Grandma’s",
+        "font": "66.19172773393463px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 214,
+        "y": -98,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 23
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "- Floki",
+        "font": "60.82483089064263px Franklin Gothic",
+        "font_size": 34,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 164,
+        "y": 22.462328767123267,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "- Laki",
+        "font": "60.82483089064263px Franklin Gothic",
+        "font_size": 34,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 384,
+        "y": 92.46232876712327,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "- Lakiša",
+        "font": "55.45793404735063px Franklin Gothic",
+        "font_size": 31,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 178,
+        "y": 89.46232876712327,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 26
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Aunt’s",
+        "font": "67.98069334836529px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -80,
+        "y": -102,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Relatives’",
+        "font": "64.40276211950396px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -40,
+        "y": 186.46232876712327,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 27
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "Ours",
+        "font": "89.44828072153328px Franklin Gothic",
+        "font_size": 50,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 392,
+        "y": 10.462328767123267,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 28
+      }
+    ]
+  }
+}

@@ -1,0 +1,424 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:14.122Z",
+  "units": "mm",
+  "source": {
+    "id": "1609028794731",
+    "slug": "legacy-1609028794731",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1609028794731.json",
+    "savedAt": "2020-12-27T00:26:34.731Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 840,
+      "height": 615,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Archie Rhodes",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -145.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "11/05/1911 - 23/09/2014",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -22,
+          "y_px": -94.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "103 years",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -41,
+          "y_px": -52.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Beloved wife of Alan",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -20,
+          "y_px": -13.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Loving Mother, Grandmother",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -19,
+          "y_px": 22.646
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "and Great Grandmother",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -25,
+          "y_px": 55.793
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Our beautiful Nana",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -25.878,
+          "y_px": 106.451
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Sleeping till Jesus comes",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 152.793
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ef6f78ea2d3317b0f05d1d601bc3dabda4c72dea868e501876df7388c729ddec",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:14.122Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Square",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 390.07,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 840,
+        "init_height": 615,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 19,
+        "label": "Florence May Goding",
+        "font": "49.96875px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -145.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 23,
+        "label": "11/05/1911 - 23/09/2014",
+        "font": "33.97875px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -22,
+        "y": -94.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 9,
+        "label": "103 years",
+        "font": "39.975px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -41,
+        "y": -52.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 20,
+        "label": "Beloved wife of Alan",
+        "font": "39.975px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -20,
+        "y": -13.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 26,
+        "label": "Loving Mother, Grandmother",
+        "font": "27.9825px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -19,
+        "y": 22.646341463414615,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 21,
+        "label": "and Great Grandmother",
+        "font": "27.9825px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -25,
+        "y": 55.79268292682923,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 18,
+        "label": "Our beautiful Nana",
+        "font": "35.9775px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -25.878048780487916,
+        "y": 106.45121951219517,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 25,
+        "label": "Sleeping till Jesus comes",
+        "font": "35.9775px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -14,
+        "y": 152.79268292682923,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 10
+      }
+    ]
+  }
+}

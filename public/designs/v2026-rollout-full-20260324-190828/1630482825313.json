@@ -1,0 +1,470 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.241Z",
+  "units": "mm",
+  "source": {
+    "id": "1630482825313",
+    "slug": "legacy-1630482825313",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1630482825313.json",
+    "savedAt": "2021-09-01T07:53:45.313Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 608,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-12",
+        "text": "26/11/1954 - 26/06/2020",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": -20
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Jordan Powers",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -162
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Beloved Wife",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 60
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Chris Ford",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 141
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Barbara Lambert",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 232
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "‘You were an angel in the shape of our mum’",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 304
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": -287
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-22",
+        "asset": "butterfly_027",
+        "position": {
+          "x_px": 369,
+          "y_px": 147
+        },
+        "height_px": 46,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-25",
+        "asset": "butterfly_027",
+        "position": {
+          "x_px": -321.48,
+          "y_px": 153
+        },
+        "height_px": 46,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_027",
+        "path": "/shapes/motifs/butterfly_027.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2bc1cd22834254418621139b42e7a2821a589de4566c951352df92692ee07fc5",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.241Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 824.32,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 390,
+        "init_height": 608,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20210831,
+        "mode": "2d",
+        "navigator": "iPhone, Apple Computer, Inc., Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "26/11/1954 - 26/06/2020",
+        "font": "76.05000000000001px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": -20,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Ellen Joy Shaw",
+        "font": "155.9025px Chopin Script",
+        "font_size": 41,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -9,
+        "y": -162,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Beloved Wife",
+        "font": "64.6425px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 12,
+        "y": 60,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Loving Mum",
+        "font": "60.84px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": 141,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Adored Nanna",
+        "font": "57.0375px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": 232,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "‘You were an angel in the shape of our mum’",
+        "font": "53.235px Chopin Script",
+        "font_size": 14,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 9,
+        "y": 304,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 14
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_027",
+        "item": "butterfly_027",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 369,
+        "y": 147,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 46,
+        "ratio": 0.08,
+        "itemID": 22
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_027",
+        "item": "butterfly_027",
+        "price": 74.4,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -321.48,
+        "y": 153,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 46,
+        "ratio": 0.08,
+        "itemID": 25
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "76.05000000000001px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 24,
+        "y": -287,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 24
+      }
+    ]
+  }
+}

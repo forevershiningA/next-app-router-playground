@@ -1,0 +1,695 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.631Z",
+  "units": "mm",
+  "source": {
+    "id": "1745129308980",
+    "slug": "legacy-1745129308980",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1745129308980.json",
+    "savedAt": "2025-04-20T06:08:28.980Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 844,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Elisha Mcdonald",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -330,
+          "y_px": -304.905
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "America Gregory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 279,
+          "y_px": -308.067
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "11/02/1968 - 17/12/1995",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -339,
+          "y_px": -206.445
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "06/07/1949 - 02/07/2024",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 276,
+          "y_px": -210.369
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Beloved Daughter, Sister",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -350,
+          "y_px": -90.206
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Niece & Aunty",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -372,
+          "y_px": -21.884
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Beloved Mother, Sister",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 310.5,
+          "y_px": -78.126
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "& Grandmother",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 296.5,
+          "y_px": -19.026
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "& Now We Lie in Spirit Together’",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 222,
+          "y_px": 340.937
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "‘In Christ We Were Born",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -294,
+          "y_px": 342.242
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "cross_004",
+        "position": {
+          "x_px": -36,
+          "y_px": -298.384
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "2_119_14",
+        "position": {
+          "x_px": -30,
+          "y_px": 201
+        },
+        "height_px": 52,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-17",
+        "asset": "159-23",
+        "position": {
+          "x_px": 315,
+          "y_px": 129
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "159-23",
+        "position": {
+          "x_px": -354.306,
+          "y_px": 141
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_004",
+        "path": "/shapes/motifs/cross_004.svg"
+      },
+      {
+        "id": "2_119_14",
+        "path": "/shapes/motifs/2_119_14.svg"
+      },
+      {
+        "id": "159-23",
+        "path": "/shapes/motifs/159-23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4d297d0d505d6cfddd276459b750eb17836ae670e67997b25cc3e0e2ab7d28ff",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.631Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 534.03,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 15,
+        "init_width": 390,
+        "init_height": 607,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250417,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 390x844"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1745129406958,
+        "path": "../upload/2025/04/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1745129406958img_1156_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -39,
+        "y": -54.73083408351704,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8755756578947369,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1156.jpeg",
+        "price": 280,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_004",
+        "item": "cross_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -36,
+        "y": -298.38412657712774,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.20707070707070707,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Tonia Lee Tyrrell",
+        "font": "72.2475px Great Vibes",
+        "font_size": 19,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -330,
+        "y": -304.9049946906502,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Thelma Jean Tyrrell",
+        "font": "68.44500000000001px Great Vibes",
+        "font_size": 18,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 279,
+        "y": -308.0668671491997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "11/02/1968 - 17/12/1995",
+        "font": "41.8275px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -339,
+        "y": -206.44540288349245,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "06/07/1949 - 02/07/2024",
+        "font": "41.8275px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 276,
+        "y": -210.3685608457055,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Beloved Daughter, Sister",
+        "font": "30.42px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -350,
+        "y": -90.20578956022973,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Niece & Aunty",
+        "font": "30.42px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -372,
+        "y": -21.88442061198265,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Beloved Mother, Sister",
+        "font": "30.42px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 310.5,
+        "y": -78.12565600430318,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "& Grandmother",
+        "font": "30.42px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 296.5,
+        "y": -19.026323783935823,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 13
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_14",
+        "item": "2_119_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -30,
+        "y": 201,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 52,
+        "ratio": 0.06183115338882283,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "& Now We Lie in Spirit Together’",
+        "font": "45.63px Dobkin",
+        "font_size": 12,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 222,
+        "y": 340.9369483362643,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "‘In Christ We Were Born",
+        "font": "49.432500000000005px Dobkin",
+        "font_size": 13,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -294,
+        "y": 342.24245751823446,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "159-23",
+        "item": "159-23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 315,
+        "y": 129,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06872852233676977,
+        "itemID": 17
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "159-23",
+        "item": "159-23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -354.3061855670103,
+        "y": 141,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06872852233676977,
+        "itemID": 18
+      }
+    ]
+  }
+}

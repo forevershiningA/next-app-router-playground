@@ -1,0 +1,564 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.760Z",
+  "units": "mm",
+  "source": {
+    "id": "1744461355508",
+    "slug": "legacy-1744461355508",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1744461355508.json",
+    "savedAt": "2025-04-12T12:35:55.508Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "762",
+      "height_mm": 914.4
+    },
+    "viewportPx": {
+      "width": 1792,
+      "height": 1120,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "762",
+      "height_mm": 914.4,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "NAN SWANSON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -27.479,
+          "y_px": -524.266
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "09/06/1925 - 04/07/2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -17.526,
+          "y_px": -339.983
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In Loving memory of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -21.063,
+          "y_px": -172.972
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Manus Doogan 24/10/1970",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 3.905,
+          "y_px": 43.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "MaryDoogan 10/04/1934",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 1.953,
+          "y_px": 136.999
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Jeremiah Fernandez 05/01/1971",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -3.905,
+          "y_px": 240
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Jennie Flores",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -25.384,
+          "y_px": -50.833
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Irma Thompson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -9.763,
+          "y_px": 337.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Ardsmore",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -41.949,
+          "y_px": -435.346
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Rest in Peace",
+        "font": {
+          "family": "Adorable",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -32.862,
+          "y_px": 571.462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "And Twin Girls",
+        "font": {
+          "family": "Garamond",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -45.005,
+          "y_px": 430.833
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c3383cf40e5e174a3d6eb5c45a5a09fb885d451bd9a05b3113e2b69153a2fa0f",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.760Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4627.01,
+        "quantity": 1,
+        "width": "762",
+        "height": 914.4,
+        "_length": 100,
+        "init_width": 1403,
+        "init_height": 865,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1792x1120"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 900,
+        "quantity": 1,
+        "width": 1200,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1403,
+        "init_height": 865,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "NEIL DOOGAN",
+        "font": "83.0093489293977px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -27.47855492585404,
+        "y": -524.266281310212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "09/06/1925 - 04/07/2024",
+        "font": "61.4269182077543px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -17.525959023503674,
+        "y": -339.9826589595376,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving memory of",
+        "font": "73.04822705786998px Adorable",
+        "font_size": 44,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -21.06315378937711,
+        "y": -172.97225433526012,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Manus Doogan 24/10/1970",
+        "font": "64.7472921649302px Garamond",
+        "font_size": 39,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3.905191804700727,
+        "y": 43.333333333333336,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "MaryDoogan 10/04/1934",
+        "font": "69.72785310069406px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.9525959023503674,
+        "y": 136.99884393063587,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Katie Doogan 05/01/1971",
+        "font": "66.40747914351816px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3.905191804700735,
+        "y": 240,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Annie Doogan",
+        "font": "69.72785310069406px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -25.383746730554723,
+        "y": -50.833333333333336,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Michael Doogan - Infant",
+        "font": "69.72785310069406px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9.762979511751837,
+        "y": 337.4999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Ardsmore",
+        "font": "83.0093489293977px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -41.949050504762454,
+        "y": -435.34630700064224,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Rest in Peace",
+        "font": "79.68897497222179px Adorable",
+        "font_size": 48,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -32.86230165640882,
+        "y": 571.4622350674375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "And Twin Girls",
+        "font": "79.68897497222179px Garamond",
+        "font_size": 48,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -45.004513949357715,
+        "y": 430.83333333333337,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 9
+      }
+    ]
+  }
+}

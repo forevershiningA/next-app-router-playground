@@ -1,0 +1,272 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.812Z",
+  "units": "mm",
+  "source": {
+    "id": "1599806376310",
+    "slug": "legacy-1599806376310",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1599806376310.json",
+    "savedAt": "2020-09-11T06:39:36.310Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Oval Landscape",
+    "material": {
+      "name": "src/bronzes/phoenix/l/03.jpg",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "220",
+      "height_mm": 152
+    },
+    "viewportPx": {
+      "width": 1573,
+      "height": 1185,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "220",
+      "height_mm": 152,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Walter Alvarez",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 5.5,
+          "y_px": -182.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Eternally in our hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 2.5,
+          "y_px": 287.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "27.12.1960 - 4.10.2009",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 12.5,
+          "y_px": -97.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_154_07",
+        "position": {
+          "x_px": -2.5,
+          "y_px": 89.5
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_07",
+        "path": "/shapes/motifs/1_154_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "706c680e9a1bc3e1e60c5c406fd7136475a691778c08fe84e90ab7661061a6be",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.812Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Casino Blue - Flat Back",
+        "border": "Border Oval Landscape",
+        "shape_url": "shapes/photos/borderoval landscape.svg",
+        "fixingSystem": 1,
+        "shape": "Oval Landscape",
+        "color": "#0c1137",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/03.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": "220",
+        "height": 152,
+        "_length": 1,
+        "init_width": 1573,
+        "init_height": 1185
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Debra Anne White",
+        "font": "131.20756578947365px Great Vibes",
+        "font_size": 17,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 5.5,
+        "y": -182.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Eternally in our hearts",
+        "font": "92.61710526315787px Great Vibes",
+        "font_size": 12,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2.5,
+        "y": 287.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 3
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_07",
+        "item": "1_154_07",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2.5,
+        "y": 89.5,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 1,
+        "height": 40,
+        "ratio": 0.041666666666666664,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "27.12.1960 - 4.10.2009",
+        "font": "84.89901315789471px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 12.5,
+        "y": -97.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 2
+      }
+    ]
+  }
+}

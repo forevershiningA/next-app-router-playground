@@ -1,0 +1,414 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.849Z",
+  "units": "mm",
+  "source": {
+    "id": "1668193660077",
+    "slug": "legacy-1668193660077",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1668193660077.json",
+    "savedAt": "2022-11-11T19:07:40.077Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/05.jpg",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 393.69999999999993,
+      "height_mm": "304.79999999999995"
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 393.69999999999993,
+      "height_mm": "304.79999999999995",
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Ben \"Pepper\" Butterfield",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -210
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "September 3, 1961 - August 16, 2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -150
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "We Love You and Miss You",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 244
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "A Heart Made of Gold",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -20,
+          "y_px": 32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Hooch",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 300,
+          "y_px": 130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Out Drove us Again",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 126
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "1_137_19",
+        "position": {
+          "x_px": 290,
+          "y_px": 10
+        },
+        "height_px": 82,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_137_19",
+        "path": "/shapes/motifs/1_137_19.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "88e08411cfd37cec73fb3f97d4851b15139e2ef50d30ef0691b7fa3e0f68acb5",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.849Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 1,
+        "shape": "Rectangle (Landscape)",
+        "color": "#1a391a",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/05.jpg",
+        "name": "Bronze Plaque - Dark Green - Flat Back",
+        "price": 1422.23,
+        "quantity": 1,
+        "width": 393.69999999999993,
+        "height": "304.79999999999995",
+        "_length": 1,
+        "init_width": 720,
+        "init_height": 411,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221020,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Ben \"Pepper\" Butterfield",
+        "font": "52.927863855727715px Lucida Calligraphy",
+        "font_size": 26,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": -210,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "September 3, 1961 - August 16, 2022",
+        "font": "32.570993141986285px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -4,
+        "y": -150,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "We Love You and Miss You",
+        "font": "40.71374142748286px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": 244,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 5
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br138-golfer-male",
+        "color": "#ffb35a",
+        "x": -306,
+        "y": 18,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 11,
+        "ratio": 1.5060131537738801,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br138-golfer-male",
+        "price": 99,
+        "quantity": 1,
+        "size": "152.39999999999998 x 152.39999999999998 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_137_19",
+        "item": "1_137_19",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 290,
+        "y": 10,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 82,
+        "ratio": 0.1263482280431433,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "A Heart Made of Gold",
+        "font": "48.856489712979425px Great Vibes",
+        "font_size": 24,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -20,
+        "y": 32,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Hooch",
+        "font": "44.78511557023114px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 300,
+        "y": 130,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Out Drove us Again",
+        "font": "40.71374142748286px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -12,
+        "y": 126,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 9
+      }
+    ]
+  }
+}

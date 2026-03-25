@@ -1,0 +1,373 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:46.054Z",
+  "units": "mm",
+  "source": {
+    "id": "1681640941103",
+    "slug": "legacy-1681640941103",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1681640941103.json",
+    "savedAt": "2023-04-16T10:29:01.103Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 25.4,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "March 7, 1990 - June 18, 2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 7.496,
+          "y_px": -95.912
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Earle Hardy",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 2.499,
+          "y_px": -183.638
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "beloved son, brother, grandson,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 102
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "nephew and friend.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 155
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "swisms dear Steven",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -1.249,
+          "y_px": 224.957
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "With gratitude for having you in our lives",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 49
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f5e03b73a47ea68b64213c420a815e0be86c2ecb4044fbfd57a6663b6ca06e93",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:46.054Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 246.45,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 25.4,
+        "init_width": 1239,
+        "init_height": 658,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230412,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x864"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "March 7, 1990 - June 18, 2022",
+        "font": "52.62057086614175px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7.496368038740911,
+        "y": -95.91185410334344,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Steven James Villella",
+        "font": "89.45497047244098px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2.4987893462470083,
+        "y": -183.63829787234042,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 28,
+        "label": "beloved son, brother, grandson,",
+        "font": "47.35851377952758px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 102,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "nephew and friend.",
+        "font": "47.35851377952758px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 155,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "swisms dear Steven",
+        "font": "39.46542814960631px Lucida Calligraphy",
+        "font_size": 15,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.2493946731234473,
+        "y": 224.95744680851067,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 6
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1681641234997,
+        "path": "../upload/2023/04/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1681641234997img_5702_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5597933070866143,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_5702.JPG",
+        "price": 280,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 35,
+        "label": "With gratitude for having you in our lives",
+        "font": "47.35851377952758px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 49,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      }
+    ]
+  }
+}

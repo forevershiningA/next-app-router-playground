@@ -1,0 +1,583 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.077Z",
+  "units": "mm",
+  "source": {
+    "id": "1689041656763",
+    "slug": "legacy-1689041656763",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1689041656763.json",
+    "savedAt": "2023-07-11T02:14:16.763Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 177.8
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 844,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 177.8,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "The Dave Matthews Band Incident",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -249.253
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "On August 8, 2004, a tour bus belonging to the Dave Matthews Band dumped",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": -161.102
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "an estimated 800 pounds (360 kg) of human waste from the bus&apos;s blackwater",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": -121.587
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "tank through the Kinzie Street Bridge onto the sightseeing boat Chicago’s Little",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -82.071
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Lady sailing in the Chicago River below. The boat received the full contents of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": -45.595
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "As part of a legal settlement, the band agreed to pay $200,000 to environmental",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -15,
+          "y_px": 182.38
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "protection and other projects. The band also donated $100,000 to two groups",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -21,
+          "y_px": 221.896
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "that protect the river and the surrounding area.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -216,
+          "y_px": 261.412
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "the tank on the seats of its open-roof terrace. Roughly two-thirds of the",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -15,
+          "y_px": -6.079
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "120 passengers aboard the tour boat were soaked. The boat immediately returned",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 32.423
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "to its dock, where all passengers were issued refunds. Five passengers went to",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -30,
+          "y_px": 68.939
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Northwestern Memorial Hospital for testing.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -228,
+          "y_px": 107.402
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b61cb61ab3a0edd11e70178b17a0d6c28e5845a8648a254ea35b050baa7b2a55",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.077Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 872.94,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 177.8,
+        "_length": 0,
+        "init_width": 390,
+        "init_height": 613,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230222,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 390x844"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 27,
+        "label": "The Dave Matthews Band Incident",
+        "font": "67.36712598425197px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -3,
+        "y": -249.2528925619835,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 59,
+        "label": "On August 8, 2004, a tour bus belonging to the Dave Matthews Band dumped",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -12,
+        "y": -161.10247933884298,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 61,
+        "label": "an estimated 800 pounds (360 kg) of human waste from the bus&apos;s blackwater",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -24,
+        "y": -121.58677685950414,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 69,
+        "label": "tank through the Kinzie Street Bridge onto the sightseeing boat Chicago’s Little",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -3,
+        "y": -82.0710743801653,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 66,
+        "label": "Lady sailing in the Chicago River below. The boat received the full contents of",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -12,
+        "y": -45.59504132231405,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 66,
+        "label": "As part of a legal settlement, the band agreed to pay $200,000 to environmental",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -15,
+        "y": 182.3801652892562,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 64,
+        "label": "protection and other projects. The band also donated $100,000 to two groups",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -21,
+        "y": 221.89586776859505,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "that protect the river and the surrounding area.",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -216,
+        "y": 261.4115702479339,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 61,
+        "label": "the tank on the seats of its open-roof terrace. Roughly two-thirds of the",
+        "font": "37.42618110236221px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -15,
+        "y": -6.079338842975207,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 67,
+        "label": "120 passengers aboard the tour boat were soaked. The boat immediately returned",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 32.423140495867756,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 66,
+        "label": "to its dock, where all passengers were issued refunds. Five passengers went to",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -30,
+        "y": 68.93884297520663,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Northwestern Memorial Hospital for testing.",
+        "font": "33.683562992125985px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -228,
+        "y": 107.40165289256197,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 15
+      }
+    ]
+  }
+}

@@ -1,0 +1,503 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.217Z",
+  "units": "mm",
+  "source": {
+    "id": "1590071258114",
+    "slug": "legacy-1590071258114",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590071258114.json",
+    "savedAt": "2020-05-21T14:27:38.114Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 400,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 784,
+      "height": 596,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "xxx",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 184
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "20.12.00 - 6.10.2017",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -125
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Always in our hearts, we will love",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 126
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "and miss you forever",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 155
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "someone who gave you",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 105,
+          "y_px": 3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "so much to remember",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 116,
+          "y_px": 51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "It’s so hard to forget",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 128,
+          "y_px": -42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Ellen Reed",
+        "font": {
+          "family": "Adorable",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -164
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "turtle_008",
+        "position": {
+          "x_px": 242,
+          "y_px": 170
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 16
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "turtle_008",
+        "position": {
+          "x_px": -238.162,
+          "y_px": 171
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": -16
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "turtle_008",
+        "path": "/shapes/motifs/turtle_008.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f234ef1bbdf085247d2eb762893ebbcf3737024732b45bddf62defcfb4d69b12",
+    "sourceItemCount": 11,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.217Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "592.91",
+        "quantity": 1,
+        "width": 400,
+        "height": 300,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 596,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "turtle_008",
+        "item": "turtle_008",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 242,
+        "y": 170,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 16,
+        "height": 55,
+        "ratio": 0.09166666666666666,
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "turtle_008",
+        "item": "turtle_008",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -238.16163125000003,
+        "y": 171,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -16,
+        "height": 55,
+        "ratio": 0.09166666666666666,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "xxx",
+        "font": "27.602250000000005px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 4,
+        "y": 184,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "20.12.00 - 6.10.2017",
+        "font": "24.696750000000005px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -8,
+        "y": -125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Always in our hearts, we will love",
+        "font": "24.696750000000005px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 4,
+        "y": 126,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "and miss you forever",
+        "font": "24.696750000000005px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 155,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "someone who gave you",
+        "font": "29.055000000000003px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 105,
+        "y": 3,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "so much to remember",
+        "font": "29.055000000000003px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 116,
+        "y": 51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "It’s so hard to forget",
+        "font": "27.602250000000005px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 128,
+        "y": -42,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Callum Mummery",
+        "font": "74.09025000000001px Adorable",
+        "font_size": 51,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2,
+        "y": -164,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      }
+    ]
+  }
+}

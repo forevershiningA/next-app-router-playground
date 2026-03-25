@@ -1,0 +1,213 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.060Z",
+  "units": "mm",
+  "source": {
+    "id": "1581342458498",
+    "slug": "legacy-1581342458498",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1581342458498.json",
+    "savedAt": "2020-02-10T13:47:38.498Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 1",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 350,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 497,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 350,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Mildred Sharp",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -23.75,
+          "y_px": -27
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "lizard_001",
+        "position": {
+          "x_px": -75,
+          "y_px": -117
+        },
+        "height_px": 80,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "lizard_001",
+        "path": "/shapes/motifs/lizard_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ec1d564ae282c26fcfde9f60c39a5e1da17d329918f7254af60fa93fd1a97c7e",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.060Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 1",
+        "shape": "Headstone 1",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "853.75",
+        "quantity": 1,
+        "width": 350,
+        "height": 600,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 497
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "lizard_001",
+        "item": "lizard_001",
+        "price": 210.09820000000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -75,
+        "y": -117,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 90,
+        "height": 80,
+        "ratio": 0.3041825095057034,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": " ",
+        "font": "121.875px Lucida Calligraphy",
+        "font_size": 200,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -93.75,
+        "y": 15,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Mervyn John Collins",
+        "font": "15.234375px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -23.75,
+        "y": -27,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 2
+      }
+    ]
+  }
+}

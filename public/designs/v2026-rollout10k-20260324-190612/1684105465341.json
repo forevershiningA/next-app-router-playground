@@ -1,0 +1,427 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:18.917Z",
+  "units": "mm",
+  "source": {
+    "id": "1684105465341",
+    "slug": "legacy-1684105465341",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1684105465341.json",
+    "savedAt": "2023-05-14T23:04:25.341Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 203.2,
+      "height_mm": 152.39999999999998
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 203.2,
+      "height_mm": 152.39999999999998,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-8",
+        "text": "This tree was planted to",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -22,
+          "y_px": -259
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "commemorate the",
+        "font": {
+          "family": "Arial",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -195
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "CORONATION",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -119
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "of",
+        "font": {
+          "family": "Arial",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -17,
+          "y_px": -51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Lee Espinoza",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Jean Santos",
+        "font": {
+          "family": "Arial",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Gus Clark",
+        "font": {
+          "family": "Arial",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 166
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "May 6th, 2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 238
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c84da6eb980efeb9525eb9fdda45f747430e72e0797b5d6d3c3c0be52996d846",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:18.917Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Screws (visible from front)",
+        "price": 626.14,
+        "quantity": 1,
+        "width": 203.2,
+        "height": 152.39999999999998,
+        "_length": 0,
+        "init_width": 1680,
+        "init_height": 905,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230222,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "This tree was planted to",
+        "font": "47.766363188976385px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -22,
+        "y": -259,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "commemorate the",
+        "font": "52.10875984251969px Arial",
+        "font_size": 12,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": -195,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "CORONATION",
+        "font": "69.47834645669292px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2,
+        "y": -119,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "of",
+        "font": "52.10875984251969px Arial",
+        "font_size": 12,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -17,
+        "y": -51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Thier Majesties",
+        "font": "43.423966535433074px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 16,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "King Charles III",
+        "font": "60.7935531496063px Arial",
+        "font_size": 14,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": 95,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Queen Camilla",
+        "font": "60.7935531496063px Arial",
+        "font_size": 14,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 166,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 19
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "May 6th, 2023",
+        "font": "43.423966535433074px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2,
+        "y": 238,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 21
+      }
+    ]
+  }
+}

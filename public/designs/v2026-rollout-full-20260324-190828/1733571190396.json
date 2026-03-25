@@ -1,0 +1,647 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.918Z",
+  "units": "mm",
+  "source": {
+    "id": "1733571190396",
+    "slug": "legacy-1733571190396",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1733571190396.json",
+    "savedAt": "2024-12-07T11:33:10.396Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 339,
+      "height": 735,
+      "dpr": 3.1875
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Remembering",
+        "font": {
+          "family": "French Script",
+          "size_px": 51.296
+        },
+        "position": {
+          "x_px": -10.541,
+          "y_px": -454.196
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "LYNN FRAZIER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 64
+        },
+        "position": {
+          "x_px": -2.635,
+          "y_px": -219.996
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Who fell asleep on the 21st August 2024.",
+        "font": {
+          "family": "French Script",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 6.588,
+          "y_px": -145.086
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "An honest man here lies at rest.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -4.217,
+          "y_px": -30.137
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "“A much loved man, true to himself,",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -17.393,
+          "y_px": 51.261
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "his family and friends”. ",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 54
+        },
+        "position": {
+          "x_px": -0.527,
+          "y_px": 122.303
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Until we meet again, your loving wife,",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 1.318,
+          "y_px": 226.385
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "son-in-law Michael and Granddaughter",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": 0.79,
+          "y_px": 452.6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Howard",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -4.744,
+          "y_px": 526.674
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "\"Gannin Yem\"  ‘A local hero to all who knew him’. ",
+        "font": {
+          "family": "French Script",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 5.798,
+          "y_px": 661.114
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Pamela",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 62
+        },
+        "position": {
+          "x_px": -42.956,
+          "y_px": 309.197
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "children Joanne and Stewart,",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 1.845,
+          "y_px": 380.924
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "cross_021",
+        "position": {
+          "x_px": -18.819,
+          "y_px": -353.022
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_021",
+        "path": "/shapes/motifs/cross_021.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b9c637752fabc252f89cea7b3ee4ae73e7f08d057d1012d5c26cef50dc4b49a8",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.918Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 339,
+        "init_height": 605.9999961853027,
+        "device": "mobile",
+        "dpr": 3.1875,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 339x735"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 848,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 339,
+        "init_height": 605.9999961853027,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_021",
+        "item": "cross_021",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -18.81943755023258,
+        "y": -353.02243410135645,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.28346456692913385,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Remembering",
+        "font": "75.9881805797999px French Script",
+        "font_size": 51.29597473144531,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10.541333223866104,
+        "y": -454.1962518648546,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "ALAN WHEATLEY",
+        "font": "94.80750843644545px Garamond",
+        "font_size": 64,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2.635357612002281,
+        "y": -219.99550160476082,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Who fell asleep on the 21st August 2024.",
+        "font": "53.329223495500564px French Script",
+        "font_size": 36,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6.5884426420768705,
+        "y": -145.0862901875739,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "An honest man here lies at rest.",
+        "font": "66.6615293693757px Garamond",
+        "font_size": 45,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4.2167082930033075,
+        "y": -30.136941623512644,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "“A much loved man, true to himself,",
+        "font": "71.10563132733408px Dobkin",
+        "font_size": 48,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -17.39325329265739,
+        "y": 51.26085425851403,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "his family and friends”. ",
+        "font": "79.99383524325084px Dobkin",
+        "font_size": 54,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -0.527052077571966,
+        "y": 122.30320036265701,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Until we meet again, your loving wife,",
+        "font": "71.10563132733408px Dobkin",
+        "font_size": 48,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.3176301939295172,
+        "y": 226.38520227105417,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "son-in-law Michael and Granddaughter",
+        "font": "65.18016205005624px Dobkin",
+        "font_size": 44,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0.7904808922148732,
+        "y": 452.59952220596637,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Ella.",
+        "font": "71.10563132733408px Dobkin",
+        "font_size": 48,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4.743614534361086,
+        "y": 526.6742711868617,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "\"Gannin Yem\"  ‘A local hero to all who knew him’. ",
+        "font": "68.14289668869516px French Script",
+        "font_size": 46,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 5.797815913647696,
+        "y": 661.114221500326,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Pamela",
+        "font": "91.84477379780652px Dobkin",
+        "font_size": 62,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -42.956154072179174,
+        "y": 309.19670549466235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "children Joanne and Stewart,",
+        "font": "68.14289668869516px Dobkin",
+        "font_size": 46,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.8446822715014832,
+        "y": 380.92410648320765,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 15
+      }
+    ]
+  }
+}

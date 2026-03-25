@@ -1,0 +1,406 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.049Z",
+  "units": "mm",
+  "source": {
+    "id": "1581034025397",
+    "slug": "legacy-1581034025397",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1581034025397.json",
+    "savedAt": "2020-02-07T00:07:05.397Z"
+  },
+  "product": {
+    "id": "9",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Mandy Lopez",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 9.15,
+          "y_px": -226.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Blue Charlie and Sam",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -3.25,
+          "y_px": -160.7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Mummy and Daddy will meet you",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 38.85,
+          "y_px": 181.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "At the Rainbow Bridge just this side of heaven",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 27.35,
+          "y_px": 222.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "2016",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 54.85,
+          "y_px": 130.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "2007",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -103.25,
+          "y_px": 138.3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "2020",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 237.85,
+          "y_px": 130.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "79427f64ddfba4931e813af92f6b97f907bf2bddfe3ac74c830e0c9e5ab00893",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.049Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 9,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "256.56",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1579304677590presentation1.jpg",
+        "color": "1",
+        "mask": 3,
+        "x": 9.450000000000045,
+        "y": 19.549999999999955,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.571345537757437,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Presentation1.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "88",
+        "width": "540 mm",
+        "height": "250 mm",
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Our Dearest",
+        "font": "68.094px Chopin Script",
+        "font_size": 24,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 9.149999999999977,
+        "y": -226.39999999999998,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Blue Charlie and Sam",
+        "font": "85.11749999999999px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -3.25,
+        "y": -160.7,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 31,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Mummy and Daddy will meet you",
+        "font": "39.72149999999999px Chopin Script",
+        "font_size": 14,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 38.85000000000002,
+        "y": 181.25,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "At the Rainbow Bridge just this side of heaven",
+        "font": "34.047px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 27.350000000000023,
+        "y": 222.25,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "2016",
+        "font": "28.372499999999995px Chopin Script",
+        "font_size": 10,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 54.85000000000002,
+        "y": 130.25,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 7,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "2007",
+        "font": "28.372499999999995px Chopin Script",
+        "font_size": 10,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -103.25,
+        "y": 138.29999999999995,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 7,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "2020",
+        "font": "28.372499999999995px Chopin Script",
+        "font_size": 10,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 237.8499999999999,
+        "y": 130.25,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 7,
+        "itemID": 9
+      }
+    ]
+  }
+}

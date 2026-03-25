@@ -1,0 +1,346 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.551Z",
+  "units": "mm",
+  "source": {
+    "id": "1755279256179",
+    "slug": "legacy-1755279256179",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1755279256179.json",
+    "savedAt": "2025-08-15T17:34:16.179Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.600000000001,
+      "height_mm": 304.8000000000001
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.600000000001,
+      "height_mm": 304.8000000000001,
+      "thickness_mm": 25.4,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Beloved mother and daughter. Her love was the heart of our home.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 166
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Wilhelmina Vega",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 56
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "November 28, 1975 - May 11, 2019",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 111
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": -287.25,
+          "y_px": -61
+        },
+        "height_px": 128,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "butterfly_004",
+        "position": {
+          "x_px": 258,
+          "y_px": -58.25
+        },
+        "height_px": 53,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      },
+      {
+        "id": "butterfly_004",
+        "path": "/shapes/motifs/butterfly_004.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4e324267dbb5cc1906a0af63089c911c8d26fc13e7f97445b03a86120c992a9c",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.551Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 1030.19,
+        "quantity": 1,
+        "width": 609.600000000001,
+        "height": 304.8000000000001,
+        "_length": 25.4,
+        "init_width": 1288,
+        "init_height": 676,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250716,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x864"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 53,
+        "label": "Beloved mother and daughter. Her love was the heart of our home.",
+        "font": "21.624015748031457px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1,
+        "y": 166,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Maribel Mercado",
+        "font": "27.03001968503932px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1,
+        "y": 56,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "November 28, 1975 - May 11, 2019",
+        "font": "27.03001968503932px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1,
+        "y": 111,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 3
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -287.25,
+        "y": -61,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 128,
+        "ratio": 0.17582417582417584,
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1755278264216,
+        "path": "../upload/2025/08/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1755278264216mommy_photo_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -6,
+        "y": -60,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.48382135826771566,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "MOMMY PHOTO.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "121",
+        "width": "135",
+        "height": "164",
+        "itemID": 5
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_004",
+        "item": "butterfly_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 258,
+        "y": -58.25,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 53,
+        "ratio": 0.20784313725490197,
+        "itemID": 6
+      }
+    ]
+  }
+}

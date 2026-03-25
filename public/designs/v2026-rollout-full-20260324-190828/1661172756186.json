@@ -1,0 +1,854 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.679Z",
+  "units": "mm",
+  "source": {
+    "id": "1661172756186",
+    "slug": "legacy-1661172756186",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1661172756186.json",
+    "savedAt": "2022-08-22T12:52:36.186Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-11",
+        "text": "\"An enterprising unique woman, a gifted",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 48.756,
+          "y_px": -129.486
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "sporting talent, a mother to all. She was",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 77.255,
+          "y_px": -94.237
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "full of life and always one call away\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 54.76,
+          "y_px": -54.24
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "\"Her children rise up and call her blessed; Her husband also, and he praises her\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -5.75,
+          "y_px": 194.489
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Lona Willis",
+        "font": {
+          "family": "Garamond",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -9.998,
+          "y_px": -201.729
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -21.244,
+          "y_px": -254.477
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Died 29 September 2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -7.984,
+          "y_px": 44.012
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Born 28 November 1964",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 6.014,
+          "y_px": 8.517
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Proverbs 31:28 - The Capable Wife",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -184.671,
+          "y_px": 155.742
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Rest in eternal peace",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -8.499,
+          "y_px": 285.973
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": -329.234,
+          "y_px": -249.48
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": 336.482,
+          "y_px": -253.474
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": 334.981,
+          "y_px": 312.468
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": -325.984,
+          "y_px": 309.723
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "2_075_05",
+        "position": {
+          "x_px": 285.485,
+          "y_px": 286.72
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "2_116_24",
+        "position": {
+          "x_px": 286.487,
+          "y_px": -235.225
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "2_091_05",
+        "position": {
+          "x_px": -299.236,
+          "y_px": 277.228
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "2_132_25",
+        "position": {
+          "x_px": -302.735,
+          "y_px": -225.231
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_037_12",
+        "path": "/shapes/motifs/1_037_12.svg"
+      },
+      {
+        "id": "2_075_05",
+        "path": "/shapes/motifs/2_075_05.svg"
+      },
+      {
+        "id": "2_116_24",
+        "path": "/shapes/motifs/2_116_24.svg"
+      },
+      {
+        "id": "2_091_05",
+        "path": "/shapes/motifs/2_091_05.svg"
+      },
+      {
+        "id": "2_132_25",
+        "path": "/shapes/motifs/2_132_25.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ac5a037b28ba9f9c7d336a005a769698919431d56866bffd009bb2118661257c",
+    "sourceItemCount": 20,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.679Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 2479.4,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1030,
+        "init_height": 658,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220819,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36 Edg/104.0.1293.54, 1536x864"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -329.2339805825243,
+        "y": -249.48024316109422,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.07540983606557378,
+        "itemID": 2
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 336.4815533980583,
+        "y": -253.47416413373864,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.07540983606557378,
+        "itemID": 3
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 334.9805825242719,
+        "y": 312.468085106383,
+        "flipx": "-1",
+        "flipy": "-1",
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.07540983606557378,
+        "itemID": 4
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -325.9844660194175,
+        "y": 309.7234042553191,
+        "flipx": "1",
+        "flipy": "-1",
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.07540983606557378,
+        "itemID": 5
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_075_05",
+        "item": "2_075_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 285.4854368932039,
+        "y": 286.7203647416411,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07575757575757576,
+        "itemID": 6
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_24",
+        "item": "2_116_24",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 286.4873786407767,
+        "y": -235.22492401215806,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07952286282306163,
+        "itemID": 7
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_091_05",
+        "item": "2_091_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -299.2359223300971,
+        "y": 277.2279635258359,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.054884742041712405,
+        "itemID": 8
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_132_25",
+        "item": "2_132_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -302.7349514563107,
+        "y": -225.23100303951367,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06157635467980296,
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2022/08/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1661171084465img_2783_2_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -237.73495145631063,
+        "y": -25.22796352583589,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.76375,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_2783 (2).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 188,
+        "width": "176",
+        "height": "251",
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "\"An enterprising unique woman, a gifted",
+        "font": "26.731250000000003px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 48.75631067961183,
+        "y": -129.48632218844983,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "sporting talent, a mother to all. She was",
+        "font": "28.067812500000002px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 77.2553398058252,
+        "y": -94.23708206686928,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "full of life and always one call away\"",
+        "font": "28.067812500000002px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 54.760194174757316,
+        "y": -54.24012158054711,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 67,
+        "label": "\"Her children rise up and call her blessed; Her husband also, and he praises her\"",
+        "font": "22.7215625px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -5.7504854368932,
+        "y": 194.48936170212778,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Kunemo Rupa Amini",
+        "font": "58.80875px Garamond",
+        "font_size": 44,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -9.9980582524272,
+        "y": -201.72948328267478,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "32.0775px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -21.243689320388285,
+        "y": -254.47720364741642,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Died 29 September 2021",
+        "font": "28.067812500000002px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7.984466019417482,
+        "y": 44.01215805471122,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Born 28 November 1964",
+        "font": "28.067812500000002px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 6.013592233009717,
+        "y": 8.516717325228,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Proverbs 31:28 - The Capable Wife",
+        "font": "24.058125px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -184.67087378640775,
+        "y": 155.741641337386,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Rest in eternal peace",
+        "font": "53.462500000000006px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -8.499029126213486,
+        "y": 285.97264437689967,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 10
+      }
+    ]
+  }
+}

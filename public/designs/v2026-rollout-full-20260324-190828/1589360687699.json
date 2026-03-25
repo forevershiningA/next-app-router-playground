@@ -1,0 +1,212 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.318Z",
+  "units": "mm",
+  "source": {
+    "id": "1589360687699",
+    "slug": "legacy-1589360687699",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589360687699.json",
+    "savedAt": "2020-05-13T09:04:47.699Z"
+  },
+  "product": {
+    "id": "9",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 175,
+      "height_mm": 125
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 758,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 175,
+      "height_mm": 125,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Bryant Sandoval",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 135.141,
+          "y_px": -135.141
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "2013 - 2020",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 202.711,
+          "y_px": -67.57
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "93b13d04a8555f0aba3aca5bb74b6492ec987b719a5a1cff0c430db5c5a6c8ee",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.318Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 9,
+        "type": "Headstone",
+        "name": "Rectangle 175x125",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "201.98",
+        "quantity": 1,
+        "width": 175,
+        "height": 125,
+        "_length": 1,
+        "init_width": 1440,
+        "init_height": 758
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1589361112320,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1589361112320img_0207_copy_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -135.14057142857143,
+        "y": 67.57028571428572,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9694285714285714,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_0207 copy.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 87,
+        "width": "385",
+        "height": "367",
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Indy Boy",
+        "font": "92.90914285714285px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 135.14057142857143,
+        "y": -135.14057142857143,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "2013 - 2020",
+        "font": "42.23142857142857px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 202.71085714285715,
+        "y": -67.57028571428572,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 2
+      }
+    ]
+  }
+}

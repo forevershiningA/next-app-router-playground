@@ -1,0 +1,378 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.976Z",
+  "units": "mm",
+  "source": {
+    "id": "1709627188839",
+    "slug": "legacy-1709627188839",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1709627188839.json",
+    "savedAt": "2024-03-05T08:26:28.839Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "&apos; Two Hearts One Soul &apos;",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -24.774,
+          "y_px": 341.256
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -21.348,
+          "y_px": -280.956
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Isabella Rita Gavu &",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -79.856,
+          "y_px": -164.337
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Walter Alvarado",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -55.609,
+          "y_px": 26.732
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Rest In Peace",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -8.697,
+          "y_px": 454.045
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "1_015_05",
+        "position": {
+          "x_px": -16.077,
+          "y_px": -99.44
+        },
+        "height_px": 416,
+        "rotation": {
+          "z_deg": 3
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_015_05",
+        "path": "/shapes/motifs/1_015_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f11961b67793581cda907b70e96aaf288187a06f70c0d753129d4a81b51a766a",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.976Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 412,
+        "init_height": 717,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x915"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1709627481182,
+        "path": "../upload/2024/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1709627481182screenshot_20240305_1814.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 307.2991724477232,
+        "y": -70.47849097268119,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 7,
+        "ratio": 0.9973832674423704,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20240305_181422_Facebook.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 207,
+        "width": "326",
+        "height": "358",
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_05",
+        "item": "1_015_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -16.076817225484092,
+        "y": -99.43969882464854,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 3,
+        "height": 416,
+        "ratio": 0.7938931297709924,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "&apos; Two Hearts One Soul &apos;",
+        "font": "77.8392593503937px Great Vibes",
+        "font_size": 45,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -24.773594606269967,
+        "y": 341.25602103245836,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "53.62260088582677px Great Vibes",
+        "font_size": 31,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -21.347570771152732,
+        "y": -280.9560987105924,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Isabella Rita Gavu &",
+        "font": "41.514271653543304px Great Vibes",
+        "font_size": 24,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -79.85557348751314,
+        "y": -164.33726353570293,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Baby Jnr Michael Emmanuel",
+        "font": "36.32498769685039px Great Vibes",
+        "font_size": 21,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -55.6090902680333,
+        "y": 26.731884967404433,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Rest In Peace",
+        "font": "64.00116879921259px Great Vibes",
+        "font_size": 37,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8.697137703015983,
+        "y": 454.04540691998557,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 12
+      }
+    ]
+  }
+}

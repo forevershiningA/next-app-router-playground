@@ -1,0 +1,391 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.478Z",
+  "units": "mm",
+  "source": {
+    "id": "1657595881473",
+    "slug": "legacy-1657595881473",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1657595881473.json",
+    "savedAt": "2022-07-12T03:18:01.473Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 732,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "Gone Racing,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 40.741
+        },
+        "position": {
+          "x_px": 71.9,
+          "y_px": -256.71
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Mates, Off to a new track,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 57.92,
+          "y_px": -119.766
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Forever Winning.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 24.368
+        },
+        "position": {
+          "x_px": 49.405,
+          "y_px": -31.547
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Clif and his beloved Playtag.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 30.957,
+          "y_px": 65.186
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Clif Thorogood 16/09/30 to 11/04/20",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 24.965,
+          "y_px": 161.16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Playtag, 1975 to 2000",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8.988,
+          "y_px": 270.13
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-18",
+        "asset": "1_143_10",
+        "position": {
+          "x_px": -418.419,
+          "y_px": -231.811
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": -2
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_143_10",
+        "path": "/shapes/motifs/1_143_10.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "81d01a66f2f259afae2e77b45b92c4f048b4ae6d7bf986576499f250366294e3",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.478Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+        "price": 447.34,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 412,
+        "init_height": 652,
+        "backgroundOption": "undefined",
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20220708,
+        "mode": "2d",
+        "navigator": "Linux armv8l, Google Inc., Mozilla/5.0 (Linux; Android 8.0.0; S41) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.81 Mobile Safari/537.36, 412x732"
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_10",
+        "item": "1_143_10",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -418.4188649075702,
+        "y": -231.81137075599725,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -2,
+        "height": 50,
+        "ratio": 0.07407407407407407,
+        "itemID": 18
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Gone Racing,",
+        "font": "143.19822574996945px Chopin Script",
+        "font_size": 40.740631103515625,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 71.9000389876876,
+        "y": -256.70990776576866,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Mates, Off to a new track,",
+        "font": "70.29749999999999px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 57.9195564788522,
+        "y": -119.7662068466467,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 9
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Forever Winning.",
+        "font": "85.65147972106932px Chopin Script",
+        "font_size": 24.3682861328125,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 49.40509777624641,
+        "y": -31.54749485320133,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 11
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Clif and his beloved Playtag.",
+        "font": "70.29749999999999px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 30.957004324903664,
+        "y": 65.18613967427461,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 13
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "Clif Thorogood 16/09/30 to 11/04/20",
+        "font": "70.29749999999999px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 24.965326068470745,
+        "y": 161.16017155559507,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 15
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Playtag, 1975 to 2000",
+        "font": "70.29749999999999px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 8.987517384649436,
+        "y": 270.1300808491151,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 17
+      }
+    ]
+  }
+}

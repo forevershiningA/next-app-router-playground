@@ -1,0 +1,727 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.808Z",
+  "units": "mm",
+  "source": {
+    "id": "1603190206420",
+    "slug": "legacy-1603190206420",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1603190206420.json",
+    "savedAt": "2020-10-20T10:36:46.420Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 6",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 740,
+      "height_mm": 750
+    },
+    "viewportPx": {
+      "width": 784,
+      "height": 601,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 740,
+      "height_mm": 750,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 840,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Singing with the Angels",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -47,
+          "y_px": -107.537
+        },
+        "rotation": {
+          "z_deg": -69
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "O’Brien",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 74
+        },
+        "position": {
+          "x_px": 92,
+          "y_px": -94.043
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 94,
+          "y_px": -51.078
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Avis Bowen",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 95,
+          "y_px": 6.781
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "OF",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 81,
+          "y_px": -22.219
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Aged 19 Years",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 83,
+          "y_px": 31.957
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "31 Dec 1995 - 8 Nov 2015",
+        "font": {
+          "family": "Arial",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 107,
+          "y_px": 60.031
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Cherished Son of Danny & Karen",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 99,
+          "y_px": 99.093
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Loved Brother of Michelle & Tracey",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 96,
+          "y_px": 129.216
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Loving Uncle of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 78,
+          "y_px": 157.093
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Amy, Jack, Sam, Josie, Kloe & Krystal",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 91,
+          "y_px": 185.463
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Forever Loved, Never Forgotten",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 94,
+          "y_px": 205.463
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "“Whosoever believe that in Him shall not perish, but have eternal life”. - John 3:15",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 278.463
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_172_02",
+        "position": {
+          "x_px": -2,
+          "y_px": -214.969
+        },
+        "height_px": 65,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_172_08",
+        "position": {
+          "x_px": 47,
+          "y_px": -175.043
+        },
+        "height_px": 105,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_172_02",
+        "path": "/shapes/motifs/1_172_02.svg"
+      },
+      {
+        "id": "1_172_08",
+        "path": "/shapes/motifs/1_172_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fd212068ea0564281248327f2f5ff0f1271d1fe96eac1beb646ddc0e8acc6a31",
+    "sourceItemCount": 17,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.808Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Guitar 4",
+        "shape": "Headstone 6",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "2982.34",
+        "quantity": 1,
+        "width": 740,
+        "height": 750,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 601,
+        "mode": "2d"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1300.51",
+        "quantity": 1,
+        "width": 840,
+        "height": 100,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 601,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_172_02",
+        "item": "1_172_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2,
+        "y": -214.96911764705885,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 65,
+        "ratio": 0.09312320916905444,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_172_08",
+        "item": "1_172_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 47,
+        "y": -175.0426470588244,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 105,
+        "ratio": 0.13530927835051546,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Singing with the Angels",
+        "font": "17.234558823529408px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -47,
+        "y": -107.53676470588277,
+        "rotation": -69,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "O’Brien",
+        "font": "51.01429411764705px Lucida Calligraphy",
+        "font_size": 74,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 92,
+        "y": -94.0426470588244,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 65,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Loving Memory",
+        "font": "25.507147058823524px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 94,
+        "y": -51.077941176474155,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Nathaniel Dudley",
+        "font": "27.575294117647054px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 95,
+        "y": 6.780882352926824,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "OF",
+        "font": "19.30270588235294px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 81,
+        "y": -22.219117647073176,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Aged 19 Years",
+        "font": "15.855794117647056px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 83,
+        "y": 31.9573529411756,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "31 Dec 1995 - 8 Nov 2015",
+        "font": "17.923941176470585px Arial",
+        "font_size": 26,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 107,
+        "y": 60.03088235294115,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Cherished Son of Danny & Karen",
+        "font": "14.477029411764702px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 99,
+        "y": 99.09264705882345,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Loved Brother of Michelle & Tracey",
+        "font": "14.477029411764702px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 96,
+        "y": 129.21617647058804,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Loving Uncle of",
+        "font": "14.477029411764702px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 78,
+        "y": 157.09264705882345,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Amy, Jack, Sam, Josie, Kloe & Krystal",
+        "font": "13.09826470588235px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 91,
+        "y": 185.46323529411723,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Forever Loved, Never Forgotten",
+        "font": "13.787647058823527px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 94,
+        "y": 205.46323529411723,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "“Whosoever believe that in Him shall not perish, but have eternal life”. - John 3:15",
+        "font": "15.855794117647056px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6,
+        "y": 278.4632352941172,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 17
+      }
+    ]
+  }
+}

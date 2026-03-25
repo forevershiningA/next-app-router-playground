@@ -1,0 +1,583 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.403Z",
+  "units": "mm",
+  "source": {
+    "id": "1634709460475",
+    "slug": "legacy-1634709460475",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1634709460475.json",
+    "savedAt": "2021-10-20T05:57:40.475Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/03.jpg",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 1050,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/03.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-15",
+        "text": "Eternity",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 226.859
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "And his Grandparents",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -59.004
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Jerry Rivera",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -187,
+          "y_px": 7.996
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Robert Russell",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 189,
+          "y_px": 0.799
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Manuel Ford",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": 171.759
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "D 28 January 2021",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 178,
+          "y_px": 83.376
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "D 11 May 2020",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -197,
+          "y_px": 87.096
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "01 August 1990",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -162.598
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Aged 2 minutes",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -114.183
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Rollie Holland",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -216
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "B 13 November 1934",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -186,
+          "y_px": 49.799
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Genevieve Castro",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 179,
+          "y_px": 43.079
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6a07752a1861bdfdb31d3d306602903938cdf157bf8a03a4376c8be0f95ad1c6",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.403Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Casino Blue - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#0c1137",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/03.jpg",
+        "price": 1178.83,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 1428,
+        "init_height": 827,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20211018,
+        "mode": "2d",
+        "navigator": "Win32, , Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:93.0) Gecko/20100101 Firefox/93.0, 1680x1050"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 8,
+        "label": "Eternity",
+        "font": "42.43815789473683px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 12,
+        "y": 226.8586405436198,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 18,
+        "label": "And his Grandparents",
+        "font": "29.706710526315785px Great Vibes",
+        "font_size": 14,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 3,
+        "y": -59.004168701171864,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 13,
+        "label": "Nancy May White",
+        "font": "38.19434210526315px Franklin Gothic",
+        "font_size": 18,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -187,
+        "y": 7.995831298828136,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 17,
+        "label": "Alan Geoffrey White",
+        "font": "38.19434210526315px Franklin Gothic",
+        "font_size": 18,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 189,
+        "y": 0.7989562988281023,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Together For",
+        "font": "33.95052631578947px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 18,
+        "y": 171.75912882486978,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "D 28 January 2021",
+        "font": "25.462894736842102px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 178,
+        "y": 83.3758605957031,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "D 11 May 2020",
+        "font": "25.462894736842102px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -197,
+        "y": 87.0961893717448,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "01 August 1990",
+        "font": "33.95052631578947px Franklin Gothic",
+        "font_size": 16,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": -162.59783325195315,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Aged 2 minutes",
+        "font": "29.706710526315785px Franklin Gothic",
+        "font_size": 14,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": -114.18289998372393,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Matthew Alan John Miller",
+        "font": "57.29151315789473px Franklin Gothic",
+        "font_size": 27,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": -216,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "B 13 November 1934",
+        "font": "27.584802631578942px Franklin Gothic",
+        "font_size": 13,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -186,
+        "y": 49.7989562988281,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "B 07 June 1937",
+        "font": "27.584802631578942px Franklin Gothic",
+        "font_size": 13,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 179,
+        "y": 43.078627522786405,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 12
+      }
+    ]
+  }
+}

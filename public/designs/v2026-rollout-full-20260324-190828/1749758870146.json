@@ -1,0 +1,385 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.131Z",
+  "units": "mm",
+  "source": {
+    "id": "1749758870146",
+    "slug": "legacy-1749758870146",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1749758870146.json",
+    "savedAt": "2025-06-12T20:07:50.146Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 2048,
+      "height": 1152,
+      "dpr": 1.125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "To live in the hearts of those we love is never to die\". ",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 23.62,
+          "y_px": 406.84
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "~ KOE ~",
+        "font": {
+          "family": "Garamond",
+          "size_px": 141
+        },
+        "position": {
+          "x_px": -3.374,
+          "y_px": -275.595
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "JAMES   MILTON   KOENIG",
+        "font": {
+          "family": "Garamond",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 7.873,
+          "y_px": 35.996
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "    ✟",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 80
+        },
+        "position": {
+          "x_px": -96.729,
+          "y_px": -469.813
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Beloved Husband, Father, Friend, Brother, Uncle and Son",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -11.248,
+          "y_px": -51.359
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "May 16, 1964 * September 1, 2023",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 10.123,
+          "y_px": 137.114
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Always Loved ~ Never Forgotten ~  Missed and Treasured Forever and Ever and Always~",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 10.123,
+          "y_px": -160.857
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0a9217ce62ed272a40ee8eddfa81bda4a369947f94f3f484abc0086e4a082f78",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.131Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 2020,
+        "init_height": 1017,
+        "device": "desktop",
+        "dpr": 1.125,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 2048x1152"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "To live in the hearts of those we love is never to die\". ",
+        "font": "60.3875030757874px Great Vibes",
+        "font_size": 33,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 23.619801980197735,
+        "y": 406.8397246804325,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "~ KOE ~",
+        "font": "258.0193313238189px Garamond",
+        "font_size": 141,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3.3742574257425986,
+        "y": -275.5948869223206,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 97,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "JAMES   MILTON   KOENIG",
+        "font": "86.0064437746063px Garamond",
+        "font_size": 47,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7.873267326732503,
+        "y": 35.996066863323335,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "    ✟",
+        "font": "146.39394685039372px Lucida Calligraphy",
+        "font_size": 80,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -96.72871287128737,
+        "y": -469.81317600786645,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 64,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 48,
+        "label": "Beloved Husband, Father, Friend, Brother, Uncle and Son",
+        "font": "34.768562376968504px Great Vibes",
+        "font_size": 19,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -11.247524752475556,
+        "y": -51.35889872173061,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "May 16, 1964 * September 1, 2023",
+        "font": "56.72765440452756px Lucida Calligraphy",
+        "font_size": 31,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 10.122772277227568,
+        "y": 137.1140609636185,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 69,
+        "label": "Always Loved ~ Never Forgotten ~  Missed and Treasured Forever and Ever and Always~",
+        "font": "25.618940698818896px Great Vibes",
+        "font_size": 14,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 10.122772277227568,
+        "y": -160.8574237954768,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      }
+    ]
+  }
+}

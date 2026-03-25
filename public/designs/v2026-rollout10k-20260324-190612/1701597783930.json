@@ -1,0 +1,578 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.282Z",
+  "units": "mm",
+  "source": {
+    "id": "1701597783930",
+    "slug": "legacy-1701597783930",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1701597783930.json",
+    "savedAt": "2023-12-03T10:03:03.930Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 430,
+      "height": 932,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Catharine Love",
+        "font": {
+          "family": "Garamond",
+          "size_px": 77
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -0.533
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "August 15, 2013 - December 9, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 130.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Your wing were ready but my heart was not you took a piece of me with you",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 216
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "when you flew away to paradise I hope that you are forever roaming free in the gates of heaven",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": 258.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "You are heavens special angel you are hard at work you were so brave and special to so many",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": 298.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "you’ve impacted the lives of so many people with your journey and brave battle",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 340.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "You faught the good fight against the tough battles you faced in your lifetime",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 388.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_145_20",
+        "position": {
+          "x_px": -510,
+          "y_px": -397.658
+        },
+        "height_px": 106,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_146_17",
+        "position": {
+          "x_px": 486,
+          "y_px": -400.693
+        },
+        "height_px": 111,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "butterfly_009",
+        "position": {
+          "x_px": -522,
+          "y_px": 540.329
+        },
+        "height_px": 87,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "butterfly_009",
+        "position": {
+          "x_px": 519,
+          "y_px": 537.293
+        },
+        "height_px": 95,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_145_20",
+        "path": "/shapes/motifs/1_145_20.svg"
+      },
+      {
+        "id": "1_146_17",
+        "path": "/shapes/motifs/1_146_17.svg"
+      },
+      {
+        "id": "butterfly_009",
+        "path": "/shapes/motifs/butterfly_009.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "286bf288013f82e910bb57714c6ff82f50b33c45e1e545dcbce0221752ce58e0",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.282Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 430,
+        "init_height": 683,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 430x932"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1701597894002,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1701597894002img_9060_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -9,
+        "y": 3,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 3.6740118628263576,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_9060.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 609,
+        "width": "882",
+        "height": "1257",
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_145_20",
+        "item": "1_145_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -510,
+        "y": -397.65777777777777,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 106,
+        "ratio": 0.14560439560439561,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_146_17",
+        "item": "1_146_17",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 486,
+        "y": -400.6933333333333,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 111,
+        "ratio": 0.20517560073937152,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_009",
+        "item": "butterfly_009",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -522,
+        "y": 540.3288888888889,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 87,
+        "ratio": 0.1686046511627907,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_009",
+        "item": "butterfly_009",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 519,
+        "y": 537.2933333333333,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 95,
+        "ratio": 0.18410852713178294,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Jordan Elise Parker",
+        "font": "158.86934055118112px Garamond",
+        "font_size": 77,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -0.533333333333303,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 70,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "August 15, 2013 - December 9, 2023",
+        "font": "78.40305118110237px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 130.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 57,
+        "label": "Your wing were ready but my heart was not you took a piece of me with you",
+        "font": "43.32800196850394px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6,
+        "y": 216,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 76,
+        "label": "when you flew away to paradise I hope that you are forever roaming free in the gates of heaven",
+        "font": "35.07504921259843px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9,
+        "y": 258.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 73,
+        "label": "You are heavens special angel you are hard at work you were so brave and special to so many",
+        "font": "35.07504921259843px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -24,
+        "y": 298.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 65,
+        "label": "you’ve impacted the lives of so many people with your journey and brave battle",
+        "font": "41.26476377952756px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": 340.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 65,
+        "label": "You faught the good fight against the tough battles you faced in your lifetime",
+        "font": "43.32800196850394px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 388.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 12
+      }
+    ]
+  }
+}

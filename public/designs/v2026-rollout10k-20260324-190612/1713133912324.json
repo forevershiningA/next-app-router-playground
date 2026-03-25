@@ -1,0 +1,808 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.398Z",
+  "units": "mm",
+  "source": {
+    "id": "1713133912324",
+    "slug": "legacy-1713133912324",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1713133912324.json",
+    "savedAt": "2024-04-14T22:31:52.324Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 692.15
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 780,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 692.15,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "CHAPMAN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 77
+        },
+        "position": {
+          "x_px": -230,
+          "y_px": -154
+        },
+        "rotation": {
+          "z_deg": -7
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "MEMORIES OF",
+        "font": {
+          "family": "Garamond",
+          "size_px": 85
+        },
+        "position": {
+          "x_px": 182,
+          "y_px": -154
+        },
+        "rotation": {
+          "z_deg": 5
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "WATTS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 110
+        },
+        "position": {
+          "x_px": -259,
+          "y_px": -35
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "DEAN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 109
+        },
+        "position": {
+          "x_px": 221,
+          "y_px": -38
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "ALSO HER DEAR HUSBAND",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -287,
+          "y_px": 160
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "MACK",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -310,
+          "y_px": 202
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "DEAR WIFE DEVOTED MOTHER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -266,
+          "y_px": 81
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "JEROME",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -306,
+          "y_px": 47
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "DIED 12TH APRIL 1977",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -291,
+          "y_px": 115
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "DIED 14TH SEPTEMBER 1980",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -283,
+          "y_px": 230
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "DEVOTED AND CARING HUSBAND",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 214.893,
+          "y_px": 79.994
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "LOVING FATHER TO DAVID AND DEAN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 214.102,
+          "y_px": 160.546
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "DIED 22ND SEPT 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 215.42,
+          "y_px": 116.989
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "LINKED BY LOVE NO PARTING",
+        "font": {
+          "family": "Garamond",
+          "size_px": 54
+        },
+        "position": {
+          "x_px": -6.254,
+          "y_px": 327.285
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "COLEMAN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 209.883,
+          "y_px": 37.705
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_129_17",
+        "position": {
+          "x_px": -395,
+          "y_px": 308
+        },
+        "height_px": 137,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_143_05",
+        "position": {
+          "x_px": 376.338,
+          "y_px": 294.284
+        },
+        "height_px": 117,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_129_17",
+        "path": "/shapes/motifs/1_129_17.svg"
+      },
+      {
+        "id": "1_143_05",
+        "path": "/shapes/motifs/1_143_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4ca1d0fed2507262e9667da81254985e21652fc2040b8811f6a1586964ef70be",
+    "sourceItemCount": 19,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.399Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 5599.61,
+        "quantity": 1,
+        "width": 1200,
+        "height": 692.15,
+        "_length": 80,
+        "init_width": 360,
+        "init_height": 595,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 360x780"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "2",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1084,
+        "quantity": 1,
+        "width": 1200,
+        "height": 100,
+        "_length": 250,
+        "init_width": 360,
+        "init_height": 595,
+        "mode": "2d"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_129_17",
+        "item": "1_129_17",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -395,
+        "y": 308,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 137,
+        "ratio": 0.23339011925042588,
+        "itemID": 1
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_05",
+        "item": "1_143_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 376.337890625,
+        "y": 294.2841796875,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 117,
+        "ratio": 0.17972350230414746,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "TREASURED",
+        "font": "59.03786546108692px Garamond",
+        "font_size": 77,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -230,
+        "y": -154,
+        "rotation": -7,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "MEMORIES OF",
+        "font": "65.17166966483622px Garamond",
+        "font_size": 85,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 182,
+        "y": -154,
+        "rotation": 5,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "KANE",
+        "font": "84.33980780155275px Garamond",
+        "font_size": 110,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -259,
+        "y": -35,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 77,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "FRENCH",
+        "font": "83.5730822760841px Garamond",
+        "font_size": 109,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 221,
+        "y": -38,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 77,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "ALSO HER DEAR HUSBAND",
+        "font": "24.535216814997163px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -287,
+        "y": 160,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "WILLIAM",
+        "font": "30.669021018746456px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -310,
+        "y": 202,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "DEAR WIFE DEVOTED MOTHER",
+        "font": "24.535216814997163px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -266,
+        "y": 81,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "MARGARET",
+        "font": "30.669021018746456px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -306,
+        "y": 47,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "DIED 12TH APRIL 1977",
+        "font": "24.535216814997163px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -291,
+        "y": 115,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "DIED 14TH SEPTEMBER 1980",
+        "font": "24.535216814997163px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -283,
+        "y": 230,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "DEVOTED AND CARING HUSBAND",
+        "font": "24.535216814997163px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 214.892578125,
+        "y": 79.994140625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "LOVING FATHER TO DAVID AND DEAN",
+        "font": "24.535216814997163px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 214.1015625,
+        "y": 160.5458984375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "DIED 22ND SEPT 2023",
+        "font": "24.535216814997163px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 215.419921875,
+        "y": 116.9892578125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "LINKED BY LOVE NO PARTING",
+        "font": "41.40317837530771px Garamond",
+        "font_size": 54,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6.25390625,
+        "y": 327.28515625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "MAURICE",
+        "font": "30.669021018746456px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 209.8828125,
+        "y": 37.705078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 14
+      }
+    ]
+  }
+}

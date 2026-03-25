@@ -1,0 +1,610 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.848Z",
+  "units": "mm",
+  "source": {
+    "id": "1692930671377",
+    "slug": "legacy-1692930671377",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1692930671377.json",
+    "savedAt": "2023-08-25T02:31:11.377Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/10.jpg",
+      "texture": "/textures/phoenix/l/10.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1925,
+      "height": 976,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/10.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Leonard",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -137
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In loving memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -238
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1915 - 1994",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -246,
+          "y_px": 27
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Christine Clark",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 259,
+          "y_px": -15
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "1917 - 2009",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 258,
+          "y_px": 25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Dearly loved parents of Denis, Evelyn & Robyn",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 90
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Hortense Fleming",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -250,
+          "y_px": -65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Allie Garrett",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 247,
+          "y_px": -68
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Resting peacefully until we all meet again in the resurrection",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 207
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Grand parents, & Great Great Grandparents",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 145
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "\"Brownie\"",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -252,
+          "y_px": -17
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Della Murphy 24,25,28",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 240
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4b3796d67bb2239b2573837382f5fa43a45db2edf194075c395b39827f1f3d9c",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.848Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 8",
+        "shape_url": "shapes/photos/border8.svg",
+        "fixingSystem": 3,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#2c2c76",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/10.jpg",
+        "name": "Bronze Plaque - Navy Blue - Screws (visible from front)",
+        "price": 906.75,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 10,
+        "init_width": 1680,
+        "init_height": 909,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1925x976"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1692851339063,
+        "path": "../upload/2023/08/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1692851339063mum_and_dad_cropped.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": 13,
+        "y": -22,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.32464285714285707,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "mum and dad.jpg",
+        "price": 280,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 5,
+        "label": "Brown",
+        "font": "121.12424999999999px Great Vibes",
+        "font_size": 41,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -9,
+        "y": -137,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 14,
+        "label": "In loving memory",
+        "font": "44.31374999999999px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 4,
+        "y": -238,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 9,
+        "label": "1915 - 1994",
+        "font": "44.31374999999999px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -246,
+        "y": 27,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 10,
+        "label": "Nee Linnell",
+        "font": "32.49675px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 259,
+        "y": -15,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1917 - 2009",
+        "font": "44.31374999999999px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 258,
+        "y": 25,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "Dearly loved parents of Denis, Evelyn & Robyn",
+        "font": "38.405249999999995px Great Vibes",
+        "font_size": 13,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2,
+        "y": 90,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Osmond Alexander",
+        "font": "56.13074999999999px Great Vibes",
+        "font_size": 19,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -250,
+        "y": -65,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Ruth Isabel",
+        "font": "53.17649999999999px Great Vibes",
+        "font_size": 18,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 247,
+        "y": -68,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 53,
+        "label": "Resting peacefully until we all meet again in the resurrection",
+        "font": "32.49675px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": 207,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Grand parents, & Great Great Grandparents",
+        "font": "32.49675px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 9,
+        "y": 145,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "\"Brownie\"",
+        "font": "35.45099999999999px Great Vibes",
+        "font_size": 12,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -252,
+        "y": -17,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "John 5:24,25,28",
+        "font": "29.542499999999997px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 240,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 13
+      }
+    ]
+  }
+}

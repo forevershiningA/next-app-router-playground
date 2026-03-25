@@ -1,0 +1,468 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.199Z",
+  "units": "mm",
+  "source": {
+    "id": "1701309528356",
+    "slug": "legacy-1701309528356",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1701309528356.json",
+    "savedAt": "2023-11-30T01:58:48.356Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 4",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 599,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 432,
+      "height": 960,
+      "dpr": 2.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 599,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Un padre amoroso,tierno y",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 95.911,
+          "y_px": 355.861
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "bondadoso, que lindo recuerdo dejaste”.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 184.829,
+          "y_px": 402.842
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Aug 30 1900-",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 12.988,
+          "y_px": 91.971
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Jun 16 2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 147.863,
+          "y_px": 167.94
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "LESSIE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 75
+        },
+        "position": {
+          "x_px": 144.866,
+          "y_px": -293.868
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "WOLFE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 162.849,
+          "y_px": -162.891
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "RUDOLPH",
+        "font": {
+          "family": "Garamond",
+          "size_px": 108
+        },
+        "position": {
+          "x_px": 143.867,
+          "y_px": -36.918
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "hasta que nos volvamos a encontrar nuestro amor",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -198.816,
+          "y_px": 42.049
+        },
+        "rotation": {
+          "z_deg": 111
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-14",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": 420.611,
+          "y_px": 176.926
+        },
+        "height_px": 168,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "857459fdd10319e0fc492f9b448b34445f5942ab439c11f7dc6e34cb78d31f69",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.199Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 4",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2518.17,
+        "quantity": 1,
+        "width": 599,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 432,
+        "init_height": 752,
+        "device": "mobile",
+        "dpr": 2.5,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 432x960"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 420.61081886291504,
+        "y": 176.92649841308594,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 168,
+        "ratio": 0.23076923076923078,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Un padre amoroso,tierno y",
+        "font": "44.91141732283465px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 95.91106414794922,
+        "y": 355.86143493652344,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "bondadoso, que lindo recuerdo dejaste”.",
+        "font": "43.184055118110244px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 184.8290252685547,
+        "y": 402.8418731689453,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Aug 30 1900-",
+        "font": "72.54921259842521px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 12.987899780273438,
+        "y": 91.971435546875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Jun 16 2021",
+        "font": "70.8218503937008px Garamond",
+        "font_size": 41,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 147.86293029785156,
+        "y": 167.9401397705078,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "JOSE",
+        "font": "129.55216535433073px Garamond",
+        "font_size": 75,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 144.86595153808594,
+        "y": -293.8677978515625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 65,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "SIERRA",
+        "font": "86.36811023622049px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 162.84927368164062,
+        "y": -162.89138793945312,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "VERA",
+        "font": "186.55511811023624px Garamond",
+        "font_size": 108,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 143.8669204711914,
+        "y": -36.91839599609375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 75,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "hasta que nos volvamos a encontrar nuestro amor",
+        "font": "39.72933070866142px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -198.81580352783203,
+        "y": 42.04866027832031,
+        "rotation": 111,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 13
+      }
+    ]
+  }
+}

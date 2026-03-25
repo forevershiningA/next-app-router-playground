@@ -1,0 +1,568 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.411Z",
+  "units": "mm",
+  "source": {
+    "id": "1615779407165",
+    "slug": "legacy-1615779407165",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1615779407165.json",
+    "savedAt": "2021-03-15T03:36:47.165Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 24",
+    "material": {
+      "name": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 365,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 848,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 365,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    },
+    "base": {
+      "width_mm": 465,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "7.8.1957",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -101.412,
+          "y_px": 8.873
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "26.1.2021",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 96.525,
+          "y_px": 11.575
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Soul Mate of Des",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -3.9,
+          "y_px": 117
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "You have All Been My Joy",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -5.85,
+          "y_px": 332.7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Buffy, Ricky (dec), Tammy, Toby",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -3.9,
+          "y_px": 185.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Merton Reid",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -2.925,
+          "y_px": 224.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Ethan, Cacha, Amber, Indi, Euan,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -1.95,
+          "y_px": 262.275
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Sally Sharp",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -13.65,
+          "y_px": 160.875
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Ruby Johnston",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 1.088,
+          "y_px": 78.573
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Oby and Brynlee",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -6.825,
+          "y_px": 288.725
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-16",
+        "asset": "butterfly_009",
+        "position": {
+          "x_px": -3,
+          "y_px": -204.925
+        },
+        "height_px": 47,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_009",
+        "path": "/shapes/motifs/butterfly_009.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "50b9213a6fc67676a895cddd6af26b63ac269855a4f92ffaa05411e1000e90fa",
+    "sourceItemCount": 13,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.411Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 24",
+        "shape": "Headstone 24",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+        "price": 868.38,
+        "quantity": 1,
+        "width": 365,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 848,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+        "price": 449,
+        "quantity": 1,
+        "width": 465,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 848,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_009",
+        "item": "butterfly_009",
+        "price": 197.5374544,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3,
+        "y": -204.92499999999998,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 47,
+        "ratio": 0.055424528301886794,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 8,
+        "label": "7.8.1957",
+        "font": "21.260571428571428px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -101.41238647959187,
+        "y": 8.87270153061229,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 9,
+        "label": "26.1.2021",
+        "font": "22.441714285714284px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 96.52499999999998,
+        "y": 11.574999999999989,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 16,
+        "label": "Soul Mate of Des",
+        "font": "18.898285714285713px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -3.8999999999999995,
+        "y": 116.99999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 24,
+        "label": "You have All Been My Joy",
+        "font": "27.166285714285713px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -5.850000000000023,
+        "y": 332.69999999999993,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 31,
+        "label": "Buffy, Ricky (dec), Tammy, Toby",
+        "font": "17.717142857142857px Lucida Calligraphy",
+        "font_size": 15,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -3.8999999999999995,
+        "y": 185.24999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 21,
+        "label": "My Childrens Children",
+        "font": "22.441714285714284px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -2.925,
+        "y": 224.24999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 32,
+        "label": "Ethan, Cacha, Amber, Indi, Euan,",
+        "font": "18.898285714285713px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -1.9499999999999997,
+        "y": 262.275,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 11,
+        "label": "My Children",
+        "font": "20.07942857142857px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -13.649999999999999,
+        "y": 160.87499999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 27,
+        "label": "Teresa Valda Keleher-Fowler",
+        "font": "21.260571428571428px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 1.0876135204081265,
+        "y": 78.57270153061222,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 15,
+        "label": "Oby and Brynlee",
+        "font": "20.07942857142857px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -6.8250000000000455,
+        "y": 288.7249999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 14
+      }
+    ]
+  }
+}

@@ -1,0 +1,488 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.099Z",
+  "units": "mm",
+  "source": {
+    "id": "1749185451992",
+    "slug": "legacy-1749185451992",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1749185451992.json",
+    "savedAt": "2025-06-06T04:50:51.992Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G654.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 889
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 812,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 889,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "DEWITT",
+        "font": {
+          "family": "Garamond",
+          "size_px": 106
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -200.829
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Polly Neal",
+        "font": {
+          "family": "Garamond",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -429,
+          "y_px": -301.629
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Lenette M.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 156,
+          "y_px": 213.686
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "May yy, 2025",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -153,
+          "y_px": 330
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "August yy, 196-",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 156,
+          "y_px": 271.886
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "WHAT A WONDERFUL, PERFECT LIFE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 410.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "WE SHARED. I LOVE YOU MORE.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 446.588
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "May xx, 196-",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -156,
+          "y_px": 271.457
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Vern Padilla",
+        "font": {
+          "family": "Garamond",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -150,
+          "y_px": 209.576
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "55bb157c966ce192d888b3e89e280213999adf525445d82d450788dea9d4a7c8",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.099Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G654.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2208.14,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 889,
+        "_length": 100,
+        "init_width": 375,
+        "init_height": 579,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 375x812"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G654.jpg",
+        "price": 593,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 375,
+        "init_height": 579,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 18.7,
+        "quantity": 5,
+        "label": "HENRY",
+        "font": "117.37204724409449px Garamond",
+        "font_size": 106,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": -200.82857142857142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 72,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 9,
+        "label": "John M. Jr.",
+        "font": "47.613188976377955px Garamond",
+        "font_size": 43,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -429,
+        "y": -301.6285714285715,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "Lenette M.",
+        "font": "52.042322834645674px Garamond",
+        "font_size": 47,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 156,
+        "y": 213.6857142857143,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 10,
+        "label": "May yy, 2025",
+        "font": "37.64763779527559px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -153,
+        "y": 330,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 13,
+        "label": "August yy, 196-",
+        "font": "36.54035433070866px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 156,
+        "y": 271.88571428571413,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 26,
+        "label": "WHAT A WONDERFUL, PERFECT LIFE",
+        "font": "26.5748031496063px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": 410.39999999999986,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 22,
+        "label": "WE SHARED. I LOVE YOU MORE.",
+        "font": "26.5748031496063px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -3,
+        "y": 446.5875000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 10,
+        "label": "May xx, 196-",
+        "font": "36.54035433070866px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -156,
+        "y": 271.4571428571428,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 10,
+        "label": "John M., Jr.",
+        "font": "52.042322834645674px Garamond",
+        "font_size": 47,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -150,
+        "y": 209.5763392857143,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 10
+      }
+    ]
+  }
+}

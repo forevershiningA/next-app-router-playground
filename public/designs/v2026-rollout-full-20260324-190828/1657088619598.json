@@ -1,0 +1,697 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.431Z",
+  "units": "mm",
+  "source": {
+    "id": "1657088619598",
+    "slug": "legacy-1657088619598",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1657088619598.json",
+    "savedAt": "2022-07-06T06:23:39.598Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Left Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 0.8999999761581421
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-12",
+        "text": "_",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 169.062,
+          "y_px": -65.254
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Dearly Missed by Husband",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -203.209,
+          "y_px": -32.58
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "Mother to",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -209.528,
+          "y_px": 57.646
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "23-01-22",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 273.379,
+          "y_px": -52.781
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "24-10-58",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 64.744,
+          "y_px": -51.998
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-36",
+        "text": "Inlaws, Nephews, Nieces,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 181.644,
+          "y_px": 29.268
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-35",
+        "text": "Loved by",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 179.842,
+          "y_px": -3.104
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "Fabian, Gabriel, Amy,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -205.039,
+          "y_px": 108.017
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Andy Brewer",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -213.1,
+          "y_px": 15.11
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-38",
+        "text": "Grandchildren,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 187.935,
+          "y_px": 70.268
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-40",
+        "text": "Family and Friends",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 181.641,
+          "y_px": 109.167
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Belle Ramos",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 145.681,
+          "y_px": -109.704
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "even though He dies\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 4.509,
+          "y_px": 236.589
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "whoever believes in me will live",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -3.606,
+          "y_px": 207.294
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "\"I am the Resurrection and the life",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -7.194,
+          "y_px": 178.899
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bf5ce76ca455aea4c274bdeeef3136df3a1d3b3ce6105f44455fc6a16ccb5582",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.431Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Left Wave",
+        "shape": "Left Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1093.51,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 1131,
+        "init_height": 893.0069427490234,
+        "device": "desktop",
+        "dpr": 0.8999999761581421,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220705,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "_",
+        "font": "41.24281955282089px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 169.06184675808493,
+        "y": -65.25353630005395,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 1,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Dearly Missed by Husband",
+        "font": "20.621409776410445px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -203.20871478556592,
+        "y": -32.57952179520561,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Mother to",
+        "font": "20.621409776410445px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -209.52814780055135,
+        "y": 57.64567626069902,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "23-01-22",
+        "font": "32.99425564225671px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 273.3789895386749,
+        "y": -52.78109667369978,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "24-10-58",
+        "font": "35.056396619897754px Great Vibes",
+        "font_size": 17,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 64.74383456119051,
+        "y": -51.99842033713418,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Inlaws, Nephews, Nieces,",
+        "font": "26.807832709333578px Great Vibes",
+        "font_size": 13,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 181.64400009373776,
+        "y": 29.2677293439873,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 36
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Loved by",
+        "font": "20.621409776410445px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 179.8421643195926,
+        "y": -3.10392284311979,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 35
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Fabian, Gabriel, Amy,",
+        "font": "47.42924248574402px Great Vibes",
+        "font_size": 23,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -205.03897378504752,
+        "y": 108.01732844780622,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 28
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "John Miranda",
+        "font": "51.55352444102611px Great Vibes",
+        "font_size": 25,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -213.10038660552846,
+        "y": 15.110241494583079,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Grandchildren,",
+        "font": "30.932114664615668px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 187.93541115245034,
+        "y": 70.26772934398741,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 38
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Family and Friends",
+        "font": "32.99425564225671px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 181.64092369758373,
+        "y": 109.16694190474033,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 40
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Margaret Miranda",
+        "font": "68.05065226215447px Great Vibes",
+        "font_size": 33,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 145.68064997129113,
+        "y": -109.70393241186343,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "even though He dies\"",
+        "font": "24.74569173169253px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 4.509237468683182,
+        "y": 236.5889758505415,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 23
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "whoever believes in me will live",
+        "font": "26.807832709333578px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -3.6060791626716195,
+        "y": 207.29448792527103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "\"I am the Resurrection and the life",
+        "font": "26.807832709333578px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7.194101217482739,
+        "y": 178.89921256075309,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 18
+      }
+    ]
+  }
+}

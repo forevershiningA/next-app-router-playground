@@ -1,0 +1,295 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.875Z",
+  "units": "mm",
+  "source": {
+    "id": "1647411274236",
+    "slug": "legacy-1647411274236",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1647411274236.json",
+    "savedAt": "2022-03-16T06:14:34.236Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 461,
+      "height_mm": 461
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 461,
+      "height_mm": 461,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "MCDONALD",
+        "font": {
+          "family": "Garamond",
+          "size_px": 62
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -301
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "ROLAND DOUGLAS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -227
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Forever In Our Hearts",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 15,
+          "y_px": 287
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "14/9/1964 - 7/11/2005",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -192
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ad514a4e18a6a30e7adc0dcca1a655a5b9b3168de117ed899cbd5254c887a373",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.875Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1435.06,
+        "quantity": 1,
+        "width": 461,
+        "height": 461,
+        "_length": 1,
+        "init_width": 1423,
+        "init_height": 825,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220315,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1647411850389,
+        "path": "../upload/2022/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1647411850389roland_douglas_loo_2_cro.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -5,
+        "y": 47,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8491876014349268,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Roland Douglas Loo (2).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 201,
+        "width": "267",
+        "height": "351",
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "LOO",
+        "font": "108.18058568329718px Garamond",
+        "font_size": 62,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -10,
+        "y": -301,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "ROLAND DOUGLAS",
+        "font": "50.60059652928417px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": -227,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever In Our Hearts",
+        "font": "68.0490780911063px Garamond",
+        "font_size": 39,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 15,
+        "y": 287,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "14/9/1964 - 7/11/2005",
+        "font": "31.40726681127983px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -192,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 9
+      }
+    ]
+  }
+}

@@ -1,0 +1,371 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.271Z",
+  "units": "mm",
+  "source": {
+    "id": "1751923809134",
+    "slug": "legacy-1751923809134",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1751923809134.json",
+    "savedAt": "2025-07-07T21:30:09.134Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 36",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 498,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 832,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 498,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 590,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Inez Curtis",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -248.189
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Louise-Blower",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": -0.264,
+          "y_px": -155.934
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Taken on",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -21.885,
+          "y_px": -21.736
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "7/7/2025",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -22.676,
+          "y_px": 97.247
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Born 6/3/1932",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -43.77,
+          "y_px": 220.81
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Sudie Garcia",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29.656
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 291.31
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "86c4527ef9b9b7b1bf2a50206a851cf5be72aa35732a7b830fde7b08c5209aa1",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.271Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 36",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2062.86,
+        "quantity": 1,
+        "width": 498,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 384,
+        "init_height": 672,
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x832"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 580,
+        "quantity": 1,
+        "width": 590,
+        "height": 100,
+        "_length": 250,
+        "init_width": 384,
+        "init_height": 672,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Susan Marie",
+        "font": "77.16459977452088px Lucida Calligraphy",
+        "font_size": 52,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -248.18944462914067,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Louise-Blower",
+        "font": "75.6806651634724px Lucida Calligraphy",
+        "font_size": 51,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -0.263671875,
+        "y": -155.933871642246,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Taken on",
+        "font": "66.77705749718153px Lucida Calligraphy",
+        "font_size": 45,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -21.884765625,
+        "y": -21.73568427522514,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "7/7/2025",
+        "font": "89.0360766629087px Lucida Calligraphy",
+        "font_size": 60,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -22.67578125,
+        "y": 97.2470082134796,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Born 6/3/1932",
+        "font": "48.96984216459978px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -43.76953125,
+        "y": 220.81034283803956,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Cherry Tree Tavs Landlady",
+        "font": "44.00793580890644px Lucida Calligraphy",
+        "font_size": 29.65625,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 291.3101285951242,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 6
+      }
+    ]
+  }
+}

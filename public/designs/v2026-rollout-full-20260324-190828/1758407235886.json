@@ -1,0 +1,234 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.661Z",
+  "units": "mm",
+  "source": {
+    "id": "1758407235886",
+    "slug": "legacy-1758407235886",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1758407235886.json",
+    "savedAt": "2025-09-20T22:27:15.886Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 152.39999999999998
+    },
+    "viewportPx": {
+      "width": 5120,
+      "height": 1440,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 152.39999999999998,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Emery M. Emmert",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -44.78
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Phase-II Expansion by:",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -13,
+          "y_px": -168
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "2025",
+        "font": {
+          "family": "Arial",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 136.618
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "31e14cb2b283e3170ff741cad2a1bda6d21f963ac0d7956fc5ea6e0eb9e3157d",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.661Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 3,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Screws (visible from front)",
+        "price": 823.58,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 152.39999999999998,
+        "_length": 0,
+        "init_width": 1952,
+        "init_height": 1222,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 5120x1440"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Emery M. Emmert",
+        "font": "132.90452755905514px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": -44.779998779296875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Phase-II Expansion by:",
+        "font": "70.36122047244096px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -13,
+        "y": -168,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2025",
+        "font": "164.17618110236222px Arial",
+        "font_size": 42,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": 136.61800130208326,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      }
+    ]
+  }
+}

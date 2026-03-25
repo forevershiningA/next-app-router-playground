@@ -1,0 +1,463 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.805Z",
+  "units": "mm",
+  "source": {
+    "id": "1602734985509",
+    "slug": "legacy-1602734985509",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1602734985509.json",
+    "savedAt": "2020-10-15T04:09:45.509Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 340,
+      "height_mm": 360
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 340,
+      "height_mm": 360,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "ALVARADO",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -13,
+          "y_px": 13
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Passed Away 29 November 1982",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 175
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Aged 76 Years",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 227
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": -235
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Geneva Andrews",
+        "font": {
+          "family": "Adorable",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -60
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_065_25",
+        "position": {
+          "x_px": -311.858,
+          "y_px": 339
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_065_25",
+        "position": {
+          "x_px": -315,
+          "y_px": -341
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_065_25",
+        "position": {
+          "x_px": 316.284,
+          "y_px": 341
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_065_25",
+        "position": {
+          "x_px": 311.426,
+          "y_px": -341
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_065_25",
+        "path": "/shapes/motifs/1_065_25.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e4c7ffd15971c3a84272bcb3beccdbcc0ad86e20845b46492af120040a8abd29",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.805Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "592.91",
+        "quantity": 1,
+        "width": 340,
+        "height": 360,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_25",
+        "item": "1_065_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -311.858125,
+        "y": 339,
+        "flipx": "1",
+        "flipy": "-1",
+        "rotation": 0,
+        "height": 55,
+        "ratio": 0.07913669064748201,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_25",
+        "item": "1_065_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -315,
+        "y": -341,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 55,
+        "ratio": 0.07913669064748201,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_25",
+        "item": "1_065_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 316.28375000000005,
+        "y": 341,
+        "flipx": "-1",
+        "flipy": "-1",
+        "rotation": 0,
+        "height": 55,
+        "ratio": 0.07913669064748201,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_25",
+        "item": "1_065_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 311.4256250000001,
+        "y": -341,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 55,
+        "ratio": 0.07913669064748201,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "MBE",
+        "font": "47.287499999999994px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -13,
+        "y": 13,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Passed Away 29 November 1982",
+        "font": "47.287499999999994px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 3,
+        "y": 175,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Aged 76 Years",
+        "font": "47.287499999999994px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 227,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "In Loving Memory Of",
+        "font": "49.651875px Adorable",
+        "font_size": 21,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -18,
+        "y": -235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Herbert Spencer Langton",
+        "font": "70.93124999999999px Adorable",
+        "font_size": 30,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6,
+        "y": -60,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 2
+      }
+    ]
+  }
+}

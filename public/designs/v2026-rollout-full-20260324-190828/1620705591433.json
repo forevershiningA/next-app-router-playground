@@ -1,0 +1,150 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.686Z",
+  "units": "mm",
+  "source": {
+    "id": "1620705591433",
+    "slug": "legacy-1620705591433",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1620705591433.json",
+    "savedAt": "2021-05-11T03:59:51.433Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Oval (Portrait)",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "80",
+      "height_mm": "100"
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 631,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "80",
+      "height_mm": "100",
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Try this",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -27
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "86a16fa27e7ce97ae43dae33562a9dd1be2cb611974de1e8424743be8cc37bce",
+    "sourceItemCount": 2,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.686Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "name": "Oval (Portrait)",
+        "shape": "Oval (Portrait)",
+        "color": "#000000",
+        "fixed": 2,
+        "texture": "src/ceramic/l/01.jpg",
+        "price": 260,
+        "quantity": 1,
+        "width": "80",
+        "height": "100",
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 631,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 140,
+        "version_date": 20210428,
+        "mode": "2d"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Try this",
+        "font": "115.3546875px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": -27,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 1
+      }
+    ]
+  }
+}

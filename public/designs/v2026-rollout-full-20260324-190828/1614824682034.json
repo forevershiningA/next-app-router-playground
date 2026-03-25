@@ -1,0 +1,288 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.371Z",
+  "units": "mm",
+  "source": {
+    "id": "1614824682034",
+    "slug": "legacy-1614824682034",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1614824682034.json",
+    "savedAt": "2021-03-04T02:24:42.034Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 608,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": "1",
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Manuel Romero",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 90
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -117
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "August 12th 1956",
+        "font": {
+          "family": "Garamond",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 225
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "February 24th 1997",
+        "font": {
+          "family": "Garamond",
+          "size_px": 56
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 324
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Beloved Mother",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 61
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "36ed7e0e9033b506a0aa9b745442eadb51221b6147cedf64140a98795818330e",
+    "sourceItemCount": 6,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.371Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Curved Top",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 1220.19,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": "1",
+        "init_width": 390,
+        "init_height": 608,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 552,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 390,
+        "init_height": 608,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 7.5,
+        "quantity": 1,
+        "label": "Katrina Kogos",
+        "font": "146.66785714285712px Great Vibes",
+        "font_size": 90,
+        "font_family": "Great Vibes",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 3,
+        "y": -117,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 106,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 5,
+        "quantity": 1,
+        "label": "August 12th 1956",
+        "font": "97.77857142857141px Garamond",
+        "font_size": 60,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 225,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 5,
+        "quantity": 1,
+        "label": "February 24th 1997",
+        "font": "91.25999999999999px Garamond",
+        "font_size": 56,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 324,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Beloved Mother",
+        "font": "83.1117857142857px Franklin Gothic",
+        "font_size": 51,
+        "font_family": "Franklin Gothic",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 61,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 2
+      }
+    ]
+  }
+}

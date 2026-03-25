@@ -1,0 +1,193 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.913Z",
+  "units": "mm",
+  "source": {
+    "id": "1632235205217",
+    "slug": "legacy-1632235205217",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1632235205217.json",
+    "savedAt": "2021-09-21T14:40:05.217Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/05.jpg",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 342.89999999999986,
+      "height_mm": 146.0500000000001
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1.100000023841858
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 342.89999999999986,
+      "height_mm": 146.0500000000001,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "415",
+        "font": {
+          "family": "Garamond",
+          "size_px": 100
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -38.488
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Ona Kelley",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 1.1,
+          "y_px": 103.368
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "378830c4d7135545e46929cae4f9a36a220c8988364e1f0051e3a90d56d78058",
+    "sourceItemCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.913Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Green - Lugs with Studs",
+        "border": "Border 5",
+        "shape_url": "shapes/photos/border5.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#1a391a",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/05.jpg",
+        "price": 804.8,
+        "quantity": 1,
+        "width": 342.89999999999986,
+        "height": 146.0500000000001,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1.100000023841858,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210916,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.164 Safari/537.36"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "415",
+        "font": "273.05118702058724px Garamond",
+        "font_size": 100,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 1.1368683772161603e-13,
+        "y": -38.48797250859104,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Jefferson Avenue",
+        "font": "109.22047480823491px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 1.099999999999909,
+        "y": 103.36769759450169,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 2
+      }
+    ]
+  }
+}

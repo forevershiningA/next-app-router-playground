@@ -1,0 +1,445 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:19.101Z",
+  "units": "mm",
+  "source": {
+    "id": "1694878463119",
+    "slug": "legacy-1694878463119",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1694878463119.json",
+    "savedAt": "2023-09-16T15:34:23.119Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Portrait)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/09.jpg",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 330.2,
+      "height_mm": 368.29999999999995
+    },
+    "viewportPx": {
+      "width": 339,
+      "height": 727,
+      "dpr": 3.1875
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 330.2,
+      "height_mm": 368.29999999999995,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Tencic",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -272,
+          "y_px": -312
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Milicic",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 229.047,
+          "y_px": -308.957
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Henry Wells",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -30,
+          "y_px": 69.931
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Ruzica Ujĉić Tencic",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -52,
+          "y_px": -158.69
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "2000-2010",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -58,
+          "y_px": -117.448
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "1942-2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -49,
+          "y_px": 109.379
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "cross_005",
+        "position": {
+          "x_px": -24,
+          "y_px": -345.172
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_005",
+        "path": "/shapes/motifs/cross_005.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "671c20b61c9402fbb19073528e7d450cf053a57d4be85b982b76bed8cae00f76",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:19.101Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "No Border",
+        "shape_url": "shapes/photos/noborder.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Portrait)",
+        "color": "#4c0f1e",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/09.jpg",
+        "name": "Bronze Plaque - Maroon - Lugs with Studs",
+        "price": 1422.23,
+        "quantity": 1,
+        "width": 330.2,
+        "height": 368.29999999999995,
+        "_length": 0,
+        "init_width": 339,
+        "init_height": 542.9999961853027,
+        "device": "mobile",
+        "dpr": 3.1875,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 339x727"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1694876816834,
+        "path": "../upload/2023/09/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1694876816834img_20230808_005807_crop.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -43,
+        "y": 209.7931034482759,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.736176456862612,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_20230808_005807.jpg",
+        "price": 280,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 1
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_005",
+        "item": "cross_005",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -24,
+        "y": -345.1724137931035,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 57,
+        "ratio": 0.24152542372881355,
+        "itemID": 3
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1694876934367,
+        "path": "../upload/2023/09/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "169487693436720230916_011646_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -56,
+        "y": -23.31034482758621,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.736176456862612,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "20230916_011646.jpg",
+        "price": 230,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Tencic",
+        "font": "100.11999813331524px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -272,
+        "y": -312.00000000000006,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Milicic",
+        "font": "94.39885538284008px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 229.04686635785401,
+        "y": -308.9565215926855,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Giannina Tencic Milicic",
+        "font": "57.21142750475156px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -30,
+        "y": 69.93103448275863,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Ruzica Ujĉić Tencic",
+        "font": "57.21142750475156px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -52,
+        "y": -158.6896551724138,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "2000-2010",
+        "font": "42.90857062856367px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -58,
+        "y": -117.44827586206898,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1942-2023",
+        "font": "51.4902847542764px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -49,
+        "y": 109.3793103448276,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 9
+      }
+    ]
+  }
+}

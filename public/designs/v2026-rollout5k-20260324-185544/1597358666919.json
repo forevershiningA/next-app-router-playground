@@ -1,0 +1,705 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.539Z",
+  "units": "mm",
+  "source": {
+    "id": "1597358666919",
+    "slug": "legacy-1597358666919",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1597358666919.json",
+    "savedAt": "2020-08-13T22:44:26.919Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 360,
+      "height_mm": 390
+    },
+    "viewportPx": {
+      "width": 1296,
+      "height": 690,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 360,
+      "height_mm": 390,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Royal Alvarez",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -1.421,
+          "y_px": -1.354
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Sept",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -238.824,
+          "y_px": -214.941
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Sept",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 217.673,
+          "y_px": -211.913
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "29",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -241.744,
+          "y_px": -167.525
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "22",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 214.438,
+          "y_px": -165.805
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "2019",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 216.028,
+          "y_px": -123.847
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "1994",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -242.329,
+          "y_px": -127.275
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ‎",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 164.677,
+          "y_px": 293.02
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Gertrude Warner",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 2.219,
+          "y_px": 64.006
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "& Those He Loved",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -14.164,
+          "y_px": 95.819
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Will Always & Forever",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -17.61,
+          "y_px": 127.427
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Remember & Miss Him",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -3.741,
+          "y_px": 161.29
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Willam Weaver",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -15.692,
+          "y_px": -281.547
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "64203996b3554bbefbd372785fb536f8d5439f388c2048ec52b50291bc583198",
+    "sourceItemCount": 18,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.539Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Flat Back",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 1,
+        "shape": "Bronze Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": "1314.16",
+        "quantity": 1,
+        "width": 360,
+        "height": 390,
+        "_length": 1,
+        "init_width": 1296,
+        "init_height": 690,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "undefined",
+        "type": "Emblem",
+        "item": "br311l-lion-rampant",
+        "color": "#ffb35a",
+        "x": -236.671875,
+        "y": 116.93332513501315,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.375,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br311l-lion-rampant",
+        "price": 99,
+        "quantity": 1,
+        "size": "75 x 75 mm",
+        "itemID": 11
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "undefined",
+        "type": "Emblem",
+        "item": "br311l-lion-rampant",
+        "color": "#ffb35a",
+        "x": 237.16567611694336,
+        "y": 118.13635239591162,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.375,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br311l-lion-rampant",
+        "price": 99,
+        "quantity": 1,
+        "size": "75 x 75 mm",
+        "itemID": 12
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "undefined",
+        "type": "Emblem",
+        "item": "br118-bible",
+        "color": "#ffb35a",
+        "x": -6.84375,
+        "y": 233.84468721994836,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 132,
+        "ratio": 0.375,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br118-bible",
+        "price": 99,
+        "quantity": 1,
+        "size": "75 x 75 mm",
+        "itemID": 16
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "path": "../upload/2020/08/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1597351696910final_alpha_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": -7.941283404827118,
+        "y": -148.28984228514068,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.65,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "final alpha.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Alpha M. Dumbuya",
+        "font": "43.125px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.4211981892585754,
+        "y": -1.3543085106865647,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "Sept",
+        "font": "43.125px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -238.82357581012184,
+        "y": -214.94073063635037,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "Sept",
+        "font": "43.125px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 217.67332465564914,
+        "y": -211.91275891476835,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "29",
+        "font": "48.300000000000004px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -241.74399363104385,
+        "y": -167.52483983239765,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "22",
+        "font": "50.025000000000006px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 214.43784033190377,
+        "y": -165.80510288724884,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2019",
+        "font": "43.125px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 216.027721836924,
+        "y": -123.84731194925223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "1994",
+        "font": "43.125px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -242.32941160188165,
+        "y": -127.2753218074343,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ‎",
+        "font": "34.5px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 164.677490234375,
+        "y": 293.01953627323667,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "He Lived For Those He Loved",
+        "font": "32.775px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2.218606948852539,
+        "y": 64.00593993763044,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "& Those He Loved",
+        "font": "32.775px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -14.164183020591736,
+        "y": 95.8185782431874,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Will Always & Forever",
+        "font": "27.6px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -17.60999577617622,
+        "y": 127.42707806953115,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Remember & Miss Him",
+        "font": "32.775px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -3.7409590613096952,
+        "y": 161.2903597337447,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Our Beloved",
+        "font": "43.125px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -15.691604614257812,
+        "y": -281.54728571753503,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 15
+      }
+    ]
+  }
+}

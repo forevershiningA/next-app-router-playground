@@ -1,0 +1,390 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.757Z",
+  "units": "mm",
+  "source": {
+    "id": "1675031921029",
+    "slug": "legacy-1675031921029",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1675031921029.json",
+    "savedAt": "2023-01-29T22:38:41.029Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Your kindness and love will always be with me each day of my life, and I will live forever in your house, Lord. Psalms 23:6 CEV https://bible.com/bible/392/psa.23.6.CEV",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -114,
+          "y_px": -106
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Psalms 23:6 ",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 298.02,
+          "y_px": 69.998
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Mahlon Murphy",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 32.001,
+          "y_px": -246.006
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "\"I will dwell forever in your house, Lord.\"",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -7.001,
+          "y_px": -13.006
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "1951 - 2023 A.D.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 37.004,
+          "y_px": -147.003
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "\"Beloved husband, father and grandfather\"",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -3.004,
+          "y_px": 206.006
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_155_05",
+        "position": {
+          "x_px": -446,
+          "y_px": -219
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_05",
+        "path": "/shapes/motifs/1_155_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0f305b520a0a42819617e93a78b0bd9269b6bc0efebd6b253a99acb65e1e26db",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.757Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 243.43,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 15,
+        "init_width": 412,
+        "init_height": 734,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230124,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x915"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_05",
+        "item": "1_155_05",
+        "price": 218.29721,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -446,
+        "y": -219,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 57,
+        "ratio": 0.07862068965517241,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 142,
+        "label": "Your kindness and love will always be with me each day of my life, and I will live forever in your house, Lord. Psalms 23:6 CEV https://bible.com/bible/392/psa.23.6.CEV",
+        "font": "77.32724999999999px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -113.99999999999997,
+        "y": -106,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "Psalms 23:6 ",
+        "font": "77.32724999999999px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 298.02026967169013,
+        "y": 69.99842772107036,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "Elder Samuel Khadka Chhetri",
+        "font": "77.32724999999999px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 32.00139840135307,
+        "y": -246.00581596852646,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 36,
+        "label": "\"I will dwell forever in your house, Lord.\"",
+        "font": "77.32724999999999px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -7.001398401352958,
+        "y": -13.005502976253865,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "1951 - 2023 A.D.",
+        "font": "77.32724999999999px Adorable",
+        "font_size": 22,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 37.004195204058874,
+        "y": -147.00275148812693,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 37,
+        "label": "\"Beloved husband, father and grandfather\"",
+        "font": "77.32724999999999px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -3.004155168255579,
+        "y": 206.00620903825893,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 8
+      }
+    ]
+  }
+}

@@ -1,0 +1,43 @@
+package forevershining.headstones.headstone_20;
+
+import pl.pkapusta.engine.graphics.algorithms.Bezier;
+import pl.pkapusta.engine.graphics.path.DiscreteCornerPoint;
+import pl.pkapusta.engine.graphics.path.DiscretePoint;
+import pl.pkapusta.engine.graphics.path.HeadScalingDiscretePath;
+import pl.pkapusta.engine.graphics.path.NormalsDirection;
+import pl.pkapusta.engine.graphics.path.ScalingDiscretePath;
+import openfl.geom.Point;
+import forevershining.headstones.AbstractHeadstoneModel3D;
+import forevershining.headstones.SVGPathReader;
+import forevershining.headstones.Utils;
+
+/**
+ * @author Przemysław Kapusta
+ */
+@:expose("Executor")
+class MainExecutor extends AbstractHeadstoneModel3D {
+    
+    override private function buildModelPath() : ScalingDiscretePath {
+		
+		var reader = new SVGPathReader(
+			"M 344.49377899169895 399.251647949219" + "\n" + 
+			"L 55.79823684692337 399.251647949219 56.09073486328134 287.764904022217" + "\n" + 
+			"Q 56.29323348999014 235.54275817871098 55.52823867797861 184.49060440063488 55.05574188232413 162.08075637817387 59.600711059570585 140.34590377807615 63.89818191528275 120.02854156494152 73.43811721801785 101.53366699218748 83.0680519104003 83.10629196166997 97.19795608520462 68.07639389038081 112.52035217285129 51.899003601074355 131.03772659301785 39.951584625244095 147.14761734008744 29.53415527343759 163.5500061035159 20.354217529296875" + "\n" + 
+			"L 196.66978149414035 1.6793441772460938" + "\n" + 
+			"Q 198.10977172851517 0.9368492126466208 199.7297607421874 0.8243499755860739 201.30475006103507 0.6218513488770441 202.78973999023447 1.2743469238282614 225.807083892822 12.79426879882817 248.32943115234366 26.13667831420912 270.7167793273925 39.41158828735365 290.606644439697 56.24147415161133 303.7465553283687 67.26639938354492 314.0739852905276 80.94630661010751 324.40141525268564 94.64871368408217 331.39886779785184 110.30860748291013 338.10382232666007 126.03600082397475 341.4112998962405 142.82088699340818 344.71877746582004 159.60577316284184 344.47127914428665 176.70565719604497" + "\n" + 
+			"L 344.49377899169895 399.251647949219 Z"
+		);
+        
+        var points : Array<DiscretePoint> = reader.getPoints();
+		
+		Utils.svgToModelCoordinates(points);
+        
+        return new HeadScalingDiscretePath(points, 210, false, false, NormalsDirection.CLOCKWISE);
+    }
+
+    public function new() {
+        super();
+    }
+	
+}
+

@@ -1,0 +1,638 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.787Z",
+  "units": "mm",
+  "source": {
+    "id": "1645410897555",
+    "slug": "legacy-1645410897555",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1645410897555.json",
+    "savedAt": "2022-02-21T02:34:57.555Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 428,
+      "height": 926,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-13",
+        "text": "Forever And Ever",
+        "font": {
+          "family": "Adorable",
+          "size_px": 73
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 642
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Annetta Espinoza",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 114,
+          "y_px": -300
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Loving mother to Travis, Thomas,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 159,
+          "y_px": 6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Charity Parker",
+        "font": {
+          "family": "Adorable",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 147,
+          "y_px": 78
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Beloved partner to Ross Whyte",
+        "font": {
+          "family": "Adorable",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 129,
+          "y_px": -63
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "14.08.1974 ~ 20.03.2012",
+        "font": {
+          "family": "Adorable",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 141,
+          "y_px": -168
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 117,
+          "y_px": -381
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Ola Keller",
+        "font": {
+          "family": "Adorable",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 120,
+          "y_px": 186
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "dolphin_002",
+        "position": {
+          "x_px": -522,
+          "y_px": 633
+        },
+        "height_px": 67,
+        "rotation": {
+          "z_deg": -21
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "dolphin_002",
+        "position": {
+          "x_px": 508.611,
+          "y_px": 636
+        },
+        "height_px": 67,
+        "rotation": {
+          "z_deg": 23
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": -276,
+          "y_px": 273
+        },
+        "height_px": 130,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": -425.842,
+          "y_px": 216
+        },
+        "height_px": 147,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dolphin_002",
+        "path": "/shapes/motifs/dolphin_002.svg"
+      },
+      {
+        "id": "2_131_22",
+        "path": "/shapes/motifs/2_131_22.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c43cd00ae342ecf9de473e3f7ea9fa6865571825be1c8e0b74a2208185aa8b0d",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.787Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Curved Top",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 2156,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 428,
+        "init_height": 690,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20220217,
+        "mode": "2d",
+        "navigator": "iPhone, Apple Computer, Inc., Mozilla/5.0 (iPhone; CPU iPhone OS 14_8_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1, 428x926"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 750,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 428,
+        "init_height": 690,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1645410923996,
+        "path": "../upload/2022/02/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "164541092399686052c87100c44bcbad6143b.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -351,
+        "y": -189,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.4411105590062112,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "86052C87-100C-44BC-BAD6-143B0E28FF04.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 278,
+        "width": "360",
+        "height": "497",
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dolphin_002",
+        "item": "dolphin_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -522,
+        "y": 633,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -21,
+        "height": 67,
+        "ratio": 0.11166666666666666,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dolphin_002",
+        "item": "dolphin_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 508.6114285714284,
+        "y": 636,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 23,
+        "height": 67,
+        "ratio": 0.11166666666666666,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -276,
+        "y": 273,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 130,
+        "ratio": 0.21666666666666667,
+        "itemID": 11
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -425.84240571428563,
+        "y": 216,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 147,
+        "ratio": 0.245,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Forever And Ever",
+        "font": "130.5552857142857px Adorable",
+        "font_size": 73,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": 642,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Kerry Anne West",
+        "font": "71.53714285714285px Adorable",
+        "font_size": 40,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 114,
+        "y": -300,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Loving mother to Travis, Thomas,",
+        "font": "46.49914285714285px Adorable",
+        "font_size": 26,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 159,
+        "y": 6,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Kayla, Cheree, Jesse & Malachi.",
+        "font": "46.49914285714285px Adorable",
+        "font_size": 26,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 147,
+        "y": 78,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Beloved partner to Ross Whyte",
+        "font": "46.49914285714285px Adorable",
+        "font_size": 26,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 129,
+        "y": -63,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "14.08.1974 ~ 20.03.2012",
+        "font": "53.65285714285714px Adorable",
+        "font_size": 30,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 141,
+        "y": -168,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "71.53714285714285px Adorable",
+        "font_size": 40,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 117,
+        "y": -381,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Wonderful nan to many",
+        "font": "41.13385714285714px Adorable",
+        "font_size": 23,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 120,
+        "y": 186,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 17
+      }
+    ]
+  }
+}

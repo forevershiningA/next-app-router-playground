@@ -1,0 +1,172 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:12.796Z",
+  "units": "mm",
+  "source": {
+    "id": "1578902003700",
+    "slug": "legacy-1578902003700",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1578902003700.json",
+    "savedAt": "2020-01-13T07:53:23.700Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Urn Rectangle",
+    "material": {
+      "name": "src/backgrounds/colors/l/08.jpg",
+      "texture": "/textures/forever/l/08.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 270
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 622,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 270,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/08.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Charity Robertson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -2.532,
+          "y_px": 95.124
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a6fdc1e3c2605467b25f26c59bd9d2b576f873252d590e5f0a2920d9ec186692",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:12.796Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Rectangle",
+        "border": "Border Rectangle",
+        "shape_url": "shapes/photos/borderrectangle.svg",
+        "shape": "Urn Rectangle",
+        "color": "1578902086445can_u_pls.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/08.jpg",
+        "price": "2475.62",
+        "quantity": 1,
+        "width": 200,
+        "height": 270,
+        "_length": 1,
+        "init_width": 412,
+        "init_height": 622,
+        "backgroundOption": "photo"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Mark 'Arras' Arrahill",
+        "font": "29.755555555555553px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2.5324616853936908,
+        "y": 95.12372645280536,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 1
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "29.755555555555553px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -74.38888888888889,
+        "y": 10.11111111111111,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 2
+      }
+    ]
+  }
+}

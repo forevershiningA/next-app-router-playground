@@ -1,0 +1,498 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:15.351Z",
+  "units": "mm",
+  "source": {
+    "id": "1683866234622",
+    "slug": "legacy-1683866234622",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1683866234622.json",
+    "savedAt": "2023-05-12T04:37:14.622Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle",
+    "material": {
+      "name": "src/backgrounds/colors/l/34.jpg",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 203.2,
+      "height_mm": 279.4
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 203.2,
+      "height_mm": 279.4,
+      "thickness_mm": 50.8,
+      "surface": "front",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Remiah &apos;Remy&apos; Jean",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -545.455
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "The Heavens Gained A Beautiful Flower",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": -403.426
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Beloved wife, mother, & Friend",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 30,
+          "y_px": -279.211
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "10/27/2006 - 12/19/ 2090",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 577.996
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "dove_004",
+        "position": {
+          "x_px": -28,
+          "y_px": -90
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_037_13",
+        "position": {
+          "x_px": -398,
+          "y_px": -550
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_037_13",
+        "position": {
+          "x_px": 415.663,
+          "y_px": -560
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_037_13",
+        "position": {
+          "x_px": -394.337,
+          "y_px": 552
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_037_13",
+        "position": {
+          "x_px": 405.325,
+          "y_px": 550
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_004",
+        "path": "/shapes/motifs/dove_004.svg"
+      },
+      {
+        "id": "1_037_13",
+        "path": "/shapes/motifs/1_037_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0231f574029117cd6f42df72b8f32e0321735afac7432a9cf3ab9193759241f6",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:15.351Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "border": "Border Rectangle",
+        "shape_url": "shapes/photos/borderrectangle.svg",
+        "shape": "Rectangle",
+        "color": "../upload/2023/05/1683866744817background_31_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "name": "Stainless Steel Vitreous Enamel Inlaid Urn",
+        "price": 2475.62,
+        "quantity": 1,
+        "width": 203.2,
+        "height": 279.4,
+        "_length": 50.8,
+        "init_width": 1200,
+        "init_height": 725,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230412,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1683866829975,
+        "path": "../upload/2023/05/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1683866829975captura_de_pantalla_2023.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -222,
+        "y": 136.36363636363637,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.86786029094222,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Captura de Pantalla 2023-05-11 a la(s) 11.20.30 p. m..png",
+        "price": 0,
+        "quantity": 1,
+        "size": 134,
+        "width": "474",
+        "height": "678",
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Remiah &apos;Remy&apos; Jean",
+        "font": "111.31889763779527px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": -545.4545454545455,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 1
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -28,
+        "y": -90,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.0425531914893617,
+        "itemID": 4
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_13",
+        "item": "1_037_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -398,
+        "y": -550,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.05428881650380022,
+        "itemID": 5
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_13",
+        "item": "1_037_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 415.6625773236741,
+        "y": -560,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.05428881650380022,
+        "itemID": 6
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_13",
+        "item": "1_037_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -394.3374226763259,
+        "y": 552,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.05428881650380022,
+        "itemID": 7
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_13",
+        "item": "1_037_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 405.3251546473482,
+        "y": 550,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.05428881650380022,
+        "itemID": 8
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "The Heavens Gained A Beautiful Flower",
+        "font": "50.599498926270584px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 10,
+        "y": -403.42600319602275,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Beloved wife, mother, & Friend",
+        "font": "50.599498926270584px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 30,
+        "y": -279.21075439453125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 9
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "10/27/2006 - 12/19/ 2090",
+        "font": "55.65944881889764px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 14,
+        "y": 577.9959259033203,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 10
+      }
+    ]
+  }
+}

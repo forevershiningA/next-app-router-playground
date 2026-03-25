@@ -1,0 +1,568 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.947Z",
+  "units": "mm",
+  "source": {
+    "id": "1589336485695",
+    "slug": "legacy-1589336485695",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589336485695.json",
+    "savedAt": "2020-05-13T02:21:25.695Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 450,
+      "height_mm": 450
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 593,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 450,
+      "height_mm": 450,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 550,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Lucy Williams",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -3.169,
+          "y_px": 176.72
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Ira Hardy",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 1.194,
+          "y_px": 114.573
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "\"GONE FISHING\"",
+        "font": {
+          "family": "Arial",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -3.011,
+          "y_px": 291.345
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "SCHNEIDER",
+        "font": {
+          "family": "Arial",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -11.149,
+          "y_px": 5.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Loving Brother, Nephew,Uncle,Cousin & Friend to many",
+        "font": {
+          "family": "Arial",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 3.545,
+          "y_px": 207.082
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "29/04/1958",
+        "font": {
+          "family": "Arial",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -105.646,
+          "y_px": 49.513
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "19/08/2019",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 94.091,
+          "y_px": 48.984
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "IN LOVING MEMORY OF KEITH WILLIAM DAWSON",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": -38
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Loving Son Of Mary Dawson(dec)",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -2.297,
+          "y_px": 85.265
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Loving Father To Cassie,Keith & Samantha",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -6.315,
+          "y_px": 147.612
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8de0001216f198ce4fbfe09bda1c4b5ad07ddd26a2d998e044c7edaf048da658",
+    "sourceItemCount": 14,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.947Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "805.00",
+        "quantity": 1,
+        "width": 450,
+        "height": 450,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 593,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": "561.25",
+        "quantity": 1,
+        "width": 550,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1126,
+        "init_height": 593,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1589249148890dad_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -1.2328677216379447,
+        "y": -136.65608521553344,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5840151515151515,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Dad.jpg",
+        "price": 300,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 54,
+        "quantity": 18,
+        "label": "Loving Grandfather",
+        "font": "21.024545454545454px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3.169424504601807,
+        "y": 176.720119365139,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 75,
+        "quantity": 25,
+        "label": "Loving Parnter Of Bernsie",
+        "font": "21.024545454545454px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 1.1939968890870887,
+        "y": 114.57273457456802,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 36,
+        "quantity": 12,
+        "label": "\"GONE FISHING\"",
+        "font": "37.844181818181816px Arial",
+        "font_size": 36,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3.0111085062923166,
+        "y": 291.34549462340345,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 21,
+        "quantity": 7,
+        "label": "DOOLY",
+        "font": "28.38313636363636px Arial",
+        "font_size": 27,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -11.14899578559357,
+        "y": 5.460598573942605,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": null,
+        "quantity": 1,
+        "label": " ",
+        "font": "28.38313636363636px Arial",
+        "font_size": 27,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -5.14899578559357,
+        "y": 20.460598573942605,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 156,
+        "quantity": 52,
+        "label": "Loving Brother, Nephew,Uncle,Cousin & Friend to many",
+        "font": "17.870863636363637px Arial",
+        "font_size": 17,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 3.5445045592691713,
+        "y": 207.08221520674914,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 24,
+        "quantity": 8,
+        "label": "29/04/1958",
+        "font": "25.229454545454544px Arial",
+        "font_size": 24,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -105.64632448743106,
+        "y": 49.5134054155281,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 24,
+        "quantity": 8,
+        "label": "19/08/2019",
+        "font": "26.28068181818182px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 94.09086447182779,
+        "y": 48.98361249773217,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "IN LOVING MEMORY OF KEITH WILLIAM DAWSON",
+        "font": "18.922090909090908px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 5,
+        "y": -38,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 90,
+        "quantity": 30,
+        "label": "Loving Son Of Mary Dawson(dec)",
+        "font": "19.97331818181818px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2.2970575575172916,
+        "y": 85.26493329877354,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 117,
+        "quantity": 39,
+        "label": "Loving Father To Cassie,Keith & Samantha",
+        "font": "19.97331818181818px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6.314961600903416,
+        "y": 147.61238622663348,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 2
+      }
+    ]
+  }
+}

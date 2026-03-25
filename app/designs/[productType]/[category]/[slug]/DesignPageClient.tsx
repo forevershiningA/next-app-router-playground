@@ -3,7 +3,11 @@
 import { useEffect, useState, Suspense, useRef, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSavedDesign, convertSavedDesignToDYO } from '#/components/SavedDesignLoader';
-import { loadSavedDesignIntoEditor, loadCanonicalDesignIntoEditor, DEFAULT_CANONICAL_DESIGN_VERSION } from '#/lib/saved-design-loader-utils';
+import {
+  loadSavedDesignIntoEditor,
+  loadCanonicalDesignIntoEditor,
+  getCanonicalDesignUrl,
+} from '#/lib/saved-design-loader-utils';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { data } from '#/app/_internal/_data';
@@ -1169,9 +1173,17 @@ export default function DesignPageClient({
   const [inscriptionTexts, setInscriptionTexts] = useState<Record<number, string>>({});
 
   const { design: designData, loading } = useSavedDesign(designId, designMetadata.mlDir);
-  const canonicalDesignUrl = useMemo(() => (
-    designId ? `/canonical-designs/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json` : null
-  ), [designId]);
+  const canonicalDesignUrl = useMemo(() => (designId ? getCanonicalDesignUrl(designId) : null), [designId]);
+  const croppedPreviewUrl = useMemo(() => {
+    if (!designMetadata.preview) return null;
+    const croppedCandidate = designMetadata.preview.replace(/\.(jpg|jpeg|png)$/i, '_cropped$&');
+    const metadataCandidate = designMetadata.preview.replace(/\.(jpg|jpeg|png)$/i, '_cropped.json');
+    return {
+      displayHref: croppedCandidate,
+      metadataHref: metadataCandidate,
+      fallbackHref: designMetadata.preview,
+    };
+  }, [designMetadata.preview]);
   
   useEffect(() => {
     legacyLoadedRef.current = false;
@@ -2995,7 +3007,9 @@ export default function DesignPageClient({
       {isLocalhost && (
       <div className="flex gap-2 md:gap-3 py-3 md:py-6 overflow-x-auto">
         <a
-          href={designMetadata.preview?.replace(/\.(jpg|jpeg|png)$/i, '_cropped$&') || designMetadata.preview}
+          href={cropBounds?.shouldCrop
+            ? croppedPreviewUrl?.fallbackHref || designMetadata.preview
+            : croppedPreviewUrl?.displayHref || designMetadata.preview}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-light text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors border border-blue-200"
@@ -3003,7 +3017,7 @@ export default function DesignPageClient({
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          Screenshot (Cropped)
+          Screenshot ({cropBounds?.shouldCrop ? 'Original (with crop metadata)' : 'Cropped'})
         </a>
         <a
           href={`/ml/${designMetadata.mlDir}/saved-designs/json/${designId}.json`}

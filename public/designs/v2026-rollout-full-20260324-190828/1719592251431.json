@@ -1,0 +1,434 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.269Z",
+  "units": "mm",
+  "source": {
+    "id": "1719592251431",
+    "slug": "legacy-1719592251431",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1719592251431.json",
+    "savedAt": "2024-06-28T16:30:51.431Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Ann Griffith",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 2.244,
+          "y_px": -148.127
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "05.03.1958 - 18.04.2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 3.367,
+          "y_px": -108.851
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Beloved Father, Son, Brother & Friend to many.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -76.308
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Always in our thoughts, forever in our hearts.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 3.367,
+          "y_px": 66.208
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Until we meet again Dad...",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 5.611,
+          "y_px": 127.928
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "His true wealth was in his generous heart.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 7.855,
+          "y_px": -21.321
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "And what endless wealth he did have.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 19.978,
+          "y_px": 9.222
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -241.002,
+          "y_px": 119.999
+        },
+        "height_px": 66,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2351ad12827f65b65c17952faf420e15acc0a6a96751971807b230492aa75da7",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.269Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "price": 906.75,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 10,
+        "init_width": 1206,
+        "init_height": 643.0069427490234,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1366x768"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -241.0020734924263,
+        "y": 119.99935073373251,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 66,
+        "ratio": 0.118491921005386,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Michael Craig Kynoch",
+        "font": "39.70567871475219px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2.2443523307121236,
+        "y": -148.12725382700015,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "05.03.1958 - 18.04.2024",
+        "font": "18.807953075408932px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3.3665284960681854,
+        "y": -108.851088039538,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Beloved Father, Son, Brother & Friend to many.",
+        "font": "18.807953075408932px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -76.3079792442122,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Always in our thoughts, forever in our hearts.",
+        "font": "16.718180511474607px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3.3665284960681854,
+        "y": 66.20839375600765,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Until we meet again Dad...",
+        "font": "16.718180511474607px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 5.610880826780309,
+        "y": 127.92808285059104,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "His true wealth was in his generous heart.",
+        "font": "16.718180511474607px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 7.855233157492433,
+        "y": -21.321347141765173,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "And what endless wealth he did have.",
+        "font": "16.718180511474607px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 19.97750396358174,
+        "y": 9.221772474665102,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 5
+      }
+    ]
+  }
+}

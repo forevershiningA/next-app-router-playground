@@ -1,0 +1,401 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.094Z",
+  "units": "mm",
+  "source": {
+    "id": "1699990032178",
+    "slug": "legacy-1699990032178",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1699990032178.json",
+    "savedAt": "2023-11-14T19:27:12.178Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 507.99999999999955,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1024,
+      "height": 820,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 507.99999999999955,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 607.9999999999995,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Amelia West",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 65
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -211.116
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Rabbitt",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 102
+        },
+        "position": {
+          "x_px": -12.5,
+          "y_px": -85.662
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Born Sleeping on Sept. 30, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 8.75,
+          "y_px": 107.965
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "his feet never touched the ground.\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 6.25,
+          "y_px": 265.937
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "\"Born an Angel because",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 1.25,
+          "y_px": 218.703
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "teddy-bear_007",
+        "position": {
+          "x_px": 361.25,
+          "y_px": -109.93
+        },
+        "height_px": 130,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "teddy-bear_007",
+        "path": "/shapes/motifs/teddy-bear_007.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "88e0e93c8905debe7f40dce042296fcb2e10b0088a792f6fef00ad4a24e02fd6",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.094Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2107.94,
+        "quantity": 1,
+        "width": 507.99999999999955,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 784,
+        "init_height": 630,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1024x820"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 796,
+        "quantity": 1,
+        "width": 607.9999999999995,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 784,
+        "init_height": 630,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Jude Rhyker",
+        "font": "70.17408956692914px Great Vibes",
+        "font_size": 65,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": -211.11587301587298,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 77,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Rabbitt",
+        "font": "110.11934055118111px Great Vibes",
+        "font_size": 102,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -12.5,
+        "y": -85.66190476190476,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 85,
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1699995833073,
+        "path": "../upload/2023/11/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1699995833073bear_design_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -428.75,
+        "y": -184.8825396825396,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9287999156355458,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bear design.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 271,
+        "width": "282",
+        "height": "293",
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_007",
+        "item": "teddy-bear_007",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 361.25,
+        "y": -109.93015873015875,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 130,
+        "ratio": 0.15494636471990464,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Born Sleeping on Sept. 30, 2023",
+        "font": "38.865649606299215px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8.75,
+        "y": 107.96507936507942,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "his feet never touched the ground.\"",
+        "font": "26.9900344488189px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6.25,
+        "y": 265.93650793650795,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "\"Born an Angel because",
+        "font": "29.14923720472441px Lucida Calligraphy",
+        "font_size": 27,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.25,
+        "y": 218.70317460317466,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 7
+      }
+    ]
+  }
+}

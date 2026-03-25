@@ -1,0 +1,241 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.580Z",
+  "units": "mm",
+  "source": {
+    "id": "1580825596707",
+    "slug": "legacy-1580825596707",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1580825596707.json",
+    "savedAt": "2020-02-04T14:13:16.707Z"
+  },
+  "product": {
+    "id": "22",
+    "name": "Laser-etched Black Granite Mini Headstone",
+    "type": "headstone",
+    "slug": "mini-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Left Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 666,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 200,
+      "height_mm": 50,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Maude Estrada",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 6.587,
+          "y_px": -27.886
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e3e5e74f122476489a82852fdd2a8d8ade0b823da233a02940315392fa45439b",
+    "sourceItemCount": 6,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.580Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "name": "Left Wave",
+        "installationMethod": 1,
+        "shape": "Left Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "450.04",
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 1,
+        "init_width": 414,
+        "init_height": 666
+      },
+      {
+        "productid": 22,
+        "type": "Base",
+        "name": "Rectangle",
+        "installationMethod": 1,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "450.04",
+        "quantity": 1,
+        "width": 200,
+        "height": 50,
+        "_length": 100,
+        "init_width": 414,
+        "init_height": 666
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1580825741219,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1580825741219screenshot_2020020422105.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -29.910011256916732,
+        "y": -39.56332428470795,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 4,
+        "ratio": 0.4363783783783784,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20200204-221052_CamScanner.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 126,
+        "width": "136 mm",
+        "height": "145 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Heather Judith Taylor",
+        "font": "20.759142857142855px Great Vibes",
+        "font_size": 18,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 6.586963556851309,
+        "y": -27.886402193998403,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "23.065714285714286px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -57.6642857142857,
+        "y": 8.357142857142854,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "20.759142857142855px Great Vibes",
+        "font_size": 18,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 8.822755102040816,
+        "y": -28.12634715760707,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 6
+      }
+    ]
+  }
+}

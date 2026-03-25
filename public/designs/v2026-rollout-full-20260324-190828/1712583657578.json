@@ -1,0 +1,780 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.846Z",
+  "units": "mm",
+  "source": {
+    "id": "1712583657578",
+    "slug": "legacy-1712583657578",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1712583657578.json",
+    "savedAt": "2024-04-08T13:40:57.578Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 868,
+      "height_mm": 717
+    },
+    "viewportPx": {
+      "width": 1504,
+      "height": 1003,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 868,
+      "height_mm": 717,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 955,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -22,
+          "y_px": -350.524
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "(Jono)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -356.5,
+          "y_px": 215.006
+        },
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Loving Partner of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -364.5,
+          "y_px": 287.521
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Lucia Morris",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -358.5,
+          "y_px": 323.522
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "PARK",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -361.5,
+          "y_px": -281.88
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "20.08.1966     31.10.2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -365.5,
+          "y_px": 246.01
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Those we love don&apos;t go away, they walk beside us every day. Unseen , unheard, but always near.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 452.046
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Still loved, still missed and very dear",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -25,
+          "y_px": 492.547
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Dorenza and Kriccia",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 307.544
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Loving Grandparents to Many",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 346.545
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Keturah, Henry, Robert",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0.5,
+          "y_px": 274.544
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Loving Parents to",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 232.047
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Rubin Norris",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -356,
+          "y_px": 187.004
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-18",
+        "asset": "bronze8",
+        "position": {
+          "x_px": 510,
+          "y_px": 484.294
+        },
+        "height_px": 56,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "bronze8",
+        "position": {
+          "x_px": -519.833,
+          "y_px": 479.796
+        },
+        "height_px": 56,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "bronze8",
+        "path": "/shapes/motifs/bronze8.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b17aaa753cca08d3520f5cd32d7912e1fd09fe2ae2e657ba5aa0c1b4aeea282e",
+    "sourceItemCount": 19,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.846Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4214.98,
+        "quantity": 1,
+        "width": 868,
+        "height": 717,
+        "_length": 90,
+        "init_width": 1256,
+        "init_height": 783,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1504x1003"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 961,
+        "quantity": 1,
+        "width": 955,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1256,
+        "init_height": 783,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1712558704311,
+        "path": "../upload/2024/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1712558704311img_7851_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -393,
+        "y": -46.524904214559285,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0784367048052397,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_7851.JPG",
+        "price": 0,
+        "quantity": 1,
+        "size": 359,
+        "width": "349",
+        "height": "423",
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "41.21490693573227px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -22,
+        "y": -350.52362707535127,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "(Jono)",
+        "font": "25.906512931031713px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -356.5,
+        "y": 215.00638569604087,
+        "rotation": 1,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Loving Partner of",
+        "font": "23.551375391847014px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -364.5,
+        "y": 287.52107279693496,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Rachel Brown",
+        "font": "23.551375391847014px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -358.5,
+        "y": 323.522349936143,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "WOODS",
+        "font": "58.878438479617536px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -361.5,
+        "y": -281.8799489144317,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "20.08.1966     31.10.2023",
+        "font": "22.373806622254662px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -365.5,
+        "y": 246.01021711366536,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 12
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronze8",
+        "item": "bronze8",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 510,
+        "y": 484.29374201788005,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 56,
+        "ratio": 0.07216494845360824,
+        "itemID": 18
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronze8",
+        "item": "bronze8",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -519.8326527486079,
+        "y": 479.7956577266923,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 56,
+        "ratio": 0.07216494845360824,
+        "itemID": 19
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1712583928502,
+        "path": "../upload/2024/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1712583928502salmonholesbeachtorndirr.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -3,
+        "y": 74.96807151979567,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.6972611092338727,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "salmon-holes-beach-torndirrup-national-park-tourism-western-australia-1.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 565,
+        "width": "998",
+        "height": "665",
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 77,
+        "label": "Those we love don&apos;t go away, they walk beside us every day. Unseen , unheard, but always near.",
+        "font": "31.794356778993468px Great Vibes",
+        "font_size": 27,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": 452.0459770114942,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Still loved, still missed and very dear",
+        "font": "28.261650470216416px Great Vibes",
+        "font_size": 24,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -25,
+        "y": 492.5466155810983,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Dorenza and Kriccia",
+        "font": "23.551375391847014px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1,
+        "y": 307.54406130268194,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Loving Grandparents to Many",
+        "font": "24.728944161439365px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": 346.5453384418903,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Keturah, Henry, Robert",
+        "font": "23.551375391847014px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0.5,
+        "y": 274.54406130268194,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Loving Parents to",
+        "font": "27.084081700624065px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -7,
+        "y": 232.04725415070254,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Jonathan Glen",
+        "font": "32.971925548585816px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -356,
+        "y": 187.0038314176245,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 10
+      }
+    ]
+  }
+}

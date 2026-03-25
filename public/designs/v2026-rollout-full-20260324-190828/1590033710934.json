@@ -1,0 +1,417 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.353Z",
+  "units": "mm",
+  "source": {
+    "id": "1590033710934",
+    "slug": "legacy-1590033710934",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590033710934.json",
+    "savedAt": "2020-05-21T04:01:50.934Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 40",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 450,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 591,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 450,
+      "height_mm": 700,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    },
+    "base": {
+      "width_mm": 550,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Magdalena Anderson",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "01/08/1951 - 02/07/2012",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -14
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Gone",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 67
+        },
+        "position": {
+          "x_px": -28,
+          "y_px": 139
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Fishing",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 81
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 212
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "anchor_001",
+        "position": {
+          "x_px": 66,
+          "y_px": 144
+        },
+        "height_px": 82,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "anchor_001",
+        "path": "/shapes/motifs/anchor_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fb199fd700f329acedbce8e3f29e6c2f96ee53f051a3321ae2072957480b69c3",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.353Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 34",
+        "shape": "Headstone 40",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": "1110.09",
+        "quantity": 1,
+        "width": 450,
+        "height": 700,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 591
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": "561.25",
+        "quantity": 1,
+        "width": 550,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1126,
+        "init_height": 591
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1590034193891,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1590034193891pop_2_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 50,
+        "y": -164,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2724519448298745,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Pop 2.jpg",
+        "price": 440,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "anchor_001",
+        "item": "anchor_001",
+        "price": 210.53916,
+        "quantity": 1,
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 66,
+        "y": 144,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 82,
+        "ratio": 0.13758389261744966,
+        "itemID": 9
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1590035334701,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1590035334701pop_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": -6,
+        "y": 51,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3219886620716699,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Pop.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "In Loving Memory Of",
+        "font": "24.193732700892855px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": -95,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Leonard John Nye",
+        "font": "32.991453683035715px Chopin Script",
+        "font_size": 45,
+        "font_family": "Chopin Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": -51.99999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "01/08/1951 - 02/07/2012",
+        "font": "18.328585379464286px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -14,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Gone",
+        "font": "49.120608816964285px Chopin Script",
+        "font_size": 67,
+        "font_family": "Chopin Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -28,
+        "y": 139,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 68,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Fishing",
+        "font": "59.38461662946428px Chopin Script",
+        "font_size": 81,
+        "font_family": "Chopin Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": 212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 80,
+        "itemID": 12
+      }
+    ]
+  }
+}

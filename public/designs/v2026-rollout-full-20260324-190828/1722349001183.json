@@ -1,0 +1,195 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.412Z",
+  "units": "mm",
+  "source": {
+    "id": "1722349001183",
+    "slug": "legacy-1722349001183",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1722349001183.json",
+    "savedAt": "2024-07-30T14:16:41.183Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "fa4_1",
+        "position": {
+          "x_px": -246,
+          "y_px": -40
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "fa4_1",
+        "position": {
+          "x_px": -124.257,
+          "y_px": -40
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "fa4_1",
+        "path": "/shapes/motifs/fa4_1.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "407cc33b84708ee27b807e70ceda2a881ea961c0461d9ac94932a86bb530b6fd",
+    "sourceItemCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.412Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 534.03,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 15,
+        "init_width": 1680,
+        "init_height": 847,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240715,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "fa4_1",
+        "item": "fa4_1",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -246,
+        "y": -40,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.22113022113022113,
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "fa4_1",
+        "item": "fa4_1",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -124.25675675675676,
+        "y": -40,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.22113022113022113,
+        "itemID": 2
+      }
+    ]
+  }
+}

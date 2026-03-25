@@ -1,0 +1,325 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.704Z",
+  "units": "mm",
+  "source": {
+    "id": "1674331384618",
+    "slug": "legacy-1674331384618",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1674331384618.json",
+    "savedAt": "2023-01-21T20:03:04.618Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Full-colour Plaque",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1600,
+      "height": 900,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "CASSIE JOSEPH",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 124,
+          "y_px": -264
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "11/10/88 - 01/15/23",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 129,
+          "y_px": -224
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "TONY COHEN",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -144,
+          "y_px": 246
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "03/13/76 - 10/22/2010",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -142,
+          "y_px": 284
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "5bb5a0b7e8cf8592d1165b41e07dad62566168f597db628d585f23e06787ce46",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.704Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "border": "No Border",
+        "shape_url": "shapes/photos/noborder.svg",
+        "shape": "Full-colour Plaque",
+        "color": "../upload/2023/01/1674332688284background_34_cropped.jpg",
+        "fixed": 0,
+        "texture": "src/ceramic/l/01.jpg",
+        "name": "Full-colour Plaque",
+        "price": 549,
+        "quantity": 1,
+        "width": 250,
+        "height": 200,
+        "_length": 10,
+        "init_width": 1360,
+        "init_height": 836,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230116,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1600x900"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1674332313744,
+        "path": "../upload/2023/01/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1674332313744jacob_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -248,
+        "y": -163,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7020000000000001,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "jacob.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 90,
+        "width": "206",
+        "height": "293",
+        "itemID": 11
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1674332385427,
+        "path": "../upload/2023/01/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1674332385427josh_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 247,
+        "y": 159,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7332000000000001,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "josh.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 94,
+        "width": "216",
+        "height": "306",
+        "itemID": 12
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "JACOB LEVI JACKSON",
+        "font": "29.343600000000002px Lucida Calligraphy",
+        "font_size": 9,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 124,
+        "y": -264,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "11/10/88 - 01/15/23",
+        "font": "29.343600000000002px Lucida Calligraphy",
+        "font_size": 9,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 129,
+        "y": -224,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 6
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "JOSHUA PHILLIP JACKSON",
+        "font": "26.0832px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -144,
+        "y": 246,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 7
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "03/13/76 - 10/22/2010",
+        "font": "29.343600000000002px Lucida Calligraphy",
+        "font_size": 9,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -142,
+        "y": 284,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 9
+      }
+    ]
+  }
+}

@@ -1,0 +1,538 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.960Z",
+  "units": "mm",
+  "source": {
+    "id": "1625597146439",
+    "slug": "legacy-1625597146439",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1625597146439.json",
+    "savedAt": "2021-07-06T18:45:46.439Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 677,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Born August 18, 1929",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -219,
+          "y_px": -28
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Died January 4, 2015",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 196,
+          "y_px": -30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -185
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "\"IsumagitsainaniakKagit omattiganetsainaniakKutit.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "OmmamiutagennaniakKagit ikKaumainnaniakKagit\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 151
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "“Always in our thoughts, forever in our hearts.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 123
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": " We will cherish and remember you forever.”",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 176
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dee Davidson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -148
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-13",
+        "asset": "2_119_14",
+        "position": {
+          "x_px": 410,
+          "y_px": 150
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-1",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -261,
+          "y_px": -144
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_119_14",
+        "path": "/shapes/motifs/2_119_14.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ed567f0f8b43e3437ac00e8b104de853c27c49e3e1386590fe20b4ea5c28e7b1",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.960Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 428.77,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 677,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210629,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36 Edg/89.0.774.63"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_14",
+        "item": "2_119_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 410,
+        "y": 150,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 43,
+        "ratio": 0.05112960760998811,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Born August 18, 1929",
+        "font": "26.402999999999995px Great Vibes",
+        "font_size": 12,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -219,
+        "y": -28,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Died January 4, 2015",
+        "font": "26.402999999999995px Great Vibes",
+        "font_size": 12,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 196,
+        "y": -30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "26.402999999999995px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5,
+        "y": -185,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 49,
+        "label": "\"IsumagitsainaniakKagit omattiganetsainaniakKutit.",
+        "font": "22.002499999999998px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -3,
+        "y": 98,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "OmmamiutagennaniakKagit ikKaumainnaniakKagit\"",
+        "font": "22.002499999999998px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1,
+        "y": 151,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "“Always in our thoughts, forever in our hearts.",
+        "font": "22.002499999999998px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -12,
+        "y": 123,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": " We will cherish and remember you forever.”",
+        "font": "22.002499999999998px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -12,
+        "y": 176,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 19
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -261,
+        "y": -144,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.059084194977843424,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Mary Dicker nee Sillett",
+        "font": "48.40549999999999px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -3,
+        "y": -148,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1625657769094,
+        "path": "../upload/2021/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1625657769094mom_1_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -17,
+        "y": -23,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6036084070796459,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "mom 1.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 93,
+        "width": "192",
+        "height": "205",
+        "itemID": 2
+      }
+    ]
+  }
+}

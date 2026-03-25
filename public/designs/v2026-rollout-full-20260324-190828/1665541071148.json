@@ -1,0 +1,408 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.993Z",
+  "units": "mm",
+  "source": {
+    "id": "1665541071148",
+    "slug": "legacy-1665541071148",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1665541071148.json",
+    "savedAt": "2022-10-12T02:17:51.148Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 2144,
+      "height": 1206,
+      "dpr": 0.8955223880597015
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 1220,
+      "height_mm": 150,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-14",
+        "text": "28/10/1963 to 24/12/2017",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 7.164,
+          "y_px": 2.207
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -3.582,
+          "y_px": -207.566
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -0.895,
+          "y_px": -149.076
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Charlie Joseph",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -8.955,
+          "y_px": -74.646
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Your Love and Kindness for all will be Revered Forever",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -0.895,
+          "y_px": 237.161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "We Thank Jesus for your Amazing Life",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -10.746,
+          "y_px": 169.295
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "You are Loved and Missed Dearly",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -1.791,
+          "y_px": 123.146
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7c70ab44d6fe8ae4b69a4aa0012f8bc9b60f5b53a740113a5621894da3edfb7e",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.993Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1434.94,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1904,
+        "init_height": 940,
+        "device": "desktop",
+        "dpr": 0.8955223880597015,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221010,
+        "mode": "2d",
+        "navigator": "Win32, , Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:105.0) Gecko/20100101 Firefox/105.0, 2144x1206"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 1227,
+        "quantity": 1,
+        "width": 1220,
+        "height": 150,
+        "_length": 1,
+        "init_width": 1904,
+        "init_height": 940,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 22,
+        "label": "28/10/1963 to 24/12/2017",
+        "font": "37.20716417910448px Great Vibes",
+        "font_size": 34,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 7.163865546218517,
+        "y": 2.206846132638873,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "40.490149253731346px Great Vibes",
+        "font_size": 37,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3.5819327731093153,
+        "y": -207.5659574468085,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 2,
+        "label": "Of",
+        "font": "41.5844776119403px Great Vibes",
+        "font_size": 38,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.8954831932773004,
+        "y": -149.07579273988267,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 19,
+        "label": "Mary Gladys Walstroom",
+        "font": "65.65970149253732px Great Vibes",
+        "font_size": 60,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -8.95483193277289,
+        "y": -74.64597612988496,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 72,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 45,
+        "label": "Your Love and Kindness for all will be Revered Forever",
+        "font": "32.82985074626866px Great Vibes",
+        "font_size": 30,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.8954831932773004,
+        "y": 237.16144731121227,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 30,
+        "label": "We Thank Jesus for your Amazing Life",
+        "font": "32.82985074626866px Great Vibes",
+        "font_size": 30,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -10.745798319327832,
+        "y": 169.29505097724484,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 26,
+        "label": "You are Loved and Missed Dearly",
+        "font": "32.82985074626866px Great Vibes",
+        "font_size": 30,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1.7909663865547145,
+        "y": 123.14566061553512,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 8
+      }
+    ]
+  }
+}

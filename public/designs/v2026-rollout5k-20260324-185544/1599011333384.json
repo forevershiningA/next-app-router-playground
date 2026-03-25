@@ -1,0 +1,720 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.648Z",
+  "units": "mm",
+  "source": {
+    "id": "1599011333384",
+    "slug": "legacy-1599011333384",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1599011333384.json",
+    "savedAt": "2020-09-02T01:48:53.384Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 669,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Wilson Hart",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": -59.843,
+          "y_px": -37.507
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "called me home to Heaven, parted by",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -71,
+          "y_px": 47.704
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "death, we&apos;ll be reunited in Heaven. ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -74,
+          "y_px": 64.018
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Don&apos;t weep. I'm simply resting in ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -71,
+          "y_px": 83.018
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "God&apos;s arms. I soar with the angels",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -78,
+          "y_px": 100.075
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "and sing with the Heavenly choir. ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -79,
+          "y_px": 113.818
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dean Bowen",
+        "font": {
+          "family": "Adorable",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -53.894,
+          "y_px": -4.078
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Oct 13, 1944 to Aug 2, 2016",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 5.955,
+          "y_px": 201.229
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -29.398,
+          "y_px": -71.915
+        },
+        "rotation": {
+          "z_deg": -1
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "I’m Loving Memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -6.838,
+          "y_px": -110.064
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "1_011_07",
+        "position": {
+          "x_px": 161,
+          "y_px": -111.182
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_011_07",
+        "path": "/shapes/motifs/1_011_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "da2f82a38e847ec102a6bf3e1ad96b39156845609c9bb0ac601c87ae25bd9f80",
+    "sourceItemCount": 20,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.648Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1952.72",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 414,
+        "init_height": 669,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1071.36",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 100,
+        "init_width": 414,
+        "init_height": 669,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_011_07",
+        "item": "1_011_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 161,
+        "y": -111.18214285629136,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 180,
+        "height": 73,
+        "ratio": 0.09931972789115646,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Anna Mae Little",
+        "font": "35.17521428571428px Great Vibes",
+        "font_size": 61,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -59.84319999999991,
+        "y": -37.50718390404762,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 71,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.532857142857143px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 28,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.532857142857143px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 12,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "30.56207142857143px Great Vibes",
+        "font_size": 53,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 14,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.532857142857143px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 14,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.532857142857143px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 13,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.532857142857143px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 15,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "called me home to Heaven, parted by",
+        "font": "14.416071428571428px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -71,
+        "y": 47.70357142857148,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "death, we&apos;ll be reunited in Heaven. ",
+        "font": "14.416071428571428px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -74,
+        "y": 64.01785714285717,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Don&apos;t weep. I'm simply resting in ",
+        "font": "14.992714285714285px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -71,
+        "y": 83.01785714285717,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "God&apos;s arms. I soar with the angels",
+        "font": "13.83942857142857px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -78,
+        "y": 100.0750000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 23
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.532857142857143px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 13,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "and sing with the Heavenly choir. ",
+        "font": "13.83942857142857px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -79,
+        "y": 113.81785714285735,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Our Beautiful Mother",
+        "font": "19.029214285714286px Adorable",
+        "font_size": 33,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -53.89360000000124,
+        "y": -4.0778346225812925,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Oct 13, 1944 to Aug 2, 2016",
+        "font": "21.335785714285713px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 5.955199999999934,
+        "y": 201.22911109560079,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "Of",
+        "font": "19.605857142857143px Great Vibes",
+        "font_size": 34,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -29.398400000009133,
+        "y": -71.91483024175312,
+        "rotation": -1,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "I’m Loving Memory",
+        "font": "28.832142857142856px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6.837600000000035,
+        "y": -110.06377172619591,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,428 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.861Z",
+  "units": "mm",
+  "source": {
+    "id": "1601213322162",
+    "slug": "legacy-1601213322162",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1601213322162.json",
+    "savedAt": "2020-09-27T13:28:42.162Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 514,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Hannah Joseph",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 2.365,
+          "y_px": -92.027
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Twin sister to Noah Aryeh",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -76.2,
+          "y_px": 76.016
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Precious daughter of Adrian and Sarah",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -6.445,
+          "y_px": 27.094
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "14.10.2019",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -10.27,
+          "y_px": -51.445
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "תנצב&apos;'ה",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -5.734,
+          "y_px": 118.642
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "אריה בת שרה וארי",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -0.084,
+          "y_px": -141.969
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Little Bird, Little Chavaleh",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -0.915,
+          "y_px": -15.529
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_129_14",
+        "position": {
+          "x_px": 148.578,
+          "y_px": 89.242
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_129_14",
+        "path": "/shapes/motifs/1_129_14.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "41f5e6f43148c54afaec63e7afd45ad2744b9ac59f62a8798d23292dc0e2bb01",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.861Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "390.07",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 514,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_129_14",
+        "item": "1_129_14",
+        "price": 203.48380000000003,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 148.578125,
+        "y": 89.2421875,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.09208103130755065,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Aria Chava Glaubert",
+        "font": "41.762499999999996px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2.365234375,
+        "y": -92.02734375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Twin sister to Noah Aryeh",
+        "font": "20.046px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -76.2001953125,
+        "y": 76.015625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Precious daughter of Adrian and Sarah",
+        "font": "20.046px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6.4453125,
+        "y": 27.09375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "14.10.2019",
+        "font": "28.3985px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -10.26953125,
+        "y": -51.4453125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 21,
+        "quantity": 7,
+        "label": "תנצב&apos;'ה",
+        "font": "30.069px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5.73388671875,
+        "y": 118.6416015625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "אריה בת שרה וארי",
+        "font": "35.0805px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -0.083984375,
+        "y": -141.96875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Little Bird, Little Chavaleh",
+        "font": "18.3755px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -0.9150390625,
+        "y": -15.529296875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 6
+      }
+    ]
+  }
+}

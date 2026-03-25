@@ -1,0 +1,449 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.722Z",
+  "units": "mm",
+  "source": {
+    "id": "1643937735750",
+    "slug": "legacy-1643937735750",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1643937735750.json",
+    "savedAt": "2022-02-04T01:22:15.750Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 350
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 350,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -13.5,
+          "y_px": -470.728
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Santiago Horton",
+        "font": {
+          "family": "Adorable",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -404.742
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Myrtle Johnson",
+        "font": {
+          "family": "Adorable",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -1.5,
+          "y_px": -336.765
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Christina Boyd",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -7.5,
+          "y_px": -281.81
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Sunrise 21.11.1938 – Sunset 04.08.2020",
+        "font": {
+          "family": "Adorable",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -7.5,
+          "y_px": -225.824
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Loving Husband of Teremoana Okoringo Uriarau",
+        "font": {
+          "family": "Adorable",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 10.5,
+          "y_px": 273.363
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Loving Father of Teokotai (Sonny), Rebecca & George)",
+        "font": {
+          "family": "Adorable",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 314.857
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Loving Grandfather & Great-Grandfather",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -1.5,
+          "y_px": 364.346
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "359a1810d99f458173435a9d1d1fb97830dc769307f6be26b33525ec12e46e59",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.722Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 525,
+        "quantity": 1,
+        "width": 250,
+        "height": 350,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220203,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36, 1280x720"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1643938033704,
+        "path": "../upload/2022/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1643938033704grandad_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -1.5,
+        "y": 16.489278752436633,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.5013590883824346,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Grandad.jpg",
+        "price": 410,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "51.0705px Adorable",
+        "font_size": 14,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -13.5,
+        "y": -470.7281204155865,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Makea Joseph Aririu",
+        "font": "80.25364285714286px Adorable",
+        "font_size": 22,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": -404.7419264082314,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": " Rongotaua Anania Uriarau",
+        "font": "76.60575px Adorable",
+        "font_size": 21,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -1.5,
+        "y": -336.76467514720366,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Papa Joe",
+        "font": "54.71839285714286px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7.5,
+        "y": -281.8104740660357,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Sunrise 21.11.1938 – Sunset 04.08.2020",
+        "font": "51.0705px Adorable",
+        "font_size": 14,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7.5,
+        "y": -225.82353650449141,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Loving Husband of Teremoana Okoringo Uriarau",
+        "font": "43.77471428571429px Adorable",
+        "font_size": 12,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 10.5,
+        "y": 273.36315588513105,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "Loving Father of Teokotai (Sonny), Rebecca & George)",
+        "font": "40.12682142857143px Adorable",
+        "font_size": 11,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": 314.8568557705835,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Loving Grandfather & Great-Grandfather",
+        "font": "47.422607142857146px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -1.5,
+        "y": 364.34591346636955,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 20
+      }
+    ]
+  }
+}

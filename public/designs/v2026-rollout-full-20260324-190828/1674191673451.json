@@ -1,0 +1,599 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.699Z",
+  "units": "mm",
+  "source": {
+    "id": "1674191673451",
+    "slug": "legacy-1674191673451",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1674191673451.json",
+    "savedAt": "2023-01-20T05:14:33.451Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 279
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 279,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Esther Lopez",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -153,
+          "y_px": -241
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "25/9/1946 - 10/07/2021",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -178,
+          "y_px": -198
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Edmond Wolfe",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -176,
+          "y_px": -156
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Loving Pop and Poppy Dought to Brittany,",
+        "font": {
+          "family": "Arial",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -158,
+          "y_px": -112
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Kendel, Tyler, Tayah",
+        "font": {
+          "family": "Arial",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -176,
+          "y_px": -83
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Naomi Peters",
+        "font": {
+          "family": "Arial",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -168,
+          "y_px": -57
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Adored Uncle to all his Neices and Nephews",
+        "font": {
+          "family": "Arial",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -141,
+          "y_px": 5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -154,
+          "y_px": -278
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Loved Brother and Brother In-Law",
+        "font": {
+          "family": "Arial",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -139,
+          "y_px": -27
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_143_23",
+        "position": {
+          "x_px": -348,
+          "y_px": -187
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_143_23",
+        "position": {
+          "x_px": -14,
+          "y_px": -185
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_143_23",
+        "path": "/shapes/motifs/1_143_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4eb5955608ad4d59acda06c6a4ed4f70f0f68adab3d437c2d1b214ea39ca81a5",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.699Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 682.67,
+        "quantity": 1,
+        "width": 380,
+        "height": 279,
+        "_length": 15,
+        "init_width": 1680,
+        "init_height": 848,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230116,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_23",
+        "item": "1_143_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -348,
+        "y": -187,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04716981132075472,
+        "itemID": 2
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_23",
+        "item": "1_143_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -14,
+        "y": -185,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04716981132075472,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Paul \"Dought\"Doughty",
+        "font": "56.570526315789465px Chopin Script",
+        "font_size": 26,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -153,
+        "y": -241,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "25/9/1946 - 10/07/2021",
+        "font": "28.285263157894732px Chopin Script",
+        "font_size": 13,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -178,
+        "y": -198,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Loved Dad",
+        "font": "34.81263157894736px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -176,
+        "y": -156,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Loving Pop and Poppy Dought to Brittany,",
+        "font": "26.10947368421052px Arial",
+        "font_size": 12,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -158,
+        "y": -112,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Kendel, Tyler, Tayah",
+        "font": "26.10947368421052px Arial",
+        "font_size": 12,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -176,
+        "y": -83,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1674189420758,
+        "path": "../upload/2023/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1674189420758received_509296453662824.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 267,
+        "y": -136,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7492105263157892,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_509296453662824.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "146",
+        "width": "280",
+        "height": "318",
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Roch, Joseph & Joshua",
+        "font": "26.10947368421052px Arial",
+        "font_size": 12,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -168,
+        "y": -57,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Adored Uncle to all his Neices and Nephews",
+        "font": "26.10947368421052px Arial",
+        "font_size": 12,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -141,
+        "y": 5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 12
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1674189649710,
+        "path": "../upload/2023/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1674189649710received_142200824657041.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -53,
+        "y": 167,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.574736842105263,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_142200824657041.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "112",
+        "width": "455",
+        "height": "244",
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "34.81263157894736px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -154,
+        "y": -278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Loved Brother and Brother In-Law",
+        "font": "28.285263157894732px Arial",
+        "font_size": 13,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -139,
+        "y": -27,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 14
+      }
+    ]
+  }
+}

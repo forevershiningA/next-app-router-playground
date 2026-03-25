@@ -1,0 +1,471 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.809Z",
+  "units": "mm",
+  "source": {
+    "id": "1623214320822",
+    "slug": "legacy-1623214320822",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1623214320822.json",
+    "savedAt": "2021-06-09T04:52:00.822Z"
+  },
+  "product": {
+    "id": "22",
+    "name": "Laser-etched Black Granite Mini Headstone",
+    "type": "headstone",
+    "slug": "mini-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Gable",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 816,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In loving memory of our",
+        "font": {
+          "family": "French Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 2.975,
+          "y_px": -106.825
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "beloved father, grand father",
+        "font": {
+          "family": "French Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -0.275,
+          "y_px": -57.625
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Norma Allen",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0.625,
+          "y_px": 54.55
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Died 9th of Sept 1936",
+        "font": {
+          "family": "French Script",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 8.5,
+          "y_px": 108.075
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "RIP 28th July 2019",
+        "font": {
+          "family": "French Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 9.925,
+          "y_px": 148.45
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "and great grand father, the late",
+        "font": {
+          "family": "French Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 16.775,
+          "y_px": -3.15
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-14",
+        "asset": "1_177_12",
+        "position": {
+          "x_px": -2,
+          "y_px": -267
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-20",
+        "asset": "2_119_04",
+        "position": {
+          "x_px": 155,
+          "y_px": -212
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-23",
+        "asset": "2_119_04",
+        "position": {
+          "x_px": -158,
+          "y_px": -214
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_177_12",
+        "path": "/shapes/motifs/1_177_12.svg"
+      },
+      {
+        "id": "2_119_04",
+        "path": "/shapes/motifs/2_119_04.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6d757bdc489cce8a7c1b927ceef3fe3dc56de2b03327aca7b74436698a00ee78",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.809Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "name": "Curved Gable",
+        "installationMethod": 2,
+        "shape": "Curved Gable",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 450.04,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 816,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 142,
+        "version_date": 20210608,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.77 Safari/537.36"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "In loving memory of our",
+        "font": "53.040000000000006px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2.9750000000000227,
+        "y": -106.82500000000005,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "beloved father, grand father",
+        "font": "53.040000000000006px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -0.27499999999997726,
+        "y": -57.625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Edmond Motu",
+        "font": "53.040000000000006px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0.625,
+        "y": 54.549999999999955,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Died 9th of Sept 1936",
+        "font": "42.432px French Script",
+        "font_size": 16,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 8.5,
+        "y": 108.07500000000005,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 11
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_177_12",
+        "item": "1_177_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2,
+        "y": -267,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.0962566844919786,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "RIP 28th July 2019",
+        "font": "34.476px French Script",
+        "font_size": 13,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 9.924999999999955,
+        "y": 148.45000000000005,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "and great grand father, the late",
+        "font": "53.040000000000006px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 16.774999999999977,
+        "y": -3.1499999999999773,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_04",
+        "item": "2_119_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 155,
+        "y": -212,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.056753688989784334,
+        "itemID": 20
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_04",
+        "item": "2_119_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -158,
+        "y": -214,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.056753688989784334,
+        "itemID": 23
+      }
+    ]
+  }
+}

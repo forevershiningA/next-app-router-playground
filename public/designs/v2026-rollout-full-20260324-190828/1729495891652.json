@@ -1,0 +1,415 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.760Z",
+  "units": "mm",
+  "source": {
+    "id": "1729495891652",
+    "slug": "legacy-1729495891652",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1729495891652.json",
+    "savedAt": "2024-10-21T07:31:31.652Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/09.jpg",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 300,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Wally Brandenburg (Nee Engler)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -73.445,
+          "y_px": -101.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "10 January 1929 to 7 July 2024 (95)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -70.144,
+          "y_px": -52.814
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Mother of Reinhard-Matthias (Matt) and David Hermann",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -23.931,
+          "y_px": 31.358
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Grandmother of Melanie, Michael and Andrew",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -21.456,
+          "y_px": 67.668
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "\"The meaning of life is fulfilled where there is love\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -3.301,
+          "y_px": 116.356
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "..... Dietrich Bonhoeffer",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 190.626,
+          "y_px": 140.288
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "In Loving Memory of:",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -87.473,
+          "y_px": -149.365
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "66c4ac2e579669e731834cbc546b9269bfee3f2aea867262d90896e5457be8bc",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.760Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 2",
+        "shape_url": "shapes/photos/border2.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#4c0f1e",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/09.jpg",
+        "name": "Bronze Plaque - Maroon - Lugs with Studs",
+        "price": 1948.76,
+        "quantity": 1,
+        "width": 560,
+        "height": 300,
+        "_length": 10,
+        "init_width": 1610,
+        "init_height": 746,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240925,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1920x1080"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1729492534050,
+        "path": "../upload/2024/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1729492534050y_0_wb_car_pic_scanned_d.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 240.9646017699115,
+        "y": -75.09513274336284,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.34482458912768643,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "y_0_wb car pic Scanned Document.jpg",
+        "price": 380,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Wally Brandenburg (Nee Engler)",
+        "font": "35.06866071428571px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -73.44469026548673,
+        "y": -101.50221238938053,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "10 January 1929 to 7 July 2024 (95)",
+        "font": "28.574464285714285px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -70.14380530973452,
+        "y": -52.8141592920354,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "Mother of Reinhard-Matthias (Matt) and David Hermann",
+        "font": "25.97678571428571px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -23.93141592920354,
+        "y": 31.358407079646017,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "Grandmother of Melanie, Michael and Andrew",
+        "font": "25.97678571428571px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -21.45575221238938,
+        "y": 67.66814159292035,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "\"The meaning of life is fulfilled where there is love\"",
+        "font": "24.677946428571428px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -3.3008849557522124,
+        "y": 116.35619469026548,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "..... Dietrich Bonhoeffer",
+        "font": "20.78142857142857px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 190.62610619469027,
+        "y": 140.28761061946904,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "In Loving Memory of:",
+        "font": "25.97678571428571px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -87.47345132743362,
+        "y": -149.3650442477876,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 8
+      }
+    ]
+  }
+}

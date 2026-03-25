@@ -1,0 +1,584 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.813Z",
+  "units": "mm",
+  "source": {
+    "id": "1717662255286",
+    "slug": "legacy-1717662255286",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1717662255286.json",
+    "savedAt": "2024-06-06T08:24:15.286Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 25",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1098.55,
+      "height_mm": 1883
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1098.55,
+      "height_mm": 1883,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1198.55,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "&apos;Fingers-crossed Jesus is real",
+        "font": {
+          "family": "Garamond",
+          "size_px": 72
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": 208.02
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "and I get to live forever&apos;",
+        "font": {
+          "family": "Garamond",
+          "size_px": 70
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": 261.756
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Gus Mcdonald",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 41.491
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "17 March 1997 – 24 July 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 82.559
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "but just in case...",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 481.584
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "1_184_14",
+        "position": {
+          "x_px": -294,
+          "y_px": 580.542
+        },
+        "height_px": 140,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_184_03",
+        "position": {
+          "x_px": -180,
+          "y_px": 572.542
+        },
+        "height_px": 129,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_184_22",
+        "position": {
+          "x_px": -54,
+          "y_px": 577.042
+        },
+        "height_px": 140,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "1_184_09",
+        "position": {
+          "x_px": 80,
+          "y_px": 578.542
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_184_12",
+        "position": {
+          "x_px": 244,
+          "y_px": 576.876
+        },
+        "height_px": 106,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_061_07",
+        "position": {
+          "x_px": 0,
+          "y_px": -205.358
+        },
+        "height_px": 269,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_184_14",
+        "path": "/shapes/motifs/1_184_14.svg"
+      },
+      {
+        "id": "1_184_03",
+        "path": "/shapes/motifs/1_184_03.svg"
+      },
+      {
+        "id": "1_184_22",
+        "path": "/shapes/motifs/1_184_22.svg"
+      },
+      {
+        "id": "1_184_09",
+        "path": "/shapes/motifs/1_184_09.svg"
+      },
+      {
+        "id": "1_184_12",
+        "path": "/shapes/motifs/1_184_12.svg"
+      },
+      {
+        "id": "1_061_07",
+        "path": "/shapes/motifs/1_061_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f73258621329f6083a512b74171db0c51f0f34ee31dc75d419c8f6b634aaa881",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.813Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 25",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 10510.63,
+        "quantity": 1,
+        "width": 1098.55,
+        "height": 1883,
+        "_length": 100,
+        "init_width": 1050,
+        "init_height": 690,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 899,
+        "quantity": 1,
+        "width": 1198.55,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1050,
+        "init_height": 690,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_14",
+        "item": "1_184_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -294,
+        "y": 580.5420605416888,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 140,
+        "ratio": 0.2,
+        "itemID": 6
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_03",
+        "item": "1_184_03",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -180,
+        "y": 572.5420605416888,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 129,
+        "ratio": 0.16517285531370038,
+        "itemID": 7
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_22",
+        "item": "1_184_22",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -54,
+        "y": 577.0416356877323,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 140,
+        "ratio": 0.23026315789473684,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_09",
+        "item": "1_184_09",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 80,
+        "y": 578.5420605416888,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.2347266881028939,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_12",
+        "item": "1_184_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 244,
+        "y": 576.875677110993,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 106,
+        "ratio": 0.37992831541218636,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_061_07",
+        "item": "1_061_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -205.35825809877855,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 269,
+        "ratio": 0.41068702290076337,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "&apos;Fingers-crossed Jesus is real",
+        "font": "48.813866774161056px Garamond",
+        "font_size": 72,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 10,
+        "y": 208.02039298990974,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 72,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "and I get to live forever&apos;",
+        "font": "47.45792603043436px Garamond",
+        "font_size": 70,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 18,
+        "y": 261.75624543796243,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 70,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "Carlota Alegra Jacqueline Di Liscia",
+        "font": "33.898518593167395px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 41.49084515766583,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "17 March 1997 – 24 July 2024",
+        "font": "33.898518593167395px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 82.5594622415997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "but just in case...",
+        "font": "33.898518593167395px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": 481.58410377107396,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      }
+    ]
+  }
+}

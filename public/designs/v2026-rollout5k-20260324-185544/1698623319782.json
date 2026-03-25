@@ -1,0 +1,447 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.011Z",
+  "units": "mm",
+  "source": {
+    "id": "1698623319782",
+    "slug": "legacy-1698623319782",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1698623319782.json",
+    "savedAt": "2023-10-29T23:48:39.782Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 320,
+      "height": 693,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": ".",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 302
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": ".",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 309
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": ".",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 323
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": ".",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 330
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "D’ADDY, BROTHER, FRIEND…YOU MATTERED",
+        "font": {
+          "family": "Arial",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 27,
+          "y_px": 352
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "DAVIS",
+        "font": {
+          "family": "Arial",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 228,
+          "y_px": 70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "12.30.45 - 3.17.23",
+        "font": {
+          "family": "Arial",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 192,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "ROBERT “BOB” ALLEN FARMER",
+        "font": {
+          "family": "Arial",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -69
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bf7dcdc459f7025d09e33c2f12a89f1ad7d43c1764ff0069b8d7ffe97cfb33f2",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.011Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 320,
+        "init_height": 466,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 320x693"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 635,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 320,
+        "init_height": 466,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": ".",
+        "font": "65.95264937993235px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 302,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": ".",
+        "font": "65.95264937993235px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 309,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": ".",
+        "font": "65.95264937993235px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 323,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": ".",
+        "font": "65.95264937993235px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 330,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "D’ADDY, BROTHER, FRIEND…YOU MATTERED",
+        "font": "31.65727170236753px Arial",
+        "font_size": 24,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 27,
+        "y": 352,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "CRAFTSMAN",
+        "font": "46.166854565952654px Arial",
+        "font_size": 35,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 228,
+        "y": 70,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "12.30.45 - 3.17.23",
+        "font": "46.166854565952654px Arial",
+        "font_size": 35,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 192,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "ROBERT “BOB” ALLEN FARMER",
+        "font": "50.12401352874859px Arial",
+        "font_size": 38,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -69,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 1
+      }
+    ]
+  }
+}

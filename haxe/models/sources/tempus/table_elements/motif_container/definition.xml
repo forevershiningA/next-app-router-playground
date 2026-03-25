@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+
+	<general>
+		<type value="motif" />
+		<collection value="element" />
+		<collection value="table-element" />
+	</general>
+	
+	<edit-attributes>
+		<duplicate>on</duplicate>
+		<erase>on</erase>
+	</edit-attributes>
+
+	<properties>
+		
+		<section id="layout" label="@/ui_panel_layout_label">
+			
+			<property id="layer" label="@/ui_panel_prop_layer_label" type="slider">
+				<value default="0" min="0" max="100" step="1" />
+			</property>
+			
+		</section>
+	
+		<section id="dimensions" label="@/ui_panel_dimensions_label">
+		
+			<property id="width" label="@/ui_panel_prop_width_label" type="slider">
+				<value default="100" min="0" max="200" step="1" />
+			</property>
+			
+			<property id="height" label="@/ui_panel_prop_height_label" type="slider">
+				<value default="100" min="0" max="200" step="1" />
+			</property>
+			
+		</section>
+		
+		<section id="look" label="@/ui_panel_look_label">
+			<property id="display_object" label="@/ui_panel_prop_display_object_label" type="display">
+				<general type="main" category="motif" />
+			</property>
+			
+			<property id="color" label="@/ui_panel_prop_color_label" type="color">
+				<general type="main" category="motif" />
+				<value default="0xFFFFFF" />
+			</property>
+			
+			<property id="sandblasted" label="@/ui_panel_prop_sandblasted_label" type="switch">
+				<value default="false" />
+			</property>
+			
+			<property id="sandblast_depth" label="@/ui_panel_prop_sandblast_depth_label" type="slider">
+				<value default="2" min="0" max="5" step="0.01" />
+			</property>
+			
+			<property id="alpha" label="@/ui_panel_prop_alpha_label" type="slider">
+				<value default="1" min="0" max="1" step="0.01" />
+			</property>
+		</section>
+		
+	</properties>
+	
+	<!--<collision-shapes>
+	
+		<collision-shape name="2d" type="rectangle_2d" width="50" height="30" x="0" y="0" />
+		
+	</collision-shapes>-->
+	
+	<selection type="surface" resizable="true" control-size="10" control-type="sphere" has-inner-controls="false" has-rotation-controls="true" />
+	
+</data>

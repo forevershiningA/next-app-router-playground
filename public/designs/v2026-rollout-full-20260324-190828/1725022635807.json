@@ -1,0 +1,174 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.118Z",
+  "units": "mm",
+  "source": {
+    "id": "1725022635807",
+    "slug": "legacy-1725022635807",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1725022635807.json",
+    "savedAt": "2024-08-30T12:57:15.807Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Left Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 507.99999999999955
+    },
+    "viewportPx": {
+      "width": 428,
+      "height": 926,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 507.99999999999955,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Jun 18 1998 - Apr 29 2022",
+        "font": {
+          "family": "French Script",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 198,
+          "y_px": 36
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bc13dd1afacf6c6de49ab4f3a4adc5165fc1f2c7ba94194668c32c9923981806",
+    "sourceItemCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.118Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Left Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2107.94,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 507.99999999999955,
+        "_length": 80,
+        "init_width": 428,
+        "init_height": 690,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20240828,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 428x926"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 650,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 428,
+        "init_height": 690,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Jun 18 1998 - Apr 29 2022",
+        "font": "61.60925196850392px French Script",
+        "font_size": 36,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 198,
+        "y": 36,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,453 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.996Z",
+  "units": "mm",
+  "source": {
+    "id": "1715641330791",
+    "slug": "legacy-1715641330791",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1715641330791.json",
+    "savedAt": "2024-05-13T23:02:10.791Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/07.jpg",
+      "texture": "/textures/phoenix/l/07.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 1024,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/07.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Horace Jimenez",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Esther Myrtle HOLMAN",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -146
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "26th February 1930 - 6th April 2024",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Returned To The Earth Having Enriched All That She Touched.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -202
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Back In Her Mothers Arms - Aged 94 years",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 29
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Your Life Was A Blessing, Your Memory A Treasure,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 167
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "God Has You In His Keeping, We Have You In Our Hearts.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 209
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2d0a96ca3d0358858a9af04cf8a0e636f8e8d7ae1440835519801232fd7f9c2e",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.996Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#07723a",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/07.jpg",
+        "name": "Bronze Plaque - Holly Green - Lugs with Studs",
+        "price": 906.75,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 10,
+        "init_width": 1040,
+        "init_height": 799,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1280x1024"
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br116l-dove-of-peace",
+        "color": "#ffb35a",
+        "x": -297,
+        "y": -45,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.29176966292134826,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br116l-dove-of-peace",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "(nee SCOTT KAU)",
+        "font": "46.741499999999995px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4,
+        "y": -70,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br116r-dove-of-peace",
+        "color": "#ffb35a",
+        "x": 296,
+        "y": -43,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.29176966292134826,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br116r-dove-of-peace",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 7
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br165-butterfly",
+        "color": "#ffb35a",
+        "x": 0,
+        "y": 93,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 4,
+        "ratio": 0.22081207482993193,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br165-butterfly",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Esther Myrtle HOLMAN",
+        "font": "49.338249999999995px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4,
+        "y": -146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "26th February 1930 - 6th April 2024",
+        "font": "25.967499999999998px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4,
+        "y": -16,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 50,
+        "label": "Returned To The Earth Having Enriched All That She Touched.",
+        "font": "20.773999999999997px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": -202,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Back In Her Mothers Arms - Aged 94 years",
+        "font": "20.773999999999997px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -5,
+        "y": 29,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "Your Life Was A Blessing, Your Memory A Treasure,",
+        "font": "20.773999999999997px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -3,
+        "y": 167,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 43,
+        "label": "God Has You In His Keeping, We Have You In Our Hearts.",
+        "font": "20.773999999999997px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1,
+        "y": 209,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 9
+      }
+    ]
+  }
+}

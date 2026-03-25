@@ -1,0 +1,556 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:50:05.431Z",
+  "units": "mm",
+  "source": {
+    "id": "1578981135593",
+    "slug": "legacy-1578981135593",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1578981135593.json",
+    "savedAt": "2020-01-14T05:52:15.593Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 6",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 590,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 859,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 590,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 690,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-8",
+        "text": "Loved Brother of Michelle & Tracey",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 144.45,
+          "y_px": 194.395
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "O’Brien",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": 124.702,
+          "y_px": -141.669
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 137.253,
+          "y_px": -92.086
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "OF",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 134,
+          "y_px": -41
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Avis Bowen",
+        "font": {
+          "family": "Garamond",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 142.308,
+          "y_px": 8.778
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "31 Dec 1995 - 8 Nov 2015",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 146.234,
+          "y_px": 97.036
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Aged 19 Years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 136.947,
+          "y_px": 49.529
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Cherished Son of Danny & Karen",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 142.78,
+          "y_px": 153.292
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_172_02",
+        "position": {
+          "x_px": 0,
+          "y_px": -292.646
+        },
+        "height_px": 53,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_177_12",
+        "position": {
+          "x_px": 74.323,
+          "y_px": -247.266
+        },
+        "height_px": 49,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_172_02",
+        "path": "/shapes/motifs/1_172_02.svg"
+      },
+      {
+        "id": "1_177_12",
+        "path": "/shapes/motifs/1_177_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8afba465f16996ed2cbb80c22578e5ba859c61c549e0504753f2b6efedea176e",
+    "sourceItemCount": 13,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:50:05.431Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Headstone 6",
+        "shape": "Headstone 6",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1917.22",
+        "quantity": 1,
+        "width": 590,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 859,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1054.99",
+        "quantity": 1,
+        "width": 690,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1040,
+        "init_height": 859,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_172_02",
+        "item": "1_172_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": -292.64600665557407,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 53,
+        "ratio": 0.08833333333333333,
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1578542300108d6ae88a95ecc49c78da29a4c.jpg",
+        "color": "1",
+        "mask": 0,
+        "x": -184.0218801996673,
+        "y": 193.89814594723083,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5704073920265781,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "D6AE88A9-5ECC-49C7-8DA2-9A4CA2E67BF2.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 205,
+        "width": "180 mm",
+        "height": "245 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_177_12",
+        "item": "1_177_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 74.32279534109817,
+        "y": -247.26622296173045,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 49,
+        "ratio": 0.08166666666666667,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Loved Brother of Michelle & Tracey",
+        "font": "25.12575px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 144.45032208224393,
+        "y": 194.39535981697173,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 23,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "O’Brien",
+        "font": "63.41260714285715px Lucida Calligraphy",
+        "font_size": 53,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 124.70207986688854,
+        "y": -141.6687782267649,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 46,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "In Loving Memory",
+        "font": "41.87625px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 137.252876158783,
+        "y": -92.08603517946284,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 33,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "OF",
+        "font": "27.518678571428573px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 134,
+        "y": -41,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Nathaniel Dudley",
+        "font": "51.447964285714285px Garamond",
+        "font_size": 43,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 142.3081411932494,
+        "y": 8.777893986213428,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 42,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "31 Dec 1995 - 8 Nov 2015",
+        "font": "31.108071428571428px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 146.2344500237699,
+        "y": 97.03595822438791,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Aged 19 Years",
+        "font": "25.12575px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 136.94682671737576,
+        "y": 49.52920133111479,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 23,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Cherished Son of Danny & Karen",
+        "font": "26.32221428571429px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 142.77954540052292,
+        "y": 153.29239838364634,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 23,
+        "itemID": 7
+      }
+    ]
+  }
+}

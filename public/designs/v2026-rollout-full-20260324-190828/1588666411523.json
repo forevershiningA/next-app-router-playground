@@ -1,0 +1,213 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.273Z",
+  "units": "mm",
+  "source": {
+    "id": "1588666411523",
+    "slug": "legacy-1588666411523",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1588666411523.json",
+    "savedAt": "2020-05-05T08:13:31.523Z"
+  },
+  "product": {
+    "id": "135",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Bone",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 220,
+      "height_mm": 100
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 661,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 220,
+      "height_mm": 100,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Beatrice",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -78,
+          "y_px": -6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "forever in our hearts",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 136,
+          "y_px": -40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6425c21b51d2b82c1ff495056430d61de5ce614af4fccd9f929dc822d651a88c",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.273Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 135,
+        "type": "Headstone",
+        "name": "Bone",
+        "shape": "Bone",
+        "color": "#000000",
+        "fixed": 2,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "299.00",
+        "quantity": 1,
+        "width": 220,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 661,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1588667237904,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1588667237904shutterstock_1099958171_.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -214,
+        "y": 3,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.4821752265861027,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "shutterstock_1099958171.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 42,
+        "width": "112",
+        "height": "160",
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Rex",
+        "font": "83.6px Dobkin",
+        "font_size": 22,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -78,
+        "y": -6,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "forever in our hearts",
+        "font": "38px Dobkin",
+        "font_size": 10,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 136,
+        "y": -40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 6
+      }
+    ]
+  }
+}

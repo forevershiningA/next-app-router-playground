@@ -1,0 +1,774 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.855Z",
+  "units": "mm",
+  "source": {
+    "id": "1663595912213",
+    "slug": "legacy-1663595912213",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1663595912213.json",
+    "savedAt": "2022-09-19T13:58:32.213Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1000,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1000,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1100,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Bruce Love",
+        "font": {
+          "family": "Adorable",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 220,
+          "y_px": -72
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Jan 1st 1942",
+        "font": {
+          "family": "Adorable",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 235,
+          "y_px": -47
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Oct 19th 1944",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -238,
+          "y_px": -42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Jan 8th 2012",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -236,
+          "y_px": -20
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Eda Reeves",
+        "font": {
+          "family": "Adorable",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -235,
+          "y_px": -72
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": -197
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Loving Parents, Grandparents & Great-Grandparents",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 194
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "RILLA",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 91
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": -137
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Jun 15th 2001",
+        "font": {
+          "family": "Adorable",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 233,
+          "y_px": -26
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Darumbal",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -285,
+          "y_px": 267
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "the Dreamtime and while we",
+        "font": {
+          "family": "Adorable",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -13,
+          "y_px": 42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "can dream they will never leave",
+        "font": {
+          "family": "Adorable",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 64
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "until we again in the Dreamtime.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 85
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Gone from now an into",
+        "font": {
+          "family": "Adorable",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": 18
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Mandandanji",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 256,
+          "y_px": 265
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0f1f11d64a3876410ddf979f07e9b792dcc1b33e38fa09472ce2f35bc03a6815",
+    "sourceItemCount": 19,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.855Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4282.6,
+        "quantity": 1,
+        "width": 1000,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1022,
+        "init_height": 873,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220919,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1034,
+        "quantity": 1,
+        "width": 1100,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1022,
+        "init_height": 873,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2022/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16631364477386800749441108c43bf94a2f4.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 230,
+        "y": 73,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36407377877924624,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "68007494411--08C43BF9-4A2F-41E6-B5C0-189AACBC381E.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "213",
+        "width": "114",
+        "height": "159",
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Thomas Edward",
+        "font": "34.35967653061225px Adorable",
+        "font_size": 46,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 220,
+        "y": -72,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Jan 1st 1942",
+        "font": "30.62492908163265px Adorable",
+        "font_size": 41,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 235,
+        "y": -47,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Oct 19th 1944",
+        "font": "29.877979591836734px Adorable",
+        "font_size": 40,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -238,
+        "y": -42,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Jan 8th 2012",
+        "font": "29.877979591836734px Adorable",
+        "font_size": 40,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -236,
+        "y": -20,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Aileen May",
+        "font": "32.11882806122449px Adorable",
+        "font_size": 43,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -235,
+        "y": -72,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "35.106626020408164px Adorable",
+        "font_size": 47,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 8,
+        "y": -197,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "Loving Parents, Grandparents & Great-Grandparents",
+        "font": "18.673737244897957px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 7,
+        "y": 194,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "ANDERSON",
+        "font": "67.97240357142857px Lucida Calligraphy",
+        "font_size": 91,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": -137,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 68,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Jun 15th 2001",
+        "font": "27.637131122448977px Adorable",
+        "font_size": 37,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 233,
+        "y": -26,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Darumbal",
+        "font": "30.62492908163265px Lucida Calligraphy",
+        "font_size": 41,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -285,
+        "y": 267,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "the Dreamtime and while we",
+        "font": "25.396282653061224px Adorable",
+        "font_size": 34,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -13,
+        "y": 42,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "can dream they will never leave",
+        "font": "23.15543418367347px Adorable",
+        "font_size": 31,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -10,
+        "y": 64,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "until we again in the Dreamtime.",
+        "font": "22.40848469387755px Adorable",
+        "font_size": 30,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": 85,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Gone from now an into",
+        "font": "24.649333163265304px Adorable",
+        "font_size": 33,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -11,
+        "y": 18,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 16
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2022/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16631364477386800749441108c43bf94a2f4.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -246,
+        "y": 77,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36407377877924624,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "68007494411--08C43BF9-4A2F-41E6-B5C0-189AACBC381E.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "213",
+        "width": "114",
+        "height": "159",
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Mandandanji",
+        "font": "29.877979591836734px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 256,
+        "y": 265,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 18
+      }
+    ]
+  }
+}

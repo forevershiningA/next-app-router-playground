@@ -1,0 +1,393 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.248Z",
+  "units": "mm",
+  "source": {
+    "id": "1719286412645",
+    "slug": "legacy-1719286412645",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1719286412645.json",
+    "savedAt": "2024-06-25T03:33:32.645Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Grandad / GG",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Forever loved and deeply missed - too right.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 22
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "04.06.1938 - 24.02.2022",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 180
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": -350,
+          "y_px": 220
+        },
+        "height_px": 27,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": 357.316,
+          "y_px": -222
+        },
+        "height_px": 27,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "anchor_001",
+        "position": {
+          "x_px": -358,
+          "y_px": -226
+        },
+        "height_px": 21,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "anchor_001",
+        "position": {
+          "x_px": 358.925,
+          "y_px": 228
+        },
+        "height_px": 21,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      },
+      {
+        "id": "anchor_001",
+        "path": "/shapes/motifs/anchor_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "90c8cff92a3273e5311bb555cf4cf5cf3b5cc5b8da512133f04ad253de0fb7cb",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.248Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Straight (No drilled holes)",
+        "price": 343.64,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 2,
+        "init_width": 414,
+        "init_height": 658,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -350,
+        "y": 220,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 27,
+        "ratio": 0.046153846153846156,
+        "itemID": 6
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 9.67252,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 357.31639999999993,
+        "y": -222,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 27,
+        "ratio": 0.046153846153846156,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Grandad / GG",
+        "font": "64.584px Great Vibes",
+        "font_size": 24,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -130,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "Forever loved and deeply missed - too right.",
+        "font": "53.81999999999999px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 22,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "04.06.1938 - 24.02.2022",
+        "font": "43.056px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -6,
+        "y": 180,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "anchor_001",
+        "item": "anchor_001",
+        "price": 8.21626,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -358,
+        "y": -226,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 21,
+        "ratio": 0.038461538461538464,
+        "itemID": 8
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "anchor_001",
+        "item": "anchor_001",
+        "price": 8.21626,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 358.92499999999995,
+        "y": 228,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 21,
+        "ratio": 0.038461538461538464,
+        "itemID": 9
+      }
+    ]
+  }
+}

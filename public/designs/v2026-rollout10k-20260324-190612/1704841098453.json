@@ -1,0 +1,312 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:19.227Z",
+  "units": "mm",
+  "source": {
+    "id": "1704841098453",
+    "slug": "legacy-1704841098453",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1704841098453.json",
+    "savedAt": "2024-01-09T22:58:18.453Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 355.59999999999997,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 355.59999999999997,
+      "height_mm": 203.2,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Rena Herrera",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -5.25,
+          "y_px": 81.009
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "2022",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 6.25,
+          "y_px": 150.516
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Dedicated  to the memory of",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 0.25,
+          "y_px": -148.249
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "A cherished lifetime member",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "William  \"Bill\"  Young",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -78
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a8a531e93d74ee42e2302e022e57838a383fc5240eea131cb25b806046793508",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:19.227Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 3,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Screws (visible from front)",
+        "price": 1021.01,
+        "quantity": 1,
+        "width": 355.59999999999997,
+        "height": 203.2,
+        "_length": 0,
+        "init_width": 1296,
+        "init_height": 647,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1536x864"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Pitt County Wildlife Club",
+        "font": "44.34933914510686px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -5.25,
+        "y": 81.00927357032452,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2022",
+        "font": "39.914405230596174px Franklin Gothic",
+        "font_size": 18,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6.25,
+        "y": 150.516228748068,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Dedicated  to the memory of",
+        "font": "33.26200435883015px Franklin Gothic",
+        "font_size": 15,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0.25,
+        "y": -148.24884080370947,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "A cherished lifetime member",
+        "font": "37.69693827334083px Franklin Gothic",
+        "font_size": 17,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3,
+        "y": 4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "William  \"Bill\"  Young",
+        "font": "64.30654176040494px Franklin Gothic",
+        "font_size": 29,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -78,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 2
+      }
+    ]
+  }
+}

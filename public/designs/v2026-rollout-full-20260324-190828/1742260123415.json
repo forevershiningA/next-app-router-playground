@@ -1,0 +1,936 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.498Z",
+  "units": "mm",
+  "source": {
+    "id": "1742260123415",
+    "slug": "legacy-1742260123415",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1742260123415.json",
+    "savedAt": "2025-03-18T01:08:43.415Z"
+  },
+  "product": {
+    "id": "102",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1300,
+      "height_mm": 100
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1300,
+      "height_mm": 100,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 1300,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "INEZ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34.957
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -47
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "RIMAMAKI",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35.306
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -17
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "In Loving memory of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 92.024
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -66
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Cherished Grandparents, Adored Great Grandparents and",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23.271
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 61
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Loved by many",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23.271
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 71
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Treasured parents of Terepai,Teina,Georgina,Rosemary (D)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23.157
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Diana,Mary-Anne,Darlene & Matakeu",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23.271
+        },
+        "position": {
+          "x_px": 11,
+          "y_px": 53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Sunset 07.12.18",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Sunrise 15.03.53",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -47
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Sunrise 05.08.52",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Sunset 28.07.23",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -17
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "LILLIE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -80,
+          "y_px": -41
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "YOU ARE",
+        "font": {
+          "family": "Arial",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "Loved",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 25.244
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "Romans 8:38",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "BEYOND MEASURE-",
+        "font": {
+          "family": "Arial",
+          "size_px": 15.342
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 222,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-28",
+        "asset": "2_119_14",
+        "position": {
+          "x_px": 1,
+          "y_px": 5
+        },
+        "height_px": 324,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-33",
+        "asset": "2_119_14",
+        "position": {
+          "x_px": 197.09,
+          "y_px": 207.162
+        },
+        "height_px": 308,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      },
+      {
+        "id": "2_119_14",
+        "path": "/shapes/motifs/2_119_14.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d3d03f339fffb956aeb7bfafff633f943ee13286aa4f762839b645ef3ed81801",
+    "sourceItemCount": 23,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.498Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 4245.64,
+        "quantity": 1,
+        "width": 1300,
+        "height": 100,
+        "_length": 80,
+        "init_width": 1192,
+        "init_height": 684,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "3d",
+        "navigator": "Edge (chromium based) (desktop), 1440x900"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 881.56,
+        "quantity": 1,
+        "width": 1300,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1192,
+        "init_height": 684,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 6,
+        "label": "ARTHUR",
+        "font": "76.95px Garamond",
+        "font_size": 34.95690865129534,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -47,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 8,
+        "label": "RIMAMAKI",
+        "font": "76.95px Garamond",
+        "font_size": 35.30627776916391,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -17,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 16,
+        "label": "In Loving memory of",
+        "font": "76.95px Great Vibes",
+        "font_size": 92.02374856147368,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -66,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 92,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 48,
+        "label": "Cherished Grandparents, Adored Great Grandparents and",
+        "font": "76.95px Garamond",
+        "font_size": 23.27088309611566,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -2,
+        "y": 61,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "Loved by many",
+        "font": "76.95px Garamond",
+        "font_size": 23.27088309611566,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -2,
+        "y": 71,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 20
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 52,
+        "label": "Treasured parents of Terepai,Teina,Georgina,Rosemary (D)",
+        "font": "76.95px Garamond",
+        "font_size": 23.15746056684854,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 31,
+        "label": "Diana,Mary-Anne,Darlene & Matakeu",
+        "font": "76.95px Garamond",
+        "font_size": 23.27088309611566,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 11,
+        "y": 53,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Sunset 07.12.18",
+        "font": "76.95px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -32,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "Sunrise 15.03.53",
+        "font": "76.95px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -47,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "Sunrise 05.08.52",
+        "font": "76.95px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -32,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Sunset 28.07.23",
+        "font": "76.95px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -17,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 8,
+        "label": "NICHOLAS",
+        "font": "76.95px Garamond",
+        "font_size": 48,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -80,
+        "y": -41,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 27
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 6,
+        "label": "YOU ARE",
+        "font": "76.95px Arial",
+        "font_size": 15,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 29
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 5,
+        "label": "Loved",
+        "font": "76.95px Great Vibes",
+        "font_size": 25.243911379028876,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 31
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "Romans 8:38",
+        "font": "76.95px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 32
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "BEYOND MEASURE-",
+        "font": "76.95px Arial",
+        "font_size": 15.341701534170154,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 30
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1707955197302,
+        "path": "../upload/2024/02/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1707955197302mata_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -1,
+        "ratio": 0.1125,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "mata.jpg",
+        "price": 350,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 21
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 257.031785,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 222,
+        "ratio": 0.30494505494505497,
+        "itemID": 7
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_14",
+        "item": "2_119_14",
+        "price": 280.976795,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 1,
+        "y": 5,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 324,
+        "ratio": 0.38525564803804996,
+        "itemID": 28
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1707955362179,
+        "path": "../upload/2024/02/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1707955362179mata2_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.1125,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "mata2.jpg",
+        "price": 350,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 22
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_14",
+        "item": "2_119_14",
+        "price": 277.220715,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 197.0897024590576,
+        "y": 207.16216887136483,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 308,
+        "ratio": 0.36623067776456597,
+        "itemID": 33
+      }
+    ]
+  }
+}

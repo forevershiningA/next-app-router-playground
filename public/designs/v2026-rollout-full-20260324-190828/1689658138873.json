@@ -1,0 +1,270 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.662Z",
+  "units": "mm",
+  "source": {
+    "id": "1689658138873",
+    "slug": "legacy-1689658138873",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1689658138873.json",
+    "savedAt": "2023-07-18T05:28:58.873Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 430,
+      "height": 932,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "CLYDE",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 71
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": -231
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Orville West",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": -39
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Gone but never forgotten",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 36,
+          "y_px": 112
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "2023",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 256
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a35d4fcb3092df0a7f5ae6b2f37b4dcf890990729f7b8a38a49c9432a2bcf99f",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.662Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (No drilled holes)",
+        "price": 343.64,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 2,
+        "init_width": 430,
+        "init_height": 684,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230630,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 430x932"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "BELLA",
+        "font": "297.6675px Lucida Calligraphy",
+        "font_size": 71,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -12,
+        "y": -231,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Running Free",
+        "font": "117.39px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 24,
+        "y": -39,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Gone but never forgotten",
+        "font": "67.08px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 36,
+        "y": 112,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2023",
+        "font": "83.85px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 12,
+        "y": 256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,432 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.915Z",
+  "units": "mm",
+  "source": {
+    "id": "1676093084324",
+    "slug": "legacy-1676093084324",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1676093084324.json",
+    "savedAt": "2023-02-11T05:24:44.324Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/09.jpg",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 253.99999999999994
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 824,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 253.99999999999994,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Blanche May",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 1.394,
+          "y_px": -309.577
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "To the world you were a teacher,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -84.639,
+          "y_px": -145.827
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "\"There are some who bring a light so bright to the world,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -26.309,
+          "y_px": 322.086
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "that even when you&apos;re gone your light remains.\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 28.74,
+          "y_px": 378.477
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "05/20/1987- 12/2/2019",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 6.855,
+          "y_px": -240.114
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "you were a hero, mentor, and inspiration.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -21.358,
+          "y_px": -17.943
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "but to your family, students, and community",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 8.701,
+          "y_px": -74.896
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_129_03",
+        "position": {
+          "x_px": 364.131,
+          "y_px": 164.302
+        },
+        "height_px": 66,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_129_03",
+        "path": "/shapes/motifs/1_129_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "750ad942b2d0228acbbaf16b6b5ae04e7d9e77723239d04af00638147c2e4f65",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.915Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 7",
+        "shape_url": "shapes/photos/border7.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#4c0f1e",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/09.jpg",
+        "name": "Bronze Plaque - Maroon - Lugs with Studs",
+        "price": 1021.01,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 253.99999999999994,
+        "_length": 0,
+        "init_width": 384,
+        "init_height": 637,
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20221214,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x824"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_129_03",
+        "item": "1_129_03",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 364.13090229034424,
+        "y": 164.30216155852315,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 66,
+        "ratio": 0.07407407407407407,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Nathaniel \"Nano\" Anaya",
+        "font": "110.55118110236222px Great Vibes",
+        "font_size": 32,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1.394423484802246,
+        "y": -309.57690753097637,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "To the world you were a teacher,",
+        "font": "62.18503937007875px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -84.63854312896729,
+        "y": -145.8266344690482,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "\"There are some who bring a light so bright to the world,",
+        "font": "41.45669291338584px Adorable",
+        "font_size": 12,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -26.308507919311523,
+        "y": 322.08556591967465,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "that even when you&apos;re gone your light remains.\"",
+        "font": "48.366141732283474px Adorable",
+        "font_size": 14,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 28.74027729034424,
+        "y": 378.47733019294503,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 18
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "05/20/1987- 12/2/2019",
+        "font": "44.91141732283465px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6.85546875,
+        "y": -240.11413328660998,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 20
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "you were a hero, mentor, and inspiration.",
+        "font": "51.82086614173229px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -21.357593536376953,
+        "y": -17.942653434161784,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 23
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "but to your family, students, and community",
+        "font": "51.82086614173229px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 8.701257705688477,
+        "y": -74.89599565832583,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 25
+      }
+    ]
+  }
+}

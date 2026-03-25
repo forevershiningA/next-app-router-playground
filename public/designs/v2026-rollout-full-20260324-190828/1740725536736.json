@@ -1,0 +1,697 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.402Z",
+  "units": "mm",
+  "source": {
+    "id": "1740725536736",
+    "slug": "legacy-1740725536736",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1740725536736.json",
+    "savedAt": "2025-02-28T06:52:16.736Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 520,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 520,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 690,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Otho Reynolds",
+        "font": {
+          "family": "French Script",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": -34.913,
+          "y_px": -283
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "14/12/2022 Born sleeping",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 0.228,
+          "y_px": -65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Two little hands are resting",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 6.342,
+          "y_px": 22
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "A little heart is still",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 6.342,
+          "y_px": 90
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "A little son is waiting for us over the hill.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -1.886,
+          "y_px": 143
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Verna Fisher",
+        "font": {
+          "family": "Adorable",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 8.684,
+          "y_px": -197
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Kathleen Rivera",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -133
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Revelation 21:4",
+        "font": {
+          "family": "Adorable",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -4.228,
+          "y_px": 527
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Neith shall there be mourning, nor crying, nor pain no more, for the former things",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 586
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "\"He will wipe away every tear from their eyes and death will be no more",
+        "font": {
+          "family": "Adorable",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 558
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "have passed away\".",
+        "font": {
+          "family": "Adorable",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 622
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "teddy-bear_007",
+        "position": {
+          "x_px": 374.193,
+          "y_px": 348
+        },
+        "height_px": 136,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "2_147_20",
+        "position": {
+          "x_px": -351.052,
+          "y_px": 335
+        },
+        "height_px": 130,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 380.052,
+          "y_px": -342
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": -34
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "teddy-bear_007",
+        "path": "/shapes/motifs/teddy-bear_007.svg"
+      },
+      {
+        "id": "2_147_20",
+        "path": "/shapes/motifs/2_147_20.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6d181909d30977b33ba84cbd7d79db7ec70d747372a80a28770dfb5342bb115b",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.402Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1227.79,
+        "quantity": 1,
+        "width": 520,
+        "height": 600,
+        "_length": 80,
+        "init_width": 2440,
+        "init_height": 1186,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1366x768"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 575,
+        "quantity": 1,
+        "width": 690,
+        "height": 100,
+        "_length": 130,
+        "init_width": 2440,
+        "init_height": 1186,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_007",
+        "item": "teddy-bear_007",
+        "price": 248.11182,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "colorName2": "undefined",
+        "x": 374.192513368984,
+        "y": 348,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 136,
+        "ratio": 0.16209773539928488,
+        "itemID": 5
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_147_20",
+        "item": "2_147_20",
+        "price": 246.63629999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "colorName2": "undefined",
+        "x": -351.05169340463453,
+        "y": 335,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 130,
+        "ratio": 0.39755351681957185,
+        "itemID": 8
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "colorName2": "undefined",
+        "x": 380.05169340463453,
+        "y": -342,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": -34,
+        "height": 100,
+        "ratio": 0.17953321364452424,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 16,
+        "label": "Until We Meet Again",
+        "font": "125.54657142857141px French Script",
+        "font_size": 76,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -34.91265597147958,
+        "y": -283,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 74,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 22,
+        "label": "14/12/2022 Born sleeping",
+        "font": "61.121357142857136px Chopin Script",
+        "font_size": 37,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0.22816399286989508,
+        "y": -65,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 24,
+        "label": "Two little hands are resting",
+        "font": "47.90592857142857px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 6.342245989304956,
+        "y": 22,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 19,
+        "label": "A little heart is still",
+        "font": "54.51364285714285px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 6.342245989304956,
+        "y": 90,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 36,
+        "label": "A little son is waiting for us over the hill.",
+        "font": "29.734714285714283px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1.8859180035651661,
+        "y": 143,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 18,
+        "label": "Tawera Edward Loreto",
+        "font": "77.64064285714285px Adorable",
+        "font_size": 47,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 8.684491978609458,
+        "y": -197,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 19,
+        "label": "Calvin Kairic Solomon",
+        "font": "66.07714285714285px Adorable",
+        "font_size": 40,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -133,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "Revelation 21:4",
+        "font": "44.60207142857142px Adorable",
+        "font_size": 27,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -4.228163992869895,
+        "y": 527,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 68,
+        "label": "Neith shall there be mourning, nor crying, nor pain no more, for the former things",
+        "font": "33.03857142857142px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 586,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 57,
+        "label": "\"He will wipe away every tear from their eyes and death will be no more",
+        "font": "37.99435714285714px Adorable",
+        "font_size": 23,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -8,
+        "y": 558,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 16,
+        "label": "have passed away\".",
+        "font": "41.29821428571428px Adorable",
+        "font_size": 25,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 14,
+        "y": 622,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 14
+      }
+    ]
+  }
+}

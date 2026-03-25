@@ -1,0 +1,469 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.481Z",
+  "units": "mm",
+  "source": {
+    "id": "1741917467888",
+    "slug": "legacy-1741917467888",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1741917467888.json",
+    "savedAt": "2025-03-14T01:57:47.888Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 150,
+      "height_mm": 120
+    },
+    "viewportPx": {
+      "width": 1707,
+      "height": 1068,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 150,
+      "height_mm": 120,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Rolla Coleman",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 13.497,
+          "y_px": -358.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Always in our hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 7.498,
+          "y_px": 409.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "We would choose you again and do life the same.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -5.999,
+          "y_px": 190.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Always our Husband, our Father",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 22.495,
+          "y_px": -46.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "our Pa and our Hero.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 10.498,
+          "y_px": 82.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "31.01.1949 - 02.06.2021",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 1.5,
+          "y_px": -199.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "We love you, We miss you",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 298
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 488.889,
+          "y_px": 402
+        },
+        "height_px": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": -498.416,
+          "y_px": 399
+        },
+        "height_px": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1bb897aa9774b786828d1fcd8a71eabe786392ded5a19226bc510ea959225958",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.481Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (No drilled holes)",
+        "price": 228.21,
+        "quantity": 1,
+        "width": 150,
+        "height": 120,
+        "_length": 2,
+        "init_width": 1467,
+        "init_height": 876,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1707x1068"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Dad   Mick",
+        "font": "170.81999999999996px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 13.496932515337448,
+        "y": -358.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Always in our hearts",
+        "font": "85.40999999999998px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 7.4982958418540875,
+        "y": 409.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 6
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "We would choose you again and do life the same.",
+        "font": "76.86899999999999px Great Vibes",
+        "font_size": 9,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5.998636673483588,
+        "y": 190.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Always our Husband, our Father",
+        "font": "85.40999999999998px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 22.49488752556249,
+        "y": -46.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 3
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 488.8888888888889,
+        "y": 402,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 15,
+        "ratio": 0.0203527815468114,
+        "itemID": 8
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 6.760000000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -498.41554944648385,
+        "y": 399,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 15,
+        "ratio": 0.0203527815468114,
+        "itemID": 9
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "our Pa and our Hero.",
+        "font": "85.40999999999998px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 10.497614178595768,
+        "y": 82.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "31.01.1949 - 02.06.2021",
+        "font": "119.57399999999998px Great Vibes",
+        "font_size": 14,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1.4996591683708402,
+        "y": -199.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "We love you, We miss you",
+        "font": "85.40999999999998px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 2.2737367544323206e-13,
+        "y": 298,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      }
+    ]
+  }
+}

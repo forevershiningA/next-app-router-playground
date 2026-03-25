@@ -1,0 +1,555 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.279Z",
+  "units": "mm",
+  "source": {
+    "id": "1701551546276",
+    "slug": "legacy-1701551546276",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1701551546276.json",
+    "savedAt": "2023-12-02T21:12:26.276Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 762,
+      "height_mm": 355.59999999999997
+    },
+    "viewportPx": {
+      "width": 1707,
+      "height": 960,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 762,
+      "height_mm": 355.59999999999997,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "LOIS OXFORD",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -240.949,
+          "y_px": -106.53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Dec 27, 1917 - Jan 17, 1918",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -246.948,
+          "y_px": -51.53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Aug 16, 1926 - Aug 17, 1926",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 238.943,
+          "y_px": 33.004
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "BABY OXFORD",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 256.939,
+          "y_px": -31.501
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Mathew Gibson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -53.05,
+          "y_px": 162.51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Maude (Donaldson) Oxford",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 287.476,
+          "y_px": 162.011
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Beloved Infant Daughters of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 9.494,
+          "y_px": 118.503
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "1_138_23",
+        "position": {
+          "x_px": -344.922,
+          "y_px": 124.444
+        },
+        "height_px": 102,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_184_07",
+        "position": {
+          "x_px": 418.405,
+          "y_px": -152.932
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_154_18",
+        "position": {
+          "x_px": -248.943,
+          "y_px": 170.924
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_043_21",
+        "position": {
+          "x_px": -442.399,
+          "y_px": 86.961
+        },
+        "height_px": 125,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_138_23",
+        "path": "/shapes/motifs/1_138_23.svg"
+      },
+      {
+        "id": "1_184_07",
+        "path": "/shapes/motifs/1_184_07.svg"
+      },
+      {
+        "id": "1_154_18",
+        "path": "/shapes/motifs/1_154_18.svg"
+      },
+      {
+        "id": "1_043_21",
+        "path": "/shapes/motifs/1_043_21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "50f453cc0dd84e80f12af9e843139bfecc744940157e2263d3693ba03eda8825",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.279Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1221.57,
+        "quantity": 1,
+        "width": 762,
+        "height": 355.59999999999997,
+        "_length": 80,
+        "init_width": 1467,
+        "init_height": 747,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1707x960"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "LOIS OXFORD",
+        "font": "60.215846456692915px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -240.94887525562353,
+        "y": -106.53012048192772,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "Dec 27, 1917 - Jan 17, 1918",
+        "font": "41.577608267716535px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -246.9475119291069,
+        "y": -51.530120481927725,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "Aug 16, 1926 - Aug 17, 1926",
+        "font": "45.878740157480316px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 238.9434219495572,
+        "y": 33.004016064256916,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "BABY OXFORD",
+        "font": "57.34842519685039px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 256.93933197000706,
+        "y": -31.500669344042933,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 7
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_138_23",
+        "item": "1_138_23",
+        "price": 228.86118499999998,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -344.92160872528996,
+        "y": 124.44444444444434,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 102,
+        "ratio": 0.1574074074074074,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_07",
+        "item": "1_184_07",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 418.4049079754602,
+        "y": -152.9317269076305,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.2288329519450801,
+        "itemID": 11
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_18",
+        "item": "1_154_18",
+        "price": 215.01064,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -248.94342194955686,
+        "y": 170.92369477911643,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 43,
+        "ratio": 0.06277372262773723,
+        "itemID": 12
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_043_21",
+        "item": "1_043_21",
+        "price": 234.26055,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -442.39945466939344,
+        "y": 86.96117804551534,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 125,
+        "ratio": 0.16361256544502617,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "Lawson Henry &",
+        "font": "38.71018700787402px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -53.04976141785983,
+        "y": 162.51004016064246,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "Maude (Donaldson) Oxford",
+        "font": "37.276476377952754px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 287.47648261758695,
+        "y": 162.01070950468545,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "Beloved Infant Daughters of",
+        "font": "35.842765748031496px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 9.494205862303943,
+        "y": 118.50334672021415,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 4
+      }
+    ]
+  }
+}

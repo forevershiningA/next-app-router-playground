@@ -1,0 +1,658 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:46.788Z",
+  "units": "mm",
+  "source": {
+    "id": "1695817307816",
+    "slug": "legacy-1695817307816",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1695817307816.json",
+    "savedAt": "2023-09-27T12:21:47.816Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 634.9999999999999,
+      "height_mm": 762
+    },
+    "viewportPx": {
+      "width": 810,
+      "height": 1080,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 634.9999999999999,
+      "height_mm": 762,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Myron Estrada",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 73
+        },
+        "position": {
+          "x_px": -0.274,
+          "y_px": -430.299
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "1632-1692",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": 7.879,
+          "y_px": -294.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In Salem&apos;s shadows, Bridget stood accused,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -165
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": " A woman bold, with courage unamused.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -125.833
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": " She faced the flames with grace upon her face,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -86.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": " Defying falsehoods in that darkened place.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -46.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": " Her name now etched in history&apos;s somber tome,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -8.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "A martyr for the truth, she found her home.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": " Injustice reigned, but she refused to yield,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": " Her spirit strong, on freedom&apos;s battlefield.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 108.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": " Though silenced by the fervor of the crowd,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 146.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "In memory, her name stands tall and proud.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 185
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": " Bridget Bishop, forever in our hearts,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 223.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "A symbol of resilience that imparts.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 261.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1dd6d0440b7dcd99a19cfc7582c0c21a63da5615cea2b0d91a46a29769baee5d",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:46.788Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Curved Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 3367.48,
+        "quantity": 1,
+        "width": 634.9999999999999,
+        "height": 762,
+        "_length": 90,
+        "init_width": 840,
+        "init_height": 643,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 810x1080"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Bridget Bishop",
+        "font": "120.11948818897636px Chopin Script",
+        "font_size": 73,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -0.2743569255850389,
+        "y": -430.29891135303257,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 76,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1632-1692",
+        "font": "87.21003937007873px Chopin Script",
+        "font_size": 53,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7.878603945371765,
+        "y": -294.4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "In Salem&apos;s shadows, Bridget stood accused,",
+        "font": "55.94606299212598px Chopin Script",
+        "font_size": 34,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -14,
+        "y": -164.99999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": " A woman bold, with courage unamused.",
+        "font": "49.36417322834645px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -125.8333333333333,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": " She faced the flames with grace upon her face,",
+        "font": "55.94606299212598px Chopin Script",
+        "font_size": 34,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -86.66666666666664,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": " Defying falsehoods in that darkened place.",
+        "font": "49.36417322834645px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -46.66666666666666,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": " Her name now etched in history&apos;s somber tome,",
+        "font": "49.36417322834645px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -8.333333333333332,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "A martyr for the truth, she found her home.",
+        "font": "49.36417322834645px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 29.999999999999993,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": " Injustice reigned, but she refused to yield,",
+        "font": "55.94606299212598px Chopin Script",
+        "font_size": 34,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 69.99999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": " Her spirit strong, on freedom&apos;s battlefield.",
+        "font": "49.36417322834645px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 108.33333333333331,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": " Though silenced by the fervor of the crowd,",
+        "font": "49.36417322834645px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 146.66666666666663,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "In memory, her name stands tall and proud.",
+        "font": "55.94606299212598px Chopin Script",
+        "font_size": 34,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 184.99999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": " Bridget Bishop, forever in our hearts,",
+        "font": "55.94606299212598px Chopin Script",
+        "font_size": 34,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 223.3333333333333,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "A symbol of resilience that imparts.",
+        "font": "46.07322834645669px Chopin Script",
+        "font_size": 28,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 261.66666666666663,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 14
+      }
+    ]
+  }
+}

@@ -1,0 +1,452 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.243Z",
+  "units": "mm",
+  "source": {
+    "id": "1653621034512",
+    "slug": "legacy-1653621034512",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1653621034512.json",
+    "savedAt": "2022-05-27T03:10:34.512Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/backgrounds/colors/l/28.jpg",
+      "texture": "/textures/forever/l/28.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 740,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/28.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "METTA HIGGINS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -161,
+          "y_px": -311
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "BELOVED WIFE OF",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -235,
+          "y_px": -225
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "GEORGIA GRAVES",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -189.984,
+          "y_px": -152.076
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "ALWAYS IN OUR HEARTS",
+        "font": {
+          "family": "Adorable",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -203.631,
+          "y_px": -58.925
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "REST IN PEACE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -179.979,
+          "y_px": 144.313
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "MUMMY, AAJI, NANI",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -168.73,
+          "y_px": 244.52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Minta Swanson 59 - 10th June 2017",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -213.437,
+          "y_px": 65.078
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "ISABELLE ESPINOZA",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -3.344,
+          "y_px": 344.202
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "48fce74fc36e2afeeef21c0c36668b41665e8b7cb1096cfad15dfc3aecc12b17",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.243Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "name": "Square",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "shape": "Square",
+        "color": "undefinedundefinedundefined#000000",
+        "fixed": 0,
+        "texture": "src/backgrounds/colors/l/28.jpg",
+        "price": 899,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 556,
+        "backgroundOption": "color",
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20220525,
+        "mode": "2d",
+        "navigator": "Linux armv8l, Google Inc., Mozilla/5.0 (Linux; Android 9; SM-G950F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Mobile Safari/537.36, 360x740"
+      },
+      {
+        "productid": 137,
+        "id": 137,
+        "path": "../upload/2022/05/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1652629720114img0032c52011c99ab0a22b7.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 296.15234375,
+        "y": -40.1142578125,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.1829515335100336,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG-0032c52011c99ab0a22b71beea34ac74-V.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "219",
+        "width": "406",
+        "height": "607",
+        "itemID": 5
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "MANJULA DEVI",
+        "font": "91.44473684210526px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -161,
+        "y": -311,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "BELOVED WIFE OF",
+        "font": "47.1078947368421px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -235,
+        "y": -225,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "MAHENDRA PRASAD",
+        "font": "58.192105263157885px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -189.984375,
+        "y": -152.076171875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "ALWAYS IN OUR HEARTS",
+        "font": "44.33684210526315px Adorable",
+        "font_size": 16,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -203.630859375,
+        "y": -58.9248046875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 6
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "REST IN PEACE",
+        "font": "55.42105263157894px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -179.978515625,
+        "y": 144.3134765625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "MUMMY, AAJI, NANI",
+        "font": "74.81842105263156px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -168.73046875,
+        "y": 244.51953125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 8
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "19th April 1959 - 10th June 2017",
+        "font": "47.1078947368421px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -213.4375,
+        "y": 65.078125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 9
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "OM SHANTI SHANTI SHANTI",
+        "font": "55.42105263157894px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -3.34375,
+        "y": 344.2023654513889,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 10
+      }
+    ]
+  }
+}

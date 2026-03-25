@@ -1,0 +1,474 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:46.471Z",
+  "units": "mm",
+  "source": {
+    "id": "1690914334795",
+    "slug": "legacy-1690914334795",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1690914334795.json",
+    "savedAt": "2023-08-01T18:25:34.795Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "1066.8",
+      "height_mm": 914.4
+    },
+    "viewportPx": {
+      "width": 430,
+      "height": 932,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "1066.8",
+      "height_mm": 914.4,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": "1199.896",
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Lavinia",
+        "font": {
+          "family": "Adorable",
+          "size_px": 144
+        },
+        "position": {
+          "x_px": -348,
+          "y_px": -36
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dollie",
+        "font": {
+          "family": "Adorable",
+          "size_px": 138
+        },
+        "position": {
+          "x_px": 237,
+          "y_px": -270
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Saul",
+        "font": {
+          "family": "Adorable",
+          "size_px": 82
+        },
+        "position": {
+          "x_px": 276,
+          "y_px": -111
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "1891-1958",
+        "font": {
+          "family": "Adorable",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": 288,
+          "y_px": -6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "1899-1954",
+        "font": {
+          "family": "Adorable",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": 297,
+          "y_px": 267
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Clement",
+        "font": {
+          "family": "Adorable",
+          "size_px": 93
+        },
+        "position": {
+          "x_px": -342,
+          "y_px": 147
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1938-2022",
+        "font": {
+          "family": "Adorable",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": -324,
+          "y_px": 270
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Larkin",
+        "font": {
+          "family": "Adorable",
+          "size_px": 87
+        },
+        "position": {
+          "x_px": 315,
+          "y_px": 138
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b4efe3890b730ae861a2b76393d82e614207a7b8b5df1627c70405fd7ede150e",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:46.471Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 6001.05,
+        "quantity": 1,
+        "width": "1066.8",
+        "height": 914.4,
+        "_length": 100,
+        "init_width": 430,
+        "init_height": 681,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 430x932"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 900,
+        "quantity": 1,
+        "width": "1199.896",
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 430,
+        "init_height": 681,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1690908912415,
+        "path": "../upload/2023/08/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1690908912415img_0446_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -3,
+        "y": 150,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.1855624214495182,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_0446.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 381,
+        "width": "283",
+        "height": "404",
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "West",
+        "font": "152.79752530933635px Adorable",
+        "font_size": 144,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -348,
+        "y": -36,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 98,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Johnson",
+        "font": "146.43096175478067px Adorable",
+        "font_size": 138,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 237,
+        "y": -270,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 123,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Alfred",
+        "font": "87.00970191226098px Adorable",
+        "font_size": 82,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 276,
+        "y": -111,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 81,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1891-1958",
+        "font": "62.60454161979753px Adorable",
+        "font_size": 59,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 288,
+        "y": -6,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1899-1954",
+        "font": "62.60454161979753px Adorable",
+        "font_size": 59,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 297,
+        "y": 267,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Violet",
+        "font": "98.68173509561306px Adorable",
+        "font_size": 93,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -342,
+        "y": 147,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 71,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1938-2022",
+        "font": "62.60454161979753px Adorable",
+        "font_size": 59,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -324,
+        "y": 270,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Florence",
+        "font": "92.31517154105738px Adorable",
+        "font_size": 87,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 315,
+        "y": 138,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 74,
+        "itemID": 8
+      }
+    ]
+  }
+}

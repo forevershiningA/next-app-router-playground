@@ -1,0 +1,424 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.590Z",
+  "units": "mm",
+  "source": {
+    "id": "1659612326680",
+    "slug": "legacy-1659612326680",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1659612326680.json",
+    "savedAt": "2022-08-04T11:25:26.680Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 360,
+      "height_mm": 260
+    },
+    "viewportPx": {
+      "width": 1392,
+      "height": 783,
+      "dpr": 1.149999976158142
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 360,
+      "height_mm": 260,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Jay Ryan",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -3.264,
+          "y_px": -82.717
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "\"Cheyno\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -6.528,
+          "y_px": -47.453
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "3/5/1950 – 16/3/2019",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 2.176,
+          "y_px": -8.925
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Beloved Husband of Sue",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -1.088,
+          "y_px": 51.701
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Dad to Luke , Ben, Joel, Abbie, Holly & Marni",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -1.088,
+          "y_px": 86.346
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Poppy to 15 Grand Kids",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 3.264,
+          "y_px": 119.62
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "<><>",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 65
+        },
+        "position": {
+          "x_px": -14.144,
+          "y_px": -149.674
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "A better Bloke there never was",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 179.871
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f2ba45b457f83b502ed38ff643cb16eb36e65e9debe324d0980a7e79a3e79e39",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.590Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 629.6,
+        "quantity": 1,
+        "width": 360,
+        "height": 260,
+        "_length": 1,
+        "init_width": 1096,
+        "init_height": 550,
+        "device": "desktop",
+        "dpr": 1.149999976158142,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220803,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36, 1392x783"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Cheyne Fredrick Southam",
+        "font": "30.834374360740185px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -3.263925744233732,
+        "y": -82.71653976523835,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "\"Cheyno\"",
+        "font": "30.834374360740185px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -6.527851488467356,
+        "y": -47.4531180981244,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "3/5/1950 – 16/3/2019",
+        "font": "30.834374360740185px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 2.1759504961556417,
+        "y": -8.924569861329996,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Beloved Husband of Sue",
+        "font": "23.982291169464588px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -1.0879752480778748,
+        "y": 51.7005198785194,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Dad to Luke , Ben, Joel, Abbie, Holly & Marni",
+        "font": "23.982291169464588px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -1.0879752480778748,
+        "y": 86.34633771709976,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Poppy to 15 Grand Kids",
+        "font": "23.982291169464588px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 3.263925744233732,
+        "y": 119.62029872010413,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "<><>",
+        "font": "111.34635185822845px Dobkin",
+        "font_size": 65,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -14.143678225012803,
+        "y": -149.6741357339477,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 22
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "A better Bloke there never was",
+        "font": "30.834374360740185px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 179.87080769526543,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 26
+      }
+    ]
+  }
+}

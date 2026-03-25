@@ -1,0 +1,393 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.409Z",
+  "units": "mm",
+  "source": {
+    "id": "1753535486635",
+    "slug": "legacy-1753535486635",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1753535486635.json",
+    "savedAt": "2025-07-26T13:11:26.635Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1707,
+      "height": 1067,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Sidney Hicks",
+        "font": {
+          "family": "Adorable",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -13.497,
+          "y_px": -59.977
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "February 19, 1934",
+        "font": {
+          "family": "Arial",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -22.495,
+          "y_px": 169.436
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "January  28, 2025",
+        "font": {
+          "family": "Arial",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -35.992,
+          "y_px": 268.917
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "\"Forgetting What Lies Behind and Reaching Forward to What Lies Ahead\"",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 7.498,
+          "y_px": 414.881
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Philippians 3: 13-14",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -41.99,
+          "y_px": 477.368
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Emmaline",
+        "font": {
+          "family": "Adorable",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -55.487,
+          "y_px": 60.526
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "beb8b8dba5e06c16c57c33579837fbe003f206b1a8743ab17ed639fe02058091",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.409Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1467,
+        "init_height": 881,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250716,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1707x1067"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "price": 593,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1467,
+        "init_height": 881,
+        "mode": "2d"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1753538026010,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1753538026010crossdrapedpurple803786w.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -17.995910020449855,
+        "y": -299.8864926220204,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 1,
+        "ratio": 0.7394587475035008,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross-draped-purple-803786.webp",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 15,
+        "label": "Martha  Jean Evans",
+        "font": "90.58369656917885px Adorable",
+        "font_size": 50,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -13.496932515337676,
+        "y": -59.97729852440409,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "February 19, 1934",
+        "font": "54.35021794150731px Arial",
+        "font_size": 30,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -22.494887525562376,
+        "y": 169.4358683314416,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "January  28, 2025",
+        "font": "54.35021794150731px Arial",
+        "font_size": 30,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -35.99182004089994,
+        "y": 268.91713961407504,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 59,
+        "label": "\"Forgetting What Lies Behind and Reaching Forward to What Lies Ahead\"",
+        "font": "39.85682649043869px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 7.4982958418540875,
+        "y": 414.88081725312156,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "Philippians 3: 13-14",
+        "font": "39.85682649043869px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -41.99045671438307,
+        "y": 477.3677639046539,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "Anderson",
+        "font": "90.58369656917885px Adorable",
+        "font_size": 50,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -55.48738922972052,
+        "y": 60.52553916004547,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 7
+      }
+    ]
+  }
+}

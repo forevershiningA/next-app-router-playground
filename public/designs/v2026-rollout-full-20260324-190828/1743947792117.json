@@ -1,0 +1,373 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.569Z",
+  "units": "mm",
+  "source": {
+    "id": "1743947792117",
+    "slug": "legacy-1743947792117",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1743947792117.json",
+    "savedAt": "2025-04-06T13:56:32.117Z"
+  },
+  "product": {
+    "id": "9",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle 250x200",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 832,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "MISS MOLLY",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -16,
+          "y_px": -288
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "You were loved your",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 216,
+          "y_px": -29
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "entire life.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 223,
+          "y_px": 70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "You will be missed",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 225,
+          "y_px": 172
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "the rest of ours",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 228,
+          "y_px": 283
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "25th March 2025",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 224,
+          "y_px": -145
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "da1230b6a88fa4cac8762080d50ba312dfc51bdc2164c0ded81f59e8abd0d30f",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.569Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 9,
+        "type": "Headstone",
+        "shape": "Rectangle 250x200",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Pet Plaque",
+        "price": 302.04,
+        "quantity": 1,
+        "width": 250,
+        "height": 200,
+        "_length": 10,
+        "init_width": 384,
+        "init_height": 640,
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250225,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x832"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1743946927643,
+        "path": "../upload/2025/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17439469276431000007098_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -245,
+        "y": 83,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.9085625000000004,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000007098.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "145",
+        "width": "391",
+        "height": "611",
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "MISS MOLLY",
+        "font": "122.14800000000002px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -16,
+        "y": -288,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "You were loved your",
+        "font": "63.18000000000001px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 215.99992752075195,
+        "y": -29,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "entire life.",
+        "font": "63.18000000000001px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 223.0000057220459,
+        "y": 69.99993705749512,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "You will be missed",
+        "font": "63.18000000000001px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 225.00001335144043,
+        "y": 172.00010871887207,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "the rest of ours",
+        "font": "71.60400000000001px Great Vibes",
+        "font_size": 17,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 228.0002040863037,
+        "y": 282.9998722076416,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "25th March 2025",
+        "font": "50.54400000000001px Lucida Calligraphy",
+        "font_size": 12,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 224,
+        "y": -145,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      }
+    ]
+  }
+}

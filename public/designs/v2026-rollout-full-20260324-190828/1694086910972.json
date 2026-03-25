@@ -1,0 +1,468 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.954Z",
+  "units": "mm",
+  "source": {
+    "id": "1694086910972",
+    "slug": "legacy-1694086910972",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1694086910972.json",
+    "savedAt": "2023-09-07T11:41:50.972Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/07.jpg",
+      "texture": "/textures/phoenix/l/07.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 175
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 175,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/07.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Jefferson Bates",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": -114.607
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "ELLEN LE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 6.25,
+          "y_px": 188.3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Died in Melbourne 8.9.1857 aged 65 years",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": 134.6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Arrived at Port Jackson 18.4.1829",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 102.854
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Born in Carlow, Ireland 20.9.1791",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 70.107
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Husband of Eleanor Jane Taber",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -7.5,
+          "y_px": -9.376
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Watch & clock maker and Inspector of Cattle",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -44.123
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Father of Susanna Street & Edward James Foster",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": 24.121
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Here buried lies",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -188.574
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "517611dbe3f49ef684ce8e8f48d3dbf33c919abc94601c4d62f79bca7a8914ee",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.954Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 9",
+        "shape_url": "shapes/photos/border9.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#07723a",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/07.jpg",
+        "name": "Bronze Plaque - Holly Green - Lugs with Studs",
+        "price": 761.01,
+        "quantity": 1,
+        "width": 250,
+        "height": 175,
+        "_length": 10,
+        "init_width": 1296,
+        "init_height": 643,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 19,
+        "label": "Edward Bunbury Foster",
+        "font": "62.692499999999995px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 5,
+        "y": -114.60653188180399,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "AN INTREPID PIONEER",
+        "font": "40.750125px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6.25,
+        "y": 188.3001555209953,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Died in Melbourne 8.9.1857 aged 65 years",
+        "font": "31.346249999999998px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1.25,
+        "y": 134.6003110419906,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Arrived at Port Jackson 18.4.1829",
+        "font": "31.346249999999998px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 102.85381026438563,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Born in Carlow, Ireland 20.9.1791",
+        "font": "31.346249999999998px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 70.10730948678071,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Husband of Eleanor Jane Taber",
+        "font": "31.346249999999998px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7.5,
+        "y": -9.376360808709194,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Watch & clock maker and Inspector of Cattle",
+        "font": "31.346249999999998px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -44.12286158631417,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Father of Susanna Street & Edward James Foster",
+        "font": "31.346249999999998px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1.25,
+        "y": 24.121306376360735,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Here buried lies",
+        "font": "40.750125px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -10,
+        "y": -188.57387247278382,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 1
+      }
+    ]
+  }
+}

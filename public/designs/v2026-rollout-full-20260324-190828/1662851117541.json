@@ -1,0 +1,351 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.791Z",
+  "units": "mm",
+  "source": {
+    "id": "1662851117541",
+    "slug": "legacy-1662851117541",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1662851117541.json",
+    "savedAt": "2022-09-10T23:05:17.541Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "a Loving Wife, Mother, Nana",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -12.496,
+          "y_px": -190.587
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "wonderful memories of",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -13.746,
+          "y_px": -286.082
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "resting in the  arms of Our Lord",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": -64.411
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "d.o.b",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": -58.731,
+          "y_px": 138.235
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Frances Dawson",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": -7.498,
+          "y_px": 18.041
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_154_07",
+        "position": {
+          "x_px": 347.389,
+          "y_px": -268.592
+        },
+        "height_px": 71,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_07",
+        "path": "/shapes/motifs/1_154_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8c890a99a177094ae0d456a3a6e0bc0da9aebf55489059a6bdd50f08157cead7",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.791Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2479.4,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1250,
+        "init_height": 682,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220910,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.33, 1536x864"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "a Loving Wife, Mother, Nana",
+        "font": "58.183125px Franklin Gothic",
+        "font_size": 42,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -12.495999999999981,
+        "y": -190.58651026392963,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_07",
+        "item": "1_154_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 347.38880000000006,
+        "y": -268.59237536656894,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 71,
+        "ratio": 0.07395833333333333,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "wonderful memories of",
+        "font": "66.495px Franklin Gothic",
+        "font_size": 48,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -13.745600000000081,
+        "y": -286.0821114369502,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "resting in the  arms of Our Lord",
+        "font": "49.871249999999996px Franklin Gothic",
+        "font_size": 36,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -1.2495999999999867,
+        "y": -64.41055718475064,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "d.o.b",
+        "font": "94.20125px Franklin Gothic",
+        "font_size": 68,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -58.731199999999944,
+        "y": 138.23460410557175,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Mary Josephine (leaf)",
+        "font": "63.724374999999995px Franklin Gothic",
+        "font_size": 46,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -7.49759999999992,
+        "y": 18.04105571847515,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 9
+      }
+    ]
+  }
+}

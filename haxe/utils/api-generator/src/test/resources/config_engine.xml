@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<config>
+    <input>
+        <source-dir>D:/GIT/dyo_haxe/source/src</source-dir>
+        <classes>
+            <include>pl.pkapusta.engine.common.data.parsers.project.IProjectElementReader</include>
+            <include>pl.pkapusta.engine.common.interfaces.IParamStorage</include>
+            <include>pl.pkapusta.engine.globals.IGlobals</include>
+            <include>pl.pkapusta.engine.globals.Globals</include>
+            <include>pl.pkapusta.engine.graphics.algorithms.Bezier</include>
+            <include>pl.pkapusta.engine.graphics.algorithms.DiscretePathOffset</include>
+            <include>pl.pkapusta.engine.graphics.path.DiscreteCornerPoint</include>
+            <include>pl.pkapusta.engine.graphics.path.DiscretePath</include>
+            <include>pl.pkapusta.engine.graphics.path.DiscretePoint</include>
+            <include>pl.pkapusta.engine.graphics.path.HeadScalingDiscretePath</include>
+            <include>pl.pkapusta.engine.graphics.path.NineScalingDiscretePath</include>
+            <include>pl.pkapusta.engine.graphics.path.NormalsDirection</include>
+            <include>pl.pkapusta.engine.graphics.path.ScalingDiscretePath</include>
+            <include>pl.pkapusta.engine.model.data.common.IBaseAsset</include>
+            <include>pl.pkapusta.engine.model.data.common.IObject3DAsset</include>
+            <include>pl.pkapusta.engine.model.data.common.ITextureAsset</include>
+            <include>pl.pkapusta.engine.model.data.common.IFlashObjectAsset</include>
+            <include>pl.pkapusta.engine.model.data.common.IUndefinedAsset</include>
+            <include>pl.pkapusta.engine.model.data.IModel3DData</include>
+            <include>pl.pkapusta.engine.model.executors.bridge.IM3DBridge</include>
+            <include>pl.pkapusta.engine.model.executors.file.asset.IModel3DAssetExecutor</include>
+            <include>pl.pkapusta.engine.model.executors.file.events.RegionPositionEvent</include>
+            <include>pl.pkapusta.engine.model.executors.file.IM3DExecutor</include>
+            <include>pl.pkapusta.engine.model.executors.file.IM3DExecutorDuplicator</include>
+            <include>pl.pkapusta.engine.model.executors.file.IM3DExecutorLimiter</include>
+            <include>pl.pkapusta.engine.model.executors.file.IM3DExecutorProjectRW</include>
+            <include>pl.pkapusta.engine.model.executors.file.IM3DExecutorProperty</include>
+            <include>pl.pkapusta.engine.model.executors.file.IM3DExecutorRenderer</include>
+            <include>pl.pkapusta.engine.model.executors.file.M3DBasicExecutor</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IBaseProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IHandlerCollectionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IHandlerProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.ILineRegionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IModel3DProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IPointHandlerProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IPointRegionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IRegionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.ISelectionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.IStandardSelectionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.ISurfaceRegionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.file.proxies.ISurfaceSelectionProxy</include>
+            <include>pl.pkapusta.engine.model.executors.utils.properties.IM3DProperty</include>
+            <include>pl.pkapusta.engine.model.executors.utils.properties.ColorTextureProperty</include>
+            <include>pl.pkapusta.engine.model.properties.values.interfaces.IByteArrayValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.interfaces.ICompositeValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.interfaces.IDisplayObjectValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.interfaces.IMaterialValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.interfaces.ITextureValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.BitmapTextureValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.ByteArrayValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.DisplayObjectValue</include>
+            <include>pl.pkapusta.engine.model.properties.values.TextureValue</include>
+            <include>pl.pkapusta.engine.project.data.SceneData</include>
+            <include>pl.pkapusta.engine.project.data.structure.storage.IProjectStorageObject</include>
+            <include>pl.pkapusta.engine.project.IProject3D</include>
+            <include>pl.pkapusta.engine.view.graphics3d.algorithms.Triangulator</include>
+            <include>pl.pkapusta.engine.view.graphics3d.primitives.PathGeometry</include>
+            <include>pl.pkapusta.engine.view.graphics3d.primitives.RectangleGeometry</include>
+        </classes>
+        <ccparams>
+            <param name="openfl" value="&quot;8.1.0&quot;" />
+            <param name="flash" value="false" />
+        </ccparams>
+    </input>
+    <goals>
+        <goal type="GenerateExtern">
+            <destination>D:\GIT\dyo_haxe\source_api\src</destination>
+            <delete-if-exists>false</delete-if-exists>
+        </goal>
+    </goals>
+</config>

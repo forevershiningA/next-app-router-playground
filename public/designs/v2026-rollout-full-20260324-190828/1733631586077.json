@@ -1,0 +1,363 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.963Z",
+  "units": "mm",
+  "source": {
+    "id": "1733631586077",
+    "slug": "legacy-1733631586077",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1733631586077.json",
+    "savedAt": "2024-12-08T04:19:46.077Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Berry Hopkins",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 72,
+          "y_px": -127
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "27.5.1957 - 12,04.2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 33,
+          "y_px": -79
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Biblical verse",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -65,
+          "y_px": 203
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loved husband of Ake",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -64,
+          "y_px": 30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Father of Pamola, Lilyanna, John, Aidan, Jordan & Jamie",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -62,
+          "y_px": 64
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "06910a8f330c7f36cdc308c678e2c8cfac778ba0c841eed98e7c8c507c0363cd",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.963Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 684.03,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 15,
+        "init_width": 1200,
+        "init_height": 674,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1440x900"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1733633380580,
+        "path": "../upload/2024/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1733633380580hs_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 257,
+        "y": 76,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8774999999999998,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "HS.JPEG",
+        "price": 0,
+        "quantity": 1,
+        "size": 171,
+        "width": "124",
+        "height": "296",
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1733633608154,
+        "path": "../upload/2024/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1733633608154unnamed_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -235,
+        "y": -123,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5439473684210525,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "unnamed.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 106,
+        "width": "145",
+        "height": "183",
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Michael John Rennie",
+        "font": "57.0682894736842px Dobkin",
+        "font_size": 33,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 72,
+        "y": -127,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "27.5.1957 - 12,04.2022",
+        "font": "24.21078947368421px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 33,
+        "y": -79,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Biblical verse",
+        "font": "31.128157894736837px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -65,
+        "y": 203,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Loved husband of Ake",
+        "font": "36.31618421052631px Dobkin",
+        "font_size": 21,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -64,
+        "y": 30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 47,
+        "label": "Father of Pamola, Lilyanna, John, Aidan, Jordan & Jamie",
+        "font": "24.21078947368421px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -62,
+        "y": 64,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      }
+    ]
+  }
+}

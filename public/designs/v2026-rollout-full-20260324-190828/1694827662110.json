@@ -1,0 +1,807 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.099Z",
+  "units": "mm",
+  "source": {
+    "id": "1694827662110",
+    "slug": "legacy-1694827662110",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1694827662110.json",
+    "savedAt": "2023-09-16T01:27:42.110Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1016,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 800,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1016,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "BAILEY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 135
+        },
+        "position": {
+          "x_px": 0.032,
+          "y_px": -152.158
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "OUR CHILDREN: RYAN | TIMOTHY | LINDSEY",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 268.447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "JAMES VINCENT",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -272.22,
+          "y_px": -5.935
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "\"JIM\"",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -284.446,
+          "y_px": 34.402
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "DEC. 19, 1954",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -278.414,
+          "y_px": 79.691
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "JUNE 26, 2012",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -284.414,
+          "y_px": 121.078
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "\"GRAMPA\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -276.414,
+          "y_px": 165.447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "ALICE GREGORY",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 250.672,
+          "y_px": -5.968
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "(BAY)",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 250.672,
+          "y_px": 32.032
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "AUG. 26, 1954",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 250.672,
+          "y_px": 81.032
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "\"GRAMMIE\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 248,
+          "y_px": 162.447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "WASHINGTON",
+        "font": {
+          "family": "Adorable",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 0.447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "OCT. 18, 1975",
+        "font": {
+          "family": "Adorable",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 153.447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-15",
+        "asset": "1_017_05",
+        "position": {
+          "x_px": -272,
+          "y_px": 68
+        },
+        "height_px": 317,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-16",
+        "asset": "1_017_05",
+        "position": {
+          "x_px": 252.768,
+          "y_px": 64
+        },
+        "height_px": 317,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_017_05",
+        "path": "/shapes/motifs/1_017_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c7e970f603b91571bf52efb7b1b12b3ec4f85310dac884f7b6671f1c8cc02ee7",
+    "sourceItemCount": 20,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.099Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4398,
+        "quantity": 1,
+        "width": 1016,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 760,
+        "init_height": 609,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1280x800"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 900,
+        "quantity": 1,
+        "width": 1200,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 760,
+        "init_height": 609,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "GILLIGAN",
+        "font": "138.47275731158604px Garamond",
+        "font_size": 135,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0.03231017770599465,
+        "y": -152.15831987075927,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 95,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "OUR CHILDREN: RYAN | TIMOTHY | LINDSEY",
+        "font": "34.874620359955px Lucida Calligraphy",
+        "font_size": 34,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": 268.4474959612278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "JAMES VINCENT",
+        "font": "38.97751687289088px Franklin Gothic",
+        "font_size": 38,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -272.2197092084007,
+        "y": -5.935379644588011,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "\"JIM\"",
+        "font": "38.97751687289088px Franklin Gothic",
+        "font_size": 38,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -284.4458804523425,
+        "y": 34.40226171243944,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "DEC. 19, 1954",
+        "font": "32.82317210348706px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -278.4135702746365,
+        "y": 79.6914378029079,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "JUNE 26, 2012",
+        "font": "32.82317210348706px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -284.4135702746365,
+        "y": 121.07754442649434,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "\"GRAMPA\"",
+        "font": "30.771723847019118px Adorable",
+        "font_size": 30,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -276.4135702746365,
+        "y": 165.4474959612278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "DIANE MARIE",
+        "font": "38.97751687289088px Franklin Gothic",
+        "font_size": 38,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 250.67205169628437,
+        "y": -5.967689822294005,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "(BAY)",
+        "font": "30.771723847019118px Franklin Gothic",
+        "font_size": 30,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 250.67205169628437,
+        "y": 32.032310177705995,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "AUG. 26, 1954",
+        "font": "32.82317210348706px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 250.67205169628437,
+        "y": 81.032310177706,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "\"GRAMMIE\"",
+        "font": "30.771723847019118px Adorable",
+        "font_size": 30,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 248,
+        "y": 162.4474959612278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 11
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1694828494464,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1694828494464flowers_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 450,
+        "y": -132,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.43383086079404004,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Flowers.PNG",
+        "price": 0,
+        "quantity": 1,
+        "size": 129,
+        "width": "108",
+        "height": "132",
+        "itemID": 13
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1694828556242,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1694828556242windmill_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -450,
+        "y": -122,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5010914593667594,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Windmill.PNG",
+        "price": 0,
+        "quantity": 1,
+        "size": 149,
+        "width": "104",
+        "height": "153",
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_05",
+        "item": "1_017_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -272,
+        "y": 68,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 317,
+        "ratio": 0.5283333333333333,
+        "itemID": 15
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_05",
+        "item": "1_017_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 252.76795750140604,
+        "y": 64,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 317,
+        "ratio": 0.5283333333333333,
+        "itemID": 16
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1694829430900,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1694829430900rings_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -8,
+        "y": 76,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.38338541186450054,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Rings.PNG",
+        "price": 80,
+        "quantity": 1,
+        "size": 114,
+        "width": "187",
+        "height": "117",
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "MARRIED",
+        "font": "28.72027559055118px Adorable",
+        "font_size": 28,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": 0.4474959612277871,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "OCT. 18, 1975",
+        "font": "28.72027559055118px Adorable",
+        "font_size": 28,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8,
+        "y": 153.4474959612278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 19
+      }
+    ]
+  }
+}

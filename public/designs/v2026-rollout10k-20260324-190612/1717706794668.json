@@ -1,0 +1,410 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.819Z",
+  "units": "mm",
+  "source": {
+    "id": "1717706794668",
+    "slug": "legacy-1717706794668",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1717706794668.json",
+    "savedAt": "2024-06-06T20:46:34.668Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 20",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 774.6999999999999,
+      "height_mm": 1069
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 774.6999999999999,
+      "height_mm": 1069,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "MORRIS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 6.589,
+          "y_px": -194.844
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "LOVING MEMORY OF",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 13.441,
+          "y_px": -155.863
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "A Wonderful Mother, Wife,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 10.278,
+          "y_px": -107.767
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Daughter, Sister, Auntie & Friend.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 3.69,
+          "y_px": -64.283
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Cordelia Diaz",
+        "font": {
+          "family": "Garamond",
+          "size_px": 66
+        },
+        "position": {
+          "x_px": -7.907,
+          "y_px": -12.13
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "1972 - 2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 64
+        },
+        "position": {
+          "x_px": -10.806,
+          "y_px": 40.837
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Rest In Peace",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -8.17,
+          "y_px": 124.692
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "acdefaaa4e073739f2aa115d8f189380e234029d10d75fd5084f021484709ca5",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.819Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 20",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 3101.74,
+        "quantity": 1,
+        "width": 774.6999999999999,
+        "height": 1069,
+        "_length": 100,
+        "init_width": 412,
+        "init_height": 777,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x915"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1717707021301,
+        "path": "../upload/2024/06/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1717707021301demetriou__theo_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 8.433622045424386,
+        "y": -296.29860039309955,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3296455255734763,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Demetriou - Theo.jpg",
+        "price": 340,
+        "quantity": 1,
+        "size": "100 x 130 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 2,
+        "label": "IN",
+        "font": "49.32004209541627px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 6.588732191659801,
+        "y": -194.84391180792014,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "LOVING MEMORY OF",
+        "font": "49.32004209541627px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 13.440980040911313,
+        "y": -155.86348835226303,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 22,
+        "label": "A Wonderful Mother, Wife,",
+        "font": "49.32004209541627px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 10.278471863385562,
+        "y": -107.76728905103657,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 30,
+        "label": "Daughter, Sister, Auntie & Friend.",
+        "font": "49.32004209541627px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 3.689699635922352,
+        "y": -64.28333632221519,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 12,
+        "label": "Helen Michael",
+        "font": "65.10245556594948px Garamond",
+        "font_size": 66,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -7.906550694437897,
+        "y": -12.129865879262281,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 9,
+        "label": "1972 - 2021",
+        "font": "63.12965388213283px Garamond",
+        "font_size": 64,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -10.805543214371937,
+        "y": 40.83719469812695,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Rest In Peace",
+        "font": "49.32004209541627px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -8.170106387832789,
+        "y": 124.69174061967638,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 7
+      }
+    ]
+  }
+}

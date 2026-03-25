@@ -1,0 +1,488 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:46.415Z",
+  "units": "mm",
+  "source": {
+    "id": "1689995594186",
+    "slug": "legacy-1689995594186",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1689995594186.json",
+    "savedAt": "2023-07-22T03:13:14.186Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 501.6499999999995
+    },
+    "viewportPx": {
+      "width": 820,
+      "height": 1180,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 501.6499999999995,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "What it ment to lose you, no one will ever know",
+        "font": {
+          "family": "Adorable",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -25,
+          "y_px": 413
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Our hearts still ache in sadness and secret tears will flow,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 360
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In loving memory",
+        "font": {
+          "family": "Adorable",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -16,
+          "y_px": -382
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "7-5-1966",
+        "font": {
+          "family": "Adorable",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -250,
+          "y_px": -118
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "29-12-2016",
+        "font": {
+          "family": "Adorable",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 250,
+          "y_px": -119
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "(Punthamara)",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 26
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Aged 50",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -17,
+          "y_px": 78
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Loving mother of Phillip & Jake",
+        "font": {
+          "family": "Adorable",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -22,
+          "y_px": 282
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Dorothy Reid",
+        "font": {
+          "family": "Adorable",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -308
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2d9b4dea78645811658c570550fe6ebab2aebba820261522e4973fc01add0500",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:46.415Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2079.31,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 501.6499999999995,
+        "_length": 80,
+        "init_width": 940,
+        "init_height": 649,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 820x1180"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "What it ment to lose you, no one will ever know",
+        "font": "49.82480314960631px Adorable",
+        "font_size": 24,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -25,
+        "y": 413,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 50,
+        "label": "Our hearts still ache in sadness and secret tears will flow,",
+        "font": "49.82480314960631px Adorable",
+        "font_size": 24,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": 360,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 7
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1689659393928,
+        "path": "../upload/2023/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1689659393928img_1892_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -15,
+        "y": -132,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7665354330708664,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1892.jpeg",
+        "price": 400,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In loving memory",
+        "font": "58.12893700787403px Adorable",
+        "font_size": 28,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -16,
+        "y": -382,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "7-5-1966",
+        "font": "58.12893700787403px Adorable",
+        "font_size": 28,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -250,
+        "y": -118,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "29-12-2016",
+        "font": "58.12893700787403px Adorable",
+        "font_size": 28,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 250,
+        "y": -119,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "(Punthamara)",
+        "font": "41.52066929133859px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -14,
+        "y": 26,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Aged 50",
+        "font": "41.52066929133859px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -17,
+        "y": 78,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Loving mother of Phillip & Jake",
+        "font": "51.900836614173244px Adorable",
+        "font_size": 25,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -22,
+        "y": 282,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Susan Jane Booth",
+        "font": "74.73720472440947px Adorable",
+        "font_size": 36,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": -308,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 1
+      }
+    ]
+  }
+}

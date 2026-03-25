@@ -1,0 +1,308 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.166Z",
+  "units": "mm",
+  "source": {
+    "id": "1591326612944",
+    "slug": "legacy-1591326612944",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1591326612944.json",
+    "savedAt": "2020-06-05T03:10:12.944Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Oval (Portrait)",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 80,
+      "height_mm": 100
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 668,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 80,
+      "height_mm": 100,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "one",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -38,
+          "y_px": -98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "two",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -92,
+          "y_px": -9
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "three",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 45,
+          "y_px": 103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#19988b",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_140_09",
+        "position": {
+          "x_px": -25,
+          "y_px": -221
+        },
+        "height_px": 30,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f6303e",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_140_09",
+        "position": {
+          "x_px": 57.043,
+          "y_px": 189
+        },
+        "height_px": 30,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f6303e",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_140_09",
+        "path": "/shapes/motifs/1_140_09.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "76ae340e649b94caff48aa90b8c601471d2733abb0f323fd56900e3d2f8395da",
+    "sourceItemCount": 6,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.166Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "name": "Oval (Portrait)",
+        "shape": "Oval (Portrait)",
+        "color": "1591326617209img_2361_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/ceramic/l/01.jpg",
+        "price": "260.00",
+        "quantity": 1,
+        "width": 80,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 668,
+        "backgroundOption": "photo"
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_09",
+        "item": "1_140_09",
+        "price": 0,
+        "quantity": 1,
+        "color": "#f6303e",
+        "colorName": "Paint Fill",
+        "x": -25,
+        "y": -221,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 30,
+        "ratio": 0.044444444444444446,
+        "itemID": 1
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_09",
+        "item": "1_140_09",
+        "price": 0,
+        "quantity": 1,
+        "color": "#f6303e",
+        "colorName": "Paint Fill",
+        "x": 57.04346666666652,
+        "y": 189,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 30,
+        "ratio": 0.044444444444444446,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "one",
+        "font": "130.26px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -38,
+        "y": -98,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "two",
+        "font": "130.26px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Paint Fill",
+        "x": -92,
+        "y": -9,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "three",
+        "font": "130.26px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#19988b",
+        "colorName": "Paint Fill",
+        "x": 45,
+        "y": 103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      }
+    ]
+  }
+}

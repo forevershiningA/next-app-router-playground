@@ -1,0 +1,424 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.622Z",
+  "units": "mm",
+  "source": {
+    "id": "1705838761927",
+    "slug": "legacy-1705838761927",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1705838761927.json",
+    "savedAt": "2024-01-21T12:06:01.927Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1047.75
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1047.75,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Slattery",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -534.063,
+          "y_px": 110.052
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Slattery",
+        "font": {
+          "family": "Arial",
+          "size_px": 81
+        },
+        "position": {
+          "x_px": -22.923,
+          "y_px": -231.16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Travis Gonzales",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -7.123,
+          "y_px": -150.607
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "His Granddaughter Mary Mc Grath Died 1925 aged 1 Month",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 1.225,
+          "y_px": -86.087
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "His Daughter Margaret McGrath Died 1932 aged 38",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 25.203,
+          "y_px": -21.31
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "His Wife Margaret Died 1943 Aged 82",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 10.184,
+          "y_px": 46.389
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "RIP",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 0.708,
+          "y_px": 263.855
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Erected by Margarets Son Patrick&apos;s Children Feb 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -1.92,
+          "y_px": 149.597
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b620302a824e40ad9157f5c60a0e24b6d9f4f21c9ea7b251b0e46ac34123d3a9",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.622Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 7202.66,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1047.75,
+        "_length": 100,
+        "init_width": 996,
+        "init_height": 577,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1280x720"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Slattery",
+        "font": "29.300781250000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -534.062502966162,
+        "y": 110.05241788682235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Slattery",
+        "font": "47.467265625px Arial",
+        "font_size": 81,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -22.923126083206625,
+        "y": -231.1597260172078,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 76,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Michael Died 1920 Aged 60",
+        "font": "29.300781250000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -7.123120300751907,
+        "y": -150.60696001638613,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "His Granddaughter Mary Mc Grath Died 1925 aged 1 Month",
+        "font": "29.300781250000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.2246240601502905,
+        "y": -86.08735023915563,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "His Daughter Margaret McGrath Died 1932 aged 38",
+        "font": "29.300781250000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 25.203007518796994,
+        "y": -21.310310926214186,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "His Wife Margaret Died 1943 Aged 82",
+        "font": "29.300781250000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 10.184210526315837,
+        "y": 46.38864756943275,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "RIP",
+        "font": "29.300781250000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0.7077067669172266,
+        "y": 263.85489552860383,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "Erected by Margarets Son Patrick&apos;s Children Feb 2024",
+        "font": "29.300781250000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.9201127819549129,
+        "y": 149.59730167654038,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 8
+      }
+    ]
+  }
+}

@@ -1,0 +1,362 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.994Z",
+  "units": "mm",
+  "source": {
+    "id": "1605161138216",
+    "slug": "legacy-1605161138216",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1605161138216.json",
+    "savedAt": "2020-11-12T06:05:38.216Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/African-Red-TILE-900-X-900LR.jpg",
+      "texture": "/textures/forever/l/African-Red-TILE-900-X-900LR.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 591,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Red-TILE-900-X-900LR.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "butterfly_004",
+        "position": {
+          "x_px": -199,
+          "y_px": -163
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "butterfly_028",
+        "position": {
+          "x_px": 196,
+          "y_px": -159
+        },
+        "height_px": 66,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "butterfly_004",
+        "position": {
+          "x_px": -198,
+          "y_px": 205
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "butterfly_004",
+        "position": {
+          "x_px": 188,
+          "y_px": 207
+        },
+        "height_px": 84,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_003_16",
+        "position": {
+          "x_px": -496,
+          "y_px": -81
+        },
+        "height_px": 47,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_004",
+        "path": "/shapes/motifs/butterfly_004.svg"
+      },
+      {
+        "id": "butterfly_028",
+        "path": "/shapes/motifs/butterfly_028.svg"
+      },
+      {
+        "id": "1_003_16",
+        "path": "/shapes/motifs/1_003_16.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f521e5e6f38216de652cc60d459abced3a189b8e07b0c83cbb38f81e23608190",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.994Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Red-TILE-900-X-900LR.jpg",
+        "price": 1220.19,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 591,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 552,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 591,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_004",
+        "item": "butterfly_004",
+        "price": 195.58845800000003,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -199,
+        "y": -163,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 60,
+        "ratio": 0.10152284263959391,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_028",
+        "item": "butterfly_028",
+        "price": 197.8867904,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": 196,
+        "y": -159,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 66,
+        "ratio": 0.1116751269035533,
+        "itemID": 6
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1605161651648,
+        "path": "../upload/2020/11/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "160516165164813412118_175059694515709.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.667442084942085,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "13412118_1750596945157094_2404607464474654202_o.jpg",
+        "price": 980,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 9
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_004",
+        "item": "butterfly_004",
+        "price": 199.4021744,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -198,
+        "y": 205.00000000000003,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.116751269035533,
+        "itemID": 11
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_004",
+        "item": "butterfly_004",
+        "price": 206.87806880000002,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 188,
+        "y": 207.00000000000003,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 84,
+        "ratio": 0.14213197969543148,
+        "itemID": 12
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_003_16",
+        "item": "1_003_16",
+        "price": 195.76700000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -496,
+        "y": -81,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 47,
+        "ratio": 0.056220095693779906,
+        "itemID": 13
+      }
+    ]
+  }
+}

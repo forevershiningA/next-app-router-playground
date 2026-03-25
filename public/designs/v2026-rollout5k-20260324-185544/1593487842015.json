@@ -1,0 +1,176 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.327Z",
+  "units": "mm",
+  "source": {
+    "id": "1593487842015",
+    "slug": "legacy-1593487842015",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1593487842015.json",
+    "savedAt": "2020-06-30T03:30:42.015Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 26",
+    "material": {
+      "name": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Sandstone-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 900,
+      "height_mm": 1200
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 464,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 1200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Sandstone-TILE-900-X-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_108_03",
+        "position": {
+          "x_px": 0.193,
+          "y_px": -74.667
+        },
+        "height_px": 106,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_108_03",
+        "path": "/shapes/motifs/1_108_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "890eddc402986591ab6ba42492b964192c0aae13b9f5f0e526e8ad617d5b3c21",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.328Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 21",
+        "shape": "Headstone 26",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+        "price": "3201.88",
+        "quantity": 1,
+        "width": 900,
+        "height": 1200,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 464
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1593488583788,
+        "path": "../upload/2020/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1593488583788images_cropped.jpg",
+        "color": 2,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.18911637931034483,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "images.jpeg",
+        "price": 440,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_108_03",
+        "item": "1_108_03",
+        "price": 215.83068000000003,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0.19281005859375,
+        "y": -74.66748046875,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 106,
+        "ratio": 0.17235772357723578,
+        "itemID": 4
+      }
+    ]
+  }
+}

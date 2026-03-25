@@ -1,0 +1,311 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.696Z",
+  "units": "mm",
+  "source": {
+    "id": "1744210221233",
+    "slug": "legacy-1744210221233",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1744210221233.json",
+    "savedAt": "2025-04-09T14:50:21.233Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 539.75,
+      "height_mm": 450.85
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 539.75,
+      "height_mm": 450.85,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Mulej",
+        "font": {
+          "family": "Garamond",
+          "size_px": 62
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -247.003
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Angela  12.08.1913 - 13.09.2006",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -96.169
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Erika      26.08.1957 - 17.03.2025",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -8.024
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "dove_004",
+        "position": {
+          "x_px": 326,
+          "y_px": -244.978
+        },
+        "height_px": 126,
+        "rotation": {
+          "z_deg": -14
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "dove_004",
+        "position": {
+          "x_px": -309.188,
+          "y_px": -238.905
+        },
+        "height_px": 126,
+        "rotation": {
+          "z_deg": 10
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_004",
+        "path": "/shapes/motifs/dove_004.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "48072bf5a3ed238ce09362942cc5f8f949fddb84ac78d7f2fde09d7e911da714",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.696Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1796.1,
+        "quantity": 1,
+        "width": 539.75,
+        "height": 450.85,
+        "_length": 80,
+        "init_width": 414,
+        "init_height": 658,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 326,
+        "y": -244.97846153846154,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -14,
+        "height": 126,
+        "ratio": 0.1072340425531915,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -309.18805688212626,
+        "y": -238.9046153846154,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 10,
+        "height": 126,
+        "ratio": 0.1072340425531915,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Mulej",
+        "font": "92.73293191292265px Garamond",
+        "font_size": 62,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": -247.00307692307695,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Angela  12.08.1913 - 13.09.2006",
+        "font": "59.827698008337194px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8,
+        "y": -96.16923076923078,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Erika      26.08.1957 - 17.03.2025",
+        "font": "59.827698008337194px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": -8.023706508875746,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      }
+    ]
+  }
+}

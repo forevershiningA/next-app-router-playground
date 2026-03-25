@@ -1,0 +1,396 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.980Z",
+  "units": "mm",
+  "source": {
+    "id": "1694478735766",
+    "slug": "legacy-1694478735766",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1694478735766.json",
+    "savedAt": "2023-09-12T00:32:15.766Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 0.8999999761581421
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -8.996,
+          "y_px": -279.655
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Morton Torres",
+        "font": {
+          "family": "Garamond",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": -0.9,
+          "y_px": -208.795
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "7-3-1953",
+        "font": {
+          "family": "Garamond",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -143.93,
+          "y_px": 189.378
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "26-8-2016",
+        "font": {
+          "family": "Garamond",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 154.725,
+          "y_px": 189.998
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Loving Father, Pop and Grandpop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -1.799,
+          "y_px": 288.827
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "MCKINNEY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 97
+        },
+        "position": {
+          "x_px": -8.096,
+          "y_px": 455.181
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3aa4780faa5abedfae6dc64ebbc081a550d1ab8ed60b17be88b783e614c842c5",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.980Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1434.94,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1832,
+        "init_height": 1012.0069427490234,
+        "device": "desktop",
+        "dpr": 0.8999999761581421,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 580,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 130,
+        "init_width": 1832,
+        "init_height": 1012.0069427490234,
+        "mode": "2d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1694479095291,
+        "path": "../upload/2023/09/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1694479095291roland_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -10.79477996518608,
+        "y": -19.78267551044138,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6005315764918651,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Roland.jpg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "54.55078707957979px Garamond",
+        "font_size": 43,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -8.995649970988325,
+        "y": -279.65509471578514,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Roland James",
+        "font": "69.77426254364858px Garamond",
+        "font_size": 55,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -0.8995649970987643,
+        "y": -208.79525603248916,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 8,
+        "label": "7-3-1953",
+        "font": "60.893901856275114px Garamond",
+        "font_size": 48,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -143.93039953581228,
+        "y": 189.3779410962917,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "26-8-2016",
+        "font": "64.69977072229231px Garamond",
+        "font_size": 51,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 154.7251795009978,
+        "y": 189.99841549304267,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 27,
+        "label": "Loving Father, Pop and Grandpop",
+        "font": "55.81941003491885px Garamond",
+        "font_size": 44,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -1.7991299941977559,
+        "y": 288.826755104414,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 8,
+        "label": "BARTLETT",
+        "font": "123.0564266678893px Garamond",
+        "font_size": 97,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -8.096084973889333,
+        "y": 455.18107189676186,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 7
+      }
+    ]
+  }
+}

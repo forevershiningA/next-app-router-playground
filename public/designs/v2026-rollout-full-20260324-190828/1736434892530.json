@@ -1,0 +1,411 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.070Z",
+  "units": "mm",
+  "source": {
+    "id": "1736434892530",
+    "slug": "legacy-1736434892530",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1736434892530.json",
+    "savedAt": "2025-01-09T15:01:32.530Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 1050,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Bertrand Stone",
+        "font": {
+          "family": "Adorable",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -312
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Loving wife, mother, and grandmother",
+        "font": {
+          "family": "Adorable",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -22,
+          "y_px": -73
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "February 21, 1935 - August 21, 1998",
+        "font": {
+          "family": "Adorable",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -48,
+          "y_px": -189
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "for they shall see God\" ",
+        "font": {
+          "family": "Adorable",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": 651
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Matthew 5:8: \"Blessed are the pure in heart,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -38,
+          "y_px": 581
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4a5478d6fb1a09a29b2e3017d46636d556b394fa21a6e0c020177682b53d5cb3",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.070Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1440,
+        "init_height": 864,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1680x1050"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 650,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1440,
+        "init_height": 864,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Margaret Kathryn Gillespie",
+        "font": "113.70978627671542px Adorable",
+        "font_size": 48,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": -312,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Loving wife, mother, and grandmother",
+        "font": "63.96175478065242px Adorable",
+        "font_size": 27,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -22,
+        "y": -73,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "February 21, 1935 - August 21, 1998",
+        "font": "59.22384701912261px Adorable",
+        "font_size": 25,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -48,
+        "y": -189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "for they shall see God\" ",
+        "font": "49.74803149606299px Adorable",
+        "font_size": 21,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -18,
+        "y": 651,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "Matthew 5:8: \"Blessed are the pure in heart,",
+        "font": "49.74803149606299px Adorable",
+        "font_size": 21,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -38,
+        "y": 581,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1736215922811,
+        "path": "../upload/2025/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1736215922811screenshot_20250106_at_9.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -570,
+        "y": -570,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6854611923509561,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot 2025-01-06 at 9.11.08 PM.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 125,
+        "width": "299",
+        "height": "296",
+        "itemID": 6
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1736216631450,
+        "path": "../upload/2025/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1736216631450screenshot_20250106_at_9.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 580,
+        "y": -576,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6690101237345332,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot 2025-01-06 at 9.22.14 PM.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 122,
+        "width": "290",
+        "height": "289",
+        "itemID": 7
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1736434917867,
+        "path": "../upload/2025/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1736434917867best_mom_pic_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -38,
+        "y": 252,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.1515748031496063,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "best mom pic.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 210,
+        "width": "396",
+        "height": "497",
+        "itemID": 8
+      }
+    ]
+  }
+}

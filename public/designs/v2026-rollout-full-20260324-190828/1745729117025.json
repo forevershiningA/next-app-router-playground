@@ -1,0 +1,406 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.861Z",
+  "units": "mm",
+  "source": {
+    "id": "1745729117025",
+    "slug": "legacy-1745729117025",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1745729117025.json",
+    "savedAt": "2025-04-27T04:45:17.025Z"
+  },
+  "product": {
+    "id": "102",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 762,
+      "height_mm": 152.39999999999998
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 960,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 762,
+      "height_mm": 152.39999999999998,
+      "thickness_mm": 76.19999999999999,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 933.4499999999999,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "\"Mom, Sis, Honey, Friend\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 47.787
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -26.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "May 18, 1988 - March 25, 2025",
+        "font": {
+          "family": "Garamond",
+          "size_px": 41.04
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -26.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Rest In Peace",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -26.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Brittany N. Wright",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "2_155_17",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 178,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "cross_010",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 56,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_155_17",
+        "path": "/shapes/motifs/2_155_17.svg"
+      },
+      {
+        "id": "cross_010",
+        "path": "/shapes/motifs/cross_010.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c2b07c4492795644af62972472076c68a9c35135825dba1ea47e66cba36e4844",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.861Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1367.7,
+        "quantity": 1,
+        "width": 762,
+        "height": 152.39999999999998,
+        "_length": 76.19999999999999,
+        "init_width": 1288,
+        "init_height": 760,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "3d",
+        "navigator": "Edge (chromium based) (desktop), 1536x960"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 854.81,
+        "quantity": 1,
+        "width": 933.4499999999999,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1288,
+        "init_height": 760,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 22,
+        "label": "\"Mom, Sis, Honey, Friend\"",
+        "font": "184.76377952755908px Garamond",
+        "font_size": 47.78704138508186,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1,
+        "y": -26.4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 23,
+        "label": "May 18, 1988 - March 25, 2025",
+        "font": "184.76377952755908px Garamond",
+        "font_size": 41.03956571098047,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -26.4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "Rest In Peace",
+        "font": "184.76377952755908px Lucida Calligraphy",
+        "font_size": 32,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -26.4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 16,
+        "label": "Brittany N. Wright",
+        "font": "184.76377952755908px Lucida Calligraphy",
+        "font_size": 57,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 1
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_17",
+        "item": "2_155_17",
+        "price": 246.702565,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -90,
+        "height": 178,
+        "ratio": 0.21215733015494637,
+        "itemID": 6
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_010",
+        "item": "cross_010",
+        "price": 218.062455,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 56,
+        "ratio": 0.23430962343096234,
+        "itemID": 10
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1745729634880,
+        "path": "../upload/2025/04/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1745729634880xq4t6w5y_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.43759842519685044,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "xq4t6w5y.png",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 12
+      }
+    ]
+  }
+}

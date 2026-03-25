@@ -1,0 +1,532 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.499Z",
+  "units": "mm",
+  "source": {
+    "id": "1724809572815",
+    "slug": "legacy-1724809572815",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1724809572815.json",
+    "savedAt": "2024-08-28T01:46:12.815Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 400,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 300,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Irene Norma Fitzgerald (Hay)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 104.471,
+          "y_px": -140.381
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "20/07/1959-31/01/2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 114.703,
+          "y_px": -69.386
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Sacred To The Memory Of",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 94.952,
+          "y_px": -208.57
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Cherished Wife of Eddy,",
+        "font": {
+          "family": "Arial",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 103.698,
+          "y_px": -27.862
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "and Their  Partners",
+        "font": {
+          "family": "Arial",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 51.876
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Forever in our Hearts",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -7.496,
+          "y_px": 122.837
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Charley Stanley",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 1.249,
+          "y_px": 167.799
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Life&apos;s A Dance",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 14.992,
+          "y_px": 239.76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loving Mother of Wayne, Kimberlee and Edmund",
+        "font": {
+          "family": "Arial",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 9.995,
+          "y_px": 13.876
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Much Loved Grandmother, Sister, and Aunt",
+        "font": {
+          "family": "Arial",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 81.876
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0188e5051f0388587750087a17f0fb2fe3ff1396c515ca06b65715220abe8087",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.499Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 1427.12,
+        "quantity": 1,
+        "width": 400,
+        "height": 300,
+        "_length": 10,
+        "init_width": 798,
+        "init_height": 695,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240731,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 25,
+        "label": "Irene Norma Fitzgerald (Hay)",
+        "font": "42.3515625px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 104.47117794486218,
+        "y": -140.38129496402877,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 2
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1724803045165,
+        "path": "../upload/2024/08/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1724803045165rene_photos_0002_0001_cr.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -282,
+        "y": -149,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.48679956896551724,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Rene Photos_0002_0001.jpg",
+        "price": 270,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 21,
+        "label": "20/07/1959-31/01/2024",
+        "font": "42.3515625px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 114.703007518797,
+        "y": -69.38561151079136,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Sacred To The Memory Of",
+        "font": "42.3515625px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 94.95238095238096,
+        "y": -208.56978417266185,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Cherished Wife of Eddy,",
+        "font": "31.763671875px Arial",
+        "font_size": 15,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 103.69799498746875,
+        "y": -27.86187050359706,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "and Their  Partners",
+        "font": "35.998828125px Arial",
+        "font_size": 17,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 51.876258992805845,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever in our Hearts",
+        "font": "38.116406250000004px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7.496240601503871,
+        "y": 122.8374100719426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Gods Tender Care",
+        "font": "38.116406250000004px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1.249373433583969,
+        "y": 167.79856115107907,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Life&apos;s A Dance",
+        "font": "40.233984375px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 14.992481203007515,
+        "y": 239.75971223021577,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "Loving Mother of Wayne, Kimberlee and Edmund",
+        "font": "29.646093750000002px Arial",
+        "font_size": 14,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 9.994987468671638,
+        "y": 13.876258992805845,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Much Loved Grandmother, Sister, and Aunt",
+        "font": "31.763671875px Arial",
+        "font_size": 15,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 81.87625899280584,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 8
+      }
+    ]
+  }
+}

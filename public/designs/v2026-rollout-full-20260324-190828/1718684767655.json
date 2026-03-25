@@ -1,0 +1,317 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.217Z",
+  "units": "mm",
+  "source": {
+    "id": "1718684767655",
+    "slug": "legacy-1718684767655",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1718684767655.json",
+    "savedAt": "2024-06-18T04:26:07.655Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 150,
+      "height_mm": 100
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 824,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 150,
+      "height_mm": 100,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "MURRAY PEREZ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 20.039,
+          "y_px": -186.976
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "2003  to 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 30.322,
+          "y_px": -49.528
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "OFF ON HIS ROAD TRIP",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 1.846,
+          "y_px": 270.545
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_188_15",
+        "position": {
+          "x_px": -307.441,
+          "y_px": 87.03
+        },
+        "height_px": 22,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_192_17",
+        "position": {
+          "x_px": 258.135,
+          "y_px": 90.95
+        },
+        "height_px": 22,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_188_15",
+        "path": "/shapes/motifs/1_188_15.svg"
+      },
+      {
+        "id": "1_192_17",
+        "path": "/shapes/motifs/1_192_17.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4a4a401c67b200fb7de8a6db15761884a10fd8d90c846bbe6be80d521a39e03f",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.217Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (No drilled holes)",
+        "price": 218.87,
+        "quantity": 1,
+        "width": 150,
+        "height": 100,
+        "_length": 2,
+        "init_width": 384,
+        "init_height": 633,
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x824"
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_188_15",
+        "item": "1_188_15",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -307.44140625,
+        "y": 87.03000585937492,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 22,
+        "ratio": 0.05405405405405406,
+        "itemID": 4
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_192_17",
+        "item": "1_192_17",
+        "price": 14.041300000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 258.134765625,
+        "y": 90.95042958984354,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 22,
+        "ratio": 0.059782608695652176,
+        "itemID": 5
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "ALEX QUILTER",
+        "font": "140.39999999999998px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 20.0390625,
+        "y": -186.9758907641835,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "2003  to 2024",
+        "font": "140.39999999999998px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 30.322265625,
+        "y": -49.527642133833126,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "OFF ON HIS ROAD TRIP",
+        "font": "77.22px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1.845703125,
+        "y": 270.54481117064535,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 3
+      }
+    ]
+  }
+}

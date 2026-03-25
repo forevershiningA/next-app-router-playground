@@ -1,0 +1,343 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.103Z",
+  "units": "mm",
+  "source": {
+    "id": "1694907768209",
+    "slug": "legacy-1694907768209",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1694907768209.json",
+    "savedAt": "2023-09-16T23:42:48.209Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 432,
+      "height": 984,
+      "dpr": 2.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Jannie",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 71
+        },
+        "position": {
+          "x_px": 125.008,
+          "y_px": 92.939
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Erric",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 85
+        },
+        "position": {
+          "x_px": 99.055,
+          "y_px": 199.94
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Huff",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 73
+        },
+        "position": {
+          "x_px": 93.034,
+          "y_px": 323.937
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "forever in our hearts",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 41.094,
+          "y_px": -388.734
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7cae8d1494cfa462e3a0b8d5d8932b3d9b076a4129f4c738f270504d0f2f51fa",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.103Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 432,
+        "init_height": 778,
+        "device": "mobile",
+        "dpr": 2.5,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 432x984"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 635,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 432,
+        "init_height": 778,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1693764100403,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "169376410040312acrossonanarmtocommemo.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -260,
+        "y": 68,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.300826998374116,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "12-a-cross-on-an-arm-to-commemorate-a-dead-grandfather (3).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "341",
+        "width": "307",
+        "height": "506",
+        "itemID": 4
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1694907949044,
+        "path": "../upload/2023/09/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1694907949044gallery_1694904814957_cr.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 127.88158416748047,
+        "y": -148.93943786621094,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9155380633718118,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Gallery_1694904814957.png",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Thomas",
+        "font": "105.35935738444196px Lucida Calligraphy",
+        "font_size": 71,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 125.00830078125,
+        "y": 92.93943786621094,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Erric",
+        "font": "126.13444193912066px Lucida Calligraphy",
+        "font_size": 85,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 99.05453491210938,
+        "y": 199.9403076171875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 68,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "Huff",
+        "font": "108.32722660653891px Lucida Calligraphy",
+        "font_size": 73,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 93.03428649902344,
+        "y": 323.93658447265625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 86,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "forever in our hearts",
+        "font": "48.96984216459978px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 41.09429168701172,
+        "y": -388.73360443115234,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 5
+      }
+    ]
+  }
+}

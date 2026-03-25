@@ -1,0 +1,629 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.963Z",
+  "units": "mm",
+  "source": {
+    "id": "1752490684129",
+    "slug": "legacy-1752490684129",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1752490684129.json",
+    "savedAt": "2025-07-14T10:58:04.129Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 456,
+      "height_mm": 353
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 456,
+      "height_mm": 353,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Mele Kasinga Fine Paea - uaifi &apos;o Sione Koniseti Paea",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -232.105
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Perley Joseph",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Pea ko &apos;eku nofo &apos;i he fale &apos;o Sihova &apos;e fai pē &apos;o lauikuonga\".",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 252
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "&apos;I he manatu &apos;ofa kihe &apos;ongo fa&apos;e oku na toka heni",
+        "font": {
+          "family": "Arial",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -23,
+          "y_px": -272.941
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "May 1924 - August 1999",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": -184.95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Koe fa&apos;e kia",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -147.241
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Ongolea Pasikala, Mosese Paea, Manutala&apos;aho Vakalahi",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -109.164
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Naupuku Kata, Vaisiliva Tangi, Kalokati Paea,",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -68.928
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Rev. Venilaite Fine Paea, Alilia Topui",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": -21.452
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "21 May 1930 - 23 April 2024",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 90
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "&apos;Ofa lahi atu mei he fanau pea moe fanga mokopuna",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": 142
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "\"Tā &apos;e toupili mai &apos;a e lelei mo e &apos;alo&apos;ofa &apos;i hoku ngaahi &apos;aho kotoa",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 212
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-12",
+        "asset": "cross_004",
+        "position": {
+          "x_px": -320,
+          "y_px": 21
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_004",
+        "path": "/shapes/motifs/cross_004.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fa997d3f38e95f87c7f281a3740fefc7b73907fcc71ca2582eb082b8ae972542",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.963Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 3,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Screws (visible from front)",
+        "price": 1782.49,
+        "quantity": 1,
+        "width": 456,
+        "height": 353,
+        "_length": 10,
+        "init_width": 1680,
+        "init_height": 847,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250629,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 44,
+        "label": "Mele Kasinga Fine Paea - uaifi &apos;o Sione Koniseti Paea",
+        "font": "36.2203947368421px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6,
+        "y": -232.10526315789474,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 21,
+        "label": "Vaioleti Matamoana Fine",
+        "font": "36.2203947368421px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 7,
+        "y": 51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 10
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_004",
+        "item": "cross_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -320,
+        "y": 21,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.5050505050505051,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 50,
+        "label": "Pea ko &apos;eku nofo &apos;i he fale &apos;o Sihova &apos;e fai pē &apos;o lauikuonga\".",
+        "font": "28.976315789473684px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 9,
+        "y": 252,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 40,
+        "label": "&apos;I he manatu &apos;ofa kihe &apos;ongo fa&apos;e oku na toka heni",
+        "font": "21.732236842105262px Arial",
+        "font_size": 12,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -23,
+        "y": -272.9407894736842,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "May 1924 - August 1999",
+        "font": "28.976315789473684px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7,
+        "y": -184.94956140350877,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Koe fa&apos;e kia",
+        "font": "28.976315789473684px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": -147.24122807017545,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 47,
+        "label": "Ongolea Pasikala, Mosese Paea, Manutala&apos;aho Vakalahi",
+        "font": "28.976315789473684px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": -109.16447368421052,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "Naupuku Kata, Vaisiliva Tangi, Kalokati Paea,",
+        "font": "28.976315789473684px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -68.9276315789474,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Rev. Venilaite Fine Paea, Alilia Topui",
+        "font": "28.976315789473684px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6,
+        "y": -21.451754385964932,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "21 May 1930 - 23 April 2024",
+        "font": "28.976315789473684px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 9,
+        "y": 90,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "&apos;Ofa lahi atu mei he fanau pea moe fanga mokopuna",
+        "font": "28.976315789473684px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 5,
+        "y": 142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 55,
+        "label": "\"Tā &apos;e toupili mai &apos;a e lelei mo e &apos;alo&apos;ofa &apos;i hoku ngaahi &apos;aho kotoa",
+        "font": "28.976315789473684px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 1,
+        "y": 212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 14
+      }
+    ]
+  }
+}

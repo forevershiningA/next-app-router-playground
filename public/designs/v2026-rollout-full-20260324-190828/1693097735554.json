@@ -1,0 +1,591 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.866Z",
+  "units": "mm",
+  "source": {
+    "id": "1693097735554",
+    "slug": "legacy-1693097735554",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1693097735554.json",
+    "savedAt": "2023-08-27T00:55:35.554Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 750,
+      "height_mm": 900
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 750,
+      "height_mm": 900,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 850,
+      "height_mm": 100,
+      "depth_mm": "250",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Willis Carter",
+        "font": {
+          "family": "Garamond",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": -163.836
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -202.068
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "02/03/1991 - 08/04/2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 6.109
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Ian and Faith",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": 114.109
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Beloved Son of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -19,
+          "y_px": 95.684
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Keedan and Amelia",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -16,
+          "y_px": 56.563
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Devoted Father to",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 37.649
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Adored Brother to",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": 156.882
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Megan, Hayley and Dallas",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 178.435
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Rest In Peace",
+        "font": {
+          "family": "Garamond",
+          "size_px": 72
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 280.722
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Forever Loved Forever Missed",
+        "font": {
+          "family": "Garamond",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 228.722
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "029b4095991cddd1befc24f623e946dd53fbd816e5efb2130e3435ab1ba555aa",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.866Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2600.17,
+        "quantity": 1,
+        "width": 750,
+        "height": 900,
+        "_length": 100,
+        "init_width": 1126,
+        "init_height": 593,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1366x768"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 648,
+        "quantity": 1,
+        "width": 850,
+        "height": 100,
+        "_length": "250",
+        "init_width": 1126,
+        "init_height": 593,
+        "mode": "2d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1693098384639,
+        "path": "../upload/2023/08/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1693098384639lwb_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": -8,
+        "y": -81.05990033305787,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3504090909090909,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "LWB...jpg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 18,
+        "label": "Luke William Bathern",
+        "font": "34.6905px Garamond",
+        "font_size": 60,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -7,
+        "y": -163.8356928945728,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "26.596049999999998px Garamond",
+        "font_size": 46,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -9,
+        "y": -202.06756838537885,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "02/03/1991 - 08/04/2021",
+        "font": "27.174225px Garamond",
+        "font_size": 47,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -7,
+        "y": 6.108827237545948,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Ian and Faith",
+        "font": "20.8143px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -18,
+        "y": 114.10943859811336,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 12,
+        "label": "Beloved Son of",
+        "font": "21.392475px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -19,
+        "y": 95.68420373356139,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 15,
+        "label": "Keedan and Amelia",
+        "font": "21.392475px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -16,
+        "y": 56.562918850613244,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 15,
+        "label": "Devoted Father to",
+        "font": "19.65795px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -14,
+        "y": 37.64914597335155,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 15,
+        "label": "Adored Brother to",
+        "font": "21.392475px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -11,
+        "y": 156.88239339354956,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "Megan, Hayley and Dallas",
+        "font": "20.236125px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 178.43525645841402,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Rest In Peace",
+        "font": "41.6286px Garamond",
+        "font_size": 72,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3,
+        "y": 280.72222222222223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 25,
+        "label": "Forever Loved Forever Missed",
+        "font": "26.596049999999998px Garamond",
+        "font_size": 46,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 6,
+        "y": 228.72222222222223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 11
+      }
+    ]
+  }
+}

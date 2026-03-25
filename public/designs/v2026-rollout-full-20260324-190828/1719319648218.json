@@ -1,0 +1,300 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.251Z",
+  "units": "mm",
+  "source": {
+    "id": "1719319648218",
+    "slug": "legacy-1719319648218",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1719319648218.json",
+    "savedAt": "2024-06-25T12:47:28.218Z"
+  },
+  "product": {
+    "id": "22",
+    "name": "Laser-etched Black Granite Mini Headstone",
+    "type": "headstone",
+    "slug": "mini-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 846,
+      "dpr": 1.75
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 50,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Floy Schneider",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19.409
+        },
+        "position": {
+          "x_px": 5.234,
+          "y_px": 219.632
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Forever 28",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -5.559,
+          "y_px": 191.322
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 182.812,
+          "y_px": 179.382
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "59967c103568ee189a1f8b5b967fdcffcec4cd1aa7544ad2d356f204f8b5dfae",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.251Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "installationMethod": 2,
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Mini Headstone",
+        "price": 572.87,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 50,
+        "init_width": 412,
+        "init_height": 661.9999961853027,
+        "device": "mobile",
+        "dpr": 1.75,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x846"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1719240205156,
+        "path": "../upload/2024/06/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1719240205156screenshot_2023081019502.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -0.7031402067061947,
+        "y": -26.466001000329165,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.7910641993957706,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20230810-195023_Chrome.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "253",
+        "width": "416",
+        "height": "593",
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.054274084124830396,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 182.81244831178174,
+        "y": 179.38217688615228,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.054274084124830396,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Damien John Long",
+        "font": "45.47898707580567px Garamond",
+        "font_size": 19.40850830078125,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 5.234322687958468,
+        "y": 219.63242852555769,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Forever 28",
+        "font": "67.95425px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5.558597004818523,
+        "y": 191.32239732489398,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 3
+      }
+    ]
+  }
+}

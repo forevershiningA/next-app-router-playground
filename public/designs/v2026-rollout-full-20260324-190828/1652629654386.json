@@ -1,0 +1,454 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.131Z",
+  "units": "mm",
+  "source": {
+    "id": "1652629654386",
+    "slug": "legacy-1652629654386",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1652629654386.json",
+    "savedAt": "2022-05-15T15:47:34.386Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/backgrounds/colors/l/28.jpg",
+      "texture": "/textures/forever/l/28.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 740,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/28.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "METTA HIGGINS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -160.84,
+          "y_px": -311.104
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "BELOVED WIFE OF",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -234.932,
+          "y_px": -225.469
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "GEORGIA GRAVES",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -171.387,
+          "y_px": -164.483
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Dallas Barber 67 - 10th June 2017",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -195.461,
+          "y_px": -56.052
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "ALWAYS IN OUR HEARTS",
+        "font": {
+          "family": "Adorable",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -176.66,
+          "y_px": 24.13
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "ALTON NEAL",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -7.471,
+          "y_px": 314.367
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "REST IN PEACE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -137.373,
+          "y_px": 108.139
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "MUMMY, AAJI, NANI",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -145.283,
+          "y_px": 211.658
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e77baa6950c9436a990cbdc12aa1d95dcc7c96b6a2e556e6b4d29b337ba98eea",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.131Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "name": "Landscape",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/backgrounds/colors/l/28.jpg",
+        "price": 899,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 556,
+        "backgroundOption": "color",
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20220512,
+        "mode": "2d",
+        "navigator": "Linux armv8l, Google Inc., Mozilla/5.0 (Linux; Android 9; SM-G950F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.61 Mobile Safari/537.36, 360x740"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1652629720114,
+        "path": "../upload/2022/05/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1652629720114img0032c52011c99ab0a22b7.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 320.888671875,
+        "y": -57.9931640625,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.1829515335100336,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG-0032c52011c99ab0a22b71beea34ac74-V.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 219,
+        "width": "408",
+        "height": "607",
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "MANJULA DEVI",
+        "font": "91.44473684210526px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -160.83984375,
+        "y": -311.103515625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "BELOVED WIFE OF",
+        "font": "47.1078947368421px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -234.931640625,
+        "y": -225.46875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 13
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "MAHENDRA PRASAD",
+        "font": "58.192105263157885px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -171.38671875,
+        "y": -164.4833984375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 15
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "19th April 1967 - 10th June 2017",
+        "font": "47.1078947368421px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -195.4610042434802,
+        "y": -56.05172268435251,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 17
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "ALWAYS IN OUR HEARTS",
+        "font": "44.33684210526315px Adorable",
+        "font_size": 16,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -176.66015625,
+        "y": 24.1298828125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 18
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "AUM SHANTI SHANTI SHANTI",
+        "font": "52.64999999999999px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -7.470703125,
+        "y": 314.36669921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 20
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "REST IN PEACE",
+        "font": "55.42105263157894px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -137.373046875,
+        "y": 108.138671875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 21
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "MUMMY, AAJI, NANI",
+        "font": "74.81842105263156px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -145.283203125,
+        "y": 211.65771484375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 23
+      }
+    ]
+  }
+}

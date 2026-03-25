@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	
+	<meta charset="utf-8">
+	
+	<title>Engine3D</title>
+	
+	<meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	
+	
+	<link rel="shortcut icon" type="image/png" href="./favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	
+	
+	<script type="text/javascript" src="./lib/howler.min.js"></script>
+	<script type="text/javascript" src="./lib/pako.min.js"></script>
+	<script type="text/javascript" src="./lib/FileSaver.min.js"></script>
+	<script type="text/javascript" src="./lib/TweenLite.min.js"></script>
+	<script type="text/javascript" src="./lib/EasePack.min.js"></script>
+	<script type="text/javascript" src="./lib/lzma-d-min.js"></script>
+	<!--<script type="text/javascript" src="./Engine3D.obfuscated.js"></script>-->
+	<script type="text/javascript" src="./Engine3D.obfuscated.js"></script>
+	<!--<script type="text/javascript" src="./Loader.js"></script>-->
+	
+	<script>
+		window.addEventListener ("touchmove", function (event) { event.preventDefault (); }, { capture: false, passive: false });
+		if (typeof window.devicePixelRatio != 'undefined' && window.devicePixelRatio > 2) {
+			var meta = document.getElementById ("viewport");
+			meta.setAttribute ('content', 'width=device-width, initial-scale=' + (2 / window.devicePixelRatio) + ', user-scalable=no');
+		}
+	</script>
+	
+	<style>
+		html,body { margin: 0; padding: 0; height: 100%; overflow: hidden; }
+		#openfl-content { background: #000000; width: 100%; height: 100%; }
+
+	</style>
+	
+</head>
+<body>
+	
+	<noscript>This webpage makes extensive use of JavaScript. Please enable JavaScript in your web browser to view this page.</noscript>
+	
+	<div id="openfl-content"></div>
+	
+	<div id="uitop">
+		<ul id="headstones">
+			<li>cropped-peak.m3d</li>
+			<li>curved-gable.m3d</li>
+			<li>curved-peak.m3d</li>
+			<li>curved-top.m3d</li>
+			<li>gable.m3d</li>
+			<li>half-round.m3d</li>
+			<li>left-wave.m3d</li>
+			<li>peak.m3d</li>
+			<li>right-wave.m3d</li>
+			<li>serpentine.m3d</li>
+			<li>square.m3d</li>
+			<li>tempus-table.m3d</li>
+			<li>headstone_1.m3d</li>
+			<li>headstone_2.m3d</li>
+			<li>headstone_3.m3d</li>
+			<li>headstone_4.m3d</li>
+			<li>headstone_5.m3d</li>
+			<li>headstone_6.m3d</li>
+			<li>headstone_7.m3d</li>
+			<li>headstone_8.m3d</li>
+			<li>headstone_9.m3d</li>
+			<li>headstone_10.m3d</li>
+			<li>headstone_11.m3d</li>
+			<li>headstone_12.m3d</li>
+			<li>headstone_13.m3d</li>
+			<li>headstone_14.m3d</li>
+			<li>headstone_15.m3d</li>
+			<li>headstone_16.m3d</li>
+			<li>headstone_17.m3d</li>
+			<li>headstone_18.m3d</li>
+			<li>headstone_19.m3d</li>
+			<li>headstone_20.m3d</li>
+			<li>headstone_21.m3d</li>
+			<li>headstone_22.m3d</li>
+			<li>headstone_23.m3d</li>
+			<li>headstone_24.m3d</li>
+			<li>headstone_25.m3d</li>
+			<li>headstone_26.m3d</li>
+			<li>headstone_27.m3d</li>
+			<li>headstone_28.m3d</li>
+			<li>headstone_29.m3d</li>
+			<li>headstone_30.m3d</li>
+			<li>headstone_31.m3d</li>
+			<li>headstone_32.m3d</li>
+			<li>headstone_33.m3d</li>
+			<li>headstone_34.m3d</li>
+			<li>headstone_35.m3d</li>
+			<li>headstone_36.m3d</li>
+			<li>headstone_37.m3d</li>
+			<li>headstone_38.m3d</li>
+			<li>headstone_39.m3d</li>
+			<li>headstone_40.m3d</li>
+			<li>headstone_41.m3d</li>
+			<li>headstone_42.m3d</li>
+			<li>headstone_43.m3d</li>
+			<li>headstone_44.m3d</li>
+			<li>headstone_45.m3d</li>
+			<li>headstone_46.m3d</li>
+			<li>square_intest.m3d</li>
+		</ul>
+		<ul id="urns">
+			<li>heart-happy.m3d</li>
+			<li>heart-slim.m3d</li>
+			<li>oval.m3d</li>
+			<li>rectangle.m3d</li>
+			<li>teardrop.m3d</li>
+			<li>triangle.m3d</li>
+		</ul>
+		<ul id="size-btns">
+			<li class="w-plus">W+</li>
+			<li class="w-minus">W-</li>
+			<li class="h-plus">H+</li>
+			<li class="h-minus">H-</li>
+		</ul>
+	</div>
+	
+	<div id="uibottom">
+		<ul id="specials">
+			<li>Load base models</li>
+			<li>Add motif from url</li>
+			<li>Add motif from HTMLCanvasElement</li>
+		</ul>
+		<div id="textures">
+			<img src="textures/azul_noche.jpg" />
+			<img src="textures/balmoral.jpg" />
+			<img src="textures/baltic_brown.jpg" />
+			<img src="textures/baltic_green.jpg" />
+			<img src="textures/blues_in_the_night.jpg" />
+			<img src="textures/blues_in_the_night_bright.jpg" />
+			<img src="textures/hassan_green.jpg" />
+			<img src="textures/kosmin.jpg" />
+			<img src="textures/lablador_czarny.jpg" />
+			<img src="textures/lablador_niebieski.jpg" />
+		</div>
+	</div>
+	
+	<script type="text/javascript" src="./Main.js"></script>
+	
+</body>
+</html>

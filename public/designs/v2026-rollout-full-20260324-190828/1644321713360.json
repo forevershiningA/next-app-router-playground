@@ -1,0 +1,293 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.743Z",
+  "units": "mm",
+  "source": {
+    "id": "1644321713360",
+    "slug": "legacy-1644321713360",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1644321713360.json",
+    "savedAt": "2022-02-08T12:01:53.360Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/Chinese-Calca-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Chinese-Calca-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 445,
+      "height_mm": 455
+    },
+    "viewportPx": {
+      "width": 2048,
+      "height": 1152,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 445,
+      "height_mm": 455,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Chinese-Calca-TILE-900-X-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Benjamin Gordon",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -9.792,
+          "y_px": -175.22
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "HARVEY",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": -385.018
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Giles Lyons",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -11.894,
+          "y_px": -685.853
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "01.01.2016",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -0.842,
+          "y_px": 319.067
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "113348e1b1d3a4dd0cd7d183974ad4273eecb64c536128d884d91fcf45850085",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.743Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 22",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Chinese-Calca-TILE-900-X-900.jpg",
+        "price": 901.6,
+        "quantity": 1,
+        "width": 445,
+        "height": 455,
+        "_length": 1,
+        "init_width": 1808,
+        "init_height": 977,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220205,
+        "mode": "2d",
+        "navigator": "MacIntel, Google Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.80 Safari/537.36, 2048x1152"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1644327746974,
+        "path": "../upload/2022/02/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1644327746974160102_dmckinnis23162_2_.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -10,
+        "y": 54,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.4281332164767747,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "160102_dmckinnis-2316-2 2.jpg",
+        "price": 270,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 28
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "Tighe Stevenson",
+        "font": "175.85999999999999px Lucida Calligraphy",
+        "font_size": 42,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -9.791855203619889,
+        "y": -175.22017643786126,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 3,
+        "label": "REM",
+        "font": "221.91857142857143px Lucida Calligraphy",
+        "font_size": 53,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -24,
+        "y": -385.01805114746094,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 31
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 8,
+        "label": "Our Angel",
+        "font": "117.24px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -11.89366515837105,
+        "y": -685.8529411764706,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 10,
+        "label": "01.01.2016",
+        "font": "146.54999999999998px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -0.8416289592760222,
+        "y": 319.06715387888084,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 6
+      }
+    ]
+  }
+}

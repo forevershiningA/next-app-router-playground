@@ -1,0 +1,685 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.885Z",
+  "units": "mm",
+  "source": {
+    "id": "1677231767428",
+    "slug": "legacy-1677231767428",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1677231767428.json",
+    "savedAt": "2023-02-24T09:42:47.428Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 307,
+      "height_mm": 328
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 307,
+      "height_mm": 328,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Always together",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -200
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Love you always",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -97.341
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Peace perfect peace",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -52.415
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "A long life well lived",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -7.488
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Love you miss you",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 54.439
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Bronze Plaque - 24/02/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 306.994
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 336.433
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "She walked in beauty",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -142.268
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "1_154_07",
+        "position": {
+          "x_px": -267,
+          "y_px": -23
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_154_02",
+        "position": {
+          "x_px": -182,
+          "y_px": 132
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_154_15",
+        "position": {
+          "x_px": 265,
+          "y_px": 50
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_006_11",
+        "position": {
+          "x_px": 14,
+          "y_px": 155
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "1_155_15",
+        "position": {
+          "x_px": 256,
+          "y_px": -218
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_07",
+        "path": "/shapes/motifs/1_154_07.svg"
+      },
+      {
+        "id": "1_154_02",
+        "path": "/shapes/motifs/1_154_02.svg"
+      },
+      {
+        "id": "1_154_15",
+        "path": "/shapes/motifs/1_154_15.svg"
+      },
+      {
+        "id": "1_006_11",
+        "path": "/shapes/motifs/1_006_11.svg"
+      },
+      {
+        "id": "1_155_15",
+        "path": "/shapes/motifs/1_155_15.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d58381e9cdbcf8fe25b0b168a061925a528356c14d729e8387a7dfb32d8edf8d",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.885Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 1215.21,
+        "quantity": 1,
+        "width": 307,
+        "height": 328,
+        "_length": 10,
+        "init_width": 1680,
+        "init_height": 865,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230223,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Always together",
+        "font": "41.140243902439025px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -200,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Love you always",
+        "font": "41.140243902439025px Franklin Gothic",
+        "font_size": 16,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -97.34146341463415,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Peace perfect peace",
+        "font": "41.140243902439025px Dobkin",
+        "font_size": 16,
+        "font_family": "Dobkin",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": -52.414634146341484,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "A long life well lived",
+        "font": "41.140243902439025px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -7.487804878048781,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Love you miss you",
+        "font": "41.140243902439025px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -3,
+        "y": 54.43902439024396,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Bronze Plaque - 24/02/2023",
+        "font": "25.71265243902439px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 306.9939024390244,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "25.71265243902439px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 336.43292682926835,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "She walked in beauty",
+        "font": "46.2827743902439px Chopin Script",
+        "font_size": 18,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -142.2682926829268,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 2
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br150-waratah",
+        "color": "#ffb35a",
+        "x": -269,
+        "y": -257,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.29691284571621696,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br150-waratah",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_07",
+        "item": "1_154_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -267,
+        "y": -23,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.10416666666666667,
+        "itemID": 11
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_02",
+        "item": "1_154_02",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -182,
+        "y": 132,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04672897196261682,
+        "itemID": 12
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_15",
+        "item": "1_154_15",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 265,
+        "y": 50,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.10775862068965517,
+        "itemID": 13
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_006_11",
+        "item": "1_006_11",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 14,
+        "y": 155,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.1111111111111111,
+        "itemID": 14
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_15",
+        "item": "1_155_15",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 256,
+        "y": -218,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06589785831960461,
+        "itemID": 15
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1677231888067,
+        "path": "../upload/2023/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16772318880678965d701ca10b58bbee2f15c.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -12,
+        "y": -300,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.23753027657297357,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "8965d701ca10b58bbee2f15c13adc6f5.jpg",
+        "price": 180,
+        "quantity": 1,
+        "size": "30 x 40 mm",
+        "itemID": 16
+      }
+    ]
+  }
+}

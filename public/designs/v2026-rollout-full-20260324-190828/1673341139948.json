@@ -1,0 +1,201 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.587Z",
+  "units": "mm",
+  "source": {
+    "id": "1673341139948",
+    "slug": "legacy-1673341139948",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1673341139948.json",
+    "savedAt": "2023-01-10T08:58:59.948Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 900
+    },
+    "viewportPx": {
+      "width": 854,
+      "height": 480,
+      "dpr": 1.125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 900,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Lola Douglas",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -7.873,
+          "y_px": -82.04
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c90133c1c4223aac183e8d5738783f5c076acf96be5c589e7e85ef91393a1516",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.587Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2211.76,
+        "quantity": 1,
+        "width": 600,
+        "height": 900,
+        "_length": 100,
+        "init_width": 1468,
+        "init_height": 646,
+        "device": "desktop",
+        "dpr": 1.125,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20221230,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 854x480"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 580,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1468,
+        "init_height": 646,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 21,
+        "label": "Edward Benjamin Rebello",
+        "font": "35.4290625px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -7.872615803814824,
+        "y": -82.04024767801852,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 2
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1673341360906,
+        "path": "../upload/2023/01/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1673341360906screenshot_2022022820273.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -119.2138964577656,
+        "y": -183.18575851393194,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.394875,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20220228-202731_Camera.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 4
+      }
+    ]
+  }
+}

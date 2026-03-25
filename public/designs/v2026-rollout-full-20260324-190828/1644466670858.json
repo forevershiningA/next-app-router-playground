@@ -1,0 +1,696 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.749Z",
+  "units": "mm",
+  "source": {
+    "id": "1644466670858",
+    "slug": "legacy-1644466670858",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1644466670858.json",
+    "savedAt": "2022-02-10T04:17:50.858Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 800,
+      "height_mm": 900
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 800,
+      "height_mm": 900,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    },
+    "base": {
+      "width_mm": 1000,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "27-01-1930 to 23-04-2021",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -82.247,
+          "y_px": -142.727
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "LOVE ALWAYS AND FOREVER MUM",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -18.627,
+          "y_px": -85.252
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "TARBOTTON (Nee - SHINE)",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -11.135,
+          "y_px": 645.825
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Rosalie Miles",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -78.801,
+          "y_px": -202.539
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "She made broken look beautiful",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -44.769,
+          "y_px": -24.221
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "and strong look invincible.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -41.027,
+          "y_px": 38.892
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "She walked with the",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -50.738,
+          "y_px": 102.717
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Universe on her shoulders",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -59.692,
+          "y_px": 156.118
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "and made it look like",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -53.746,
+          "y_px": 217.693
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "a pair of wings",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -62.631,
+          "y_px": 279.314
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "JUDGE ALEXANDER",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -46.644,
+          "y_px": 332.898
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "bronze8",
+        "position": {
+          "x_px": -277.081,
+          "y_px": 234.909
+        },
+        "height_px": 85,
+        "rotation": {
+          "z_deg": -10
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "cross_001",
+        "position": {
+          "x_px": 317.385,
+          "y_px": -445.092
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_184_13",
+        "position": {
+          "x_px": 275.005,
+          "y_px": 220.442
+        },
+        "height_px": 328,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "bronze8",
+        "path": "/shapes/motifs/bronze8.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      },
+      {
+        "id": "1_184_13",
+        "path": "/shapes/motifs/1_184_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "646fc612b8ad0aaed2c740f167eeff019de970883ef003894e1837173c222331",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.749Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Right Wave",
+        "shape": "Right Wave",
+        "color": "undefinedundefinedundefined#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 2599.66,
+        "quantity": 1,
+        "width": 800,
+        "height": 900,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220205,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "2",
+        "shape": "Square",
+        "color": "undefinedundefined#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 683,
+        "quantity": 1,
+        "width": 1000,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1680,
+        "init_height": 873,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronze8",
+        "item": "bronze8",
+        "price": 235.5699,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -277.08118343195264,
+        "y": 234.90863905325443,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": -10,
+        "height": 85,
+        "ratio": 0.09736540664375716,
+        "itemID": 10
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 317.3850596267634,
+        "y": -445.09163040509793,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1145475372279496,
+        "itemID": 12
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_13",
+        "item": "1_184_13",
+        "price": 281.915815,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 275.00497041420135,
+        "y": 220.44236686390525,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 328,
+        "ratio": 0.35807860262008734,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "27-01-1930 to 23-04-2021",
+        "font": "25.535249999999998px Lucida Calligraphy",
+        "font_size": 30,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -82.24656895766952,
+        "y": -142.72739918070096,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "LOVE ALWAYS AND FOREVER MUM",
+        "font": "24.684074999999996px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -18.62650887573966,
+        "y": -85.2515976331361,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 20,
+        "label": "TARBOTTON (Nee - SHINE)",
+        "font": "42.558749999999996px Lucida Calligraphy",
+        "font_size": 50,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -11.134911242603538,
+        "y": 645.824852071006,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "Mary Patricia (Pat)",
+        "font": "35.74934999999999px Lucida Calligraphy",
+        "font_size": 42,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -78.80142011834312,
+        "y": -202.53859262630857,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 26,
+        "label": "She made broken look beautiful",
+        "font": "28.088775px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -44.769230769230774,
+        "y": -24.22130177514792,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "and strong look invincible.",
+        "font": "27.237599999999997px Lucida Calligraphy",
+        "font_size": 32,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -41.02698224852071,
+        "y": 38.89183431952665,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "She walked with the",
+        "font": "28.088775px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -50.738461538461536,
+        "y": 102.71668639053249,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "Universe on her shoulders",
+        "font": "28.939949999999996px Lucida Calligraphy",
+        "font_size": 34,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -59.69230769230769,
+        "y": 156.1183431952663,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "and made it look like",
+        "font": "28.939949999999996px Lucida Calligraphy",
+        "font_size": 34,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -53.746035502958584,
+        "y": 217.6932544378698,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "a pair of wings",
+        "font": "29.791124999999997px Lucida Calligraphy",
+        "font_size": 35,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -62.631005917159754,
+        "y": 279.31408284023655,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "MUM, NANNA & GREAT NAN NAN",
+        "font": "20.428199999999997px Lucida Calligraphy",
+        "font_size": 24,
+        "font_family": "Lucida Calligraphy",
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -46.644023668638965,
+        "y": 332.8977514792899,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      }
+    ]
+  }
+}

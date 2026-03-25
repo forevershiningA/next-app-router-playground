@@ -1,0 +1,208 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:28.955Z",
+  "units": "mm",
+  "source": {
+    "id": "1578522627342",
+    "slug": "legacy-1578522627342",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1578522627342.json",
+    "savedAt": "2020-01-08T22:30:27.342Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 160,
+      "height_mm": 80
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 670,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 160,
+      "height_mm": 80,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Russell Austin",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 1.07,
+          "y_px": -36.687
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "8.2.1995 - 9.2.1995",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 15.094,
+          "y_px": 22.588
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "050714d27aa180567d9ac74a1a22d00441cd80cf6df852ce21fc56d1288dd985",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:28.955Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "283.22",
+        "quantity": 1,
+        "width": 160,
+        "height": 80,
+        "_length": 1,
+        "init_width": 412,
+        "init_height": 670
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Jewells Green",
+        "font": "52.723125px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1.0704398402509514,
+        "y": -36.68652635541011,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "32.638125px Lucida Calligraphy",
+        "font_size": 13,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -4.077011386439851,
+        "y": 35.8756640067927,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "8.2.1995 - 9.2.1995",
+        "font": "32.638125px Lucida Calligraphy",
+        "font_size": 13,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 15.093777535115983,
+        "y": 22.588456574787894,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 14
+      }
+    ]
+  }
+}

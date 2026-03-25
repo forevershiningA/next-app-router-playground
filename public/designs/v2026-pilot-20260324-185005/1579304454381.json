@@ -1,0 +1,265 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:50:05.446Z",
+  "units": "mm",
+  "source": {
+    "id": "1579304454381",
+    "slug": "legacy-1579304454381",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1579304454381.json",
+    "savedAt": "2020-01-17T23:40:54.381Z"
+  },
+  "product": {
+    "id": "9",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 824,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Mandy Lopez",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -216
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Blue Charlie and Sam",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -138
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Mummy and Daddy will meet you",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -66
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "At the Rainbow Bridge just this side of heaven",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "14afa5f224e201fb78207c662f28f9347f1b68160271f940afbbec5fde98b3c5",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:50:05.446Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 9,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "256.56",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 824,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Our Dearest",
+        "font": "64.27199999999999px Chopin Script",
+        "font_size": 24,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -9,
+        "y": -216,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Blue Charlie and Sam",
+        "font": "80.33999999999999px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5,
+        "y": -138,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 30,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 0,
+        "label": "Mummy and Daddy will meet you",
+        "font": "45.52599999999999px Chopin Script",
+        "font_size": 17,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2,
+        "y": -66,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "At the Rainbow Bridge just this side of heaven",
+        "font": "42.84799999999999px Chopin Script",
+        "font_size": 16,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": -16,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      }
+    ]
+  }
+}

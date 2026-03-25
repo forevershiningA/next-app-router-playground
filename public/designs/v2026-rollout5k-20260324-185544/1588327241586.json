@@ -1,0 +1,493 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.875Z",
+  "units": "mm",
+  "source": {
+    "id": "1588327241586",
+    "slug": "legacy-1588327241586",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1588327241586.json",
+    "savedAt": "2020-05-01T10:00:41.586Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1360,
+      "height": 725,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-23",
+        "text": "Always Loved & Remembered",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -207
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "31.10.1950 - 28.04.2012",
+        "font": {
+          "family": "Adorable",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -123
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "Rubin, Dean, John & Justin",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -21,
+          "y_px": -38
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "Tammy, Peter (Dec), Michael, Maureen (Dec)",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": -65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "Cherished & Survived By Soul Mate Merle & His Children",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": -94
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "\"JOHN BULL\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -31,
+          "y_px": 189
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "Manuel Ellis",
+        "font": {
+          "family": "Adorable",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "Grandchildren , Great Grandchildren & Great-Great Grandchildren",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": -11
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e545240b55499cb2ab4fb39cc03aa7f11b72d94a0206695ba84a6b45851121b3",
+    "sourceItemCount": 12,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.875Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "428.77",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1360,
+        "init_height": 725,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "158832259379820200501_184100_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 260,
+        "y": 116,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6101584022038569,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "20200501_184100.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 94,
+        "width": "162",
+        "height": "221",
+        "itemID": 31
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1588318348048304443_4294905203300_126.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -27,
+        "y": 86,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3829717630853995,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "304443_4294905203300_1260174788_n.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "59",
+        "width": "188",
+        "height": "139",
+        "itemID": 32
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1588325707413screenshot_2020050119291.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -287,
+        "y": 118,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5841942148760331,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20200501-192910_Gallery.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 90,
+        "width": "103",
+        "height": "212",
+        "itemID": 33
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Always Loved & Remembered",
+        "font": "40.056250000000006px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1,
+        "y": -207,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 23
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "31.10.1950 - 28.04.2012",
+        "font": "32.987500000000004px Adorable",
+        "font_size": 14,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -14,
+        "y": -123,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Rubin, Dean, John & Justin",
+        "font": "23.5625px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -21,
+        "y": -38,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 42,
+        "label": "Tammy, Peter (Dec), Michael, Maureen (Dec)",
+        "font": "23.5625px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -12,
+        "y": -65,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 26
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 54,
+        "label": "Cherished & Survived By Soul Mate Merle & His Children",
+        "font": "23.5625px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -18,
+        "y": -94,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 27
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "\"JOHN BULL\"",
+        "font": "40.056250000000006px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -31,
+        "y": 189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 28
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "John William Mckellar",
+        "font": "54.19375px Adorable",
+        "font_size": 23,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2,
+        "y": -161,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 29
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 63,
+        "label": "Grandchildren , Great Grandchildren & Great-Great Grandchildren",
+        "font": "23.5625px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -7,
+        "y": -11,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 30
+      }
+    ]
+  }
+}

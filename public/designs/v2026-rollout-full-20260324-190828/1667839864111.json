@@ -1,0 +1,683 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.159Z",
+  "units": "mm",
+  "source": {
+    "id": "1667839864111",
+    "slug": "legacy-1667839864111",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1667839864111.json",
+    "savedAt": "2022-11-07T16:51:04.111Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 492,
+      "height_mm": 315
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 492,
+      "height_mm": 315,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 592,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Goodnight and God bless you",
+        "font": {
+          "family": "Arial",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -200
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Ours is love everlasting",
+        "font": {
+          "family": "Arial",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -149
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Goodnight and God bless you",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -47
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Goodnight and God bless you",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 34.411
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Beloved by all who knew them",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 55
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Ours is love everlasting",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 106
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Arial",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 157
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Laser-Etched Black Granite Headstone - 11/07/2022",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 250
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 290
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-21",
+        "asset": "dove_004",
+        "position": {
+          "x_px": 0,
+          "y_px": -300
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-29",
+        "asset": "dove_004",
+        "position": {
+          "x_px": 220.179,
+          "y_px": 134.47
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-31",
+        "asset": "dove_004",
+        "position": {
+          "x_px": 189.348,
+          "y_px": -43.929
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-33",
+        "asset": "dove_004",
+        "position": {
+          "x_px": -247.588,
+          "y_px": 112.955
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_004",
+        "path": "/shapes/motifs/dove_004.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e6f9204c9f331b5dff2303c4465901e36d9c5838fa252ff5ea23e5f5b66ef6b0",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.159Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2479.62,
+        "quantity": 1,
+        "width": 492,
+        "height": 315,
+        "_length": 1,
+        "init_width": 1237,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221105,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 783.49,
+        "quantity": 1,
+        "width": 592,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1237,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Goodnight and God bless you",
+        "font": "282.7214868878984px Arial",
+        "font_size": 40,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -200,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Ours is love everlasting",
+        "font": "282.7214868878984px Arial",
+        "font_size": 40,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -149,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Goodnight and God bless you",
+        "font": "282.7214868878984px Adorable",
+        "font_size": 40,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -98,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "282.7214868878984px Chopin Script",
+        "font_size": 40,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -47,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Goodnight and God bless you",
+        "font": "282.7214868878984px Franklin Gothic",
+        "font_size": 34.41110843367629,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Beloved by all who knew them",
+        "font": "282.7214868878984px Chopin Script",
+        "font_size": 40,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 55,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Ours is love everlasting",
+        "font": "282.7214868878984px Chopin Script",
+        "font_size": 40,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 106,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "282.7214868878984px Arial",
+        "font_size": 40,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 157,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "Laser-Etched Black Granite Headstone - 11/07/2022",
+        "font": "282.7214868878984px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 250,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "282.7214868878984px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 290,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -300,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.03404255319148936,
+        "itemID": 21
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 220.17943522404605,
+        "y": 134.46999987215088,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.03404255319148936,
+        "itemID": 29
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 189.34818136391928,
+        "y": -43.929120912582675,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.03404255319148936,
+        "itemID": 31
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -247.587603729797,
+        "y": 112.95452801871562,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.03404255319148936,
+        "itemID": 33
+      }
+    ]
+  }
+}

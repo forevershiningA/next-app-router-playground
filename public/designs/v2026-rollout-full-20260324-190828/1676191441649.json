@@ -1,0 +1,444 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.831Z",
+  "units": "mm",
+  "source": {
+    "id": "1676191441649",
+    "slug": "legacy-1676191441649",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1676191441649.json",
+    "savedAt": "2023-02-12T08:44:01.649Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -166,
+          "y_px": -293.134
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Riley Schultz",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 62
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 264.389
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "A kind caring gentle man",
+        "font": {
+          "family": "Arial",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 223.038,
+          "y_px": -130.148
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "3/2/1954 - 1/2/2022",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": -13,
+          "y_px": 372.262
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "2_121_23",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_139_24",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 53,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_139_24",
+        "position": {
+          "x_px": 297.862,
+          "y_px": -234.619
+        },
+        "height_px": 88,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_121_23",
+        "path": "/shapes/motifs/2_121_23.svg"
+      },
+      {
+        "id": "1_139_24",
+        "path": "/shapes/motifs/1_139_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e2fb932f179574e1b977aaf318f41dfbe18e3a01fd3cf56677819f1f2b415b7e",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.831Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2479.4,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 80,
+        "init_width": 412,
+        "init_height": 660,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230208,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x915"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 635,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 130,
+        "init_width": 412,
+        "init_height": 660,
+        "mode": "2d"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_121_23",
+        "item": "2_121_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04250797024442083,
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1676101882154,
+        "path": "../upload/2023/02/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "167610188215420220203_0844462_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -131.9938601891971,
+        "y": 87.54139580107106,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.5817707765667572,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "20220203_084446~2.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 629,
+        "width": "728",
+        "height": "948",
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_139_24",
+        "item": "1_139_24",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 53,
+        "ratio": 0.10433070866141732,
+        "itemID": 12
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_139_24",
+        "item": "1_139_24",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 297.8622932063721,
+        "y": -234.61888700480043,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 88,
+        "ratio": 0.1732283464566929,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "70.79962499999999px Chopin Script",
+        "font_size": 47,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -165.99999999999997,
+        "y": -293.133514986376,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Paul William Lucas",
+        "font": "93.39524999999999px Great Vibes",
+        "font_size": 62,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -14,
+        "y": 264.38907408919795,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 71,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "A kind caring gentle man",
+        "font": "36.15299999999999px Arial",
+        "font_size": 24,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 223.03824871026188,
+        "y": -130.14797380111472,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "3/2/1954 - 1/2/2022",
+        "font": "78.33149999999999px Great Vibes",
+        "font_size": 52,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -13,
+        "y": 372.26158038147145,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 9
+      }
+    ]
+  }
+}

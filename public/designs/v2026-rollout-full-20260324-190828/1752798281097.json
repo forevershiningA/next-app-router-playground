@@ -1,0 +1,356 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.989Z",
+  "units": "mm",
+  "source": {
+    "id": "1752798281097",
+    "slug": "legacy-1752798281097",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1752798281097.json",
+    "savedAt": "2025-07-18T00:24:41.097Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 12",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 570,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 428,
+      "height": 926,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 570,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 670,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "banksiarufa",
+        "position": {
+          "x_px": -477,
+          "y_px": 594.82
+        },
+        "height_px": 91,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "flag_aboriginal",
+        "position": {
+          "x_px": 432,
+          "y_px": 597.217
+        },
+        "height_px": 102,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "cross_005",
+        "position": {
+          "x_px": -135,
+          "y_px": 388.313
+        },
+        "height_px": 141,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "sun_002",
+        "position": {
+          "x_px": 42,
+          "y_px": -390.45
+        },
+        "height_px": 125,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "banksiarufa",
+        "path": "/shapes/motifs/banksiarufa.svg"
+      },
+      {
+        "id": "flag_aboriginal",
+        "path": "/shapes/motifs/flag_aboriginal.svg"
+      },
+      {
+        "id": "cross_005",
+        "path": "/shapes/motifs/cross_005.svg"
+      },
+      {
+        "id": "sun_002",
+        "path": "/shapes/motifs/sun_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9590c949bcb488b36823a74220532c8aa945a74033ceb3420dfc2fc85e0f0827",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.989Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 12",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2344.16,
+        "quantity": 1,
+        "width": 570,
+        "height": 600,
+        "_length": 80,
+        "init_width": 428,
+        "init_height": 689,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250716,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 428x926"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 818,
+        "quantity": 1,
+        "width": 670,
+        "height": 100,
+        "_length": 130,
+        "init_width": 428,
+        "init_height": 689,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "banksiarufa",
+        "item": "banksiarufa",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -477,
+        "y": 594.8202937499999,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 91,
+        "ratio": 0.136431784107946,
+        "itemID": 2
+      },
+      {
+        "productid": 2400,
+        "id": 2400,
+        "uid": 1752800409325,
+        "path": "../upload/2025/07/",
+        "name": "Premium Plana",
+        "type": "Photo",
+        "item": "1752800409325subject_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 390,
+        "y": -145.35,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7775776397515527,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Subject.png",
+        "price": 368,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 4
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1752802505588,
+        "path": "../upload/2025/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1752802505588subject_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 192,
+        "y": -256.5,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -51,
+        "ratio": 0.6739006211180123,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Subject.png",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flag_aboriginal",
+        "item": "flag_aboriginal",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 432,
+        "y": 597.2174999999999,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 102,
+        "ratio": 0.2261640798226164,
+        "itemID": 6
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_005",
+        "item": "cross_005",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -135,
+        "y": 388.3125,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 141,
+        "ratio": 0.597457627118644,
+        "itemID": 7
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "sun_002",
+        "item": "sun_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 42,
+        "y": -390.45,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 125,
+        "ratio": 0.7911392405063291,
+        "itemID": 8
+      }
+    ]
+  }
+}

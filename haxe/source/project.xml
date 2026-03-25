@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<!-- NMML reference: https://gist.github.com/1763850 -->
+	
+	<!-- metadata, make sure 'package' is at least 3 segments (ie. com.mycompany.myproject) -->
+	<meta title="Engine3D" package="Engine3D" version="1.0.0" company="Przemysław Kapusta" />
+	
+	<!-- output -->
+	<app main="Main" file="Engine3D" path="bin" />
+	
+	<define name="openfl-share-context" value="" unless="flash" />
+	<window background="#000000" fps="60" antialiasing="4" />
+	<window width="800" height="480" unless="mobile" />
+	<window orientation="landscape" vsync="false" if="cpp" />
+	
+	<!-- classpath, haxe libs -->
+	<source path="src" />
+	<haxelib name="openfl" />
+	<haxelib name="away3d" />
+	<haxelib name="gsap" />
+	<haxelib name="box2d" />
+	<!--<haxelib name="hxtsdgen" />-->
+	
+	<!-- optimize output
+	<haxeflag name="-dce full" />-->
+	<haxeflag name="-lib closure" />
+	<!--<haxeflag name="-D hxtsdgen_enums_ts" />-->
+	
+</project>pul

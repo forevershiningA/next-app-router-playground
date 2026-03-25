@@ -1,0 +1,136 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.433Z",
+  "units": "mm",
+  "source": {
+    "id": "1657118005969",
+    "slug": "legacy-1657118005969",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1657118005969.json",
+    "savedAt": "2022-07-06T14:33:25.969Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/09.jpg",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/09.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "54328aae8436635c9b0ff2f9981706408a52c8eb845ee994cb9f5cbcbaab5ffe",
+    "sourceItemCount": 2,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.433Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Maroon - Lugs with Studs",
+        "border": "Border 8",
+        "shape_url": "shapes/photos/border8.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#4c0f1e",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/09.jpg",
+        "price": 1296.71,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 561,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220706,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36, 1366x768"
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br150-waratah",
+        "color": "#ffb35a",
+        "x": -169,
+        "y": -17,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 39,
+        "ratio": 1.126938565274396,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br150-waratah",
+        "price": 109,
+        "quantity": 1,
+        "size": "220 x 220 mm",
+        "itemID": 3
+      }
+    ]
+  }
+}

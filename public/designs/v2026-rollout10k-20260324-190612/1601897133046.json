@@ -1,0 +1,528 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.767Z",
+  "units": "mm",
+  "source": {
+    "id": "1601897133046",
+    "slug": "legacy-1601897133046",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1601897133046.json",
+    "savedAt": "2020-10-05T11:25:33.046Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 485,
+      "height_mm": 495
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 593,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 485,
+      "height_mm": 495,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "31/ 5 /1988",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -183,
+          "y_px": -44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Loving Father And Brother",
+        "font": {
+          "family": "French Script",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Kittie Silva",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 117
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "23 /10 / 2012",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 180,
+          "y_px": -44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "And Always Be Loved And Remembered",
+        "font": {
+          "family": "French Script",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 256
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Fishy",
+        "font": {
+          "family": "French Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -150
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Eda Austin",
+        "font": {
+          "family": "French Script",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -187
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory of Cherished Son",
+        "font": {
+          "family": "French Script",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -226
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "turtle_001",
+        "position": {
+          "x_px": -218,
+          "y_px": 172
+        },
+        "height_px": 71,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c3d600",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "turtle_001",
+        "position": {
+          "x_px": 229,
+          "y_px": 169
+        },
+        "height_px": 68,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#00269a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "turtle_001",
+        "path": "/shapes/motifs/turtle_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e879afa18a7049aec70c694e278a7a29ceb918de61fea664d7172cd37fe603cf",
+    "sourceItemCount": 12,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.767Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 22",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "883.00",
+        "quantity": 1,
+        "width": 485,
+        "height": 495,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 593,
+        "mode": "2d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1601897328961,
+        "path": "../upload/2020/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1601897328961fb_img_1579563078564_cro.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": -7,
+        "y": -39,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.589914294459749,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1579563078564.jpg",
+        "price": 300,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "turtle_001",
+        "item": "turtle_001",
+        "price": 208.11388000000002,
+        "quantity": 1,
+        "color": "#c3d600",
+        "colorName": "Paint Fill",
+        "x": -218,
+        "y": 172,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 71,
+        "ratio": 0.11973018549747048,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "turtle_001",
+        "item": "turtle_001",
+        "price": 207.45244,
+        "quantity": 1,
+        "color": "#00269a",
+        "colorName": "Paint Fill",
+        "x": 229,
+        "y": 169,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 68,
+        "ratio": 0.11467116357504216,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "31/ 5 /1988",
+        "font": "38.545px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -183,
+        "y": -44,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Loving Father And Brother",
+        "font": "43.217121212121214px French Script",
+        "font_size": 37,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 8,
+        "y": 70,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Close To Our Heart",
+        "font": "38.545px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 6,
+        "y": 117,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "23 /10 / 2012",
+        "font": "38.545px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 180,
+        "y": -44,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "And Always Be Loved And Remembered",
+        "font": "45.55318181818181px French Script",
+        "font_size": 39,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Fishy",
+        "font": "46.72121212121212px French Script",
+        "font_size": 40,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -5,
+        "y": -150,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Troy Ronald Hooper",
+        "font": "43.217121212121214px French Script",
+        "font_size": 37,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6,
+        "y": -187,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "In Loving Memory of Cherished Son",
+        "font": "40.8810606060606px French Script",
+        "font_size": 35,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1,
+        "y": -226,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 2
+      }
+    ]
+  }
+}

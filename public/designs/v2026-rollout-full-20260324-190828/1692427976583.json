@@ -1,0 +1,481 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.806Z",
+  "units": "mm",
+  "source": {
+    "id": "1692427976583",
+    "slug": "legacy-1692427976583",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1692427976583.json",
+    "savedAt": "2023-08-19T06:52:56.583Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Full-colour Plaque",
+    "material": {
+      "name": "src/backgrounds/colors/l/35.jpg",
+      "texture": "/textures/forever/l/35.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/35.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-19",
+        "text": "Dearly loved Dad of Kash",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 121,
+          "y_px": 97
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Krystal & Kristiana",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 126,
+          "y_px": 122
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "27.03.1970  - 11.12.2016",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 107,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "~ TINY ~",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 112,
+          "y_px": 45
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Cherished Papa of his mokos",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 128,
+          "y_px": 154
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Beloved Son, Brother & Friend",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 128,
+          "y_px": 184
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "In Our Hearts Forever",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 98,
+          "y_px": -99
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Octavia Graves",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 65,
+          "y_px": -48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9302d64a080e6eeb508dd4548b513dd5bc88a0cd30bf4c55de74276dfef70933",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.806Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Full-colour Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/backgrounds/colors/l/35.jpg",
+        "name": "Full-colour Plaque",
+        "price": 600,
+        "quantity": 1,
+        "width": 250,
+        "height": 200,
+        "_length": 10,
+        "init_width": 1126,
+        "init_height": 585,
+        "backgroundOption": "color",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1366x768"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1692428868189,
+        "path": "../upload/2023/08/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1692428868189polish_20230819_14004909.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": -160,
+        "y": 27,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.370457337883959,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Polish_20230819_140049095_resized.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 176,
+        "width": "278",
+        "height": "402",
+        "itemID": 3
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1692429234428,
+        "path": "../upload/2023/08/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1692429234428polish_20230819_14295911.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 101,
+        "y": -169,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.28032081911262796,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Polish_20230819_142959119.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 36,
+        "width": "137",
+        "height": "82",
+        "itemID": 10
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Dearly loved Dad of Kash",
+        "font": "18.252px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 121,
+        "y": 97,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 19
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Krystal & Kristiana",
+        "font": "18.252px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 126,
+        "y": 122,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 18
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "27.03.1970  - 11.12.2016",
+        "font": "22.814999999999998px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 107,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 12
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "~ TINY ~",
+        "font": "41.067px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 112,
+        "y": 45,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 14
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Cherished Papa of his mokos",
+        "font": "18.252px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 128,
+        "y": 154,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 20
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Beloved Son, Brother & Friend",
+        "font": "18.252px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 128,
+        "y": 184,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 22
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "In Our Hearts Forever",
+        "font": "20.5335px Lucida Calligraphy",
+        "font_size": 9,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 98,
+        "y": -99,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 15
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Regan Michael Bentley",
+        "font": "50.193px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 65,
+        "y": -48,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 7
+      }
+    ]
+  }
+}

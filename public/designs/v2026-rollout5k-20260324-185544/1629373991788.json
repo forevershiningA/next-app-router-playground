@@ -1,0 +1,442 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.887Z",
+  "units": "mm",
+  "source": {
+    "id": "1629373991788",
+    "slug": "legacy-1629373991788",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1629373991788.json",
+    "savedAt": "2021-08-19T11:53:11.788Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/12.jpg",
+      "texture": "/textures/phoenix/l/12.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 203.19999999999993,
+      "height_mm": 101.6
+    },
+    "viewportPx": {
+      "width": 640,
+      "height": 497,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 203.19999999999993,
+      "height_mm": 101.6,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/12.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "IN MEMORY OF SUSAN",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -35.274,
+          "y_px": -176.371
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "LOVED MUM AND WIFE",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -2.126,
+          "y_px": -117.717
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "IVA DIAZ",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -33.256,
+          "y_px": -51.54
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "AND BUBBLY IN LIFE",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -39.304,
+          "y_px": 21.926
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-18",
+        "asset": "pardalotesolid",
+        "position": {
+          "x_px": 268,
+          "y_px": 200.633
+        },
+        "height_px": 104,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_153_12",
+        "position": {
+          "x_px": -814.003,
+          "y_px": 738.879
+        },
+        "height_px": 62,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_154_13",
+        "position": {
+          "x_px": -649.568,
+          "y_px": 250.168
+        },
+        "height_px": 62,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-1",
+        "asset": "1_153_21",
+        "position": {
+          "x_px": -208,
+          "y_px": 128
+        },
+        "height_px": 51,
+        "rotation": {
+          "z_deg": -1
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "pardalotesolid",
+        "path": "/shapes/motifs/pardalotesolid.svg"
+      },
+      {
+        "id": "1_153_12",
+        "path": "/shapes/motifs/1_153_12.svg"
+      },
+      {
+        "id": "1_154_13",
+        "path": "/shapes/motifs/1_154_13.svg"
+      },
+      {
+        "id": "1_153_21",
+        "path": "/shapes/motifs/1_153_21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "174c24cd70cbd78f67a5f70a777a56ff1e94738dd7ee3aa02bade955d9ce9a9e",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.887Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Red - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#c72028",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/12.jpg",
+        "price": 435.89,
+        "quantity": 1,
+        "width": 203.19999999999993,
+        "height": 101.6,
+        "_length": 1,
+        "init_width": 640,
+        "init_height": 497,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210816,
+        "mode": "2d",
+        "navigator": "MacIntel, Apple Computer, Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91 Version/11.1.1 Safari/605.1.15"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pardalotesolid",
+        "item": "pardalotesolid",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 268,
+        "y": 200.63303758850543,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 104,
+        "ratio": 0.10462776659959759,
+        "itemID": 18
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_12",
+        "item": "1_153_12",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -814.0029084708127,
+        "y": 738.8792760152289,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 62,
+        "ratio": 0.06623931623931624,
+        "itemID": 11
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_13",
+        "item": "1_154_13",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -649.5682237367623,
+        "y": 250.16843889304025,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 62,
+        "ratio": 0.06652360515021459,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "IN MEMORY OF SUSAN",
+        "font": "71.5415846456693px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -35.273656177075964,
+        "y": -176.37076142131986,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 1
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_21",
+        "item": "1_153_21",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -208,
+        "y": 128,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -1,
+        "height": 51,
+        "ratio": 0.085,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "LOVED MUM AND WIFE",
+        "font": "71.5415846456693px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2.125938104849638,
+        "y": -117.71712482365854,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "GARDENER WALKER",
+        "font": "71.5415846456693px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -33.25625379950293,
+        "y": -51.5402008917921,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "AND BUBBLY IN LIFE",
+        "font": "71.5415846456693px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -39.304217880526835,
+        "y": 21.926210680812233,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      }
+    ]
+  }
+}

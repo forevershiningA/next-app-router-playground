@@ -1,0 +1,187 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.816Z",
+  "units": "mm",
+  "source": {
+    "id": "1602787626406",
+    "slug": "legacy-1602787626406",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1602787626406.json",
+    "savedAt": "2020-10-15T18:47:06.406Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 500,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 881,
+      "height": 850,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 500,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "PIANG HIN AH MEW",
+        "font": {
+          "family": "Arial",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -85
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "1945 - 2020",
+        "font": {
+          "family": "Arial",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 96
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "44fafce1c33f2be702bd8fe122d3b539e24678a2dfd85ce9abf2f21016397448",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.816Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "707.50",
+        "quantity": 1,
+        "width": 500,
+        "height": 300,
+        "_length": 1,
+        "init_width": 881,
+        "init_height": 850,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "PIANG HIN AH MEW",
+        "font": "67.9575px Arial",
+        "font_size": 41,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -3,
+        "y": -85,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "1945 - 2020",
+        "font": "71.2725px Arial",
+        "font_size": 43,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2,
+        "y": 96,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 4
+      }
+    ]
+  }
+}

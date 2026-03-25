@@ -1,0 +1,271 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.671Z",
+  "units": "mm",
+  "source": {
+    "id": "1620484294230",
+    "slug": "legacy-1620484294230",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1620484294230.json",
+    "savedAt": "2021-05-08T14:31:34.230Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 900
+    },
+    "viewportPx": {
+      "width": 1086,
+      "height": 538,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 900,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "dessario sentre",
+        "font": {
+          "family": "Garamond",
+          "size_px": 82
+        },
+        "position": {
+          "x_px": -12.675,
+          "y_px": -7.8
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1990 - 2011",
+        "font": {
+          "family": "Garamond",
+          "size_px": 82
+        },
+        "position": {
+          "x_px": -0.975,
+          "y_px": 50.7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -116.025,
+          "y_px": -143.325
+        },
+        "height_px": 176,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 101.523,
+          "y_px": -144.3
+        },
+        "height_px": 176,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ff378e6f67e9f0060d021601df86cf97576aff6379de20be945b751dde66d224",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.671Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 3017.84,
+        "quantity": 1,
+        "width": 600,
+        "height": 900,
+        "_length": 1,
+        "init_width": 1086,
+        "init_height": 538,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 140,
+        "version_date": 20210428,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -116.02499999999998,
+        "y": -143.325,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 176,
+        "ratio": 0.31654676258992803,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 101.52349999999998,
+        "y": -144.29999999999998,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 176,
+        "ratio": 0.31654676258992803,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "dessario sentre",
+        "font": "47.79233333333333px Garamond",
+        "font_size": 82,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -12.674999999999999,
+        "y": -7.799999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1990 - 2011",
+        "font": "47.79233333333333px Garamond",
+        "font_size": 82,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -0.9749999999999999,
+        "y": 50.699999999999996,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 3
+      }
+    ]
+  }
+}

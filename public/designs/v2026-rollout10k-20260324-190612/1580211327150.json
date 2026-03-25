@@ -1,0 +1,598 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:12.857Z",
+  "units": "mm",
+  "source": {
+    "id": "1580211327150",
+    "slug": "legacy-1580211327150",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1580211327150.json",
+    "savedAt": "2020-01-28T11:35:27.150Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 629,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "CHRISTOPHER ALWYN GARLETT",
+        "font": {
+          "family": "Arial",
+          "size_px": 30.96
+        },
+        "position": {
+          "x_px": -5.161,
+          "y_px": -36.127
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "23/06/1960 - 13/08/2000",
+        "font": {
+          "family": "Arial",
+          "size_px": 34.989
+        },
+        "position": {
+          "x_px": -9.224,
+          "y_px": -20.084
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Loving husband of Susan",
+        "font": {
+          "family": "Arial",
+          "size_px": 36.685
+        },
+        "position": {
+          "x_px": 0.003,
+          "y_px": -3.933
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Loving Father to Kellie,Jennifer",
+        "font": {
+          "family": "Arial",
+          "size_px": 32.868
+        },
+        "position": {
+          "x_px": -13.624,
+          "y_px": 15.168
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Christopher,Gerald,Joshua & Dwayne",
+        "font": {
+          "family": "Arial",
+          "size_px": 29.688
+        },
+        "position": {
+          "x_px": -1.814,
+          "y_px": 33.979
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Our hearts are full of memories",
+        "font": {
+          "family": "Arial",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -7.078,
+          "y_px": 48.532
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "with pride we speak your name",
+        "font": {
+          "family": "Arial",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -0.785,
+          "y_px": 63.694
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Though life goes on with out you it will never be the same",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -3.134,
+          "y_px": 76.533
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-24",
+        "asset": "1_136_15",
+        "position": {
+          "x_px": 39.444,
+          "y_px": 99.543
+        },
+        "height_px": 96,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-25",
+        "asset": "kangaroo_003",
+        "position": {
+          "x_px": -51.509,
+          "y_px": 98.657
+        },
+        "height_px": 88,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_136_15",
+        "path": "/shapes/motifs/1_136_15.svg"
+      },
+      {
+        "id": "kangaroo_003",
+        "path": "/shapes/motifs/kangaroo_003.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "60afe709c0a569870751f38d8471cae6a7ca7629f04a1faf48f0e7b1d5d4f3de",
+    "sourceItemCount": 15,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:12.857Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1220.19",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 412,
+        "init_height": 629
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": "707.50",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 412,
+        "init_height": 629
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1580212597759,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1580212597759fb_img_1580212539886.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -0.29218894120763017,
+        "y": -88.05505035812796,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.22132231404958677,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1580212539886.jpg",
+        "price": 296.838,
+        "quantity": 1,
+        "size": "100 x 130 mm",
+        "itemID": 12
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_136_15",
+        "item": "1_136_15",
+        "price": 213.62588000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 39.444396265266214,
+        "y": 99.5427164027048,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 96,
+        "ratio": 0.1889763779527559,
+        "itemID": 24
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "kangaroo_003",
+        "item": "kangaroo_003",
+        "price": 211.86204,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -51.509428950839265,
+        "y": 98.65720310799608,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 88,
+        "ratio": 0.1837160751565762,
+        "itemID": 25
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "CHRISTOPHER ALWYN GARLETT",
+        "font": "17.76654218837193px Arial",
+        "font_size": 30.959869384765625,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -5.161227603272688,
+        "y": -36.12724730213343,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "23/06/1960 - 13/08/2000",
+        "font": "20.078607853480747px Arial",
+        "font_size": 34.988861083984375,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -9.22391340676193,
+        "y": -20.083913192703605,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": null,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.477142857142857px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.2816061178713106,
+        "y": 17.745302697954084,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": null,
+        "quantity": 1,
+        "label": " ",
+        "font": "11.477142857142857px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0.2680902493733668,
+        "y": 16.202962152677948,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 84,
+        "quantity": 28,
+        "label": "Loving husband of Susan",
+        "font": "21.05210549926758px Arial",
+        "font_size": 36.685272216796875,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0.002549941866779395,
+        "y": -3.93305505681168,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 84,
+        "quantity": 28,
+        "label": "Loving Father to Kellie,Jennifer",
+        "font": "18.86171828351702px Arial",
+        "font_size": 32.868316650390625,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -13.62354461418195,
+        "y": 15.16769834499373,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 93,
+        "quantity": 31,
+        "label": "Christopher,Gerald,Joshua & Dwayne",
+        "font": "17.03638392857143px Arial",
+        "font_size": 29.6875,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1.8137687143002246,
+        "y": 33.979457464202866,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Our hearts are full of memories",
+        "font": "16.067999999999998px Arial",
+        "font_size": 28,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -7.077951308728795,
+        "y": 48.53150194024447,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "with pride we speak your name",
+        "font": "14.920285714285715px Arial",
+        "font_size": 26,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.7850386228942803,
+        "y": 63.693521605072256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 19
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Though life goes on with out you it will never be the same",
+        "font": "12.624857142857142px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3.1344211160638706,
+        "y": 76.53278373080417,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 20
+      }
+    ]
+  }
+}

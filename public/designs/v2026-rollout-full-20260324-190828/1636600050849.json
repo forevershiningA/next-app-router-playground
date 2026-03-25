@@ -1,0 +1,335 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.502Z",
+  "units": "mm",
+  "source": {
+    "id": "1636600050849",
+    "slug": "legacy-1636600050849",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1636600050849.json",
+    "savedAt": "2021-11-11T03:07:30.849Z"
+  },
+  "product": {
+    "id": "8",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-31",
+        "text": "but you will never",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -47.461,
+          "y_px": -21.937
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "2020 - 2021",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -122.08,
+          "y_px": -156.665
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Kitty",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -102.305,
+          "y_px": -212.051
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "You left our lives,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -75.674,
+          "y_px": -67.042
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-33",
+        "text": "leave our hearts.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -22.149,
+          "y_px": 19.135
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e8eed9cad936bf642907aebb0da2ec9d22abed96d6965e452625006b02c2f9f0",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.502Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 8,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "installationMethod": 3,
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 443.83,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 1,
+        "init_width": 272,
+        "init_height": 684,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20211110,
+        "mode": "2d",
+        "navigator": "Linux aarch64, Google Inc., Mozilla/5.0 (Linux; Android 11; SM-G986B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.74 Mobile Safari/537.36, 412x915"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1636602646861,
+        "path": "../upload/2021/11/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "163660264686120211111_144908_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 89.91241836547852,
+        "y": -165.18943697388443,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -20,
+        "ratio": 0.8684912280701754,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "20211111_144908.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 128,
+        "width": "262",
+        "height": "297",
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "but you will never",
+        "font": "32.487px Chopin Script",
+        "font_size": 14,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -47.461026191711426,
+        "y": -21.937243768346093,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 31
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "2020 - 2021",
+        "font": "25.5255px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -122.07968330383301,
+        "y": -156.6648824145219,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Kitty",
+        "font": "74.256px Lucida Calligraphy",
+        "font_size": 32,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -102.30496501922607,
+        "y": -212.05099451611466,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "You left our lives,",
+        "font": "37.128px Chopin Script",
+        "font_size": 16,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -75.67358779907227,
+        "y": -67.04194739269258,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 30
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "leave our hearts.",
+        "font": "34.8075px Chopin Script",
+        "font_size": 15,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -22.148677825927734,
+        "y": 19.134639673065408,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 33
+      }
+    ]
+  }
+}

@@ -1,0 +1,373 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.811Z",
+  "units": "mm",
+  "source": {
+    "id": "1692591252891",
+    "slug": "legacy-1692591252891",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1692591252891.json",
+    "savedAt": "2023-08-21T04:14:12.891Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Balmoral-Green.jpg",
+      "texture": "/textures/forever/l/Balmoral-Green.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 801
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 824,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 801,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Balmoral-Green.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 150,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "04.07.1945 - 21.08.2022",
+        "font": {
+          "family": "Adorable",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -8.437,
+          "y_px": -34.033
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Forever Loved",
+        "font": {
+          "family": "Adorable",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -8.701,
+          "y_px": 134.392
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Mother of Jessica and Lucas",
+        "font": {
+          "family": "Adorable",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -14.502,
+          "y_px": 45.244
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Janice Margaret Toole.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 7.647,
+          "y_px": -112.33
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "banksiarufa",
+        "position": {
+          "x_px": -231.24,
+          "y_px": -286.928
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "banksiarufa",
+        "position": {
+          "x_px": 237.95,
+          "y_px": -290.65
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "banksiarufa",
+        "path": "/shapes/motifs/banksiarufa.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2548957db1bfe3b893ce286885d58df4abb0a9953896fc160facf96f6494dc4c",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.811Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Balmoral-Green.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1955.41,
+        "quantity": 1,
+        "width": 600,
+        "height": 801,
+        "_length": 100,
+        "init_width": 384,
+        "init_height": 637,
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x824"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 870,
+        "quantity": 1,
+        "width": 700,
+        "height": 150,
+        "_length": 250,
+        "init_width": 384,
+        "init_height": 637,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "banksiarufa",
+        "item": "banksiarufa",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -231.24021291732788,
+        "y": -286.9281496176184,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.14992503748125938,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "banksiarufa",
+        "item": "banksiarufa",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 237.9501491761771,
+        "y": -290.6499261702588,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.14992503748125938,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "04.07.1945 - 21.08.2022",
+        "font": "33.217665615141954px Adorable",
+        "font_size": 30,
+        "font_family": "Adorable",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -8.4375,
+        "y": -34.032936199007175,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 12,
+        "label": "Forever Loved",
+        "font": "55.36277602523659px Adorable",
+        "font_size": 50,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -8.701171875,
+        "y": 134.3919638046201,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 23,
+        "label": "Mother of Jessica and Lucas",
+        "font": "45.397476340694006px Adorable",
+        "font_size": 41,
+        "font_family": "Adorable",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -14.501910209655762,
+        "y": 45.24389936230219,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 20,
+        "label": "Janice Margaret Toole.",
+        "font": "55.36277602523659px Adorable",
+        "font_size": 50,
+        "font_family": "Adorable",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 7.646527290344238,
+        "y": -112.33017621798521,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 15
+      }
+    ]
+  }
+}

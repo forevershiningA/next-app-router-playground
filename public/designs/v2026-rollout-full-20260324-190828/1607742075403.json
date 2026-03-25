@@ -1,0 +1,429 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.112Z",
+  "units": "mm",
+  "source": {
+    "id": "1607742075403",
+    "slug": "legacy-1607742075403",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1607742075403.json",
+    "savedAt": "2020-12-12T03:01:15.403Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 823,
+      "height": 702,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "ANDREW FRANCIS TURK",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 3.5,
+          "y_px": -126.426
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "IN LOVING MEMORY OF",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -1.5,
+          "y_px": -182
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "BORN 30.04.1969 - DIED 16.11.2007",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": -81.156
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "LOVING FATHER OF SAMUEL, JOSHUA, & RACHELLE",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -6.5,
+          "y_px": -35.792
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "BELOVED SON OF VAL & COLIN (DEC) & WARREN",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -9.5,
+          "y_px": -11.856
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "BROTHER TO SAMANTHA, COLIN, CAMERON, & KATHLEEN",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -9.5,
+          "y_px": 7.42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "&apos;I LOVE YOU GUYS, ALWAYS HAVE , ALWAYS WILL'",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 21.5,
+          "y_px": 79.844
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "1_171_12",
+        "position": {
+          "x_px": -252.5,
+          "y_px": 108
+        },
+        "height_px": 77,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_171_12",
+        "path": "/shapes/motifs/1_171_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "5c1420de75b3b18c1e74e689ab5565af8a689e795982307483e1dec35c9a97c9",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.112Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 749.38,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 823,
+        "init_height": 702,
+        "mode": "2d"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "ANDREW FRANCIS TURK",
+        "font": "43.348499999999994px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 3.5,
+        "y": -126.4263916015625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_171_12",
+        "item": "1_171_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -252.5,
+        "y": 108,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 77,
+        "ratio": 0.08191489361702127,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "IN LOVING MEMORY OF",
+        "font": "25.0965px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.5,
+        "y": -182,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "BORN 30.04.1969 - DIED 16.11.2007",
+        "font": "22.814999999999998px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2.5,
+        "y": -81.15625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "LOVING FATHER OF SAMUEL, JOSHUA, & RACHELLE",
+        "font": "20.5335px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -6.5,
+        "y": -35.791748046875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 43,
+        "label": "BELOVED SON OF VAL & COLIN (DEC) & WARREN",
+        "font": "20.5335px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -9.5,
+        "y": -11.856483459472656,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "BROTHER TO SAMANTHA, COLIN, CAMERON, & KATHLEEN",
+        "font": "20.5335px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -9.5,
+        "y": 7.420465469360352,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 43,
+        "label": "&apos;I LOVE YOU GUYS, ALWAYS HAVE , ALWAYS WILL'",
+        "font": "18.252px Lucida Calligraphy",
+        "font_size": 8,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 21.5,
+        "y": 79.84375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 5
+      }
+    ]
+  }
+}

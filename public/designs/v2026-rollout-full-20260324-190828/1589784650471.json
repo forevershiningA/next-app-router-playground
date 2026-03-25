@@ -1,0 +1,475 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.341Z",
+  "units": "mm",
+  "source": {
+    "id": "1589784650471",
+    "slug": "legacy-1589784650471",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589784650471.json",
+    "savedAt": "2020-05-18T06:50:50.471Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 338,
+      "height_mm": 220
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 902,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 338,
+      "height_mm": 220,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "Beloved wife of Mel",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving  Memory of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -20,
+          "y_px": -223
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Andrew Fox",
+        "font": {
+          "family": "Adorable",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -124
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "5-10-1938 - 31-10-2020",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Sadly missed by family, friends &neighbours",
+        "font": {
+          "family": "Adorable",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 119
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Treasured memories are ours to keep",
+        "font": {
+          "family": "Adorable",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 205
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "1_155_14",
+        "position": {
+          "x_px": -338,
+          "y_px": -198
+        },
+        "height_px": 49,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_155_01",
+        "position": {
+          "x_px": 356,
+          "y_px": -22
+        },
+        "height_px": 56,
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_14",
+        "path": "/shapes/motifs/1_155_14.svg"
+      },
+      {
+        "id": "1_155_01",
+        "path": "/shapes/motifs/1_155_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6d63d238e85dd68bd61b6c729667ceb2d290dd54b95b08799b58854b1a3ea344",
+    "sourceItemCount": 11,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.341Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 2",
+        "shape_url": "shapes/photos/border2.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "842.53",
+        "quantity": 1,
+        "width": 338,
+        "height": 220,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 902
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "52.03846153846154px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": 38.904,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "52.03846153846154px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": 38.904,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 3
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_14",
+        "item": "1_155_14",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -338,
+        "y": -198,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 49,
+        "ratio": 0.08828828828828829,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Beloved wife of Mel",
+        "font": "52.03846153846154px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": 48,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Loving  Memory of",
+        "font": "44.23269230769231px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -20,
+        "y": -223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Kathleen Ann  O&apos;Brien",
+        "font": "57.24230769230769px Adorable",
+        "font_size": 22,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": -124,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "5-10-1938 - 31-10-2020",
+        "font": "39.02884615384615px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": -32,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Sadly missed by family, friends &neighbours",
+        "font": "39.02884615384615px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": 119,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Treasured memories are ours to keep",
+        "font": "49.43653846153846px Adorable",
+        "font_size": 19,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 205,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 12
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_01",
+        "item": "1_155_01",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 356,
+        "y": -22,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 1,
+        "height": 56,
+        "ratio": 0.09333333333333334,
+        "itemID": 13
+      }
+    ]
+  }
+}

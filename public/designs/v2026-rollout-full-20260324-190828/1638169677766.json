@@ -1,0 +1,232 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.579Z",
+  "units": "mm",
+  "source": {
+    "id": "1638169677766",
+    "slug": "legacy-1638169677766",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1638169677766.json",
+    "savedAt": "2021-11-29T07:07:57.766Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/backgrounds/colors/l/10.jpg",
+      "texture": "/textures/forever/l/10.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 381,
+      "height_mm": 216
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 381,
+      "height_mm": 216,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/10.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "asdsasdasas",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "asdsasdasas",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 64
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "asdsasdasas",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 128
+        },
+        "rotation": {
+          "z_deg": -8
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "29e518e023d4c67d5e137f2978d9fbc8b191d7a040a5a961ca99d1af8e3c3edb",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.579Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "name": "Landscape",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "shape": "Square",
+        "color": "../upload/2021/11/1638169715633background_36_cropped.jpg",
+        "fixed": 0,
+        "texture": "src/backgrounds/colors/l/10.jpg",
+        "price": 699,
+        "quantity": 1,
+        "width": 381,
+        "height": 216,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 631,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20211128,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36, 1366x768"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "asdsasdasas",
+        "font": "58.13149606299212px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 1
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "asdsasdasas",
+        "font": "71.0496062992126px Chopin Script",
+        "font_size": 44,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 64,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "asdsasdasas",
+        "font": "67.82007874015747px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 128,
+        "rotation": -8,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 3
+      }
+    ]
+  }
+}

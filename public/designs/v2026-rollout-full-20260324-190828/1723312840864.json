@@ -1,0 +1,332 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.931Z",
+  "units": "mm",
+  "source": {
+    "id": "1723312840864",
+    "slug": "legacy-1723312840864",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1723312840864.json",
+    "savedAt": "2024-08-10T18:00:40.864Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 787.4,
+      "height_mm": 641.3499999999999
+    },
+    "viewportPx": {
+      "width": 428,
+      "height": 926,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 787.4,
+      "height_mm": 641.3499999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 174,
+          "y_px": -340
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Winfred Vazquez",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 171,
+          "y_px": -194
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "3rd May 2007 - 11th August 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": -7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Aged 16 years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 288,
+          "y_px": 133
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loving Friend, brother, cousin, son, and grandson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 266.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "5c75fa719b47631ad07bd1318d964455804bd619001d1e4091c44aab873ff690",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.931Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2027.27,
+        "quantity": 1,
+        "width": 787.4,
+        "height": 641.3499999999999,
+        "_length": 80,
+        "init_width": 428,
+        "init_height": 689,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 428x926"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1721938631821,
+        "path": "../upload/2024/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1721938631821img_4187_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -405,
+        "y": -233,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8295214851299266,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_4187.jpeg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "79.49580899161798px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 174,
+        "y": -340,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 16,
+        "label": "Aaron James Fenton",
+        "font": "79.49580899161798px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 171,
+        "y": -194,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 25,
+        "label": "3rd May 2007 - 11th August 2023",
+        "font": "79.49580899161798px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 18,
+        "y": -7,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 11,
+        "label": "Aged 16 years",
+        "font": "79.49580899161798px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 288,
+        "y": 133,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 43,
+        "label": "Loving Friend, brother, cousin, son, and grandson",
+        "font": "63.59664719329438px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -1,
+        "y": 266.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      }
+    ]
+  }
+}

@@ -1,0 +1,868 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.988Z",
+  "units": "mm",
+  "source": {
+    "id": "1649474102602",
+    "slug": "legacy-1649474102602",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1649474102602.json",
+    "savedAt": "2022-04-09T03:15:02.602Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In loving memory of our son,brother and uncle",
+        "font": {
+          "family": "Adorable",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 3.221,
+          "y_px": -349.812
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "ADEN DARRYL MARLON GRAHAM",
+        "font": {
+          "family": "Adorable",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 0.418,
+          "y_px": -276.815
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "27/02/1994 - 03/03/2022",
+        "font": {
+          "family": "French Script",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": -12.307,
+          "y_px": -189.053
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Your company, laughter your yarns",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 205.944,
+          "y_px": -96.383
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "There&apos;s a empty",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 13.136,
+          "y_px": -53.12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "Space in our home and",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 313.14,
+          "y_px": -52.988
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "Love your Mum( Tanya)",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 66.557,
+          "y_px": 17.766
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "Your Dad (Darryl),",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 374.281,
+          "y_px": 16.357
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "Darrylboy, Harlem and",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 293.253,
+          "y_px": 113.961
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-33",
+        "text": "Neices &",
+        "font": {
+          "family": "Arial",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 267.229,
+          "y_px": 157.854
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-34",
+        "text": "Nephews.",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 414.009,
+          "y_px": 158.016
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-35",
+        "text": "Your with God now",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 332.419,
+          "y_px": 270.38
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-42",
+        "text": "Until we meet again",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 323.348,
+          "y_px": 311.284
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-43",
+        "text": "Forever 28 son love you.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 226.916,
+          "y_px": 472.805
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "(Brothers)-",
+        "font": {
+          "family": "Arial",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 41.612,
+          "y_px": 114.98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "(Sisters)-Eltara,Nadine",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 142.802,
+          "y_px": 76.605
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "You will be sadly missed every day son",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 222.023,
+          "y_px": -132.834
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "In our hearts now",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 93.991,
+          "y_px": -18.271
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ce83128dba60995a8b0acf2285c03a3ce61e5f9528a73221b0ed088a89872f35",
+    "sourceItemCount": 21,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.988Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 2156,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 412,
+        "init_height": 720,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20220409,
+        "mode": "2d",
+        "navigator": "Linux armv8l, Google Inc., Mozilla/5.0 (Linux; Android 11; SM-A715F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.79 Mobile Safari/537.36, 412x915"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1649474881682,
+        "path": "../upload/2022/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1649474881682received_918018975541581.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": 80.39035510737347,
+        "y": 295.8651690614513,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.78430625,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_918018975541581.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 168,
+        "width": "293",
+        "height": "282",
+        "itemID": 8
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1649474987215,
+        "path": "../upload/2022/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1649474987215received_479540000325441.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -239.36044053061758,
+        "y": 181.12748086682393,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.7880315104166666,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_479540000325441.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 383,
+        "width": "558",
+        "height": "644",
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "In loving memory of our son,brother and uncle",
+        "font": "48.73903125px Adorable",
+        "font_size": 29,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 3.2214005149802247,
+        "y": -349.81161030339564,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "ADEN DARRYL MARLON GRAHAM",
+        "font": "57.142312499999996px Adorable",
+        "font_size": 34,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0.418207486307899,
+        "y": -276.8153919890033,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "27/02/1994 - 03/03/2022",
+        "font": "92.43609375px French Script",
+        "font_size": 55,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -12.306844642488555,
+        "y": -189.05266307523746,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Your company, laughter your yarns",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 205.94400691712178,
+        "y": -96.38318231264873,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "There&apos;s a empty",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 13.135727804665976,
+        "y": -53.1204889952071,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Space in our home and",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 313.1402151445908,
+        "y": -52.988301805083665,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 27
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Love your Mum( Tanya)",
+        "font": "31.932468749999998px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 66.55716738659316,
+        "y": 17.76590123226174,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 28
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Your Dad (Darryl),",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 374.2813035412505,
+        "y": 16.356888018931613,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 29
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Darrylboy, Harlem and",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 293.25306143437956,
+        "y": 113.9609924678266,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 32
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Neices &",
+        "font": "35.29378125px Arial",
+        "font_size": 21,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 267.2288620596456,
+        "y": 157.85418385842422,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 33
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Nephews.",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 414.009330858104,
+        "y": 158.01639483905046,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 34
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Your with God now",
+        "font": "36.9744375px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 332.41906733921246,
+        "y": 270.37982016954015,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 35
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Until we meet again",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 323.34773314173356,
+        "y": 311.28416601271465,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 42
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Forever 28 son love you.",
+        "font": "63.26774999999999px Chopin Script",
+        "font_size": 36,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 226.91648757342,
+        "y": 472.805306904959,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 43
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "(Brothers)-",
+        "font": "36.906187499999994px Arial",
+        "font_size": 21,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 41.6122204349881,
+        "y": 114.98038914518224,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 31
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "(Sisters)-Eltara,Nadine",
+        "font": "38.663624999999996px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 142.80225821234785,
+        "y": 76.60538945824374,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 30
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "You will be sadly missed every day son",
+        "font": "33.613125px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 222.0234934472022,
+        "y": -132.83437748541235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In our hearts now",
+        "font": "38.663624999999996px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 93.99076383063425,
+        "y": -18.271026506558428,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 22
+      }
+    ]
+  }
+}

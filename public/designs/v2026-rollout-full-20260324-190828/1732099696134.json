@@ -1,0 +1,827 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.832Z",
+  "units": "mm",
+  "source": {
+    "id": "1732099696134",
+    "slug": "legacy-1732099696134",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1732099696134.json",
+    "savedAt": "2024-11-20T10:48:16.134Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 914.4000000000007
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 1024,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 914.4000000000007,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 214
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Ellie Garrett",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -182
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Corbett, Honora Frances",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -222,
+          "y_px": 40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Zoe Luna",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -17,
+          "y_px": 39
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Ryan, Albert Michael",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 207,
+          "y_px": 42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Born 17th November 1888",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -221,
+          "y_px": 70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Born 2nd December 1931",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 223,
+          "y_px": 71
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Died 28th August 1947",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -232,
+          "y_px": 101
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Born 23rd September 1928",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 67
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Died 13th November 2019",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Simon Padilla",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 210,
+          "y_px": 103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "You Lived Your Lives True and Well",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 54
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -126
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Memories and a Gift to Treasure",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 56
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -85
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-14",
+        "asset": "1_017_19",
+        "position": {
+          "x_px": 3,
+          "y_px": 0
+        },
+        "height_px": 859,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "cross_002",
+        "position": {
+          "x_px": 0,
+          "y_px": -18
+        },
+        "height_px": 148,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-16",
+        "asset": "cross_010",
+        "position": {
+          "x_px": -136,
+          "y_px": -17
+        },
+        "height_px": 142,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-17",
+        "asset": "angel_001",
+        "position": {
+          "x_px": -260,
+          "y_px": -20
+        },
+        "height_px": 139,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "angel_001",
+        "position": {
+          "x_px": 226.63,
+          "y_px": -20
+        },
+        "height_px": 139,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_017_19",
+        "path": "/shapes/motifs/1_017_19.svg"
+      },
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      },
+      {
+        "id": "cross_010",
+        "path": "/shapes/motifs/cross_010.svg"
+      },
+      {
+        "id": "angel_001",
+        "path": "/shapes/motifs/angel_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "67b57df28a29723f0ba3e3585826586fabbf8d4e99c75665fcb22f332c55a085",
+    "sourceItemCount": 19,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.832Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 6601.52,
+        "quantity": 1,
+        "width": 1200,
+        "height": 914.4000000000007,
+        "_length": 100,
+        "init_width": 1032,
+        "init_height": 808,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1280x1024"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_19",
+        "item": "1_017_19",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 859,
+        "ratio": 1.6551059730250481,
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -18,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 148,
+        "ratio": 0.5323741007194245,
+        "itemID": 15
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_010",
+        "item": "cross_010",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -136,
+        "y": -17,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 142,
+        "ratio": 0.5941422594142259,
+        "itemID": 16
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "angel_001",
+        "item": "angel_001",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -260,
+        "y": -20,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 139,
+        "ratio": 0.11468646864686469,
+        "itemID": 17
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "angel_001",
+        "item": "angel_001",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 226.62959249999994,
+        "y": -20,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 139,
+        "ratio": 0.11468646864686469,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "44.641999999999996px Franklin Gothic",
+        "font_size": 68,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 214,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Together Forever",
+        "font": "32.824999999999996px Franklin Gothic",
+        "font_size": 50,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4,
+        "y": -182,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Corbett, Honora Frances",
+        "font": "18.381999999999998px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -222,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Ryan, Frances Teresa",
+        "font": "18.381999999999998px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -17,
+        "y": 39,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Ryan, Albert Michael",
+        "font": "18.381999999999998px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 207,
+        "y": 42,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Born 17th November 1888",
+        "font": "17.069px Franklin Gothic",
+        "font_size": 26,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -221,
+        "y": 70,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Born 2nd December 1931",
+        "font": "17.7255px Franklin Gothic",
+        "font_size": 27,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 223,
+        "y": 71,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Died 28th August 1947",
+        "font": "17.069px Franklin Gothic",
+        "font_size": 26,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -232,
+        "y": 101,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Born 23rd September 1928",
+        "font": "17.069px Franklin Gothic",
+        "font_size": 26,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 67,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Died 13th November 2019",
+        "font": "18.381999999999998px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Died 21st June 2021",
+        "font": "18.381999999999998px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 210,
+        "y": 103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "You Lived Your Lives True and Well",
+        "font": "35.451px Franklin Gothic",
+        "font_size": 54,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1,
+        "y": -126,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Memories and a Gift to Treasure",
+        "font": "36.763999999999996px Franklin Gothic",
+        "font_size": 56,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -85,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 13
+      }
+    ]
+  }
+}

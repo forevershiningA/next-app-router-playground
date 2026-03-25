@@ -1,0 +1,239 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.564Z",
+  "units": "mm",
+  "source": {
+    "id": "1608172788228",
+    "slug": "legacy-1608172788228",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1608172788228.json",
+    "savedAt": "2020-12-17T02:39:48.228Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 857,
+      "height": 599,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_140_23",
+        "position": {
+          "x_px": -148,
+          "y_px": -81
+        },
+        "height_px": 61,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_140_18",
+        "position": {
+          "x_px": 188,
+          "y_px": -36
+        },
+        "height_px": 61,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_140_03",
+        "position": {
+          "x_px": -82,
+          "y_px": 62
+        },
+        "height_px": 61,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_140_23",
+        "path": "/shapes/motifs/1_140_23.svg"
+      },
+      {
+        "id": "1_140_18",
+        "path": "/shapes/motifs/1_140_18.svg"
+      },
+      {
+        "id": "1_140_03",
+        "path": "/shapes/motifs/1_140_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2bcef6eda3d3d793aa7d17f3d791b06c8b5dae42919b3748a43bbd1ca561c2f0",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.564Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 495.45,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 1,
+        "init_width": 857,
+        "init_height": 599,
+        "mode": "2d"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_23",
+        "item": "1_140_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -148,
+        "y": -81,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 61,
+        "ratio": 0.119140625,
+        "itemID": 1
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_18",
+        "item": "1_140_18",
+        "price": 43.52400000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 188,
+        "y": -36,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 61,
+        "ratio": 0.08187919463087248,
+        "itemID": 2
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_03",
+        "item": "1_140_03",
+        "price": 43.52400000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -82,
+        "y": 62,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 61,
+        "ratio": 0.14386792452830188,
+        "itemID": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,803 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.048Z",
+  "units": "mm",
+  "source": {
+    "id": "1709840680498",
+    "slug": "legacy-1709840680498",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1709840680498.json",
+    "savedAt": "2024-03-07T19:44:40.498Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/Balmoral-Red.jpg",
+      "texture": "/textures/forever/l/Balmoral-Red.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 704.8499999999999,
+      "height_mm": 800.0999999999999
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 704.8499999999999,
+      "height_mm": 800.0999999999999,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Balmoral-Red.webp"
+    },
+    "base": {
+      "width_mm": 804.8499999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "PAT",
+        "font": {
+          "family": "Arial",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": -88.25,
+          "y_px": -238.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "GEORGE",
+        "font": {
+          "family": "Arial",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": 173.75,
+          "y_px": -234.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1873 - 1958",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 168,
+          "y_px": -185.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "1868 - 1905",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -75.75,
+          "y_px": -191.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "THOMPSON",
+        "font": {
+          "family": "Arial",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -79,
+          "y_px": -102
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "ADAMS",
+        "font": {
+          "family": "Arial",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": 168,
+          "y_px": -103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "1896 - 1934",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -80,
+          "y_px": -51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "1899 - 2005",
+        "font": {
+          "family": "Arial",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 166,
+          "y_px": -50
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "FOSTER",
+        "font": {
+          "family": "Arial",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": -77.5,
+          "y_px": 156.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "1942 - 2024",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -84.75,
+          "y_px": 204.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "PALMQUIST FAMILJEGRAV",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -304
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "KELLY",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 35,
+          "y_px": 3.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Savannah",
+        "font": {
+          "family": "Arial",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -82.5,
+          "y_px": 50
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "ADAMS",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 128.75,
+          "y_px": 60
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "1899 - 1988",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 128.75,
+          "y_px": 102
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "1889 - 1976",
+        "font": {
+          "family": "Arial",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -73.75,
+          "y_px": 100
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-12",
+        "asset": "cross_002",
+        "position": {
+          "x_px": -237,
+          "y_px": -146
+        },
+        "height_px": 223,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3c377a6117fde688a4c1b32bc6d27093b64bc37c394e865663734fd74e24bbd5",
+    "sourceItemCount": 19,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.049Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Balmoral-Red.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2224.58,
+        "quantity": 1,
+        "width": 704.8499999999999,
+        "height": 800.0999999999999,
+        "_length": 100,
+        "init_width": 1288,
+        "init_height": 644,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x864"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 638,
+        "quantity": 1,
+        "width": 804.8499999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1288,
+        "init_height": 644,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 5,
+        "label": "FRITZ",
+        "font": "51.35591105689254px Arial",
+        "font_size": 59,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -88.25,
+        "y": -238.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 5,
+        "label": "MAGDA",
+        "font": "47.87415437506932px Arial",
+        "font_size": 55,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 173.75,
+        "y": -234.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "1873 - 1958",
+        "font": "32.20624930686481px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 168,
+        "y": -185.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "1868 - 1905",
+        "font": "32.20624930686481px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -75.75,
+        "y": -191.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "BERTIL",
+        "font": "52.22635022734835px Arial",
+        "font_size": 60,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -79,
+        "y": -102,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 4,
+        "label": "AINA",
+        "font": "52.22635022734835px Arial",
+        "font_size": 60,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 168,
+        "y": -103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "1896 - 1934",
+        "font": "32.20624930686481px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -80,
+        "y": -51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "1899 - 2005",
+        "font": "30.465370965953202px Arial",
+        "font_size": 35,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 166,
+        "y": -50,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 5,
+        "label": "BERIT",
+        "font": "51.35591105689254px Arial",
+        "font_size": 59,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -77.5,
+        "y": 156.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "1942 - 2024",
+        "font": "32.20624930686481px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -84.75,
+        "y": 204.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 20,
+        "label": "PALMQUIST FAMILJEGRAV",
+        "font": "43.521958522790285px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -4,
+        "y": -304,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 11
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 269.50686,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -237,
+        "y": -146,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 223,
+        "ratio": 0.802158273381295,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "WADNER",
+        "font": "43.521958522790285px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 35,
+        "y": 3.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "Martin",
+        "font": "52.22635022734835px Arial",
+        "font_size": 60,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -82.5,
+        "y": 50,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 4,
+        "label": "AINA",
+        "font": "43.521958522790285px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 128.75,
+        "y": 60,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "1899 - 1988",
+        "font": "32.20624930686481px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 128.75,
+        "y": 102,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "1889 - 1976",
+        "font": "31.33581013640901px Arial",
+        "font_size": 36,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -73.75,
+        "y": 100,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 17
+      }
+    ]
+  }
+}

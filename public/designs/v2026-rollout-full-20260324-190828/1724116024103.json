@@ -1,0 +1,497 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.473Z",
+  "units": "mm",
+  "source": {
+    "id": "1724116024103",
+    "slug": "legacy-1724116024103",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1724116024103.json",
+    "savedAt": "2024-08-20T01:07:04.103Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Darwin-Brown.jpg",
+      "texture": "/textures/forever/l/Darwin-Brown.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 646,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 960,
+      "dpr": 2.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 646,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Darwin-Brown.webp"
+    },
+    "base": {
+      "width_mm": 746,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "APR. 7, 1960",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -67,
+          "y_px": 368.999
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "JAN. 13, 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -70,
+          "y_px": 456.997
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "AUG. 11, 1962",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 482.5,
+          "y_px": 374.497
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "SOMERS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 112
+        },
+        "position": {
+          "x_px": -150,
+          "y_px": -192.506
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "WALSH",
+        "font": {
+          "family": "Garamond",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": 492.5,
+          "y_px": 283.498
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "RUSH",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -67,
+          "y_px": 285.995
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_015_08",
+        "position": {
+          "x_px": -337.5,
+          "y_px": 314.917
+        },
+        "height_px": 249,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_129_14",
+        "position": {
+          "x_px": -10,
+          "y_px": -524.862
+        },
+        "height_px": 122,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "cross_028",
+        "position": {
+          "x_px": 602.5,
+          "y_px": -82.478
+        },
+        "height_px": 174,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_015_08",
+        "path": "/shapes/motifs/1_015_08.svg"
+      },
+      {
+        "id": "1_129_14",
+        "path": "/shapes/motifs/1_129_14.svg"
+      },
+      {
+        "id": "cross_028",
+        "path": "/shapes/motifs/cross_028.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6cc135161410686d6218476c27db65cfc146a4af48cefabd7e4d2f795214bf90",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.473Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Darwin-Brown.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1554.05,
+        "quantity": 1,
+        "width": 646,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1296,
+        "init_height": 761,
+        "device": "desktop",
+        "dpr": 2.5,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240731,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x960"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 601,
+        "quantity": 1,
+        "width": 746,
+        "height": 100,
+        "_length": 130,
+        "init_width": 1296,
+        "init_height": 761,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 10,
+        "label": "APR. 7, 1960",
+        "font": "78.11435166171732px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -67,
+        "y": 368.9986859395533,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "JAN. 13, 2024",
+        "font": "78.11435166171732px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -70,
+        "y": 456.99737187910637,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "AUG. 11, 1962",
+        "font": "78.11435166171732px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 482.5,
+        "y": 374.49671484888313,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_08",
+        "item": "1_015_08",
+        "price": 275.90078,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -337.5,
+        "y": 314.91721419185296,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 249,
+        "ratio": 0.5697940503432495,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "SOMERS",
+        "font": "282.2195931003981px Garamond",
+        "font_size": 112,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -150,
+        "y": -192.5059132720105,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 79,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 4,
+        "label": "GAIL",
+        "font": "123.47107198142416px Garamond",
+        "font_size": 49,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 492.5,
+        "y": 283.49802890933006,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 4
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_129_14",
+        "item": "1_129_14",
+        "price": 244.66894,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -10,
+        "y": -524.862023653088,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 122,
+        "ratio": 0.22467771639042358,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_028",
+        "item": "cross_028",
+        "price": 257.45678,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 602.5,
+        "y": -82.47831800262804,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 174,
+        "ratio": 0.2766295707472178,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 3,
+        "label": "TED",
+        "font": "125.99088977696343px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -67,
+        "y": 285.99474375821273,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 1
+      }
+    ]
+  }
+}

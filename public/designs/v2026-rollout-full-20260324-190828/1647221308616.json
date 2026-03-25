@@ -1,0 +1,474 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.857Z",
+  "units": "mm",
+  "source": {
+    "id": "1647221308616",
+    "slug": "legacy-1647221308616",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1647221308616.json",
+    "savedAt": "2022-03-14T01:28:28.616Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 28",
+    "material": {
+      "name": "src/granites/forever2/l/G633-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/G633-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 500,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 500,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633-TILE-900-X-900.webp"
+    },
+    "base": {
+      "width_mm": 600,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/G633-TILE-900-X-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "SHARP",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -4.161,
+          "y_px": -61
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "27/10/2021",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -6.662,
+          "y_px": 103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "We will love you forever",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -2.319,
+          "y_px": 153
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Mummy & Daddy",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -3.155,
+          "y_px": 230
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "LILLIE",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 2.325,
+          "y_px": -128
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "& forever in our hearts",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 191
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Born an Angel",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -6.131,
+          "y_px": 52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "TROUMOULIARIS",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -7.539,
+          "y_px": 4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "631bfefff1bda9ff6b0fb7e1e07a13e0a97b64ba3b488a200a44b2937b740037",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.857Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 28",
+        "shape": "Headstone 28",
+        "color": "undefinedundefinedundefinedundefined#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/G633-TILE-900-X-900.jpg",
+        "price": 1120,
+        "quantity": 1,
+        "width": 500,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 816,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220313,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.51 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "undefinedundefinedundefined#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633-TILE-900-X-900.jpg",
+        "price": 508,
+        "quantity": 1,
+        "width": 600,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1680,
+        "init_height": 816,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 6,
+        "label": "CHARLY",
+        "font": "47.42260714285713px Lucida Calligraphy",
+        "font_size": 39,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -4.161428571428587,
+        "y": -61,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 10,
+        "label": "27/10/2021",
+        "font": "40.12682142857142px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -6.661964285714248,
+        "y": 103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 20,
+        "label": "We will love you forever",
+        "font": "24.31928571428571px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -2.319107142857092,
+        "y": 153,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Mummy & Daddy",
+        "font": "24.31928571428571px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -3.154821428571381,
+        "y": 230,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 8,
+        "label": "NICHOLAS",
+        "font": "57.15032142857142px Lucida Calligraphy",
+        "font_size": 47,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 2.32482142857134,
+        "y": -128,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 19,
+        "label": "& forever in our hearts",
+        "font": "24.31928571428571px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -5,
+        "y": 191,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Born an Angel",
+        "font": "26.75121428571428px Lucida Calligraphy",
+        "font_size": 22,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -6.131071428571431,
+        "y": 52,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 9
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1647221753103,
+        "path": "../upload/2022/03/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1647221753103dumbo2_cropped.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": 0,
+        "y": -249,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36214285714285716,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dumbo2.jpg",
+        "price": 410,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 13,
+        "label": "TROUMOULIARIS",
+        "font": "43.18971428571429px Lucida Calligraphy",
+        "font_size": 38,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -7.539464285714303,
+        "y": 4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.726Z",
+  "units": "mm",
+  "source": {
+    "id": "1597391120606",
+    "slug": "legacy-1597391120606",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1597391120606.json",
+    "savedAt": "2020-08-14T07:45:20.606Z"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "monument",
+    "slug": "laser-monument",
+    "category": "full-monument",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1786,
+      "height_mm": 1200
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 905,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1786,
+      "height_mm": 1200,
+      "thickness_mm": 50,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1886,
+      "height_mm": 400,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_184_23",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 319,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_218_19",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 526,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_154_05",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 516,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_154_26",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 360,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_184_23",
+        "path": "/shapes/motifs/1_184_23.svg"
+      },
+      {
+        "id": "1_218_19",
+        "path": "/shapes/motifs/1_218_19.svg"
+      },
+      {
+        "id": "1_154_05",
+        "path": "/shapes/motifs/1_154_05.svg"
+      },
+      {
+        "id": "1_154_26",
+        "path": "/shapes/motifs/1_154_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "18025e034bcd6f1a6faa5ad2fbc6e548f117f6a7a4452b56fe58ea520dc6b853",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.726Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 100,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "5906.66",
+        "quantity": 1,
+        "width": 1786,
+        "height": 1200,
+        "_length": 50,
+        "init_width": 1680,
+        "init_height": 905
+      },
+      {
+        "productid": 100,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "10395.63",
+        "quantity": 1,
+        "width": 1886,
+        "height": 400,
+        "_length": 250,
+        "init_width": 1680,
+        "init_height": 905
+      },
+      {
+        "productid": 100,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "6377.94",
+        "quantity": 1,
+        "width": 950,
+        "height": 60,
+        "_length": 2030,
+        "init_width": 1680,
+        "init_height": 905
+      },
+      {
+        "productid": 100,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "42406.57",
+        "quantity": 1,
+        "width": 1150,
+        "height": 300,
+        "_length": 2230,
+        "init_width": 1680,
+        "init_height": 905
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_23",
+        "item": "1_184_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 319,
+        "ratio": 0.4001641459437043,
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_218_19",
+        "item": "1_218_19",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 526,
+        "ratio": 0.7112433647467445,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_05",
+        "item": "1_154_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 516,
+        "ratio": 0.5470357491542629,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_26",
+        "item": "1_154_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 360,
+        "ratio": 0.3982879850125894,
+        "itemID": 4
+      }
+    ]
+  }
+}

@@ -1,4 +1,12 @@
 @import 'tailwindcss';
+@source "../app";
+@source "../components";
+@source "../contexts";
+@source "../lib";
+@source "../ui";
+@source not "../public";
+@source not "../haxe";
+@source not "../archive";
 
 /* CRITICAL: Prevent text cursor (caret) from appearing anywhere except inputs */
 *, *::before, *::after {

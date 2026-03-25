@@ -1,0 +1,621 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.852Z",
+  "units": "mm",
+  "source": {
+    "id": "1604286244095",
+    "slug": "legacy-1604286244095",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1604286244095.json",
+    "savedAt": "2020-11-02T03:04:04.095Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 39",
+    "material": {
+      "name": "src/granites/forever2/l/G633-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/G633-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 747,
+      "height_mm": 1002
+    },
+    "viewportPx": {
+      "width": 1505,
+      "height": 757,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 747,
+      "height_mm": 1002,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633-TILE-900-X-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-13",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -156.249
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Philippa and Sophia",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -10.776,
+          "y_px": 210.128
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Michael, Melinda,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -9.878,
+          "y_px": 174.209
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Leon Vasquez",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 17.96
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Wilber Brown",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 1.796,
+          "y_px": -88.002
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "19-10-1934 - 24-1-2018",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -3.592,
+          "y_px": -59.267
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "22-2-1936 - 2-7-2020",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -2.694,
+          "y_px": 45.797
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Beloved parents of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -6.286,
+          "y_px": 133.8
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Dearly Loved,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -3.592,
+          "y_px": 272.987
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Art Warren",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -3.592,
+          "y_px": 301.722
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "&",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 0.265,
+          "y_px": -12.355
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-19",
+        "asset": "1_124_01",
+        "position": {
+          "x_px": 159.857,
+          "y_px": 316.09
+        },
+        "height_px": 83,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_124_01",
+        "position": {
+          "x_px": -161.637,
+          "y_px": 315.192
+        },
+        "height_px": 83,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_124_01",
+        "path": "/shapes/motifs/1_124_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "50879f850c3ca126285c8dc2a3ca8513c2af0a06f777ed6545a9e24518cc99c4",
+    "sourceItemCount": 14,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.852Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 39",
+        "shape": "Headstone 39",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/G633-TILE-900-X-900.jpg",
+        "price": 2429.02,
+        "quantity": 1,
+        "width": 747,
+        "height": 1002,
+        "_length": 1,
+        "init_width": 1505,
+        "init_height": 757,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_124_01",
+        "item": "1_124_01",
+        "price": 195.0728065,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 159.85738957776616,
+        "y": 316.09015421115066,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 83,
+        "ratio": 0.0931537598204265,
+        "itemID": 19
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_124_01",
+        "item": "1_124_01",
+        "price": 195.0728065,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -161.6370106761566,
+        "y": 315.19217081850536,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 83,
+        "ratio": 0.0931537598204265,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 19,
+        "label": "In Loving Memory of",
+        "font": "19.88824850299401px Lucida Calligraphy",
+        "font_size": 27,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -156.2491103202847,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 19,
+        "label": "Philippa and Sophia",
+        "font": "21.36145209580838px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -10.775800711743772,
+        "y": 210.12811387900356,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 17,
+        "label": "Michael, Melinda,",
+        "font": "22.098053892215567px Lucida Calligraphy",
+        "font_size": 30,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -9.877817319098458,
+        "y": 174.20877817319098,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 23,
+        "label": "Lyall Edward David Ewin",
+        "font": "21.36145209580838px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 17.959667852906286,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 19,
+        "label": "Joanne Frances Ewin",
+        "font": "21.36145209580838px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 1.7959667852906287,
+        "y": -88.0023724792408,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 22,
+        "label": "19-10-1934 - 24-1-2018",
+        "font": "20.624850299401196px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -3.5919335705812574,
+        "y": -59.26690391459075,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 20,
+        "label": "22-2-1936 - 2-7-2020",
+        "font": "22.098053892215567px Lucida Calligraphy",
+        "font_size": 30,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -2.693950177935943,
+        "y": 45.79715302491103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 18,
+        "label": "Beloved parents of",
+        "font": "18.41504491017964px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -6.2858837485172,
+        "y": 133.79952550415183,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 13,
+        "label": "Dearly Loved,",
+        "font": "19.88824850299401px Lucida Calligraphy",
+        "font_size": 27,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -3.5919335705812574,
+        "y": 272.9869513641756,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 15,
+        "label": "Never Forgotten",
+        "font": "19.88824850299401px Lucida Calligraphy",
+        "font_size": 27,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -3.5919335705812574,
+        "y": 301.7224199288256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 20
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "&",
+        "font": "30.200673652694608px Lucida Calligraphy",
+        "font_size": 41,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0.26516185151978855,
+        "y": -12.354568274473438,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 1
+      }
+    ]
+  }
+}

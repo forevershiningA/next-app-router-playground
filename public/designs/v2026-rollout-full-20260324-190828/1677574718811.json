@@ -1,0 +1,503 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.901Z",
+  "units": "mm",
+  "source": {
+    "id": "1677574718811",
+    "slug": "legacy-1677574718811",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1677574718811.json",
+    "savedAt": "2023-02-28T08:58:38.811Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 800,
+      "height_mm": 443
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 800,
+      "height_mm": 443,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In loving memory of Lenny",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 16,
+          "y_px": -212.547
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "2019 ~ 2023",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": -189.429
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "You have left hoof prints in everyone’s heart",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 162.811
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "See you at the rainbow bridge",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 183.475
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Lenny",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -155.662
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "rest easy beautiful man",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 201.966
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "The sound of you may be gone but never forgotten",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 140.147
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "A horse that was to special for the world",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": -120.467
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bf836712f9ad5343a99412c94b05bf34172fb9dcc13e3b4d966302d0755b2b27",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.901Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 1477.31,
+        "quantity": 1,
+        "width": 800,
+        "height": 443,
+        "_length": 15,
+        "init_width": 414,
+        "init_height": 659,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230223,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "In loving memory of Lenny",
+        "font": "20.182499999999997px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 16,
+        "y": -212.5466098192747,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "2019 ~ 2023",
+        "font": "20.182499999999997px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": -189.429395729311,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "You have left hoof prints in everyone’s heart",
+        "font": "20.182499999999997px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": 162.81105990783408,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "See you at the rainbow bridge",
+        "font": "20.182499999999997px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8,
+        "y": 183.47465437788014,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 12
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1677575654713,
+        "path": "../upload/2023/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "167757565471325d42cbd01404ec58056b874.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": 2,
+        "y": 10,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7339090909090908,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "25D42CBD-0140-4EC5-8056-B874840C62C6.jpeg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 18
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1677575864958,
+        "path": "../upload/2023/02/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16775758649580e9b40159c0b491889957ef1.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -256,
+        "y": -8,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0427625,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "0E9B4015-9C0B-4918-8995-7EF1639153DE.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 341,
+        "width": "248",
+        "height": "344",
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Lenny",
+        "font": "46.41974999999999px Franklin Gothic",
+        "font_size": 46,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8,
+        "y": -155.6622397526944,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "rest easy beautiful man",
+        "font": "20.182499999999997px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -12,
+        "y": 201.96620583717356,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "The sound of you may be gone but never forgotten",
+        "font": "22.200749999999996px Franklin Gothic",
+        "font_size": 22,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": 140.14746543778801,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1677576631598,
+        "path": "../upload/2023/02/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "167757663159813206f7302c649abbbaa5937.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 250,
+        "y": -4,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0366465909090907,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "13206F73-02C6-49AB-BBAA-5937D6D196E0.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 339,
+        "width": "265",
+        "height": "342",
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "A horse that was to special for the world",
+        "font": "22.200749999999996px Franklin Gothic",
+        "font_size": 22,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": -120.46697388632867,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 8
+      }
+    ]
+  }
+}

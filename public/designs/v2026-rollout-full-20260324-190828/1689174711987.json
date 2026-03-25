@@ -1,0 +1,724 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.079Z",
+  "units": "mm",
+  "source": {
+    "id": "1689174711987",
+    "slug": "legacy-1689174711987",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1689174711987.json",
+    "savedAt": "2023-07-12T15:11:51.987Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 203.2,
+      "height_mm": 177.79999999999998
+    },
+    "viewportPx": {
+      "width": 2347,
+      "height": 1320,
+      "dpr": 1.0909090909090908
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 203.2,
+      "height_mm": 177.79999999999998,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "This memorial",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 164.654,
+          "y_px": -368.471
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "is in remembrance of",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 163.564,
+          "y_px": -309.882
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Founder of",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 170.106,
+          "y_px": -107.626
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Kids &apos;n things 1972",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 172.287,
+          "y_px": -54.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "KATHLEEN KELLER",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 162.473,
+          "y_px": -213.508
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "that is carried on today at Kid&apos;s &apos;n things.",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -16.356,
+          "y_px": 343.347
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "strength, determination and love for children",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -16.356,
+          "y_px": 300.076
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Shirley&apos;s spirit lives on here, in a place that",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -17.447,
+          "y_px": 258.781
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "children. This plaque is a reminder of her",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -15.266,
+          "y_px": 216.499
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "that Shirley began her life&apos;s dedication to",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -14.176,
+          "y_px": 174.523
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "is special to here. It was here, at Kids &apos;n things",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -13.085,
+          "y_px": 133.33
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Shirley&apos;s spirit lives on here, in a place that",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -14.176,
+          "y_px": 92.445
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "October 7, 1932",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -336.941,
+          "y_px": -13.211
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "April 6, 2011",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -332.58,
+          "y_px": 32.05
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Kids &apos;n things is Proud to continue in Shirley&apos;s Memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -5.452,
+          "y_px": 414.629
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fee6b597f779ad3a9e9c2f13c35985f42215080e624e3dd6f9833bbf24881542",
+    "sourceItemCount": 17,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.079Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "price": 675.5,
+        "quantity": 1,
+        "width": 203.2,
+        "height": 177.79999999999998,
+        "_length": 0,
+        "init_width": 1880,
+        "init_height": 1040,
+        "device": "desktop",
+        "dpr": 1.0909090909090908,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230222,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 2347x1320"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1689174987449,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1689174987449img2307127668_cropped.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": -343.48404255319167,
+        "y": -236.6380709134615,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7328203292770221,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "img23-07-12-7668.png",
+        "price": 280,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 12,
+        "label": "This memorial",
+        "font": "59.881889763779526px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 164.65425531914912,
+        "y": -368.4714393028846,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 17,
+        "label": "is in remembrance of",
+        "font": "59.881889763779526px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 163.563829787234,
+        "y": -309.8818991267596,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 9,
+        "label": "Founder of",
+        "font": "59.881889763779526px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 170.1063829787231,
+        "y": -107.62596463156751,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 16,
+        "label": "Kids &apos;n things 1972",
+        "font": "48.99427344309234px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 172.28723404255288,
+        "y": -54.46093892376831,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 16,
+        "label": "SHIRLEY ANN BLASKO",
+        "font": "59.881889763779526px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 162.4734042553191,
+        "y": -213.5078005690674,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 36,
+        "label": "that is carried on today at Kid&apos;s &apos;n things.",
+        "font": "38.10665712240515px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -16.356382978723673,
+        "y": 343.34658994118945,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 18
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 40,
+        "label": "strength, determination and love for children",
+        "font": "38.10665712240515px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -16.356382978723673,
+        "y": 300.07578834898266,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Shirley&apos;s spirit lives on here, in a place that",
+        "font": "38.10665712240515px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -17.44680851063856,
+        "y": 258.7813088721608,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "children. This plaque is a reminder of her",
+        "font": "38.10665712240515px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -15.265957446808784,
+        "y": 216.49866833764634,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "that Shirley began her life&apos;s dedication to",
+        "font": "38.10665712240515px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14.175531914894009,
+        "y": 174.52269847620914,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "is special to here. It was here, at Kids &apos;n things",
+        "font": "38.10665712240515px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -13.085106382979006,
+        "y": 133.33044255707932,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Shirley&apos;s spirit lives on here, in a place that",
+        "font": "38.10665712240515px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14.175531914893895,
+        "y": 92.44485731102645,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "October 7, 1932",
+        "font": "48.99427344309234px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -336.9414893617022,
+        "y": -13.210893851652713,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "April 6, 2011",
+        "font": "48.99427344309234px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -332.57978723404267,
+        "y": 32.05016691179014,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "Kids &apos;n things is Proud to continue in Shirley&apos;s Memory",
+        "font": "54.43808160343593px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -5.452127659574785,
+        "y": 414.6285764605294,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 19
+      }
+    ]
+  }
+}

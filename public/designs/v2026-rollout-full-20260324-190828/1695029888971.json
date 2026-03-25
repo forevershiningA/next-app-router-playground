@@ -1,0 +1,429 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.990Z",
+  "units": "mm",
+  "source": {
+    "id": "1695029888971",
+    "slug": "legacy-1695029888971",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1695029888971.json",
+    "savedAt": "2023-09-18T09:38:08.971Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 820,
+      "height": 1180,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "ARTHUR MCDONALD",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -270
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "29/04/1948  -  10/08/2023",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": -120
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "DOCIA WEST",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 350
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "YOU WILL ALWAYS BE THERE",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -16,
+          "y_px": 458
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "GONE ARE THE DAYS WE USED TO SHARE",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 248
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "AGED 75",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -34,
+          "y_px": -4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "IN LOVING MEMORY OF",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": -430
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "OUR BROTHER AND UNCLE",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 142
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "019c8385e77fdfed54ae22a7b383b91af345915dbadade05878ec6bb9e3c5c8f",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.990Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 712.42,
+        "quantity": 1,
+        "width": 200,
+        "height": 200,
+        "_length": 10,
+        "init_width": 940,
+        "init_height": 649,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 820x1180"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "KENNETH  JOHN. MONTAGUE",
+        "font": "82.26075px Franklin Gothic",
+        "font_size": 13,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2,
+        "y": -270,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "29/04/1948  -  10/08/2023",
+        "font": "56.94975px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 6,
+        "y": -120,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "BUT IN OUR HEARTS",
+        "font": "63.2775px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -10,
+        "y": 350,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "YOU WILL ALWAYS BE THERE",
+        "font": "63.2775px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -16,
+        "y": 458,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "GONE ARE THE DAYS WE USED TO SHARE",
+        "font": "63.2775px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2,
+        "y": 248,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "AGED 75",
+        "font": "56.94975px Franklin Gothic",
+        "font_size": 9,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -34,
+        "y": -4,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 6,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "IN LOVING MEMORY OF",
+        "font": "63.2775px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 12,
+        "y": -430,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "OUR BROTHER AND UNCLE",
+        "font": "63.2775px Franklin Gothic",
+        "font_size": 10,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 14,
+        "y": 142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 9
+      }
+    ]
+  }
+}

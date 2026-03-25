@@ -1,0 +1,412 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.286Z",
+  "units": "mm",
+  "source": {
+    "id": "1613506585618",
+    "slug": "legacy-1613506585618",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1613506585618.json",
+    "savedAt": "2021-02-16T20:16:25.618Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 45",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 630,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 592,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 630,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 730,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Hazel Jimenez",
+        "font": {
+          "family": "Adorable",
+          "size_px": 34.667
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 242
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "20/06/2003 -16/08/2020",
+        "font": {
+          "family": "Arial",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 324
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Your wings were ready but our hearts were not",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -29,
+          "y_px": 371
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Forever missed",
+        "font": {
+          "family": "Adorable",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 26,
+          "y_px": -142
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loved beyond measure",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 25,
+          "y_px": -98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "We love you Bella",
+        "font": {
+          "family": "Adorable",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": -53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "2_056_25",
+        "position": {
+          "x_px": 302,
+          "y_px": -308
+        },
+        "height_px": 105,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_056_25",
+        "path": "/shapes/motifs/2_056_25.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ee44f5e04c0093fac89624178ceb37f24b016b178d06b97b4eb02f6e1cc9f406",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.286Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 39",
+        "shape": "Headstone 45",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 1286.24,
+        "quantity": 1,
+        "width": 630,
+        "height": 600,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 592,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 565,
+        "quantity": 1,
+        "width": 730,
+        "height": 100,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 592,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_056_25",
+        "item": "2_056_25",
+        "price": 190.789742,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 302.00001525878906,
+        "y": -308.00001525878906,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 105,
+        "ratio": 0.12338425381903642,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Izabella Margaret Schonknecht",
+        "font": "49.665335269850125px Adorable",
+        "font_size": 34.66668701171875,
+        "font_family": "Adorable",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 1.999969482421875,
+        "y": 241.9999237060548,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "20/06/2003 -16/08/2020",
+        "font": "50.14285714285714px Arial",
+        "font_size": 35,
+        "font_family": "Arial",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 6.0000457763671875,
+        "y": 324.0000915527345,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 2,
+        "label": "Your wings were ready but our hearts were not",
+        "font": "28.653061224489793px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -28.999969482421875,
+        "y": 370.9999694824219,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Forever missed",
+        "font": "48.71020408163265px Adorable",
+        "font_size": 34,
+        "font_family": "Adorable",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 26.000015258789062,
+        "y": -141.99996948242188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Loved beyond measure",
+        "font": "25.787755102040812px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 24.999984741210938,
+        "y": -97.99986267089844,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "We love you Bella",
+        "font": "47.27755102040816px Adorable",
+        "font_size": 33,
+        "font_family": "Adorable",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 24,
+        "y": -52.99993896484375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 7
+      }
+    ]
+  }
+}

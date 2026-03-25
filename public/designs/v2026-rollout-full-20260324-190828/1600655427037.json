@@ -1,0 +1,205 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.846Z",
+  "units": "mm",
+  "source": {
+    "id": "1600655427037",
+    "slug": "legacy-1600655427037",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1600655427037.json",
+    "savedAt": "2020-09-21T02:30:27.037Z"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "monument",
+    "slug": "traditional-monument",
+    "category": "full-monument",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 900,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 1552,
+      "height": 681,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 1000,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Demo inscription",
+        "font": {
+          "family": "Arial",
+          "size_px": 111.417
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6a410e2b6e6677b7de332bebdff6801148a9672c82a086ccbed96ff4fbb99626",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.846Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 900,
+        "height": 700,
+        "_length": 1,
+        "init_width": 1552,
+        "init_height": 681,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 1000,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1552,
+        "init_height": 681,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1552,
+        "init_height": 681,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1552,
+        "init_height": 681,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 6.25,
+        "quantity": 1,
+        "label": "Demo inscription",
+        "font": "98.36666666666666px Arial",
+        "font_size": 111.41687236768622,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 111,
+        "itemID": 1
+      }
+    ]
+  }
+}

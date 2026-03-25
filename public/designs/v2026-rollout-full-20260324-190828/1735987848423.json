@@ -1,0 +1,263 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.059Z",
+  "units": "mm",
+  "source": {
+    "id": "1735987848423",
+    "slug": "legacy-1735987848423",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1735987848423.json",
+    "savedAt": "2025-01-04T10:50:48.423Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 500,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 579,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 500,
+      "height_mm": 280,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Luther Shaw",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": -199
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "07/12/1941 ~ 12/12/2024",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -36,
+          "y_px": -146
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_158_05",
+        "position": {
+          "x_px": -342.773,
+          "y_px": 63.457
+        },
+        "height_px": 206,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_158_05",
+        "path": "/shapes/motifs/1_158_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4731227a71668f42e7ccd593fb3abbd36967f34f51988aaa0df275f18af34f57",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.059Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 847.31,
+        "quantity": 1,
+        "width": 500,
+        "height": 280,
+        "_length": 15,
+        "init_width": 360,
+        "init_height": 523,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 360x579"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_158_05",
+        "item": "1_158_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -342.7734375,
+        "y": 63.45703125,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 206,
+        "ratio": 0.2429245283018868,
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1735988265996,
+        "path": "../upload/2025/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17359882659962149707044_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 126.03515625,
+        "y": 100.1953125,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.4468702290076338,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2149707044.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 180,
+        "width": "268",
+        "height": "379",
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Ronald Graham Vaughan",
+        "font": "58.96800000000001px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -7,
+        "y": -199,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "07/12/1941 ~ 12/12/2024",
+        "font": "44.226000000000006px Franklin Gothic",
+        "font_size": 21,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -36,
+        "y": -146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,396 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.457Z",
+  "units": "mm",
+  "source": {
+    "id": "1716748849554",
+    "slug": "legacy-1716748849554",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1716748849554.json",
+    "savedAt": "2024-05-26T18:40:49.554Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 692.1499999999997,
+      "height_mm": 444.5
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 920,
+      "dpr": 2.608695652173913
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 692.1499999999997,
+      "height_mm": 444.5,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 749.3,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "GILMORE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 122
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": -115
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "OCTOBER 30",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -46.87,
+          "y_px": 112.894
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "1971",
+        "font": {
+          "family": "Garamond",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": -57.043,
+          "y_px": 190.462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "APRIL 5",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 255.565,
+          "y_px": 115.894
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 80
+        },
+        "position": {
+          "x_px": 255.957,
+          "y_px": 191.854
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "CRAIG \"SHOOTY\" ROBERT",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 93.913,
+          "y_px": 18.257
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ea084c0b0b40d19d84ae32c8ca1721e0bad4b62c8ed54b37285ec5f0f454a99c",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.457Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2193.82,
+        "quantity": 1,
+        "width": 692.1499999999997,
+        "height": 444.5,
+        "_length": 80,
+        "init_width": 414,
+        "init_height": 758,
+        "device": "mobile",
+        "dpr": 2.608695652173913,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (mobile(android)), 414x920"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 671,
+        "quantity": 1,
+        "width": 749.3,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 414,
+        "init_height": 758,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1716748079785,
+        "path": "../upload/2024/05/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17167480797851000003236_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -305.4347826086956,
+        "y": 102.12269129287597,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6730630467936901,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000003236.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "206",
+        "width": "179",
+        "height": "255",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "GILMORE",
+        "font": "151.07324833809048px Garamond",
+        "font_size": 122,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 5,
+        "y": -115,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 84,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "OCTOBER 30",
+        "font": "47.055601941372444px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -46.86956521739131,
+        "y": 112.89445910290237,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "1971",
+        "font": "94.11120388274489px Garamond",
+        "font_size": 76,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -57.04347826086956,
+        "y": 190.46174142480209,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "APRIL 5",
+        "font": "49.532212569865735px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 255.56521739130426,
+        "y": 115.89445910290226,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2024",
+        "font": "99.06442513973147px Garamond",
+        "font_size": 80,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 255.95652173913038,
+        "y": 191.8535620052769,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "CRAIG \"SHOOTY\" ROBERT",
+        "font": "47.055601941372444px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 93.91304347826087,
+        "y": 18.257255936675506,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 8
+      }
+    ]
+  }
+}

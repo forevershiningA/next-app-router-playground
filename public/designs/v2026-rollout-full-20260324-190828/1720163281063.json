@@ -1,0 +1,535 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.299Z",
+  "units": "mm",
+  "source": {
+    "id": "1720163281063",
+    "slug": "legacy-1720163281063",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1720163281063.json",
+    "savedAt": "2024-07-05T07:08:01.063Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 963,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1799,
+      "height": 1012,
+      "dpr": 2.134999990463257
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 963,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": 1063,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "SILVA",
+        "font": {
+          "family": "Garamond",
+          "size_px": 71
+        },
+        "position": {
+          "x_px": 10.674,
+          "y_px": -149.417
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "SALLY SAMS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -330.88,
+          "y_px": 34.152
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "DEC 18, 1941",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -341.553,
+          "y_px": 94.573
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "DELWIN \"DEL\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 298.859,
+          "y_px": 24.135
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "JULY 15, 2010",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 322.341,
+          "y_px": 136.17
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "SEPT 1, 1937",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 326.611,
+          "y_px": 85.69
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "AUG 23, 1985",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -330.88,
+          "y_px": 140.035
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "REST IN PEACE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 79
+        },
+        "position": {
+          "x_px": 10.674,
+          "y_px": 534.918
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_017_17",
+        "position": {
+          "x_px": -6.404,
+          "y_px": 8.538
+        },
+        "height_px": 552,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "australiancoat",
+        "position": {
+          "x_px": 2.135,
+          "y_px": 170.76
+        },
+        "height_px": 187,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_017_17",
+        "path": "/shapes/motifs/1_017_17.svg"
+      },
+      {
+        "id": "australiancoat",
+        "path": "/shapes/motifs/australiancoat.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "09410ce5483dd24879df309d8e49052e4e3e60e715fc61ff1ab5bbbb6da088e7",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.299Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2374.89,
+        "quantity": 1,
+        "width": 963,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1559,
+        "init_height": 788.007022857666,
+        "device": "desktop",
+        "dpr": 2.134999990463257,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1799x1012"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "price": 746,
+        "quantity": 1,
+        "width": 1063,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1559,
+        "init_height": 788.007022857666,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_17",
+        "item": "1_017_17",
+        "price": 334.50093499999997,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -6.404127760695701,
+        "y": 8.538016837850932,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 552,
+        "ratio": 1.0298507462686568,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "THOMPSON",
+        "font": "106.12971996107329px Garamond",
+        "font_size": 71,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 10.673641393202095,
+        "y": -149.41662628973003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "australiancoat",
+        "item": "australiancoat",
+        "price": 248.81536,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 2.1347092535650063,
+        "y": 170.76033675701206,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 187,
+        "ratio": 1.9684210526315788,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 9,
+        "label": "SALLY SAMS",
+        "font": "52.317467586444586px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -330.8799343026069,
+        "y": 34.15206735140248,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "DEC 18, 1941",
+        "font": "35.87483491641915px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -341.55348057043284,
+        "y": 94.57333919136045,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "DELWIN \"DEL\"",
+        "font": "50.82268279826045px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 298.85929549912885,
+        "y": 24.134504209462648,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "JULY 15, 2010",
+        "font": "32.88526534005088px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 322.34109728834596,
+        "y": 136.16963049334208,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "SEPT 1, 1937",
+        "font": "38.86440449278741px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 326.61051579547643,
+        "y": 85.69008418925307,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "AUG 23, 1985",
+        "font": "37.369619704603274px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -330.87993430260667,
+        "y": 140.03512628387955,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 11,
+        "label": "REST IN PEACE",
+        "font": "118.08799826654635px Garamond",
+        "font_size": 79,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 10.673546267825941,
+        "y": 534.91840503447,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 10
+      }
+    ]
+  }
+}

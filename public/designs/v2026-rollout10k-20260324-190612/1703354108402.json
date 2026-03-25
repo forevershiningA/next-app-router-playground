@@ -1,0 +1,694 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.390Z",
+  "units": "mm",
+  "source": {
+    "id": "1703354108402",
+    "slug": "legacy-1703354108402",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1703354108402.json",
+    "savedAt": "2023-12-23T17:55:08.402Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 825.5,
+      "height_mm": 654.05
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 825.5,
+      "height_mm": 654.05,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 862,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "HILL",
+        "font": {
+          "family": "Garamond",
+          "size_px": 113
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -117
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "EMILY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -159,
+          "y_px": 63
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "ULYSSES",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 155,
+          "y_px": 64
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Feb 7, 2014",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -157,
+          "y_px": 157
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Mar 2, 1925",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -155,
+          "y_px": 109
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Feb 14, 1927",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 167,
+          "y_px": 112
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Aug 19, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 173,
+          "y_px": 154
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "1949",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 39.249
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Always and Forever",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 74
+        },
+        "position": {
+          "x_px": 8.957,
+          "y_px": 221.379
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_009_26",
+        "position": {
+          "x_px": -2,
+          "y_px": -218
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": -262.122,
+          "y_px": 10.805
+        },
+        "height_px": 181,
+        "rotation": {
+          "z_deg": -19
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 499,
+          "y_px": -171.23
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_119_24",
+        "position": {
+          "x_px": -2,
+          "y_px": -14
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": -68
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": 282.406,
+          "y_px": 11.245
+        },
+        "height_px": 189,
+        "rotation": {
+          "z_deg": 19
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_009_26",
+        "path": "/shapes/motifs/1_009_26.svg"
+      },
+      {
+        "id": "2_131_22",
+        "path": "/shapes/motifs/2_131_22.svg"
+      },
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      },
+      {
+        "id": "2_119_24",
+        "path": "/shapes/motifs/2_119_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e622474104dceecb3b274fc66580b7307986e71995b12081db5dee4cfe2007a5",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.390Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2158.81,
+        "quantity": 1,
+        "width": 825.5,
+        "height": 654.05,
+        "_length": 80,
+        "init_width": 1300,
+        "init_height": 651,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 664,
+        "quantity": 1,
+        "width": 862,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1300,
+        "init_height": 651,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_009_26",
+        "item": "1_009_26",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2,
+        "y": -218,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.23094688221709006,
+        "itemID": 3
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 259.17822,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -262.12160397126763,
+        "y": 10.804915514592949,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -19,
+        "height": 181,
+        "ratio": 0.1965255157437568,
+        "itemID": 4
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 231.63518,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 499,
+        "y": -171.23041474654377,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.09362279511533243,
+        "itemID": 6
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_24",
+        "item": "2_119_24",
+        "price": 233.11069999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2,
+        "y": -14,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -68,
+        "height": 75,
+        "ratio": 0.099601593625498,
+        "itemID": 12
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 261.14558,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 282.4058380588335,
+        "y": 11.24509788175942,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 19,
+        "height": 189,
+        "ratio": 0.20521172638436483,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 18.7,
+        "quantity": 11,
+        "label": "IANNUZZELLI",
+        "font": "95.96757150057799px Garamond",
+        "font_size": 113,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -117,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 80,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "JOSEPH",
+        "font": "42.46352721264513px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -159,
+        "y": 63,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 5,
+        "label": "IRENE",
+        "font": "42.46352721264513px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 155,
+        "y": 64,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 9,
+        "label": "Feb 7, 2014",
+        "font": "42.46352721264513px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -157,
+        "y": 157,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 9,
+        "label": "Mar 2, 1925",
+        "font": "42.46352721264513px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -155,
+        "y": 109,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 10,
+        "label": "Feb 14, 1927",
+        "font": "42.46352721264513px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 167,
+        "y": 112,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 10,
+        "label": "Aug 19, 2023",
+        "font": "42.46352721264513px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 173,
+        "y": 154,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 4,
+        "label": "1949",
+        "font": "39.915715579886424px Chopin Script",
+        "font_size": 47,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 4,
+        "y": 39.248847926267274,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 18.7,
+        "quantity": 16,
+        "label": "Always and Forever",
+        "font": "62.846020274714796px Chopin Script",
+        "font_size": 74,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 8.956989247311867,
+        "y": 221.3788696281067,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 85,
+        "itemID": 14
+      }
+    ]
+  }
+}

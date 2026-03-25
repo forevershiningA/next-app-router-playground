@@ -1,0 +1,527 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.625Z",
+  "units": "mm",
+  "source": {
+    "id": "1595136553198",
+    "slug": "legacy-1595136553198",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1595136553198.json",
+    "savedAt": "2020-07-19T05:29:13.198Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Gable",
+    "material": {
+      "name": "src/granites/forever2/l/G633-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/G633-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1296,
+      "height": 690,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633-TILE-900-X-900.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "ELISABETH",
+        "font": {
+          "family": "Arial",
+          "size_px": 69
+        },
+        "position": {
+          "x_px": 6.837,
+          "y_px": -202.522
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Willie Bryant",
+        "font": {
+          "family": "Arial",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -25.656,
+          "y_px": -78.797
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "13/3/1929  -  23/7/2014",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -19.646,
+          "y_px": -49.771
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "and his beloved wife",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 11.855,
+          "y_px": 1.656
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "much loved and mourned by their sons Greg, Steve, Mike & Tony",
+        "font": {
+          "family": "Arial",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -14.787,
+          "y_px": 232.076
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "their grandchildren & great grandchildren",
+        "font": {
+          "family": "Arial",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -14.787,
+          "y_px": 259.076
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "late of Henrietta St.",
+        "font": {
+          "family": "Arial",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 3.208,
+          "y_px": 166.43
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Daphne Ellen Percy (nee Lowis)",
+        "font": {
+          "family": "Arial",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 27.282,
+          "y_px": 60.284
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "18/10/1927  -  15/9/2016",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 13.82,
+          "y_px": 95.898
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "1_184_23",
+        "position": {
+          "x_px": 194.892,
+          "y_px": -41.553
+        },
+        "height_px": 85,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_184_23",
+        "path": "/shapes/motifs/1_184_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f4bf4ca59b740277164c40189a5a0df552800a3f4a1cc39fdc2719da336e0546",
+    "sourceItemCount": 12,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.625Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Curved Gable",
+        "shape": "Curved Gable",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633-TILE-900-X-900.jpg",
+        "price": "1220.19",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1296,
+        "init_height": 690,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": "707.50",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1296,
+        "init_height": 690,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 22.5,
+        "quantity": 5,
+        "label": "PERCY",
+        "font": "66.31392857142858px Arial",
+        "font_size": 69,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 6.8369140625,
+        "y": -202.5216579201129,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 63,
+        "quantity": 21,
+        "label": "William Patrick Percy",
+        "font": "32.67642857142857px Arial",
+        "font_size": 34,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -25.656105041503906,
+        "y": -78.79650049610339,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 69,
+        "quantity": 23,
+        "label": "13/3/1929  -  23/7/2014",
+        "font": "24.026785714285715px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -19.646233558654785,
+        "y": -49.77129961702525,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 60,
+        "quantity": 20,
+        "label": "and his beloved wife",
+        "font": "24.026785714285715px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 11.85479736328125,
+        "y": 1.6557902346180526,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 183,
+        "quantity": 61,
+        "label": "much loved and mourned by their sons Greg, Steve, Mike & Tony",
+        "font": "16.338214285714287px Arial",
+        "font_size": 17,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -14.787109375,
+        "y": 232.0760723256068,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 123,
+        "quantity": 41,
+        "label": "their grandchildren & great grandchildren",
+        "font": "16.338214285714287px Arial",
+        "font_size": 17,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -14.787109375,
+        "y": 259.0760723256068,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 63,
+        "quantity": 21,
+        "label": "late of Henrietta St.",
+        "font": "25.94892857142857px Arial",
+        "font_size": 27,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 3.208040237426758,
+        "y": 166.4304290051419,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 90,
+        "quantity": 30,
+        "label": "Daphne Ellen Percy (nee Lowis)",
+        "font": "28.832142857142856px Arial",
+        "font_size": 30,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 27.2823486328125,
+        "y": 60.28380664558921,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 72,
+        "quantity": 24,
+        "label": "18/10/1927  -  15/9/2016",
+        "font": "24.026785714285715px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 13.8203125,
+        "y": 95.89777286035707,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 9
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_23",
+        "item": "1_184_23",
+        "price": 211.20059999999998,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 194.892333984375,
+        "y": -41.552606987382944,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 85,
+        "ratio": 0.10678391959798995,
+        "itemID": 11
+      }
+    ]
+  }
+}

@@ -1,0 +1,610 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.536Z",
+  "units": "mm",
+  "source": {
+    "id": "1742989042388",
+    "slug": "legacy-1742989042388",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1742989042388.json",
+    "savedAt": "2025-03-26T11:37:22.388Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/Australian-Grandee.jpg",
+      "texture": "/textures/forever/l/Australian-Grandee.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 568,
+      "height_mm": 655
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 806,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 568,
+      "height_mm": 655,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Australian-Grandee.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "French Script",
+          "size_px": 70
+        },
+        "position": {
+          "x_px": -9.5,
+          "y_px": -236.293
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Elvira Ferguson",
+        "font": {
+          "family": "French Script",
+          "size_px": 73
+        },
+        "position": {
+          "x_px": -2.75,
+          "y_px": -188.669
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "04/08/1966 - 19/07/2023",
+        "font": {
+          "family": "French Script",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -28,
+          "y_px": -147.337
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Your life was a blessing",
+        "font": {
+          "family": "French Script",
+          "size_px": 69
+        },
+        "position": {
+          "x_px": -85.25,
+          "y_px": -84.248
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "your memory a treasure...",
+        "font": {
+          "family": "French Script",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -76,
+          "y_px": -55.214
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "You are loved beyond words",
+        "font": {
+          "family": "French Script",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": -55,
+          "y_px": 21.332
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "and missed beyond measure...",
+        "font": {
+          "family": "French Script",
+          "size_px": 56
+        },
+        "position": {
+          "x_px": -68,
+          "y_px": -17.756
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Forever in our hearts",
+        "font": {
+          "family": "French Script",
+          "size_px": 64
+        },
+        "position": {
+          "x_px": -12.75,
+          "y_px": 91.158
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Until we meet again",
+        "font": {
+          "family": "French Script",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -9.25,
+          "y_px": 134.369
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Beloved mother of Terentia, Bryoni, Cheyanne, Jefferey",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -22.75,
+          "y_px": 258.474
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Grandmother of Cheyanne, Eli, Amber, Kodah, Allyn, Emily",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -7.937,
+          "y_px": 288.904
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-18",
+        "asset": "1_154_07",
+        "position": {
+          "x_px": -288.75,
+          "y_px": -163.702
+        },
+        "height_px": 125,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bd83cb",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_07",
+        "path": "/shapes/motifs/1_154_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "eeafdb6d469b8ebf5b2122b54ee033c6cb7721d3001ce48ad4616b26a3d431f0",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.536Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Australian-Grandee.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1494.5,
+        "quantity": 1,
+        "width": 568,
+        "height": 655,
+        "_length": 80,
+        "init_width": 360,
+        "init_height": 674,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 360x806"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1742887762197,
+        "path": "../upload/2025/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "17428877621971000000694_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 256,
+        "y": -84.63926823602775,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5724511291820509,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000000694.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_07",
+        "item": "1_154_07",
+        "price": 234.26055,
+        "quantity": 1,
+        "color": "#bd83cb",
+        "colorName": "East Side",
+        "x": -288.75,
+        "y": -163.70189615989744,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 125,
+        "ratio": 0.13020833333333334,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "75.02290076335878px French Script",
+        "font_size": 70,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -9.5,
+        "y": -236.29280759186346,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 17,
+        "label": "Vernnesa Rose Busch",
+        "font": "78.2381679389313px French Script",
+        "font_size": 73,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2.75,
+        "y": -188.6686050128754,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "04/08/1966 - 19/07/2023",
+        "font": "47.157251908396944px French Script",
+        "font_size": 44,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -28,
+        "y": -147.33726427978232,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 20,
+        "label": "Your life was a blessing",
+        "font": "73.95114503816794px French Script",
+        "font_size": 69,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -85.25,
+        "y": -84.24784617348674,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 22,
+        "label": "your memory a treasure...",
+        "font": "64.30534351145037px French Script",
+        "font_size": 60,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -76,
+        "y": -55.21420314035328,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 22,
+        "label": "You are loved beyond words",
+        "font": "58.94656488549618px French Script",
+        "font_size": 55,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -55,
+        "y": 21.33181264993281,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 25,
+        "label": "and missed beyond measure...",
+        "font": "60.01832061068702px French Script",
+        "font_size": 56,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -68,
+        "y": -17.756096214966426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 18,
+        "label": "Forever in our hearts",
+        "font": "68.59236641221374px French Script",
+        "font_size": 64,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -12.75,
+        "y": 91.15758360315482,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 16,
+        "label": "Until we meet again",
+        "font": "50.372519083969465px French Script",
+        "font_size": 47,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -9.25,
+        "y": 134.3689979667192,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 48,
+        "label": "Beloved mother of Terentia, Bryoni, Cheyanne, Jefferey",
+        "font": "35.36793893129771px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -22.75,
+        "y": 258.47413597403306,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 49,
+        "label": "Grandmother of Cheyanne, Eli, Amber, Kodah, Allyn, Emily",
+        "font": "35.36793893129771px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -7.9375,
+        "y": 288.9041757473341,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 17
+      }
+    ]
+  }
+}

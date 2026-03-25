@@ -1,0 +1,138 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.057Z",
+  "units": "mm",
+  "source": {
+    "id": "1699363558089",
+    "slug": "legacy-1699363558089",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1699363558089.json",
+    "savedAt": "2023-11-07T13:25:58.089Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 355.59999999999997,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 393,
+      "height": 873,
+      "dpr": 2.75
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 355.59999999999997,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "acb5d167883a3a5ad4efc862c81c9b676e1266b0957ae8375f67d73e75528797",
+    "sourceItemCount": 2,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.057Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1032.54,
+        "quantity": 1,
+        "width": 355.59999999999997,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 393,
+        "init_height": 685,
+        "device": "mobile",
+        "dpr": 2.75,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "3d",
+        "navigator": "Chrome (mobile(android)), 393x873"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1699363845901,
+        "path": "../upload/2023/11/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1699363845901received_573197387947893.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5039538664172082,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_573197387947893.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 100,
+        "width": "121",
+        "height": "173",
+        "itemID": 1
+      }
+    ]
+  }
+}

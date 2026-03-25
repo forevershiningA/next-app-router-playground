@@ -1,0 +1,272 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.177Z",
+  "units": "mm",
+  "source": {
+    "id": "1589783009681",
+    "slug": "legacy-1589783009681",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1589783009681.json",
+    "savedAt": "2020-05-18T06:23:29.681Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1200
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 106
+        },
+        "position": {
+          "x_px": 117,
+          "y_px": -191
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Rest in Peace",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 133
+        },
+        "position": {
+          "x_px": 164,
+          "y_px": 50
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "8 rosella solid",
+        "position": {
+          "x_px": -279,
+          "y_px": -58
+        },
+        "height_px": 600,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "gecko_001",
+        "position": {
+          "x_px": 253,
+          "y_px": -60
+        },
+        "height_px": 120,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "8 rosella solid",
+        "path": "/shapes/motifs/8 rosella solid.svg"
+      },
+      {
+        "id": "gecko_001",
+        "path": "/shapes/motifs/gecko_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "dc6f86738aa07d4ae0fcd40ae5038a751581048aec479e8ba8df6afa83475e24",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.177Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "6213.20",
+        "quantity": 1,
+        "width": 1200,
+        "height": 1200,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "8 rosella solid",
+        "item": "8 rosella solid",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -279,
+        "y": -58,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 600,
+        "ratio": 1,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Loving Memory",
+        "font": "75.187125px Great Vibes",
+        "font_size": 106,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 117,
+        "y": -191,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 124,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "gecko_001",
+        "item": "gecko_001",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 253,
+        "y": -60,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 120,
+        "ratio": 0.6382978723404256,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Rest in Peace",
+        "font": "94.3385625px Great Vibes",
+        "font_size": 133,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 164,
+        "y": 50,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 114,
+        "itemID": 5
+      }
+    ]
+  }
+}

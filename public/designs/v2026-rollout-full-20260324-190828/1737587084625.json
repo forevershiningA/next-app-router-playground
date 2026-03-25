@@ -1,0 +1,300 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.135Z",
+  "units": "mm",
+  "source": {
+    "id": "1737587084625",
+    "slug": "legacy-1737587084625",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1737587084625.json",
+    "savedAt": "2025-01-22T23:04:44.625Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "1168.3999999999999",
+      "height_mm": 507.99999999999955
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "1168.3999999999999",
+      "height_mm": 507.99999999999955,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Laurence Stanley",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": 219,
+          "y_px": 42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "May 12, 1991  -  March 4, 2022",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 226,
+          "y_px": 82
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Henry Mcdaniel",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -20,
+          "y_px": 148
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -31,
+          "y_px": -129
+        },
+        "height_px": 119,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_035",
+        "path": "/shapes/motifs/cross_035.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b546fef651a5ebda61ac62f215451e0fa6d456072c30b9f8c2f070a03e1ae707",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.135Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4627.01,
+        "quantity": 1,
+        "width": "1168.3999999999999",
+        "height": 507.99999999999955,
+        "_length": 80,
+        "init_width": 1680,
+        "init_height": 855,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Jacin Marc Lisner",
+        "font": "37.81421174255392px Franklin Gothic",
+        "font_size": 53,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 219,
+        "y": 42,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "May 12, 1991  -  March 4, 2022",
+        "font": "24.971649263950706px Franklin Gothic",
+        "font_size": 35,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 226,
+        "y": 82,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1737587520086,
+        "path": "../upload/2025/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1737587520086jacin_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 203,
+        "y": -80,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.43175281437671786,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Jacin.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 259,
+        "width": "136",
+        "height": "185",
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -31,
+        "y": -129,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 119,
+        "ratio": 0.4559386973180077,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Hebrew Characters",
+        "font": "24.25817357069497px Franklin Gothic",
+        "font_size": 34,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -20,
+        "y": 148,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 5
+      }
+    ]
+  }
+}

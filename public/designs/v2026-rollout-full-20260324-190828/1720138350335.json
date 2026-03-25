@@ -1,0 +1,316 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.292Z",
+  "units": "mm",
+  "source": {
+    "id": "1720138350335",
+    "slug": "legacy-1720138350335",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1720138350335.json",
+    "savedAt": "2024-07-05T00:12:30.335Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 100,
+      "height_mm": 50
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1.100000023841858
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 100,
+      "height_mm": 50,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "RIP",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 169.349,
+          "y_px": -76.956
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 167.15,
+          "y_px": 60.131
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_037_13",
+        "position": {
+          "x_px": -257.322,
+          "y_px": -80.254
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_037_13",
+        "position": {
+          "x_px": 256.672,
+          "y_px": 81.353
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_061_20",
+        "position": {
+          "x_px": -184.744,
+          "y_px": 27.484
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_037_13",
+        "path": "/shapes/motifs/1_037_13.svg"
+      },
+      {
+        "id": "2_061_20",
+        "path": "/shapes/motifs/2_061_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ecd6fe88135089e662a520a5d1f0a11a96d59d99a1a9ca90a08c8773dbb395b1",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.292Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 111.07,
+        "quantity": 1,
+        "width": 100,
+        "height": 50,
+        "_length": 15,
+        "init_width": 1505,
+        "init_height": 795.0085258483887,
+        "device": "desktop",
+        "dpr": 1.100000023841858,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_13",
+        "item": "1_037_13",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -257.3222591362128,
+        "y": -80.25408805031441,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 90,
+        "height": 40,
+        "ratio": 0.04343105320304017,
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_13",
+        "item": "1_037_13",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 256.67229395441495,
+        "y": 81.35345911949696,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": -90,
+        "height": 40,
+        "ratio": 0.04343105320304017,
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_061_20",
+        "item": "2_061_20",
+        "price": 224.5035,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -184.74418604651157,
+        "y": 27.484276729559724,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.050505050505050504,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 3,
+        "label": "RIP",
+        "font": "153.4763992415427px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 169.34883720930225,
+        "y": -76.95597484276732,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 4,
+        "label": "2024",
+        "font": "153.4763992415427px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 167.14950166112953,
+        "y": 60.13081761006282,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 5
+      }
+    ]
+  }
+}

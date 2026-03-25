@@ -1,0 +1,457 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.304Z",
+  "units": "mm",
+  "source": {
+    "id": "1720413481803",
+    "slug": "legacy-1720413481803",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1720413481803.json",
+    "savedAt": "2024-07-08T04:38:01.803Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Full-colour Plaque",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory of farmer",
+        "font": {
+          "family": "Adorable",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -30,
+          "y_px": -39
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "A devoted farmer whose passion and",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": 10
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": " hard work will forever inspire us.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 58
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Honoring the legacy of Farmer, a farmer who cultivated not just crops,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 105
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": " but community and care.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 152
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Forever loved and remembered",
+        "font": {
+          "family": "French Script",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": 252
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": 343,
+          "y_px": 235
+        },
+        "height_px": 22,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": -284.837,
+          "y_px": 239
+        },
+        "height_px": 22,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4c6fe3e966495c5f1507c8bda314ab4bf7b68053b59fd8beb725f034e227a4cb",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.304Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Full-colour Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/ceramic/l/01.jpg",
+        "name": "Full-colour Plaque",
+        "price": 600,
+        "quantity": 1,
+        "width": 250,
+        "height": 200,
+        "_length": 10,
+        "init_width": 1680,
+        "init_height": 881,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1720413488728,
+        "path": "../upload/2024/07/",
+        "name": "Image (free)",
+        "type": "Photo",
+        "item": "1720413488728gettyimages165930601612x.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": -6,
+        "y": -164,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.38176666666666664,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "gettyimages-165930601-612x612.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 49,
+        "width": "118",
+        "height": "168",
+        "itemID": 1
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "In Loving Memory of farmer",
+        "font": "54.9744px Adorable",
+        "font_size": 16,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -30,
+        "y": -39,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "A devoted farmer whose passion and",
+        "font": "34.359px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 5,
+        "y": 10,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": " hard work will forever inspire us.",
+        "font": "34.359px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 6,
+        "y": 58,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 4
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 59,
+        "label": "Honoring the legacy of Farmer, a farmer who cultivated not just crops,",
+        "font": "30.9231px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 7,
+        "y": 105,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 5
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": " but community and care.",
+        "font": "30.9231px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5,
+        "y": 152,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 6
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Forever loved and remembered",
+        "font": "65.2821px French Script",
+        "font_size": 19,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 24,
+        "y": 252,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 7
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 343,
+        "y": 235,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 22,
+        "ratio": 0.037606837606837605,
+        "itemID": 8
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -284.83716000000004,
+        "y": 239,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 22,
+        "ratio": 0.037606837606837605,
+        "itemID": 9
+      }
+    ]
+  }
+}

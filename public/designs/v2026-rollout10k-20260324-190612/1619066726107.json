@@ -1,0 +1,372 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:14.776Z",
+  "units": "mm",
+  "source": {
+    "id": "1619066726107",
+    "slug": "legacy-1619066726107",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1619066726107.json",
+    "savedAt": "2021-04-22T04:45:26.107Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-28",
+        "text": "You are loved beyond words",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 151
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "Your life was a blessing",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 8
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "your memory a treasure...",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 11,
+          "y_px": 79
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "and missed beyond measure xo",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 215
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Dad",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 85,
+          "y_px": -189
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "10/09/1955 - 09/09/2020",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 102,
+          "y_px": -108
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f1efdcc33e5fe53201e92f765b95a74dbd6ba186310b2ddb07c63b7a8d11f7ee",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:14.776Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 749.38,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 139,
+        "version_date": 20210421,
+        "mode": "2d"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "path": "../upload/2021/04/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1618968391208dads_photo_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -285,
+        "y": -149,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.4544794050343248,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Dad's Photo.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 24
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "You are loved beyond words",
+        "font": "79.44299999999998px Chopin Script",
+        "font_size": 28,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": 151,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 28
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Your life was a blessing",
+        "font": "79.44299999999998px Chopin Script",
+        "font_size": 28,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": 8,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 25
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "your memory a treasure...",
+        "font": "51.070499999999996px Chopin Script",
+        "font_size": 18,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 11,
+        "y": 79,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 27
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "and missed beyond measure xo",
+        "font": "45.395999999999994px Chopin Script",
+        "font_size": 16,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 9,
+        "y": 215,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 30
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "Dad",
+        "font": "99.30374999999998px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 85,
+        "y": -189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 22
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "10/09/1955 - 09/09/2020",
+        "font": "39.72149999999999px Lucida Calligraphy",
+        "font_size": 14,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 102,
+        "y": -108,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 23
+      }
+    ]
+  }
+}

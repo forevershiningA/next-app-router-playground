@@ -1,0 +1,545 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.923Z",
+  "units": "mm",
+  "source": {
+    "id": "1693897185715",
+    "slug": "legacy-1693897185715",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1693897185715.json",
+    "savedAt": "2023-09-05T06:59:45.715Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1.75
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "who passed away 11 May 2023 aged 83 years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -12.246,
+          "y_px": -49.923
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -22.742,
+          "y_px": -213.377
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Always in Our Hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -20.992,
+          "y_px": 212.219
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Olivia Thornton",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -17.494,
+          "y_px": -121.405
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dearly loved best friend and husband of 53 years of Dawn,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -6.997,
+          "y_px": 35.053
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "father of Paul and Russell, father-in-law of Carmel",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -8.747,
+          "y_px": 76.049
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "and grandad of Luke and Bella",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -24.491,
+          "y_px": 112.526
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "1_008_21",
+        "position": {
+          "x_px": -349.873,
+          "y_px": 243.109
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "1_008_21",
+        "position": {
+          "x_px": 347.467,
+          "y_px": -234.364
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_008_21",
+        "position": {
+          "x_px": -351.188,
+          "y_px": -244.858
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_008_21",
+        "position": {
+          "x_px": 349.651,
+          "y_px": 246.607
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_008_21",
+        "path": "/shapes/motifs/1_008_21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "abbcdcf3ccdaeac3d2481dda16844bbd13e9372700920c56ab4b05060cdb1580",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.923Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 1,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (Hole on each corners)",
+        "price": 442.54,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 2,
+        "init_width": 790,
+        "init_height": 494,
+        "device": "desktop",
+        "dpr": 1.75,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "who passed away 11 May 2023 aged 83 years",
+        "font": "33.271874999999994px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -12.245568674164247,
+        "y": -49.923068711558415,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "35.489999999999995px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -22.741770394876653,
+        "y": -213.37650503697537,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Always in Our Hearts",
+        "font": "44.3625px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -20.9924034414247,
+        "y": 212.21862013234613,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Brian Rex Jacobsen",
+        "font": "59.889374999999994px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -17.493669534520564,
+        "y": -121.40484814324338,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 47,
+        "label": "Dearly loved best friend and husband of 53 years of Dawn,",
+        "font": "22.18125px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -6.997467813808157,
+        "y": 35.052637197354784,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "father of Paul and Russell, father-in-law of Carmel",
+        "font": "22.18125px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -8.746834767260225,
+        "y": 76.0485881821736,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 5
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "and grandad of Luke and Bella",
+        "font": "22.18125px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -24.491137348328493,
+        "y": 112.52631859867734,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_21",
+        "item": "1_008_21",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -349.87339069040866,
+        "y": 243.1092967224555,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05952380952380952,
+        "itemID": 8
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_21",
+        "item": "1_008_21",
+        "price": 7.00271,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 347.4669295750739,
+        "y": -234.36435799143206,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05952380952380952,
+        "itemID": 9
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_21",
+        "item": "1_008_21",
+        "price": 7.00271,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -351.1875790141744,
+        "y": -244.85828446866032,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05952380952380952,
+        "itemID": 10
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_21",
+        "item": "1_008_21",
+        "price": 7.00271,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 349.6514751582122,
+        "y": 246.6072722148649,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05952380952380952,
+        "itemID": 11
+      }
+    ]
+  }
+}

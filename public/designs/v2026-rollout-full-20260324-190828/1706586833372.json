@@ -1,0 +1,217 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.476Z",
+  "units": "mm",
+  "source": {
+    "id": "1706586833372",
+    "slug": "legacy-1706586833372",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1706586833372.json",
+    "savedAt": "2024-01-30T03:53:53.372Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 2276,
+      "height": 960,
+      "dpr": 2.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Wake with a smile ...",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -194,
+          "y_px": -522.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": ".. and don&apos;t sweat the small stuff",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 140,
+          "y_px": 705
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d2067aabfe1f5795beb7b93f65b81e8d8e078ac07627778d80fd998d1649aeee",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.476Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2479.4,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 80,
+        "init_width": 896,
+        "init_height": 752,
+        "device": "desktop",
+        "dpr": 2.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 2276x960"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1704782187030,
+        "path": "../upload/2024/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1704782187030cindy_in_bed_3_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": 5,
+        "y": 82,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.734875,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Cindy in Bed 3.JPG",
+        "price": 0,
+        "quantity": 1,
+        "size": 374,
+        "width": "1157",
+        "height": "1028",
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Wake with a smile ...",
+        "font": "98.98200000000001px Lucida Calligraphy",
+        "font_size": 36,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -194,
+        "y": -522.25,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": ".. and don&apos;t sweat the small stuff",
+        "font": "71.48700000000001px Lucida Calligraphy",
+        "font_size": 26,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 140,
+        "y": 705,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 2
+      }
+    ]
+  }
+}

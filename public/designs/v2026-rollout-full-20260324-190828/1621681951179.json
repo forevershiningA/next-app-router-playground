@@ -1,0 +1,745 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.745Z",
+  "units": "mm",
+  "source": {
+    "id": "1621681951179",
+    "slug": "legacy-1621681951179",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1621681951179.json",
+    "savedAt": "2021-05-22T11:12:31.179Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1013,
+      "height": 543,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Our beautiful baby girl",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 24
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Forever in our hearts",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Avis Jensen",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 2.95,
+          "y_px": -66.8
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-23",
+        "asset": "flower_004",
+        "position": {
+          "x_px": -188.3,
+          "y_px": 92.05
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-24",
+        "asset": "flower_004",
+        "position": {
+          "x_px": 199.511,
+          "y_px": 88.7
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-47",
+        "asset": "flower_004",
+        "position": {
+          "x_px": 211.166,
+          "y_px": -106.95
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-46",
+        "asset": "flower_004",
+        "position": {
+          "x_px": -206.567,
+          "y_px": -101.95
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-31",
+        "asset": "1_198_08",
+        "position": {
+          "x_px": -1.65,
+          "y_px": 128.6
+        },
+        "height_px": 47,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-28",
+        "asset": "2_131_20",
+        "position": {
+          "x_px": 169.404,
+          "y_px": 130
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-26",
+        "asset": "2_131_20",
+        "position": {
+          "x_px": -146.05,
+          "y_px": 126.95
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-55",
+        "asset": "2_131_24",
+        "position": {
+          "x_px": 131.145,
+          "y_px": -123.5
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-29",
+        "asset": "2_131_24",
+        "position": {
+          "x_px": 93.873,
+          "y_px": 140.15
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-27",
+        "asset": "2_131_24",
+        "position": {
+          "x_px": -69.5,
+          "y_px": 133.5
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-54",
+        "asset": "2_131_24",
+        "position": {
+          "x_px": -125.178,
+          "y_px": -124.5
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-45",
+        "asset": "1_198_11",
+        "position": {
+          "x_px": 226.214,
+          "y_px": -30
+        },
+        "height_px": 79,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-44",
+        "asset": "1_198_11",
+        "position": {
+          "x_px": -218,
+          "y_px": -27
+        },
+        "height_px": 79,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "flower_004",
+        "path": "/shapes/motifs/flower_004.svg"
+      },
+      {
+        "id": "1_198_08",
+        "path": "/shapes/motifs/1_198_08.svg"
+      },
+      {
+        "id": "2_131_20",
+        "path": "/shapes/motifs/2_131_20.svg"
+      },
+      {
+        "id": "2_131_24",
+        "path": "/shapes/motifs/2_131_24.svg"
+      },
+      {
+        "id": "1_198_11",
+        "path": "/shapes/motifs/1_198_11.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a225cab99a2d04173a36bb1ca1ebc333bb75f52e4d63cbc67d21df5979e1669f",
+    "sourceItemCount": 17,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.745Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 390.07,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1013,
+        "init_height": 543,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 141,
+        "version_date": 20210519,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_004",
+        "item": "flower_004",
+        "price": 181.13325880000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -188.29999999999995,
+        "y": 92.04999999999995,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 57,
+        "ratio": 0.10497237569060773,
+        "itemID": 23
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_004",
+        "item": "flower_004",
+        "price": 181.13325880000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 199.51125000000002,
+        "y": 88.69999999999999,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 57,
+        "ratio": 0.10497237569060773,
+        "itemID": 24
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_004",
+        "item": "flower_004",
+        "price": 181.13325880000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 211.16646126760565,
+        "y": -106.95000000000005,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 57,
+        "ratio": 0.10497237569060773,
+        "itemID": 47
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_004",
+        "item": "flower_004",
+        "price": 181.13325880000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -206.56676936619715,
+        "y": -101.95000000000005,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 57,
+        "ratio": 0.10497237569060773,
+        "itemID": 46
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_198_08",
+        "item": "1_198_08",
+        "price": 181.1813692,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -1.6499999999999773,
+        "y": 128.60000000000002,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 47,
+        "ratio": 0.09978768577494693,
+        "itemID": 31
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_20",
+        "item": "2_131_20",
+        "price": 177.97000000000003,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 169.40435034199731,
+        "y": 130,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.0560875512995896,
+        "itemID": 28
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_20",
+        "item": "2_131_20",
+        "price": 177.97000000000003,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -146.04999999999995,
+        "y": 126.94999999999999,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.0560875512995896,
+        "itemID": 26
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_24",
+        "item": "2_131_24",
+        "price": 178.89211600000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 131.14488888888877,
+        "y": -123.5,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07407407407407407,
+        "itemID": 55
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_24",
+        "item": "2_131_24",
+        "price": 178.89211600000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 93.87282962962956,
+        "y": 140.14999999999998,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07407407407407407,
+        "itemID": 29
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_24",
+        "item": "2_131_24",
+        "price": 178.89211600000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -69.5,
+        "y": 133.5,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07407407407407407,
+        "itemID": 27
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_24",
+        "item": "2_131_24",
+        "price": 178.89211600000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -125.17755555555561,
+        "y": -124.5,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07407407407407407,
+        "itemID": 54
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_198_11",
+        "item": "1_198_11",
+        "price": 178.76382160000003,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 226.2140030726257,
+        "y": -30,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 79,
+        "ratio": 0.08826815642458101,
+        "itemID": 45
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_198_11",
+        "item": "1_198_11",
+        "price": 178.76382160000003,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -218,
+        "y": -27,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 79,
+        "ratio": 0.08826815642458101,
+        "itemID": 44
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 20,
+        "label": "Our beautiful baby girl",
+        "font": "17.647499999999997px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 3,
+        "y": 24,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 18,
+        "label": "Forever in our hearts",
+        "font": "19.412249999999997px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 9,
+        "y": 51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 19,
+        "label": "Eloise Stephanie Gray",
+        "font": "31.765499999999992px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2.9499999999999886,
+        "y": -66.80000000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 1
+      }
+    ]
+  }
+}

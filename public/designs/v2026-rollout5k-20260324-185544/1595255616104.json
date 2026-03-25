@@ -1,0 +1,488 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.418Z",
+  "units": "mm",
+  "source": {
+    "id": "1595255616104",
+    "slug": "legacy-1595255616104",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1595255616104.json",
+    "savedAt": "2020-07-20T14:33:36.104Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Sandstone-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Sandstone-TILE-900-X-900.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "IN LOVING MEMORY",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -255
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "DOROTHY \"DOT\" FITZSIMMONS",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -167
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Beloved Wife of Jim",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -27
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Mother of Tony & Rick",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 29
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Grandmother & Friend ToMany",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 82
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Love, Laughter and Happiness",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 214
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "She filled every second of her life with",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 163
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "9/05/1938 - 31/07/2013",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -104
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "2_057_13",
+        "position": {
+          "x_px": 1,
+          "y_px": 291
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_057_13",
+        "path": "/shapes/motifs/2_057_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bb31c2a046d1cf789558fb7f76edc0d9e9e144b9d343be945326f0fddaf7291b",
+    "sourceItemCount": 11,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.418Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Curved Top",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+        "price": "1220.19",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": "707.50",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1680,
+        "init_height": 873,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_057_13",
+        "item": "2_057_13",
+        "price": 212.303,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": 291,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.1782178217821782,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 48,
+        "quantity": 16,
+        "label": "IN LOVING MEMORY",
+        "font": "35.262964285714276px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": -255,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 75,
+        "quantity": 25,
+        "label": "DOROTHY \"DOT\" FITZSIMMONS",
+        "font": "37.69489285714285px Lucida Calligraphy",
+        "font_size": 31,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -4,
+        "y": -167,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 57,
+        "quantity": 19,
+        "label": "Beloved Wife of Jim",
+        "font": "36.47892857142856px Lucida Calligraphy",
+        "font_size": 30,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": -27,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 63,
+        "quantity": 21,
+        "label": "Mother of Tony & Rick",
+        "font": "36.47892857142856px Lucida Calligraphy",
+        "font_size": 30,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 29,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 81,
+        "quantity": 27,
+        "label": "Grandmother & Friend ToMany",
+        "font": "36.47892857142856px Lucida Calligraphy",
+        "font_size": 30,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -1,
+        "y": 82,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 84,
+        "quantity": 28,
+        "label": "Love, Laughter and Happiness",
+        "font": "31.61507142857142px Lucida Calligraphy",
+        "font_size": 26,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": 214,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 120,
+        "quantity": 40,
+        "label": "She filled every second of her life with",
+        "font": "31.61507142857142px Lucida Calligraphy",
+        "font_size": 26,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -4,
+        "y": 163,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 63,
+        "quantity": 21,
+        "label": "9/05/1938 - 31/07/2013",
+        "font": "41.342785714285704px Lucida Calligraphy",
+        "font_size": 34,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": -104,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 3
+      }
+    ]
+  }
+}

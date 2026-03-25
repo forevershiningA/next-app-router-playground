@@ -1,0 +1,307 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.758Z",
+  "units": "mm",
+  "source": {
+    "id": "1601688052716",
+    "slug": "legacy-1601688052716",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1601688052716.json",
+    "savedAt": "2020-10-03T01:20:52.716Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/10.jpg",
+      "texture": "/textures/phoenix/l/10.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 450,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 1214,
+      "height": 686,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 450,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/10.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Memory of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -7.442,
+          "y_px": -159.703
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Savannah King",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 4.148,
+          "y_px": -80.949
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "and will be missed forever",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 12.529,
+          "y_px": 58.788
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Loved by Everyone and",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 4.347,
+          "y_px": 1.038
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "HUGHES",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 247.47,
+          "y_px": 157.538
+        },
+        "rotation": {
+          "z_deg": -16
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f1e8c695e3366ff3098ad4d95ce6285ce1004ff6e491798735e5e66f59e6c78f",
+    "sourceItemCount": 6,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.758Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Navy Blue - Lugs with Studs",
+        "border": "Border 7",
+        "shape_url": "shapes/photos/border7.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#2c2c76",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/10.jpg",
+        "price": "1314.16",
+        "quantity": 1,
+        "width": 450,
+        "height": 300,
+        "_length": 1,
+        "init_width": 1214,
+        "init_height": 686,
+        "mode": "2d"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Memory of",
+        "font": "34.18566666666666px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -7.441831928223678,
+        "y": -159.70309575213446,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Graig Roberts",
+        "font": "75.803px Lucida Calligraphy",
+        "font_size": 51,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 4.147562926973762,
+        "y": -80.94943397521635,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "and will be missed forever",
+        "font": "34.18566666666666px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 12.528879028173947,
+        "y": 58.78798748050366,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Loved by Everyone and",
+        "font": "34.18566666666666px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 4.346772802678629,
+        "y": 1.0379872267840256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "XXXX",
+        "font": "38.644666666666666px Franklin Gothic",
+        "font_size": 26,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 247.46963348050735,
+        "y": 157.53778035293675,
+        "rotation": -16,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 11
+      }
+    ]
+  }
+}

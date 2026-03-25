@@ -1,0 +1,268 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:12.781Z",
+  "units": "mm",
+  "source": {
+    "id": "1578452916369",
+    "slug": "legacy-1578452916369",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1578452916369.json",
+    "savedAt": "2020-01-08T03:08:36.369Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 350
+    },
+    "viewportPx": {
+      "width": 1296,
+      "height": 658,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 350,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Building",
+        "font": {
+          "family": "Arial",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": 3.4,
+          "y_px": -57.061
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Founder TKIS",
+        "font": {
+          "family": "Arial",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": 6.6,
+          "y_px": 77.413
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1989",
+        "font": {
+          "family": "Arial",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": -1.1,
+          "y_px": 144.24
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Rosalie Fowler",
+        "font": {
+          "family": "Arial",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -114.511
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "edda05d900eccdea9a853eeddf5e967a094926339ffb9c59fac7540c56e6c2c6",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:12.781Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "1745.26",
+        "quantity": 1,
+        "width": 560,
+        "height": 350,
+        "_length": 1,
+        "init_width": 1296,
+        "init_height": 658,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Building",
+        "font": "63.00937499999999px Arial",
+        "font_size": 55,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 3.399817900951689,
+        "y": -57.06054034974176,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 51,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Founder TKIS",
+        "font": "65.300625px Arial",
+        "font_size": 57,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6.599726851427363,
+        "y": 77.41301541083271,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 43,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "1989",
+        "font": "69.88312499999999px Arial",
+        "font_size": 61,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.0999544752378887,
+        "y": 144.24028567229416,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 45,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Raymond Wittmer",
+        "font": "63.00937499999999px Arial",
+        "font_size": 55,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -114.51137183143965,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 51,
+        "itemID": 4
+      }
+    ]
+  }
+}

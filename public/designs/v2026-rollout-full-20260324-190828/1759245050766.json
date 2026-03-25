@@ -1,0 +1,450 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:43.812Z",
+  "units": "mm",
+  "source": {
+    "id": "1759245050766",
+    "slug": "legacy-1759245050766",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1759245050766.json",
+    "savedAt": "2025-09-30T15:10:50.766Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "355.59999999999997",
+      "height_mm": 508
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "355.59999999999997",
+      "height_mm": 508,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": "355.59999999999997100",
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Letha",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 735,
+          "y_px": -228.9
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Morton White",
+        "font": {
+          "family": "Adorable",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -69,
+          "y_px": -200.749
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Jan. 10 1948 ~ Sept. 14 2025",
+        "font": {
+          "family": "Adorable",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -55.5,
+          "y_px": -153.265
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "\"To A Home On God&apos;s Celestial Shore,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 262.739
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "I&apos;ll Fly Away\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -1.5,
+          "y_px": 298.402
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Shuford",
+        "font": {
+          "family": "Adorable",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 4.5,
+          "y_px": 385.579
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d7c0805c92442875a72f5c41d40c83f747b969b21fddfd4358cb8e4436bbc4f6",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:43.812Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1526.2,
+        "quantity": 1,
+        "width": "355.59999999999997",
+        "height": 508,
+        "_length": 80,
+        "init_width": 1032,
+        "init_height": 530,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1280x720"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 660,
+        "quantity": 1,
+        "width": "355.59999999999997100",
+        "height": 100,
+        "_length": 130,
+        "init_width": 1032,
+        "init_height": 530,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1759337706584,
+        "path": "../upload/2025/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1759337706584light_house_111_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -12,
+        "y": 103.1400000000001,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.6982319078947365,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Light house 111.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 353,
+        "width": "318",
+        "height": "450",
+        "itemID": 12
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1759337869365,
+        "path": "../upload/2025/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1759337869365doves_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -25.5,
+        "y": -71.97599999999994,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3560032894736842,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Doves.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 74,
+        "width": "246",
+        "height": "94",
+        "itemID": 13
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1759338006862,
+        "path": "../upload/2025/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1759338006862copilot_20250924_1446241.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 145.5,
+        "y": -231.89999999999998,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5195723684210526,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Copilot_20250924_144624(1).png",
+        "price": 80,
+        "quantity": 1,
+        "size": 108,
+        "width": "97",
+        "height": "138",
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Addie",
+        "font": "63.7438322368421px Chopin Script",
+        "font_size": 50,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 735,
+        "y": -228.89999999999998,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Addie Laverne",
+        "font": "42.07092927631579px Adorable",
+        "font_size": 33,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -69,
+        "y": -200.74867998337493,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Jan. 10 1948 ~ Sept. 14 2025",
+        "font": "24.22265625px Adorable",
+        "font_size": 19,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -55.5,
+        "y": -153.26524278148145,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "\"To A Home On God&apos;s Celestial Shore,",
+        "font": "24.22265625px Adorable",
+        "font_size": 19,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 262.73941150824976,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "I&apos;ll Fly Away\"",
+        "font": "25.497532894736842px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.5,
+        "y": 298.40241150824977,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Shuford",
+        "font": "53.54481907894736px Adorable",
+        "font_size": 42,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 4.5,
+        "y": 385.5791592974997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 16
+      }
+    ]
+  }
+}

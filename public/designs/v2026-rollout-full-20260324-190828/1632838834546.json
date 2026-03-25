@@ -1,0 +1,566 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.369Z",
+  "units": "mm",
+  "source": {
+    "id": "1632838834546",
+    "slug": "legacy-1632838834546",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1632838834546.json",
+    "savedAt": "2021-09-28T14:20:34.546Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Gable",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 1000
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 794,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 1000,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-25",
+        "text": "Rest In Peace",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -8.205,
+          "y_px": 343.39
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Petrina Margaret HANCHARD",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 119.398
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "A dear  Husband, Dad, Grandad & Brother",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 1.014
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "A dear Stepmum, Nan & Sister",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -42,
+          "y_px": 241.079
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "25th July 1958~",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -89,
+          "y_px": 164.161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "And also his beloved wife, now reunited",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 74.695
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "So dearly loved, so sadly missed",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 290.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Born in County Tipperary",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -68,
+          "y_px": -34
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Of",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -13,
+          "y_px": -166.859
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "31st March 1948 ~",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -68,
+          "y_px": -84.947
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Born in Staffordshire",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -81,
+          "y_px": 205.058
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0174beb87d2f7b6a4dcca8b6b26c1292bac2f7b531917c2f6b50385a4785378d",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.369Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Curved Gable",
+        "shape": "Curved Gable",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 3724,
+        "quantity": 1,
+        "width": 600,
+        "height": 1000,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 794,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210921,
+        "mode": "2d",
+        "navigator": "Win32, , Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:92.0) Gecko/20100101 Firefox/92.0"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 552,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1680,
+        "init_height": 794,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Rest In Peace",
+        "font": "27.44713636363636px Garamond",
+        "font_size": 39,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -8.204545454545496,
+        "y": 343.38989549116656,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Petrina Margaret HANCHARD",
+        "font": "28.854681818181817px Franklin Gothic",
+        "font_size": 41,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -1,
+        "y": 119.39793497721354,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "A dear  Husband, Dad, Grandad & Brother",
+        "font": "20.40940909090909px Franklin Gothic",
+        "font_size": 29,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 1.0139526367187273,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "A dear Stepmum, Nan & Sister",
+        "font": "20.40940909090909px Franklin Gothic",
+        "font_size": 29,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -42,
+        "y": 241.07911987304698,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "25th July 1958~",
+        "font": "24.63204545454545px Franklin Gothic",
+        "font_size": 35,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -89,
+        "y": 164.1610534667969,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "And also his beloved wife, now reunited",
+        "font": "28.854681818181817px Chopin Script",
+        "font_size": 41,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": 74.69481099446614,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "So dearly loved, so sadly missed",
+        "font": "33.07731818181818px Chopin Script",
+        "font_size": 47,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": 290.39987182617193,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 23
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Born in County Tipperary",
+        "font": "21.113181818181815px Franklin Gothic",
+        "font_size": 30,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -68,
+        "y": -34,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "Of",
+        "font": "33.07731818181818px Chopin Script",
+        "font_size": 47,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -13,
+        "y": -166.8588623046875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "31st March 1948 ~",
+        "font": "27.44713636363636px Franklin Gothic",
+        "font_size": 39,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -68,
+        "y": -84.9473866780599,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Born in Staffordshire",
+        "font": "21.113181818181815px Franklin Gothic",
+        "font_size": 30,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -81,
+        "y": 205.05812377929698,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 19
+      }
+    ]
+  }
+}

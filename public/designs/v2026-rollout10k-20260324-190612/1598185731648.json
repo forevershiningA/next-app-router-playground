@@ -1,0 +1,252 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.636Z",
+  "units": "mm",
+  "source": {
+    "id": "1598185731648",
+    "slug": "legacy-1598185731648",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1598185731648.json",
+    "savedAt": "2020-08-23T12:28:51.648Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Oval Portrait",
+    "material": {
+      "name": "src/backgrounds/colors/l/27.jpg",
+      "texture": "/textures/forever/l/27.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "60",
+      "height_mm": "80"
+    },
+    "viewportPx": {
+      "width": 794,
+      "height": 399,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "60",
+      "height_mm": "80",
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/27.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "forever",
+        "font": {
+          "family": "French Script",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 9.412,
+          "y_px": 168.394
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Trevor",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -7.334,
+          "y_px": -148.843
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "with Mum",
+        "font": {
+          "family": "French Script",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 3.099,
+          "y_px": 137.451
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d2713e0e16bfcaa0c57aa082238da1d830a4945870d8a6ebb4516c75fb083256",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.637Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "name": "Oval (Portrait)",
+        "shape": "Oval Portrait",
+        "color": "1598186717173trev_hat_pic2019_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/27.jpg",
+        "price": "210.00",
+        "quantity": 1,
+        "width": "60",
+        "height": "80",
+        "_length": 1,
+        "init_width": 794,
+        "init_height": 399,
+        "backgroundOption": "photo"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1598186717173,
+        "path": "../upload/2020/08/",
+        "type": "Photo",
+        "item": "1598186717173trev_hat_pic2019_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -0.3231446493260819,
+        "y": -10.80639684096883,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.2157031249999999,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Trev hat pic2019.JPG",
+        "price": null,
+        "quantity": 1,
+        "size": 50,
+        "width": "170",
+        "height": "243",
+        "itemID": 5
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "forever",
+        "font": "48.628125px French Script",
+        "font_size": 10,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 9.411681317373507,
+        "y": 168.3941419711282,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Trevor",
+        "font": "48.628125px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -7.333663883906752,
+        "y": -148.84309817150188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 4
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "with Mum",
+        "font": "48.628125px French Script",
+        "font_size": 10,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 3.099273110247111,
+        "y": 137.45098259321907,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 2
+      }
+    ]
+  }
+}

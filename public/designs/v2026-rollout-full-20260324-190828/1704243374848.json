@@ -1,0 +1,299 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.591Z",
+  "units": "mm",
+  "source": {
+    "id": "1704243374848",
+    "slug": "legacy-1704243374848",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1704243374848.json",
+    "savedAt": "2024-01-03T00:56:14.848Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 800,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Arial",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": -528
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Betty Jean Hobbs-Curry",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -16,
+          "y_px": -430
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_006_01",
+        "position": {
+          "x_px": -506,
+          "y_px": -392
+        },
+        "height_px": 79,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_006_01",
+        "position": {
+          "x_px": 500.856,
+          "y_px": -386
+        },
+        "height_px": 79,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_006_01",
+        "path": "/shapes/motifs/1_006_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0f4148d80f5fff8b2efa0b6379d9b7f9d0d51c5658b948b500b1318e4e446190",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.591Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 788,
+        "init_height": 631,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1280x800"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1704243389276,
+        "path": "../upload/2024/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1704243389276screen_shot_20240102_at_.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 2,
+        "y": -86,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.7310165516296225,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screen Shot 2024-01-02 at 6.54.55 PM.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 271,
+        "width": "403",
+        "height": "547",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "42.38754921259843px Arial",
+        "font_size": 21,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -24,
+        "y": -528,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Betty Jean Hobbs-Curry",
+        "font": "76.70127952755907px Great Vibes",
+        "font_size": 38,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -16,
+        "y": -430,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_006_01",
+        "item": "1_006_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -506,
+        "y": -392,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 180,
+        "height": 79,
+        "ratio": 0.1297208538587849,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_006_01",
+        "item": "1_006_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 500.8559832499386,
+        "y": -386,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 180,
+        "height": 79,
+        "ratio": 0.1297208538587849,
+        "itemID": 5
+      }
+    ]
+  }
+}

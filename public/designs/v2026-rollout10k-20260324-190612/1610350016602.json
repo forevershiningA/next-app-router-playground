@@ -1,0 +1,175 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:18.064Z",
+  "units": "mm",
+  "source": {
+    "id": "1610350016602",
+    "slug": "legacy-1610350016602",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1610350016602.json",
+    "savedAt": "2021-01-11T07:26:56.602Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 292.09999999999997,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 631,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 292.09999999999997,
+      "height_mm": 203.2,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Welcome",
+        "font": {
+          "family": "Arial",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7ed57cc6310e4d128db8ef30291d6a2ffde2010248d969ac209a97cb2e6d7373",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:18.064Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 741.83,
+        "quantity": 1,
+        "width": 292.09999999999997,
+        "height": 203.2,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 631,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/01/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "../upload/2021/01/1610349755805161lackingshapes_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 92,
+        "ratio": 1.5996559180790353,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "161-lacking-shapes.jpg",
+        "price": 520,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Welcome",
+        "font": "61.08019513865116px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,493 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.983Z",
+  "units": "mm",
+  "source": {
+    "id": "1665471249465",
+    "slug": "legacy-1665471249465",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1665471249465.json",
+    "savedAt": "2022-10-11T06:54:09.465Z"
+  },
+  "product": {
+    "id": "102",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 6",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1799,
+      "height": 1012,
+      "dpr": 2.134999990463257
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Charity Hoffman",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39.75
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Beloved Mother,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39.75
+        },
+        "position": {
+          "x_px": 104.259,
+          "y_px": -93.616
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f6303e",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Sister & Friend",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39.75
+        },
+        "position": {
+          "x_px": 104.259,
+          "y_px": -53.616
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "You brouht joy to all of our lives,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -53.616
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "You brightened every room,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -105.506,
+          "y_px": 36.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "Your laughter was contagious.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -105.506,
+          "y_px": 54.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "I love you so much.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -105.506,
+          "y_px": 72.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-34",
+        "text": "We will see you again soon.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -105.506,
+          "y_px": 90.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_140_13",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_140_13",
+        "path": "/shapes/motifs/1_140_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7c8dcd3109d79c7e260fa5e73a2a3395f9de0fd675901620c3b79118f45af29c",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.983Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Headstone 6",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1434.89,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 960,
+        "init_height": 586.007022857666,
+        "device": "desktop",
+        "dpr": 2.134999990463257,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221010,
+        "mode": "3d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36, 1799x1012"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_13",
+        "item": "1_140_13",
+        "price": 215.01064,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 43,
+        "ratio": 0.086,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 9,
+        "label": "Anne Heche",
+        "font": "406.6156211690685px Garamond",
+        "font_size": 39.74982626824184,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Beloved Mother,",
+        "font": "406.6156211690685px Garamond",
+        "font_size": 39.74982626824184,
+        "font_family": "Garamond",
+        "color": "#f6303e",
+        "colorName": "Paint Fill",
+        "x": 104.25911887468689,
+        "y": -93.61633686896312,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 13,
+        "label": "Sister & Friend",
+        "font": "406.6156211690685px Garamond",
+        "font_size": 39.74982626824184,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 104.25911887468689,
+        "y": -53.61633686896312,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 14
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1665471412123,
+        "path": "../upload/2022/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1665471412123ah_1_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0372847478802767,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "AH_1.PNG",
+        "price": 350,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 22
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 28,
+        "label": "You brouht joy to all of our lives,",
+        "font": "406.6156211690685px Great Vibes",
+        "font_size": 35,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -53.61633686896312,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 25
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "You brightened every room,",
+        "font": "406.6156211690685px Great Vibes",
+        "font_size": 37,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -105.50616227060851,
+        "y": 36.501799366682235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 28
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 26,
+        "label": "Your laughter was contagious.",
+        "font": "406.6156211690685px Great Vibes",
+        "font_size": 35,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -105.50616227060851,
+        "y": 54.501799366682235,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 30
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "I love you so much.",
+        "font": "406.6156211690685px Great Vibes",
+        "font_size": 37,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -105.50616227060851,
+        "y": 72.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 32
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "We will see you again soon.",
+        "font": "406.6156211690685px Great Vibes",
+        "font_size": 35,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -105.50616227060851,
+        "y": 90.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 34
+      }
+    ]
+  }
+}

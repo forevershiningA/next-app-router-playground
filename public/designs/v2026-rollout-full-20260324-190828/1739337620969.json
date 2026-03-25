@@ -1,0 +1,248 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.277Z",
+  "units": "mm",
+  "source": {
+    "id": "1739337620969",
+    "slug": "legacy-1739337620969",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1739337620969.json",
+    "savedAt": "2025-02-12T05:20:20.969Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 393,
+      "height": 852,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Cordelia Barber",
+        "font": {
+          "family": "Garamond",
+          "size_px": 92
+        },
+        "position": {
+          "x_px": -402,
+          "y_px": 345.041
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "bronze3",
+        "position": {
+          "x_px": -60,
+          "y_px": -364.757
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "bronze3",
+        "path": "/shapes/motifs/bronze3.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b2d53d28ec09f580f29c842d123d6c96c4a24b3205e7d0062b5eb27da92ce9c9",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.277Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 393,
+        "init_height": 603,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 393x852"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1739337641757,
+        "path": "../upload/2025/02/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1739337641757img_9405_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 147,
+        "y": 56.68528610354223,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 3.169987018337824,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_9405.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 506,
+        "width": "669",
+        "height": "954",
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1739337641757,
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1739337641757img_9405_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -351.1327391307191,
+        "y": 64.07901907356948,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 3.169987018337824,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_9405.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 506,
+        "width": "669",
+        "height": "954",
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronze3",
+        "item": "bronze3",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -60,
+        "y": -364.75749318801087,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07380073800738007,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Herein Lies Darth Jar Jar",
+        "font": "173.48474409448818px Garamond",
+        "font_size": 92,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -402,
+        "y": 345.04087193460487,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 84,
+        "itemID": 3
+      }
+    ]
+  }
+}

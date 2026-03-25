@@ -1,0 +1,519 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.423Z",
+  "units": "mm",
+  "source": {
+    "id": "1741633067008",
+    "slug": "legacy-1741633067008",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1741633067008.json",
+    "savedAt": "2025-03-10T18:57:47.008Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G654.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 711.2000000000003
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 711.2000000000003,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Dara",
+        "font": {
+          "family": "Garamond",
+          "size_px": 71
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Nedeljkovic",
+        "font": {
+          "family": "Garamond",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Mattica",
+        "font": {
+          "family": "Garamond",
+          "size_px": 120
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 62
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Mar 24, 1938 - Sep 14, 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 121
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Beloved",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -223
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "flowerrose_01",
+        "position": {
+          "x_px": 191,
+          "y_px": -157
+        },
+        "height_px": 158,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "flowerrose_01",
+        "position": {
+          "x_px": -191,
+          "y_px": -157
+        },
+        "height_px": 158,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_139_22",
+        "position": {
+          "x_px": 180,
+          "y_px": 232
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "2_128_05",
+        "position": {
+          "x_px": -193,
+          "y_px": 225
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "cross_001",
+        "position": {
+          "x_px": -3,
+          "y_px": -151
+        },
+        "height_px": 114,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "flowerrose_01",
+        "path": "/shapes/motifs/flowerrose_01.svg"
+      },
+      {
+        "id": "1_139_22",
+        "path": "/shapes/motifs/1_139_22.svg"
+      },
+      {
+        "id": "2_128_05",
+        "path": "/shapes/motifs/2_128_05.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "520060cdd56a4fa4b61f47b02f054532efa026e4badcc7c8e21e145b27c04049",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.423Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G654.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1747.74,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 711.2000000000003,
+        "_length": 90,
+        "init_width": 1108,
+        "init_height": 567,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1366x768"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 4,
+        "label": "Dara",
+        "font": "55.18922244094485px Garamond",
+        "font_size": 71,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": -52,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 11,
+        "label": "Nedeljkovic",
+        "font": "47.416092519685016px Garamond",
+        "font_size": 61,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": -3,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 7,
+        "label": "Mattica",
+        "font": "93.27755905511806px Garamond",
+        "font_size": 120,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8,
+        "y": 62,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 81,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 21,
+        "label": "Mar 24, 1938 - Sep 14, 2024",
+        "font": "38.86564960629919px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": 121,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 7,
+        "label": "Beloved",
+        "font": "38.86564960629919px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": -223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 5
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerrose_01",
+        "item": "flowerrose_01",
+        "price": 242.007465,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 191,
+        "y": -157,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 158,
+        "ratio": 0.1767337807606264,
+        "itemID": 6
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerrose_01",
+        "item": "flowerrose_01",
+        "price": 242.007465,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -191,
+        "y": -157,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 158,
+        "ratio": 0.1767337807606264,
+        "itemID": 7
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_139_22",
+        "item": "1_139_22",
+        "price": 222.05328999999998,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 180,
+        "y": 232,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.15051546391752577,
+        "itemID": 8
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_128_05",
+        "item": "2_128_05",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -193,
+        "y": 225,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1152073732718894,
+        "itemID": 9
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 231.67824499999998,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": -151,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 114,
+        "ratio": 0.19095477386934673,
+        "itemID": 10
+      }
+    ]
+  }
+}

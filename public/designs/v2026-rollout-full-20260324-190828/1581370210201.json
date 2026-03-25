@@ -1,0 +1,385 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.061Z",
+  "units": "mm",
+  "source": {
+    "id": "1581370210201",
+    "slug": "legacy-1581370210201",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1581370210201.json",
+    "savedAt": "2020-02-10T21:30:10.201Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 1669,
+      "height": 853,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-14",
+        "text": "NOEL ANDREW (TIM) GOODE",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -138
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "IN LOVING MEMORY OF",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": -234
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "BORN 08.03.1939    DIED 24.10.2010",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 11,
+          "y_px": -79
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "NOELENE, SUSANNE, DIANNE & JONATHON",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 100
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "FATHER OF",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 58
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "LOVED POP OF THEIR CHILDREN",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 13,
+          "y_px": 155
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "MISSED FOREVER",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 13,
+          "y_px": 248
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b9d72bf7b9c2b8adfce5457e2824be9a30db54a30cd9b2076fa9409a540253a9",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.061Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 10",
+        "shape_url": "shapes/photos/border10.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "1071.66",
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 1669,
+        "init_height": 853,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "NOEL ANDREW (TIM) GOODE",
+        "font": "61.281315789473666px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": -138,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 24,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "IN LOVING MEMORY OF",
+        "font": "41.58374999999999px Franklin Gothic",
+        "font_size": 19,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 9,
+        "y": -234,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 14,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "BORN 08.03.1939    DIED 24.10.2010",
+        "font": "35.017894736842095px Franklin Gothic",
+        "font_size": 16,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 11,
+        "y": -79,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 11,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "NOELENE, SUSANNE, DIANNE & JONATHON",
+        "font": "39.39513157894736px Franklin Gothic",
+        "font_size": 18,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": 100,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 15,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "FATHER OF",
+        "font": "43.77236842105262px Franklin Gothic",
+        "font_size": 20,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -7,
+        "y": 58,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 14,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "LOVED POP OF THEIR CHILDREN",
+        "font": "45.96098684210525px Franklin Gothic",
+        "font_size": 21,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 13,
+        "y": 155,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 15,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "MISSED FOREVER",
+        "font": "45.96098684210525px Franklin Gothic",
+        "font_size": 21,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 13,
+        "y": 248,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 15,
+        "itemID": 17
+      }
+    ]
+  }
+}

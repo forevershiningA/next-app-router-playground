@@ -1,0 +1,440 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.676Z",
+  "units": "mm",
+  "source": {
+    "id": "1599010903168",
+    "slug": "legacy-1599010903168",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1599010903168.json",
+    "savedAt": "2020-09-02T01:41:43.168Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1276,
+      "height": 625,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "I’m Loving Memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": -10.322,
+          "y_px": -166.159
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Wilson Hart",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -119.611,
+          "y_px": 108.095
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 63
+        },
+        "position": {
+          "x_px": -171.296,
+          "y_px": -27.948
+        },
+        "rotation": {
+          "z_deg": -1
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dean Bowen",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -120.857,
+          "y_px": 31.6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Oct 13, 1944 to Aug 2, 2016",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -24.943,
+          "y_px": 231.402
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "bronze8",
+        "position": {
+          "x_px": 27.174,
+          "y_px": 163.804
+        },
+        "height_px": 64,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -213.28,
+          "y_px": -119.889
+        },
+        "height_px": 96,
+        "rotation": {
+          "z_deg": 2
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "bronze8",
+        "path": "/shapes/motifs/bronze8.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b7fa01542053bd01f5b1dfd3e9757acbc364baff596a4d7105e206655693c646",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.676Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1952.72",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1276,
+        "init_height": 625,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1071.36",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1276,
+        "init_height": 625,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronze8",
+        "item": "bronze8",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 27.17391304347826,
+        "y": 163.80370082819752,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 64,
+        "ratio": 0.08194622279129321,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -213.28019323671492,
+        "y": -119.88932074681156,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 2,
+        "height": 96,
+        "ratio": 0.12291933418693982,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "I’m Loving Memory",
+        "font": "45.267857142857146px Great Vibes",
+        "font_size": 52,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -10.322463768115995,
+        "y": -166.15907567360495,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Anna Mae Little",
+        "font": "34.82142857142857px Great Vibes",
+        "font_size": 40,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -119.61111111111109,
+        "y": 108.09514947462867,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "Of",
+        "font": "54.84375px Great Vibes",
+        "font_size": 63,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -171.29589371980683,
+        "y": -27.94772325109406,
+        "rotation": -1,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 72,
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1599010912446,
+        "path": "../upload/2020/09/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1599010912446annamae_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 129.1171875,
+        "y": 13.121539835697092,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9011296211775445,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "ANNAMAE.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 324,
+        "width": "186",
+        "height": "282",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Our Beautiful Mother",
+        "font": "32.20982142857143px Great Vibes",
+        "font_size": 37,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -120.85726147343007,
+        "y": 31.59951579809797,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Oct 13, 1944 to Aug 2, 2016",
+        "font": "36.5625px Great Vibes",
+        "font_size": 42,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -24.94323671497591,
+        "y": 231.4019127058753,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 8
+      }
+    ]
+  }
+}

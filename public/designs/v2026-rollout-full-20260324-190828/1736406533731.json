@@ -1,0 +1,258 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.089Z",
+  "units": "mm",
+  "source": {
+    "id": "1736406533731",
+    "slug": "legacy-1736406533731",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1736406533731.json",
+    "savedAt": "2025-01-09T07:08:53.731Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G439.jpg",
+      "texture": "/textures/forever/l/G439.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 700,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 834,
+      "height": 1112,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 700,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G439.webp"
+    },
+    "base": {
+      "width_mm": 800,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/G439.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "09/01/1928 - 05/05/2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -61.419
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Sheilah Joan Nolan-Neylan",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 9.935,
+          "y_px": -118.323
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_017_18",
+        "position": {
+          "x_px": 5.186,
+          "y_px": 41.14
+        },
+        "height_px": 458,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_017_18",
+        "path": "/shapes/motifs/1_017_18.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fac51cf6ed16da5ba091269e71bdde943f9fa8df0cf5919f343d814b904d3ef9",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.090Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G439.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1952.82,
+        "quantity": 1,
+        "width": 700,
+        "height": 700,
+        "_length": 80,
+        "init_width": 657,
+        "init_height": 504,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 834x1112"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G439.jpg",
+        "price": 625,
+        "quantity": 1,
+        "width": 800,
+        "height": 100,
+        "_length": 250,
+        "init_width": 657,
+        "init_height": 504,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_18",
+        "item": "1_017_18",
+        "price": 327.29806,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "colorName2": "undefined",
+        "x": 5.186264308012493,
+        "y": 41.14047866805412,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 458,
+        "ratio": 1.0043859649122806,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "09/01/1928 - 05/05/2023",
+        "font": "44.226px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": -61.41935483870967,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 23,
+        "label": "Sheilah Joan Nolan-Neylan",
+        "font": "61.425px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 9.935483870967742,
+        "y": -118.32258064516128,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 2
+      }
+    ]
+  }
+}

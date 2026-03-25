@@ -1,0 +1,131 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.730Z",
+  "units": "mm",
+  "source": {
+    "id": "1583897551259",
+    "slug": "legacy-1583897551259",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1583897551259.json",
+    "savedAt": "2020-03-11T03:32:31.259Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Oval (Portrait)",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "80",
+      "height_mm": "100"
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "80",
+      "height_mm": "100",
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2801f599130a0b1b2c8e3e37ce2ec4331e5bfad6021469821f2be8568c328076",
+    "sourceItemCount": 2,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.730Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "name": "Oval (Portrait)",
+        "shape": "Oval (Portrait)",
+        "color": "#000000",
+        "fixed": 2,
+        "texture": "src/ceramic/l/01.jpg",
+        "price": "392.60",
+        "quantity": 1,
+        "width": "80",
+        "height": "100",
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1583897593179,
+        "type": "Photo",
+        "color": 0,
+        "mask": 0,
+        "x": 1,
+        "y": -7,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.9721159897025176,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "banner18-1400x677.jpg",
+        "price": null,
+        "quantity": 1,
+        "size": 81,
+        "width": "603 mm",
+        "height": "862 mm",
+        "itemID": 1
+      }
+    ]
+  }
+}

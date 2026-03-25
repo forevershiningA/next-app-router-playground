@@ -1,0 +1,408 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.392Z",
+  "units": "mm",
+  "source": {
+    "id": "1721947782500",
+    "slug": "legacy-1721947782500",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1721947782500.json",
+    "savedAt": "2024-07-25T22:49:42.500Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1200
+    },
+    "viewportPx": {
+      "width": 1600,
+      "height": 900,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1200,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "“Her children arise up, and call her blessed;",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -87
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "her husband also, and he praiseth her.”",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -45
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "- Proverbs 31:28",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 2
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Children’s children are a crown to the aged,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 90
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "and parents are the pride of their children.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": 127
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "- Proverbs 17:6",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 167
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "FOWLER",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 159
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -169
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fb5d51df94cd3373f697e923f36ce631463b0945122dc78b02d41d35b63a114a",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.392Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 4542.23,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1200,
+        "_length": 100,
+        "init_width": 1360,
+        "init_height": 681,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240715,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1600x900"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 809,
+        "quantity": 1,
+        "width": 1200,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1360,
+        "init_height": 681,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 38,
+        "label": "“Her children arise up, and call her blessed;",
+        "font": "21.451500000000006px Lucida Calligraphy",
+        "font_size": 42,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": -87,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 33,
+        "label": "her husband also, and he praiseth her.”",
+        "font": "24.516000000000005px Lucida Calligraphy",
+        "font_size": 48,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -45,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 14,
+        "label": "- Proverbs 31:28",
+        "font": "25.53750000000001px Lucida Calligraphy",
+        "font_size": 50,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": 2,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 37,
+        "label": "Children’s children are a crown to the aged,",
+        "font": "20.940750000000005px Lucida Calligraphy",
+        "font_size": 41,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 90,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 37,
+        "label": "and parents are the pride of their children.",
+        "font": "22.473000000000006px Lucida Calligraphy",
+        "font_size": 44,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -7,
+        "y": 127,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "- Proverbs 17:6",
+        "font": "24.516000000000005px Lucida Calligraphy",
+        "font_size": 48,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": 167,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 11,
+        "label": "HUNKAPILLER",
+        "font": "81.20925000000003px Franklin Gothic",
+        "font_size": 159,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4,
+        "y": -169,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 108,
+        "itemID": 1
+      }
+    ]
+  }
+}

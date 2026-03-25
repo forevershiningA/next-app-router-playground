@@ -1,0 +1,415 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.985Z",
+  "units": "mm",
+  "source": {
+    "id": "1747385450953",
+    "slug": "legacy-1747385450953",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1747385450953.json",
+    "savedAt": "2025-05-16T08:50:50.953Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 36",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 498,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 686,
+      "height": 1143,
+      "dpr": 1.75
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 498,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Sp. Bogusław Klisiewicz",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 141.004,
+          "y_px": -203.97
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Ur. 17.03.1956 Zm. 25.04.2025",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 178.347,
+          "y_px": -100.985
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Ukochany mąż,tata i dziadek",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 127.946,
+          "y_px": -281.946
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Tutaj spoczywa",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 106.19,
+          "y_px": -380.931
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Śpieszmy się kochać ludzi,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 140.942,
+          "y_px": 137.991
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "tak szybko odchodzą",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 95.96,
+          "y_px": 222.988
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_169_04",
+        "position": {
+          "x_px": -321.866,
+          "y_px": 331.951
+        },
+        "height_px": 237,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_169_04",
+        "path": "/shapes/motifs/1_169_04.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "908f18314d464a68b7abf183611500e20ad17f008ee0ff7a3d7bdea08ab9d520",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.985Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 36",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2062.86,
+        "quantity": 1,
+        "width": 498,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 686,
+        "init_height": 959,
+        "device": "tablet",
+        "dpr": 1.75,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (tablet(android)), 686x1143"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_169_04",
+        "item": "1_169_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -321.8658338838507,
+        "y": 331.9511786244334,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 237,
+        "ratio": 0.2872727272727273,
+        "itemID": 1
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1747385595365,
+        "path": "../upload/2025/05/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1747385595365img_20240317_180925599_h.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -308.8712990210798,
+        "y": -170.9744246163998,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7200341412401575,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_20240317_180925599_HDR~2 Version 2~2.png",
+        "price": 440,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Sp. Bogusław Klisiewicz",
+        "font": "48.00227608267717px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 141.00374351890775,
+        "y": -203.969727900963,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Ur. 17.03.1956 Zm. 25.04.2025",
+        "font": "46.08218503937008px Lucida Calligraphy",
+        "font_size": 24,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 178.34748663743915,
+        "y": -100.98496339513815,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Ukochany mąż,tata i dziadek",
+        "font": "38.40182086614173px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 127.94637626035149,
+        "y": -281.94613211838373,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Tutaj spoczywa",
+        "font": "69.12327755905513px Lucida Calligraphy",
+        "font_size": 36,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 106.19003196337889,
+        "y": -380.9314545962428,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Śpieszmy się kochać ludzi,",
+        "font": "46.08218503937008px Lucida Calligraphy",
+        "font_size": 24,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 140.9416851840731,
+        "y": 137.99138277842576,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "tak szybko odchodzą",
+        "font": "42.24200295275591px Lucida Calligraphy",
+        "font_size": 22,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 95.96017589867813,
+        "y": 222.98782135500971,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 8
+      }
+    ]
+  }
+}

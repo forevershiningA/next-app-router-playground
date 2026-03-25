@@ -1,0 +1,543 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.711Z",
+  "units": "mm",
+  "source": {
+    "id": "1643767306526",
+    "slug": "legacy-1643767306526",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1643767306526.json",
+    "savedAt": "2022-02-02T02:01:46.526Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Adorable",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -3.75,
+          "y_px": -186.137
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Basil Day",
+        "font": {
+          "family": "Adorable",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -3.75,
+          "y_px": -113.65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Although we are apart,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 102.775
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "your spirit lives within us.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 3.75,
+          "y_px": 146.307
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "27th August 1954 - 13th February 2021",
+        "font": {
+          "family": "Adorable",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -8.75,
+          "y_px": -51.663
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Gone, yet not forgotten.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 55.772
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Forever in our heart.",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 3.75,
+          "y_px": 190.304
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-33",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": -317.5,
+          "y_px": 166.149
+        },
+        "height_px": 59,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-44",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": -319.172,
+          "y_px": -173.644
+        },
+        "height_px": 59,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-45",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": 324.578,
+          "y_px": -172.395
+        },
+        "height_px": 59,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-46",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": 321.656,
+          "y_px": 167.398
+        },
+        "height_px": 59,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_037_12",
+        "path": "/shapes/motifs/1_037_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4f114f09792a09c25427a0545b955d9369ce293cba8affd174459b9312775985",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.711Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+        "price": 447.34,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1296,
+        "init_height": 658,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220131,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36, 1536x864"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "32.0775px Adorable",
+        "font_size": 12,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -3.75,
+        "y": -186.13677811550153,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Janet Pearce",
+        "font": "90.88625px Adorable",
+        "font_size": 34,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -3.75,
+        "y": -113.65045592705167,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 5
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Although we are apart,",
+        "font": "34.750625px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": 102.775075987842,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 10
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "your spirit lives within us.",
+        "font": "34.750625px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 3.75,
+        "y": 146.306990881459,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 15
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 11.37149,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -317.5,
+        "y": 166.14893617021255,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 59,
+        "ratio": 0.06448087431693988,
+        "itemID": 33
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "27th August 1954 - 13th February 2021",
+        "font": "32.0775px Adorable",
+        "font_size": 12,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -8.75,
+        "y": -51.66261398176289,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Gone, yet not forgotten.",
+        "font": "34.750625px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": 55.77203647416417,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 8
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever in our heart.",
+        "font": "34.750625px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 3.75,
+        "y": 190.30395136778122,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 18
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 11.37149,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -319.17182855191254,
+        "y": -173.6443768996962,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 59,
+        "ratio": 0.06448087431693988,
+        "itemID": 44
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 11.37149,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 324.57817144808746,
+        "y": -172.39513677811573,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 59,
+        "ratio": 0.06448087431693988,
+        "itemID": 45
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 11.37149,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 321.6563428961749,
+        "y": 167.3981762917931,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 59,
+        "ratio": 0.06448087431693988,
+        "itemID": 46
+      }
+    ]
+  }
+}

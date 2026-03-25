@@ -1,0 +1,620 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.986Z",
+  "units": "mm",
+  "source": {
+    "id": "1665473699612",
+    "slug": "legacy-1665473699612",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1665473699612.json",
+    "savedAt": "2022-10-11T07:34:59.612Z"
+  },
+  "product": {
+    "id": "102",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Left Wave",
+    "material": {
+      "name": "src/granites/forever2/l/Balmoral-Green.jpg",
+      "texture": "/textures/forever/l/Balmoral-Green.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1799,
+      "height": 1012,
+      "dpr": 2.134999990463257
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Balmoral-Green.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Clem Jenkins",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "15/-7/1927 - 27/06/2022",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -166.942,
+          "y_px": -86.876
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#00c2df",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "From City Across the River",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -86.876
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bd83cb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "to Blade Runner,",
+        "font": {
+          "family": "French Script",
+          "size_px": 33.314
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -46.875
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Joe filled the screens",
+        "font": {
+          "family": "French Script",
+          "size_px": 33.207
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 53.334
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f0b3cb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "and our hearts",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 93.334
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-45",
+        "text": "Rest in Peace",
+        "font": {
+          "family": "French Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 93.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#643c1f",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-35",
+        "asset": "1_141_04",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#00ce7d",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-37",
+        "asset": "1_141_15",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 71,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#3b8ede",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-39",
+        "asset": "1_138_16",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a8a4e0",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-41",
+        "asset": "butterfly_008",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-43",
+        "asset": "2_056_16",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_141_04",
+        "path": "/shapes/motifs/1_141_04.svg"
+      },
+      {
+        "id": "1_141_15",
+        "path": "/shapes/motifs/1_141_15.svg"
+      },
+      {
+        "id": "1_138_16",
+        "path": "/shapes/motifs/1_138_16.svg"
+      },
+      {
+        "id": "butterfly_008",
+        "path": "/shapes/motifs/butterfly_008.svg"
+      },
+      {
+        "id": "2_056_16",
+        "path": "/shapes/motifs/2_056_16.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ab9501c8504d5e6e44d992462a0b11f074aed5154b23ed544e0db778a3f12ebc",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.986Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Left Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Balmoral-Green.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1434.89,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 80,
+        "init_width": 960,
+        "init_height": 586.007022857666,
+        "device": "desktop",
+        "dpr": 2.134999990463257,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221010,
+        "mode": "3d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36, 1799x1012"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 453.38,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 960,
+        "init_height": 586.007022857666,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 9,
+        "label": "Joe Turkel",
+        "font": "348.527675287773px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "15/-7/1927 - 27/06/2022",
+        "font": "348.527675287773px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#00c2df",
+        "colorName": "Paint Fill",
+        "x": -166.94213085219462,
+        "y": -86.87554007170661,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "From City Across the River",
+        "font": "348.527675287773px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#bd83cb",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -86.87554007170661,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "to Blade Runner,",
+        "font": "348.527675287773px French Script",
+        "font_size": 33.31420141237312,
+        "font_family": "French Script",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -46.87506069575671,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Joe filled the screens",
+        "font": "348.527675287773px French Script",
+        "font_size": 33.20691108301728,
+        "font_family": "French Script",
+        "color": "#f0b3cb",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 53.334019357551966,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "and our hearts",
+        "font": "348.527675287773px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 93.33449873350186,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 20
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_141_04",
+        "item": "1_141_04",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#00ce7d",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1937984496124031,
+        "itemID": 35
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_141_15",
+        "item": "1_141_15",
+        "price": 221.58377999999996,
+        "quantity": 1,
+        "color": "#3b8ede",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 71,
+        "ratio": 0.27626459143968873,
+        "itemID": 37
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_138_16",
+        "item": "1_138_16",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#a8a4e0",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.16806722689075632,
+        "itemID": 39
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_008",
+        "item": "butterfly_008",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.19801980198019803,
+        "itemID": 41
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_056_16",
+        "item": "2_056_16",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#d41568",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.25316455696202533,
+        "itemID": 43
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "Rest in Peace",
+        "font": "348.527675287773px French Script",
+        "font_size": 40,
+        "font_family": "French Script",
+        "color": "#643c1f",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 93.33338018905724,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 45
+      }
+    ]
+  }
+}

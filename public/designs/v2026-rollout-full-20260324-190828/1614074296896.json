@@ -1,0 +1,191 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.301Z",
+  "units": "mm",
+  "source": {
+    "id": "1614074296896",
+    "slug": "legacy-1614074296896",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1614074296896.json",
+    "savedAt": "2021-02-23T09:58:16.896Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 603,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2249f2ceece366b5db25895b584c7b4e65f1eef744d5b12d32f8252065794de9",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.301Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 749.38,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 603,
+        "mode": "2d"
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br119-jesus",
+        "color": "#ffb35a",
+        "x": -231,
+        "y": -129,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3244619205298013,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br119-jesus",
+        "price": 99,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br119-jesus",
+        "color": "#ffb35a",
+        "x": -161.56514900662253,
+        "y": -129,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3244619205298013,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br119-jesus",
+        "price": 99,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br119-jesus",
+        "color": "#ffb35a",
+        "x": -92.13029801324507,
+        "y": -129,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3244619205298013,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br119-jesus",
+        "price": 99,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br119-jesus",
+        "color": "#ffb35a",
+        "x": -22.69544701986763,
+        "y": -129,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3244619205298013,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br119-jesus",
+        "price": 99,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 4
+      }
+    ]
+  }
+}

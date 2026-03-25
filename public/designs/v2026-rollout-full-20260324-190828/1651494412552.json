@@ -1,0 +1,490 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.094Z",
+  "units": "mm",
+  "source": {
+    "id": "1651494412552",
+    "slug": "legacy-1651494412552",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1651494412552.json",
+    "savedAt": "2022-05-02T12:26:52.552Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.399999976158142
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Lee Chavez",
+        "font": {
+          "family": "Arial",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 11.197,
+          "y_px": -238.755
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "31/12/1939 - 14/08/2021",
+        "font": {
+          "family": "Arial",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 15.396,
+          "y_px": -169.363
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Beloved Husband to Pina",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -158.161,
+          "y_px": -108.991
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Adored Father to Daiana & Alex",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -99.375,
+          "y_px": -58.409
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Loved Father-in-law to Jeff & Lisa",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -85.379,
+          "y_px": -6.429
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Much loved Bisnonno",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -194.552,
+          "y_px": 141.727
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "In our Hearts and Minds Always",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 6.998,
+          "y_px": 236.505
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Alex, Brandon and Jessie",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -155.362,
+          "y_px": 88.348
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Cherished Nonno to Joshua,Tayla,",
+        "font": {
+          "family": "Arial",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -76.981,
+          "y_px": 39.956
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "5f72fddbe55b405f51809b835713e11e5f016c888829117f0da62c085aced9b1",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.094Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 594.81,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 1,
+        "init_width": 1131,
+        "init_height": 602.0044631958008,
+        "device": "desktop",
+        "dpr": 1.399999976158142,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220427,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Safari/537.36 Edg/101.0.1210.32, 1536x864"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Mario Veronesi",
+        "font": "84.33607119068222px Arial",
+        "font_size": 39,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 11.197237114732843,
+        "y": -238.75509726525001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "31/12/1939 - 14/08/2021",
+        "font": "32.4369504579547px Arial",
+        "font_size": 15,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 15.396201032757858,
+        "y": -169.36304005664738,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Beloved Husband to Pina",
+        "font": "41.086803913409284px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -158.16097424560172,
+        "y": -108.99083982653781,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Adored Father to Daiana & Alex",
+        "font": "41.086803913409284px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -99.37547939325435,
+        "y": -58.409373006464875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Loved Father-in-law to Jeff & Lisa",
+        "font": "41.086803913409284px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -85.37893299983773,
+        "y": -6.429229984958056,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Much loved Bisnonno",
+        "font": "41.086803913409284px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -194.55199486848318,
+        "y": 141.72708466235656,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "In our Hearts and Minds Always",
+        "font": "41.086803913409284px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 6.998273196707942,
+        "y": 236.50458008673093,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Alex, Brandon and Jessie",
+        "font": "41.086803913409284px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -155.36166496691823,
+        "y": 88.34826543941631,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 18
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1651498041533,
+        "path": "../upload/2022/05/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1651498041533img_20210824_0002964_cro.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 319.1212577698866,
+        "y": -1.3986762014338296,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8234545921997329,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_20210824_0002[964].jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 115,
+        "width": "174",
+        "height": "249",
+        "itemID": 28
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Cherished Nonno to Joshua,Tayla,",
+        "font": "41.086803913409284px Arial",
+        "font_size": 19,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -76.9810051637885,
+        "y": 39.95620823081356,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 15
+      }
+    ]
+  }
+}

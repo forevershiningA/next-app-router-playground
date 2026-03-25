@@ -1,0 +1,476 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:15.036Z",
+  "units": "mm",
+  "source": {
+    "id": "1622783493958",
+    "slug": "legacy-1622783493958",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1622783493958.json",
+    "savedAt": "2021-06-04T05:11:33.958Z"
+  },
+  "product": {
+    "id": "22",
+    "name": "Laser-etched Black Granite Mini Headstone",
+    "type": "headstone",
+    "slug": "mini-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 479,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-27",
+        "text": "Tony,Michael",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -144,
+          "y_px": 1.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Loving uncle to",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -130,
+          "y_px": 43
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Moreton,Lonsdale,Williams",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -82,
+          "y_px": 83
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Johnson,Blair",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 70,
+          "y_px": 43
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Family",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 130,
+          "y_px": 81
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "The Barlz",
+        "font": {
+          "family": "French Script",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 44,
+          "y_px": 290
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-27",
+        "asset": "gecko_003",
+        "position": {
+          "x_px": -170,
+          "y_px": 254
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-30",
+        "asset": "flag_aboriginal",
+        "position": {
+          "x_px": 238,
+          "y_px": 224
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-32",
+        "asset": "lizard_001",
+        "position": {
+          "x_px": 172,
+          "y_px": 266
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "gecko_003",
+        "path": "/shapes/motifs/gecko_003.svg"
+      },
+      {
+        "id": "flag_aboriginal",
+        "path": "/shapes/motifs/flag_aboriginal.svg"
+      },
+      {
+        "id": "lizard_001",
+        "path": "/shapes/motifs/lizard_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4c2cee10d402f85624897aa896652dc9b28e0e836dc28a96ec0094edeb9f4f70",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:15.036Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "installationMethod": 2,
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 450.04,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 479,
+        "backgroundOption": "undefined",
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": 142,
+        "version_date": 20210603,
+        "mode": "2d",
+        "navigator": "iPhone, Apple Computer, Inc., Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 LightSpeed [FBAN/MessengerLiteForiOS;FBAV/314.0.0.42.119;FBBV/294309808;FBDV/iPhone8,1;FBMD/iPhone;FBSN/iOS;FBSV/14.4.2;FBSS/2;FBCR/;FBID/phone;FBLC/en-GB;FBOP/0]"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Tony,Michael",
+        "font": "34.125px Chopin Script",
+        "font_size": 14,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -144,
+        "y": 1.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 27
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Loving uncle to",
+        "font": "36.5625px Chopin Script",
+        "font_size": 15,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -130,
+        "y": 43,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Moreton,Lonsdale,Williams",
+        "font": "31.6875px Chopin Script",
+        "font_size": 13,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -82,
+        "y": 83,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Johnson,Blair",
+        "font": "31.6875px Chopin Script",
+        "font_size": 13,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 70,
+        "y": 43,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Family",
+        "font": "31.6875px Chopin Script",
+        "font_size": 13,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 130,
+        "y": 81,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "The Barlz",
+        "font": "117px French Script",
+        "font_size": 48,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 44,
+        "y": 290,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 23
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "gecko_003",
+        "item": "gecko_003",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -170,
+        "y": 254,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.09394572025052192,
+        "itemID": 27
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flag_aboriginal",
+        "item": "flag_aboriginal",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 238,
+        "y": 224,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.09394572025052192,
+        "itemID": 30
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "lizard_001",
+        "item": "lizard_001",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 172,
+        "y": 266,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.09394572025052192,
+        "itemID": 32
+      }
+    ]
+  }
+}

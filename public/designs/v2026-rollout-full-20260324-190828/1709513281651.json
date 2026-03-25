@@ -1,0 +1,686 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.651Z",
+  "units": "mm",
+  "source": {
+    "id": "1709513281651",
+    "slug": "legacy-1709513281651",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1709513281651.json",
+    "savedAt": "2024-03-04T00:48:01.651Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/02.jpg",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 800,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Griffin",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -25.576,
+          "y_px": -242.925
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Bernard Nichols",
+        "font": {
+          "family": "Arial",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -254.971,
+          "y_px": -135.235
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "19th of September 2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -334.6,
+          "y_px": -49.804
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "& grate grandfather",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -335.391,
+          "y_px": 25.112
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Loving father grandfather",
+        "font": {
+          "family": "Arial",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": -328.271,
+          "y_px": -14.663
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Born 30 of September 1950 To",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -309.023,
+          "y_px": -94.011
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Merle sutton",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 230.449,
+          "y_px": -126.801
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "??????????",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 171.65,
+          "y_px": -36.69
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "Loving Mother grandmother",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 258.926,
+          "y_px": -1.76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "& grate grandmother",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 216.475,
+          "y_px": 32.222
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "Born 18th of May 1952 to",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": 250.225,
+          "y_px": -73.998
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-24",
+        "asset": "kangaroo_003",
+        "position": {
+          "x_px": 376.26,
+          "y_px": -238.611
+        },
+        "height_px": 42,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "kangaroo_003",
+        "path": "/shapes/motifs/kangaroo_003.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0e0650218fd9b6bd3925c0c93498209adb6eb5b0ffbb23378c675ac11db3f86a",
+    "sourceItemCount": 17,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.651Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 9",
+        "shape_url": "shapes/photos/border9.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#48280f",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/02.jpg",
+        "name": "Bronze Plaque - Brown - Lugs with Studs",
+        "price": 906.75,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 10,
+        "init_width": 360,
+        "init_height": 623,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Safari (mobile(android)), 360x800"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1709513611611,
+        "path": "../upload/2024/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1709513611611inbound69145868942537058.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -375.99609375,
+        "y": 185.1905487804878,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -2,
+        "ratio": 0.7875,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "inbound6914586894253705881.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 3
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1709513898907,
+        "path": "../upload/2024/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1709513898907inbound15784471652579990.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -7.3828125,
+        "y": 178.5803232822725,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7875,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "inbound1578447165257999065.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 4
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1709514435242,
+        "path": "../upload/2024/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1709514435242inbound74002292739833268.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 377.841796875,
+        "y": 189.9390243902439,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7875,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "inbound740022927398332682.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 5
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br339-the-australian-army",
+        "color": "#ffb35a",
+        "x": -387.59765625,
+        "y": -244.546493902439,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.41785714285714287,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br339-the-australian-army",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 14
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "kangaroo_003",
+        "item": "kangaroo_003",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 376.259765625,
+        "y": -238.6108993902439,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 42,
+        "ratio": 0.08768267223382047,
+        "itemID": 24
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 6,
+        "label": "Sutton",
+        "font": "115.83px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -25.576171875,
+        "y": -242.9250632064247,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 20,
+        "label": "Bradley William Sutton",
+        "font": "45.629999999999995px Arial",
+        "font_size": 13,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -254.970703125,
+        "y": -135.23526266417915,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 19,
+        "label": "19th of September 2023",
+        "font": "28.08px Arial",
+        "font_size": 8,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -334.599609375,
+        "y": -49.80357218101272,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "& grate grandfather",
+        "font": "31.589999999999996px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -335.390625,
+        "y": 25.11178376640416,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Loving father grandfather",
+        "font": "28.08px Arial",
+        "font_size": 8,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -328.271484375,
+        "y": -14.66323183880578,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Born 30 of September 1950 To",
+        "font": "24.57px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -309.0234375,
+        "y": -94.0112538517664,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Merle sutton",
+        "font": "56.16px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 230.44921875,
+        "y": -126.80070969493477,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "??????????",
+        "font": "38.61px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 171.650390625,
+        "y": -36.689768238939585,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 20
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Loving Mother grandmother",
+        "font": "31.589999999999996px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 258.92578125,
+        "y": -1.759906735016216,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 21
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "& grate grandmother",
+        "font": "31.589999999999996px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 216.474609375,
+        "y": 32.22196762138311,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 22
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Born 18th of May 1952 to",
+        "font": "31.589999999999996px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 250.224609375,
+        "y": -73.9978189543838,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 23
+      }
+    ]
+  }
+}

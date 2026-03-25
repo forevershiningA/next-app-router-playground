@@ -1,0 +1,190 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.822Z",
+  "units": "mm",
+  "source": {
+    "id": "1623389288705",
+    "slug": "legacy-1623389288705",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1623389288705.json",
+    "savedAt": "2021-06-11T05:28:08.705Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 36",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 490,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 616,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 490,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Agnes Mann",
+        "font": {
+          "family": "Garamond",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": -270
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Born 14/02/1933 Died 20/01/2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": -177
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "67ccad9f8408e673c60d67ab4d48f1ed5a07a32fa92f5f048cf06cc002474872",
+    "sourceItemCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.822Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 31",
+        "shape": "Headstone 36",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 990.25,
+        "quantity": 1,
+        "width": 490,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 616,
+        "device": "tablet",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": 142,
+        "version_date": 20210610,
+        "mode": "2d",
+        "navigator": "Linux armv8l, Google Inc., Mozilla/5.0 (Linux; Android 8.1.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 11,
+        "label": "Valma Walker",
+        "font": "88.58850000000001px Garamond",
+        "font_size": 59,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 7.000030517578125,
+        "y": -270.00000762939453,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 28,
+        "label": "Born 14/02/1933 Died 20/01/2021",
+        "font": "30.03px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 18,
+        "y": -176.99998474121094,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 3
+      }
+    ]
+  }
+}

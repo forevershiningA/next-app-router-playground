@@ -1,0 +1,1054 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.887Z",
+  "units": "mm",
+  "source": {
+    "id": "1677241048028",
+    "slug": "legacy-1677241048028",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1677241048028.json",
+    "savedAt": "2023-02-24T12:17:28.028Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 590,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 590,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 690,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -282
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Dorothy Rivera",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -253
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "I shall not be in want.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -37
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "“The Lord is my shepherd,",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -67
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "You’ll always be home to us our little lady",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 275
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-46",
+        "text": "Cornelius Leonard",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 299
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-47",
+        "text": "28.02.1952",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -173
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-49",
+        "text": "25.09.2018",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -131
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "He guides me in paths of righteousness for his name sake.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 58
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-38",
+        "text": "for you are with me;",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 81
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-40",
+        "text": "your rod and your staff, they comfort me.”",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 113
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-34",
+        "text": "Even though I walk through the valley of the",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": -1
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-36",
+        "text": "shadow of death, I shall fear no evil",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "“Heaven gained a angel & has taken a piece of our hearts forever.”",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 398
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "May you rest easy on grace & love",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 359
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-42",
+        "text": "Psalms 23:",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 144
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "Beloved daughter, sister, mother, aunt, grandmother & great-grandmother",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 433
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-15",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -196,
+          "y_px": -276
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-16",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 170.166,
+          "y_px": -278
+        },
+        "height_px": 76,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-24",
+        "asset": "1_156_15",
+        "position": {
+          "x_px": -262,
+          "y_px": 244
+        },
+        "height_px": 177,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-25",
+        "asset": "1_156_15",
+        "position": {
+          "x_px": 267.47,
+          "y_px": 236
+        },
+        "height_px": 173,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-52",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": -6,
+          "y_px": 198
+        },
+        "height_px": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "1_156_15",
+        "path": "/shapes/motifs/1_156_15.svg"
+      },
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "450ac4a2b9e6c09c4d864d3a52f17f18918e6f913477af3bcc5bfa5a22752ea9",
+    "sourceItemCount": 26,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.887Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2434.32,
+        "quantity": 1,
+        "width": 590,
+        "height": 600,
+        "_length": 80,
+        "init_width": 414,
+        "init_height": 664,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230223,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 828,
+        "quantity": 1,
+        "width": 690,
+        "height": 100,
+        "_length": 130,
+        "init_width": 414,
+        "init_height": 664,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "31.138714285714286px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": -282,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Irene Jane Davis",
+        "font": "33.44528571428571px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8,
+        "y": -253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 5
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1677241412850,
+        "path": "../upload/2023/02/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1677241412850bb5585f84600451e8d95ca0c.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -246,
+        "y": -124,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6252753872633391,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "BB5585F8-4600-451E-8D95-CA0C088B206D.jpeg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 13
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1677241462847,
+        "path": "../upload/2023/02/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1677241462847b1900196eaaa4dce81666f5c.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 234,
+        "y": -138,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6252753872633391,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "B1900196-EAAA-4DCE-8166-6F5CB9993DD7.jpeg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -196,
+        "y": -276,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.12926391382405744,
+        "itemID": 15
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 170.1656199025391,
+        "y": -278,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 76,
+        "ratio": 0.13644524236983843,
+        "itemID": 16
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_15",
+        "item": "1_156_15",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -262,
+        "y": 244,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 177,
+        "ratio": 0.21121718377088305,
+        "itemID": 24
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_15",
+        "item": "1_156_15",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 267.47005796113194,
+        "y": 236,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 173,
+        "ratio": 0.2064439140811456,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "I shall not be in want.",
+        "font": "33.44528571428571px Chopin Script",
+        "font_size": 29,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8,
+        "y": -37,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 30
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "“The Lord is my shepherd,",
+        "font": "31.138714285714286px Chopin Script",
+        "font_size": 27,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": -67,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 28
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "You’ll always be home to us our little lady",
+        "font": "28.832142857142856px Chopin Script",
+        "font_size": 25,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4,
+        "y": 275,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Love Monica, Ryemina, Maroon & John",
+        "font": "23.065714285714286px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4,
+        "y": 299,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 46
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "28.02.1952",
+        "font": "36.905142857142856px Chopin Script",
+        "font_size": 32,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 4,
+        "y": -173,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 47
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "25.09.2018",
+        "font": "36.905142857142856px Chopin Script",
+        "font_size": 32,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": -131,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 49
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": 198.0000000000001,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 70,
+        "ratio": 0.09615384615384616,
+        "itemID": 52
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 47,
+        "label": "He guides me in paths of righteousness for his name sake.",
+        "font": "25.372285714285713px Chopin Script",
+        "font_size": 22,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": 58,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 32
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "for you are with me;",
+        "font": "29.98542857142857px Chopin Script",
+        "font_size": 26,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": 81,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 38
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "your rod and your staff, they comfort me.”",
+        "font": "25.372285714285713px Chopin Script",
+        "font_size": 22,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -12,
+        "y": 113,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 40
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Even though I walk through the valley of the",
+        "font": "28.832142857142856px Chopin Script",
+        "font_size": 25,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 12,
+        "y": -1,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 34
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "shadow of death, I shall fear no evil",
+        "font": "33.44528571428571px Chopin Script",
+        "font_size": 29,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": 32,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 36
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 54,
+        "label": "“Heaven gained a angel & has taken a piece of our hearts forever.”",
+        "font": "31.138714285714286px Chopin Script",
+        "font_size": 27,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": 398,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "May you rest easy on grace & love",
+        "font": "33.44528571428571px Chopin Script",
+        "font_size": 29,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -14,
+        "y": 359.0000000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Psalms 23:",
+        "font": "39.21171428571429px Chopin Script",
+        "font_size": 34,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": 144,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 42
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 64,
+        "label": "Beloved daughter, sister, mother, aunt, grandmother & great-grandmother",
+        "font": "32.292px Chopin Script",
+        "font_size": 28,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4,
+        "y": 433.0000000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 23
+      }
+    ]
+  }
+}

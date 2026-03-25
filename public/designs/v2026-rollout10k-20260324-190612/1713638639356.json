@@ -1,0 +1,809 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.455Z",
+  "units": "mm",
+  "source": {
+    "id": "1713638639356",
+    "slug": "legacy-1713638639356",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1713638639356.json",
+    "savedAt": "2024-04-20T18:43:59.356Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1066.8,
+      "height_mm": 762
+    },
+    "viewportPx": {
+      "width": 1500,
+      "height": 1000,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1066.8,
+      "height_mm": 762,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 1166.8,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Bennie Silva",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -395.421,
+          "y_px": 41.358
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Coleman Cummings",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 365.16,
+          "y_px": 46.401
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "മണലിൽ",
+        "font": {
+          "family": "Arial",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 361.125,
+          "y_px": 114.995
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Jan 18, 1947 - Jan 23, 2023",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -383.317,
+          "y_px": 163.466
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Apr 28, 1947 -",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 312.706,
+          "y_px": 167.449
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Luther Carlson",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -365.16,
+          "y_px": 316.741
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Grace Freeman",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 355.072,
+          "y_px": 313.714
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "\"And I shall dwell in the house of the Lord forever\"",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 52.848
+        },
+        "position": {
+          "x_px": 1.797,
+          "y_px": -99.171
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Psalm 23",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 2.017,
+          "y_px": -30.262
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "വാറൂർ",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -401.474,
+          "y_px": 106.925
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Panicker",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 121
+        },
+        "position": {
+          "x_px": -20.175,
+          "y_px": -207.798
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Mar 1, 1977-xxxxxxx",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 359.107,
+          "y_px": 448.884
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Nov 29, 1978- xxxxxx",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -363.142,
+          "y_px": 446.867
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "\"Punji\"",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 353.055,
+          "y_px": 376.256
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-14",
+        "asset": "2_116_04",
+        "position": {
+          "x_px": 570.94,
+          "y_px": -246.13
+        },
+        "height_px": 108,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "bronzeangel2",
+        "position": {
+          "x_px": -613.307,
+          "y_px": -238.06
+        },
+        "height_px": 135,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-16",
+        "asset": "cross_001",
+        "position": {
+          "x_px": 0,
+          "y_px": -377.264
+        },
+        "height_px": 142,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_116_04",
+        "path": "/shapes/motifs/2_116_04.svg"
+      },
+      {
+        "id": "bronzeangel2",
+        "path": "/shapes/motifs/bronzeangel2.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e84efe19d3ef63bdacc4cde7ad15be9b3c235f032452247848264ebc6fac274d",
+    "sourceItemCount": 19,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.455Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 3063.16,
+        "quantity": 1,
+        "width": 1066.8,
+        "height": 762,
+        "_length": 90,
+        "init_width": 1260,
+        "init_height": 809,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1500x1000"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "price": 807,
+        "quantity": 1,
+        "width": 1166.8,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1260,
+        "init_height": 809,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_04",
+        "item": "2_116_04",
+        "price": 241.22606,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 570.9401496259352,
+        "y": -246.12967581047383,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 108,
+        "ratio": 0.18980667838312829,
+        "itemID": 14
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronzeangel2",
+        "item": "bronzeangel2",
+        "price": 247.8659,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -613.3067331670824,
+        "y": -238.05985037406487,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 135,
+        "ratio": 0.2631578947368421,
+        "itemID": 15
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 249.58733999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -377.2643391521197,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 142,
+        "ratio": 0.23785594639865998,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 12,
+        "label": "George Mathew",
+        "font": "66.2631460643544px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -395.42144638403994,
+        "y": 41.357855361596016,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 14,
+        "label": "Kunjamma Mathew",
+        "font": "66.2631460643544px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 365.15960099750623,
+        "y": 46.401496259351624,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 5,
+        "label": "മണലിൽ",
+        "font": "49.034728087622256px Arial",
+        "font_size": 37,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 361.1246882793018,
+        "y": 114.99501246882794,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 21,
+        "label": "Jan 18, 1947 - Jan 23, 2023",
+        "font": "43.733676402473904px Great Vibes",
+        "font_size": 33,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -383.31670822942647,
+        "y": 163.4663341645885,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Apr 28, 1947 -",
+        "font": "45.05893932376099px Great Vibes",
+        "font_size": 34,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 312.7057356608479,
+        "y": 167.4488778054863,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 15,
+        "label": "Silvy Mary Mathew",
+        "font": "66.2631460643544px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -365.15960099750623,
+        "y": 316.7406483790524,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 18,
+        "label": "Selvin George Mathew",
+        "font": "66.2631460643544px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 355.072319201995,
+        "y": 313.71446384039905,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 42,
+        "label": "\"And I shall dwell in the house of the Lord forever\"",
+        "font": "70.0374437431982px Dobkin",
+        "font_size": 52.84796142578125,
+        "font_family": "Dobkin",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 1.7965507982972257,
+        "y": -99.17131257473383,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 17
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 7,
+        "label": "Psalm 23",
+        "font": "50.35999100890934px Dobkin",
+        "font_size": 38,
+        "font_family": "Dobkin",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2.0174563591022445,
+        "y": -30.26184538653367,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 5,
+        "label": "വാറൂർ",
+        "font": "46.38420224504807px Great Vibes",
+        "font_size": 35,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -401.47381546134665,
+        "y": 106.92518703241896,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 8,
+        "label": "Panicker",
+        "font": "160.35681347573762px Great Vibes",
+        "font_size": 121,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -20.174563591022444,
+        "y": -207.7980049875312,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 103,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 17,
+        "label": "Mar 1, 1977-xxxxxxx",
+        "font": "47.709465166335164px Great Vibes",
+        "font_size": 36,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 359.1072319201994,
+        "y": 448.8840399002495,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 17,
+        "label": "Nov 29, 1978- xxxxxx",
+        "font": "47.709465166335164px Great Vibes",
+        "font_size": 36,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -363.14214463840403,
+        "y": 446.8665835411472,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 7,
+        "label": "\"Punji\"",
+        "font": "60.96209437920604px Chopin Script",
+        "font_size": 46,
+        "font_family": "Chopin Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 353.0548628428928,
+        "y": 376.2556109725686,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 10
+      }
+    ]
+  }
+}

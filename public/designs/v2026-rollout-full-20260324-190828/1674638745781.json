@@ -1,0 +1,920 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.730Z",
+  "units": "mm",
+  "source": {
+    "id": "1674638745781",
+    "slug": "legacy-1674638745781",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1674638745781.json",
+    "savedAt": "2023-01-25T09:25:45.781Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 16",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1280
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1280,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "A long life well lived",
+        "font": {
+          "family": "Garamond",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 170,
+          "y_px": -223
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Here lies",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 168,
+          "y_px": -284
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Love is enough",
+        "font": {
+          "family": "Adorable",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 172,
+          "y_px": -256
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Once met, never forgotten",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 170,
+          "y_px": -196
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "So loved",
+        "font": {
+          "family": "French Script",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 174,
+          "y_px": -346
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Laser-Etched Black Granite Headstone - 25/01/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 80,
+          "y_px": 314
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 62,
+          "y_px": 343
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "In God&apos;s care",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 172,
+          "y_px": -320
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Once met, never forgotten",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 232,
+          "y_px": 258
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": 288,
+          "y_px": -111
+        },
+        "height_px": 160,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_218_12",
+        "position": {
+          "x_px": 24,
+          "y_px": -37
+        },
+        "height_px": 150,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_151_01",
+        "position": {
+          "x_px": 153,
+          "y_px": 72
+        },
+        "height_px": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_184_19",
+        "position": {
+          "x_px": -74,
+          "y_px": 41
+        },
+        "height_px": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_184_12",
+        "position": {
+          "x_px": 235,
+          "y_px": 191
+        },
+        "height_px": 140,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "1_175_07",
+        "position": {
+          "x_px": 8,
+          "y_px": 123
+        },
+        "height_px": 150,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-20",
+        "asset": "dolphin_002",
+        "position": {
+          "x_px": -94,
+          "y_px": -110
+        },
+        "height_px": 400,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-21",
+        "asset": "dolphin_005",
+        "position": {
+          "x_px": -244,
+          "y_px": 77
+        },
+        "height_px": 210,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-22",
+        "asset": "dolphin_004",
+        "position": {
+          "x_px": 9,
+          "y_px": -328
+        },
+        "height_px": 160,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      },
+      {
+        "id": "1_218_12",
+        "path": "/shapes/motifs/1_218_12.svg"
+      },
+      {
+        "id": "1_151_01",
+        "path": "/shapes/motifs/1_151_01.svg"
+      },
+      {
+        "id": "1_184_19",
+        "path": "/shapes/motifs/1_184_19.svg"
+      },
+      {
+        "id": "1_184_12",
+        "path": "/shapes/motifs/1_184_12.svg"
+      },
+      {
+        "id": "1_175_07",
+        "path": "/shapes/motifs/1_175_07.svg"
+      },
+      {
+        "id": "dolphin_002",
+        "path": "/shapes/motifs/dolphin_002.svg"
+      },
+      {
+        "id": "dolphin_005",
+        "path": "/shapes/motifs/dolphin_005.svg"
+      },
+      {
+        "id": "dolphin_004",
+        "path": "/shapes/motifs/dolphin_004.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3bec3ae3a273b723759b898b3a171fd5cec690aaf7192a9e1e9076b8d6f5de7e",
+    "sourceItemCount": 22,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.730Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 16",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 8249.64,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1280,
+        "_length": 100,
+        "init_width": 1125,
+        "init_height": 865,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230124,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 288,
+        "y": -111,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 160,
+        "ratio": 0.27350427350427353,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "A long life well lived",
+        "font": "28.332128906250002px Garamond",
+        "font_size": 43,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 170,
+        "y": -223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Here lies",
+        "font": "30.3087890625px Lucida Calligraphy",
+        "font_size": 46,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 168,
+        "y": -284,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Love is enough",
+        "font": "31.626562500000002px Adorable",
+        "font_size": 48,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 172,
+        "y": -256,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Once met, never forgotten",
+        "font": "24.37880859375px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 170,
+        "y": -196,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "So loved",
+        "font": "29.649902343750004px French Script",
+        "font_size": 45,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 174,
+        "y": -346,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "Laser-Etched Black Granite Headstone - 25/01/2023",
+        "font": "17.1310546875px Arial",
+        "font_size": 26,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 80,
+        "y": 314,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "26.35546875px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 62,
+        "y": 343,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "In God&apos;s care",
+        "font": "24.37880859375px Dobkin",
+        "font_size": 37,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 172,
+        "y": -320,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 10
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_218_12",
+        "item": "1_218_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 24,
+        "y": -37,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 150,
+        "ratio": 0.24793388429752067,
+        "itemID": 11
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_151_01",
+        "item": "1_151_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 153,
+        "y": 72,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 180,
+        "ratio": 0.41284403669724773,
+        "itemID": 12
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_19",
+        "item": "1_184_19",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -74,
+        "y": 41,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 180,
+        "ratio": 0.24193548387096775,
+        "itemID": 13
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_12",
+        "item": "1_184_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 235,
+        "y": 191,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 140,
+        "ratio": 0.5017921146953405,
+        "itemID": 14
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_175_07",
+        "item": "1_175_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": 123,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 150,
+        "ratio": 0.3105590062111801,
+        "itemID": 15
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1674637082728,
+        "path": "../upload/2023/01/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1674637082728pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 150,
+        "y": -88,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36520280023094687,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 16
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1674637536434,
+        "path": "../upload/2023/01/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1674637536434pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 268,
+        "y": 24,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2739021001732102,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 17
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1674639195519,
+        "path": "../upload/2023/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1674639195519pomniklechakaczynskiegol.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -134,
+        "y": 182,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.41846154193129337,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 0,
+        "quantity": 1,
+        "size": 275,
+        "width": "141",
+        "height": "181",
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Once met, never forgotten",
+        "font": "24.37880859375px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 232,
+        "y": 258,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 19
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dolphin_002",
+        "item": "dolphin_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -94,
+        "y": -110,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 400,
+        "ratio": 0.547945205479452,
+        "itemID": 20
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dolphin_005",
+        "item": "dolphin_005",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -244,
+        "y": 77,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 210,
+        "ratio": 0.14179608372721134,
+        "itemID": 21
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dolphin_004",
+        "item": "dolphin_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 9,
+        "y": -328,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 160,
+        "ratio": 0.10825439783491204,
+        "itemID": 22
+      }
+    ]
+  }
+}

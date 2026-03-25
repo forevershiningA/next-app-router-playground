@@ -1,0 +1,363 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.933Z",
+  "units": "mm",
+  "source": {
+    "id": "1746638885325",
+    "slug": "legacy-1746638885325",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1746638885325.json",
+    "savedAt": "2025-05-07T17:28:05.325Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1517,
+      "height": 852,
+      "dpr": 0.9004614353179932
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Live in the sunshine, swim the sea, drink the wild air.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 1.8,
+          "y_px": 171.839
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Cal Larson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 56
+        },
+        "position": {
+          "x_px": 3.6,
+          "y_px": 62.07
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "November 13th - October 27th 2087",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 1.8,
+          "y_px": 116.967
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_140_25",
+        "position": {
+          "x_px": 160.192,
+          "y_px": -78.263
+        },
+        "height_px": 128,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_140_18",
+        "position": {
+          "x_px": -160.192,
+          "y_px": -80.062
+        },
+        "height_px": 126,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_140_25",
+        "path": "/shapes/motifs/1_140_25.svg"
+      },
+      {
+        "id": "1_140_18",
+        "path": "/shapes/motifs/1_140_18.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "15221453ffbbc513850de21ab957a7f68bc9f4beb4d665c52f9b75726d1e1708",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.933Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1229,
+        "init_height": 667.0050354003906,
+        "device": "desktop",
+        "dpr": 0.9004614353179932,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1517x852"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 584,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1229,
+        "init_height": 667.0050354003906,
+        "mode": "2d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1746638180740,
+        "path": "../upload/2025/05/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1746638180740image0_1_cropped.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": 3.599709927659135,
+        "y": -81.86068682119459,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5929936107235321,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "image0 (1).jpeg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_25",
+        "item": "1_140_25",
+        "price": 234.964815,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 160.1922755850428,
+        "y": -78.26341903845483,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 128,
+        "ratio": 0.1797752808988764,
+        "itemID": 4
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_18",
+        "item": "1_140_18",
+        "price": 234.495305,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -160.1921940584309,
+        "y": -80.06246038622939,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 126,
+        "ratio": 0.1691275167785235,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 45,
+        "label": "Live in the sunshine, swim the sea, drink the wild air.",
+        "font": "23.932233806117214px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.7998685520342406,
+        "y": 171.8387241818064,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 11,
+        "label": "Emma Sackett",
+        "font": "46.21396872905393px Garamond",
+        "font_size": 56,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3.5998661887299477,
+        "y": 62.0703559527679,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 28,
+        "label": "November 13th - October 27th 2087",
+        "font": "31.359478780429452px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.7998753459315417,
+        "y": 116.96667297549956,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 2
+      }
+    ]
+  }
+}

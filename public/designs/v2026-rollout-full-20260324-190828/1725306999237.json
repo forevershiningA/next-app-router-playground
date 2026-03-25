@@ -1,0 +1,299 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.143Z",
+  "units": "mm",
+  "source": {
+    "id": "1725306999237",
+    "slug": "legacy-1725306999237",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1725306999237.json",
+    "savedAt": "2024-09-02T19:56:39.237Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G654.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 1024,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Ryan weir",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 131,
+          "y_px": -53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "September 26 1983",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 45,
+          "y_px": 11
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_015_08",
+        "position": {
+          "x_px": -5,
+          "y_px": 9
+        },
+        "height_px": 343,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_138_26",
+        "position": {
+          "x_px": 209,
+          "y_px": 134
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_015_08",
+        "path": "/shapes/motifs/1_015_08.svg"
+      },
+      {
+        "id": "1_138_26",
+        "path": "/shapes/motifs/1_138_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ffffcccca938aadae7ddbeca36d9184ebe8a48f350112ac1b73670e222b7714a",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.143Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G654.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1040,
+        "init_height": 799,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240828,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1280x1024"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G654.jpg",
+        "price": 593,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1040,
+        "init_height": 799,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_08",
+        "item": "1_015_08",
+        "price": 285.43714,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5,
+        "y": 9,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 343,
+        "ratio": 0.7848970251716247,
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_138_26",
+        "item": "1_138_26",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 209,
+        "y": 134,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.17152658662092624,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "Ryan weir",
+        "font": "54.7683492688414px Chopin Script",
+        "font_size": 50,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 131,
+        "y": -53,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 15,
+        "label": "September 26 1983",
+        "font": "54.7683492688414px Chopin Script",
+        "font_size": 50,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 45,
+        "y": 11,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 4
+      }
+    ]
+  }
+}

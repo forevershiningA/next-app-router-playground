@@ -1,0 +1,986 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.373Z",
+  "units": "mm",
+  "source": {
+    "id": "1740853042582",
+    "slug": "legacy-1740853042582",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1740853042582.json",
+    "savedAt": "2025-03-01T18:17:22.582Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 356,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1024,
+      "height": 1366,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 356,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 456,
+      "height_mm": 101.6,
+      "depth_mm": "250",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-8",
+        "text": "“We will miss & Love You Forever!”",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 838
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Chapo “The Barber”",
+        "font": {
+          "family": "Adorable",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 356
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "———————————————————————————————",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 698
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "———————————————————————————————",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -710,
+          "y_px": 31
+        },
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "———————————————————————————————",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 702,
+          "y_px": 28
+        },
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Father of Cecilia, Dylan Frankie & Lucy Rivera",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 639
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Son of Maria & John Rivera",
+        "font": {
+          "family": "Adorable",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 581
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -564
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "09/25/1978 - 08/20/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 456
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Leslie Dawson",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 80
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": 234
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-12",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": -586,
+          "y_px": 562
+        },
+        "height_px": 111,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": 588.851,
+          "y_px": 560
+        },
+        "height_px": 111,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": 620.851,
+          "y_px": -460
+        },
+        "height_px": 82,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": -618.444,
+          "y_px": -460
+        },
+        "height_px": 82,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_022_07",
+        "position": {
+          "x_px": 6,
+          "y_px": 358
+        },
+        "height_px": 53,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "1_149_08",
+        "position": {
+          "x_px": -294,
+          "y_px": 360
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-20",
+        "asset": "1_149_08",
+        "position": {
+          "x_px": 308.698,
+          "y_px": 360
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-21",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": 863.556,
+          "y_px": 778
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-22",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": -864.444,
+          "y_px": 778
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-23",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": 854.426,
+          "y_px": 902
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-24",
+        "asset": "1_069_07",
+        "position": {
+          "x_px": -854.444,
+          "y_px": 900
+        },
+        "height_px": 43,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_069_07",
+        "path": "/shapes/motifs/1_069_07.svg"
+      },
+      {
+        "id": "1_022_07",
+        "path": "/shapes/motifs/1_022_07.svg"
+      },
+      {
+        "id": "1_149_08",
+        "path": "/shapes/motifs/1_149_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3d0a64c8db51f256d0c2af98599deca0efc5a93eeaceb1fef24f63ad86388631",
+    "sourceItemCount": 24,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.373Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1742.97,
+        "quantity": 1,
+        "width": 356,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1126,
+        "init_height": 857,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1024x1366"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 719,
+        "quantity": 1,
+        "width": 456,
+        "height": 101.6,
+        "_length": "250",
+        "init_width": 1126,
+        "init_height": 857,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1740853481753,
+        "path": "../upload/2025/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1740853481753img_1562_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -2,
+        "y": -212,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.7198716637693015,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1562.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 314,
+        "width": "547",
+        "height": "738",
+        "itemID": 6
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -586,
+        "y": 561.9999999999999,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -90,
+        "height": 111,
+        "ratio": 0.19204152249134948,
+        "itemID": 12
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 588.8511380930324,
+        "y": 559.9999999999999,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 90,
+        "height": 111,
+        "ratio": 0.19204152249134948,
+        "itemID": 13
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 620.8511380930324,
+        "y": -460.0000000000001,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": -90,
+        "height": 82,
+        "ratio": 0.14186851211072665,
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -618.4444444444445,
+        "y": -460.0000000000001,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 90,
+        "height": 82,
+        "ratio": 0.14186851211072665,
+        "itemID": 15
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_022_07",
+        "item": "1_022_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6,
+        "y": 357.9999999999999,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 53,
+        "ratio": 0.44166666666666665,
+        "itemID": 18
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_149_08",
+        "item": "1_149_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -294,
+        "y": 359.9999999999999,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.04963680387409201,
+        "itemID": 19
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_149_08",
+        "item": "1_149_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 308.69779370609854,
+        "y": 359.9999999999999,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.04963680387409201,
+        "itemID": 20
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 863.5555555555557,
+        "y": 777.9999999999999,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": -90,
+        "height": 43,
+        "ratio": 0.07439446366782007,
+        "itemID": 21
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -864.4444444444445,
+        "y": 777.9999999999999,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": -90,
+        "height": 43,
+        "ratio": 0.07439446366782007,
+        "itemID": 22
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 854.4258162582619,
+        "y": 901.9999999999999,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 180,
+        "height": 43,
+        "ratio": 0.07439446366782007,
+        "itemID": 23
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_069_07",
+        "item": "1_069_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -854.4444444444445,
+        "y": 899.9999999999999,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 180,
+        "height": 43,
+        "ratio": 0.07439446366782007,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "“We will miss & Love You Forever!”",
+        "font": "117.48804836895388px Chopin Script",
+        "font_size": 50,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -12,
+        "y": 837.9999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Chapo “The Barber”",
+        "font": "61.09378515185602px Adorable",
+        "font_size": 26,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 12,
+        "y": 355.9999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "———————————————————————————————",
+        "font": "49.34498031496063px Chopin Script",
+        "font_size": 21,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": 697.9999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "———————————————————————————————",
+        "font": "39.94593644544432px Chopin Script",
+        "font_size": 17,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -710,
+        "y": 30.999999999999886,
+        "rotation": -90,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 4,
+        "itemID": 26
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "———————————————————————————————",
+        "font": "39.94593644544432px Chopin Script",
+        "font_size": 17,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 702,
+        "y": 27.999999999999886,
+        "rotation": -90,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 4,
+        "itemID": 27
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Father of Cecilia, Dylan Frankie & Lucy Rivera",
+        "font": "42.295697412823394px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -4,
+        "y": 638.9999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Son of Maria & John Rivera",
+        "font": "46.99521934758155px Adorable",
+        "font_size": 20,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": 580.9999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "89.29091676040495px Great Vibes",
+        "font_size": 38,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": -564,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "09/25/1978 - 08/20/2023",
+        "font": "37.59617547806524px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 12,
+        "y": 455.9999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Frankie Rivera",
+        "font": "187.9808773903262px Chopin Script",
+        "font_size": 80,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -14,
+        "y": 234,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 3
+      }
+    ]
+  }
+}

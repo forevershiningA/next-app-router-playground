@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+
+	<general>
+		<type value="${general.type}" />
+		<collection value="tomb" />
+		<collection value="root-tomb" />
+	</general>
+	
+	<edit-attributes>
+		<duplicate>off</duplicate>
+		<erase>off</erase>
+	</edit-attributes>
+	
+	<informations>
+		<information type="stone_area_square_meters">
+			<static-get type="number" value="NaN" />
+		</information>
+	</informations>
+
+	<properties>
+		
+		<section id="look" label="@/ui_panel_look_label">
+			
+			<property id="color" label="@/ui_panel_prop_color_label" type="texture">
+				<general type="tomb" collection="base" />
+			</property>
+			
+		</section>
+		
+	</properties>
+	
+	<regions>
+	
+		<region type="point" id="kerb">
+			<type-filter>
+				<deny value="*" />
+				<allow value="kerb" />
+			</type-filter>
+			<child-limit value="1" />
+			<position x="0" y="500" z="0" />
+			<rotation x="0" y="0" z="0" />
+		</region>
+		
+	</regions>
+	
+	<selection type="standard" />
+	
+</data>

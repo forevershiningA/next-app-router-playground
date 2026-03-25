@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project default="build">
+	
+	<property name="ANT_DIR" location="../../../../ant"/>
+
+	<target name="build">
+		
+		<ant antfile="${ANT_DIR}/build-m3d.xml" useNativeBasedir="true">
+			
+			<property name="definition.file" location="definition.xml"/>
+			
+			<property name="asset1.type" value="object3d"/>
+			<property name="asset1.id" value="model"/>
+			<property name="asset1.file" location="assets/simple_away3d_rectangle5.3DS"/>
+			<property name="asset1.executor.file" location="ModelAssetExecutor.hx"/>
+			<property name="asset1.executor.out_file" location="compiled/ModelAssetExecutor.js"/>
+			
+			<property name="asset2.type" value="texture"/>
+			<property name="asset2.id" value="model-diffusemap"/>
+			<property name="asset2.file" location="assets/diffuseMap.jpg"/>
+			
+			<property name="executor.file" location="MainExecutor.hx"/>
+			<property name="executor.out_file" location="compiled/MainExecutor.js"/>
+			
+			<!--<property name="output.file" location="build/table.m3d"/>-->
+			<property name="output.file" location="build/rectangle.m3d"/>
+			
+			<property name="copy-to-build.dir" value="forevershining/urns"/>
+			
+		</ant>
+		
+	</target>
+	
+</project>

@@ -1,0 +1,393 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.613Z",
+  "units": "mm",
+  "source": {
+    "id": "1598406811784",
+    "slug": "legacy-1598406811784",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1598406811784.json",
+    "savedAt": "2020-08-26T01:53:31.784Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 220,
+      "height_mm": 170
+    },
+    "viewportPx": {
+      "width": 1111,
+      "height": 887,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 220,
+      "height_mm": 170,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Forever in our",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -123.464,
+          "y_px": 129.231
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Hearts & Minds",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -123.697,
+          "y_px": 196.517
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "IN LOVING MEMORY OF",
+        "font": {
+          "family": "Garamond",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 133.957,
+          "y_px": -256.092
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Stuart Weber",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 137.697,
+          "y_px": -183.86
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "18/10/1917 - 25/05/2009",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 131.697,
+          "y_px": -98.314
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Rest In Peace",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -110.464,
+          "y_px": 268.231
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "54755dba707d8032e2fcad3cab9a54a092d8827d6b24ac6ff0b6bd6222d5c7d6",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.613Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "367.19",
+        "quantity": 1,
+        "width": 220,
+        "height": 170,
+        "_length": 1,
+        "init_width": 1111,
+        "init_height": 887,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1598398920390main_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -284.1465909090909,
+        "y": -130.9022727272727,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8322435503685504,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Main.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "94",
+        "width": "259",
+        "height": "370",
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1598399040731photo_1_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 297.91363636363633,
+        "y": 147.43636363636358,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.761414312039312,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Photo 1.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "86",
+        "width": "240",
+        "height": "338",
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Forever in our",
+        "font": "90.41352272727272px Dobkin",
+        "font_size": 23,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -123.46363636363634,
+        "y": 129.23068181818178,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Hearts & Minds",
+        "font": "78.62045454545454px Dobkin",
+        "font_size": 20,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -123.6965909090909,
+        "y": 196.5170454545455,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "IN LOVING MEMORY OF",
+        "font": "43.241249999999994px Garamond",
+        "font_size": 11,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 133.9568181818181,
+        "y": -256.0920454545454,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Ellen May Deegan",
+        "font": "78.62045454545454px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 137.6965909090909,
+        "y": -183.86022727272723,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "18/10/1917 - 25/05/2009",
+        "font": "51.10329545454545px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 131.6965909090909,
+        "y": -98.31363636363636,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Rest In Peace",
+        "font": "70.75840909090908px Dobkin",
+        "font_size": 18,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -110.46363636363634,
+        "y": 268.2306818181818,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 1
+      }
+    ]
+  }
+}

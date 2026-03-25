@@ -1,0 +1,260 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.915Z",
+  "units": "mm",
+  "source": {
+    "id": "1632595194427",
+    "slug": "legacy-1632595194427",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1632595194427.json",
+    "savedAt": "2021-09-25T18:39:54.427Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 253.9999999999998,
+      "height_mm": 114.30000000000007
+    },
+    "viewportPx": {
+      "width": 560,
+      "height": 283,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 253.9999999999998,
+      "height_mm": 114.30000000000007,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Baby and Tilly",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -84
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "2_057_13",
+        "position": {
+          "x_px": 144,
+          "y_px": 12.5
+        },
+        "height_px": 112,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "2_057_26",
+        "position": {
+          "x_px": 28,
+          "y_px": 574
+        },
+        "height_px": 119,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_057_13",
+        "path": "/shapes/motifs/2_057_13.svg"
+      },
+      {
+        "id": "2_057_26",
+        "path": "/shapes/motifs/2_057_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7ae57dd0ff7421a9581900e5642827c7ab518b37a48f1b7a514afbe07f93ed82",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.915Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 591.66,
+        "quantity": 1,
+        "width": 253.9999999999998,
+        "height": 114.30000000000007,
+        "_length": 1,
+        "init_width": 560,
+        "init_height": 283,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210921,
+        "mode": "2d",
+        "navigator": "iPhone, Apple Computer, Inc., Mozilla/5.0 (iPhone; CPU iPhone OS 14_8 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_057_13",
+        "item": "2_057_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 144,
+        "y": 12.5,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 112,
+        "ratio": 0.24669603524229075,
+        "itemID": 1
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_057_26",
+        "item": "2_057_26",
+        "price": 74.4,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 28,
+        "y": 574,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 119,
+        "ratio": 0.2786885245901639,
+        "itemID": 2
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br389-puppy",
+        "color": "#ffb35a",
+        "x": -150,
+        "y": 8,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.4893328367737821,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br389-puppy",
+        "price": 109,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Baby and Tilly",
+        "font": "43.45275590551185px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": -84,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 4
+      }
+    ]
+  }
+}

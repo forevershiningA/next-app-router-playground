@@ -1,0 +1,638 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:38.095Z",
+  "units": "mm",
+  "source": {
+    "id": "1755169086231",
+    "slug": "legacy-1755169086231",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1755169086231.json",
+    "savedAt": "2025-08-14T10:58:06.231Z"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "monument",
+    "slug": "laser-monument",
+    "category": "full-monument",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1075,
+      "height_mm": 829
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1075,
+      "height_mm": 829,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Gertrude Mendoza",
+        "font": {
+          "family": "Adorable",
+          "size_px": 60.433
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "01/04/1968 - 13/01/2016",
+        "font": {
+          "family": "French Script",
+          "size_px": 36.702
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 80
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Sister, Neice & Aunty to many",
+        "font": {
+          "family": "Adorable",
+          "size_px": 36.655
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Kathrine Stewart",
+        "font": {
+          "family": "Adorable",
+          "size_px": 54.874
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Beloved Daughter of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40.316
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Gwendoline & David Clinch",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 204,
+          "y_px": 1
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Loving Mother to",
+        "font": {
+          "family": "Adorable",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Shahnae Kelvin & Shakiah",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 43
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "banksiarufa",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 145,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "banksiarufa",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 140,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "alyogynehakeifolia(nativehibiscus)",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 400,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "banksiarufa",
+        "path": "/shapes/motifs/banksiarufa.svg"
+      },
+      {
+        "id": "alyogynehakeifolia(nativehibiscus)",
+        "path": "/shapes/motifs/alyogynehakeifolia(nativehibiscus).svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "842fb213e68486f897a0f5ee6475ce3fd4b5693a90fe8f07a83110c35672fdc1",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:38.095Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 100,
+        "type": "Headstone",
+        "promo_code": "undefined",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Full Monument",
+        "price": 3849.62,
+        "quantity": 1,
+        "width": 1075,
+        "height": 829,
+        "_length": 80,
+        "init_width": 1200,
+        "init_height": 724,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "3d",
+        "navigator": "Safari (desktop), 1440x900"
+      },
+      {
+        "productid": 100,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "price": 5261.41,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1200,
+        "init_height": 724,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 4427.71,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1200,
+        "init_height": 724,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 100,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1934.29,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1200,
+        "init_height": 724,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Nicole Joanne Clinch",
+        "font": "184.68662051008937px Adorable",
+        "font_size": 60.4331515233207,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "01/04/1968 - 13/01/2016",
+        "font": "184.68662051008937px French Script",
+        "font_size": 36.70223325062035,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 80,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Sister, Neice & Aunty to many",
+        "font": "184.68662051008937px Adorable",
+        "font_size": 36.6551724137931,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "One Life One Chance",
+        "font": "184.68662051008937px Adorable",
+        "font_size": 54.873562751892756,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 8
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "banksiarufa",
+        "item": "banksiarufa",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 145,
+        "ratio": 0.21739130434782608,
+        "itemID": 10
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "banksiarufa",
+        "item": "banksiarufa",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 140,
+        "ratio": 0.2098950524737631,
+        "itemID": 12
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "alyogynehakeifolia(nativehibiscus)",
+        "item": "alyogynehakeifolia(nativehibiscus)",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 400,
+        "ratio": 0.322061191626409,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Beloved Daughter of",
+        "font": "184.68662051008937px Adorable",
+        "font_size": 40.31615880169988,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Gwendoline & David Clinch",
+        "font": "184.68662051008937px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 204,
+        "y": 1,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Loving Mother to",
+        "font": "184.68662051008937px Adorable",
+        "font_size": 40,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Shahnae Kelvin & Shakiah",
+        "font": "184.68662051008937px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 43,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 14
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1754911602402,
+        "path": "../upload/2025/08/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1754911602402attachment_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 13,
+        "ratio": 2.0152269365051185,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Attachment.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 790,
+        "width": "594",
+        "height": "730",
+        "itemID": 9
+      }
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project default="build">
+	<import file="config.xml"/>
+	
+	<target name="build">
+		
+		<foreach target="run" param="file">
+			<fileset dir="${base.dir}" casesensitive="no">
+				<include name="**/build.xml"/>
+			</fileset>
+		</foreach>
+		
+	</target>
+	
+	<target name="run">
+		
+		<echo>Running: ${file}</echo>
+		<ant antfile="${file}" useNativeBasedir="true" />
+		
+	</target>
+	
+</project>

@@ -1,0 +1,552 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.710Z",
+  "units": "mm",
+  "source": {
+    "id": "1728588535051",
+    "slug": "legacy-1728588535051",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1728588535051.json",
+    "savedAt": "2024-10-10T19:28:55.051Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Portrait)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 256
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1.100000023841858
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 256,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-15",
+        "text": "Seidy L. Lozano",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -242.161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "09-30-1991",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -216.635,
+          "y_px": 56.793
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "10-30-2022",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 230.93,
+          "y_px": 56.793
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "butterfly_009",
+        "position": {
+          "x_px": -241.927,
+          "y_px": -329.729
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 13
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "butterfly_009",
+        "position": {
+          "x_px": 236.245,
+          "y_px": -322.035
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": -18
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 4.399,
+          "y_px": -36.27
+        },
+        "height_px": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": -234.229,
+          "y_px": 320.936
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": 245.124,
+          "y_px": 328.629
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "m1010_1",
+        "position": {
+          "x_px": 4.399,
+          "y_px": 385.782
+        },
+        "height_px": 46,
+        "rotation": {
+          "z_deg": 75
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_009",
+        "path": "/shapes/motifs/butterfly_009.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      },
+      {
+        "id": "m1010_1",
+        "path": "/shapes/motifs/m1010_1.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "cdffdbe83f73f8ea09fb97aecc199805b18a86ab2d845eb28341f65bcda11f1f",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.710Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Portrait)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 503.35,
+        "quantity": 1,
+        "width": 200,
+        "height": 256,
+        "_length": 15,
+        "init_width": 1505,
+        "init_height": 777.0085258483887,
+        "device": "desktop",
+        "dpr": 1.100000023841858,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240925,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_009",
+        "item": "butterfly_009",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -241.92691029900334,
+        "y": -329.7285382863432,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 13,
+        "height": 40,
+        "ratio": 0.07751937984496124,
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_009",
+        "item": "butterfly_009",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 236.2453734525418,
+        "y": -322.0348723929951,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -18,
+        "height": 40,
+        "ratio": 0.07751937984496124,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 4.398671096345424,
+        "y": -36.27013921149762,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 70,
+        "ratio": 0.12567324955116696,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -234.2292358803985,
+        "y": 320.9357772653741,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06837606837606838,
+        "itemID": 4
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1728597735071,
+        "path": "../upload/2024/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1728597735071ss_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 237.52823920265746,
+        "y": -120.90046403832582,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5857759915490575,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "ss.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 12
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1728597872556,
+        "path": "../upload/2024/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1728597872556unnamed_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -225.43189368770777,
+        "y": -112.10770301735676,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5857759915490575,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "unnamed.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 13
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 245.12370913543168,
+        "y": 328.6294431587221,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06837606837606838,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Seidy L. Lozano",
+        "font": "42.31813127519405px Chopin Script",
+        "font_size": 13,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.1368683772161603e-13,
+        "y": -242.16111369198205,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "09-30-1991",
+        "font": "39.06289040787143px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -216.63455149501658,
+        "y": 56.792761020969124,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "10-30-2022",
+        "font": "39.06289040787143px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 230.93023255813978,
+        "y": 56.79276102096907,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 17
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1728598543639,
+        "path": "../upload/2024/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1728598543639img_6633_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -1.0996677740864698,
+        "y": -28.576473318149738,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5857759915490575,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_6633.jpeg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 18
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "m1010_1",
+        "item": "m1010_1",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 4.398671096345538,
+        "y": 385.7823897950217,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 75,
+        "height": 46,
+        "ratio": 0.11302211302211303,
+        "itemID": 19
+      }
+    ]
+  }
+}

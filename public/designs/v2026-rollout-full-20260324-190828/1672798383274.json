@@ -1,0 +1,945 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.524Z",
+  "units": "mm",
+  "source": {
+    "id": "1672798383274",
+    "slug": "legacy-1672798383274",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1672798383274.json",
+    "savedAt": "2023-01-04T02:13:03.274Z"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "monument",
+    "slug": "traditional-monument",
+    "category": "full-monument",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1000,
+      "height_mm": 50
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Irwin Hamilton",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 53.846
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Our Beloved Wife Mother Grandmother",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18.838
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 39.429
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Albert Padilla",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 54.084
+        },
+        "position": {
+          "x_px": 6.213,
+          "y_px": -147.181
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Our Dearest Sister Aunty and Friend",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23.386
+        },
+        "position": {
+          "x_px": -125.399,
+          "y_px": -231.762
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "BERYL GAIBA KRIS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40.315
+        },
+        "position": {
+          "x_px": -5.092,
+          "y_px": -91.625
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Born October 26 1967 Thursday Island",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -106.507
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "Taken into God&apos;s Care March 15 2019 Cairns",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16.097
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -67.079
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "Aged 52",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20.097
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -27.65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "Forever In Our Hearts",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40.097
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 11.778
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-305",
+        "text": "From day one when she took the cross of Jesus to follow him,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.107
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-318",
+        "text": "Godly and Spiritual Journey ",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 69.253
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -160.334
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-327",
+        "text": "Sista Beryl was a woman of prayer (Luke 5:16).  She was a intercessor",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.107
+        },
+        "position": {
+          "x_px": -27.374,
+          "y_px": -123.813
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-329",
+        "text": "always praying for the needs of others in her family, community,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.107
+        },
+        "position": {
+          "x_px": -27.429,
+          "y_px": -84.443
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-331",
+        "text": "nation of Torres Strait and Australia, also other nations as well.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.107
+        },
+        "position": {
+          "x_px": -27.429,
+          "y_px": -59.443
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-335",
+        "text": "She was a Prayer Warrior.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.107
+        },
+        "position": {
+          "x_px": -27.429,
+          "y_px": -34.443
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-337",
+        "text": "Sista Beryl was anointed to serve in ministry work. (Isaiah 61:3)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25.107
+        },
+        "position": {
+          "x_px": -27.429,
+          "y_px": -9.443
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-98",
+        "asset": "cross_002",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-104",
+        "asset": "dovefinal8-11-16[converted]",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-294",
+        "asset": "1_017_12",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 1000,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      },
+      {
+        "id": "dovefinal8-11-16[converted]",
+        "path": "/shapes/motifs/dovefinal8-11-16[converted].svg"
+      },
+      {
+        "id": "1_017_12",
+        "path": "/shapes/motifs/1_017_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9a5ad73c96c747fee5b01d11372e3242fb01133330f253e280863352368a8fb1",
+    "sourceItemCount": 24,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.524Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Full Monument",
+        "price": 2339.51,
+        "quantity": 1,
+        "width": 1000,
+        "height": 50,
+        "_length": 80,
+        "init_width": 1680,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20221230,
+        "mode": "3d",
+        "navigator": "Mozilla Firefox (desktop), 1920x1080"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 6357.35,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1680,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 6205.99,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1680,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 3855.31,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1680,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 8,
+        "label": "In Loving",
+        "font": "162.1285714285714px Great Vibes",
+        "font_size": 53.845630971629575,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 31,
+        "label": "Our Beloved Wife Mother Grandmother",
+        "font": "162.1285714285714px Garamond",
+        "font_size": 18.838313970886315,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 39.42857142857143,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 8,
+        "label": "Memory Of",
+        "font": "54.04285714285712px Great Vibes",
+        "font_size": 54.08375981892658,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 6.213398828821369,
+        "y": -147.18056166210363,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 30,
+        "label": "Our Dearest Sister Aunty and Friend",
+        "font": "162.1285714285714px Garamond",
+        "font_size": 23.38646708927464,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -125.3993464876304,
+        "y": -231.76215880699777,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "BERYL GAIBA KRIS",
+        "font": "162.1285714285714px Garamond",
+        "font_size": 40.31462586633831,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -5.092226409783493,
+        "y": -91.62508736457147,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 31,
+        "label": "Born October 26 1967 Thursday Island",
+        "font": "54.04285714285712px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -106.5072456678961,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 22
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 35,
+        "label": "Taken into God&apos;s Care March 15 2019 Cairns",
+        "font": "54.04285714285712px Garamond",
+        "font_size": 16.09661835748792,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -67.07867423932467,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 24
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 6,
+        "label": "Aged 52",
+        "font": "54.04285714285712px Garamond",
+        "font_size": 20.09661835748792,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -27.650102810753232,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 26
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "Forever In Our Hearts",
+        "font": "162.1285714285714px Garamond",
+        "font_size": 40.09661835748792,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 11.778468617818199,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 28
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1672800546189,
+        "path": "../upload/2023/01/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "167280054618920230104_122615_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.04382479977116705,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "20230104_122615.jpg",
+        "price": 440,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 60
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 219.001475,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 60,
+        "ratio": 0.2158273381294964,
+        "itemID": 98
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dovefinal8-11-16[converted]",
+        "item": "dovefinal8-11-16[converted]",
+        "price": 218.29721,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 57,
+        "ratio": 0.17647058823529413,
+        "itemID": 104
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_12",
+        "item": "1_017_12",
+        "price": 460.5867,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 1000,
+        "ratio": 1.1947431302270013,
+        "itemID": 294
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 48,
+        "label": "From day one when she took the cross of Jesus to follow him,",
+        "font": "21.279375px Garamond",
+        "font_size": 25.107407087376025,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 305
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 24,
+        "label": "Godly and Spiritual Journey ",
+        "font": "21.279375px Great Vibes",
+        "font_size": 69.25326755809122,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -160.3337100133981,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 318
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 56,
+        "label": "Sista Beryl was a woman of prayer (Luke 5:16).  She was a intercessor",
+        "font": "21.279375px Garamond",
+        "font_size": 25.107407087376025,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -27.37418477549872,
+        "y": -123.81308353963482,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 327
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 54,
+        "label": "always praying for the needs of others in her family, community,",
+        "font": "21.279375px Garamond",
+        "font_size": 25.107407087376025,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -27.42863154739615,
+        "y": -84.44329504989344,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 329
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 56,
+        "label": "nation of Torres Strait and Australia, also other nations as well.",
+        "font": "21.279375px Garamond",
+        "font_size": 25.107407087376025,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -27.42863154739615,
+        "y": -59.443295049893436,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 331
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "She was a Prayer Warrior.",
+        "font": "21.279375px Garamond",
+        "font_size": 25.107407087376025,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -27.42863154739615,
+        "y": -34.443295049893436,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 335
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 55,
+        "label": "Sista Beryl was anointed to serve in ministry work. (Isaiah 61:3)",
+        "font": "21.279375px Garamond",
+        "font_size": 25.107407087376025,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -27.42863154739615,
+        "y": -9.443295049893436,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 337
+      }
+    ]
+  }
+}

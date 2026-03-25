@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+
+	<general>
+		<type value="table" />
+		<collection value="tomb" />
+		<collection value="root-tomb" />
+		<collection value="urn" />
+	</general>
+	
+	<edit-attributes>
+		<duplicate>off</duplicate>
+		<erase>off</erase>
+	</edit-attributes>
+
+	<properties>
+		<section id="dimensions" label="@/ui_panel_dimensions_label">
+			
+			<property id="width" label="@/ui_panel_prop_width_label" type="slider">
+				<value default="294" step="1" />
+			</property>
+			
+			<property id="depth" label="@/ui_panel_prop_depth_label" type="slider">
+				<value default="81" step="1" />
+			</property>
+			
+			<property id="height" label="@/ui_panel_prop_height_label" type="slider">
+				<value default="307" step="1" />
+			</property>
+			
+		</section>
+		<section id="look" label="@/ui_panel_look_label">
+			<property id="front-bitmap" label="@/ui_panel_prop_front_bitmap_label" type="display">
+				<general type="main" category="urn" />
+			</property>
+		</section>
+		<section id="render" label="@/ui_panel_render_label">
+			<property id="showReflections" label="@/ui_panel_prop_show_reflections_label" type="switch" />
+		</section>
+	</properties>
+	
+	<regions>
+		<region type="surface" id="inscriptions">
+			<collection-filter>
+				<deny value="*" />
+				<allow value="table-element" />
+			</collection-filter>
+			<type-filter>
+				<allow value="*" />
+			</type-filter>
+			<bounds-shape type="rectangle" x="-85" y="-120" width="170" height="240" />
+			<position x="0" y="135" z="-3" />
+			<rotation x="90" y="0" z="0" />
+		</region>
+	</regions>
+	
+	<camera mode="autoZoomSphere" relative="true">
+		<target x="0" y="140" z="0" />
+		<position angleA="0" angleB="0" radius="450" />
+		<limits>
+			<angleA min="-30" max="30" />
+			<angleB min="-5" max="20" />
+			<radius min="350" max="1000" />
+		</limits>
+	</camera>
+	
+	<selection type="standard" width="205" height="83" depth="275" x="0" y="-44" z="135" />
+	
+</data>

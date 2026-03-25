@@ -1,0 +1,779 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.741Z",
+  "units": "mm",
+  "source": {
+    "id": "1674728057482",
+    "slug": "legacy-1674728057482",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1674728057482.json",
+    "savedAt": "2023-01-26T10:14:17.482Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 17",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1225
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1225,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Edge (chromium based) - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 378
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Laser-Etched Black Granite Headstone - 26/01/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": 347
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Always together",
+        "font": {
+          "family": "French Script",
+          "size_px": 159
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 221
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Death cannot part them",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -256,
+          "y_px": -76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Always loving, always loved",
+        "font": {
+          "family": "French Script",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 252,
+          "y_px": -30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "So loved",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 239,
+          "y_px": -70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Always loving, always loved",
+        "font": {
+          "family": "French Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 253,
+          "y_px": 3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Always loving, always loved",
+        "font": {
+          "family": "French Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -264,
+          "y_px": -48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Always loving, always loved",
+        "font": {
+          "family": "French Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 253,
+          "y_px": 30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Always loving, always loved",
+        "font": {
+          "family": "French Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 253,
+          "y_px": 57
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Death cannot part them",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -256,
+          "y_px": -16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Death cannot part them",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -259,
+          "y_px": 9
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Love is waiting",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 66
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -272
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "So loved",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 63
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -236
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-20",
+        "asset": "2_120_05",
+        "position": {
+          "x_px": 253,
+          "y_px": 115
+        },
+        "height_px": 80,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_120_05",
+        "path": "/shapes/motifs/2_120_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a0ce88db877a6de96e7bfa2360b8822e54f953598c6b7938052765227b5d8ecc",
+    "sourceItemCount": 19,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.741Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 17",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 8001.7,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1225,
+        "_length": 100,
+        "init_width": 1633,
+        "init_height": 897,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230124,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "2",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 886,
+        "quantity": 1,
+        "width": 1200,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1633,
+        "init_height": 897,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Edge (chromium based) - desktop",
+        "font": "24.42209433962264px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": 378,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "Laser-Etched Black Granite Headstone - 26/01/2023",
+        "font": "26.402264150943395px Arial",
+        "font_size": 40,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -11,
+        "y": 347,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Always together",
+        "font": "104.949px French Script",
+        "font_size": 159,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5,
+        "y": 221,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 153,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Death cannot part them",
+        "font": "16.50141509433962px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -256,
+        "y": -76,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Always loving, always loved",
+        "font": "29.702547169811318px French Script",
+        "font_size": 45,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 252,
+        "y": -30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "So loved",
+        "font": "24.42209433962264px Chopin Script",
+        "font_size": 37,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 239,
+        "y": -70,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Always loving, always loved",
+        "font": "28.38243396226415px French Script",
+        "font_size": 43,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 253,
+        "y": 3,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Always loving, always loved",
+        "font": "28.38243396226415px French Script",
+        "font_size": 43,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -264,
+        "y": -48,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 10
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1674727050426,
+        "path": "../upload/2023/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1674727050426pomniklechakaczynskiegol.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -20,
+        "y": -21,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7688409883598772,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 0,
+        "quantity": 1,
+        "size": "523",
+        "width": "241",
+        "height": "345",
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Always loving, always loved",
+        "font": "28.38243396226415px French Script",
+        "font_size": 43,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 253,
+        "y": 30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Always loving, always loved",
+        "font": "28.38243396226415px French Script",
+        "font_size": 43,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 253,
+        "y": 57,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Death cannot part them",
+        "font": "16.50141509433962px Franklin Gothic",
+        "font_size": 25,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -256,
+        "y": -16,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Death cannot part them",
+        "font": "16.50141509433962px Great Vibes",
+        "font_size": 25,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -259,
+        "y": 9,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 14
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1674736771770,
+        "path": "../upload/2023/01/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1674736771770pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -250,
+        "y": 83,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.220508887674917,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 350,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 18
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_120_05",
+        "item": "2_120_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 253,
+        "y": 115,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 80,
+        "ratio": 0.18181818181818182,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Love is waiting",
+        "font": "43.5637358490566px Xirwena",
+        "font_size": 66,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1,
+        "y": -272,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 115,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "So loved",
+        "font": "41.58356603773585px Chopin Script",
+        "font_size": 63,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": -236,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 21
+      }
+    ]
+  }
+}

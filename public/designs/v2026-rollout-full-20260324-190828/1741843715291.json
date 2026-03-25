@@ -1,0 +1,236 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.473Z",
+  "units": "mm",
+  "source": {
+    "id": "1741843715291",
+    "slug": "legacy-1741843715291",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1741843715291.json",
+    "savedAt": "2025-03-13T05:28:35.291Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Stainless Steel Plaque",
+    "material": {
+      "name": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "T1",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -127,
+          "y_px": -24
+        },
+        "rotation": {
+          "z_deg": 53
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "T1",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -268,
+          "y_px": 107
+        },
+        "rotation": {
+          "z_deg": -132
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_141_08",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 80,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_141_08",
+        "path": "/shapes/motifs/1_141_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2699fd3152bb0ec4506842ca52200ad7a76587204bb325d5e6050f55a2165127",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.473Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 3,
+        "shape": "Stainless Steel Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (No drilled holes)",
+        "price": 447.34,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 2,
+        "init_width": 1680,
+        "init_height": 881,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "T1",
+        "font": "120.25649999999999px Xirwena",
+        "font_size": 42,
+        "font_family": "Xirwena",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -127,
+        "y": -24,
+        "rotation": 53,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 75,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "T1",
+        "font": "120.25649999999999px Xirwena",
+        "font_size": 42,
+        "font_family": "Xirwena",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -268,
+        "y": 107,
+        "rotation": -132,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 75,
+        "itemID": 3
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_141_08",
+        "item": "1_141_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 80,
+        "ratio": 0.08483563096500531,
+        "itemID": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,320 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:38.847Z",
+  "units": "mm",
+  "source": {
+    "id": "1689189291249",
+    "slug": "legacy-1689189291249",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1689189291249.json",
+    "savedAt": "2023-07-12T19:14:51.249Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/Paradiso.jpg",
+      "texture": "/textures/forever/l/Paradiso.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 381.0000000000002,
+      "height_mm": 253.99999999999997
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 381.0000000000002,
+      "height_mm": 253.99999999999997,
+      "thickness_mm": 25.4,
+      "surface": "front",
+      "texture": "/textures/forever/l/Paradiso.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Lucile Espinoza",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 7.5,
+          "y_px": -189.913
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "November 1, 1964 - June 23, 2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 30,
+          "y_px": -75.696
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_157_09",
+        "position": {
+          "x_px": -376.25,
+          "y_px": 87.46
+        },
+        "height_px": 160,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_044_05",
+        "position": {
+          "x_px": 398.75,
+          "y_px": 248.637
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "eagle_003",
+        "position": {
+          "x_px": -438.75,
+          "y_px": -276.124
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_157_09",
+        "path": "/shapes/motifs/1_157_09.svg"
+      },
+      {
+        "id": "1_044_05",
+        "path": "/shapes/motifs/1_044_05.svg"
+      },
+      {
+        "id": "eagle_003",
+        "path": "/shapes/motifs/eagle_003.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "583b0767157157436dc27c5a0699f4cea0d9857208264c2c93924ee548fd54ee",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:38.847Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Paradiso.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 294.48,
+        "quantity": 1,
+        "width": 381.0000000000002,
+        "height": 253.99999999999997,
+        "_length": 25.4,
+        "init_width": 1612,
+        "init_height": 878,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230412,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x864"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_157_09",
+        "item": "1_157_09",
+        "price": 242.476975,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -376.25,
+        "y": 87.46013667425967,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 160,
+        "ratio": 0.19536019536019536,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_044_05",
+        "item": "1_044_05",
+        "price": 221.11427,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 398.75,
+        "y": 248.63667425968106,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.12234042553191489,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Sidney Gene Runions Jr",
+        "font": "81.4483267716535px Great Vibes",
+        "font_size": 29,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 7.5,
+        "y": -189.91343963553527,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 26,
+        "label": "November 1, 1964 - June 23, 2023",
+        "font": "42.128444881889735px Arial",
+        "font_size": 15,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 30,
+        "y": -75.69589977220949,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "eagle_003",
+        "item": "eagle_003",
+        "price": 214.54112999999998,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -438.75,
+        "y": -276.124145785877,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.17982456140350878,
+        "itemID": 5
+      }
+    ]
+  }
+}

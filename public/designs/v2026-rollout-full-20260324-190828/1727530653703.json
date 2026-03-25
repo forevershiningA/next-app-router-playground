@@ -1,0 +1,332 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.677Z",
+  "units": "mm",
+  "source": {
+    "id": "1727530653703",
+    "slug": "legacy-1727530653703",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1727530653703.json",
+    "savedAt": "2024-09-28T13:37:33.703Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1191,
+      "height_mm": 950
+    },
+    "viewportPx": {
+      "width": 1600,
+      "height": 900,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1191,
+      "height_mm": 950,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "base": {
+      "width_mm": 1191,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "MUNOZ",
+        "font": {
+          "family": "Arial",
+          "size_px": 161
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -92
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Chase, Sydney, Wyatt, and Cheyenne",
+        "font": {
+          "family": "Arial",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 188
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Grandchildren",
+        "font": {
+          "family": "Arial",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": 137
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Children",
+        "font": {
+          "family": "Arial",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": -23,
+          "y_px": 12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dennis and Denise",
+        "font": {
+          "family": "Arial",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": -26,
+          "y_px": 57
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a1d02acadf8edb7b635e5e58bd602514257d1d81dadb0b17576eea03b90991e6",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.677Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 3871.57,
+        "quantity": 1,
+        "width": 1191,
+        "height": 950,
+        "_length": 100,
+        "init_width": 1352,
+        "init_height": 710,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240925,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1600x900"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "2",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 805,
+        "quantity": 1,
+        "width": 1191,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1352,
+        "init_height": 710,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 9,
+        "label": "STEVENSON",
+        "font": "85.51524329295111px Arial",
+        "font_size": 161,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": -92,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 120,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 30,
+        "label": "Chase, Sydney, Wyatt, and Cheyenne",
+        "font": "31.86903476755942px Arial",
+        "font_size": 60,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1,
+        "y": 188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 13,
+        "label": "Grandchildren",
+        "font": "40.367444038908594px Arial",
+        "font_size": 76,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9,
+        "y": 137,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "Children",
+        "font": "40.367444038908594px Arial",
+        "font_size": 76,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -23,
+        "y": 12,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 15,
+        "label": "Dennis and Denise",
+        "font": "40.367444038908594px Arial",
+        "font_size": 76,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -26,
+        "y": 57,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 4
+      }
+    ]
+  }
+}

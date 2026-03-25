@@ -1,0 +1,314 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.391Z",
+  "units": "mm",
+  "source": {
+    "id": "1727226690199",
+    "slug": "legacy-1727226690199",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1727226690199.json",
+    "savedAt": "2024-09-25T01:11:30.199Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 883,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Perley Jenkins",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 100
+        },
+        "position": {
+          "x_px": -22.665,
+          "y_px": -62.234
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "1932 - 2023",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 100
+        },
+        "position": {
+          "x_px": -10.015,
+          "y_px": 156.67
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "2_147_03",
+        "position": {
+          "x_px": -2.899,
+          "y_px": -345.36
+        },
+        "height_px": 140,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_008_40",
+        "position": {
+          "x_px": -363.963,
+          "y_px": 399.68
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_008_40",
+        "position": {
+          "x_px": 366.644,
+          "y_px": 403.111
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_147_03",
+        "path": "/shapes/motifs/2_147_03.svg"
+      },
+      {
+        "id": "1_008_40",
+        "path": "/shapes/motifs/1_008_40.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f80370efaeca13ae3a298fc48ef3cdae2390479d9dd70f20a358fad271413b47",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.391Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 412,
+        "init_height": 694,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20240903,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x883"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_147_03",
+        "item": "2_147_03",
+        "price": 249.0955,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2.8990725915408575,
+        "y": -345.3599794793754,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 140,
+        "ratio": 0.35805626598465473,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_40",
+        "item": "1_008_40",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -363.96251551618843,
+        "y": 399.6800825380375,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.21413276231263384,
+        "itemID": 4
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_40",
+        "item": "1_008_40",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 366.6436848014979,
+        "y": 403.11099643540456,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.21413276231263384,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 10,
+        "label": "Eugene Pocs",
+        "font": "172.97613188976376px Great Vibes",
+        "font_size": 100,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -22.665109023306968,
+        "y": -62.233680852440386,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 113,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 9,
+        "label": "1932 - 2023",
+        "font": "172.97613188976376px Great Vibes",
+        "font_size": 100,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -10.014876134187261,
+        "y": 156.66992231986248,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 6
+      }
+    ]
+  }
+}

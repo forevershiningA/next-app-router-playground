@@ -1,0 +1,633 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.489Z",
+  "units": "mm",
+  "source": {
+    "id": "1591852648333",
+    "slug": "legacy-1591852648333",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1591852648333.json",
+    "savedAt": "2020-06-11T05:17:28.333Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 650,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 905,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 650,
+      "height_mm": 700,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 750,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-8",
+        "text": "Wynne",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 106
+        },
+        "position": {
+          "x_px": -153.808,
+          "y_px": -46.324
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -132.619,
+          "y_px": -210.171
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Shaye",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": -27.412,
+          "y_px": -141.62
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Cherdeena",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 66
+        },
+        "position": {
+          "x_px": -216.601,
+          "y_px": -142.331
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "24/12/1992-09/04/2019",
+        "font": {
+          "family": "Adorable",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -135.492,
+          "y_px": 31.474
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "and Shirley-Rose",
+        "font": {
+          "family": "Adorable",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -134.601,
+          "y_px": 262.66
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Thayne, Malakye",
+        "font": {
+          "family": "Adorable",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -133.872,
+          "y_px": 220.618
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Beloved mother to",
+        "font": {
+          "family": "Adorable",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -132.201,
+          "y_px": 180.632
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "\"Deena\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 90
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": 447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "2_155_07",
+        "position": {
+          "x_px": 196,
+          "y_px": 203
+        },
+        "height_px": 231,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "2_155_01",
+        "position": {
+          "x_px": -370,
+          "y_px": 443
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_155_01",
+        "position": {
+          "x_px": 369.434,
+          "y_px": 445
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_155_07",
+        "path": "/shapes/motifs/2_155_07.svg"
+      },
+      {
+        "id": "2_155_01",
+        "path": "/shapes/motifs/2_155_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "933d904a1fbe325222cd8ab49d4dc4ce2a46afd352b4cff57e25ba08e8e44f56",
+    "sourceItemCount": 15,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.489Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Right Wave",
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "2485.28",
+        "quantity": 1,
+        "width": 650,
+        "height": 700,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 905,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1153.20",
+        "quantity": 1,
+        "width": 750,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1680,
+        "init_height": 905,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1586931989135img_20190507_155537.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 200.8695361946202,
+        "y": -149.58485858386075,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8302700745033113,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_20190507_155537.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "341",
+        "width": "239",
+        "height": "376",
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_07",
+        "item": "2_155_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 196,
+        "y": 203,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 231,
+        "ratio": 0.279322853688029,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_01",
+        "item": "2_155_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -370,
+        "y": 443,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.08913308913308914,
+        "itemID": 11
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_01",
+        "item": "2_155_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 369.4335491071429,
+        "y": 445,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.08913308913308914,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Wynne",
+        "font": "116.9146875px Great Vibes",
+        "font_size": 106,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -153.8080375722003,
+        "y": -46.32387535593216,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 120,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "In Loving Memory of",
+        "font": "35.295px Adorable",
+        "font_size": 32,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -132.61862549477598,
+        "y": -210.17099997239583,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Shaye",
+        "font": "58.45734375px Great Vibes",
+        "font_size": 53,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -27.411690745690862,
+        "y": -141.61975813918752,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Cherdeena",
+        "font": "72.79593750000001px Great Vibes",
+        "font_size": 66,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -216.60087239742927,
+        "y": -142.3308008317589,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 61,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "24/12/1992-09/04/2019",
+        "font": "36.397968750000004px Adorable",
+        "font_size": 33,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -135.4915902890798,
+        "y": 31.473514465895278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "and Shirley-Rose",
+        "font": "45.22171875px Adorable",
+        "font_size": 41,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -134.6005451236565,
+        "y": 262.6601370516087,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Thayne, Malakye",
+        "font": "45.22171875px Adorable",
+        "font_size": 41,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -133.8721851763903,
+        "y": 220.61811633729246,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Beloved mother to",
+        "font": "39.706875000000004px Adorable",
+        "font_size": 36,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -132.2010984795079,
+        "y": 180.6318912419282,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "\"Deena\"",
+        "font": "99.2671875px Adorable",
+        "font_size": 90,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -24,
+        "y": 447,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 13
+      }
+    ]
+  }
+}

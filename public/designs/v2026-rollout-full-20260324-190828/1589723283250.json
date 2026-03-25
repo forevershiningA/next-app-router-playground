@@ -1,0 +1,672 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.339Z",
+  "units": "mm",
+  "source": {
+    "id": "1589723283250",
+    "slug": "legacy-1589723283250",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589723283250.json",
+    "savedAt": "2020-05-17T13:48:03.250Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Left Wave",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 898,
+      "height": 482,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "French Script",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -3.999,
+          "y_px": -116.041
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Ethelyn Lawson",
+        "font": {
+          "family": "French Script",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": -8.997,
+          "y_px": -84.039
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "01-07-1936  to  12-06-2017",
+        "font": {
+          "family": "French Script",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -7.997,
+          "y_px": 96.034
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Grandmother, Aunt,  and  Friend",
+        "font": {
+          "family": "French Script",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 4.998,
+          "y_px": 170.052
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "We will honour you forever in our hearts",
+        "font": {
+          "family": "French Script",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 240.077
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Forever blessed to have had you has a",
+        "font": {
+          "family": "French Script",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -1.999,
+          "y_px": 125.039
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Loving & Caring Daughter, Wife, Mother, Sister",
+        "font": {
+          "family": "French Script",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 4.998,
+          "y_px": 147.052
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "(nee Haines)",
+        "font": {
+          "family": "French Script",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -10.996,
+          "y_px": -56.039
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "dove_004",
+        "position": {
+          "x_px": -78.971,
+          "y_px": 21.007
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "dove_004",
+        "position": {
+          "x_px": 57.825,
+          "y_px": 22.008
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-17",
+        "asset": "1_006_13",
+        "position": {
+          "x_px": -125.954,
+          "y_px": -125.044
+        },
+        "height_px": 211,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": -210.922,
+          "y_px": 236.083
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-20",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": 208.659,
+          "y_px": 236.083
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_004",
+        "path": "/shapes/motifs/dove_004.svg"
+      },
+      {
+        "id": "1_006_13",
+        "path": "/shapes/motifs/1_006_13.svg"
+      },
+      {
+        "id": "2_131_22",
+        "path": "/shapes/motifs/2_131_22.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "191006aa919904ea8912b2345984c8db942aa4717a8b3ce742eaae0b813fb167",
+    "sourceItemCount": 16,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.339Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Left Wave",
+        "shape": "Left Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "1220.19",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 898,
+        "init_height": 482
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "707.50",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 898,
+        "init_height": 482
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1589723541831,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1589723541831hzm_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -10.995959706589872,
+        "y": 19.0067029350152,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5432142857142859,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "HZM.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 208.9958,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -78.97098334732732,
+        "y": 21.00740850712222,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 1,
+        "height": 75,
+        "ratio": 0.125,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 208.9958,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 57.82453326774203,
+        "y": 22.007761293175577,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.125,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 57,
+        "quantity": 19,
+        "label": "In Loving Memory Of",
+        "font": "27.52564285714286px French Script",
+        "font_size": 41,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -3.998530802396317,
+        "y": -116.0409231821986,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Hannah Zelba McGrady",
+        "font": "34.23921428571429px French Script",
+        "font_size": 51,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -8.996694305391713,
+        "y": -84.03915925193142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 78,
+        "quantity": 26,
+        "label": "01-07-1936  to  12-06-2017",
+        "font": "28.197px French Script",
+        "font_size": 42,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -7.997061604792577,
+        "y": 96.03386746112986,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Grandmother, Aunt,  and  Friend",
+        "font": "24.840214285714285px French Script",
+        "font_size": 37,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 4.998163502995396,
+        "y": 170.05221233590854,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "We will honour you forever in our hearts",
+        "font": "34.23921428571429px French Script",
+        "font_size": 51,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 5.684341886080802e-14,
+        "y": 240.07690735964914,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 14
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_006_13",
+        "item": "1_006_13",
+        "price": 238.98108000000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -125.95372027548422,
+        "y": -125.04409825667956,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 211,
+        "ratio": 0.42115768463073855,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 208.33436000000003,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -210.92249982640584,
+        "y": 236.08325750861098,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.12,
+        "itemID": 19
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 208.33436000000003,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 208.6586813328114,
+        "y": 236.08325750861098,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.12,
+        "itemID": 20
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Forever blessed to have had you has a",
+        "font": "28.197px French Script",
+        "font_size": 42,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -1.9992654011980449,
+        "y": 125.03915925193135,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 108,
+        "quantity": 36,
+        "label": "Loving & Caring Daughter, Wife, Mother, Sister",
+        "font": "23.497500000000002px French Script",
+        "font_size": 35,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 4.998163502995396,
+        "y": 147.0518595498551,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "(nee Haines)",
+        "font": "26.182928571428572px French Script",
+        "font_size": 39,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -10.995959706589872,
+        "y": -56.03880646587797,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 7
+      }
+    ]
+  }
+}

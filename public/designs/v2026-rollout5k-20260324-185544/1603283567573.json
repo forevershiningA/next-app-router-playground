@@ -1,0 +1,594 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.838Z",
+  "units": "mm",
+  "source": {
+    "id": "1603283567573",
+    "slug": "legacy-1603283567573",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1603283567573.json",
+    "savedAt": "2020-10-21T12:32:47.573Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 160
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 816,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 160,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Perley Fox",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -5.751,
+          "y_px": -92.54
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Gordon Walsh",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -5.42,
+          "y_px": 62.757
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "On 26th April 2016",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -3.231,
+          "y_px": 149.892
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Forever in our Hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -6.794,
+          "y_px": 232.382
+        },
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -15.306,
+          "y_px": -173.255
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "MITCHELL BENNETT",
+        "font": {
+          "family": "Adorable",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 1.587,
+          "y_px": -21.106
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-14",
+        "asset": "1_182_08",
+        "position": {
+          "x_px": 283.287,
+          "y_px": 173.574
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 25
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "teddy-bear_007",
+        "position": {
+          "x_px": -273.38,
+          "y_px": 184.307
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": -15
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_175_07",
+        "position": {
+          "x_px": -260.689,
+          "y_px": -226.348
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": -23
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-39",
+        "asset": "1_050_06",
+        "position": {
+          "x_px": 323.077,
+          "y_px": -22.277
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 8
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-65",
+        "asset": "1_175_07",
+        "position": {
+          "x_px": 244.873,
+          "y_px": -225.451
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 23
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-68",
+        "asset": "1_051_01",
+        "position": {
+          "x_px": -320.937,
+          "y_px": -18.08
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": -2
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_182_08",
+        "path": "/shapes/motifs/1_182_08.svg"
+      },
+      {
+        "id": "teddy-bear_007",
+        "path": "/shapes/motifs/teddy-bear_007.svg"
+      },
+      {
+        "id": "1_175_07",
+        "path": "/shapes/motifs/1_175_07.svg"
+      },
+      {
+        "id": "1_050_06",
+        "path": "/shapes/motifs/1_050_06.svg"
+      },
+      {
+        "id": "1_051_01",
+        "path": "/shapes/motifs/1_051_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9e6aab22421ccd84c20bec21351776af9ce371d6ed2da8f0baf5457151220d03",
+    "sourceItemCount": 13,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.838Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "350.39",
+        "quantity": 1,
+        "width": 200,
+        "height": 160,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 816
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_182_08",
+        "item": "1_182_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 283.2868335297246,
+        "y": 173.5743262922365,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 25,
+        "height": 40,
+        "ratio": 0.07407407407407407,
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_007",
+        "item": "teddy-bear_007",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -273.3798490172926,
+        "y": 184.30667689961138,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -15,
+        "height": 40,
+        "ratio": 0.045819014891179836,
+        "itemID": 15
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_175_07",
+        "item": "1_175_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -260.68946122186765,
+        "y": -226.34801120551998,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -23,
+        "height": 40,
+        "ratio": 0.08281573498964803,
+        "itemID": 18
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_050_06",
+        "item": "1_050_06",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 323.07741363782634,
+        "y": -22.277213279451075,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 8,
+        "height": 40,
+        "ratio": 0.043243243243243246,
+        "itemID": 39
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_175_07",
+        "item": "1_175_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 244.87255112250932,
+        "y": -225.4513046236616,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 23,
+        "height": 40,
+        "ratio": 0.08281573498964803,
+        "itemID": 65
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_051_01",
+        "item": "1_051_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -320.9370024889381,
+        "y": -18.080380254424824,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -2,
+        "height": 41,
+        "ratio": 0.046964490263459335,
+        "itemID": 68
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Our Precious Baby",
+        "font": "43.758px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5.75073829011194,
+        "y": -92.54039024425447,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Born Asleep",
+        "font": "43.758px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5.420407248645802,
+        "y": 62.75687873252974,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "On 26th April 2016",
+        "font": "43.758px Great Vibes",
+        "font_size": 11,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -3.230883378425119,
+        "y": 149.89236600622826,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Forever in our Hearts",
+        "font": "47.736000000000004px Great Vibes",
+        "font_size": 12,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6.79356299025028,
+        "y": 232.3815157405735,
+        "rotation": 1,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Loving Memory of",
+        "font": "47.736000000000004px Great Vibes",
+        "font_size": 12,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -15.306363686309851,
+        "y": -173.255203654816,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "ANTONIA MAKUNA KULU",
+        "font": "39.78px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1.5874109170672455,
+        "y": -21.105757491029067,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 7
+      }
+    ]
+  }
+}

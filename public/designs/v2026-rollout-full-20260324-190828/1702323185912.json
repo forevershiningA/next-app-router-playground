@@ -1,0 +1,521 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.512Z",
+  "units": "mm",
+  "source": {
+    "id": "1702323185912",
+    "slug": "legacy-1702323185912",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1702323185912.json",
+    "savedAt": "2023-12-11T19:33:05.912Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "635",
+      "height_mm": 508
+    },
+    "viewportPx": {
+      "width": 1642,
+      "height": 924,
+      "dpr": 1.1699999570846558
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "635",
+      "height_mm": 508,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Mittie Shelton",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 1.17,
+          "y_px": 84.178
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "May 26, 1958 - November 6, 2023",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -2.34,
+          "y_px": 135.318
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "In memory of a very special man - our father",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 2.34,
+          "y_px": 260.417
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_228_20",
+        "position": {
+          "x_px": 174.312,
+          "y_px": -188.233
+        },
+        "height_px": 275,
+        "rotation": {
+          "z_deg": 119
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_228_20",
+        "position": {
+          "x_px": -176.156,
+          "y_px": -202.263
+        },
+        "height_px": 275,
+        "rotation": {
+          "z_deg": 69
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "2_139_26",
+        "position": {
+          "x_px": -67.853,
+          "y_px": 197.586
+        },
+        "height_px": 59,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "2_139_26",
+        "position": {
+          "x_px": 38.936,
+          "y_px": 191.74
+        },
+        "height_px": 59,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "2_139_14",
+        "position": {
+          "x_px": -302.997,
+          "y_px": 160.172
+        },
+        "height_px": 191,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "2_139_14",
+        "position": {
+          "x_px": 303.795,
+          "y_px": 166.018
+        },
+        "height_px": 191,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_228_20",
+        "path": "/shapes/motifs/1_228_20.svg"
+      },
+      {
+        "id": "2_139_26",
+        "path": "/shapes/motifs/2_139_26.svg"
+      },
+      {
+        "id": "2_139_14",
+        "path": "/shapes/motifs/2_139_14.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "667c6e54af224b2d64c05ee0b905540d549fec7efedba2eb898039f11f81674d",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.512Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2222.44,
+        "quantity": 1,
+        "width": "635",
+        "height": 508,
+        "_length": 80,
+        "init_width": 1354,
+        "init_height": 745.0042724609375,
+        "device": "desktop",
+        "dpr": 1.1699999570846558,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1642x924"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 900,
+        "quantity": 1,
+        "width": 1200,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1354,
+        "init_height": 745.0042724609375,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1702323530592,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1702323530592dad_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -14.038530540756938,
+        "y": -78.33300786527406,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.53761961944415,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Dad.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 174,
+        "width": "289",
+        "height": "201",
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_228_20",
+        "item": "1_228_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 174.312295410532,
+        "y": -188.2327840598397,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 119,
+        "height": 275,
+        "ratio": 0.3052164261931188,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_228_20",
+        "item": "1_228_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -176.15615152033138,
+        "y": -202.262558700465,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 69,
+        "height": 275,
+        "ratio": 0.3052164261931188,
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_139_26",
+        "item": "2_139_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -67.853047448952,
+        "y": 197.58595150896485,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 59,
+        "ratio": 0.09175738724727839,
+        "itemID": 6
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_139_26",
+        "item": "2_139_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 38.93639866069236,
+        "y": 191.7402511869334,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 59,
+        "ratio": 0.09175738724727839,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Don Mark Thompson",
+        "font": "46.09933748337195px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.1698797814105941,
+        "y": 84.17808463725362,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "May 26, 1958 - November 6, 2023",
+        "font": "27.65960249002317px Lucida Calligraphy",
+        "font_size": 24,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2.3397729809072416,
+        "y": 135.3183601832165,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "In memory of a very special man - our father",
+        "font": "23.049668741685974px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2.3397528537784638,
+        "y": 260.4172723425098,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_139_14",
+        "item": "2_139_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -302.99712574325565,
+        "y": 160.17218882366285,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 191,
+        "ratio": 0.20384204909284953,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_139_14",
+        "item": "2_139_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 303.7947148700879,
+        "y": 166.0178891456943,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 191,
+        "ratio": 0.20384204909284953,
+        "itemID": 10
+      }
+    ]
+  }
+}

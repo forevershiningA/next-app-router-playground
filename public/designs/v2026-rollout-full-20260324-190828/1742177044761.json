@@ -1,0 +1,113 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.489Z",
+  "units": "mm",
+  "source": {
+    "id": "1742177044761",
+    "slug": "legacy-1742177044761",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1742177044761.json",
+    "savedAt": "2025-03-17T02:04:04.761Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Oval (Portrait)",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "80",
+      "height_mm": "100"
+    },
+    "viewportPx": {
+      "width": 2240,
+      "height": 1260,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "80",
+      "height_mm": "100",
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "769ed8c01f1b2cf11a665be354a8e8f7619628d61fea7b9a9dbeb5269dfceb02",
+    "sourceItemCount": 1,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.489Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "shape": "Oval (Portrait)",
+        "color": "../upload/2025/03/1742177527867eileen_kelly_001_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/ceramic/l/01.jpg",
+        "name": "Ceramic Image",
+        "materialImage": 1,
+        "price": 310,
+        "quantity": 1,
+        "width": "80",
+        "height": "100",
+        "_length": 10,
+        "init_width": 1887,
+        "init_height": 902,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 2240x1260"
+      }
+    ]
+  }
+}

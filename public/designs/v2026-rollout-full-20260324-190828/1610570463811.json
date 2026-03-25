@@ -1,0 +1,333 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.192Z",
+  "units": "mm",
+  "source": {
+    "id": "1610570463811",
+    "slug": "legacy-1610570463811",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1610570463811.json",
+    "savedAt": "2021-01-13T20:41:03.811Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 21",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 431,
+      "height_mm": 556
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 775,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 431,
+      "height_mm": 556,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    },
+    "base": {
+      "width_mm": 531,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "09/09/1927 - 31/08/2019",
+        "font": {
+          "family": "Arial",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 5.877,
+          "y_px": -43.632
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "BARKER",
+        "font": {
+          "family": "Arial",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 7.386,
+          "y_px": -63.541
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Loving mother of Leonie and Gary",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": -13.28
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-17",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 39.072,
+          "y_px": 26.906
+        },
+        "height_px": 333,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -30,
+          "y_px": 29.789
+        },
+        "height_px": 333,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0f0328ee68ceb97e5cbabe24b7508188511af5e73633e1912ad20a78511278ce",
+    "sourceItemCount": 7,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.192Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 21",
+        "shape": "Headstone 21",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 889.83,
+        "quantity": 1,
+        "width": 431,
+        "height": 556,
+        "_length": 1,
+        "init_width": 414,
+        "init_height": 775,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 478,
+        "quantity": 1,
+        "width": 531,
+        "height": 100,
+        "_length": 100,
+        "init_width": 414,
+        "init_height": 775,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 375.2752016,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 39.07193207015041,
+        "y": 26.905684090481316,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 333,
+        "ratio": 0.1432258064516129,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 375.2752016,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -30,
+        "y": 29.789184396564167,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 333,
+        "ratio": 0.1432258064516129,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 23,
+        "label": "09/09/1927 - 31/08/2019",
+        "font": "14.152362804878047px Arial",
+        "font_size": 23,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 5.87710532711526,
+        "y": -43.63171596233093,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 7,
+        "label": "READING",
+        "font": "17.844283536585365px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 7.385707020204109,
+        "y": -63.541438963425264,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 1,
+        "label": "Loving mother of Leonie and Gary",
+        "font": "15.383003048780486px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 5,
+        "y": -13.280487804879215,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 1
+      }
+    ]
+  }
+}

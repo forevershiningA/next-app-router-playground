@@ -1,0 +1,449 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.114Z",
+  "units": "mm",
+  "source": {
+    "id": "1582959702944",
+    "slug": "legacy-1582959702944",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1582959702944.json",
+    "savedAt": "2020-02-29T07:01:42.944Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 442
+    },
+    "viewportPx": {
+      "width": 1467,
+      "height": 774,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 442,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-12",
+        "text": "R.I.P.",
+        "font": {
+          "family": "Arial",
+          "size_px": 77
+        },
+        "position": {
+          "x_px": -7.927,
+          "y_px": -121.324
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Arnold Marshall",
+        "font": {
+          "family": "Arial",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -6.865,
+          "y_px": -32.708
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "20 Jan 1897 to 28 Sep 1968",
+        "font": {
+          "family": "Arial",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -4.14,
+          "y_px": 24.482
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "AND",
+        "font": {
+          "family": "Arial",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -11.258,
+          "y_px": 65.608
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Marguerite Jennings",
+        "font": {
+          "family": "Arial",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 2.901,
+          "y_px": 126.945
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Parents to Ronald, Harold, Heather and Alan",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -9.941,
+          "y_px": 277.51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "8 Mar 1894 - 11 Jan 1964",
+        "font": {
+          "family": "Arial",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 3.062,
+          "y_px": 189.523
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-19",
+        "asset": "1_153_12",
+        "position": {
+          "x_px": -230.382,
+          "y_px": -98.83
+        },
+        "height_px": 74,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_153_12",
+        "path": "/shapes/motifs/1_153_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "07566d0c09285072234727f2033e72acd97390443c7bace51ba7c8bdaa2f7eb1",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.114Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1467.47",
+        "quantity": 1,
+        "width": 600,
+        "height": 442,
+        "_length": 1,
+        "init_width": 1467,
+        "init_height": 774,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1071.36",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1467,
+        "init_height": 774,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_12",
+        "item": "1_153_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -230.38201389898632,
+        "y": -98.83023491039395,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 74,
+        "ratio": 0.12333333333333334,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "R.I.P.",
+        "font": "82.27509945738755px Arial",
+        "font_size": 77,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -7.927413588581544,
+        "y": -121.32448784513494,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 55,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Cecil Oliver Carmichael",
+        "font": "48.08285033223948px Arial",
+        "font_size": 45,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6.865308866985441,
+        "y": -32.707816189140345,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 35,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "20 Jan 1897 to 28 Sep 1968",
+        "font": "28.849710199343686px Arial",
+        "font_size": 27,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -4.1400029960020674,
+        "y": 24.48173440734672,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 25,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "AND",
+        "font": "28.849710199343686px Arial",
+        "font_size": 27,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -11.257995450625913,
+        "y": 65.60839270526304,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 20,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Sophia Ella Carmichael",
+        "font": "48.08285033223948px Arial",
+        "font_size": 45,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2.9005382952052514,
+        "y": 126.94526250381136,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 43,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 43,
+        "label": "Parents to Ronald, Harold, Heather and Alan",
+        "font": "23.5071712735393px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -9.940737585030888,
+        "y": 277.50953700338147,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 21,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "8 Mar 1894 - 11 Jan 1964",
+        "font": "34.192249125148074px Arial",
+        "font_size": 32,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 3.06221732116785,
+        "y": 189.52277036213775,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 23,
+        "itemID": 17
+      }
+    ]
+  }
+}

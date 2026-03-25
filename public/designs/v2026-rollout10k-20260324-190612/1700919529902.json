@@ -1,0 +1,453 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.224Z",
+  "units": "mm",
+  "source": {
+    "id": "1700919529902",
+    "slug": "legacy-1700919529902",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1700919529902.json",
+    "savedAt": "2023-11-25T13:38:49.902Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 352,
+      "height_mm": 406.65
+    },
+    "viewportPx": {
+      "width": 806,
+      "height": 968,
+      "dpr": 2.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 352,
+      "height_mm": 406.65,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 452,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Enriqueta",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -324
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Arreola",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -0.136,
+          "y_px": -175.318
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Julio 15, 1943 - Marzo 31, 2023",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 125
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Amada",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -349,
+          "y_px": 326
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Madre y Bita",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -254,
+          "y_px": 425
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": -10,
+          "y_px": -10
+        },
+        "height_px": 65,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "5f83c6169dd98de60c5ab84ddb6b7977ac0146a1a687fa0d38626909fffdc5c2",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.224Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1303.16,
+        "quantity": 1,
+        "width": 352,
+        "height": 406.65,
+        "_length": 80,
+        "init_width": 566,
+        "init_height": 739,
+        "device": "tablet",
+        "dpr": 2.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (tablet(android)), 806x968"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 519,
+        "quantity": 1,
+        "width": 452,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 566,
+        "init_height": 739,
+        "mode": "2d"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1687486785006,
+        "path": "../upload/2023/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "168748678500696a80a82196f693aa1391177.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 343,
+        "y": 367,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5942469523138485,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "96a80a82196f693aa13911772edfe3fc_red-rose-png-red-rose-clipart-no-background_2200-1870.png",
+        "price": 400,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 1
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1687488084921,
+        "path": "../upload/2023/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1687488084921virgendeguadalupewallpap.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 334.864544979675,
+        "y": -184.27531274116757,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9904115871897474,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "virgen-de-guadalupe-wallpaper-ixpap.jpg",
+        "price": 450,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 2
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -10,
+        "y": -10,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 65,
+        "ratio": 0.08928571428571429,
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1700919574658,
+        "path": "../upload/2023/11/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1700919574658bita_pic_2_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -336.07895765540445,
+        "y": -190.10169877605904,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.2809323194320734,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Bita_Pic_2.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 194,
+        "width": "277",
+        "height": "474",
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Enriqueta",
+        "font": "114.82171667486473px Chopin Script",
+        "font_size": 47,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": -324,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Arreola",
+        "font": "109.93568617806197px Chopin Script",
+        "font_size": 45,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -0.13565386984464567,
+        "y": -175.31780989341053,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Julio 15, 1943 - Marzo 31, 2023",
+        "font": "48.86030496802754px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2,
+        "y": 125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Amada",
+        "font": "78.17648794884407px Chopin Script",
+        "font_size": 32,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -349,
+        "y": 326,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Madre y Bita",
+        "font": "75.73347270044269px Chopin Script",
+        "font_size": 31,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -254,
+        "y": 425,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 9
+      }
+    ]
+  }
+}

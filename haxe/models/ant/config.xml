@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project>
+	
+	<!-- Haxe properties --> 
+	<property name="HAXE" value="haxe"/>
+	
+	<!-- Project properties --> 
+	<property name="MODELS_HOME" location="${basedir}/.."/>
+	<property name="BUILD_HOME" location="${MODELS_HOME}/build"/>
+	<property name="PROJECT_HOME" location="${MODELS_HOME}/.."/>
+	<property name="M3DPACKER.JAR" location="${basedir}/lib/m3dpacker.jar"/>
+	<property name="THEMEBUILDER.JAR" location="${basedir}/lib/themebuilder.jar"/>
+	<property name="PNG2ATF.EXE" location="${basedir}/lib/atf-tools/png2atf.exe"/>
+	<property name="API.LIBRARY" value="engine3d-api"/>
+	<property name="SOURCE_DIR" location="${MODELS_HOME}/sources"/>
+	
+	<!-- antcontrib tasks -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+		<classpath>
+			<pathelement location="lib/antcontrib/ant-contrib-1.0b3.jar"/>
+		</classpath>
+	</taskdef>
+	
+</project>

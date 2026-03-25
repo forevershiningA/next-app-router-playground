@@ -1,0 +1,572 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.982Z",
+  "units": "mm",
+  "source": {
+    "id": "1735294348366",
+    "slug": "legacy-1735294348366",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1735294348366.json",
+    "savedAt": "2024-12-27T10:12:28.366Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "1016",
+      "height_mm": 1016
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "1016",
+      "height_mm": 1016,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "In Memory Of Our Beloved Father",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -330.012
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Jean Jackson",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 70
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 97.28
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "1963 - 2024",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 154.018
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "“Nitakupumzisha, na jina lako",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": 235.552
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": " litakuwa kumbukumbu la upendo.” Zaburi - 116:15",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 274.335
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_208_20",
+        "position": {
+          "x_px": -340,
+          "y_px": 342.16
+        },
+        "height_px": 133,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_208_20",
+        "position": {
+          "x_px": -338.042,
+          "y_px": -344.185
+        },
+        "height_px": 133,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_208_20",
+        "position": {
+          "x_px": 341.638,
+          "y_px": -344.185
+        },
+        "height_px": 133,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_208_20",
+        "position": {
+          "x_px": 339.318,
+          "y_px": 340.135
+        },
+        "height_px": 133,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": -278,
+          "y_px": -96
+        },
+        "height_px": 206,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": 260.588,
+          "y_px": -102
+        },
+        "height_px": 206,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_208_20",
+        "path": "/shapes/motifs/1_208_20.svg"
+      },
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "39c5442f0c40d2f863f33daa2818a9e6c8427f18b993bd0054c280d1bb6d44a3",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.982Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 6230.06,
+        "quantity": 1,
+        "width": "1016",
+        "height": 1016,
+        "_length": 100,
+        "init_width": 414,
+        "init_height": 658,
+        "device": "mobile",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1735295471528,
+        "path": "../upload/2024/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1735295471528img_6833_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": -121.45230769230773,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0699144987195748,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_6833.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 443,
+        "width": "247",
+        "height": "352",
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_20",
+        "item": "1_208_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -340,
+        "y": 342.16,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 133,
+        "ratio": 0.23581560283687944,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_20",
+        "item": "1_208_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -338.041875,
+        "y": -344.1846153846154,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 133,
+        "ratio": 0.23581560283687944,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_20",
+        "item": "1_208_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 341.6381446850394,
+        "y": -344.1846153846154,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 133,
+        "ratio": 0.23581560283687944,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_20",
+        "item": "1_208_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 339.31816437007876,
+        "y": 340.1353846153846,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 133,
+        "ratio": 0.23581560283687944,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "In Memory Of Our Beloved Father",
+        "font": "43.702263779527556px Chopin Script",
+        "font_size": 55,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -330.01230769230773,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Edward Sisti Temu",
+        "font": "55.62106299212598px Chopin Script",
+        "font_size": 70,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2,
+        "y": 97.27999999999997,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "1963 - 2024",
+        "font": "60.38858267716535px Chopin Script",
+        "font_size": 76,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 14,
+        "y": 154.01846153846157,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "“Nitakupumzisha, na jina lako",
+        "font": "31.783464566929133px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 10,
+        "y": 235.55150728447893,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": " litakuwa kumbukumbu la upendo.” Zaburi - 116:15",
+        "font": "31.783464566929133px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 274.3353846153846,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -278,
+        "y": -96,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 206,
+        "ratio": 0.28296703296703296,
+        "itemID": 11
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 260.5876757592801,
+        "y": -102,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 206,
+        "ratio": 0.28296703296703296,
+        "itemID": 12
+      }
+    ]
+  }
+}

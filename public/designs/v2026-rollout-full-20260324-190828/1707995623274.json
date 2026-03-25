@@ -1,0 +1,422 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.559Z",
+  "units": "mm",
+  "source": {
+    "id": "1707995623274",
+    "slug": "legacy-1707995623274",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1707995623274.json",
+    "savedAt": "2024-02-15T11:13:43.274Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1021,
+      "height_mm": 873
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1021,
+      "height_mm": 873,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "Loving Grandmother to Effie , sophia ,christo,Bradley (jnr) & Sierra",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 322
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loving mother to Melissa & Bradley",
+        "font": {
+          "family": "Garamond",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -15,
+          "y_px": 271
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "22/9/1961 - 25-12-2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 17,
+          "y_px": 74
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Proud Nyul Nyul girl",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 191
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Carlton Elliott",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 72
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -311
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "flag_aboriginal",
+        "position": {
+          "x_px": -330,
+          "y_px": -120
+        },
+        "height_px": 86,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_172_18",
+        "position": {
+          "x_px": 356,
+          "y_px": -123
+        },
+        "height_px": 129,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "flag_aboriginal",
+        "path": "/shapes/motifs/flag_aboriginal.svg"
+      },
+      {
+        "id": "1_172_18",
+        "path": "/shapes/motifs/1_172_18.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8ee7930b2aba75b4a32ba8edf55d690e1f67d1878e385a202f612cdc8b68eb5e",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.559Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 3017.97,
+        "quantity": 1,
+        "width": 1021,
+        "height": 873,
+        "_length": 15,
+        "init_width": 1632,
+        "init_height": 894,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flag_aboriginal",
+        "item": "flag_aboriginal",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -330,
+        "y": -120,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 86,
+        "ratio": 0.19068736141906872,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_172_18",
+        "item": "1_172_18",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 356,
+        "y": -123,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 129,
+        "ratio": 0.17362045760430686,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 59,
+        "label": "Loving Grandmother to Effie , sophia ,christo,Bradley (jnr) & Sierra",
+        "font": "23.90421155729677px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -6,
+        "y": 322,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "Loving mother to Melissa & Bradley",
+        "font": "38.41748285994124px Garamond",
+        "font_size": 45,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -15,
+        "y": 271,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "22/9/1961 - 25-12-2021",
+        "font": "42.686092066601375px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 17,
+        "y": 74,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Proud Nyul Nyul girl",
+        "font": "34.1488736532811px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": 191,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 8
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1707997543649,
+        "path": "../upload/2024/02/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1707997543649mum_2_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -22,
+        "y": -136,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5137610186092066,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "mum 2.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 269,
+        "width": "357",
+        "height": "230",
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Jennifer Ellen Attwood",
+        "font": "61.467972575905975px Lucida Calligraphy",
+        "font_size": 72,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1,
+        "y": -311,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 84,
+        "itemID": 1
+      }
+    ]
+  }
+}

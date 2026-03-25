@@ -1,0 +1,525 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:12.945Z",
+  "units": "mm",
+  "source": {
+    "id": "1582269681218",
+    "slug": "legacy-1582269681218",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1582269681218.json",
+    "savedAt": "2020-02-21T07:21:21.218Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 572,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "IN LOVING MEMORY",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 1.904,
+          "y_px": -156.162
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Allie Bush",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -0.335,
+          "y_px": -131.71
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "07.10.95 - 02.05.19",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -91.786,
+          "y_px": 161.37
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "22.06.89 - 02.05.19",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 83.969,
+          "y_px": 161.685
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "I would rather walk with a friend in the dark,",
+        "font": {
+          "family": "French Script",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -2.611,
+          "y_px": 93.261
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Than alone in the light",
+        "font": {
+          "family": "French Script",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 1.944,
+          "y_px": 113.698
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Friends until the very end",
+        "font": {
+          "family": "French Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 2.209,
+          "y_px": 135.239
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Walk beside me and be my friend",
+        "font": {
+          "family": "French Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -12.844,
+          "y_px": -81.446
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "R.I.P",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 58.462
+        },
+        "position": {
+          "x_px": 139.182,
+          "y_px": -0.999
+        },
+        "rotation": {
+          "z_deg": -54
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "(Nooks & danno)",
+        "font": {
+          "family": "Adorable",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -5.617,
+          "y_px": -105.93
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c9375255be70a72ff84f959d6b1636c61e32d9b8682fc44dab51edd8932bce36",
+    "sourceItemCount": 12,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:12.945Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1139.15",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 572,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1582218532454received_153492611000621.jpg",
+        "color": "1",
+        "mask": 1,
+        "x": -4.922460950239127,
+        "y": -8.646094994305031,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6218181818181817,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_1534926110006219.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 304,
+        "width": "178 mm",
+        "height": "178 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "IN LOVING MEMORY",
+        "font": "21.06px Lucida Calligraphy",
+        "font_size": 36,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1.9042794746043512,
+        "y": -156.16208100753127,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 41,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Nakirra L Browning & Daniel S Clune",
+        "font": "21.06px Chopin Script",
+        "font_size": 36,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -0.3353098741508518,
+        "y": -131.71000678466618,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 44,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "07.10.95 - 02.05.19",
+        "font": "16.965px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -91.78637628851489,
+        "y": 161.369716606314,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "22.06.89 - 02.05.19",
+        "font": "16.965px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 83.96892295224325,
+        "y": 161.68480176384122,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 27,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "I would rather walk with a friend in the dark,",
+        "font": "22.229999999999997px French Script",
+        "font_size": 38,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2.6107910182182366,
+        "y": 93.26117155428062,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 36,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Than alone in the light",
+        "font": "23.985px French Script",
+        "font_size": 41,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1.9441522290332216,
+        "y": 113.69847914207355,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 39,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Friends until the very end",
+        "font": "29.25px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2.2086681033893285,
+        "y": 135.23944791596512,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 50,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "Walk beside me and be my friend",
+        "font": "25.154999999999998px French Script",
+        "font_size": 43,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -12.84423828125,
+        "y": -81.44647216796875,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 43,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "R.I.P",
+        "font": "34.20000549316406px Lucida Calligraphy",
+        "font_size": 58.4615478515625,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 139.1816864013672,
+        "y": -0.999298095703125,
+        "rotation": -54,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 55,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "(Nooks & danno)",
+        "font": "21.06px Adorable",
+        "font_size": 36,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5.617195129394531,
+        "y": -105.9302978515625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 13
+      }
+    ]
+  }
+}

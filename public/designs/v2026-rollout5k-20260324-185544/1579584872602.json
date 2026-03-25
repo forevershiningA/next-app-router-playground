@@ -1,0 +1,253 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.524Z",
+  "units": "mm",
+  "source": {
+    "id": "1579584872602",
+    "slug": "legacy-1579584872602",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1579584872602.json",
+    "savedAt": "2020-01-21T05:34:32.602Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 210,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 582,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 210,
+      "height_mm": 150,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In memory of",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 84.25,
+          "y_px": -76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "our friend",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 78.25,
+          "y_px": -5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Ally",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 75.25,
+          "y_px": 65
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d0d25d3afc9a3fffdb8c5b85f3ff4b8581c6c9cf56843c86a4e14d9fdeed811c",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.524Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "350.39",
+        "quantity": 1,
+        "width": 210,
+        "height": 150,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 582
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In memory of",
+        "font": "40.04464285714286px Dobkin",
+        "font_size": 23,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 84.25,
+        "y": -76,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "our friend",
+        "font": "43.526785714285715px Dobkin",
+        "font_size": 25,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 78.25,
+        "y": -5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Ally",
+        "font": "40.04464285714286px Dobkin",
+        "font_size": 23,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 75.25,
+        "y": 65,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1579584960506,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1579584960506c5cf07fada7f4ec79a9ff695.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -83.75,
+        "y": -6,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7095462328767124,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "C5CF07FA-DA7F-4EC7-9A9F-F695D646BF59.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 119,
+        "width": "162 mm",
+        "height": "207 mm",
+        "itemID": 4
+      }
+    ]
+  }
+}

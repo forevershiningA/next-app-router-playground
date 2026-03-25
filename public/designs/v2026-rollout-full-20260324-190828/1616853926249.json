@@ -1,0 +1,307 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.504Z",
+  "units": "mm",
+  "source": {
+    "id": "1616853926249",
+    "slug": "legacy-1616853926249",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1616853926249.json",
+    "savedAt": "2021-03-27T14:05:26.249Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 284,
+      "height_mm": 157
+    },
+    "viewportPx": {
+      "width": 1277,
+      "height": 630,
+      "dpr": 0.8999999761581421
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 284,
+      "height_mm": 157,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "Aimee Medina",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -6.298,
+          "y_px": 8.352
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "That bloody kid…",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -116.97,
+          "y_px": -114.997
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "He is here & will always be around",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 1.8,
+          "y_px": 95.232
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "& around & around...",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 125.74
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "A lovable larakin connecting us all",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -0.9,
+          "y_px": 61.092
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "aa99f9edf92d47bb677204403d0f1be4bc15735c5acf129f00533e29ffcc5cd7",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.504Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 360.02,
+        "quantity": 1,
+        "width": 284,
+        "height": 157,
+        "_length": 1,
+        "init_width": 1277,
+        "init_height": 630,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 0.8999999761581421,
+        "orientation": "landscape",
+        "version": 136,
+        "version_date": 20210324,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 23,
+        "label": "Devoted Dad to Ella & Olivia",
+        "font": "40.8779038466828px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6.298372378731187,
+        "y": 8.35238095238094,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 14,
+        "label": "That bloody kid…",
+        "font": "35.038203297156684px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -116.96977274786843,
+        "y": -114.99682539682536,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 27,
+        "label": "He is here & will always be around",
+        "font": "35.038203297156684px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 1.7995349653517678,
+        "y": 95.23174603174607,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 17,
+        "label": "& around & around...",
+        "font": "35.038203297156684px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1.1368683772161603e-13,
+        "y": 125.73968253968258,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 30,
+        "label": "A lovable larakin connecting us all",
+        "font": "35.038203297156684px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.8997674826756565,
+        "y": 61.09206349206352,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 6
+      }
+    ]
+  }
+}

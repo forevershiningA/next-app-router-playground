@@ -1,0 +1,381 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.256Z",
+  "units": "mm",
+  "source": {
+    "id": "1588228463377",
+    "slug": "legacy-1588228463377",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1588228463377.json",
+    "savedAt": "2020-04-30T06:34:23.377Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 16",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 722,
+      "height_mm": 802
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 546,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 722,
+      "height_mm": 802,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Alice M Gower",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 57,
+          "y_px": 99
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Alfred L Gower",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 106,
+          "y_px": -35
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Art Warren",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 190
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "27/11/2013",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 119,
+          "y_px": 10
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "28/12/1918",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 85,
+          "y_px": 148
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Always in our hearts",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -78,
+          "y_px": -76
+        },
+        "rotation": {
+          "z_deg": -55
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "R.I.P",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 170,
+          "y_px": 229
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4b68d4113df2576a25a302133a9c462b2dd646c00b3fe3538923e603cd789eeb",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.256Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 11",
+        "shape": "Headstone 16",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1933.60",
+        "quantity": 1,
+        "width": 722,
+        "height": 802,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 546
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Alice M Gower",
+        "font": "21.904675810473815px Xirwena",
+        "font_size": 33,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 57,
+        "y": 99,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Alfred L Gower",
+        "font": "19.91334164588529px Xirwena",
+        "font_size": 30,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 106,
+        "y": -35,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Never Forgotten",
+        "font": "22.568453865336657px Xirwena",
+        "font_size": 34,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 8,
+        "y": 190,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "27/11/2013",
+        "font": "21.904675810473815px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 119,
+        "y": 10,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "28/12/1918",
+        "font": "17.92200748129676px Lucida Calligraphy",
+        "font_size": 27,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 85,
+        "y": 148,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Always in our hearts",
+        "font": "21.904675810473815px Xirwena",
+        "font_size": 33,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -78,
+        "y": -76,
+        "rotation": -55,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "R.I.P",
+        "font": "21.904675810473815px Xirwena",
+        "font_size": 33,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 170,
+        "y": 229,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 14
+      }
+    ]
+  }
+}

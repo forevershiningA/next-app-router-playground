@@ -1,0 +1,355 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.440Z",
+  "units": "mm",
+  "source": {
+    "id": "1723110374251",
+    "slug": "legacy-1723110374251",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1723110374251.json",
+    "savedAt": "2024-08-08T09:46:14.251Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 30",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1423,
+      "height_mm": 2057
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1423,
+      "height_mm": 2057,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 1423,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "07/11/1937 - 27/07/2424",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -3.208,
+          "y_px": -93.605
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Loving and Loved husband of Bramwell, (Bram) Taylor",
+        "font": {
+          "family": "Garamond",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": -4.277,
+          "y_px": -48.067
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Loving mother of Helen, Linda, Denise, Christine",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -9.623,
+          "y_px": -12.649
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Lee Bowen",
+        "font": {
+          "family": "Garamond",
+          "size_px": 75
+        },
+        "position": {
+          "x_px": 1.069,
+          "y_px": 27.829
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Cynthia Faith Taylor (Zelley)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": 7.485,
+          "y_px": -139.143
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a26f2565c82fbf9dfd56ef0cf2aca8d6b6f183c21ad3be88768a028583e1002f",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.440Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 30",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": null,
+        "quantity": 1,
+        "width": 1423,
+        "height": 2057,
+        "_length": 100,
+        "init_width": 1680,
+        "init_height": 942,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240731,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 911,
+        "quantity": 1,
+        "width": 1423,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1680,
+        "init_height": 942,
+        "mode": "2d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1723110454132,
+        "path": "../upload/2024/08/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1723110454132cynthia_cropped_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -4.276958002270147,
+        "y": -236.12087139845397,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.28965967471828785,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Cynthia cropped.jpg",
+        "price": 816,
+        "quantity": 1,
+        "size": "240 x 300 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "07/11/1937 - 27/07/2424",
+        "font": "21.28998609179416px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3.2077185017026104,
+        "y": -93.60505973295854,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 44,
+        "label": "Loving and Loved husband of Bramwell, (Bram) Taylor",
+        "font": "20.864186369958276px Garamond",
+        "font_size": 49,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -4.276958002270147,
+        "y": -48.06746310611385,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 42,
+        "label": "Loving mother of Helen, Linda, Denise, Christine",
+        "font": "21.28998609179416px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -9.623155505107832,
+        "y": -12.649332396345748,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 10,
+        "label": "In Gods Care",
+        "font": "31.934979137691236px Garamond",
+        "font_size": 75,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 1.0692395005675368,
+        "y": 27.828531271960646,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 26,
+        "label": "Cynthia Faith Taylor (Zelley)",
+        "font": "32.36077885952712px Garamond",
+        "font_size": 76,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 7.484676503972757,
+        "y": -139.14265635980323,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 80,
+        "itemID": 5
+      }
+    ]
+  }
+}

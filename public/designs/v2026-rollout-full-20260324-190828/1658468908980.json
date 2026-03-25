@@ -1,0 +1,648 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.552Z",
+  "units": "mm",
+  "source": {
+    "id": "1658468908980",
+    "slug": "legacy-1658468908980",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1658468908980.json",
+    "savedAt": "2022-07-22T05:48:28.980Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "MR GIMANAMA TEMU",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -8.747,
+          "y_px": -257.071
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -2.499,
+          "y_px": -328.544
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "01st July 1947 - 21st Nov 2021",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -13.746,
+          "y_px": 139.956
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Aged 74 years",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -4.998,
+          "y_px": 188.9
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "that a man laydown his life for his friends\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8.747,
+          "y_px": 269.392
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Charity Alexander",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -8.747,
+          "y_px": 304.389
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "\"Greater love hath no man than this,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -12.496,
+          "y_px": 237.395
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "A great leader",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -232.427,
+          "y_px": -172.812
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Who loved his family",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -191.19,
+          "y_px": -137.815
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "Who loved his people",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -192.44,
+          "y_px": -100.32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "And who Loved God",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -189.941,
+          "y_px": -65.323
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-17",
+        "asset": "dove_001",
+        "position": {
+          "x_px": 326.148,
+          "y_px": -314.803
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "dove_001",
+        "position": {
+          "x_px": -331.505,
+          "y_px": -313.553
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_001",
+        "path": "/shapes/motifs/dove_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "46b4e0dea6bf7a58d72e4d890ebc952c9fe5f02af05fc5325a96e9139db80221",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.552Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black-TILE-900-X-900.jpg",
+        "price": 1434.94,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1282,
+        "init_height": 638,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220720,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36 Edg/103.0.1264.62, 1536x864"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "MR GIMANAMA TEMU",
+        "font": "40.1740625px Lucida Calligraphy",
+        "font_size": 31,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -8.747269890795792,
+        "y": -257.0705329153605,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "32.3984375px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -2.499219968798684,
+        "y": -328.54388714733545,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "01st July 1947 - 21st Nov 2021",
+        "font": "31.1025px Lucida Calligraphy",
+        "font_size": 24,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -13.745709828393274,
+        "y": 139.95611285266466,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "Aged 74 years",
+        "font": "32.3984375px Lucida Calligraphy",
+        "font_size": 25,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -4.998439937597595,
+        "y": 188.89968652037612,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 36,
+        "label": "that a man laydown his life for his friends\"",
+        "font": "25.91875px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 8.747269890795678,
+        "y": 269.39184952978064,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 9,
+        "label": "John 15:13",
+        "font": "27.2146875px Lucida Calligraphy",
+        "font_size": 21,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -8.747269890795678,
+        "y": 304.3887147335423,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 30,
+        "label": "\"Greater love hath no man than this,",
+        "font": "25.91875px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -12.496099843993761,
+        "y": 237.39498432601886,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 13
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 326.1482059282371,
+        "y": -314.80250783699057,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.17985611510791366,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -331.5051107125221,
+        "y": -313.5532915360501,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.17985611510791366,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "A great leader",
+        "font": "25.91875px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -232.42745709828387,
+        "y": -172.8119122257053,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 20
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "Who loved his family",
+        "font": "25.91875px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -191.1903276131045,
+        "y": -137.8150470219435,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 22
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "Who loved his people",
+        "font": "25.91875px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -192.4399375975039,
+        "y": -100.3197492163008,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 25
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "And who Loved God",
+        "font": "25.91875px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -189.9407176287051,
+        "y": -65.32288401253902,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 26
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1658472938909,
+        "path": "../upload/2022/07/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1658472938909img20211122wa0004_croppe.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 239.92511700468026,
+        "y": -49.96865203761752,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.975,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG-20211122-WA0004.jpg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 29
+      }
+    ]
+  }
+}

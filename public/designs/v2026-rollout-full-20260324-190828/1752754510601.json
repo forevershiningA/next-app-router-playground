@@ -1,0 +1,392 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.986Z",
+  "units": "mm",
+  "source": {
+    "id": "1752754510601",
+    "slug": "legacy-1752754510601",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1752754510601.json",
+    "savedAt": "2025-07-17T12:15:10.601Z"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "monument",
+    "slug": "laser-monument",
+    "category": "full-monument",
+    "title": "Legacy Migration",
+    "shape": "Curved Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 897,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 897,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Gertrude Mendoza",
+        "font": {
+          "family": "Adorable",
+          "size_px": 65
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Beloved Daughter of Gwendoline & David Clinch",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Loving Mother to Shahnae, Kelvin & Shakiah",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "In loving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_px": 101
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 38.307
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "01/04/1968 - 13/01/2016",
+        "font": {
+          "family": "French Script",
+          "size_px": 33.702
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 76.614
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "337b07db51a432450ddc89c4d48c63f1f7bc91c566636c056fcc2013d1d59c6b",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.986Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 100,
+        "type": "Headstone",
+        "shape": "Curved Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Full Monument",
+        "price": 2441.11,
+        "quantity": 1,
+        "width": 897,
+        "height": 700,
+        "_length": 80,
+        "init_width": 1200,
+        "init_height": 724,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250629,
+        "mode": "3d",
+        "navigator": "Safari (desktop), 1440x900"
+      },
+      {
+        "productid": 100,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 5261.41,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1200,
+        "init_height": 724,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 4427.71,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1200,
+        "init_height": 724,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 100,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1934.29,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1200,
+        "init_height": 724,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Nicole Joanne Clinch",
+        "font": "209.8550724637681px Adorable",
+        "font_size": 65,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 65,
+        "itemID": 1
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1752754637677,
+        "path": "../upload/2025/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1752754637677attachment_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6662065792500574,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Attachment.jpeg",
+        "price": 980,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Beloved Daughter of Gwendoline & David Clinch",
+        "font": "209.8550724637681px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Loving Mother to Shahnae, Kelvin & Shakiah",
+        "font": "209.8550724637681px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In loving Memory",
+        "font": "209.8550724637681px Garamond",
+        "font_size": 101,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 38.3068783068783,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 101,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "01/04/1968 - 13/01/2016",
+        "font": "209.8550724637681px French Script",
+        "font_size": 33.70223325062035,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 76.6137566137566,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 6
+      }
+    ]
+  }
+}

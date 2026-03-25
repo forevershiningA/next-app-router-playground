@@ -1,0 +1,674 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.274Z",
+  "units": "mm",
+  "source": {
+    "id": "1654324667830",
+    "slug": "legacy-1654324667830",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1654324667830.json",
+    "savedAt": "2022-06-04T06:37:47.830Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/African-Red-TILE-900-X-900LR.jpg",
+      "texture": "/textures/forever/l/African-Red-TILE-900-X-900LR.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 797,
+      "height_mm": 807
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1.7999999523162842
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 797,
+      "height_mm": 807,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Red-TILE-900-X-900LR.webp"
+    },
+    "base": {
+      "width_mm": 897,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -36,
+          "y_px": -1018
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "13/4/1933 - 16/1/2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 9.799,
+          "y_px": 107.58
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Andrée Marie-Rose (Frodello)",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": 26.81,
+          "y_px": 35.95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#1fcfcb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "\"moi pour lui dans la vie\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 385.924,
+          "y_px": -229.516
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "\"C&apos;est lui pour moi\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -346.34,
+          "y_px": -218.318
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Joachim",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -17.398,
+          "y_px": 191.613
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#1fcfcb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Charlotte Larson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 3.182,
+          "y_px": -78.069
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Greatly loved and sadly missed.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 54
+        },
+        "position": {
+          "x_px": -6.796,
+          "y_px": 537.265
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "WILSON",
+        "font": {
+          "family": "Garamond",
+          "size_px": 85
+        },
+        "position": {
+          "x_px": -16.193,
+          "y_px": -505.665
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -10.796,
+          "y_px": -404.892
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#1fcfcb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "2/3/1932 - 16/5/2016",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 16.595,
+          "y_px": 263.737
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Our beloved parents, grandparents & great-grandparents",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -12.996,
+          "y_px": 623.642
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_140_18",
+        "position": {
+          "x_px": 2.796,
+          "y_px": 370.876
+        },
+        "height_px": 95,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#87e2d1",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_140_18",
+        "path": "/shapes/motifs/1_140_18.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "486e26e6b04ef178f8ee6cc0715ce6b9ce633ea38b5aa1817515af6d475a3640",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.274Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 27",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/African-Red-TILE-900-X-900LR.jpg",
+        "price": 2481.06,
+        "quantity": 1,
+        "width": 797,
+        "height": 807,
+        "_length": 1,
+        "init_width": 1360,
+        "init_height": 848.0069427490234,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1.7999999523162842,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220603,
+        "mode": "2d",
+        "navigator": "MacIntel, Google Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.5005.61 Safari/537.36, 1440x900"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+        "price": 670,
+        "quantity": 1,
+        "width": 897,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1360,
+        "init_height": 848.0069427490234,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_140_18",
+        "item": "1_140_18",
+        "price": 227.2179,
+        "quantity": 1,
+        "color": "#87e2d1",
+        "colorName": "Paint Fill",
+        "x": 2.795587266308303,
+        "y": 370.87619444510426,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 95,
+        "ratio": 0.12751677852348994,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "82.04256588199101px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -36,
+        "y": -1018,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 3
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "path": "../upload/2022/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1654221900549img_20160519_160956_crop.jpg",
+        "color": 2,
+        "mask": 1,
+        "x": -27.61323820107509,
+        "y": -225.91692732456238,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.579123994461113,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_20160519_160956.jpg",
+        "price": 450,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 19,
+        "label": "13/4/1933 - 16/1/2022",
+        "font": "54.148093482114064px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 9.799264544384641,
+        "y": 107.57987316544427,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 26,
+        "label": "Andrée Marie-Rose (Frodello)",
+        "font": "77.12001192907154px Great Vibes",
+        "font_size": 47,
+        "font_family": "Great Vibes",
+        "color": "#1fcfcb",
+        "colorName": "Paint Fill",
+        "x": 26.810296378613884,
+        "y": 35.949682913610445,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "\"moi pour lui dans la vie\"",
+        "font": "39.38043162335568px Lucida Calligraphy",
+        "font_size": 24,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 385.9242919989829,
+        "y": -229.5159689038693,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 17,
+        "label": "\"C&apos;est lui pour moi\"",
+        "font": "37.73958030571586px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -346.34047202251907,
+        "y": -218.31788574525558,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 7,
+        "label": "Joachim",
+        "font": "77.12001192907154px Great Vibes",
+        "font_size": 47,
+        "font_family": "Great Vibes",
+        "color": "#1fcfcb",
+        "colorName": "Paint Fill",
+        "x": -17.39779363315415,
+        "y": 191.6134178897039,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 18,
+        "label": "(Married 2 June 1954)",
+        "font": "45.94383689391496px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 3.182349065233211,
+        "y": -78.06948550025231,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 27,
+        "label": "Greatly loved and sadly missed.",
+        "font": "88.60597115255028px Great Vibes",
+        "font_size": 54,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6.795587266308303,
+        "y": 537.2645865888225,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 64,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "GARCIA",
+        "font": "139.4723619993847px Garamond",
+        "font_size": 85,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -16.193380899462454,
+        "y": -505.6653418926146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "78.76086324671137px Great Vibes",
+        "font_size": 48,
+        "font_family": "Great Vibes",
+        "color": "#1fcfcb",
+        "colorName": "Paint Fill",
+        "x": -10.795587266308303,
+        "y": -404.8921776720223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 18,
+        "label": "2/3/1932 - 16/5/2016",
+        "font": "54.148093482114064px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 16.594851810692944,
+        "y": 263.73742656150057,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 49,
+        "label": "Our beloved parents, grandparents & great-grandparents",
+        "font": "70.55660665851227px Great Vibes",
+        "font_size": 43,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -12.996322721923661,
+        "y": 623.641584492187,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 10
+      }
+    ]
+  }
+}

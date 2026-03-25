@@ -1,0 +1,453 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.755Z",
+  "units": "mm",
+  "source": {
+    "id": "1707334846846",
+    "slug": "legacy-1707334846846",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1707334846846.json",
+    "savedAt": "2024-02-07T19:40:46.846Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Red.jpg",
+      "texture": "/textures/forever/l/Noble-Red.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "660.4",
+      "height_mm": 507.9999999999999
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "660.4",
+      "height_mm": 507.9999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Red.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "APRIL 3, 1940",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 83
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "AIMEE",
+        "font": {
+          "family": "Garamond",
+          "size_px": 58
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "GRAVES",
+        "font": {
+          "family": "Garamond",
+          "size_px": 77
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -104
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "OCTOBER 12, 2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 127
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "LUTIE BRADLEY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 227
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "OUR HEARTS FOREVER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 263
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_153_21",
+        "position": {
+          "x_px": -320,
+          "y_px": -134
+        },
+        "height_px": 169,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_153_21",
+        "position": {
+          "x_px": 330.369,
+          "y_px": -129
+        },
+        "height_px": 169,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_153_21",
+        "path": "/shapes/motifs/1_153_21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "83b6481591a27ec92a8717c0ce3e5d4a9c1bb61fd05f7ec0b452646b6536b3e7",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.756Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Red.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1353.12,
+        "quantity": 1,
+        "width": "660.4",
+        "height": 507.9999999999999,
+        "_length": 80,
+        "init_width": 1168,
+        "init_height": 836,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_21",
+        "item": "1_153_21",
+        "price": 244.58977000000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -320,
+        "y": -134,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 169,
+        "ratio": 0.19096045197740114,
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_21",
+        "item": "1_153_21",
+        "price": 244.58977000000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 330.3692018105787,
+        "y": -129,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 169,
+        "ratio": 0.19096045197740114,
+        "itemID": 3
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1707335081177,
+        "path": "../upload/2024/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1707335081177image_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -7,
+        "y": -224,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.29527559055118113,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMAGE.jpg",
+        "price": 310,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "APRIL 3, 1940",
+        "font": "45.667322834645674px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 3,
+        "y": 83,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 7,
+        "label": "ROSALIE",
+        "font": "71.58661417322836px Garamond",
+        "font_size": 58,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -12,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "LEARNING",
+        "font": "95.03740157480316px Garamond",
+        "font_size": 77,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 2,
+        "y": -104,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "OCTOBER 12, 2022",
+        "font": "41.96456692913386px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1,
+        "y": 127,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "HER LIGHT WILL SHINE IN",
+        "font": "34.55905511811024px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 3,
+        "y": 227,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "OUR HEARTS FOREVER",
+        "font": "35.79330708661418px Garamond",
+        "font_size": 29,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1,
+        "y": 263,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 10
+      }
+    ]
+  }
+}

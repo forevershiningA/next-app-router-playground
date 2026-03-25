@@ -1,0 +1,229 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:47.323Z",
+  "units": "mm",
+  "source": {
+    "id": "1702478601199",
+    "slug": "legacy-1702478601199",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1702478601199.json",
+    "savedAt": "2023-12-13T14:43:21.199Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1366,
+      "height": 768,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Carson B. Miller",
+        "font": {
+          "family": "Garamond",
+          "size_px": 90
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -100
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "05-07-2007 -  12-06-2080",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 51
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Beloved Son, grandson, brother, & friend",
+        "font": {
+          "family": "Garamond",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 181
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e93ea0099a50751b1aa33ad7c8d91ec21e9939700cca3e339629e2f47fae3ce0",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:47.323Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1126,
+        "init_height": 548,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1366x768"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 14,
+        "label": "Carson B. Miller",
+        "font": "78.88287401574804px Garamond",
+        "font_size": 90,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": 2,
+        "y": -100,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "05-07-2007 -  12-06-2080",
+        "font": "43.8238188976378px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": 9,
+        "y": 51,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 35,
+        "label": "Beloved Son, grandson, brother, & friend",
+        "font": "32.42962598425197px Garamond",
+        "font_size": 37,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": -1,
+        "y": 181,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 3
+      }
+    ]
+  }
+}

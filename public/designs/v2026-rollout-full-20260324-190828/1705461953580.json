@@ -1,0 +1,456 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.372Z",
+  "units": "mm",
+  "source": {
+    "id": "1705461953580",
+    "slug": "legacy-1705461953580",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1705461953580.json",
+    "savedAt": "2024-01-17T03:25:53.580Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 900,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 400,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Forever in our hearts",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "SCHWARTZ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 64
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -146
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Jeanette Chandler",
+        "font": {
+          "family": "Garamond",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -253,
+          "y_px": -9
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "5/8/1937  13/10/2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -265,
+          "y_px": 30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loving husband of Mary ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -265,
+          "y_px": 62
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Father of Peter, jannie, Charlie",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -262,
+          "y_px": 90
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Nannu of Danielle, jake ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -264,
+          "y_px": 119
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": -7,
+          "y_px": 16
+        },
+        "height_px": 269,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a72a0b8ecd2964666dc08a621fe8c974fbd090f3d47a04031a5b94e06d423f21",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.372Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 779.61,
+        "quantity": 1,
+        "width": 900,
+        "height": 400,
+        "_length": 15,
+        "init_width": 1680,
+        "init_height": 847,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 268.06527,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -7,
+        "y": 16,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 269,
+        "ratio": 0.3695054945054945,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "Forever in our hearts",
+        "font": "28.445083333333333px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -1,
+        "y": 161,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 6,
+        "label": "MUSCAT",
+        "font": "58.72533333333333px Garamond",
+        "font_size": 64,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": 1,
+        "y": -146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 2
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1705462419552,
+        "path": "../upload/2024/01/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1705462419552porcelain_plaqueslogos_c.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -268,
+        "y": -97,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2596933962264151,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "porcelain plaques-logos.jpeg",
+        "price": 380,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "Emanuel Muscat ",
+        "font": "39.45608333333333px Garamond",
+        "font_size": 43,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -253,
+        "y": -9,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "5/8/1937  13/10/2023",
+        "font": "22.022px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -265,
+        "y": 30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Loving husband of Mary ",
+        "font": "18.351666666666667px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -265,
+        "y": 62,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 28,
+        "label": "Father of Peter, jannie, Charlie",
+        "font": "18.351666666666667px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -262,
+        "y": 90,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 20,
+        "label": "Nannu of Danielle, jake ",
+        "font": "18.351666666666667px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -264,
+        "y": 119,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 8
+      }
+    ]
+  }
+}

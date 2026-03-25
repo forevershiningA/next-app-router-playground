@@ -1,0 +1,778 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:15.296Z",
+  "units": "mm",
+  "source": {
+    "id": "1681311041514",
+    "slug": "legacy-1681311041514",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1681311041514.json",
+    "savedAt": "2023-04-12T14:50:41.514Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 507.99999999999955,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 507.99999999999955,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 607.9999999999995,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Addison Walsh",
+        "font": {
+          "family": "Garamond",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": 3.04,
+          "y_px": -24.985
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "WEBER",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -6.079,
+          "y_px": 28.961
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "La famiglia e tutto",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 4.559,
+          "y_px": 239.25
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Absent from the body, present with the Lord",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -162.589
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "July 22,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -167.173,
+          "y_px": 91.857
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "1950",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -168.693,
+          "y_px": 123.939
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "March 16,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 180.851,
+          "y_px": 91.477
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 174.772,
+          "y_px": 123.559
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "His legacies are Music, Laughter & Love",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 3.04,
+          "y_px": -136.7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_017_15",
+        "position": {
+          "x_px": 1.52,
+          "y_px": 43.932
+        },
+        "height_px": 334,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_019_13",
+        "position": {
+          "x_px": 6.079,
+          "y_px": 237.356
+        },
+        "height_px": 67,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-16",
+        "asset": "155-24",
+        "position": {
+          "x_px": 227.964,
+          "y_px": 239.438
+        },
+        "height_px": 96,
+        "rotation": {
+          "z_deg": -45
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-17",
+        "asset": "155-24",
+        "position": {
+          "x_px": -215.629,
+          "y_px": 239.438
+        },
+        "height_px": 96,
+        "rotation": {
+          "z_deg": 45
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "cross_002",
+        "position": {
+          "x_px": 3.04,
+          "y_px": 118.678
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "2_155_12",
+        "position": {
+          "x_px": -3.04,
+          "y_px": -217.576
+        },
+        "height_px": 86,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-27",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 0,
+          "y_px": 118.678
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_017_15",
+        "path": "/shapes/motifs/1_017_15.svg"
+      },
+      {
+        "id": "1_019_13",
+        "path": "/shapes/motifs/1_019_13.svg"
+      },
+      {
+        "id": "155-24",
+        "path": "/shapes/motifs/155-24.svg"
+      },
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      },
+      {
+        "id": "2_155_12",
+        "path": "/shapes/motifs/2_155_12.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2fa41cf4670dd0756c80685b3c953262c35a904ea079d72f2179d0a91f7ff66f",
+    "sourceItemCount": 18,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:15.296Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1221.57,
+        "quantity": 1,
+        "width": 507.99999999999955,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1296,
+        "init_height": 800,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230223,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "price": 546,
+        "quantity": 1,
+        "width": 607.9999999999995,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1296,
+        "init_height": 800,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_15",
+        "item": "1_017_15",
+        "price": 283.324345,
+        "quantity": 1,
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": 1.5197568389057778,
+        "y": 43.93237082066855,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 334,
+        "ratio": 0.7121535181236673,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_019_13",
+        "item": "1_019_13",
+        "price": 220.64476,
+        "quantity": 1,
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": 6.0790273556231,
+        "y": 237.3556231003038,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 67,
+        "ratio": 0.35638297872340424,
+        "itemID": 8
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "155-24",
+        "item": "155-24",
+        "price": 238.27502,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 227.96352583586625,
+        "y": 239.43768996960472,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -45,
+        "height": 96,
+        "ratio": 0.17744916820702403,
+        "itemID": 16
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "155-24",
+        "item": "155-24",
+        "price": 238.27502,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -215.62851601507882,
+        "y": 239.43768996960455,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 45,
+        "height": 96,
+        "ratio": 0.17744916820702403,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 3.03951367781155,
+        "y": 118.6778115501519,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.3597122302158273,
+        "itemID": 18
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_12",
+        "item": "2_155_12",
+        "price": 235.81581999999997,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -3.03951367781155,
+        "y": -217.5759878419451,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 86,
+        "ratio": 0.12427745664739884,
+        "itemID": 19
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 222.05328999999998,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 118.67781155015186,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.1310592459605027,
+        "itemID": 27
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "Richard Michael",
+        "font": "67.1751968503937px Garamond",
+        "font_size": 49,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 3.03951367781155,
+        "y": -24.98480243161086,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 4,
+        "label": "LIGI",
+        "font": "68.54611923509562px Lucida Calligraphy",
+        "font_size": 50,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -6.0790273556231,
+        "y": 28.961499493414472,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 16,
+        "label": "La famiglia e tutto",
+        "font": "43.869516310461194px Great Vibes",
+        "font_size": 32,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 4.559270516717325,
+        "y": 239.2502532928062,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 36,
+        "label": "Absent from the body, present with the Lord",
+        "font": "23.30568053993251px Lucida Calligraphy",
+        "font_size": 17,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": -162.5886524822694,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 7,
+        "label": "July 22,",
+        "font": "45.24043869516311px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -167.17325227963525,
+        "y": 91.85663627152984,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 4,
+        "label": "1950",
+        "font": "45.24043869516311px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -168.69300911854103,
+        "y": 123.93870314083074,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 8,
+        "label": "March 16,",
+        "font": "45.24043869516311px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 180.85106382978722,
+        "y": 91.4766970618034,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 4,
+        "label": "2023",
+        "font": "45.24043869516311px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 174.77203647416414,
+        "y": 123.55876393110431,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 33,
+        "label": "His legacies are Music, Laughter & Love",
+        "font": "21.934758155230597px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 3.03951367781155,
+        "y": -136.69959473150953,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 22
+      }
+    ]
+  }
+}

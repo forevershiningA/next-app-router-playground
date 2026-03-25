@@ -1,0 +1,497 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.540Z",
+  "units": "mm",
+  "source": {
+    "id": "1728595382449",
+    "slug": "legacy-1728595382449",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1728595382449.json",
+    "savedAt": "2024-10-10T21:23:02.449Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Gable",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 781.05,
+      "height_mm": 603.25
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 781.05,
+      "height_mm": 603.25,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 946.15,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Lavinia Warren",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 90
+        },
+        "position": {
+          "x_px": 8.75,
+          "y_px": -105.319
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "November 18th 2008-November 18th 2050",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 6.25,
+          "y_px": 229.498
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Even when she is gone, everyone she ever knew will still",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": 283.197
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "know that what she said was right in her heart and with God.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": 323.16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "1_184_23",
+        "position": {
+          "x_px": -1.25,
+          "y_px": -177.333
+        },
+        "height_px": 126,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_179_02",
+        "position": {
+          "x_px": -76.25,
+          "y_px": -168.592
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "1_179_02",
+        "position": {
+          "x_px": 80.7,
+          "y_px": -171.089
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_153_21",
+        "position": {
+          "x_px": 267.5,
+          "y_px": 24.977
+        },
+        "height_px": 210,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_153_21",
+        "position": {
+          "x_px": -270.661,
+          "y_px": 38.714
+        },
+        "height_px": 210,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_184_23",
+        "path": "/shapes/motifs/1_184_23.svg"
+      },
+      {
+        "id": "1_179_02",
+        "path": "/shapes/motifs/1_179_02.svg"
+      },
+      {
+        "id": "1_153_21",
+        "path": "/shapes/motifs/1_153_21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "843bef039356d1664c9b24915518582f4279e745c30bc08d87760813dd638728",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.540Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Gable",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 3310.22,
+        "quantity": 1,
+        "width": 781.05,
+        "height": 603.25,
+        "_length": 80,
+        "init_width": 1296,
+        "init_height": 639,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241009,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 969,
+        "quantity": 1,
+        "width": 946.15,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1296,
+        "init_height": 639,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Katherine Barbat",
+        "font": "78.66782954142617px Chopin Script",
+        "font_size": 90,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8.75,
+        "y": -105.31924882629099,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 71,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "November 18th 2008-November 18th 2050",
+        "font": "41.956175755427296px Chopin Script",
+        "font_size": 48,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6.25,
+        "y": 229.49765258215962,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "Even when she is gone, everyone she ever knew will still",
+        "font": "43.70434974523676px Chopin Script",
+        "font_size": 50,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -2.5,
+        "y": 283.1971830985916,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 48,
+        "label": "know that what she said was right in her heart and with God.",
+        "font": "38.45982777580835px Chopin Script",
+        "font_size": 44,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.25,
+        "y": 323.1596244131457,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 6
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_23",
+        "item": "1_184_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.25,
+        "y": -177.33333333333331,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 126,
+        "ratio": 0.15829145728643215,
+        "itemID": 7
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_179_02",
+        "item": "1_179_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -76.25,
+        "y": -168.59154929577466,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.14314115308151093,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_179_02",
+        "item": "1_179_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 80.69981591857754,
+        "y": -171.0892018779343,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.14314115308151093,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_21",
+        "item": "1_153_21",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 267.5,
+        "y": 24.976525821596283,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 210,
+        "ratio": 0.23728813559322035,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_21",
+        "item": "1_153_21",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -270.6614575766923,
+        "y": 38.713615023474176,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 210,
+        "ratio": 0.23728813559322035,
+        "itemID": 11
+      }
+    ]
+  }
+}

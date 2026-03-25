@@ -1,0 +1,539 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:14.162Z",
+  "units": "mm",
+  "source": {
+    "id": "1610251510340",
+    "slug": "legacy-1610251510340",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1610251510340.json",
+    "savedAt": "2021-01-10T04:05:10.340Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Balmoral-Red-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Balmoral-Red-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 750,
+      "height_mm": 915
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 546,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 750,
+      "height_mm": 915,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Balmoral-Red-TILE-900-X-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -5.25,
+          "y_px": -165.312
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Timothy Garcia",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -99.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Died 28 April 1955  aged 3 years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 12.5,
+          "y_px": -74.375
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Frances Brown",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -38.375
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Lyman Steele",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -8.25,
+          "y_px": 39.938
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Died 6 February 2017  aged 86 years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -0.125,
+          "y_px": 63.313
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Josie Murray",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -14.375,
+          "y_px": 100.656
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Died 8 May 2017  aged 97 years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 6.469,
+          "y_px": 128.828
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Always in our throughts",
+        "font": {
+          "family": "French Script",
+          "size_px": 79
+        },
+        "position": {
+          "x_px": -11.297,
+          "y_px": 183.242
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "REST IN PEACE",
+        "font": {
+          "family": "Adorable",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -14.918,
+          "y_px": 231.295
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Died 14 January 1960  aged 38 years",
+        "font": {
+          "family": "Garamond",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 0.813,
+          "y_px": -10.031
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c1f155a0f92a8e53e45a85ca3970dd6d94dd9bb33995c221fd1b3051d4c33858",
+    "sourceItemCount": 12,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:14.162Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Balmoral-Red-TILE-900-X-900.jpg",
+        "price": 2244.06,
+        "quantity": 1,
+        "width": 750,
+        "height": 915,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 546,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 19,
+        "label": "In loving memory of",
+        "font": "29.090163934426233px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -5.25,
+        "y": -165.3125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 14,
+        "label": "Patricia Helen",
+        "font": "29.090163934426233px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": -99.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 32,
+        "label": "Died 28 April 1955  aged 3 years",
+        "font": "20.944918032786887px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": 12.5,
+        "y": -74.375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 15,
+        "label": "Irene Constance",
+        "font": "29.090163934426233px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": -38.375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 15,
+        "label": "Winnifred Grace",
+        "font": "29.090163934426233px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -8.25,
+        "y": 39.9375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 35,
+        "label": "Died 6 February 2017  aged 86 years",
+        "font": "20.944918032786887px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -0.125,
+        "y": 63.3125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 15,
+        "label": "Desmond Anthony",
+        "font": "29.090163934426233px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -14.375,
+        "y": 100.65625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 30,
+        "label": "Died 8 May 2017  aged 97 years",
+        "font": "20.944918032786887px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": 6.46875,
+        "y": 128.828125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 5,
+        "quantity": 23,
+        "label": "Always in our throughts",
+        "font": "45.962459016393446px French Script",
+        "font_size": 79,
+        "font_family": "French Script",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -11.296875,
+        "y": 183.2421875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 77,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 13,
+        "label": "REST IN PEACE",
+        "font": "27.926557377049186px Adorable",
+        "font_size": 48,
+        "font_family": "Adorable",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -14.91796875,
+        "y": 231.294921875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 35,
+        "label": "Died 14 January 1960  aged 38 years",
+        "font": "20.944918032786887px Garamond",
+        "font_size": 36,
+        "font_family": "Garamond",
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": 0.8125,
+        "y": -10.03125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,263 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.747Z",
+  "units": "mm",
+  "source": {
+    "id": "1659117755289",
+    "slug": "legacy-1659117755289",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1659117755289.json",
+    "savedAt": "2022-07-29T18:02:35.289Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 101.60000000000002,
+      "height_mm": 76.20000000000002
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 101.60000000000002,
+      "height_mm": 76.20000000000002,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-12",
+        "text": "McGaughey",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 162,
+          "y_px": 216.908
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Debbie",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 174,
+          "y_px": 133.418
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-14",
+        "asset": "1_143_20",
+        "position": {
+          "x_px": 226.5,
+          "y_px": -100.439
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_143_20",
+        "path": "/shapes/motifs/1_143_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7b2b042a1761be9189e5d7b5d6aa3a8db9cc70271243057c7683b25330250516",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.747Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Flat Back",
+        "border": "Border 3",
+        "shape_url": "shapes/photos/border3.svg",
+        "fixingSystem": 1,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 364.47,
+        "quantity": 1,
+        "width": 101.60000000000002,
+        "height": 76.20000000000002,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 545,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220728,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Safari/537.36 Edg/103.0.1264.77, 1280x720"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1659117783680,
+        "path": "../upload/2022/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1659117783680debbie_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -175.5,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.011564960629921,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Debbie.jpg",
+        "price": 280,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "McGaughey",
+        "font": "94.1412401574803px Dobkin",
+        "font_size": 12,
+        "font_family": "Dobkin",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 162,
+        "y": 216.90825688073403,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Debbie",
+        "font": "94.1412401574803px Dobkin",
+        "font_size": 12,
+        "font_family": "Dobkin",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 174,
+        "y": 133.41834862385338,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 10
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_20",
+        "item": "1_143_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 226.5,
+        "y": -100.43853211009178,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05312084993359894,
+        "itemID": 14
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<config>
+    <input>
+        <source-dir>C:/HaxeToolkit/haxe/lib/away3d/5,0,9</source-dir>
+        <classes>
+            <include>away3d.containers.Scene3D</include>
+            <include>away3d.containers.View3D</include>
+            <include>away3d.entities.Entity</include>
+            <include>away3d.entities.Mesh</include>
+            <include>away3d.lights.DirectionalLight</include>
+            <include>away3d.lights.shadowmaps.CascadeShadowMapper</include>
+            <include>away3d.lights.shadowmaps.DirectionalShadowMapper</include>
+            <include>away3d.materials.lightpickers.StaticLightPicker</include>
+            <include>away3d.materials.methods.CascadeShadowMapMethod</include>
+            <include>away3d.materials.methods.FilteredShadowMapMethod</include>
+            <include>away3d.materials.methods.FresnelPlanarReflectionMethod</include>
+            <include>away3d.materials.TextureMultiPassMaterial</include>
+            <include>away3d.primitives.PlaneGeometry</include>
+            <include>away3d.primitives.SkyBox</include>
+            <include>away3d.textures.BitmapCubeTexture</include>
+            <include>away3d.textures.BitmapTexture</include>
+            <include>away3d.textures.PlanarReflectionTexture</include>
+        </classes>
+        <ccparams>
+            <param name="openfl" value="&quot;8.1.0&quot;" />
+            <param name="flash" value="false" />
+        </ccparams>
+        <mapping>
+            <source>away3d.*</source>
+            <target>Engine3D.core.*</target>
+        </mapping>
+    </input>
+    <goals>
+        <goal type="Copy">
+            <destination>tmp/expose</destination>
+            <delete-if-exists>true</delete-if-exists>
+        </goal>
+        <goal type="GenerateExpose">
+            <destination>tmp/expose</destination>
+        </goal>
+        <goal type="GenerateExtern">
+            <destination>tmp/extern</destination>
+            <delete-if-exists>true</delete-if-exists>
+        </goal>
+    </goals>
+</config>

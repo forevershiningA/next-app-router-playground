@@ -1,0 +1,516 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.628Z",
+  "units": "mm",
+  "source": {
+    "id": "1673605061173",
+    "slug": "legacy-1673605061173",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1673605061173.json",
+    "savedAt": "2023-01-13T10:17:41.173Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 28",
+    "material": {
+      "name": "src/granites/forever2/l/G788.jpg",
+      "texture": "/textures/forever/l/G788.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 500,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 500,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G788.webp"
+    },
+    "base": {
+      "width_mm": 600,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Imperial-Red.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "Traditional Engraved Headstone - 13/01/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 405.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 440.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Rest in Peace",
+        "font": {
+          "family": "French Script",
+          "size_px": 82
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -126.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Once met, never forgotten",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -67.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Beloved",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -124,
+          "y_px": 9.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Into the sunshine",
+        "font": {
+          "family": "Arial",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 104,
+          "y_px": 11.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Dearly beloved",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 63
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 106.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Your love will light my way",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": 161.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_188_08",
+        "position": {
+          "x_px": 1,
+          "y_px": 233
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_188_08",
+        "path": "/shapes/motifs/1_188_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fb88140c254d2f5e32174880c1d4401ad489044bc9bb726e1de78c43532aedcc",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.628Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 28",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/G788.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1176,
+        "quantity": 1,
+        "width": 500,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1300,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230106,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Imperial-Red.jpg",
+        "price": 534,
+        "quantity": 1,
+        "width": 600,
+        "height": 100,
+        "_length": 130,
+        "init_width": 1300,
+        "init_height": 873,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_188_08",
+        "item": "1_188_08",
+        "price": 219.001475,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1,
+        "y": 233,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 60,
+        "ratio": 0.13793103448275862,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 39,
+        "label": "Traditional Engraved Headstone - 13/01/2023",
+        "font": "20.671392857142852px Arial",
+        "font_size": 17,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -3,
+        "y": 405.33333333333337,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "25.535249999999994px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": 440.66666666666674,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 11,
+        "label": "Rest in Peace",
+        "font": "99.7090714285714px French Script",
+        "font_size": 82,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1,
+        "y": -126.66666666666669,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "Once met, never forgotten",
+        "font": "46.206642857142846px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 3,
+        "y": -67.66666666666669,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 7,
+        "label": "Beloved",
+        "font": "43.774714285714275px Great Vibes",
+        "font_size": 36,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -124,
+        "y": 9.333333333333314,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "Into the sunshine",
+        "font": "36.47892857142856px Arial",
+        "font_size": 30,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 104,
+        "y": 11.333333333333314,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 13,
+        "label": "Dearly beloved",
+        "font": "76.60574999999999px Great Vibes",
+        "font_size": 63,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 3,
+        "y": 106.33333333333326,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 71,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "Your love will light my way",
+        "font": "30.399107142857133px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 5,
+        "y": 161.33333333333326,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1673605199330,
+        "path": "../upload/2023/01/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1673605199330pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": -257,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.33390323635174884,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 400,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 10
+      }
+    ]
+  }
+}

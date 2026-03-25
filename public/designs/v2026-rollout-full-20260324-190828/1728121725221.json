@@ -1,0 +1,1103 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.695Z",
+  "units": "mm",
+  "source": {
+    "id": "1728121725221",
+    "slug": "legacy-1728121725221",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1728121725221.json",
+    "savedAt": "2024-10-05T09:48:45.221Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 430,
+      "height": 932,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Elbert May",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 71
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": 88
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "22.07.02 - 22.04.22",
+        "font": {
+          "family": "Adorable",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -18,
+          "y_px": 171
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "   A voice we loved is stilled,",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 282,
+          "y_px": -189
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "A place is vacant in our home",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 291,
+          "y_px": -171
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": " A precious one from us has gone,",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 306,
+          "y_px": -210
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Which never can be filled.",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 279,
+          "y_px": -150
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "God in His wisdom has recalled,",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 300,
+          "y_px": -132
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": " The boon His love had given",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 282,
+          "y_px": -114
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "Gone But Not Forgotten",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 303,
+          "y_px": -237
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Beloved Son of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 427
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "And though the body slumbers here,",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 304,
+          "y_px": -98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Stan Retchford & Camilla Paddy",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 495
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": -376
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "The Soul is safe in Heaven.",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 291,
+          "y_px": -75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "“ Let’s Go Fishing Owat Boys “",
+        "font": {
+          "family": "Garamond",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 336
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "MOORE",
+        "font": {
+          "family": "Adorable",
+          "size_px": 100
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 636
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_188_08",
+        "position": {
+          "x_px": -378,
+          "y_px": -269
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "cross_002",
+        "position": {
+          "x_px": 3,
+          "y_px": -480
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-23",
+        "asset": "dovefinal8-11-16[converted]",
+        "position": {
+          "x_px": 162,
+          "y_px": -267
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_188_08",
+        "path": "/shapes/motifs/1_188_08.svg"
+      },
+      {
+        "id": "cross_002",
+        "path": "/shapes/motifs/cross_002.svg"
+      },
+      {
+        "id": "dovefinal8-11-16[converted]",
+        "path": "/shapes/motifs/dovefinal8-11-16[converted].svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "80947c28d071dad34eb85ae49ff12b373402a403a5750d6ecd1e88fd886591d6",
+    "sourceItemCount": 29,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.695Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2930.2,
+        "quantity": 1,
+        "width": 600,
+        "height": 700,
+        "_length": 80,
+        "init_width": 430,
+        "init_height": 683,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20240925,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 430x932"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 833,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 430,
+        "init_height": 683,
+        "mode": "2d"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_188_08",
+        "item": "1_188_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -378,
+        "y": -269,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.1728110599078341,
+        "itemID": 2
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1728106523207,
+        "path": "../upload/2024/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1728106523207resized_photoleap_08_08_.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -12,
+        "y": -135,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.1032894736842107,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Resized_Photoleap_08_08_2023_18_29_58_bsLMX.jpeg",
+        "price": 980,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1728106952391,
+        "path": "../upload/2024/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1728106952391resized_screenshot_20201.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -303,
+        "y": 174,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.206578947368421,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Resized_Screenshot_2020-11-16-20-42-44-86 (1) (1).jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "480",
+        "width": "340",
+        "height": "755",
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Cleon Thomas Retchford",
+        "font": "111.6253125px Dobkin",
+        "font_size": 71,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9,
+        "y": 88,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 70,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "22.07.02 - 22.04.22",
+        "font": "73.8928125px Adorable",
+        "font_size": 47,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -18,
+        "y": 171,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 7
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1728112034958,
+        "path": "../upload/2024/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1728112034958resized_20241005_155753_.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 66,
+        "y": 288,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.5446052631578948,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Resized_20241005_155753.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "336",
+        "width": "816",
+        "height": "528",
+        "itemID": 8
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_002",
+        "item": "cross_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 3,
+        "y": -480,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.26258992805755393,
+        "itemID": 11
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1728113799587,
+        "path": "../upload/2024/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1728113799587img_1566_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -480,
+        "y": 627,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.42292763157894736,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1566.jpeg",
+        "price": 80,
+        "quantity": 1,
+        "size": "92",
+        "width": "102",
+        "height": "145",
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "   A voice we loved is stilled,",
+        "font": "25.155px Dobkin",
+        "font_size": 16,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 282,
+        "y": -189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 13
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1728113988653,
+        "path": "../upload/2024/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "17281139886531c5d9f807d964736a2ede5c5.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 390,
+        "y": -354,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5516447368421054,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1C5D9F80-7D96-4736-A2ED-E5C5347C628E.jpeg",
+        "price": 380,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "A place is vacant in our home",
+        "font": "25.155px Dobkin",
+        "font_size": 16,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 291,
+        "y": -171,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": " A precious one from us has gone,",
+        "font": "26.7271875px Dobkin",
+        "font_size": 17,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 306,
+        "y": -210,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Which never can be filled.",
+        "font": "25.155px Dobkin",
+        "font_size": 16,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 279,
+        "y": -150,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "God in His wisdom has recalled,",
+        "font": "26.7271875px Dobkin",
+        "font_size": 17,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 300,
+        "y": -132,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": " The boon His love had given",
+        "font": "23.582812500000003px Dobkin",
+        "font_size": 15,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 282,
+        "y": -114,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Gone But Not Forgotten",
+        "font": "31.44375px Dobkin",
+        "font_size": 20,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 303,
+        "y": -237,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Beloved Son of",
+        "font": "64.4596875px Adorable",
+        "font_size": 41,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 427,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 22
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dovefinal8-11-16[converted]",
+        "item": "dovefinal8-11-16[converted]",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 162,
+        "y": -267,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.1238390092879257,
+        "itemID": 23
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "And though the body slumbers here,",
+        "font": "26.7271875px Dobkin",
+        "font_size": 17,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 304,
+        "y": -98,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Stan Retchford & Camilla Paddy",
+        "font": "66.031875px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 495,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "70.74843750000001px Garamond",
+        "font_size": 45,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -24,
+        "y": -376,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "The Soul is safe in Heaven.",
+        "font": "31.44375px Dobkin",
+        "font_size": 20,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 291,
+        "y": -75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "“ Let’s Go Fishing Owat Boys “",
+        "font": "75.465px Garamond",
+        "font_size": 48,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": 336,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 26
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "CTP",
+        "font": "157.21875px Adorable",
+        "font_size": 100,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": 636,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 27
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1728113799587,
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1728113799587img_1566_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 482.50263157894733,
+        "y": 627,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.42292763157894736,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1566.jpeg",
+        "price": 80,
+        "quantity": 1,
+        "size": "92",
+        "width": "102",
+        "height": "145",
+        "itemID": 28
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1728124403384,
+        "path": "../upload/2024/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1728124403384img_1571_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -285,
+        "y": 630,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2758223684210526,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1571.jpeg",
+        "price": 80,
+        "quantity": 1,
+        "size": 60,
+        "width": "163",
+        "height": "94",
+        "itemID": 29
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1728124548469,
+        "path": "../upload/2024/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1728124548469img_1572_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 294,
+        "y": 630,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2942105263157895,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1572.jpeg",
+        "price": 80,
+        "quantity": 1,
+        "size": 64,
+        "width": "166",
+        "height": "101",
+        "itemID": 30
+      }
+    ]
+  }
+}

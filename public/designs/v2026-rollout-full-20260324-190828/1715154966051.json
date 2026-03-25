@@ -1,0 +1,780 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.975Z",
+  "units": "mm",
+  "source": {
+    "id": "1715154966051",
+    "slug": "legacy-1715154966051",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1715154966051.json",
+    "savedAt": "2024-05-08T07:56:06.051Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Portrait)",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 242,
+      "height_mm": 293
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 242,
+      "height_mm": 293,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "Forever with the Lord",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 148
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "I 72",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 271,
+          "y_px": -371
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "25 March 2024",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 21,
+          "y_px": -7
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Forever in our hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 88
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Forever Loved",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "24 January 1946",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 25,
+          "y_px": -53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "FAY ROSS",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 28,
+          "y_px": -97
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_156_01",
+        "position": {
+          "x_px": -238,
+          "y_px": -222
+        },
+        "height_px": 74,
+        "rotation": {
+          "z_deg": 34
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "cross_001",
+        "position": {
+          "x_px": 263,
+          "y_px": -236
+        },
+        "height_px": 74,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "2_155_17",
+        "position": {
+          "x_px": 229,
+          "y_px": 383
+        },
+        "height_px": 79,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_155_17",
+        "position": {
+          "x_px": -214,
+          "y_px": 382
+        },
+        "height_px": 81,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_156_01",
+        "position": {
+          "x_px": -256,
+          "y_px": -48
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": -47
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_175_07",
+        "position": {
+          "x_px": 223,
+          "y_px": 254
+        },
+        "height_px": 52,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_098_22",
+        "position": {
+          "x_px": 8,
+          "y_px": 290
+        },
+        "height_px": 85,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "musiclal-notes_001",
+        "position": {
+          "x_px": -74,
+          "y_px": 227
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": -17
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_175_07",
+        "position": {
+          "x_px": -216.061,
+          "y_px": 258
+        },
+        "height_px": 52,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_156_01",
+        "path": "/shapes/motifs/1_156_01.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      },
+      {
+        "id": "2_155_17",
+        "path": "/shapes/motifs/2_155_17.svg"
+      },
+      {
+        "id": "1_175_07",
+        "path": "/shapes/motifs/1_175_07.svg"
+      },
+      {
+        "id": "2_098_22",
+        "path": "/shapes/motifs/2_098_22.svg"
+      },
+      {
+        "id": "musiclal-notes_001",
+        "path": "/shapes/motifs/musiclal-notes_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "25e877e8a1423ac03feddfcaef413accaf7f0ac293dc7bbc15fb12eaf0bfd110",
+    "sourceItemCount": 18,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.975Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Portrait)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 256.66,
+        "quantity": 1,
+        "width": 242,
+        "height": 293,
+        "_length": 15,
+        "init_width": 1680,
+        "init_height": 855,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_01",
+        "item": "1_156_01",
+        "price": 232.86478000000002,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -238,
+        "y": -222,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 34,
+        "height": 74,
+        "ratio": 0.08716136631330977,
+        "itemID": 1
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 222.28804499999998,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 263,
+        "y": -236,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 74,
+        "ratio": 0.12395309882747069,
+        "itemID": 2
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_17",
+        "item": "2_155_17",
+        "price": 223.46182000000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 229,
+        "y": 383,
+        "flipx": "1",
+        "flipy": "-1",
+        "rotation": -90,
+        "height": 79,
+        "ratio": 0.09415971394517282,
+        "itemID": 3
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_17",
+        "item": "2_155_17",
+        "price": 223.93132999999997,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -214,
+        "y": 382,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -90,
+        "height": 81,
+        "ratio": 0.09654350417163289,
+        "itemID": 4
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_01",
+        "item": "1_156_01",
+        "price": 232.37294,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -256,
+        "y": -48,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": -47,
+        "height": 72,
+        "ratio": 0.08480565371024736,
+        "itemID": 5
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_175_07",
+        "item": "1_175_07",
+        "price": 217.12343499999997,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 223,
+        "y": 254,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 52,
+        "ratio": 0.10766045548654245,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "Forever with the Lord",
+        "font": "62.59300341296928px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": 148,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 3,
+        "label": "I 72",
+        "font": "62.59300341296928px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 271,
+        "y": -371,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "25 March 2024",
+        "font": "51.212457337883954px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 21,
+        "y": -7,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "Forever in our hearts",
+        "font": "62.59300341296928px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 3,
+        "y": 88,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 11
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_098_22",
+        "item": "2_098_22",
+        "price": 224.87035,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": 290,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 85,
+        "ratio": 0.11659807956104253,
+        "itemID": 12
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "musiclal-notes_001",
+        "item": "musiclal-notes_001",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -74,
+        "y": 227,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -17,
+        "height": 40,
+        "ratio": 0.07104795737122557,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "Forever Loved",
+        "font": "62.59300341296928px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1,
+        "y": 44,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "24 January 1946",
+        "font": "51.212457337883954px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 25,
+        "y": -53,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 7,
+        "label": "ANNE OOI",
+        "font": "51.212457337883954px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 28,
+        "y": -97,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 16
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1715137184241,
+        "path": "../upload/2024/05/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1715137184241img20240325wa0007_croppe.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": 5,
+        "y": -292,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.46532606615418964,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG-20240325-WA0007.jpg",
+        "price": 232,
+        "quantity": 1,
+        "size": "70 x 90 mm",
+        "itemID": 17
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_175_07",
+        "item": "1_175_07",
+        "price": 217.12343499999997,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -216.06149704280006,
+        "y": 258,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 52,
+        "ratio": 0.10766045548654245,
+        "itemID": 18
+      }
+    ]
+  }
+}

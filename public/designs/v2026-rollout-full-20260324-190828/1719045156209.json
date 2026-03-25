@@ -1,0 +1,361 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.237Z",
+  "units": "mm",
+  "source": {
+    "id": "1719045156209",
+    "slug": "legacy-1719045156209",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1719045156209.json",
+    "savedAt": "2024-06-22T08:32:36.209Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 750,
+      "height_mm": 750
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 880,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 750,
+      "height_mm": 750,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 850,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Estella Dawson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": 2.837,
+          "y_px": -243.44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "&apos;In Loving Memory of a Life",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 15.824,
+          "y_px": -149.122
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "So Beautifully Lived & Deeply Loved&apos;",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 11.076,
+          "y_px": -94.325
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Forever in our Hearts",
+        "font": {
+          "family": "Garamond",
+          "size_px": 67
+        },
+        "position": {
+          "x_px": 7.12,
+          "y_px": 530.379
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "21 March 1948 - 9 October 1995",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 11.188,
+          "y_px": 438.535
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ae022499823e27ef5f43cefc89921f9f9c72330630084c0f6cebed48e4704ac4",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.237Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 3831.8,
+        "quantity": 1,
+        "width": 750,
+        "height": 750,
+        "_length": 90,
+        "init_width": 360,
+        "init_height": 685,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 360x880"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 908,
+        "quantity": 1,
+        "width": 850,
+        "height": 100,
+        "_length": 250,
+        "init_width": 360,
+        "init_height": 685,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1718170546212,
+        "path": "../upload/2024/06/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17181705462121647151466513_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 15.163238525390625,
+        "y": 168.16644287109375,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.3218933287600754,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1647151466513.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 366,
+        "width": "468",
+        "height": "453",
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Alan Alfred Connors",
+        "font": "94.15058823529411px Garamond",
+        "font_size": 76,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2.837493896484375,
+        "y": -243.4398193359375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "&apos;In Loving Memory of a Life",
+        "font": "39.64235294117647px Great Vibes",
+        "font_size": 32,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 15.824203491210938,
+        "y": -149.1219482421875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "So Beautifully Lived & Deeply Loved&apos;",
+        "font": "42.12px Great Vibes",
+        "font_size": 34,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 11.076278686523438,
+        "y": -94.32525634765625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever in our Hearts",
+        "font": "83.00117647058823px Garamond",
+        "font_size": 67,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 7.1201934814453125,
+        "y": 530.3789672851562,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "21 March 1948 - 9 October 1995",
+        "font": "43.358823529411765px Great Vibes",
+        "font_size": 35,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 11.187530517578125,
+        "y": 438.5350341796875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 7
+      }
+    ]
+  }
+}

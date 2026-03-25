@@ -1,0 +1,390 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.155Z",
+  "units": "mm",
+  "source": {
+    "id": "1712825313639",
+    "slug": "legacy-1712825313639",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1712825313639.json",
+    "savedAt": "2024-04-11T08:48:33.639Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 927.0999999999999,
+      "height_mm": 768.3499999999999
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 927.0999999999999,
+      "height_mm": 768.3499999999999,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Witzell",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 126
+        },
+        "position": {
+          "x_px": -35,
+          "y_px": -176.144
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Irma Olson",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 73
+        },
+        "position": {
+          "x_px": -213.75,
+          "y_px": 1.249
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1939-202",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 83
+        },
+        "position": {
+          "x_px": 173.75,
+          "y_px": -16.24
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Elizabeth Palmer",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 79
+        },
+        "position": {
+          "x_px": -215,
+          "y_px": 84.949
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "1938-202",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 83
+        },
+        "position": {
+          "x_px": 166.25,
+          "y_px": 73.706
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Till we meet again",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 84
+        },
+        "position": {
+          "x_px": -15,
+          "y_px": 289.826
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "1_156_12",
+        "position": {
+          "x_px": 288.75,
+          "y_px": 227.363
+        },
+        "height_px": 244,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_156_12",
+        "path": "/shapes/motifs/1_156_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "66f9b9a4d1075c6d0ae808439016545fd3bcc0de1988d558773aac7644d2f8cf",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.155Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2717.86,
+        "quantity": 1,
+        "width": 927.0999999999999,
+        "height": 768.3499999999999,
+        "_length": 90,
+        "init_width": 1296,
+        "init_height": 666,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 7,
+        "label": "Witzell",
+        "font": "110.31455614281091px Lucida Calligraphy",
+        "font_size": 126,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -35,
+        "y": -176.14414414414418,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 109,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 7,
+        "label": "Alfred V",
+        "font": "63.91240157480315px Lucida Calligraphy",
+        "font_size": 73,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -213.75,
+        "y": 1.2492492492492033,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 87,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "1939-202",
+        "font": "72.66752507820084px Lucida Calligraphy",
+        "font_size": 83,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 173.75,
+        "y": -16.240240240240325,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 4,
+        "label": "Ann L",
+        "font": "69.16547567684177px Lucida Calligraphy",
+        "font_size": 79,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -215,
+        "y": 84.9489489489489,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 8,
+        "label": "1938-202",
+        "font": "72.66752507820084px Lucida Calligraphy",
+        "font_size": 83,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 166.25,
+        "y": 73.70570570570578,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 70,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 15,
+        "label": "Till we meet again",
+        "font": "73.54303742854061px Great Vibes",
+        "font_size": 84,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -15,
+        "y": 289.82582582582586,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 90,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_12",
+        "item": "1_156_12",
+        "price": 262.196395,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 288.75,
+        "y": 227.36336336336342,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 244,
+        "ratio": 0.2782212086659065,
+        "itemID": 7
+      }
+    ]
+  }
+}

@@ -1,0 +1,507 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.634Z",
+  "units": "mm",
+  "source": {
+    "id": "1581911579720",
+    "slug": "legacy-1581911579720",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1581911579720.json",
+    "savedAt": "2020-02-17T03:52:59.720Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 146,
+      "height_mm": 146
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 593,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 146,
+      "height_mm": 146,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Melinda Collins",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -166
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -232
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "17/8/1921- 9/6/2019",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": 214
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Whether family, friend",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 35,
+          "y_px": -88
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "or stranger, her kind",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 37,
+          "y_px": -44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "and generous nature",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 42,
+          "y_px": 1
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "always shone through.",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 47,
+          "y_px": 42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Too well-loved",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 35,
+          "y_px": 95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "to ever be forgotten",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 47,
+          "y_px": 141
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "1_155_08",
+        "position": {
+          "x_px": -190,
+          "y_px": 55
+        },
+        "height_px": 49,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_08",
+        "path": "/shapes/motifs/1_155_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9300d365c03e756d0a34c405fb9c4582c769ad3b1ebedd4fdca0f86d5df6e1d5",
+    "sourceItemCount": 11,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.634Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "415.33",
+        "quantity": 1,
+        "width": 146,
+        "height": 146,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 593,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_08",
+        "item": "1_155_08",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -190,
+        "y": 55,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 49,
+        "ratio": 0.08166666666666667,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Ruth Feeney",
+        "font": "95.04246575342465px Chopin Script",
+        "font_size": 24,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": -166,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 24,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "In loving memory of",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": -232,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 12,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "17/8/1921- 9/6/2019",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 18,
+        "y": 214,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 9,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Whether family, friend",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 35,
+        "y": -88,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "or stranger, her kind",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 37,
+        "y": -44,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "and generous nature",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 42,
+        "y": 1,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 11,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "always shone through.",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 47,
+        "y": 42,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Too well-loved",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 35,
+        "y": 95,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "to ever be forgotten",
+        "font": "47.521232876712325px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 47,
+        "y": 141,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 11
+      }
+    ]
+  }
+}

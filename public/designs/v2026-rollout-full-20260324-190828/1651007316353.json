@@ -1,0 +1,218 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:32.069Z",
+  "units": "mm",
+  "source": {
+    "id": "1651007316353",
+    "slug": "legacy-1651007316353",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1651007316353.json",
+    "savedAt": "2022-04-26T21:08:36.353Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 873,
+      "height_mm": 987
+    },
+    "viewportPx": {
+      "width": 1067,
+      "height": 667,
+      "dpr": 1.4174998998641968
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 873,
+      "height_mm": 987,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 973,
+      "height_mm": 100,
+      "depth_mm": 80,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 271,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -488.882,
+          "y_px": -158.589
+        },
+        "height_px": 302,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e8feac85a358af565b9e6cbee5dc18bda2991bfcec285d03fcefb90cb4ce5aa9",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:32.069Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 6541.65,
+        "quantity": 1,
+        "width": 873,
+        "height": 987,
+        "_length": 100,
+        "init_width": 946,
+        "init_height": 548.0008773803711,
+        "device": "desktop",
+        "dpr": 1.4174998998641968,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220412,
+        "mode": "3d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36, 1067x667"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1448.41,
+        "quantity": 1,
+        "width": 973,
+        "height": 100,
+        "_length": 80,
+        "init_width": 946,
+        "init_height": 548.0008773803711,
+        "mode": "3d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 271,
+        "ratio": 0.4865350089766607,
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -488.88199778319665,
+        "y": -158.5887363625202,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 302,
+        "ratio": 0.5421903052064632,
+        "itemID": 6
+      }
+    ]
+  }
+}

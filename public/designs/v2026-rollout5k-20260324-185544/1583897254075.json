@@ -1,0 +1,171 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.729Z",
+  "units": "mm",
+  "source": {
+    "id": "1583897254075",
+    "slug": "legacy-1583897254075",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1583897254075.json",
+    "savedAt": "2020-03-11T03:27:34.075Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Circle",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 400,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 920,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 400,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "test",
+        "font": {
+          "family": "Arial",
+          "size_px": 93
+        },
+        "position": {
+          "x_px": 220,
+          "y_px": -13
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "73dc6f08f1be15e813480cdd6d8da1e77f34cedb8a874aefdb75a94a0246df75",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.729Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border Circle",
+        "shape_url": "shapes/photos/bordercircle.svg",
+        "fixingSystem": 2,
+        "shape": "Circle",
+        "color": "#24160b",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "1448.88",
+        "quantity": 1,
+        "width": 400,
+        "height": 400,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 920,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "test",
+        "font": "208.5525px Arial",
+        "font_size": 93,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 220,
+        "y": -13,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 1
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br146-mormon",
+        "color": "#ffb35a",
+        "x": -284,
+        "y": -21,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.73125,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br146-mormon",
+        "price": 99,
+        "quantity": 1,
+        "size": "150 x 150 mm",
+        "itemID": 2
+      }
+    ]
+  }
+}

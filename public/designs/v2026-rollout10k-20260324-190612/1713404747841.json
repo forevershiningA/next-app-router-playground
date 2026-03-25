@@ -1,0 +1,155 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.426Z",
+  "units": "mm",
+  "source": {
+    "id": "1713404747841",
+    "slug": "legacy-1713404747841",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1713404747841.json",
+    "savedAt": "2024-04-18T01:45:47.841Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "1066.8",
+      "height_mm": 914.4
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 844,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "1066.8",
+      "height_mm": 914.4,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_157_19",
+        "position": {
+          "x_px": 372,
+          "y_px": 185
+        },
+        "height_px": 527,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_157_19",
+        "path": "/shapes/motifs/1_157_19.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fd9aa6d6b271864f7a57f67bbc1ffa1a890c7c81cd07ed123c62828fbbce6691",
+    "sourceItemCount": 2,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.426Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 3457.78,
+        "quantity": 1,
+        "width": "1066.8",
+        "height": 914.4,
+        "_length": 100,
+        "init_width": 390,
+        "init_height": 607,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 390x844"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_157_19",
+        "item": "1_157_19",
+        "price": 328.63205999999997,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 372,
+        "y": 185,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 527,
+        "ratio": 0.6303827751196173,
+        "itemID": 1
+      }
+    ]
+  }
+}

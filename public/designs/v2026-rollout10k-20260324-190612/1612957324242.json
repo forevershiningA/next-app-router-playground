@@ -1,0 +1,448 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:14.291Z",
+  "units": "mm",
+  "source": {
+    "id": "1612957324242",
+    "slug": "legacy-1612957324242",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1612957324242.json",
+    "savedAt": "2021-02-10T11:42:04.242Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 848,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Lemuel Bryant",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 105.178,
+          "y_px": -183.286
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "02.03.1963 - 04.02.2015",
+        "font": {
+          "family": "Garamond",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 111.339,
+          "y_px": -108.131
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Aged 51",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 100.14,
+          "y_px": -42.32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "A loving Husband to Debra, devoted",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -13.8,
+          "y_px": 35.4
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "Dad to Caitlin, Amanda and Lauren",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 109.86
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-36",
+        "text": "A beloved Grandfather and family man",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -8.92,
+          "y_px": 188.98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 101.08,
+          "y_px": -261.36
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-40",
+        "text": "His life a beautiful memory, his absence a silent grief",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 260
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fc709d0669eb778bb44fa7abccd840631ba2daddbff79d2cfb2a1d858e7b7b56",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:14.291Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "price": 669.08,
+        "quantity": 1,
+        "width": 250,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 848,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1612955168333fb_image_2_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -279,
+        "y": -148,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7020000000000001,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "fb image 2.jpg",
+        "price": 232,
+        "quantity": 1,
+        "size": "70 x 90 mm",
+        "itemID": 39
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Vaughan David Pugh",
+        "font": "69.45120000000001px Chopin Script",
+        "font_size": 21,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 105.178,
+        "y": -183.28600000000006,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "02.03.1963 - 04.02.2015",
+        "font": "52.915200000000006px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 111.33879999999999,
+        "y": -108.13080000000002,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Aged 51",
+        "font": "56.22240000000001px Chopin Script",
+        "font_size": 17,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 100.13999999999999,
+        "y": -42.31999999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 20
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "A loving Husband to Debra, devoted",
+        "font": "56.22240000000001px Chopin Script",
+        "font_size": 17,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -13.799999999999955,
+        "y": 35.39999999999998,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 31
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Dad to Caitlin, Amanda and Lauren",
+        "font": "52.915200000000006px Chopin Script",
+        "font_size": 16,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1,
+        "y": 109.86000000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 32
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "A beloved Grandfather and family man",
+        "font": "52.915200000000006px Chopin Script",
+        "font_size": 16,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -8.919999999999959,
+        "y": 188.98000000000002,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 36
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "In loving memory of",
+        "font": "69.45120000000001px Chopin Script",
+        "font_size": 21,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 101.08000000000004,
+        "y": -261.36,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 18
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 55,
+        "label": "His life a beautiful memory, his absence a silent grief",
+        "font": "42.99360000000001px Chopin Script",
+        "font_size": 13,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": 260,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 40
+      }
+    ]
+  }
+}

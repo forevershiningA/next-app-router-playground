@@ -1,0 +1,360 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.420Z",
+  "units": "mm",
+  "source": {
+    "id": "1635045160211",
+    "slug": "legacy-1635045160211",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1635045160211.json",
+    "savedAt": "2021-10-24T03:12:40.211Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Urn Heart",
+    "material": {
+      "name": "src/backgrounds/colors/l/34.jpg",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 302,
+      "height_mm": 307
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 302,
+      "height_mm": 307,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "GUY HERRERA",
+        "font": {
+          "family": "Adorable",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -178
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "13/08/1949 - 04/12/2012",
+        "font": {
+          "family": "Adorable",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -105
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "IN LOVING MEMORY OF",
+        "font": {
+          "family": "Adorable",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -163,
+          "y_px": -254
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "butterfly_028",
+        "position": {
+          "x_px": 233,
+          "y_px": -308
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": -14
+        },
+        "color": "#154733",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "butterfly_009",
+        "position": {
+          "x_px": 1,
+          "y_px": 339
+        },
+        "height_px": 27,
+        "rotation": {
+          "z_deg": -4
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-16",
+        "asset": "dragonfly_01",
+        "position": {
+          "x_px": -221,
+          "y_px": -330
+        },
+        "height_px": 26,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_028",
+        "path": "/shapes/motifs/butterfly_028.svg"
+      },
+      {
+        "id": "butterfly_009",
+        "path": "/shapes/motifs/butterfly_009.svg"
+      },
+      {
+        "id": "dragonfly_01",
+        "path": "/shapes/motifs/dragonfly_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3e1f558777e20bf6640f8f24863854f2ff4b5e3221c833c90d806b1c3de866a2",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.420Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Heart",
+        "border": "Border Heart",
+        "shape_url": "shapes/photos/borderheart.svg",
+        "shape": "Urn Heart",
+        "color": "../upload/2021/10/1635045236477background_6_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "price": 2606.62,
+        "quantity": 1,
+        "width": 302,
+        "height": 307,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 905,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20211018,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "BARBARA ANN RASH",
+        "font": "68.98045602605863px Adorable",
+        "font_size": 24,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -1,
+        "y": -178,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "13/08/1949 - 04/12/2012",
+        "font": "54.60952768729641px Adorable",
+        "font_size": 19,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": -105,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_028",
+        "item": "butterfly_028",
+        "price": 0,
+        "quantity": 1,
+        "color": "#154733",
+        "colorName": "Paint Fill",
+        "x": 233,
+        "y": -308,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -14,
+        "height": 40,
+        "ratio": 0.04419889502762431,
+        "itemID": 9
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_009",
+        "item": "butterfly_009",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": 339,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -4,
+        "height": 27,
+        "ratio": 0.02983425414364641,
+        "itemID": 10
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dragonfly_01",
+        "item": "dragonfly_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#154733",
+        "colorName": "Paint Fill",
+        "x": -221,
+        "y": -330,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 26,
+        "ratio": 0.028729281767955802,
+        "itemID": 16
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "IN LOVING MEMORY OF",
+        "font": "37.36441368078176px Adorable",
+        "font_size": 13,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -163,
+        "y": -254,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 1
+      }
+    ]
+  }
+}

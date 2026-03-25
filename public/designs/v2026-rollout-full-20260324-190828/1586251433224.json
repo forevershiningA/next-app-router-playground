@@ -1,0 +1,446 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.188Z",
+  "units": "mm",
+  "source": {
+    "id": "1586251433224",
+    "slug": "legacy-1586251433224",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1586251433224.json",
+    "savedAt": "2020-04-07T09:23:53.224Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 230,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 600,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 230,
+      "height_mm": 150,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "French Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 54.052,
+          "y_px": -140.663
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Brian Clifford McGrath",
+        "font": {
+          "family": "French Script",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 53.06,
+          "y_px": -74.771
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "of",
+        "font": {
+          "family": "French Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 60.828,
+          "y_px": -112.748
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "they walk with us everyday. Always near,",
+        "font": {
+          "family": "French Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -2.589,
+          "y_px": 102.648
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Aged 76",
+        "font": {
+          "family": "French Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 50.967,
+          "y_px": -5.939
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "18/03/1943 - 20/11/2019",
+        "font": {
+          "family": "French Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 51.077,
+          "y_px": -32.774
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "deeply missed and loved so dear.",
+        "font": {
+          "family": "French Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -1.589,
+          "y_px": 140.539
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Those we love are never far away,",
+        "font": {
+          "family": "French Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -1.926,
+          "y_px": 67.506
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "40b89ce8a9883055ed3f1cdba65d2ccb31332cf5ff2a30d18a5777b9abed1400",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.188Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "556.66",
+        "quantity": 1,
+        "width": 230,
+        "height": 150,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 600,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1585735878688brian_mcgrath__portrait_.jpg",
+        "color": "0",
+        "mask": 0,
+        "x": -208.2054512128372,
+        "y": -82.33852788175082,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5934782608695653,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Brian McGrath - Portrait final .jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory",
+        "font": "50.86956521739131px French Script",
+        "font_size": 20,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 54.05162192688215,
+        "y": -140.66315632833692,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Brian Clifford McGrath",
+        "font": "48.32608695652174px French Script",
+        "font_size": 19,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 53.05995405091642,
+        "y": -74.77136799334266,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 18,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "of",
+        "font": "38.152173913043484px French Script",
+        "font_size": 15,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 60.82837477911562,
+        "y": -112.7479595486254,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 13,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "they walk with us everyday. Always near,",
+        "font": "38.152173913043484px French Script",
+        "font_size": 15,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2.5889155862167854,
+        "y": 102.64757145994287,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 14,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Aged 76",
+        "font": "38.152173913043484px French Script",
+        "font_size": 15,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 50.967053075172544,
+        "y": -5.939239303803333,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 14,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "18/03/1943 - 20/11/2019",
+        "font": "38.152173913043484px French Script",
+        "font_size": 15,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 51.077435057429966,
+        "y": -32.77445234805208,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 11,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "deeply missed and loved so dear.",
+        "font": "38.152173913043484px French Script",
+        "font_size": 15,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.5889155862167854,
+        "y": 140.538875807769,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 13,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Those we love are never far away,",
+        "font": "38.152173913043484px French Script",
+        "font_size": 15,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.9261578449904846,
+        "y": 67.50558246691872,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      }
+    ]
+  }
+}

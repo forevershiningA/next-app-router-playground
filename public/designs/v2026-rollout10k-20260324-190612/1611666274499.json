@@ -1,0 +1,263 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:14.251Z",
+  "units": "mm",
+  "source": {
+    "id": "1611666274499",
+    "slug": "legacy-1611666274499",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1611666274499.json",
+    "savedAt": "2021-01-26T13:04:34.499Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 2",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 816,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_143_22",
+        "position": {
+          "x_px": -212,
+          "y_px": 173
+        },
+        "height_px": 86,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_134_01",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 104,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "horse_003",
+        "position": {
+          "x_px": -32,
+          "y_px": -234
+        },
+        "height_px": 84,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_143_22",
+        "path": "/shapes/motifs/1_143_22.svg"
+      },
+      {
+        "id": "1_134_01",
+        "path": "/shapes/motifs/1_134_01.svg"
+      },
+      {
+        "id": "horse_003",
+        "path": "/shapes/motifs/horse_003.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "021dc13632d55d0eae153bdee6641fe995a3be31a88deea31e6ae29dc5c49f07",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:14.251Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Headstone 2",
+        "shape": "Headstone 2",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1810.7,
+        "quantity": 1,
+        "width": 560,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 816,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1611666307655,
+        "path": "../upload/2021/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1611666307655fb_img_1611659309197_cro.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -268,
+        "y": -69,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.41600000000000004,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1611659309197.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 128,
+        "width": "119",
+        "height": "170",
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_22",
+        "item": "1_143_22",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -212,
+        "y": 173,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 86,
+        "ratio": 0.18105263157894738,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_134_01",
+        "item": "1_134_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 104,
+        "ratio": 0.11403508771929824,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "horse_003",
+        "item": "horse_003",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -32,
+        "y": -234,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 84,
+        "ratio": 0.10294117647058823,
+        "itemID": 4
+      }
+    ]
+  }
+}

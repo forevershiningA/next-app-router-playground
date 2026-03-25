@@ -1,0 +1,357 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.440Z",
+  "units": "mm",
+  "source": {
+    "id": "1716498569687",
+    "slug": "legacy-1716498569687",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1716498569687.json",
+    "savedAt": "2024-05-23T21:09:29.687Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 599,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 599,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Hixson",
+        "font": {
+          "family": "French Script",
+          "size_px": 78
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -402
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Irvin",
+        "font": {
+          "family": "French Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": -237
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Sara",
+        "font": {
+          "family": "French Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -288,
+          "y_px": -156
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Maybelle",
+        "font": {
+          "family": "French Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 324,
+          "y_px": -174
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Souls of my soul",
+        "font": {
+          "family": "French Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 228
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6b9a3858bfd03320196b1f3051b0ef50892334a97dcf5940268a3d2fa8346ebb",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.441Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1457.21,
+        "quantity": 1,
+        "width": 599,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1200,
+        "init_height": 609,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 6,
+        "label": "Hixson",
+        "font": "151.95029527559058px French Script",
+        "font_size": 78,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6,
+        "y": -402,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 8,
+        "label": "Caroline",
+        "font": "97.40403543307087px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 4,
+        "y": -237,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 5,
+        "label": "Dixie",
+        "font": "97.40403543307087px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -288,
+        "y": -156,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 8,
+        "label": "Maybelle",
+        "font": "97.40403543307087px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 324,
+        "y": -174,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 13,
+        "label": "Souls of my soul",
+        "font": "77.92322834645671px French Script",
+        "font_size": 40,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2,
+        "y": 228,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 5
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1716498675644,
+        "path": "../upload/2024/05/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1716498675644dixie_day_1_back_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -274,
+        "y": 20,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9580724796695496,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Dixie Day 1 (back).jpeg",
+        "price": 350,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 6
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1716500048649,
+        "path": "../upload/2024/05/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1716500048649maybelle_back_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 278,
+        "y": 16,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9580724796695496,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Maybelle Back.jpg",
+        "price": 350,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 7
+      }
+    ]
+  }
+}

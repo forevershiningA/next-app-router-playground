@@ -1,0 +1,335 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.238Z",
+  "units": "mm",
+  "source": {
+    "id": "1668646222226",
+    "slug": "legacy-1668646222226",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1668646222226.json",
+    "savedAt": "2022-11-17T00:50:22.226Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 604,
+      "height_mm": 614
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1200,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 604,
+      "height_mm": 614,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 704,
+      "height_mm": 100,
+      "depth_mm": "130",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "MERLE DAVIS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -262
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "(JEWELL)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -157
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "14.6.1931 - 19.6.2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Beloved wife of Neil",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 67
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_154_13",
+        "position": {
+          "x_px": -1,
+          "y_px": 184
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_13",
+        "path": "/shapes/motifs/1_154_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "10a52578ceea8ce76cf74609a126b5d04ec7d0faa697af81fea7209a6b856dd2",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.238Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1481.55,
+        "quantity": 1,
+        "width": 604,
+        "height": 614,
+        "_length": 80,
+        "init_width": 1680,
+        "init_height": 993,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221116,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1200"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "price": 581,
+        "quantity": 1,
+        "width": 704,
+        "height": 100,
+        "_length": "130",
+        "init_width": 1680,
+        "init_height": 993,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_13",
+        "item": "1_154_13",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -1,
+        "y": 184,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1072961373390558,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "MERLE DAVIS",
+        "font": "69.15535714285714px Garamond",
+        "font_size": 51,
+        "font_family": "Garamond",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": -262,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 8,
+        "label": "(JEWELL)",
+        "font": "54.23949579831933px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": -157,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "14.6.1931 - 19.6.2022",
+        "font": "55.59548319327731px Garamond",
+        "font_size": 41,
+        "font_family": "Garamond",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": -5,
+        "y": -52,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "Beloved wife of Neil",
+        "font": "48.8155462184874px Lucida Calligraphy",
+        "font_size": 36,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": 67,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 4
+      }
+    ]
+  }
+}

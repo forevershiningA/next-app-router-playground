@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project default="build">
+	
+	<property name="ANT_DIR" location="../../../ant"/>
+	
+	<target name="build">
+		
+		<ant antfile="${ANT_DIR}/build-all.xml" useNativeBasedir="true">
+			<property name="base.dir" location="."/>
+		</ant>
+		
+	</target>
+	
+</project>

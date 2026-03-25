@@ -1,0 +1,111 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:14.047Z",
+  "units": "mm",
+  "source": {
+    "id": "1606989170159",
+    "slug": "legacy-1606989170159",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1606989170159.json",
+    "savedAt": "2020-12-03T09:52:50.159Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Circle",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 400,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1142,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 400,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "da50670352b280285552e2cf5c92ffe563176b28ee8ec6c52ed81d2859db1d6b",
+    "sourceItemCount": 1,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:14.047Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border Circle",
+        "shape_url": "shapes/photos/bordercircle.svg",
+        "fixingSystem": 2,
+        "shape": "Circle",
+        "color": "#24160b",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 1448.88,
+        "quantity": 1,
+        "width": 400,
+        "height": 400,
+        "_length": 1,
+        "init_width": 1142,
+        "init_height": 873,
+        "mode": "2d"
+      }
+    ]
+  }
+}

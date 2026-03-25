@@ -1,0 +1,491 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.421Z",
+  "units": "mm",
+  "source": {
+    "id": "1716233294884",
+    "slug": "legacy-1716233294884",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1716233294884.json",
+    "savedAt": "2024-05-20T19:28:14.884Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/Paradiso.jpg",
+      "texture": "/textures/forever/l/Paradiso.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 820,
+      "height": 1180,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Paradiso.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Paradiso.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Marion Elizabeth (Pitblado)",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": 18.692,
+          "y_px": -124.376
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "March 03, 1936 - Sept. 01, 2024",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -10.717,
+          "y_px": -16.251
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "(Margaret) Delynne",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -52.775,
+          "y_px": 643.214
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "May 23, 1961 -",
+        "font": {
+          "family": "Arial",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -135.719,
+          "y_px": 1176.908
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "IN LOVING MEMORY",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": -5.499,
+          "y_px": -337.293
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "You will always be in our hearts",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -48.219,
+          "y_px": -251.592
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "May 23, 1961-",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -183.578,
+          "y_px": 851.92
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "ARMSTRONG",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 98
+        },
+        "position": {
+          "x_px": 36.133,
+          "y_px": -552.958
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "hummingbird_001",
+        "position": {
+          "x_px": 3.251,
+          "y_px": 264.299
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": -1
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "hummingbird_001",
+        "path": "/shapes/motifs/hummingbird_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "98adfd0b263b4de337d97c8beeca199965db57589fde75cc2e9b2d7df298ba17",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.421Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Paradiso.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 820,
+        "init_height": 1009,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 820x1180"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Paradiso.jpg",
+        "price": 593,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 820,
+        "init_height": 1009,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "hummingbird_001",
+        "item": "hummingbird_001",
+        "price": 221.81853499999997,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 3.2507433102081267,
+        "y": 264.29892141756545,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -1,
+        "height": 72,
+        "ratio": 0.46153846153846156,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 25,
+        "label": "Marion Elizabeth (Pitblado)",
+        "font": "110.16732283464566px Franklin Gothic",
+        "font_size": 49,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 18.691774033696728,
+        "y": -124.37596302003081,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 25,
+        "label": "March 03, 1936 - Sept. 01, 2024",
+        "font": "85.43588301462317px Franklin Gothic",
+        "font_size": 38,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -10.717143331424491,
+        "y": -16.25128145469734,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 17,
+        "label": "(Margaret) Delynne",
+        "font": "107.91901012373452px Franklin Gothic",
+        "font_size": 48,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -52.77544714025698,
+        "y": 643.2144130711943,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "May 23, 1961 -",
+        "font": "80.9392575928009px Arial",
+        "font_size": 36,
+        "font_family": "Arial",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -135.7185332011893,
+        "y": 1176.9075500770416,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "IN LOVING MEMORY",
+        "font": "114.66394825646793px Franklin Gothic",
+        "font_size": 51,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5.4985133795837555,
+        "y": -337.29275808936825,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 26,
+        "label": "You will always be in our hearts",
+        "font": "76.44263217097863px Franklin Gothic",
+        "font_size": 34,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -48.21868787276344,
+        "y": -251.59166460269682,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "May 23, 1961-",
+        "font": "85.43588301462317px Franklin Gothic",
+        "font_size": 38,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -183.57839896825493,
+        "y": 851.9202494770907,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 9,
+        "label": "PATTERSON",
+        "font": "220.33464566929132px Franklin Gothic",
+        "font_size": 98,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 36.13280475718534,
+        "y": -552.9583975346687,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 68,
+        "itemID": 9
+      }
+    ]
+  }
+}

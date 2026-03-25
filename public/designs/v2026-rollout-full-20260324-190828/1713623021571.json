@@ -1,0 +1,669 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:35.908Z",
+  "units": "mm",
+  "source": {
+    "id": "1713623021571",
+    "slug": "legacy-1713623021571",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1713623021571.json",
+    "savedAt": "2024-04-20T14:23:41.571Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "Lillian Marquez",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -189
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -254
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Always in our thoughts & hearts. Until we meet again...",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 253
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Beloved Partner, Fur Dad, Son, Brother, Uncle & Friend.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 211
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "24/11/1983 - 05/02/2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -125
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_147_11",
+        "position": {
+          "x_px": -10,
+          "y_px": 40
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "2_068_04",
+        "position": {
+          "x_px": -256,
+          "y_px": 37
+        },
+        "height_px": 63,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "paw_001",
+        "position": {
+          "x_px": 187,
+          "y_px": -2
+        },
+        "height_px": 34,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "paw_001",
+        "position": {
+          "x_px": 305,
+          "y_px": -1
+        },
+        "height_px": 34,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "paw_001",
+        "position": {
+          "x_px": 245,
+          "y_px": 91
+        },
+        "height_px": 27,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "paw_001",
+        "position": {
+          "x_px": 313,
+          "y_px": 75
+        },
+        "height_px": 14,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "musiclal-notes_001",
+        "position": {
+          "x_px": 356,
+          "y_px": -198
+        },
+        "height_px": 25,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "musiclal-notes_001",
+        "position": {
+          "x_px": -358,
+          "y_px": -201
+        },
+        "height_px": 25,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "paw_001",
+        "position": {
+          "x_px": 176.744,
+          "y_px": 71
+        },
+        "height_px": 14,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_147_11",
+        "path": "/shapes/motifs/1_147_11.svg"
+      },
+      {
+        "id": "2_068_04",
+        "path": "/shapes/motifs/2_068_04.svg"
+      },
+      {
+        "id": "paw_001",
+        "path": "/shapes/motifs/paw_001.svg"
+      },
+      {
+        "id": "musiclal-notes_001",
+        "path": "/shapes/motifs/musiclal-notes_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "11201ac939e3e49359777d6a5acf697ba037aaa7e25429886b8bd613655abb0f",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:35.908Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (Holes in the centre of the two sides)",
+        "price": 343.64,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 2,
+        "init_width": 1632,
+        "init_height": 902,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_147_11",
+        "item": "1_147_11",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -10,
+        "y": 40,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.13440860215053763,
+        "itemID": 1
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_068_04",
+        "item": "2_068_04",
+        "price": 20.594469999999998,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -256,
+        "y": 37,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 63,
+        "ratio": 0.10413223140495868,
+        "itemID": 2
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "paw_001",
+        "item": "paw_001",
+        "price": 12.099620000000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 187,
+        "y": -2,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 34,
+        "ratio": 0.036093418259023353,
+        "itemID": 3
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "paw_001",
+        "item": "paw_001",
+        "price": 12.099620000000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 305,
+        "y": -1,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 34,
+        "ratio": 0.036093418259023353,
+        "itemID": 4
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "paw_001",
+        "item": "paw_001",
+        "price": 10.157940000000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 245,
+        "y": 91,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 27,
+        "ratio": 0.028662420382165606,
+        "itemID": 5
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "paw_001",
+        "item": "paw_001",
+        "price": 6.760000000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 313,
+        "y": 75,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 14,
+        "ratio": 0.014861995753715499,
+        "itemID": 6
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Adrian \"AJ\" Smith",
+        "font": "82.082px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -2,
+        "y": -189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 9
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "musiclal-notes_001",
+        "item": "musiclal-notes_001",
+        "price": 9.187100000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 356,
+        "y": -198,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 25,
+        "ratio": 0.04440497335701599,
+        "itemID": 10
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "musiclal-notes_001",
+        "item": "musiclal-notes_001",
+        "price": 9.187100000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -358,
+        "y": -201,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 25,
+        "ratio": 0.04440497335701599,
+        "itemID": 11
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "paw_001",
+        "item": "paw_001",
+        "price": 6.760000000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 176.74427494692145,
+        "y": 71,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 14,
+        "ratio": 0.014861995753715499,
+        "itemID": 15
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "38.1095px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -10,
+        "y": -254,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 8
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "Always in our thoughts & hearts. Until we meet again...",
+        "font": "38.1095px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 13
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 47,
+        "label": "Beloved Partner, Fur Dad, Son, Brother, Uncle & Friend.",
+        "font": "38.1095px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 211,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 14
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "24/11/1983 - 05/02/2024",
+        "font": "43.9725px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -6,
+        "y": -125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 12
+      }
+    ]
+  }
+}

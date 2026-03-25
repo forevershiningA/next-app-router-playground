@@ -1,21 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
-import { loadCanonicalDesignIntoEditor, DEFAULT_CANONICAL_DESIGN_VERSION, type CanonicalDesignData } from '#/lib/saved-design-loader-utils';
-import { useHeadstoneStore } from '#/lib/headstone-store';
-
-const DEFAULT_DESIGN_ID = '1725769905504';
+import {
+  loadCanonicalDesignIntoEditor,
+  getCanonicalDesignUrl,
+  type CanonicalDesignData,
+} from '#/lib/saved-design-loader-utils';
 const isDevEnvironment = process.env.NODE_ENV !== 'production';
-
-// Routes where we should attempt to load the default design
-const DESIGNER_ROUTES = [
-  '/select-size',
-  '/select-material', 
-  '/inscriptions',
-  '/select-additions',
-  '/select-motifs',
-];
+const DEFAULT_DESIGN_ID = '1725769905504';
 
 /**
  * Component that loads the default canonical design on first designer visit
@@ -27,39 +18,42 @@ export default function DefaultDesignLoader() {
   return null;
 }
 
+export async function loadDesignById(designId: string) {
+  const canonicalDesignUrl = getCanonicalDesignUrl(designId);
+
+  try {
+    if (isDevEnvironment) {
+      console.log(`[loadDesignById] Loading canonical design: ${designId}`);
+    }
+
+    const response = await fetch(canonicalDesignUrl, { cache: 'no-cache' });
+    if (!response.ok) {
+      if (isDevEnvironment) {
+        console.warn(`[loadDesignById] Failed to fetch canonical design ${designId}:`, response.status);
+      }
+      return { success: false, message: 'Failed to fetch design' };
+    }
+
+    const canonicalData: CanonicalDesignData = await response.json();
+    await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
+
+    if (isDevEnvironment) {
+      console.log(`[loadDesignById] Successfully loaded canonical design ${designId}`);
+    }
+    return { success: true, message: 'Design loaded successfully' };
+  } catch (error) {
+    console.error(`[loadDesignById] Error loading canonical design ${designId}:`, error);
+    return { success: false, message: 'Error loading design' };
+  }
+}
+
 /**
  * Hook to load a specific canonical design programmatically
  * Used by the "Load Design" buttons
  * Always allows reloading - clears existing design each time
  */
 export function useLoadDesign(designId: string) {
-  const loadDesign = async () => {
-    const canonicalDesignUrl = `/canonical-designs/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json`;
-
-    try {
-      console.log(`[useLoadDesign] Loading canonical design: ${designId}`);
-      
-      const response = await fetch(canonicalDesignUrl, { cache: 'no-cache' });
-      if (!response.ok) {
-        if (isDevEnvironment) {
-          console.warn(`[useLoadDesign] Failed to fetch canonical design ${designId}:`, response.status);
-        }
-        return { success: false, message: 'Failed to fetch design' };
-      }
-
-      const canonicalData: CanonicalDesignData = await response.json();
-      
-      await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
-      
-      if (isDevEnvironment) {
-        console.log(`[useLoadDesign] Successfully loaded canonical design ${designId}`);
-      }
-      return { success: true, message: 'Design loaded successfully' };
-    } catch (error) {
-      console.error(`[useLoadDesign] Error loading canonical design ${designId}:`, error);
-      return { success: false, message: 'Error loading design' };
-    }
-  };
+  const loadDesign = async () => loadDesignById(designId);
 
   return { loadDesign, isLoaded: false };
 }

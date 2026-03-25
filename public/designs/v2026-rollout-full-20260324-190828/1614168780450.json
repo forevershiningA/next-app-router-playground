@@ -1,0 +1,292 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.308Z",
+  "units": "mm",
+  "source": {
+    "id": "1614168780450",
+    "slug": "legacy-1614168780450",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1614168780450.json",
+    "savedAt": "2021-02-24T12:13:00.450Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle Landscape",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "180",
+      "height_mm": "240"
+    },
+    "viewportPx": {
+      "width": 1335,
+      "height": 774,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "180",
+      "height_mm": "240",
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "We will always hold you in our hearts and",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -0.299,
+          "y_px": 174.642
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Virgil Bishop",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -5.866,
+          "y_px": 252.801
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In loving memory of Annie and Sef",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": -2.66,
+          "y_px": -239.064
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "forever treasure your precious memory",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 2.27,
+          "y_px": 203.955
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8a5484da25aaf45cbbb27aaa7022f877bcaba58d2f0bc2294a7331a4c0fad72c",
+    "sourceItemCount": 6,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.308Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "name": "Rectangle (Landscape)",
+        "shape": "Rectangle Landscape",
+        "color": "1614173042637sunset_reflection_3840_x.jpg",
+        "fixed": 2,
+        "texture": "src/ceramic/l/01.jpg",
+        "price": 520,
+        "quantity": 1,
+        "width": "180",
+        "height": "240",
+        "_length": 1,
+        "init_width": 1335,
+        "init_height": 774,
+        "mode": "2d",
+        "backgroundOption": "photo"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1614168906493,
+        "path": "../upload/2021/02/",
+        "type": "Photo",
+        "item": "1614168906493mam__pap_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": -2.902462614322758,
+        "y": -30.803390864146138,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8130763729977116,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Mam & Pap.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 113,
+        "width": "518",
+        "height": "355",
+        "itemID": 1
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "We will always hold you in our hearts and",
+        "font": "31.443749999999998px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.2992778111961343,
+        "y": 174.64197549801918,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Lousanne  Marc  Louis  Rachel  Chloe",
+        "font": "31.443749999999998px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -5.865979381443253,
+        "y": 252.80140763571512,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 14
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "In loving memory of Annie and Sef",
+        "font": "34.588125px Lucida Calligraphy",
+        "font_size": 11,
+        "font_family": "Lucida Calligraphy",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -2.6597938144329873,
+        "y": -239.0635313341507,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "forever treasure your precious memory",
+        "font": "31.443749999999998px Lucida Calligraphy",
+        "font_size": 10,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2.2701432434666913,
+        "y": 203.95494857169842,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 13
+      }
+    ]
+  }
+}

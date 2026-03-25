@@ -1,0 +1,465 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.130Z",
+  "units": "mm",
+  "source": {
+    "id": "1695565355430",
+    "slug": "legacy-1695565355430",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1695565355430.json",
+    "savedAt": "2023-09-24T14:22:35.430Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 914.4,
+      "height_mm": 761.9999999999999
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 914.4,
+      "height_mm": 761.9999999999999,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1014.4,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Wally H.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 32.5,
+          "y_px": 28.725
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Bertie Guzman",
+        "font": {
+          "family": "Garamond",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": -68.75,
+          "y_px": 181.091
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "March 5, 1939  *",
+        "font": {
+          "family": "Garamond",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -180,
+          "y_px": 227.3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "PARADIS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 82
+        },
+        "position": {
+          "x_px": -8.75,
+          "y_px": -124.89
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Sept. 22, 1934 * Sept. 13, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 57.5,
+          "y_px": 77.432
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8e204e7acc964ec77ee15f11cefb94517da4e912b188dcf48ea716b6b1bd131d",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.130Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4627.01,
+        "quantity": 1,
+        "width": 914.4,
+        "height": 761.9999999999999,
+        "_length": 90,
+        "init_width": 1296,
+        "init_height": 683,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1004,
+        "quantity": 1,
+        "width": 1014.4,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1296,
+        "init_height": 683,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1695565974895,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1695565974895ship_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -516.25,
+        "y": -186.08638360175695,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36497772609354556,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Ship.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 153,
+        "width": "161",
+        "height": "125",
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1695570647092,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1695570647092img_6699_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": 211.25,
+        "y": 218.55783308931183,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.314882744080706,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_6699.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 132,
+        "width": "117",
+        "height": "108",
+        "itemID": 7
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1695571573760,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1695571573760img_6700_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.1192737666972371,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_6700.PNG",
+        "price": 80,
+        "quantity": 1,
+        "size": 50,
+        "width": "8676",
+        "height": "41",
+        "itemID": 8
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1695571921706,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1695571921706flowerss_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -1.25,
+        "y": -223.5534407027818,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2695587127357559,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerss.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 113,
+        "width": "430",
+        "height": "92",
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1695587405639,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1695587405639whale_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -206.25,
+        "y": 63.693997071742274,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.27671513873759007,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Whale.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 116,
+        "width": "141",
+        "height": "95",
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Wally H.",
+        "font": "37.52829795361869px Garamond",
+        "font_size": 46,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 32.5,
+        "y": 28.72474377745226,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Mary E. ( Keough )",
+        "font": "37.52829795361869px Garamond",
+        "font_size": 46,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -68.75,
+        "y": 181.09077598828702,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 47,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "March 5, 1939  *",
+        "font": "34.26496769678228px Garamond",
+        "font_size": 42,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -180,
+        "y": 227.3001464128842,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "PARADIS",
+        "font": "66.89827026514635px Garamond",
+        "font_size": 82,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -8.75,
+        "y": -124.89019033674961,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Sept. 22, 1934 * Sept. 13, 2023",
+        "font": "32.63330256836407px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 57.5,
+        "y": 77.43191800878475,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 4
+      }
+    ]
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.633Z",
+  "units": "mm",
+  "source": {
+    "id": "1755892723342",
+    "slug": "legacy-1755892723342",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1755892723342.json",
+    "savedAt": "2025-08-22T19:58:43.342Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 1079.5
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 1.75
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 1079.5,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Bowser",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 120
+        },
+        "position": {
+          "x_px": -0.911,
+          "y_px": -1.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "flower_011",
+        "position": {
+          "x_px": -5.243,
+          "y_px": -103.25
+        },
+        "height_px": 169,
+        "rotation": {
+          "z_deg": -59
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "flower_011",
+        "path": "/shapes/motifs/flower_011.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4cf21c745617241d63522403cbef13a2d8ca28136ed2f6e712956170e7dafbc9",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.633Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2572.78,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 1079.5,
+        "_length": 100,
+        "init_width": 329,
+        "init_height": 236,
+        "device": "desktop",
+        "dpr": 1.75,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 565,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 329,
+        "init_height": 236,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_011",
+        "item": "flower_011",
+        "price": 229.72092000000004,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -5.243161094224888,
+        "y": -103.25,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -59,
+        "height": 169,
+        "ratio": 0.49127906976744184,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 10,
+        "quantity": 6,
+        "label": "Bowser",
+        "font": "40.91186182372365px Lucida Calligraphy",
+        "font_size": 120,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.9113896148930962,
+        "y": -1.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 88,
+        "itemID": 1
+      }
+    ]
+  }
+}

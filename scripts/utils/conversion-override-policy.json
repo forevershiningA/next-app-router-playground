@@ -1,0 +1,37 @@
+{
+  "version": "1",
+  "warningWeights": {
+    "missing-device": 1,
+    "missing-dpr": 1,
+    "missing-viewport-metadata": 2,
+    "missing-productid": 2
+  },
+  "mlDirWeightOverrides": {
+    "forevershining": {
+      "missing-device": 0,
+      "missing-dpr": 0
+    },
+    "bronze-plaque": {
+      "missing-device": 0,
+      "missing-dpr": 0
+    }
+  },
+  "confidenceThresholds": {
+    "highMaxScore": 0,
+    "mediumMaxScore": 2
+  },
+  "filters": {
+    "skipDesignIds": [
+      "1607102336393",
+      "1609405832748"
+    ],
+    "skipIfTestInscription": true,
+    "testInscriptionRegex": "\\btest\\b",
+    "skipIfSingleImageOnly": true
+  },
+  "designOverrides": {
+    "1578016189116": {
+      "forceConfidence": "medium"
+    }
+  }
+}

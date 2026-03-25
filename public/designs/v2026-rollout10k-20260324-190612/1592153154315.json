@@ -1,0 +1,470 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.358Z",
+  "units": "mm",
+  "source": {
+    "id": "1592153154315",
+    "slug": "legacy-1592153154315",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1592153154315.json",
+    "savedAt": "2020-06-14T16:45:54.315Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 900,
+      "height_mm": 1200
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 596,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 1200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1000,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Eugene Cooper",
+        "font": {
+          "family": "Arial",
+          "size_px": 58
+        },
+        "position": {
+          "x_px": -39.667,
+          "y_px": -102.93
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "25/03/1995 - 23/09/2019",
+        "font": {
+          "family": "Arial",
+          "size_px": 56
+        },
+        "position": {
+          "x_px": -36.666,
+          "y_px": -53.714
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Daughter of CarleneThorne and Darryl Narrier",
+        "font": {
+          "family": "Arial",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": -5.534
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Sister of Sheree Darryl Joanna",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -6.667,
+          "y_px": 22
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Enoch Lyons",
+        "font": {
+          "family": "Arial",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": -17,
+          "y_px": 46.339
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Mother of Ashton (Dec) Damien",
+        "font": {
+          "family": "Arial",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": 2.332,
+          "y_px": 75.088
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "and Amelia",
+        "font": {
+          "family": "Arial",
+          "size_px": 86
+        },
+        "position": {
+          "x_px": -3.667,
+          "y_px": 109.995
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Nell Bailey",
+        "font": {
+          "family": "French Script",
+          "size_px": 137
+        },
+        "position": {
+          "x_px": -6.033,
+          "y_px": 145.349
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "75d316f309a4a158f72cb8c9f8e190d88f53f43aa05188d0b9b5a39be83ebd13",
+    "sourceItemCount": 11,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.358Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Right Wave",
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "5148.08",
+        "quantity": 1,
+        "width": 900,
+        "height": 1200,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 596
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1597.68",
+        "quantity": 1,
+        "width": 1000,
+        "height": 100,
+        "_length": 250,
+        "init_width": 360,
+        "init_height": 596
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1592153250371,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1592153250371fb_img_1584932345677_cro.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 91.33334350585938,
+        "y": -81.66671752929688,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.4802013422818792,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1584932345677.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 530,
+        "width": "73",
+        "height": "143",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Alannah Jayde Narrier",
+        "font": "15.66px Arial",
+        "font_size": 58,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -39.666900634765625,
+        "y": -102.929692318565,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 52,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "25/03/1995 - 23/09/2019",
+        "font": "15.120000000000001px Arial",
+        "font_size": 56,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -36.66600036621094,
+        "y": -53.7143683182569,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Daughter of CarleneThorne and Darryl Narrier",
+        "font": "12.420000000000002px Arial",
+        "font_size": 46,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 5.99993896484375,
+        "y": -5.53399658203125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Sister of Sheree Darryl Joanna",
+        "font": "13.5px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6.666717529296875,
+        "y": 21.999755859375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Linda Lachlan & Julie",
+        "font": "18.36px Arial",
+        "font_size": 68,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -16.999893188476562,
+        "y": 46.339080810546875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Mother of Ashton (Dec) Damien",
+        "font": "16.470000000000002px Arial",
+        "font_size": 61,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 2.331695556640625,
+        "y": 75.08782958984375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "and Amelia",
+        "font": "23.220000000000002px Arial",
+        "font_size": 86,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -3.6673660278320312,
+        "y": 109.99542236328125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Forever Young",
+        "font": "36.99px French Script",
+        "font_size": 137,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6.032806396484375,
+        "y": 145.34869384765625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 137,
+        "itemID": 9
+      }
+    ]
+  }
+}

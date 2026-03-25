@@ -1,0 +1,538 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.018Z",
+  "units": "mm",
+  "source": {
+    "id": "1579780273114",
+    "slug": "legacy-1579780273114",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1579780273114.json",
+    "savedAt": "2020-01-23T11:51:13.114Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 18",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 390,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 579,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 390,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 490,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-17",
+        "text": "Chris Green",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 49.25,
+          "y_px": 143
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Dry your tears",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 34.25,
+          "y_px": 95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Behold",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 35.25,
+          "y_px": 110
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "The Garden",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 37.25,
+          "y_px": 128
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Doctor - father - son - brother - friend",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -6.75,
+          "y_px": -44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "July 21, 1944 - Oct 18, 2005",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": -7.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Rhoda Delgado",
+        "font": {
+          "family": "Garamond",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -1.75,
+          "y_px": -29.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-30",
+        "text": "one of a kind",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 71
+        },
+        "position": {
+          "x_px": -7.75,
+          "y_px": 177
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-23",
+        "asset": "1_145_20",
+        "position": {
+          "x_px": -40.75,
+          "y_px": 104
+        },
+        "height_px": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_145_20",
+        "path": "/shapes/motifs/1_145_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "26c4d7420a1373cb729d47197ff0fd07b5a3d29b9e72c173f82a7f41d096dbb5",
+    "sourceItemCount": 13,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.018Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Headstone 18",
+        "shape": "Headstone 18",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1382.35",
+        "quantity": 1,
+        "width": 390,
+        "height": 600,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 579,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 490,
+        "height": 100,
+        "_length": 100,
+        "init_width": 375,
+        "init_height": 579,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Of Endless Time",
+        "font": "14.624999999999998px Great Vibes",
+        "font_size": 28,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 49.25,
+        "y": 143,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 36,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Dry your tears",
+        "font": "11.491071428571427px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 34.25,
+        "y": 95,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 25,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Behold",
+        "font": "14.624999999999998px Great Vibes",
+        "font_size": 28,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 35.25,
+        "y": 110,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 25,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "The Garden",
+        "font": "15.147321428571427px Great Vibes",
+        "font_size": 29,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 37.25,
+        "y": 128,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 36,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "Doctor - father - son - brother - friend",
+        "font": "11.491071428571427px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -6.75,
+        "y": -44,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 25,
+        "itemID": 22
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_145_20",
+        "item": "1_145_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -40.75,
+        "y": 104,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 180,
+        "ratio": 0.3,
+        "itemID": 23
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1579780604605,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1579780604605556db1309ce649d994f7ae34.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -0.75,
+        "y": -112,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3962438423645319,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "556DB130-9CE6-49D9-94F7-AE34B96011CA.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 220,
+        "width": "71 mm",
+        "height": "115 mm",
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "July 21, 1944 - Oct 18, 2005",
+        "font": "7.834821428571427px Great Vibes",
+        "font_size": 15,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5,
+        "y": -7.5,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 19,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Alex Tuck Yow Yik",
+        "font": "23.50446428571428px Garamond",
+        "font_size": 45,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -1.75,
+        "y": -29.5,
+        "rotation": 0,
+        "flipx": "1",
+        "flipy": 1,
+        "height": 34,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "156.69642857142856px Great Vibes",
+        "font_size": 300,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -93.75,
+        "y": 11,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 2,
+        "itemID": 31
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "one of a kind",
+        "font": "37.08482142857142px Great Vibes",
+        "font_size": 71,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -7.75,
+        "y": 177,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 71,
+        "itemID": 30
+      }
+    ]
+  }
+}

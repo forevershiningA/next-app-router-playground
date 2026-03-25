@@ -1,0 +1,185 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.121Z",
+  "units": "mm",
+  "source": {
+    "id": "1588646014387",
+    "slug": "legacy-1588646014387",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1588646014387.json",
+    "savedAt": "2020-05-05T02:33:34.387Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1520,
+      "height": 776,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "65025ee3ea37a9d5120486408cd5b91376e08e5d7f6fcb17d168b63ec0df40ef",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.121Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "428.77",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1520,
+        "init_height": 776
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1588646027628,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1588646027628shittytree_002.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -275,
+        "y": -136.05844078025433,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.32499999999999996,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "shitty--tree (002).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 50,
+        "width": "88 mm",
+        "height": "126 mm",
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1588646027628,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1588646027628shittytree_002.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -186.60000000000002,
+        "y": -136.05844078025433,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.32499999999999996,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "shitty--tree (002).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 50,
+        "width": "88 mm",
+        "height": "126 mm",
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1588646027628,
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1588646027628shittytree_002.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -98.20000000000003,
+        "y": -136.05844078025433,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.32499999999999996,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "shitty--tree (002).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 50,
+        "width": "88 mm",
+        "height": "126 mm",
+        "itemID": 3
+      }
+    ]
+  }
+}

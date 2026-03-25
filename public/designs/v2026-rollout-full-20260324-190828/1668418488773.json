@@ -1,0 +1,532 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.205Z",
+  "units": "mm",
+  "source": {
+    "id": "1668418488773",
+    "slug": "legacy-1668418488773",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1668418488773.json",
+    "savedAt": "2022-11-14T09:34:48.773Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -262.958
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Of",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -217.064
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Estella Dawson",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 17,
+          "y_px": -165.868
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Beloved Grandfather & Great-Grandfather to",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 3.539
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Teresa Holland",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 5,
+          "y_px": 49.327
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Chance & Nadia",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 91.289
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "21/03/1948 - 09/10/1995",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 16,
+          "y_px": 435.063
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Husband to Eva",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": -89.81
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Father to Paula (dec), Lennis, Samantha & Alana",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": -41.79
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-18",
+        "asset": "1_134_01",
+        "position": {
+          "x_px": -253,
+          "y_px": 198
+        },
+        "height_px": 240,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_134_01",
+        "path": "/shapes/motifs/1_134_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "44a44022f317619708031a4cfabddd26d59d9872212018aad64d1f3a6bf422b1",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.205Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1434.94,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1633,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221108,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "price": 580,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1633,
+        "init_height": 873,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_134_01",
+        "item": "1_134_01",
+        "price": 261.257375,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -253,
+        "y": 198,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 240,
+        "ratio": 0.2631578947368421,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "43.774714285714275px Dobkin",
+        "font_size": 36,
+        "font_family": "Dobkin",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -1,
+        "y": -262.9583333333333,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 2,
+        "label": "Of",
+        "font": "44.99067857142856px Dobkin",
+        "font_size": 37,
+        "font_family": "Dobkin",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -3,
+        "y": -217.06388888888887,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 17,
+        "label": "Alan Alfred Connors",
+        "font": "49.8545357142857px Dobkin",
+        "font_size": 41,
+        "font_family": "Dobkin",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 17,
+        "y": -165.86805555555554,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 38,
+        "label": "Beloved Grandfather & Great-Grandfather to",
+        "font": "30.399107142857133px Great Vibes",
+        "font_size": 25,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -6,
+        "y": 3.5388888888888914,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 27,
+        "label": "Rochelle, Sarah, Letahni, Kyla",
+        "font": "30.399107142857133px Great Vibes",
+        "font_size": 25,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 5,
+        "y": 49.32708333333329,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 12,
+        "label": "Chance & Nadia",
+        "font": "37.69489285714285px Great Vibes",
+        "font_size": 31,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": 91.28888888888889,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 17
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "21/03/1948 - 09/10/1995",
+        "font": "40.12682142857142px Dobkin",
+        "font_size": 33,
+        "font_family": "Dobkin",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 16,
+        "y": 435.06319444444443,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 12,
+        "label": "Husband to Eva",
+        "font": "32.831035714285704px Great Vibes",
+        "font_size": 27,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 9,
+        "y": -89.8104166666667,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 40,
+        "label": "Father to Paula (dec), Lennis, Samantha & Alana",
+        "font": "30.399107142857133px Great Vibes",
+        "font_size": 25,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 12,
+        "y": -41.79027777777776,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 9
+      }
+    ]
+  }
+}

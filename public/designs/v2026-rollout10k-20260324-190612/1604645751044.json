@@ -1,0 +1,174 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:18.029Z",
+  "units": "mm",
+  "source": {
+    "id": "1604645751044",
+    "slug": "legacy-1604645751044",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1604645751044.json",
+    "savedAt": "2020-11-06T06:55:51.044Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Circle",
+    "material": {
+      "name": "src/bronzes/phoenix/l/05.jpg",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 75,
+      "height_mm": 75
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 619,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 75,
+      "height_mm": 75,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "my dog",
+        "font": {
+          "family": "French Script",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 5.4,
+          "y_px": 50.15
+        },
+        "rotation": {
+          "z_deg": -6
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f5a6c45832dcccf9d02f60306bddb299b6394ebec9ab991f832e7a8f7745e6af",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:18.029Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Green - Lugs with Studs",
+        "border": "Border Circle",
+        "shape_url": "shapes/photos/bordercircle.svg",
+        "fixingSystem": 2,
+        "shape": "Circle",
+        "color": "#1a391a",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/05.jpg",
+        "price": "180.35",
+        "quantity": 1,
+        "width": 75,
+        "height": 75,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 619,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "path": "../upload/2020/11/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1604645267819dogfrisbee_09_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 3,
+        "y": -17,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 82,
+        "ratio": 1.8170645161290322,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dogFrisbee_09.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "my dog",
+        "font": "152.89299999999997px French Script",
+        "font_size": 19,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 5.399999999999977,
+        "y": 50.14999999999998,
+        "rotation": -6,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<config>
+    <input>
+        <source-dir>C:\HaxeToolkit\haxe\lib\openfl\8,9,5\src</source-dir>
+        <classes>
+            <include>openfl.display.BitmapData</include>
+            <include>openfl.geom.Vector3D</include>
+        </classes>
+        <ccparams>
+            <param name="openfl" value="&quot;8.9.5&quot;" />
+            <param name="flash" value="false" />
+        </ccparams>
+        <mapping>
+            <source>openfl.*</source>
+            <target>Engine3D.core.*</target>
+        </mapping>
+    </input>
+    <goals>
+        <!--<goal type="Copy">
+            <destination>tmp/expose</destination>
+            <delete-if-exists>true</delete-if-exists>
+        </goal>
+        <goal type="GenerateExpose">
+            <destination>tmp/expose</destination>
+        </goal>-->
+        <goal type="GenerateExtern">
+            <destination>D:\GIT\dyo_haxe\source_api\src</destination>
+            <delete-if-exists>false</delete-if-exists>
+        </goal>
+    </goals>
+</config>

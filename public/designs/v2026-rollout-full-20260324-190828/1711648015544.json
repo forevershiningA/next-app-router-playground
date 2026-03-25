@@ -1,0 +1,443 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.086Z",
+  "units": "mm",
+  "source": {
+    "id": "1711648015544",
+    "slug": "legacy-1711648015544",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1711648015544.json",
+    "savedAt": "2024-03-28T17:46:55.544Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 567.2499999999999,
+      "height_mm": 577
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 567.2499999999999,
+      "height_mm": 577,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 699,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "“Maddie”",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 64
+        },
+        "position": {
+          "x_px": -15,
+          "y_px": 0.205
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Madison Beisley-Barnes",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 92.708
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Sept 16, 2005-Feb 4, 2024",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 166.938
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Daughter, Sister, Grandaughter, and Friend",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 24,
+          "y_px": 640.436
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "1_003_26",
+        "position": {
+          "x_px": 6,
+          "y_px": -270.346
+        },
+        "height_px": 222,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "1_008_26",
+        "position": {
+          "x_px": -372,
+          "y_px": 371.507
+        },
+        "height_px": 151,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_008_26",
+        "position": {
+          "x_px": 372.11,
+          "y_px": 377.194
+        },
+        "height_px": 154,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_003_26",
+        "path": "/shapes/motifs/1_003_26.svg"
+      },
+      {
+        "id": "1_008_26",
+        "path": "/shapes/motifs/1_008_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "570eb3c48beb5ec9572dac3e53adf6fe786569f45ca32e6e1a08e586e601877b",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.086Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2228.08,
+        "quantity": 1,
+        "width": 567.2499999999999,
+        "height": 577,
+        "_length": 80,
+        "init_width": 428,
+        "init_height": 689,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 843,
+        "quantity": 1,
+        "width": 699,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 428,
+        "init_height": 689,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1711650300322,
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1711650300322facetune_16022024125733t.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 3,
+        "y": -273.1718061674009,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.037381309345327,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Facetune_16-02-2024-12-57-33.tiff",
+        "price": 0,
+        "quantity": 1,
+        "size": 194,
+        "width": "273",
+        "height": "358",
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_003_26",
+        "item": "1_003_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6,
+        "y": -270.3460446221222,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 222,
+        "ratio": 0.25754060324825984,
+        "itemID": 7
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_26",
+        "item": "1_008_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -372,
+        "y": 371.50741653567246,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 151,
+        "ratio": 0.20798898071625344,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_008_26",
+        "item": "1_008_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 372.1095360884642,
+        "y": 377.19444722668493,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 154,
+        "ratio": 0.21212121212121213,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "“Maddie”",
+        "font": "118.06896551724135px Chopin Script",
+        "font_size": 64,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -15,
+        "y": 0.2051550248513027,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Madison Beisley-Barnes",
+        "font": "81.17241379310343px Chopin Script",
+        "font_size": 44,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 92.70771459546954,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Sept 16, 2005-Feb 4, 2024",
+        "font": "62.72413793103447px Chopin Script",
+        "font_size": 34,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 6,
+        "y": 166.93832599118943,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "Daughter, Sister, Grandaughter, and Friend",
+        "font": "75.63793103448275px Chopin Script",
+        "font_size": 41,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 24,
+        "y": 640.4361233480176,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 11
+      }
+    ]
+  }
+}

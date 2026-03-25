@@ -1,0 +1,1592 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.420Z",
+  "units": "mm",
+  "source": {
+    "id": "1741611496645",
+    "slug": "legacy-1741611496645",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1741611496645.json",
+    "savedAt": "2025-03-10T12:58:16.645Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 711.1999999999998
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 711.1999999999998,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "CUMMINGS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 120
+        },
+        "position": {
+          "x_px": 19,
+          "y_px": -17
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "ANTONIO HARRIS",
+        "font": {
+          "family": "Garamond",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -178,
+          "y_px": 91
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "ANNABEL FOSTER",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -180,
+          "y_px": 182
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_129_03",
+        "position": {
+          "x_px": 497,
+          "y_px": -208
+        },
+        "height_px": 155,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_154_11",
+        "position": {
+          "x_px": 351,
+          "y_px": -283
+        },
+        "height_px": 117,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "cross_004",
+        "position": {
+          "x_px": 12,
+          "y_px": -145
+        },
+        "height_px": 131,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_150_25",
+        "position": {
+          "x_px": -280,
+          "y_px": -85
+        },
+        "height_px": 136,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_198_21",
+        "position": {
+          "x_px": 428,
+          "y_px": 119
+        },
+        "height_px": 96,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_198_21",
+        "position": {
+          "x_px": 429,
+          "y_px": 193
+        },
+        "height_px": 93,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_019_08",
+        "position": {
+          "x_px": 17,
+          "y_px": -20
+        },
+        "height_px": 190,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "1_154_11",
+        "position": {
+          "x_px": -414,
+          "y_px": 81
+        },
+        "height_px": 120,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_022_02",
+        "position": {
+          "x_px": -175,
+          "y_px": 113
+        },
+        "height_px": 145,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 7,
+          "y_px": 113
+        },
+        "height_px": 98,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_022_02",
+        "position": {
+          "x_px": 187,
+          "y_px": 112
+        },
+        "height_px": 145,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "flower_009",
+        "position": {
+          "x_px": 450,
+          "y_px": -124
+        },
+        "height_px": 82,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-16",
+        "asset": "1_198_08",
+        "position": {
+          "x_px": -166,
+          "y_px": -270
+        },
+        "height_px": 138,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-17",
+        "asset": "1_198_08",
+        "position": {
+          "x_px": 251.768,
+          "y_px": -252
+        },
+        "height_px": 138,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_156_15",
+        "position": {
+          "x_px": -47,
+          "y_px": -263
+        },
+        "height_px": 122,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "1_156_15",
+        "position": {
+          "x_px": 40.642,
+          "y_px": -259
+        },
+        "height_px": 122,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-20",
+        "asset": "1_153_18",
+        "position": {
+          "x_px": 142,
+          "y_px": -236
+        },
+        "height_px": 124,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-21",
+        "asset": "1_153_18",
+        "position": {
+          "x_px": -235.485,
+          "y_px": -207
+        },
+        "height_px": 124,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-22",
+        "asset": "flower_010",
+        "position": {
+          "x_px": 182,
+          "y_px": -302
+        },
+        "height_px": 103,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-23",
+        "asset": "flower_010",
+        "position": {
+          "x_px": 224.962,
+          "y_px": -199
+        },
+        "height_px": 103,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-24",
+        "asset": "1_011_12",
+        "position": {
+          "x_px": -68,
+          "y_px": -132
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-25",
+        "asset": "1_011_12",
+        "position": {
+          "x_px": 86.565,
+          "y_px": -131
+        },
+        "height_px": 72,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-26",
+        "asset": "2_154_20",
+        "position": {
+          "x_px": -386,
+          "y_px": -186
+        },
+        "height_px": 117,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-27",
+        "asset": "2_154_20",
+        "position": {
+          "x_px": 414.622,
+          "y_px": -52
+        },
+        "height_px": 117,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-28",
+        "asset": "hummingbird_001",
+        "position": {
+          "x_px": 285,
+          "y_px": -93
+        },
+        "height_px": 86,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-29",
+        "asset": "2_129_10",
+        "position": {
+          "x_px": 495,
+          "y_px": -33
+        },
+        "height_px": 199,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-30",
+        "asset": "1_156_01",
+        "position": {
+          "x_px": 520,
+          "y_px": 85
+        },
+        "height_px": 175,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-31",
+        "asset": "1_156_22",
+        "position": {
+          "x_px": 418,
+          "y_px": -295
+        },
+        "height_px": 175,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-32",
+        "asset": "1_156_07",
+        "position": {
+          "x_px": 256,
+          "y_px": -33
+        },
+        "height_px": 173,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-33",
+        "asset": "1_155_14",
+        "position": {
+          "x_px": 280,
+          "y_px": -293
+        },
+        "height_px": 110,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-34",
+        "asset": "1_157_01",
+        "position": {
+          "x_px": -418,
+          "y_px": 38
+        },
+        "height_px": 101,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-35",
+        "asset": "1_150_14",
+        "position": {
+          "x_px": -443,
+          "y_px": -91
+        },
+        "height_px": 82,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-36",
+        "asset": "2_124_02",
+        "position": {
+          "x_px": -248,
+          "y_px": -16
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_129_03",
+        "path": "/shapes/motifs/1_129_03.svg"
+      },
+      {
+        "id": "1_154_11",
+        "path": "/shapes/motifs/1_154_11.svg"
+      },
+      {
+        "id": "cross_004",
+        "path": "/shapes/motifs/cross_004.svg"
+      },
+      {
+        "id": "1_150_25",
+        "path": "/shapes/motifs/1_150_25.svg"
+      },
+      {
+        "id": "1_198_21",
+        "path": "/shapes/motifs/1_198_21.svg"
+      },
+      {
+        "id": "1_019_08",
+        "path": "/shapes/motifs/1_019_08.svg"
+      },
+      {
+        "id": "1_022_02",
+        "path": "/shapes/motifs/1_022_02.svg"
+      },
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      },
+      {
+        "id": "flower_009",
+        "path": "/shapes/motifs/flower_009.svg"
+      },
+      {
+        "id": "1_198_08",
+        "path": "/shapes/motifs/1_198_08.svg"
+      },
+      {
+        "id": "1_156_15",
+        "path": "/shapes/motifs/1_156_15.svg"
+      },
+      {
+        "id": "1_153_18",
+        "path": "/shapes/motifs/1_153_18.svg"
+      },
+      {
+        "id": "flower_010",
+        "path": "/shapes/motifs/flower_010.svg"
+      },
+      {
+        "id": "1_011_12",
+        "path": "/shapes/motifs/1_011_12.svg"
+      },
+      {
+        "id": "2_154_20",
+        "path": "/shapes/motifs/2_154_20.svg"
+      },
+      {
+        "id": "hummingbird_001",
+        "path": "/shapes/motifs/hummingbird_001.svg"
+      },
+      {
+        "id": "2_129_10",
+        "path": "/shapes/motifs/2_129_10.svg"
+      },
+      {
+        "id": "1_156_01",
+        "path": "/shapes/motifs/1_156_01.svg"
+      },
+      {
+        "id": "1_156_22",
+        "path": "/shapes/motifs/1_156_22.svg"
+      },
+      {
+        "id": "1_156_07",
+        "path": "/shapes/motifs/1_156_07.svg"
+      },
+      {
+        "id": "1_155_14",
+        "path": "/shapes/motifs/1_155_14.svg"
+      },
+      {
+        "id": "1_157_01",
+        "path": "/shapes/motifs/1_157_01.svg"
+      },
+      {
+        "id": "1_150_14",
+        "path": "/shapes/motifs/1_150_14.svg"
+      },
+      {
+        "id": "2_124_02",
+        "path": "/shapes/motifs/2_124_02.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "fffaabcdcbd5c0b4d1170b93c29af367aa47d968246e868d583099918619d9b2",
+    "sourceItemCount": 37,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.420Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 5685.49,
+        "quantity": 1,
+        "width": 1200,
+        "height": 711.1999999999998,
+        "_length": 90,
+        "init_width": 1132,
+        "init_height": 705,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_129_03",
+        "item": "1_129_03",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 497,
+        "y": -208,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 155,
+        "ratio": 0.1739618406285073,
+        "itemID": 1
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_11",
+        "item": "1_154_11",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 351,
+        "y": -283,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 117,
+        "ratio": 0.21507352941176472,
+        "itemID": 2
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_004",
+        "item": "cross_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 12,
+        "y": -145,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 131,
+        "ratio": 0.6616161616161617,
+        "itemID": 3
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_150_25",
+        "item": "1_150_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -280,
+        "y": -85,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 136,
+        "ratio": 0.2381786339754816,
+        "itemID": 4
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_198_21",
+        "item": "1_198_21",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 428,
+        "y": 119,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 96,
+        "ratio": 0.27507163323782235,
+        "itemID": 5
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_198_21",
+        "item": "1_198_21",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 429,
+        "y": 193,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 93,
+        "ratio": 0.2664756446991404,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "HATLEY",
+        "font": "68.73750000000001px Garamond",
+        "font_size": 120,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 19,
+        "y": -17,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 86,
+        "itemID": 7
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_019_08",
+        "item": "1_019_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 17,
+        "y": -20,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 190,
+        "ratio": 0.7916666666666666,
+        "itemID": 8
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_11",
+        "item": "1_154_11",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -414,
+        "y": 81,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 120,
+        "ratio": 0.22058823529411764,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "GLENN EVANS HATLEY",
+        "font": "22.9125px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -178,
+        "y": 91,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "PAW PAW",
+        "font": "28.640625000000004px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -180,
+        "y": 182,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 11
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_022_02",
+        "item": "1_022_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": -175,
+        "y": 113,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 145,
+        "ratio": 0.6712962962962963,
+        "itemID": 12
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 7,
+        "y": 113,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 98,
+        "ratio": 0.13297150610583447,
+        "itemID": 13
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_022_02",
+        "item": "1_022_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 187,
+        "y": 112,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 145,
+        "ratio": 0.6712962962962963,
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_009",
+        "item": "flower_009",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 450,
+        "y": -124,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 82,
+        "ratio": 0.49101796407185627,
+        "itemID": 15
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_198_08",
+        "item": "1_198_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -166,
+        "y": -270,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 138,
+        "ratio": 0.2929936305732484,
+        "itemID": 16
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_198_08",
+        "item": "1_198_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 251.76807324840763,
+        "y": -252,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 138,
+        "ratio": 0.2929936305732484,
+        "itemID": 17
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_15",
+        "item": "1_156_15",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -47,
+        "y": -263,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 122,
+        "ratio": 0.14541120381406436,
+        "itemID": 18
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_15",
+        "item": "1_156_15",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 40.64235995232423,
+        "y": -259,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 122,
+        "ratio": 0.14541120381406436,
+        "itemID": 19
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_18",
+        "item": "1_153_18",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 142,
+        "y": -236,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 124,
+        "ratio": 0.18646616541353384,
+        "itemID": 20
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_18",
+        "item": "1_153_18",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -235.4852236842105,
+        "y": -207,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 124,
+        "ratio": 0.18646616541353384,
+        "itemID": 21
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_010",
+        "item": "flower_010",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 182,
+        "y": -302,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 103,
+        "ratio": 0.6477987421383647,
+        "itemID": 22
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_010",
+        "item": "flower_010",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 224.9617452830189,
+        "y": -199,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 103,
+        "ratio": 0.6477987421383647,
+        "itemID": 23
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_011_12",
+        "item": "1_011_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -68,
+        "y": -132,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.2647058823529412,
+        "itemID": 24
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_011_12",
+        "item": "1_011_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 86.56481617647057,
+        "y": -131,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 72,
+        "ratio": 0.2647058823529412,
+        "itemID": 25
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_154_20",
+        "item": "2_154_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -386,
+        "y": -186,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 117,
+        "ratio": 0.21389396709323583,
+        "itemID": 26
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_154_20",
+        "item": "2_154_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 414.6224445840951,
+        "y": -52,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 117,
+        "ratio": 0.21389396709323583,
+        "itemID": 27
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "hummingbird_001",
+        "item": "hummingbird_001",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 285,
+        "y": -93,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 86,
+        "ratio": 0.5512820512820513,
+        "itemID": 28
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_129_10",
+        "item": "2_129_10",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 495,
+        "y": -33,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 199,
+        "ratio": 0.21192758253461128,
+        "itemID": 29
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_01",
+        "item": "1_156_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 520,
+        "y": 85,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 175,
+        "ratio": 0.2061248527679623,
+        "itemID": 30
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_22",
+        "item": "1_156_22",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 418,
+        "y": -295,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 175,
+        "ratio": 0.20372526193247964,
+        "itemID": 31
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_156_07",
+        "item": "1_156_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 256,
+        "y": -33,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 173,
+        "ratio": 0.19394618834080718,
+        "itemID": 32
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_14",
+        "item": "1_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 280,
+        "y": -293,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 110,
+        "ratio": 0.1762820512820513,
+        "itemID": 33
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_157_01",
+        "item": "1_157_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -418,
+        "y": 38,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 101,
+        "ratio": 0.23820754716981132,
+        "itemID": 34
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_150_14",
+        "item": "1_150_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -443,
+        "y": -91,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 82,
+        "ratio": 0.13333333333333333,
+        "itemID": 35
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_124_02",
+        "item": "2_124_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -248,
+        "y": -16,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.2770083102493075,
+        "itemID": 36
+      }
+    ]
+  }
+}

@@ -1,0 +1,556 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.438Z",
+  "units": "mm",
+  "source": {
+    "id": "1723098947987",
+    "slug": "legacy-1723098947987",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1723098947987.json",
+    "savedAt": "2024-08-08T06:35:47.987Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 2",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 747,
+      "height_mm": 800
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 747,
+      "height_mm": 800,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    },
+    "base": {
+      "width_mm": 847,
+      "height_mm": 150,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/White-Carrara-600-x-600.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Together forever with Freddie",
+        "font": {
+          "family": "Arial",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 226.421
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Adored Noona of Emily, Chenae & Kate",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 200.2
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Allie Wilson",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 174.623
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Loving Mum to Tony, Kathy, Stephen & Marg",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 145.519
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loved wife of Ted (dec)",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 116.416
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "19.08.1934 - 09.03.2024",
+        "font": {
+          "family": "Arial",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": -114.652
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "James Elliott",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 65
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -167.741
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Sainty",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 84
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 444.17
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Cherished in Our Hearts Forever",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 322.622
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": 142,
+          "y_px": 435.872
+        },
+        "height_px": 117,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_131_22",
+        "path": "/shapes/motifs/2_131_22.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e83c7722d29ba918834a12b75359933adae053dc56f472d7b3fdb56a3f309dd2",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.439Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 2",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2333.46,
+        "quantity": 1,
+        "width": 747,
+        "height": 800,
+        "_length": 100,
+        "init_width": 1632,
+        "init_height": 892,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240731,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 971,
+        "quantity": 1,
+        "width": 847,
+        "height": 150,
+        "_length": 250,
+        "init_width": 1632,
+        "init_height": 892,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 243.43934000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "colorName2": "undefined",
+        "x": 142,
+        "y": 435.8724911452185,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 117,
+        "ratio": 0.1270358306188925,
+        "itemID": 10
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1721982448595,
+        "path": "../upload/2024/07/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1721982448595photo732518270134_inner_.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 14,
+        "y": 4.409681227863046,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3694736842105263,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Photo732518270134_inner_55-31-667-42-38-968-670-949.JPG",
+        "price": 390,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 26,
+        "label": "Together forever with Freddie",
+        "font": "23.80231578947368px Arial",
+        "font_size": 26,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 12,
+        "y": 226.42148760330582,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 30,
+        "label": "Adored Noona of Emily, Chenae & Kate",
+        "font": "22.886842105263156px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 3,
+        "y": 200.19952774498228,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "Harry, Michael & Carolyn",
+        "font": "22.886842105263156px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 14,
+        "y": 174.62337662337663,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 34,
+        "label": "Loving Mum to Tony, Kathy, Stephen & Marg",
+        "font": "22.886842105263156px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 12,
+        "y": 145.5194805194805,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Loved wife of Ted (dec)",
+        "font": "22.886842105263156px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 12,
+        "y": 116.41558441558442,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "19.08.1934 - 09.03.2024",
+        "font": "25.633263157894735px Arial",
+        "font_size": 28,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -2,
+        "y": -114.6517119244392,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 16,
+        "label": "Aurora Mary Sainty",
+        "font": "59.5057894736842px Great Vibes",
+        "font_size": 65,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -167.741440377804,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 74,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 6,
+        "label": "Sainty",
+        "font": "76.89978947368421px Great Vibes",
+        "font_size": 84,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -3,
+        "y": 444.1700118063755,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 96,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 27,
+        "label": "Cherished in Our Hearts Forever",
+        "font": "35.70347368421052px Great Vibes",
+        "font_size": 39,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 2,
+        "y": 322.6221959858323,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 1
+      }
+    ]
+  }
+}

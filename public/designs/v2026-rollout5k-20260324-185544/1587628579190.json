@@ -1,0 +1,238 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.837Z",
+  "units": "mm",
+  "source": {
+    "id": "1587628579190",
+    "slug": "legacy-1587628579190",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1587628579190.json",
+    "savedAt": "2020-04-23T07:56:19.190Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Oval",
+    "material": {
+      "name": "src/bronzes/phoenix/l/15.jpg",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 275,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 783,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 275,
+      "height_mm": 400,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "this is a test",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": -196.083
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_143_16",
+        "position": {
+          "x_px": 6,
+          "y_px": -285.121
+        },
+        "height_px": 46,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_143_16",
+        "path": "/shapes/motifs/1_143_16.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0d39a9b7e282947e1c98f84bf61f81e191cd1a779104e78c68df5811b93cc19a",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.837Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - White - Lugs with Studs",
+        "border": "Border Oval",
+        "shape_url": "shapes/photos/borderoval.svg",
+        "fixingSystem": 2,
+        "shape": "Oval",
+        "color": "#ffffff",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/15.jpg",
+        "price": "1112.08",
+        "quantity": 1,
+        "width": 275,
+        "height": 400,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 783
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "this is a test",
+        "font": "78.2510625px Chopin Script",
+        "font_size": 41,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 7,
+        "y": -196.08347020102843,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 1
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1587629534303,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1587629534303400pxzinnienblute_zinnia.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -50,
+        "y": 108.04599378424012,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9494124681122451,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "400px-Zinnienblüte_Zinnia_elegans_stack15_20190722-RM-7222254.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br148l-footballer-rugby",
+        "color": "#ffb35a",
+        "x": 137,
+        "y": -84.0357729432979,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2434390943877551,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br148l-footballer-rugby",
+        "price": 99,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_16",
+        "item": "1_143_16",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": -285.1213724861893,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 46,
+        "ratio": 0.07666666666666666,
+        "itemID": 5
+      }
+    ]
+  }
+}

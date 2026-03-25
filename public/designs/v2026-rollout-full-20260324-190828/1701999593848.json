@@ -1,0 +1,337 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.214Z",
+  "units": "mm",
+  "source": {
+    "id": "1701999593848",
+    "slug": "legacy-1701999593848",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1701999593848.json",
+    "savedAt": "2023-12-08T01:39:53.848Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Portrait)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/02.jpg",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 253.9999999999998,
+      "height_mm": 304.79999999999995
+    },
+    "viewportPx": {
+      "width": 390,
+      "height": 844,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 253.9999999999998,
+      "height_mm": 304.79999999999995,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "SCHNEIDER",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 67
+        },
+        "position": {
+          "x_px": -35.5,
+          "y_px": 136.257
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "POWERS",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": -41.5,
+          "y_px": 342.565
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "23",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 100
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -359.209
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "dove_001",
+        "position": {
+          "x_px": -296,
+          "y_px": -192.631
+        },
+        "height_px": 102,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "dove_001",
+        "position": {
+          "x_px": 308.54,
+          "y_px": -180.486
+        },
+        "height_px": 102,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_001",
+        "path": "/shapes/motifs/dove_001.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f1facfbb94c5fc5cba41fd41a4fb123c63c063dd4c3fc0ee292b2725223488d0",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.214Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 8",
+        "shape_url": "shapes/photos/border8.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Portrait)",
+        "color": "#48280f",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/02.jpg",
+        "name": "Bronze Plaque - Brown - Lugs with Studs",
+        "price": 1021.01,
+        "quantity": 1,
+        "width": 253.9999999999998,
+        "height": 304.79999999999995,
+        "_length": 0,
+        "init_width": 390,
+        "init_height": 607,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 390x844"
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br164_butterfly_profile",
+        "color": "#ffb35a",
+        "x": 5.571340460526244,
+        "y": -108.19409191975119,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6254111842105263,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br164_butterfly_profile",
+        "price": 99,
+        "quantity": 1,
+        "size": "50.8 x 50.8 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -296,
+        "y": -192.63089458466393,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 102,
+        "ratio": 0.18345323741007194,
+        "itemID": 6
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 132.6,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 308.5401613748372,
+        "y": -180.4859500653659,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 102,
+        "ratio": 0.18345323741007194,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "CASA",
+        "font": "250.75541338582678px Lucida Calligraphy",
+        "font_size": 67,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -35.5,
+        "y": 136.25661682078584,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "VIVI",
+        "font": "220.81446850393704px Lucida Calligraphy",
+        "font_size": 59,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -41.5,
+        "y": 342.56513025906975,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "23",
+        "font": "374.2618110236221px Lucida Calligraphy",
+        "font_size": 100,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -3,
+        "y": -359.20927023274936,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 70,
+        "itemID": 8
+      }
+    ]
+  }
+}

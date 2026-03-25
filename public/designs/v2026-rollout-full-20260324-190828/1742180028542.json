@@ -1,0 +1,631 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.494Z",
+  "units": "mm",
+  "source": {
+    "id": "1742180028542",
+    "slug": "legacy-1742180028542",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1742180028542.json",
+    "savedAt": "2025-03-17T02:53:48.542Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 500,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 2240,
+      "height": 1260,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 500,
+      "height_mm": 300,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Orpha Nguyen",
+        "font": {
+          "family": "Adorable",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 448,
+          "y_px": 132
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Sisters together forever",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -508,
+          "y_px": 473
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Loving mother of Anthony, Francis & Thomas",
+        "font": {
+          "family": "Garamond",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -376,
+          "y_px": -214
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "May they have Eternal Peace",
+        "font": {
+          "family": "Adorable",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 414,
+          "y_px": 462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "B 5/12/1926 Sale",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -524,
+          "y_px": -367
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "D 29/11/2022 RMH",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -492,
+          "y_px": -287
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "B 12/12/1912 Sale",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 456,
+          "y_px": 232
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "D 5/11/1951 RMH",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 452,
+          "y_px": 314
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Monica Lois WILSON (nee KELLY)",
+        "font": {
+          "family": "Adorable",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -286,
+          "y_px": -462
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "1_168_24",
+        "position": {
+          "x_px": -98,
+          "y_px": 446
+        },
+        "height_px": 34,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "flowerrose_02",
+        "position": {
+          "x_px": -476,
+          "y_px": -96
+        },
+        "height_px": 30,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "flowerrose_02",
+        "position": {
+          "x_px": -200,
+          "y_px": -98
+        },
+        "height_px": 30,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "flowerrose_02",
+        "position": {
+          "x_px": -750,
+          "y_px": -102
+        },
+        "height_px": 30,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_168_24",
+        "path": "/shapes/motifs/1_168_24.svg"
+      },
+      {
+        "id": "flowerrose_02",
+        "path": "/shapes/motifs/flowerrose_02.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0a6dafecd2e9d37b480995f94d850538bce0fc202c3af84d239beac6c9ddfd39",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.494Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Straight (No drilled holes)",
+        "price": 516.76,
+        "quantity": 1,
+        "width": 500,
+        "height": 300,
+        "_length": 2,
+        "init_width": 1887,
+        "init_height": 902,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 2240x1260"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Eileen Mary KELLY",
+        "font": "73.8738px Adorable",
+        "font_size": 21,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 448,
+        "y": 132,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Sisters together forever",
+        "font": "63.3204px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -508,
+        "y": 473,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Loving mother of Anthony, Francis & Thomas",
+        "font": "49.249199999999995px Garamond",
+        "font_size": 14,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -376,
+        "y": -214,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 8
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "May they have Eternal Peace",
+        "font": "66.8382px Adorable",
+        "font_size": 19,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 414,
+        "y": 462,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 9
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_168_24",
+        "item": "1_168_24",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": -98,
+        "y": 446,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 34,
+        "ratio": 0.05619834710743802,
+        "itemID": 10
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerrose_02",
+        "item": "flowerrose_02",
+        "price": 10.40065,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": -476,
+        "y": -96,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 30,
+        "ratio": 0.03225806451612903,
+        "itemID": 11
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerrose_02",
+        "item": "flowerrose_02",
+        "price": 10.40065,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": -200,
+        "y": -98,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 30,
+        "ratio": 0.03225806451612903,
+        "itemID": 12
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerrose_02",
+        "item": "flowerrose_02",
+        "price": 10.40065,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": -750,
+        "y": -102,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 30,
+        "ratio": 0.03225806451612903,
+        "itemID": 13
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "B 5/12/1926 Sale",
+        "font": "63.3204px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -524,
+        "y": -367,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "D 29/11/2022 RMH",
+        "font": "59.8026px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -492,
+        "y": -287,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "B 12/12/1912 Sale",
+        "font": "63.3204px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 456,
+        "y": 232,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "D 5/11/1951 RMH",
+        "font": "59.8026px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 452,
+        "y": 314,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Monica Lois WILSON (nee KELLY)",
+        "font": "77.3916px Adorable",
+        "font_size": 22,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -286,
+        "y": -462,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 6
+      }
+    ]
+  }
+}

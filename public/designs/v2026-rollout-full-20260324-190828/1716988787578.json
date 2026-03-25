@@ -1,0 +1,114 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.085Z",
+  "units": "mm",
+  "source": {
+    "id": "1716988787578",
+    "slug": "legacy-1716988787578",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1716988787578.json",
+    "savedAt": "2024-05-29T13:19:47.578Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Portrait",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 130,
+      "height_mm": 180
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 130,
+      "height_mm": 180,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ffd997b58ddc999391d71d0f8302c8535b68c5194ad1c8007f05a365679b08e2",
+    "sourceItemCount": 1,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.085Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "shape": "Portrait",
+        "color": "../upload/2024/05/1716988811279img_0259_cropped.jpg",
+        "fixed": 0,
+        "texture": "src/ceramic/l/01.jpg",
+        "name": "Full-colour Plaque",
+        "price": 440,
+        "quantity": 1,
+        "width": 130,
+        "height": 180,
+        "_length": 10,
+        "init_width": 1248,
+        "init_height": 644,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x864"
+      }
+    ]
+  }
+}

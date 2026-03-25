@@ -1,0 +1,299 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:16.294Z",
+  "units": "mm",
+  "source": {
+    "id": "1701892868452",
+    "slug": "legacy-1701892868452",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1701892868452.json",
+    "savedAt": "2023-12-06T20:01:08.452Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Half Round",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "457.2",
+      "height_mm": 508
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "457.2",
+      "height_mm": 508,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": "457.2100",
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Nannie Walters",
+        "font": {
+          "family": "Garamond",
+          "size_px": 71
+        },
+        "position": {
+          "x_px": 15,
+          "y_px": 144
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "3/6/2007 - 9/20/2023",
+        "font": {
+          "family": "Garamond",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 205
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "paw_001",
+        "position": {
+          "x_px": -1,
+          "y_px": -135
+        },
+        "height_px": 68,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": -5,
+          "y_px": -108
+        },
+        "height_px": 222,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "paw_001",
+        "path": "/shapes/motifs/paw_001.svg"
+      },
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "aaab43e3ac48bd9dcee13b6deb586106634f81f266894900bee40a10d3a9c365",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:16.295Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Half Round",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1021.44,
+        "quantity": 1,
+        "width": "457.2",
+        "height": 508,
+        "_length": 80,
+        "init_width": 1632,
+        "init_height": 894,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "price": 475,
+        "quantity": 1,
+        "width": "457.2100",
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1632,
+        "init_height": 894,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 11,
+        "label": "Sasha Wilson",
+        "font": "101.5209153543307px Garamond",
+        "font_size": 71,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 15,
+        "y": 144,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "3/6/2007 - 9/20/2023",
+        "font": "54.33513779527558px Garamond",
+        "font_size": 38,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -3,
+        "y": 205,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "paw_001",
+        "item": "paw_001",
+        "price": 220.879515,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1,
+        "y": -135.00000000000006,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 68,
+        "ratio": 0.07218683651804671,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 257.031785,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5,
+        "y": -108,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 222,
+        "ratio": 0.3012211668928087,
+        "itemID": 4
+      }
+    ]
+  }
+}

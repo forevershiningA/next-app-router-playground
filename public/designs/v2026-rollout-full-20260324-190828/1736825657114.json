@@ -1,0 +1,590 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.110Z",
+  "units": "mm",
+  "source": {
+    "id": "1736825657114",
+    "slug": "legacy-1736825657114",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1736825657114.json",
+    "savedAt": "2025-01-14T03:34:17.114Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 425,
+      "height_mm": 245
+    },
+    "viewportPx": {
+      "width": 339,
+      "height": 735,
+      "dpr": 3.1875
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 425,
+      "height_mm": 245,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Bettie Stephens",
+        "font": {
+          "family": "Adorable",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 244.561,
+          "y_px": -233.118
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "25.12.1944 - 30.12.2024",
+        "font": {
+          "family": "Adorable",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 246.932,
+          "y_px": -70.232
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Jonas Peters",
+        "font": {
+          "family": "Adorable",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -265.643,
+          "y_px": -231.505
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "25.9.1933 - 19.7.2019",
+        "font": {
+          "family": "Adorable",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -258.791,
+          "y_px": -71.478
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Norma Chapman",
+        "font": {
+          "family": "Adorable",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -5.798,
+          "y_px": 247.114
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "(Oupa)",
+        "font": {
+          "family": "Adorable",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -254.574,
+          "y_px": -141.164
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "(Ouma)",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 253.257,
+          "y_px": -139.048
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Cherished Parents, Grandparents,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 13.703,
+          "y_px": -5.165
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Great Grandparents, Friends",
+        "font": {
+          "family": "Adorable",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 59.295,
+          "y_px": 60.007
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "& Confidants",
+        "font": {
+          "family": "Adorable",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 16.603,
+          "y_px": 132.566
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-13",
+        "asset": "1_145_12",
+        "position": {
+          "x_px": -435.886,
+          "y_px": 154.775
+        },
+        "height_px": 108,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-15",
+        "asset": "anigozanthos(kangaroopaw)",
+        "position": {
+          "x_px": 441.42,
+          "y_px": 198.251
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 11
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_145_12",
+        "path": "/shapes/motifs/1_145_12.svg"
+      },
+      {
+        "id": "anigozanthos(kangaroopaw)",
+        "path": "/shapes/motifs/anigozanthos(kangaroopaw).svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "18994572f01849ab0c4bf00cee666d0e2a215d2e921d396fc02c2fd249f566a4",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.110Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 1,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Rounded (No drilled holes)",
+        "price": 438.27,
+        "quantity": 1,
+        "width": 425,
+        "height": 245,
+        "_length": 2,
+        "init_width": 339,
+        "init_height": 549.9999961853027,
+        "device": "mobile",
+        "dpr": 3.1875,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 339x735"
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_145_12",
+        "item": "1_145_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -435.88625072377965,
+        "y": 154.7747375901884,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 108,
+        "ratio": 0.11428571428571428,
+        "itemID": 13
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "anigozanthos(kangaroopaw)",
+        "item": "anigozanthos(kangaroopaw)",
+        "price": 20.837180000000004,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 441.42045552751654,
+        "y": 198.25058341383897,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 11,
+        "height": 73,
+        "ratio": 0.07101167315175097,
+        "itemID": 15
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Cath Keese",
+        "font": "91.72068749999998px Adorable",
+        "font_size": 37,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 244.5605738817061,
+        "y": -233.1179020386801,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "25.12.1944 - 30.12.2024",
+        "font": "44.62087499999999px Adorable",
+        "font_size": 18,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 246.93179780403057,
+        "y": -70.23248703290035,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Lou Keese",
+        "font": "101.63643749999997px Adorable",
+        "font_size": 41,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -265.64274205570746,
+        "y": -231.50525175065013,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "25.9.1933 - 19.7.2019",
+        "font": "42.14193749999999px Adorable",
+        "font_size": 17,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -258.79105289425473,
+        "y": -71.47821024214456,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Familia Ni Kilu Kita",
+        "font": "76.84706249999998px Adorable",
+        "font_size": 31,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5.797815913647696,
+        "y": 247.114279775639,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 6
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "(Oupa)",
+        "font": "86.76281249999998px Adorable",
+        "font_size": 35,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -254.57439321332276,
+        "y": -141.16403298078495,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "(Ouma)",
+        "font": "94.19962499999997px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 253.25654426507208,
+        "y": -139.04791647668617,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 8
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Cherished Parents, Grandparents,",
+        "font": "54.53662499999999px Adorable",
+        "font_size": 22,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 13.70345124101243,
+        "y": -5.165485501118401,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 9
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Great Grandparents, Friends",
+        "font": "54.53662499999999px Adorable",
+        "font_size": 22,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 59.29510876140773,
+        "y": 60.00675648808541,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 10
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "& Confidants",
+        "font": "54.53662499999999px Adorable",
+        "font_size": 22,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 16.60257795215705,
+        "y": 132.56620514962773,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 11
+      }
+    ]
+  }
+}

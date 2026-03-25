@@ -1,0 +1,350 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.266Z",
+  "units": "mm",
+  "source": {
+    "id": "1592728206117",
+    "slug": "legacy-1592728206117",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1592728206117.json",
+    "savedAt": "2020-06-21T08:30:06.117Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1123,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-8",
+        "text": "Test",
+        "font": {
+          "family": "Arial",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 279,
+          "y_px": 197
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "2_057_20",
+        "position": {
+          "x_px": -113,
+          "y_px": 139
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "2_057_20",
+        "position": {
+          "x_px": 80.52,
+          "y_px": 139
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_057_20",
+        "path": "/shapes/motifs/2_057_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0950602c31ab769ce79c03cf4a4a86a53f8c5a689a036a8fe12630aecf8c2851",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.266Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": "749.38",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1123,
+        "init_height": 873
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1592728265570,
+        "path": "../upload/2020/06/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1592728265570screenshot20200518at1006.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -307,
+        "y": -145,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3895537757437071,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screen-Shot-2020-05-18-at-10.06.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 1
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1592728282136,
+        "path": "../upload/2020/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1592728282136screenshot20200518at1006.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": -98,
+        "y": -142,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3246281464530892,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screen-Shot-2020-05-18-at-10.06.jpg",
+        "price": 180,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br121-fossicker",
+        "color": "#ffb35a",
+        "x": -303,
+        "y": 95,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6492562929061784,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br121-fossicker",
+        "price": 99,
+        "quantity": 1,
+        "size": "100 x 100 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_057_20",
+        "item": "2_057_20",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -113,
+        "y": 139,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 60,
+        "ratio": 0.11090573012939002,
+        "itemID": 4
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_057_20",
+        "item": "2_057_20",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 80.52037892791125,
+        "y": 139,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 60,
+        "ratio": 0.11090573012939002,
+        "itemID": 5
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1592728282136,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1592728282136screenshot20200518at1006.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": 114.30680778032033,
+        "y": -142,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 45,
+        "ratio": 0.3246281464530892,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screen-Shot-2020-05-18-at-10.06.jpg",
+        "price": 180,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 6
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1592728265570,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1592728265570screenshot20200518at1006.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 294.7497025171624,
+        "y": -149,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -45,
+        "ratio": 0.3895537757437071,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screen-Shot-2020-05-18-at-10.06.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Test",
+        "font": "102.14099999999999px Arial",
+        "font_size": 36,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 279,
+        "y": 197,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 8
+      }
+    ]
+  }
+}

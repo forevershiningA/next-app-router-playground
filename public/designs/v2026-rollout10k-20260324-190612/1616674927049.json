@@ -1,0 +1,649 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:14.606Z",
+  "units": "mm",
+  "source": {
+    "id": "1616674927049",
+    "slug": "legacy-1616674927049",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1616674927049.json",
+    "savedAt": "2021-03-25T12:22:07.049Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 36",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 490,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 662,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 490,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-12",
+        "text": "Rose Sutton",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": -11.927,
+          "y_px": -116.771
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Of",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -2.716,
+          "y_px": -92.547
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "And",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": -5.656,
+          "y_px": -15.942
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "Edmond Garza",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -7.575,
+          "y_px": 10.617
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Edythe Holland",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -63.17
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Born 17-11-1988 Sadly Passed 06-04-2017",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -8.706,
+          "y_px": -37.504
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "Born 06-04-2017 Sadly Passed 06-04-2017",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -12.253,
+          "y_px": 31.922
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "FOREVER YOUNG",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -20.613,
+          "y_px": 58.036
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-28",
+        "asset": "1_155_14",
+        "position": {
+          "x_px": 3.004,
+          "y_px": -169.371
+        },
+        "height_px": 87,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-30",
+        "asset": "butterfly_004",
+        "position": {
+          "x_px": 67.786,
+          "y_px": -160.692
+        },
+        "height_px": 61,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-31",
+        "asset": "butterfly_028",
+        "position": {
+          "x_px": -61.627,
+          "y_px": -166.244
+        },
+        "height_px": 52,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_14",
+        "path": "/shapes/motifs/1_155_14.svg"
+      },
+      {
+        "id": "butterfly_004",
+        "path": "/shapes/motifs/butterfly_004.svg"
+      },
+      {
+        "id": "butterfly_028",
+        "path": "/shapes/motifs/butterfly_028.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4ea063ac18f956d8b4467872c940a2d2827acdb7074426e75b6f1125b0e7f172",
+    "sourceItemCount": 16,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:14.606Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Headstone 31",
+        "shape": "Headstone 36",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1546.03,
+        "quantity": 1,
+        "width": 490,
+        "height": 600,
+        "_length": 1,
+        "init_width": 412,
+        "init_height": 662,
+        "mode": "2d"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1616676355612,
+        "path": "../upload/2021/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "../upload/2021/03/161667635561201evwnnsnjnbpq3djppeepmn.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 126.44264174234502,
+        "y": 137.2386813882581,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -1,
+        "ratio": 0.3033987915407855,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "01EVWNNSNJNBPQ3DJPPEEPMN7Q.jpg",
+        "price": 440,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 23
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1616676581141,
+        "path": "../upload/2021/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "../upload/2021/03/1616676581141fb_img_1616676491269_cro.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -127.30262614389838,
+        "y": 138.4637214832744,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36407854984894256,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1616676491269.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 25
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1616676626656,
+        "path": "../upload/2021/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "../upload/2021/03/1616676626656fb_img_1616676530640_cro.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 44.40888516668235,
+        "y": 137.09907465108847,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36407854984894256,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1616676530640.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 26
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1616676953899,
+        "path": "../upload/2021/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "../upload/2021/03/1616676953899fb_img_1616676944472_cro.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -42.98336960993035,
+        "y": 133.97539396488355,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.36407854984894256,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1616676944472.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 27
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_14",
+        "item": "1_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 3.0037448788171446,
+        "y": -169.37135578980093,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 87,
+        "ratio": 0.13942307692307693,
+        "itemID": 28
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_004",
+        "item": "butterfly_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 67.78643118736801,
+        "y": -160.69215723368993,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 61,
+        "ratio": 0.03511801957397812,
+        "itemID": 30
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_028",
+        "item": "butterfly_028",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -61.62748592102551,
+        "y": -166.2438293245538,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 52,
+        "ratio": 0.029936672423719057,
+        "itemID": 31
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Loving Memories",
+        "font": "32.8055px Chopin Script",
+        "font_size": 49,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -11.927027592352204,
+        "y": -116.77126048673776,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Of",
+        "font": "31.4665px Chopin Script",
+        "font_size": 47,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2.715536209974374,
+        "y": -92.5471168393363,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "And",
+        "font": "36.8225px Chopin Script",
+        "font_size": 55,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -5.6555051166380395,
+        "y": -15.942163331637744,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Baby Valma Papertalk",
+        "font": "28.7885px Chopin Script",
+        "font_size": 43,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -7.574898544282604,
+        "y": 10.617306821837076,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 18
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Patrica May Slater Papertalk",
+        "font": "30.127499999999998px Chopin Script",
+        "font_size": 45,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": -63.16994225280166,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Born 17-11-1988 Sadly Passed 06-04-2017",
+        "font": "18.746px Chopin Script",
+        "font_size": 28,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -8.706134047592911,
+        "y": -37.50433651471411,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Born 06-04-2017 Sadly Passed 06-04-2017",
+        "font": "17.407px Chopin Script",
+        "font_size": 26,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -12.252807234850081,
+        "y": 31.921857491568687,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "FOREVER YOUNG",
+        "font": "24.102px Chopin Script",
+        "font_size": 36,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -20.61326132254584,
+        "y": 58.036095408719234,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 32
+      }
+    ]
+  }
+}

@@ -1,0 +1,321 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.308Z",
+  "units": "mm",
+  "source": {
+    "id": "1682593765981",
+    "slug": "legacy-1682593765981",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1682593765981.json",
+    "savedAt": "2023-04-27T11:09:25.981Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/01.jpg",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 190,
+      "height_mm": 175
+    },
+    "viewportPx": {
+      "width": 834,
+      "height": 1112,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 190,
+      "height_mm": 175,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Arthur Rice",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -20,
+          "y_px": -428
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "🎶 Last Train To Glory 🎶",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": 496
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "29/07/1958 - 05/05/2022",
+        "font": {
+          "family": "Arial",
+          "size_px": 9
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -294
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Beloved Brother, Father & Poppy",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -198
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7a4d01c9bf021d010c5e3c4b5bcfd59e637b00e02c1171c33971c3d9892c359a",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.308Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 9",
+        "shape_url": "shapes/photos/border9.svg",
+        "fixingSystem": 1,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Flat Back",
+        "price": 644.41,
+        "quantity": 1,
+        "width": 190,
+        "height": 175,
+        "_length": 10,
+        "init_width": 872,
+        "init_height": 667,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 834x1112"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Peter John Leary",
+        "font": "157.44710526315785px Chopin Script",
+        "font_size": 23,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -20,
+        "y": -428,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "🎶 Last Train To Glory 🎶",
+        "font": "82.14631578947368px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 14,
+        "y": 496,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1682591572300,
+        "path": "../upload/2023/04/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1682591572300dd8ca56a23bb488184a69f4a.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": -220,
+        "y": 162,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.6396470217459813,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "DD8CA56A-23BB-4881-84A6-9F4A2B5EAE09.webp",
+        "price": 350,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 6
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1682591725156,
+        "path": "../upload/2023/04/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "168259172515649a67c9589234e53acecb39e.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 376,
+        "y": 150,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.6396470217459813,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "49A67C95-8923-4E53-ACEC-B39E7CC6B5DE.jpeg",
+        "price": 300,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "29/07/1958 - 05/05/2022",
+        "font": "61.60973684210525px Arial",
+        "font_size": 9,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": -294,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Beloved Brother, Father & Poppy",
+        "font": "88.99184210526315px Chopin Script",
+        "font_size": 13,
+        "font_family": "Chopin Script",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -198,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      }
+    ]
+  }
+}

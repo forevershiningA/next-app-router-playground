@@ -1,0 +1,213 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:44.205Z",
+  "units": "mm",
+  "source": {
+    "id": "1604645700267",
+    "slug": "legacy-1604645700267",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1604645700267.json",
+    "savedAt": "2020-11-06T06:55:00.267Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Circle",
+    "material": {
+      "name": "src/bronzes/phoenix/l/05.jpg",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 75,
+      "height_mm": 75
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 619,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 75,
+      "height_mm": 75,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/05.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "fff",
+        "font": {
+          "family": "Arial",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 86.4,
+          "y_px": -109.85
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "my dog",
+        "font": {
+          "family": "French Script",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -1.6,
+          "y_px": 73.15
+        },
+        "rotation": {
+          "z_deg": -6
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "abd1fa90857e07e3534238303990a9e9d0b61901a8f0223c86cc162ab77ee261",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:44.205Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Green - Lugs with Studs",
+        "border": "Border Circle",
+        "shape_url": "shapes/photos/bordercircle.svg",
+        "fixingSystem": 2,
+        "shape": "Circle",
+        "color": "#1a391a",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/05.jpg",
+        "price": "180.35",
+        "quantity": 1,
+        "width": 75,
+        "height": 75,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 619,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "path": "../upload/2020/11/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1604645267819dogfrisbee_09_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -2,
+        "y": -6,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 82,
+        "ratio": 1.8170645161290322,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dogFrisbee_09.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "fff",
+        "font": "120.70499999999998px Arial",
+        "font_size": 15,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 86.39999999999998,
+        "y": -109.85000000000002,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "my dog",
+        "font": "152.89299999999997px French Script",
+        "font_size": 19,
+        "font_family": "French Script",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.6000000000000227,
+        "y": 73.14999999999998,
+        "rotation": -6,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 2
+      }
+    ]
+  }
+}

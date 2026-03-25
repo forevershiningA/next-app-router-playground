@@ -1,0 +1,62 @@
+package forevershining.headstones.headstone_5;
+
+import pl.pkapusta.engine.graphics.algorithms.Bezier;
+import pl.pkapusta.engine.graphics.path.DiscreteCornerPoint;
+import pl.pkapusta.engine.graphics.path.DiscretePoint;
+import pl.pkapusta.engine.graphics.path.HeadScalingDiscretePath;
+import pl.pkapusta.engine.graphics.path.NormalsDirection;
+import pl.pkapusta.engine.graphics.path.DiscretePath;
+import pl.pkapusta.engine.graphics.path.ScalingDiscretePath;
+import openfl.geom.Point;
+import forevershining.headstones.InnerLineHeadstoneModel3D;
+import forevershining.headstones.SVGPathReader;
+import forevershining.headstones.Utils;
+
+/**
+ * @author Przemysław Kapusta
+ */
+@:expose("Executor")
+class MainExecutor extends T1InnerLineHeadstoneModel3D {
+	
+    override private function getOuterDirection() : Int {
+        return NormalsDirection.CLOCKWISE;
+    }
+	
+    override private function getInnerDirection() : Int {
+        return NormalsDirection.ANTICLOCKWISE;
+    }
+	
+    override private function buildOuterPath() : String {
+        return
+			"M242.4,27.8c36.1,22.5,70.1,43.6,103.8,64.4l41.3,25.8c1.3,0.7,2.4,1.7,3.1,3" +
+			"c0.7,1.3,1,2.7,1,4.3v273l-275.6,0h-21c-4.8,0-10.8-1.4-15-2.4c-6.9-1.8-13.7-4.1-20.4-7c-10.8-4.4-20.8-10.3-29.8-17.6" +
+			"c-7.4-6.2-13.1-13.6-17.2-22.4c-1.6-3.6-2.7-7.3-3.4-11.3c-0.7-3.9-0.8-7.8-0.5-11.7c0.7-7.7,3.1-14.8,7-21.4" +
+			"c4-6.9,9.1-12.8,15.3-17.8c6-4.6,12.4-8.9,19.1-12.9c2.9-1.7,5.5-3.8,7.9-6.3c2.4-2.4,4.3-5.1,5.9-8c1.5-3.1,2.6-6.4,3.1-9.8" +
+			"c0.5-3.4,0.5-6.9,0-10.3c-0.6-3.6-0.5-7.3,0.3-10.9c0.8-3.6,2.1-7,4-10.1c1.9-2.8,4.2-5.2,6.9-7.2c2.8-2,5.9-3.3,9.2-4.1" +
+			"c5.9-1,11.6-0.5,17.2,1.3l13.9,5.3l12.8-32.7l24.1-58.4l24.9-62.6c-3.2-3.2-5.6-6.8-7.3-11c-1.3-2.8-1.8-5.7-1.7-8.8" +
+			"c0.2-3,1-5.9,2.5-8.5l14.5-23.4c1.7-2.5,3.9-4.6,6.6-6.1c2.7-1.5,5.5-2.3,8.6-2.5c3.6-0.2,7.2,0.1,10.7,1s6.8,2.3,9.8,4.3" +
+			"c3.1,1.8,5.9,4.1,8.3,6.8c2.4,2.8,4.2,5.8,5.6,9.2c0.6,1.4,1.1,2.8,1.4,4.3L242.4,27.8z";
+    }
+	
+    override private function buildInnerPath() : String {
+        return
+			"M118.3,395.4c9.7-5.4,14.9-9,18.4-12.6" +
+			"c3.5-3.7,6.4-7.8,8.6-12.3c2.1-4.6,3.5-9.3,4.3-14.3c0.8-5,0.9-9.9,0.4-14.9c-0.6-6.3-1.6-12.5-2.9-18.5l-3.8-18.4" +
+			"c-1.2-4.8-1-9.6,0.4-14.3c1.5-4.7,4-8.7,7.8-12c4.6-4.3,8.8-9,12.6-14.3c1.3-1.7,2.3-3.6,3-5.8c0.3-1.1,0.3-2.3,0-3.4" +
+			"c-0.3-1.1-0.9-2.1-1.7-2.9c-0.7-0.9-1.6-1.5-2.8-1.8c-0.9-0.2-1.8-0.1-2.7,0.2c-0.9,0.3-1.8,0.7-2.6,1.3l-2.6,1.4" +
+			"c-0.8,0.5-1.8,0.9-3,1.3c-2.9,0.9-5.9,0.9-8.8,0.1c-3-0.8-5.5-2.3-7.5-4.6c-1.9-1.9-3.2-4.1-3.7-6.8c-0.4-2.8,0-5.6,1.1-8.2" +
+			"l16.5-42.9l43.7-116.6l2.9-5.7c3.6,1,7.3,1.4,11,1.1c3.1-0.1,5.9-0.9,8.6-2.4c2.6-1.5,4.8-3.5,6.5-6.1l14.5-23.4" +
+			"c1.3-3.1,2.1-5.6,2.5-9.7l2.2,1.4c-0.5,4-1.7,7.5-2.8,9.4l-14.5,23.5c-1.9,2.8-4.3,5.1-7.3,6.8c-3,1.7-6.2,2.6-9.6,2.8" +
+			"c-3.4,0.2-6.7,0-10-0.8l-2,4l-43.7,116.5l-16.5,43c-1,2.2-1.3,4.5-1,6.9c0.4,2.2,1.5,4.1,3.1,5.6c1.7,1.9,3.9,3.3,6.4,3.9" +
+			"c2.5,0.7,5,0.7,7.5-0.1c0.8-0.3,1.7-0.7,2.6-1.1l2.6-1.4c0.8-0.5,1.8-1,2.9-1.4c1.3-0.5,2.7-0.6,4-0.3c1.6,0.5,2.9,1.3,3.9,2.5" +
+			"c1.1,1.1,1.8,2.4,2.2,3.9c0.4,1.5,0.3,3.1-0.1,4.6c-0.7,2.4-1.8,4.6-3.3,6.5c-3.8,5.3-8.1,10.2-12.9,14.6c-3.4,3-5.8,6.7-7.2,11" +
+			"c-1.3,4.3-1.5,8.7-0.4,13.1l3.8,18.5c1.3,6.3,2.3,12.5,2.9,18.7c0.6,5.2,0.4,10.4-0.4,15.6c-0.8,5.1-2.3,10.1-4.4,14.9" +
+			"c-2.4,4.8-5.4,9.1-9.1,12.9c-3.7,3.8-8.3,6.9-15.3,11.1H118.3z";
+    }
+
+    public function new() {
+        super();
+    }
+	
+}
+

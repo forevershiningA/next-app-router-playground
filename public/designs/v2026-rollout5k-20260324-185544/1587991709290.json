@@ -1,0 +1,790 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.846Z",
+  "units": "mm",
+  "source": {
+    "id": "1587991709290",
+    "slug": "legacy-1587991709290",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1587991709290.json",
+    "savedAt": "2020-04-27T12:48:29.290Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle",
+    "material": {
+      "name": "src/granites/forever2/l/Balmoral-Red-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Balmoral-Red-TILE-900-X-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 601,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 817,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 601,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Balmoral-Red-TILE-900-X-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Rememberance of",
+        "font": {
+          "family": "Arial",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": -356
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Loving husband of Salina, devoted father of Stanley & Alice",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -20
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Wonderful, son of Wilma &Keith, brother of Jane",
+        "font": {
+          "family": "Arial",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 8
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "\"Bro\"- in- Lawof Mark & Uncle of Harrison",
+        "font": {
+          "family": "Arial",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": 42
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "DANIEL OWENS",
+        "font": {
+          "family": "Arial",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -257
+        },
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "SCHOLAR.GENTLEMAN. LEADER",
+        "font": {
+          "family": "Arial",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "\"ALLAN. S.\"",
+        "font": {
+          "family": "Adorable",
+          "size_px": 46
+        },
+        "position": {
+          "x_px": -22,
+          "y_px": -188
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "20.12.1955- 24.11.2018",
+        "font": {
+          "family": "Arial",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": -14,
+          "y_px": -123
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-32",
+        "asset": "1_065_15",
+        "position": {
+          "x_px": -358,
+          "y_px": -355
+        },
+        "height_px": 70,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-33",
+        "asset": "1_065_15",
+        "position": {
+          "x_px": -344.641,
+          "y_px": 344
+        },
+        "height_px": 81,
+        "rotation": {
+          "z_deg": 89
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-34",
+        "asset": "1_065_15",
+        "position": {
+          "x_px": 346.717,
+          "y_px": 346
+        },
+        "height_px": 81,
+        "rotation": {
+          "z_deg": 361
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-35",
+        "asset": "1_065_15",
+        "position": {
+          "x_px": 360.076,
+          "y_px": -356
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 270
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-36",
+        "asset": "cross_008",
+        "position": {
+          "x_px": -341,
+          "y_px": -296
+        },
+        "height_px": 85,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-38",
+        "asset": "australian coat",
+        "position": {
+          "x_px": 335,
+          "y_px": -307
+        },
+        "height_px": 54,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-39",
+        "asset": "1_172_08",
+        "position": {
+          "x_px": -355,
+          "y_px": 32
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-41",
+        "asset": "2_079_26",
+        "position": {
+          "x_px": 348,
+          "y_px": 45
+        },
+        "height_px": 51,
+        "rotation": {
+          "z_deg": 45
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_065_15",
+        "path": "/shapes/motifs/1_065_15.svg"
+      },
+      {
+        "id": "cross_008",
+        "path": "/shapes/motifs/cross_008.svg"
+      },
+      {
+        "id": "australian coat",
+        "path": "/shapes/motifs/australian coat.svg"
+      },
+      {
+        "id": "1_172_08",
+        "path": "/shapes/motifs/1_172_08.svg"
+      },
+      {
+        "id": "2_079_26",
+        "path": "/shapes/motifs/2_079_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7f8598c51868427f0b33c47308687ced4425850accb072c5d1816f02f9a5b1d8",
+    "sourceItemCount": 19,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.846Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Balmoral-Red-TILE-900-X-900.jpg",
+        "price": "1222.39",
+        "quantity": 1,
+        "width": 601,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 817
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": null,
+        "quantity": 1,
+        "label": " ",
+        "font": "33.13539933444259px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 9,
+        "y": -309,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": null,
+        "quantity": 1,
+        "label": " ",
+        "font": "38.4370632279534px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1,
+        "y": -321,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "In Loving Rememberance of",
+        "font": "38.4370632279534px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1,
+        "y": -356,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Loving husband of Salina, devoted father of Stanley & Alice",
+        "font": "29.159151414309477px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3,
+        "y": -20,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Wonderful, son of Wilma &Keith, brother of Jane",
+        "font": "30.484567387687182px Arial",
+        "font_size": 23,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2,
+        "y": 8,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "\"Bro\"- in- Lawof Mark & Uncle of Harrison",
+        "font": "30.484567387687182px Arial",
+        "font_size": 23,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -11,
+        "y": 42,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_15",
+        "item": "1_065_15",
+        "price": 207.8934,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -358,
+        "y": -355,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 180,
+        "height": 70,
+        "ratio": 0.12939001848428835,
+        "itemID": 32
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_15",
+        "item": "1_065_15",
+        "price": 210.31868000000003,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -344.641306156406,
+        "y": 344,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 89,
+        "height": 81,
+        "ratio": 0.14972273567467653,
+        "itemID": 33
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_15",
+        "item": "1_065_15",
+        "price": 210.31868000000003,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 346.71738768718797,
+        "y": 346,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 361,
+        "height": 81,
+        "ratio": 0.14972273567467653,
+        "itemID": 34
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_15",
+        "item": "1_065_15",
+        "price": 205.6886,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 360.07608153078195,
+        "y": -356,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 270,
+        "height": 60,
+        "ratio": 0.11090573012939002,
+        "itemID": 35
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "ALLAN STANLEY WHITE",
+        "font": "47.71497504159733px Arial",
+        "font_size": 36,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 1,
+        "y": -257,
+        "rotation": 1,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "SCHOLAR.GENTLEMAN. LEADER",
+        "font": "38.4370632279534px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6,
+        "y": -70,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "\"ALLAN. S.\"",
+        "font": "60.969134775374364px Adorable",
+        "font_size": 46,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -22,
+        "y": -188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_008",
+        "item": "cross_008",
+        "price": 211.20059999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -341,
+        "y": -296,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 85,
+        "ratio": 0.14166666666666666,
+        "itemID": 36
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "20.12.1955- 24.11.2018",
+        "font": "35.786231281198px Arial",
+        "font_size": 27,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -14,
+        "y": -123,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "australian coat",
+        "item": "australian coat",
+        "price": 204.36572,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 335,
+        "y": -307,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 54,
+        "ratio": 0.12217194570135746,
+        "itemID": 38
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_172_08",
+        "item": "1_172_08",
+        "price": 204.5862,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -355,
+        "y": 32,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 55,
+        "ratio": 0.09166666666666666,
+        "itemID": 39
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_079_26",
+        "item": "2_079_26",
+        "price": 203.70428,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 348,
+        "y": 45,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 45,
+        "height": 51,
+        "ratio": 0.085,
+        "itemID": 41
+      }
+    ]
+  }
+}

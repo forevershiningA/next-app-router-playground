@@ -122,9 +122,7 @@ export default function ConditionalCanvas() {
             </div>
           }
         >
-          <LoadDesignButton designId="1725769905504" label="Load Design 1" position="top" />
-          <LoadDesignButton designId="1578016189116" label="Load Design 2" position="middle" />
-          <LoadDesignButton designId="1723691641046" label="Load Design 3" position="bottom" />
+          <LoadDesignButton label="Load Design" />
           <SceneOverlayHost />
           <CheckPricePanel />
           <SEOPanel />

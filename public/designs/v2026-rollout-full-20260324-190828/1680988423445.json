@@ -1,0 +1,354 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:34.157Z",
+  "units": "mm",
+  "source": {
+    "id": "1680988423445",
+    "slug": "legacy-1680988423445",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1680988423445.json",
+    "savedAt": "2023-04-08T21:13:43.445Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 400,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 768,
+      "height": 1024,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 200,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Miles Stone",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": 40,
+          "y_px": 32.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "6 Dec 1963 ~ 6 Dec 2063",
+        "font": {
+          "family": "Arial",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 56,
+          "y_px": 76.423
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "In silence we remember",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": -68,
+          "y_px": -62.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "With thought we reflect",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 48,
+          "y_px": -36.007
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_157_15",
+        "position": {
+          "x_px": -416,
+          "y_px": 0.735
+        },
+        "height_px": 171,
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "2_095_15",
+        "position": {
+          "x_px": 424,
+          "y_px": -53.643
+        },
+        "height_px": 62,
+        "rotation": {
+          "z_deg": 4
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_157_15",
+        "path": "/shapes/motifs/1_157_15.svg"
+      },
+      {
+        "id": "2_095_15",
+        "path": "/shapes/motifs/2_095_15.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9a663e214ebecee32288068bb6ea4d3e230307f8a2dcb2bb148589bcd85ccb35",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:34.157Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 281.24,
+        "quantity": 1,
+        "width": 400,
+        "height": 200,
+        "_length": 15,
+        "init_width": 773,
+        "init_height": 570,
+        "device": "tablet",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Safari (tablet(ios)), 768x1024"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_157_15",
+        "item": "1_157_15",
+        "price": 245.05927999999997,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -416,
+        "y": 0.7348353552859619,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 1,
+        "height": 171,
+        "ratio": 0.20046893317702227,
+        "itemID": 4
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_095_15",
+        "item": "2_095_15",
+        "price": 219.47098499999998,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 424,
+        "y": -53.642980935875215,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 4,
+        "height": 62,
+        "ratio": 0.1183206106870229,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 11,
+        "label": "Peter Newitt",
+        "font": "59.772375px Great Vibes",
+        "font_size": 61,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 40,
+        "y": 32.33275563258232,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "6 Dec 1963 ~ 6 Dec 2063",
+        "font": "22.537125px Arial",
+        "font_size": 23,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 56,
+        "y": 76.42287694974004,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "In silence we remember",
+        "font": "21.55725px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -68,
+        "y": -62.46100519930676,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 20,
+        "label": "With thought we reflect",
+        "font": "21.55725px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 48,
+        "y": -36.00693240901213,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 11
+      }
+    ]
+  }
+}

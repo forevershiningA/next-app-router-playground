@@ -1,0 +1,534 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:17.865Z",
+  "units": "mm",
+  "source": {
+    "id": "1718339402597",
+    "slug": "legacy-1718339402597",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1718339402597.json",
+    "savedAt": "2024-06-14T04:30:02.597Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 40",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 526,
+      "height_mm": 901.7
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 915,
+      "dpr": 1.75
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 526,
+      "height_mm": 901.7,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Wilbert Lyons",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": 16.977,
+          "y_px": -132.838
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "\"Pistol\"",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -0.999,
+          "y_px": -80.902
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Morris",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 73.681
+        },
+        "position": {
+          "x_px": -5.564,
+          "y_px": -33.107
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "May 7, 2014",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -0.999,
+          "y_px": 56.931
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "May 25, 2024",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -7.989,
+          "y_px": 100.878
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Forever In Our Hearts",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 54
+        },
+        "position": {
+          "x_px": -5.992,
+          "y_px": 263.68
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Even though we are apart, you spirit is",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -4.993,
+          "y_px": 219.733
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "2_095_09",
+        "position": {
+          "x_px": -123.828,
+          "y_px": -166.797
+        },
+        "height_px": 161,
+        "rotation": {
+          "z_deg": -72
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "dragonfly_03",
+        "position": {
+          "x_px": -4.993,
+          "y_px": 159.806
+        },
+        "height_px": 120,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "2_095_09",
+        "position": {
+          "x_px": 119.834,
+          "y_px": -270.671
+        },
+        "height_px": 192,
+        "rotation": {
+          "z_deg": 32
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_095_09",
+        "path": "/shapes/motifs/2_095_09.svg"
+      },
+      {
+        "id": "dragonfly_03",
+        "path": "/shapes/motifs/dragonfly_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d329876d70def059556253c2d2471fc9415ceeffb6552fbf284b58e0a6fd883e",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:17.865Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 40",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2024.55,
+        "quantity": 1,
+        "width": 526,
+        "height": 901.7,
+        "_length": 100,
+        "init_width": 412,
+        "init_height": 728.9999961853027,
+        "device": "mobile",
+        "dpr": 1.75,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x915"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1718339559283,
+        "path": "../upload/2024/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1718339559283snapchat2076838432_cropp.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 4.992904293252536,
+        "y": -231.71870171451832,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3203879734018391,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Snapchat-2076838432.jpg",
+        "price": 450,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_095_09",
+        "item": "2_095_09",
+        "price": 242.71173000000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -123.82813871601158,
+        "y": -166.7972786108968,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -72,
+        "height": 161,
+        "ratio": 0.3213572854291417,
+        "itemID": 8
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dragonfly_03",
+        "item": "dragonfly_03",
+        "price": 233.08677500000002,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -4.993251430678185,
+        "y": 159.80587786924855,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 120,
+        "ratio": 0.13574660633484162,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_095_09",
+        "item": "2_095_09",
+        "price": 249.98913499999998,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 119.83376187565165,
+        "y": -270.67144349053416,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 32,
+        "height": 192,
+        "ratio": 0.38323353293413176,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 11,
+        "label": "Brystil Emma",
+        "font": "53.01352999889098px Great Vibes",
+        "font_size": 68,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 16.976515466151966,
+        "y": -132.83837544521566,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 78,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "\"Pistol\"",
+        "font": "46.776644116668514px Great Vibes",
+        "font_size": 60,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -0.998580858650655,
+        "y": -80.9022404002967,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 8,
+        "label": "Robinson",
+        "font": "57.442331852848916px Great Vibes",
+        "font_size": 73.6807861328125,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5.563873660848969,
+        "y": -33.10682693138892,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 9,
+        "label": "May 7, 2014",
+        "font": "38.98053676389043px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -0.9987410759237605,
+        "y": 56.93101445528396,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 10,
+        "label": "May 25, 2024",
+        "font": "38.98053676389043px Great Vibes",
+        "font_size": 50,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -7.988967303750712,
+        "y": 100.8779150877973,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 18,
+        "label": "Forever In Our Hearts",
+        "font": "42.09897970500166px Great Vibes",
+        "font_size": 54,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5.991591963418614,
+        "y": 263.67974918990274,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 32,
+        "label": "Even though we are apart, you spirit is",
+        "font": "32.74365088166796px Great Vibes",
+        "font_size": 42,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -4.9929844018892595,
+        "y": 219.73343567535562,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 14
+      }
+    ]
+  }
+}

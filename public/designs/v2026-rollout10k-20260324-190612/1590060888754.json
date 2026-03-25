@@ -1,0 +1,887 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:13.214Z",
+  "units": "mm",
+  "source": {
+    "id": "1590060888754",
+    "slug": "legacy-1590060888754",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590060888754.json",
+    "savedAt": "2020-05-21T11:34:48.754Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 990,
+      "height_mm": 1000
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 592,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 990,
+      "height_mm": 1000,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1090,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "Coleman Cummings",
+        "font": {
+          "family": "French Script",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": 47,
+          "y_px": -107.167
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "In loving memory of",
+        "font": {
+          "family": "French Script",
+          "size_px": 86
+        },
+        "position": {
+          "x_px": 46,
+          "y_px": -127.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Beloved Mother to Mereani, Puapii & Bartholomew",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": 3.833,
+          "y_px": -52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Grandmother to Talia&apos;uli, Horatio, Mafi,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -35
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Gracie Freeman",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": -9.333,
+          "y_px": -16.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Sunrise",
+        "font": {
+          "family": "French Script",
+          "size_px": 99
+        },
+        "position": {
+          "x_px": -100.667,
+          "y_px": 107
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "15-03-1973",
+        "font": {
+          "family": "French Script",
+          "size_px": 112
+        },
+        "position": {
+          "x_px": -85.333,
+          "y_px": 137.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Sunset",
+        "font": {
+          "family": "French Script",
+          "size_px": 97
+        },
+        "position": {
+          "x_px": 102.333,
+          "y_px": 108
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "21-05-2019",
+        "font": {
+          "family": "French Script",
+          "size_px": 108
+        },
+        "position": {
+          "x_px": 80.333,
+          "y_px": 138.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Forever in our hearts",
+        "font": {
+          "family": "French Script",
+          "size_px": 89
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "Loved and Missed",
+        "font": {
+          "family": "French Script",
+          "size_px": 88
+        },
+        "position": {
+          "x_px": -4.667,
+          "y_px": 21
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "Til we meet again",
+        "font": {
+          "family": "French Script",
+          "size_px": 75
+        },
+        "position": {
+          "x_px": -3.333,
+          "y_px": 39.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-38",
+        "text": "TANGIMETUA",
+        "font": {
+          "family": "Garamond",
+          "size_px": 104
+        },
+        "position": {
+          "x_px": -1.333,
+          "y_px": 179.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "1_184_23",
+        "position": {
+          "x_px": -47.333,
+          "y_px": -122
+        },
+        "height_px": 182,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-25",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -29.333,
+          "y_px": 70.5
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-26",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -2.788,
+          "y_px": 72.167
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-27",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 23.091,
+          "y_px": 72.167
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-37",
+        "asset": "1_013_20",
+        "position": {
+          "x_px": 196.493,
+          "y_px": -73
+        },
+        "height_px": 47,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_184_23",
+        "path": "/shapes/motifs/1_184_23.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "1_013_20",
+        "path": "/shapes/motifs/1_013_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "422bc52c16b6459b85eefcaa3c2a216056c82346d0f6ee025038ab5e2c56020a",
+    "sourceItemCount": 22,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:13.214Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 22",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "2959.67",
+        "quantity": 1,
+        "width": 990,
+        "height": 1000,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 592
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": "1198.17",
+        "quantity": 1,
+        "width": 1090,
+        "height": 100,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 592
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1590061886539,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1590061886539fb_img_1590061705732_cro.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -91.9999885559082,
+        "y": -109.99996948242188,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": -1,
+        "ratio": 0.2910626535626536,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1590061705732.jpg",
+        "price": 980,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_23",
+        "item": "1_184_23",
+        "price": 232.58716000000004,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -47.33332824707031,
+        "y": -122.00001525878906,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 182,
+        "ratio": 0.30333333333333334,
+        "itemID": 11
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 214.5078,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -29.33332061767578,
+        "y": 70.50003051757812,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.16666666666666666,
+        "itemID": 25
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 214.5078,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2.7880125011097334,
+        "y": 72.16671752929688,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.16666666666666666,
+        "itemID": 26
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 214.5078,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 23.090608603737564,
+        "y": 72.16668701171875,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.16666666666666666,
+        "itemID": 27
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_013_20",
+        "item": "1_013_20",
+        "price": 202.82236,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 196.4934687353229,
+        "y": -73,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 47,
+        "ratio": 0.18951612903225806,
+        "itemID": 37
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 117,
+        "quantity": 26,
+        "label": "Tupopongi Tangimetua",
+        "font": "24.25090909090909px French Script",
+        "font_size": 76,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 47.00001525878906,
+        "y": -107.16664123535156,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 78,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 76.5,
+        "quantity": 17,
+        "label": "In loving memory of",
+        "font": "27.44181818181818px French Script",
+        "font_size": 86,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 46.00000762939453,
+        "y": -127.33334350585938,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 78,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 148.5,
+        "quantity": 33,
+        "label": "Beloved Mother to Mereani, Puapii & Bartholomew",
+        "font": "16.91181818181818px Great Vibes",
+        "font_size": 53,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 3.8333396911621094,
+        "y": -51.99999237060547,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 63,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Grandmother to Talia&apos;uli, Horatio, Mafi,",
+        "font": "15.635454545454545px Great Vibes",
+        "font_size": 49,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -8,
+        "y": -34.999969482421875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Elias & Maliyah",
+        "font": "18.188181818181818px Great Vibes",
+        "font_size": 57,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -9.333335876464844,
+        "y": -16.6666259765625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 72,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Sunrise",
+        "font": "31.59px French Script",
+        "font_size": 99,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -100.66666412353516,
+        "y": 106.99996948242188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 17
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "15-03-1973",
+        "font": "35.738181818181815px French Script",
+        "font_size": 112,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -85.33334350585938,
+        "y": 137.33331298828125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": null,
+        "quantity": 1,
+        "label": " ",
+        "font": "15.954545454545455px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -90,
+        "y": 9,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 19
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Sunset",
+        "font": "30.951818181818183px French Script",
+        "font_size": 97,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 102.33335876464844,
+        "y": 107.99996948242188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 20
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "21-05-2019",
+        "font": "34.46181818181818px French Script",
+        "font_size": 108,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 80.33334350585938,
+        "y": 138.66668701171875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 21
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Forever in our hearts",
+        "font": "28.39909090909091px French Script",
+        "font_size": 89,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1,
+        "y": 2.999969482421875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 22
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Loved and Missed",
+        "font": "28.08px French Script",
+        "font_size": 88,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -4.6666717529296875,
+        "y": 21,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 23
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Til we meet again",
+        "font": "23.931818181818183px French Script",
+        "font_size": 75,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -3.3333358764648438,
+        "y": 39.333343505859375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 72,
+        "itemID": 24
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "TANGIMETUA",
+        "font": "33.18545454545455px Garamond",
+        "font_size": 104,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1.3333358764648438,
+        "y": 179.33331298828125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 78,
+        "itemID": 38
+      }
+    ]
+  }
+}

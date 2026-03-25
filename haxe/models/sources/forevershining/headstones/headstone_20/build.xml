@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project default="build">
+	
+	<property name="ANT_DIR" location="../../../../ant"/>
+
+	<target name="build">
+		
+		<ant antfile="${ANT_DIR}/build-m3d.xml" useNativeBasedir="true">
+			
+			<property name="definition.file" location="definition.xml"/>
+			
+			<property name="executor.file" location="MainExecutor.hx"/>
+			<property name="executor.out_file" location="compiled/MainExecutor.js"/>
+			
+			<property name="output.file" location="build/headstone_20.m3d"/>
+			
+			<property name="copy-to-build.dir" value="forevershining/headstones"/>
+			<!--<property name="copy-to-build.dir" value="../../source/bin/html5/bin/models/forevershining/headstones"/>-->
+			
+		</ant>
+		
+	</target>
+	
+</project>

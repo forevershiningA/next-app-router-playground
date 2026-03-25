@@ -1,0 +1,284 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:45.349Z",
+  "units": "mm",
+  "source": {
+    "id": "1723012422686",
+    "slug": "legacy-1723012422686",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1723012422686.json",
+    "savedAt": "2024-08-07T06:33:42.686Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/11.jpg",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304.79999999999995,
+      "height_mm": 203.2,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "helloo",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -91,
+          "y_px": 210
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_154_10",
+        "position": {
+          "x_px": 306,
+          "y_px": 115
+        },
+        "height_px": 81,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_154_11",
+        "position": {
+          "x_px": -339,
+          "y_px": -199
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_10",
+        "path": "/shapes/motifs/1_154_10.svg"
+      },
+      {
+        "id": "1_154_11",
+        "path": "/shapes/motifs/1_154_11.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9eb1c6923791f3f7a24ef47354003d0a65d713dc1f8d799c118eff2628772fbc",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:45.349Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#513a68",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/11.jpg",
+        "name": "Bronze Plaque - Purple - Lugs with Studs",
+        "price": 922.3,
+        "quantity": 1,
+        "width": 304.79999999999995,
+        "height": 203.2,
+        "_length": 0,
+        "init_width": 1680,
+        "init_height": 881,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240731,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "helloo",
+        "font": "98.63558070866144px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -91,
+        "y": 210,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br115r-gum-leaves",
+        "color": "#ffb35a",
+        "x": -228,
+        "y": -53,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5392184557438796,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br115r-gum-leaves",
+        "price": 99,
+        "quantity": 1,
+        "size": "101.6 x 101.6 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br115r-gum-leaves",
+        "color": "#ffb35a",
+        "x": 58.325000000000045,
+        "y": -53,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5392184557438796,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br115r-gum-leaves",
+        "price": 99,
+        "quantity": 1,
+        "size": "101.6 x 101.6 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_10",
+        "item": "1_154_10",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 306,
+        "y": 115,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 81,
+        "ratio": 0.10344827586206896,
+        "itemID": 4
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_11",
+        "item": "1_154_11",
+        "price": 74.399,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -339,
+        "y": -199,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07352941176470588,
+        "itemID": 5
+      }
+    ]
+  }
+}

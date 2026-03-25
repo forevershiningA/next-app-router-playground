@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project default="build">
+	
+	<property name="ANT_DIR" location="../../../../ant"/>
+
+	<target name="build">
+		
+		<ant antfile="${ANT_DIR}/build-m3d.xml" useNativeBasedir="true">
+			
+			<property name="definition.file" location="definition.xml"/>
+			
+			<property name="asset1.type" value="texture"/>
+			<property name="asset1.id" value="floor-diffuse-map"/>
+			<property name="asset1.file" location="assets/floor-diffuse-smaller.jpg"/>
+			
+			<property name="asset2.type" value="texture"/>
+			<property name="asset2.id" value="floor-specular-map"/>
+			<property name="asset2.file" location="assets/floor-specular.png"/>
+			
+			<property name="asset3.type" value="texture"/>
+			<property name="asset3.id" value="sky-box-pos-x"/>
+			<property name="asset3.file" location="assets/skybox_pos_x.jpg"/>
+			
+			<property name="asset4.type" value="texture"/>
+			<property name="asset4.id" value="sky-box-neg-x"/>
+			<property name="asset4.file" location="assets/skybox_neg_x.jpg"/>
+			
+			<property name="asset5.type" value="texture"/>
+			<property name="asset5.id" value="sky-box-pos-y"/>
+			<property name="asset5.file" location="assets/skybox_pos_y.jpg"/>
+			
+			<property name="asset6.type" value="texture"/>
+			<property name="asset6.id" value="sky-box-neg-y"/>
+			<property name="asset6.file" location="assets/skybox_neg_y.jpg"/>
+			
+			<property name="asset7.type" value="texture"/>
+			<property name="asset7.id" value="sky-box-pos-z"/>
+			<property name="asset7.file" location="assets/skybox_pos_z.jpg"/>
+			
+			<property name="asset8.type" value="texture"/>
+			<property name="asset8.id" value="sky-box-neg-z"/>
+			<property name="asset8.file" location="assets/skybox_neg_z.jpg"/>
+			
+			
+			<property name="executor.file" location="MainExecutor.hx"/>
+			<property name="executor.out_file" location="compiled/MainExecutor.js"/>
+			
+			<property name="output.file" location="build/scenery1.m3d"/>
+			
+			<property name="copy-to-build.dir" value="tempus/sceneries"/>
+			
+		</ant>
+		
+	</target>
+	
+</project>

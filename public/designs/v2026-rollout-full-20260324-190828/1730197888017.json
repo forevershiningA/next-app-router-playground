@@ -1,0 +1,475 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.794Z",
+  "units": "mm",
+  "source": {
+    "id": "1730197888017",
+    "slug": "legacy-1730197888017",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1730197888017.json",
+    "savedAt": "2024-10-29T10:31:28.017Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 306,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 834,
+      "height": 1112,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 306,
+      "height_mm": 150,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Dorothy Henderson",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -15,
+          "y_px": -293
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "10th January 1937 to 13th March 2022",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -32,
+          "y_px": -161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Grandmother and \"Pippy\" to",
+        "font": {
+          "family": "Arial",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 46
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Treasured daughter of Nancy and Robert",
+        "font": {
+          "family": "Arial",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": 247
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Not a day passes where we don&apos;t miss you",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 336
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Loving mother of John, Wen and Sal",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -73
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Thomas, Laura and Lucy",
+        "font": {
+          "family": "Arial",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 139
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "williesolid",
+        "position": {
+          "x_px": -646,
+          "y_px": 144
+        },
+        "height_px": 26,
+        "rotation": {
+          "z_deg": 1
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "1_155_07",
+        "position": {
+          "x_px": 663.333,
+          "y_px": 144
+        },
+        "height_px": 33,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "williesolid",
+        "path": "/shapes/motifs/williesolid.svg"
+      },
+      {
+        "id": "1_155_07",
+        "path": "/shapes/motifs/1_155_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2eb847b08eec26dcbc11c2805cadc6143acab9ae0e79c646bdaf01385258fa8d",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.794Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Straight (No drilled holes)",
+        "price": 394.72,
+        "quantity": 1,
+        "width": 306,
+        "height": 150,
+        "_length": 2,
+        "init_width": 834,
+        "init_height": 976,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20240925,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 834x1112"
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Phillipa May Wauch",
+        "font": "175.38529411764705px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -15,
+        "y": -293,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "10th January 1937 to 13th March 2022",
+        "font": "53.147058823529406px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -32,
+        "y": -161,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 2
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 23,
+        "label": "Grandmother and \"Pippy\" to",
+        "font": "58.46176470588235px Arial",
+        "font_size": 11,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1,
+        "y": 46,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Treasured daughter of Nancy and Robert",
+        "font": "53.147058823529406px Arial",
+        "font_size": 10,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 18,
+        "y": 247,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Not a day passes where we don&apos;t miss you",
+        "font": "85.03529411764706px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 336,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Loving mother of John, Wen and Sal",
+        "font": "95.66470588235293px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 1,
+        "y": -73,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "williesolid",
+        "item": "williesolid",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": -646,
+        "y": 144,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 1,
+        "height": 26,
+        "ratio": 0.05148514851485148,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Thomas, Laura and Lucy",
+        "font": "85.03529411764706px Arial",
+        "font_size": 16,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 6,
+        "y": 139,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 8
+      },
+      {
+        "productid": 75,
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_07",
+        "item": "1_155_07",
+        "price": 11.12878,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 663.3333333333333,
+        "y": 144,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 33,
+        "ratio": 0.04365079365079365,
+        "itemID": 9
+      }
+    ]
+  }
+}

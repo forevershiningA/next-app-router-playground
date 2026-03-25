@@ -16,6 +16,23 @@ export interface LoadDesignOptions {
 type CanonicalPositionMode = 'legacy-stage-px' | 'surface-mm';
 type CanonicalHeadstonePlacement = 'legacy-stage-offset' | 'auto-center' | 'none';
 type CanonicalFlipMode = 'invert-legacy-bools' | 'preserve';
+export type CanonicalConversionConfidence = 'high' | 'medium' | 'low';
+
+export type CanonicalConversionMetadata = {
+  pipeline?: string;
+  converter?: string;
+  converterVersion?: string;
+  sourceHash?: string;
+  sourceItemCount?: number;
+  warnings?: string[];
+  confidence?: CanonicalConversionConfidence;
+  migratedAt?: string;
+};
+
+export type CanonicalLoadPolicyDecision = {
+  mode: 'canonical' | 'legacy-fallback';
+  reason: string;
+};
 
 export type CanonicalDesignData = {
   version?: string;
@@ -89,6 +106,10 @@ export type CanonicalDesignData = {
   assets?: {
     motifs?: Array<{ id: string; path: string }>;
   };
+  migration?: CanonicalConversionMetadata;
+  legacy?: {
+    raw?: SavedDesignData;
+  };
 };
 
 const MIN_CANONICAL_INSCRIPTION_SIZE = 5;
@@ -97,7 +118,115 @@ const MIN_CANONICAL_ROTATION = -45;
 const MAX_CANONICAL_ROTATION = 45;
 const DEFAULT_CANONICAL_FONT = 'Garamond';
 const DEFAULT_CANONICAL_COLOR = '#000000';
-export const DEFAULT_CANONICAL_DESIGN_VERSION = 'v2026';
+export const DEFAULT_CANONICAL_DESIGN_VERSION = 'v2026-rollout-full-20260324-190828';
+export const DEFAULT_CANONICAL_DESIGN_BASE_PATH = '/designs';
+const DEFAULT_CANONICAL_LEGACY_BASE_PATH = '/canonical-designs';
+const DEFAULT_CANONICAL_LEGACY_VERSION = 'v2026';
+const DESIGN_SOURCE_OVERRIDES: Record<string, { basePath: string; version: string }> = {
+  // Keep the known-good baseline payload for Load Design 1.
+  '1725769905504': {
+    basePath: DEFAULT_CANONICAL_LEGACY_BASE_PATH,
+    version: DEFAULT_CANONICAL_LEGACY_VERSION,
+  },
+  // Keep Load Design 2 on the stable canonical baseline while rollout-full remains under investigation.
+  '1578016189116': {
+    basePath: '/designs',
+    version: 'v2026',
+  },
+};
+const FORCE_LEGACY_PARITY_IDS = new Set<string>([
+  '1578016189116',
+]);
+const ROLLOUT_FULL_SKIPPED_IDS_PATH = '/database-exports/rollout-full-skipped-ids-20260324-190828.json';
+
+type RolloutSkippedIdsArtifact = {
+  skipped?: Array<{
+    id?: string;
+    reason?: string;
+  }>;
+};
+
+let skippedDesignReasonLookupPromise: Promise<Map<string, string>> | null = null;
+
+export const getCanonicalDesignUrl = (designId: string) => {
+  const override = DESIGN_SOURCE_OVERRIDES[designId];
+  if (override) {
+    return `${override.basePath}/${override.version}/${designId}.json`;
+  }
+  return `${DEFAULT_CANONICAL_DESIGN_BASE_PATH}/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json`;
+};
+
+const getSkippedDesignReasonLookup = async (): Promise<Map<string, string>> => {
+  if (skippedDesignReasonLookupPromise) {
+    return skippedDesignReasonLookupPromise;
+  }
+  skippedDesignReasonLookupPromise = (async () => {
+    try {
+      const response = await fetch(ROLLOUT_FULL_SKIPPED_IDS_PATH, { cache: 'force-cache' });
+      if (!response.ok) {
+        console.warn(
+          `[resolveCanonicalLoadPolicy] Failed to load skipped-ID artifact (${response.status}); continuing without skipped-ID routing.`,
+        );
+        return new Map<string, string>();
+      }
+      const payload = (await response.json()) as RolloutSkippedIdsArtifact;
+      const lookup = new Map<string, string>();
+      for (const entry of payload.skipped ?? []) {
+        if (!entry?.id) continue;
+        lookup.set(entry.id, entry.reason || 'unknown');
+      }
+      return lookup;
+    } catch (error) {
+      console.warn('[resolveCanonicalLoadPolicy] Failed to parse skipped-ID artifact:', error);
+      return new Map<string, string>();
+    }
+  })();
+  return skippedDesignReasonLookupPromise;
+};
+
+export const resolveCanonicalLoadPolicy = async (
+  designData: CanonicalDesignData,
+  fallbackReason?: string | null,
+): Promise<CanonicalLoadPolicyDecision> => {
+  if (fallbackReason) {
+    return {
+      mode: 'legacy-fallback',
+      reason: fallbackReason,
+    };
+  }
+
+  const sourceDesignId = designData.source?.id;
+  if (sourceDesignId && FORCE_LEGACY_PARITY_IDS.has(sourceDesignId)) {
+    return {
+      mode: 'legacy-fallback',
+      reason: 'forced legacy parity mapping for known outlier',
+    };
+  }
+
+  if (sourceDesignId) {
+    const skippedLookup = await getSkippedDesignReasonLookup();
+    const skipReason = skippedLookup.get(sourceDesignId);
+    if (skipReason) {
+      return {
+        mode: 'legacy-fallback',
+        reason: `design skipped in rollout (${skipReason})`,
+      };
+    }
+  }
+
+  const conversionConfidence = designData.migration?.confidence;
+  if (conversionConfidence === 'low') {
+    return {
+      mode: 'legacy-fallback',
+      reason: 'canonical conversion confidence is low',
+    };
+  }
+
+  return {
+    mode: 'canonical',
+    reason: conversionConfidence ? `canonical conversion confidence is ${conversionConfidence}` : 'canonical default',
+  };
+};
 
 type ShapeDirectory = 'headstones' | 'masks';
 
@@ -190,6 +319,7 @@ type LegacyCanvasInfo = {
   initH: number;
   designDpr: number;
   usesPhysicalCoords: boolean;
+  headstoneHeightMm: number;
   mmPerPxXHeadstone: number;
   mmPerPxYHeadstone: number;
   mmPerPxXBase: number;
@@ -231,6 +361,7 @@ const computeLegacyCanvasInfo = (designData: SavedDesignData, baseProduct?: any)
     initH,
     designDpr,
     usesPhysicalCoords,
+    headstoneHeightMm,
     mmPerPxXHeadstone,
     mmPerPxYHeadstone,
     mmPerPxXBase,
@@ -390,6 +521,36 @@ export async function loadSavedDesignIntoEditor(
   const store = useHeadstoneStore.getState();
   const { clearExisting = true } = options;
 
+  // Clear existing content first to avoid shape-remap against stale layout.
+  if (clearExisting) {
+    const currentInscriptions = [...store.inscriptions];
+    currentInscriptions.forEach((insc) => {
+      store.deleteInscription(insc.id);
+    });
+
+    if (store.selectedMotifs && store.selectedMotifs.length > 0) {
+      const currentMotifs = [...store.selectedMotifs];
+      currentMotifs.forEach((motif) => {
+        store.removeMotif(motif.id);
+      });
+    }
+
+    if (store.selectedAdditions && store.selectedAdditions.length > 0) {
+      const currentAdditions = [...store.selectedAdditions];
+      currentAdditions.forEach((addId) => {
+        store.removeAddition(addId);
+      });
+    }
+
+    if (store.selectedImages && store.selectedImages.length > 0) {
+      const currentImages = [...store.selectedImages];
+      currentImages.forEach((image) => {
+        store.removeImage(image.id);
+      });
+      store.setSelectedImageId(null);
+    }
+  }
+
   // Get the base product first (to determine product type)
   const baseProduct = designData.find(
     item => item.type === 'Headstone' || item.type === 'Plaque'
@@ -413,29 +574,15 @@ export async function loadSavedDesignIntoEditor(
     }
   }
 
-  // Clear existing content if requested
-  if (clearExisting) {
-    // Clear inscriptions
-    const currentInscriptions = [...store.inscriptions];
-    currentInscriptions.forEach(insc => {
-      store.deleteInscription(insc.id);
-    });
-    
-    // Clear motifs - use selectedMotifs array
-    if (store.selectedMotifs && store.selectedMotifs.length > 0) {
-      const currentMotifs = [...store.selectedMotifs];
-      currentMotifs.forEach(motif => {
-        store.removeMotif(motif.id);
-      });
-    }
-    
-    // Clear additions - use selectedAdditions array
-    if (store.selectedAdditions && store.selectedAdditions.length > 0) {
-      const currentAdditions = [...store.selectedAdditions];
-      currentAdditions.forEach(addId => {
-        store.removeAddition(addId);
-      });
-    }
+  // Ensure legacy loads also apply the saved headstone shape.
+  const legacyShapeName =
+    typeof baseProduct?.shape === 'string' && baseProduct.shape.trim().length > 0
+      ? baseProduct.shape
+      : typeof baseProduct?.name === 'string' && baseProduct.type === 'Headstone'
+        ? baseProduct.name
+        : undefined;
+  if (legacyShapeName) {
+    store.setShapeUrl(resolveCanonicalShapeUrl(legacyShapeName));
   }
 
   // Set product properties if available
@@ -475,6 +622,40 @@ export async function loadSavedDesignIntoEditor(
   });
 
   const canvasInfo = computeLegacyCanvasInfo(designData, baseProduct);
+  const baseItem = designData.find((item) => item.type === 'Base');
+  const useContainParityMapping = designId === '1578016189116';
+
+  const mapCanvasPointToSurfaceMm = (
+    canvasX: number,
+    canvasY: number,
+    surfaceIsBase: boolean,
+  ) => {
+    const surfaceWidthMm = surfaceIsBase
+      ? Number(baseItem?.width ?? baseProduct?.width ?? canvasInfo.initW)
+      : Number(baseProduct?.width ?? canvasInfo.initW);
+    const surfaceHeightMm = surfaceIsBase
+      ? Number(baseItem?.height ?? 100)
+      : Number(baseProduct?.height ?? canvasInfo.initH);
+
+    const initW = canvasInfo.initW;
+    const initH = canvasInfo.initH;
+    const safeScale = Math.min(
+      surfaceWidthMm / Math.max(initW, 1),
+      surfaceHeightMm / Math.max(initH, 1),
+    );
+    const usedWidthMm = initW * safeScale;
+    const usedHeightMm = initH * safeScale;
+    const padX = (surfaceWidthMm - usedWidthMm) / 2;
+    const padY = (surfaceHeightMm - usedHeightMm) / 2;
+
+    const pxX = canvasX + initW / 2;
+    const pxY = canvasY + initH / 2;
+
+    const xPos = -surfaceWidthMm / 2 + padX + pxX * safeScale;
+    const yPos = surfaceHeightMm / 2 - (padY + pxY * safeScale);
+
+    return { xPos, yPos };
+  };
 
   for (const insc of sortedInscriptions) {
     const text = insc.label || '';
@@ -490,11 +671,17 @@ export async function loadSavedDesignIntoEditor(
     const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
     const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
 
-    const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
     const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
+    const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
 
-    const xPos = canvasX * mmPerPxX;
-    const yPos = -(canvasY * mmPerPxY);
+    const mapped = useContainParityMapping
+      ? mapCanvasPointToSurfaceMm(canvasX, canvasY, surfaceIsBase)
+      : {
+          xPos: canvasX * mmPerPxX,
+          yPos: -(canvasY * mmPerPxY),
+        };
+    const xPos = mapped.xPos;
+    const yPos = mapped.yPos;
 
     const canvasFontPx = fontPixels > 0 ? (canvasInfo.usesPhysicalCoords ? fontPixels / canvasInfo.designDpr : fontPixels) : 0;
     let sizeMm = insc.font_size || 10;
@@ -537,11 +724,17 @@ export async function loadSavedDesignIntoEditor(
       const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
       const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
 
-      const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
       const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
+      const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
 
-      const xPos = canvasX * mmPerPxX;
-      const yPos = -(canvasY * mmPerPxY);
+      const mapped = useContainParityMapping
+        ? mapCanvasPointToSurfaceMm(canvasX, canvasY, surfaceIsBase)
+        : {
+            xPos: canvasX * mmPerPxX,
+            yPos: -(canvasY * mmPerPxY),
+          };
+      const xPos = mapped.xPos;
+      const yPos = mapped.yPos;
 
       let heightMm = 100;
       if (typeof motif.height === 'number' && motif.height > 0) {
@@ -560,17 +753,19 @@ export async function loadSavedDesignIntoEditor(
 
       console.log(`[LOADER] Motif ${newMotif.id}: saved=(${motif.x}, ${motif.y}) → offset=(${xPos.toFixed(1)}, ${yPos.toFixed(1)}), height=${heightMm.toFixed(1)}mm`);
 
-      const flipX = typeof motif.flipx === 'number' ? motif.flipx === 1 : false;
-      const flipY = typeof motif.flipy === 'number' ? motif.flipy === 1 : false;
+      const flipX = Number(motif.flipx) === 1;
+      const flipY = Number(motif.flipy) === 1;
 
       store.setMotifOffset(newMotif.id, {
         xPos,
         yPos,
         scale: 1.0,
-        rotationZ: typeof motif.rotation === 'number' ? motif.rotation : 0,
+        rotationZ: typeof motif.rotation === 'number' ? (motif.rotation * Math.PI) / 180 : 0,
         heightMm,
         flipX,
         flipY,
+        coordinateSpace: useContainParityMapping ? 'absolute' : undefined,
+        target: surfaceIsBase ? 'base' : 'headstone',
       });
     }
   }
@@ -636,7 +831,6 @@ export async function loadCanonicalDesignIntoEditor(
       : 'preserve');
   const needsLegacyStageCompensation = headstonePlacement === 'legacy-stage-offset';
   const invertLegacyFlips = flipMode === 'invert-legacy-bools';
-
   let canonicalOutOfBounds = () => null as string | null;
 
   if (clearExisting) {
@@ -647,6 +841,10 @@ export async function loadCanonicalDesignIntoEditor(
     if (store.selectedAdditions.length) {
       [...store.selectedAdditions].forEach((additionId) => store.removeAddition(additionId));
     }
+    if (store.selectedImages.length) {
+      [...store.selectedImages].forEach((image) => store.removeImage(image.id));
+    }
+    store.setSelectedImageId(null);
     store.setSelectedInscriptionId(null);
     store.setSelectedMotifId(null);
     store.setSelectedAdditionId(null);
@@ -994,9 +1192,10 @@ export async function loadCanonicalDesignIntoEditor(
   };
 
   const fallbackReason = canonicalOutOfBounds();
-  if (fallbackReason) {
+  const loadPolicy = await resolveCanonicalLoadPolicy(designData, fallbackReason);
+  if (loadPolicy.mode === 'legacy-fallback') {
     console.warn(
-      `[loadCanonicalDesignIntoEditor] ${fallbackReason}; attempting legacy fallback via ${designData.source?.legacyFile ?? 'N/A'}`,
+      `[loadCanonicalDesignIntoEditor] ${loadPolicy.reason}; attempting legacy fallback via ${designData.source?.legacyFile ?? 'N/A'}`,
     );
     const legacyDesign = await fetchLegacyDesign();
     if (legacyDesign) {
@@ -1010,7 +1209,7 @@ export async function loadCanonicalDesignIntoEditor(
     }
     console.warn('[loadCanonicalDesignIntoEditor] Legacy fallback unavailable; proceeding with canonical data');
   } else {
-    console.log('[loadCanonicalDesignIntoEditor] Using canonical coordinates (no fallback needed)');
+    console.log(`[loadCanonicalDesignIntoEditor] Using canonical coordinates (${loadPolicy.reason})`);
   }
 
   type PendingMotifData = {

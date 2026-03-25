@@ -1,0 +1,233 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:45.328Z",
+  "units": "mm",
+  "source": {
+    "id": "1593489478520",
+    "slug": "legacy-1593489478520",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1593489478520.json",
+    "savedAt": "2020-06-30T03:57:58.520Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 24",
+    "material": {
+      "name": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 765,
+      "height_mm": 1000
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 464,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 765,
+      "height_mm": 1000,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "With Love The Brown Family",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 35.938
+        },
+        "position": {
+          "x_px": -2.197,
+          "y_px": 151.406
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "2_123_08",
+        "position": {
+          "x_px": 1.494,
+          "y_px": -8.594
+        },
+        "height_px": 239,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_108_03",
+        "position": {
+          "x_px": -2.637,
+          "y_px": -104.062
+        },
+        "height_px": 95,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_123_08",
+        "path": "/shapes/motifs/2_123_08.svg"
+      },
+      {
+        "id": "1_108_03",
+        "path": "/shapes/motifs/1_108_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bb64fad72ce05d705670c1dfcc9e075870623c4645139053033077f3df6caba9",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:45.328Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 19",
+        "shape": "Headstone 24",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+        "price": "2464.25",
+        "quantity": 1,
+        "width": 765,
+        "height": 1000,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 464
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_123_08",
+        "item": "2_123_08",
+        "price": 245.15452,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 1.494140625,
+        "y": -8.59375,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 239,
+        "ratio": 0.2957920792079208,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_108_03",
+        "item": "1_108_03",
+        "price": 213.40540000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -2.63671875,
+        "y": -104.0625,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 95,
+        "ratio": 0.15447154471544716,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "With Love The Brown Family",
+        "font": "12.6140625px Lucida Calligraphy",
+        "font_size": 35.9375,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -2.197265625,
+        "y": 151.40625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 3
+      }
+    ]
+  }
+}

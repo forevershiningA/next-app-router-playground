@@ -1,0 +1,236 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:37.475Z",
+  "units": "mm",
+  "source": {
+    "id": "1741845039636",
+    "slug": "legacy-1741845039636",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1741845039636.json",
+    "savedAt": "2025-03-13T05:50:39.636Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle",
+    "material": {
+      "name": "src/backgrounds/colors/l/05.jpg",
+      "texture": "/textures/forever/l/05.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 270
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 270,
+      "thickness_mm": 50,
+      "surface": "front",
+      "texture": "/textures/forever/l/05.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Sunless",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_142_04",
+        "position": {
+          "x_px": 2,
+          "y_px": 62
+        },
+        "height_px": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_142_04",
+        "position": {
+          "x_px": -0.714,
+          "y_px": -218
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_142_04",
+        "path": "/shapes/motifs/1_142_04.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8fc95ce6b2583c58eacef0a5a29216daacff05c8c9755835e1e42846df9737c1",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:37.475Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "border": "Border Rectangle",
+        "shape_url": "shapes/photos/borderrectangle.svg",
+        "shape": "Rectangle",
+        "color": "../upload/2025/02/undefinedbackground_2_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/05.jpg",
+        "name": "Stainless Steel Vitreous Enamel Inlaid Urn",
+        "price": 2475.62,
+        "quantity": 1,
+        "width": 200,
+        "height": 270,
+        "_length": 50,
+        "init_width": 1680,
+        "init_height": 881,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Sunless",
+        "font": "120.89277777777778px Lucida Calligraphy",
+        "font_size": 38,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 1
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_142_04",
+        "item": "1_142_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 2,
+        "y": 62,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 15,
+        "ratio": 0.036057692307692304,
+        "itemID": 3
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_142_04",
+        "item": "1_142_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -0.7140624999999545,
+        "y": -218,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.21634615384615385,
+        "itemID": 4
+      }
+    ]
+  }
+}

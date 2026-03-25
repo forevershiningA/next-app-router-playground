@@ -1,0 +1,524 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.548Z",
+  "units": "mm",
+  "source": {
+    "id": "1617347232854",
+    "slug": "legacy-1617347232854",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1617347232854.json",
+    "savedAt": "2021-04-02T07:07:12.854Z"
+  },
+  "product": {
+    "id": "9",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 2060,
+      "height": 1170,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-11",
+        "text": "Thea",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -484,
+          "y_px": 457
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "26.9.2009 - 21.9.2018",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -358,
+          "y_px": 529
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "11.1.2010 - 31.3.2021",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 352,
+          "y_px": 529
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Jordie",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 249,
+          "y_px": 454
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "In loving memory of our faithful friends,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 30,
+          "y_px": -197
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Always in our hearts.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 21,
+          "y_px": -103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Because of all the years we&apos;ve shared,",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 22,
+          "y_px": 2
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "We shall never be apart.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 108
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d575560e228a5d2dc850428f4e13625716f00ec29fbdcadfe03c00bd16d41b21",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.548Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 9,
+        "type": "Headstone",
+        "name": "Square 300x300",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 302.79,
+        "quantity": 1,
+        "width": 300,
+        "height": 300,
+        "_length": 1,
+        "init_width": 2060,
+        "init_height": 1170,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 136,
+        "version_date": 20210331,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2021/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1617345363476dsc00117_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 377,
+        "y": 293,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8775000000000001,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "DSC00117.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 135,
+        "width": "354",
+        "height": "513",
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2021/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1617345451859img_5882_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -268,
+        "y": 328,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.65,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_5882.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 100,
+        "width": "573",
+        "height": "380",
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2021/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1617345621065img_3571_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": 297,
+        "y": -350,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.65,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_3571.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 100,
+        "width": "510",
+        "height": "380",
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2021/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1617345504597img_3299_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -363,
+        "y": -311,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.845,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_3299.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 130,
+        "width": "371",
+        "height": "494",
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "Thea",
+        "font": "72.2475px Great Vibes",
+        "font_size": 19,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -484,
+        "y": 457,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "26.9.2009 - 21.9.2018",
+        "font": "49.432500000000005px Great Vibes",
+        "font_size": 13,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -358,
+        "y": 529,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "11.1.2010 - 31.3.2021",
+        "font": "49.432500000000005px Great Vibes",
+        "font_size": 13,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 352,
+        "y": 529,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Jordie",
+        "font": "72.2475px Great Vibes",
+        "font_size": 19,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 249,
+        "y": 454,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "In loving memory of our faithful friends,",
+        "font": "64.6425px Great Vibes",
+        "font_size": 17,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 30,
+        "y": -197,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Always in our hearts.",
+        "font": "72.2475px Great Vibes",
+        "font_size": 19,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 21,
+        "y": -103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Because of all the years we&apos;ve shared,",
+        "font": "68.44500000000001px Great Vibes",
+        "font_size": 18,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 22,
+        "y": 2,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "We shall never be apart.",
+        "font": "72.2475px Great Vibes",
+        "font_size": 19,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 6,
+        "y": 108,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 10
+      }
+    ]
+  }
+}

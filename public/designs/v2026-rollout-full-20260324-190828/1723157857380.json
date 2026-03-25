@@ -1,0 +1,273 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.922Z",
+  "units": "mm",
+  "source": {
+    "id": "1723157857380",
+    "slug": "legacy-1723157857380",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1723157857380.json",
+    "savedAt": "2024-08-08T22:57:37.380Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 10",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 387
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 780,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 387,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Lindsey",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 177.715,
+          "y_px": -179.135
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Vazquez",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 161.895,
+          "y_px": -93.808
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "March 28th, 1999 - ????",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 195.908,
+          "y_px": -50.034
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "2_056_05",
+        "position": {
+          "x_px": 272.373,
+          "y_px": 276.344
+        },
+        "height_px": 120,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_056_05",
+        "path": "/shapes/motifs/2_056_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7ef408fcfa448a847979e6c847ca3533cc7d13c874348763f6945694507914ad",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.922Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 10",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1150.89,
+        "quantity": 1,
+        "width": 300,
+        "height": 387,
+        "_length": 80,
+        "init_width": 360,
+        "init_height": 595,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 360x780"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_056_05",
+        "item": "2_056_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 272.373046875,
+        "y": 276.34447674418607,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 120,
+        "ratio": 0.146163215590743,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "Lindsey",
+        "font": "84.34883720930232px Xirwena",
+        "font_size": 31,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 177.71484375,
+        "y": -179.1351356870831,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "Miller",
+        "font": "81.62790697674419px Xirwena",
+        "font_size": 30,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 161.89453125,
+        "y": -93.80786254582058,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "March 28th, 1999 - ????",
+        "font": "29.930232558139533px Xirwena",
+        "font_size": 11,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 195.908203125,
+        "y": -50.03431847545223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      }
+    ]
+  }
+}

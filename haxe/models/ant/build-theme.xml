@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<project name="build-theme" default="build-theme">
+	<import file="config.xml"/>
+	
+	<target name="build-theme">
+		
+		<java jar="${THEMEBUILDER.JAR}" fork="true" failonerror="true">
+			<arg line="-config &quot;${config.file}&quot;" />
+			<arg line="-input ${input.files}" />
+			<arg line="-out &quot;${out.dir}&quot;" />
+		</java>
+		
+	</target>
+	
+</project>

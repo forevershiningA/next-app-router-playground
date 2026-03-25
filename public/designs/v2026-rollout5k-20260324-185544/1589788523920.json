@@ -1,0 +1,510 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T17:55:44.989Z",
+  "units": "mm",
+  "source": {
+    "id": "1589788523920",
+    "slug": "legacy-1589788523920",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589788523920.json",
+    "savedAt": "2020-05-18T07:55:23.920Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 1",
+    "material": {
+      "name": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 420,
+      "height_mm": 670
+    },
+    "viewportPx": {
+      "width": 1662,
+      "height": 844,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 420,
+      "height_mm": 670,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    },
+    "base": {
+      "width_mm": 520,
+      "height_mm": 100,
+      "depth_mm": 100,
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-58",
+        "text": "Loving Mother to Christian, Jamie,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": 226.254
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-57",
+        "text": "Millie Garcia",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -17,
+          "y_px": 251.508
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-59",
+        "text": "Proudest Grandma of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -57,
+          "y_px": 280
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-56",
+        "text": "her beautiful grandchildren",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -28,
+          "y_px": 309.254
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-54",
+        "text": "Paulette Rose-Ann Curtis",
+        "font": {
+          "family": "French Script",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 1.019,
+          "y_px": 82.882
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-60",
+        "text": "Dearly missed by your partner, Greg",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 193.031
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-63",
+        "text": "(nee Berney)",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": 129.695
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-55",
+        "text": "28.12.1957 - 06.08.2019",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -19.999,
+          "y_px": -10.228
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-61",
+        "asset": "1_155_24",
+        "position": {
+          "x_px": 126.713,
+          "y_px": 288.002
+        },
+        "height_px": 83,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_24",
+        "path": "/shapes/motifs/1_155_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a7c084c1896815aef8d0e9048361839d4f2ee6e4f8b6ed320c35cdca949f4fbb",
+    "sourceItemCount": 12,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T17:55:44.989Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 1",
+        "shape": "Headstone 1",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+        "price": "990.25",
+        "quantity": 1,
+        "width": 420,
+        "height": 670,
+        "_length": 1,
+        "init_width": 1662,
+        "init_height": 844,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+        "price": "532.00",
+        "quantity": 1,
+        "width": 520,
+        "height": 100,
+        "_length": 100,
+        "init_width": 1662,
+        "init_height": 844,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_24",
+        "item": "1_155_24",
+        "price": 210.75964000000002,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Paint Fill",
+        "x": 126.71312481634573,
+        "y": 288.00236360212307,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 83,
+        "ratio": 0.13833333333333334,
+        "itemID": 61
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1589680671518img_5185_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -99.88165680473372,
+        "y": -159.81065088757396,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.4938311688311689,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_5185.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 62
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 102,
+        "quantity": 34,
+        "label": "Loving Mother to Christian, Jamie,",
+        "font": "16.03051948051948px Lucida Calligraphy",
+        "font_size": 15,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": 226.25385596221963,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 58
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 54,
+        "quantity": 18,
+        "label": "Joshua & Kararaina",
+        "font": "19.236623376623378px Lucida Calligraphy",
+        "font_size": 18,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -17,
+        "y": 251.50771192443926,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 57
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 57,
+        "quantity": 19,
+        "label": "Proudest Grandma of",
+        "font": "16.03051948051948px Lucida Calligraphy",
+        "font_size": 15,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -57,
+        "y": 280,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 59
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 81,
+        "quantity": 27,
+        "label": "her beautiful grandchildren",
+        "font": "16.03051948051948px Lucida Calligraphy",
+        "font_size": 15,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -28,
+        "y": 309.25385596221963,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 56
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 72,
+        "quantity": 24,
+        "label": "Paulette Rose-Ann Curtis",
+        "font": "51.29766233766234px French Script",
+        "font_size": 48,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 1.0189139035747985,
+        "y": 82.88174083540497,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 54
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 105,
+        "quantity": 35,
+        "label": "Dearly missed by your partner, Greg",
+        "font": "16.03051948051948px Lucida Calligraphy",
+        "font_size": 15,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -2,
+        "y": 193.0308476977567,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 60
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "(nee Berney)",
+        "font": "35.26714285714286px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -8,
+        "y": 129.69454545454545,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 63
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 69,
+        "quantity": 23,
+        "label": "28.12.1957 - 06.08.2019",
+        "font": "24.58012987012987px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -19.998816568047346,
+        "y": -10.228259514722936,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 55
+      }
+    ]
+  }
+}

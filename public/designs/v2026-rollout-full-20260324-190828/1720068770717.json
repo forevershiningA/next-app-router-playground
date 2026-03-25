@@ -1,0 +1,237 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.286Z",
+  "units": "mm",
+  "source": {
+    "id": "1720068770717",
+    "slug": "legacy-1720068770717",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1720068770717.json",
+    "savedAt": "2024-07-04T04:52:50.717Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Full-colour Plaque",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 150,
+      "height_mm": 110
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1.100000023841858
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 150,
+      "height_mm": 110,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "They come in Set Sizes",
+        "font": {
+          "family": "Garamond",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -1.1,
+          "y_px": 269.974
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "This Is A Full Colour",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 2.199,
+          "y_px": -262.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "butterfly_017",
+        "position": {
+          "x_px": -9.897,
+          "y_px": 2.199
+        },
+        "height_px": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_017",
+        "path": "/shapes/motifs/butterfly_017.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0bfbe715e17ee6a28ba1f985c519ce4cf5a3e38ab66349959b91f2ad9a4ca09b",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.286Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Full-colour Plaque",
+        "color": "../upload/2024/07/undefinedbackground_3_cropped.jpg",
+        "fixed": 0,
+        "texture": "src/ceramic/l/01.jpg",
+        "name": "Full-colour Plaque",
+        "price": 350,
+        "quantity": 1,
+        "width": 150,
+        "height": 110,
+        "_length": 10,
+        "init_width": 1505,
+        "init_height": 795.0085258483887,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1.100000023841858,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_017",
+        "item": "butterfly_017",
+        "price": 0,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Gorse",
+        "x": -9.897009966777546,
+        "y": 2.1987421383647643,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 70,
+        "ratio": 0.14675052410901468,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "They come in Set Sizes",
+        "font": "73.8960440792613px Garamond",
+        "font_size": 13,
+        "font_family": "Garamond",
+        "color": "#fee123",
+        "colorName": "Gorse",
+        "x": -1.099667774086356,
+        "y": 269.97358490566035,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "This Is A Full Colour",
+        "font": "68.21173299624121px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#fee123",
+        "colorName": "Gorse",
+        "x": 2.199335548172826,
+        "y": -262.7496855345912,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 1
+      }
+    ]
+  }
+}

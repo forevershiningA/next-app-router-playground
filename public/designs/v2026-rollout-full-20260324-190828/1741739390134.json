@@ -1,0 +1,192 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:42.434Z",
+  "units": "mm",
+  "source": {
+    "id": "1741739390134",
+    "slug": "legacy-1741739390134",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1741739390134.json",
+    "savedAt": "2025-03-12T00:29:50.134Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1092.2,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 768,
+      "height": 1024,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1092.2,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ae10215180589170901be8de7d56155631dd3e9a8e5a8a40a6d88ed16003b72d",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:42.434Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4741.51,
+        "quantity": 1,
+        "width": 1092.2,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 784,
+        "init_height": 578,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 768x1024"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1741739411133,
+        "path": "../upload/2025/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17417394111330f3ba7f2e5284202ac8115ab.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -240,
+        "y": -62,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9426844900201427,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "0F3BA7F2-E528-4202-AC81-15ABC86313AA.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 264,
+        "width": "628",
+        "height": "272",
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1741739475464,
+        "path": "../upload/2025/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "174173947546406d0f0fb108044cd9a1d09b2.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 2,
+        "y": 206,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7391503387657937,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "06D0F0FB-1080-44CD-9A1D-09B28493593C.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 207,
+        "width": "1124",
+        "height": "214",
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1741739495920,
+        "path": "../upload/2025/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1741739495920f90b4a5b1ba24d06ac4d3553.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 332,
+        "y": -60,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9819630104376487,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "F90B4A5B-1BA2-4D06-AC4D-3553D895C351.jpeg",
+        "price": 80,
+        "quantity": 1,
+        "size": 275,
+        "width": "275",
+        "height": "284",
+        "itemID": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.416Z",
+  "units": "mm",
+  "source": {
+    "id": "1590812279735",
+    "slug": "legacy-1590812279735",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590812279735.json",
+    "savedAt": "2020-05-30T04:17:59.735Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Husband of Colleen",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": 32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "02.06.1938 - 28.05.1995",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 15,
+          "y_px": -53
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Father of Nelson Wesley & Mathew",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 13,
+          "y_px": 123
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Pop to Steven and Jamie",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 13,
+          "y_px": 198
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Edd Weber",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 363
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Larkin Watts",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 91
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": -142
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_155_05",
+        "position": {
+          "x_px": 6,
+          "y_px": -295
+        },
+        "height_px": 99,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_05",
+        "path": "/shapes/motifs/1_155_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "2b72cf9dde0a7b75db7371d35b7d4a98486233ffdf6b8169c982113a6a8e54fc",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.416Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+        "price": "1220.19",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_05",
+        "item": "1_155_05",
+        "price": 214.28732,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 6,
+        "y": -295,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 99,
+        "ratio": 0.165,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Husband of Colleen",
+        "font": "46.814625px Chopin Script",
+        "font_size": 33,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 10,
+        "y": 32,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "02.06.1938 - 28.05.1995",
+        "font": "38.302875px Chopin Script",
+        "font_size": 27,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 15,
+        "y": -53,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Father of Nelson Wesley & Mathew",
+        "font": "46.814625px Chopin Script",
+        "font_size": 33,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 13,
+        "y": 123,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Pop to Steven and Jamie",
+        "font": "42.55875px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 13,
+        "y": 198,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Always Serving Others",
+        "font": "45.396px Chopin Script",
+        "font_size": 32,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 12,
+        "y": 363,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "David Denton",
+        "font": "129.094875px Chopin Script",
+        "font_size": 91,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 12,
+        "y": -142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 74,
+        "itemID": 1
+      }
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-23
+**Last Updated:** 2026-03-25
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,56 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-25)
+
+### ✅ Recent Changes (March 25, 2026)
+
+1. **Canonical runtime switched to full rollout output - COMPLETE**
+   - Default canonical source now points to `public/designs/v2026-rollout-full-20260324-190828`.
+   - Shared canonical URL helper now routes runtime fetches through `/designs/<version>/<id>.json`.
+   - Files: `lib/saved-design-loader-utils.ts`, `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`, `components/DefaultDesignLoader.tsx`, `components/TestCanonicalLoader.tsx`.
+
+2. **Skipped-ID artifact policy integration - COMPLETE**
+   - Loader policy now consumes `database-exports/rollout-full-skipped-ids-20260324-190828.json`.
+   - Skipped IDs are automatically routed to legacy fallback behavior.
+   - Files: `lib/saved-design-loader-utils.ts`.
+
+3. **Outlier parity hardening for `1578016189116` - IN PLACE**
+   - Kept explicit legacy-parity fallback behavior for this medium-confidence outlier to reduce canonical mismatch risk.
+   - Design page screenshot link logic now avoids broken `*_cropped.jpg` URLs when only original JPG exists.
+   - Files: `lib/saved-design-loader-utils.ts`, `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`.
+
+4. **Rollout operations scripts added - COMPLETE**
+   - Added npm wrappers:
+     - `pnpm rollout:batch`
+     - `pnpm rollout:report`
+     - `pnpm rollout:resume`
+   - Added resume support (`--resume-from-report`) to batch converter flow.
+   - Files: `package.json`, `scripts/batch-convert-saved-designs.js`, `scripts/report-rollout-summary.js`.
+
+5. **Load Design UX upgraded to a single modal tree picker - COMPLETE**
+   - Replaced 3 fixed regression buttons with one `Load Design` canvas button.
+   - Modal picker shows hierarchical tree (product -> category -> design), supports search, and loads any design via shared loader.
+   - Design labels now use SEO-friendly shape+slug naming consistent with `/designs` navigation.
+   - Product/category ordering now follows dataset insertion order to better match `/designs` popularity ordering.
+   - Files: `components/ConditionalCanvas.tsx`, `components/LoadDesignButton.tsx`, `components/DefaultDesignLoader.tsx`.
+
+6. **Validation**
+   - `pnpm type-check` passes after each major change slice in this batch.
+
+### ⚠️ Known Gaps (March 25, 2026)
+- **`1578016189116` still requires visual parity confirmation in browser**: fallback path is enforced, but final UX parity should be re-verified against legacy SVG/div expectation.
+- **Canonical rollout remains mixed-mode by policy**: non-skipped IDs use rollout-full canonical, while skipped/fallback IDs intentionally route through legacy behavior.
+
+### 📌 March 25 Action Plan Status
+- Runtime rollout switch: ✅ done
+- Skipped-ID integration: ✅ done
+- Outlier parity routing for `1578016189116`: ✅ implemented (final visual sign-off pending)
+- Batch/report/resume scripts: ✅ done
+- Type-check + targeted validation: ✅ done
 
 ---
 
@@ -74,6 +124,26 @@
 ### ⚠️ Known Gaps (March 23, 2026)
 - **Saved Design 2 (`1578016189116`)** remains unresolved; current evidence still points to loader interpretation / non-text asset hydration behavior rather than simple reconversion.
 - **Unit-system rollout is partial by design**: safe-scope surfaces are done, but additional `mm` labels remain in deeper Designer panels and can be migrated in a follow-up pass.
+
+### 📌 Tomorrow Action Plan (March 25, 2026) — Completed
+
+1. **Switch runtime to prefer full rollout output**
+   - Point loader/default canonical source to `public/designs/v2026-rollout-full-20260324-190828`.
+   - Keep legacy fallback for skipped IDs and any runtime parse/load failures.
+
+2. **Use skipped IDs artifact for triage**
+   - Review `database-exports/rollout-full-skipped-ids-20260324-190828.json`.
+   - Split skipped designs into:
+     - intentional skips (`test-inscription`, `single-image-only`),
+     - potential false positives to recover.
+
+3. **Resolve medium-confidence outlier**
+   - Re-verify `1578016189116` against the legacy SVG/div reference and confirm loader parity path.
+   - Document whether this ID should stay in design overrides or move back to default high-confidence flow.
+
+4. **Operational hardening**
+   - Add npm script wrappers for batch rollout commands and summary generation.
+   - Add a small “resume from report” workflow for interrupted long runs.
 
 ---
 
@@ -1639,23 +1709,20 @@ A Next.js-based 3D headstone designer allowing users to:
 - **Sizing Guardrails**: Square-to-plaque conversions clamp to 300 mm × 300 mm (catalog min/max permitting) while landscape plaques default to 300 mm × 200 mm.
 - **Pricing**: Uses `quantity_type="Width + Height"` from catalog
 
-### Load Design Feature (2026-01-28/29)
-**Manual Design Loading** with multi-design support:
+### Load Design Feature (updated March 25, 2026)
+**Manual Design Loading** with modal tree picker:
 - Headstone starts **completely empty** (no inscriptions, motifs, or 3D additions)
-- **"Load Design 1" button** in top-right corner loads canonical design `1725769905504` (Curved Gable biblical)
-- **"Load Design 2" button** below loads canonical design `1578016189116` (forevershining 3-person memorial)
-- **"Load Design 3" button** (top-36) loads canonical design `1723691641046` (Laser-etched Serpentine family memorial)
-- Buttons stay active at all times:
-  - Default: amber/gold styling with hover glow
-  - Loading: "Loading..." (amber with bouncing icon)
-- Buttons always remain clickable for free design switching
+- Single **"Load Design" button** in the canvas opens a searchable modal
+- Modal presents hierarchical tree:
+  - product type -> category -> design
+- Design rows use SEO-style names (shape + cleaned slug) matching `/designs` nav conventions
+- Product/category order follows source dataset order (not forced alphabetical sorting)
 - Each load clears existing design before loading new one
-- See `LOAD_DESIGN_BUTTON.md` for implementation details
 
 **Components:**
-- `components/LoadDesignButton.tsx` - Reusable button component with designId/label/position props
-- `components/DefaultDesignLoader.tsx` - Exports `useLoadDesign(designId)` hook (no caching)
-- `components/ConditionalCanvas.tsx` - Renders the button stack in the canvas overlay
+- `components/LoadDesignButton.tsx` - Canvas button + modal tree/search picker
+- `components/DefaultDesignLoader.tsx` - Exports shared `loadDesignById()` and `useLoadDesign(designId)` helpers
+- `components/ConditionalCanvas.tsx` - Renders the single load button in the canvas overlay
 
 ---
 
@@ -2130,7 +2197,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 **Default State (2026-01-28):**
 - Headstone starts **completely empty**: `inscriptions: []`, `selectedAdditions: []`, `selectedMotifs: []`
 - Previous defaults removed: `B2127` (Cross) and `B1134S` (Angel) no longer auto-loaded
-- Users can load sample design via "Load Design" button (uses `useLoadDefaultDesign()` hook)
+- Users can load any design via the canvas "Load Design" modal (uses shared `loadDesignById()` / `useLoadDesign(designId)` helpers)
 - Design loading is now manual, not automatic on first visit
 
 **Catalog-driven dimension rails (Jan 2026):** `setProductId()` now records the active shape’s min/max width, height, base, and thickness limits straight from the catalog XML. Every slider/input (including base width/height and upright/slant thickness) clamps against those live bounds, so compact products such as the Laser-etched Black Granite Mini Headstone (id 22) retain their exact 200 mm × 300 mm × 50 mm proportions on the canvas while still allowing larger monuments to use their broader ranges.

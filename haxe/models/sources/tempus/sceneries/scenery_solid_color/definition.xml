@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<data>
+
+	<general>
+		<type value="scenery" />
+		<collection value="scenery" />
+	</general>
+	
+	<edit-attributes>
+		<duplicate>off</duplicate>
+		<erase>off</erase>
+	</edit-attributes>
+
+	<properties>
+		
+		<section id="render" label="@/ui_panel_render_label">
+			<property id="showReflections" label="@/ui_panel_prop_show_reflections_label" type="switch" />
+		</section>
+		
+	</properties>
+	
+	<regions>
+		
+		<region type="point" id="ground">
+			<collection-filter>
+				<deny value="*" />
+				<allow value="root-tomb" />
+			</collection-filter>
+			<type-filter>
+				<allow value="*" />
+			</type-filter>
+			<position x="0" y="0" z="0" />
+			<rotation x="0" y="0" z="0" />
+		</region>
+		
+	</regions>
+	
+	<camera mode="autoZoomSphere" relative="true" remember-usage="true">
+		<target object="region:ground" x="0" y="200" z="0" />
+		<position linear-distance="1.5" angleA="-20" angleB="20" radius="800" />
+		<limits>
+			<linear-distance min="0.9" max="3" />
+			<angleB min="-5" max="80" />
+			<radius min="150" max="4500" />
+		</limits>
+		<enviroment>
+			<lens near="50" far="10000" fov="43" />
+			<scene scale="1" />
+		</enviroment>
+	</camera>
+	
+	<!--<camera mode="sphere" relative="true" remember-usage="true">
+		<target x="0" y="150" z="0" />
+		<position angleA="-30" angleB="20" radius="800" />
+		<limits>
+			<angleB min="-5" max="80" />
+			<radius min="350" max="1000" />
+		</limits>
+		<enviroment>
+			<lens near="50" far="10000" fov="43" />
+			<scene scale="1" />
+		</enviroment>
+	</camera>-->
+	
+	<project>
+		<screens>
+			<screen name="scenery-front" mode="normal" width="1200" height="900">
+				<camera>
+					<position x="0" y="150" z="500" />
+					<target x="0" y="150" z="0" />
+					<lens type="perspective" fov="43" />
+				</camera>
+			</screen>
+			<screen name="scenery-natural-1" mode="normal" width="1200" height="900">
+				<camera>
+					<position x="-260" y="320" z="450" />
+					<target x="-20" y="150" z="0" />
+					<lens type="perspective" fov="43" />
+				</camera>
+			</screen>
+		</screens>
+	</project>
+	
+</data>

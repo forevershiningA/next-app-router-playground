@@ -1,0 +1,309 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:36.022Z",
+  "units": "mm",
+  "source": {
+    "id": "1715956700910",
+    "slug": "legacy-1715956700910",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1715956700910.json",
+    "savedAt": "2024-05-17T14:38:20.910Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/Paradiso.jpg",
+      "texture": "/textures/forever/l/Paradiso.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 800
+    },
+    "viewportPx": {
+      "width": 1517,
+      "height": 852,
+      "dpr": 0.9004614353179932
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 800,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/Paradiso.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "He is the author of the famous poem Leaves of Grass which was about a celebration of individuality to society and nature.",
+        "font": {
+          "family": "Arial",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 14
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Born May 31, 1819, in West Hills NY, and died on March 26, 1892, in Camden NJ dying at 72.",
+        "font": {
+          "family": "Arial",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 1.799
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "It is also known as a celebration of America and a loose list of poems representing his philosophy on life.",
+        "font": {
+          "family": "Arial",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 28.393
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "He cheered people up during the Civil War and wrote many other inspiring poems like “O Captain! My Captain!” about Abraham Lincoln.",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 2.699,
+          "y_px": 39.187
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "He taught in his earlier years and between his poems, lectures, hospital visits, and teaching he helped many.",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 1.8,
+          "y_px": 52.681
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bcc2417ea49766dbae03c4a5fbc482b0299185cba5a001b5df9da67ee694dc71",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:36.022Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Paradiso.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 1719.94,
+        "quantity": 1,
+        "width": 1200,
+        "height": 800,
+        "_length": 15,
+        "init_width": 1277,
+        "init_height": 667.0050354003906,
+        "device": "desktop",
+        "dpr": 0.9004614353179932,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20240125,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1517x852"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 100,
+        "label": "He is the author of the famous poem Leaves of Grass which was about a celebration of individuality to society and nature.",
+        "font": "10.73594506879474px Arial",
+        "font_size": 22,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 14,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 71,
+        "label": "Born May 31, 1819, in West Hills NY, and died on March 26, 1892, in Camden NJ dying at 72.",
+        "font": "14.151927590683977px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 1.7990956755105003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 88,
+        "label": "It is also known as a celebration of America and a loose list of poems representing his philosophy on life.",
+        "font": "12.687935081302875px Arial",
+        "font_size": 26,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 28.392765404084173,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 110,
+        "label": "He cheered people up during the Civil War and wrote many other inspiring poems like “O Captain! My Captain!” about Abraham Lincoln.",
+        "font": "9.759950062540673px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 2.6993287674454223,
+        "y": 39.18733945714723,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 92,
+        "label": "He taught in his earlier years and between his poems, lectures, hospital visits, and teaching he helped many.",
+        "font": "12.199937578175842px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.7995525116302815,
+        "y": 52.68055702347618,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 5
+      }
+    ]
+  }
+}

@@ -461,10 +461,17 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
   React.useEffect(() => {
     if (!shapeUrl) return;
+    const state = useHeadstoneStore.getState();
+    const hasExistingHeadstoneLayout =
+      state.inscriptions.some((line) => (line.target ?? 'headstone') === 'headstone') ||
+      Object.values(state.motifOffsets).some((offset) => (offset.target ?? 'headstone') === 'headstone') ||
+      Object.values(state.additionOffsets).some((offset) => (offset.targetSurface ?? 'headstone') === 'headstone') ||
+      state.selectedImages.some((image) => (image.target ?? 'headstone') === 'headstone');
     if (
       prevShapeUrlRef.current &&
       prevShapeUrlRef.current !== shapeUrl &&
-      currentBoundingBoxRef.current
+      currentBoundingBoxRef.current &&
+      hasExistingHeadstoneLayout
     ) {
       pendingRemapRef.current = {
         oldBox: currentBoundingBoxRef.current.clone(),

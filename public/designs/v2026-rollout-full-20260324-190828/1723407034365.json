@@ -1,0 +1,335 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:40.937Z",
+  "units": "mm",
+  "source": {
+    "id": "1723407034365",
+    "slug": "legacy-1723407034365",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1723407034365.json",
+    "savedAt": "2024-08-11T20:10:34.365Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1710,
+      "height": 1107,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "ADAMS",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": -310
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Art",
+        "font": {
+          "family": "Arial",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": -370,
+          "y_px": 126
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "1922-2006",
+        "font": {
+          "family": "Arial",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -338,
+          "y_px": 247
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Always In Our Hearts",
+        "font": {
+          "family": "Arial",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": 545
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_004_01",
+        "position": {
+          "x_px": 4,
+          "y_px": -304
+        },
+        "height_px": 218,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_004_01",
+        "path": "/shapes/motifs/1_004_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "95efeda05503f313d9db5d2cb267e397616a1f2686991793553cf31af1bb3f06",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:40.938Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1084,
+        "init_height": 824,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1710x1107"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 580,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1084,
+        "init_height": 824,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_004_01",
+        "item": "1_004_01",
+        "price": 256.092765,
+        "quantity": 1,
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": 4,
+        "y": -303.9999999999999,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 218,
+        "ratio": 0.7266666666666667,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 6,
+        "label": "MIGLIO",
+        "font": "112.96400449943758px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 2,
+        "y": -310,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 5,
+        "label": "Louis",
+        "font": "112.96400449943758px Arial",
+        "font_size": 50,
+        "font_family": "Arial",
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": -370,
+        "y": 126.00000000000011,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 9,
+        "label": "1922-2006",
+        "font": "72.29696287964005px Arial",
+        "font_size": 32,
+        "font_family": "Arial",
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": -338,
+        "y": 247.0000000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "Always In Our Hearts",
+        "font": "72.45997745208568px Arial",
+        "font_size": 32,
+        "font_family": "Arial",
+        "color": "#bdc6c2",
+        "colorName": "Tiara",
+        "x": -4,
+        "y": 545.0000000000001,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,365 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:41.509Z",
+  "units": "mm",
+  "source": {
+    "id": "1728451254550",
+    "slug": "legacy-1728451254550",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1728451254550.json",
+    "savedAt": "2024-10-09T05:20:54.550Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_015_05",
+        "position": {
+          "x_px": -230,
+          "y_px": -289
+        },
+        "height_px": 155,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_015_08",
+        "position": {
+          "x_px": -226,
+          "y_px": -36
+        },
+        "height_px": 148,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_017_24",
+        "position": {
+          "x_px": 209,
+          "y_px": -212
+        },
+        "height_px": 262,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_017_25",
+        "position": {
+          "x_px": 225,
+          "y_px": 155
+        },
+        "height_px": 169,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_018_08",
+        "position": {
+          "x_px": -82,
+          "y_px": 179
+        },
+        "height_px": 114,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_017_20",
+        "position": {
+          "x_px": -308,
+          "y_px": 186
+        },
+        "height_px": 109,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_015_05",
+        "path": "/shapes/motifs/1_015_05.svg"
+      },
+      {
+        "id": "1_015_08",
+        "path": "/shapes/motifs/1_015_08.svg"
+      },
+      {
+        "id": "1_017_24",
+        "path": "/shapes/motifs/1_017_24.svg"
+      },
+      {
+        "id": "1_017_25",
+        "path": "/shapes/motifs/1_017_25.svg"
+      },
+      {
+        "id": "1_018_08",
+        "path": "/shapes/motifs/1_018_08.svg"
+      },
+      {
+        "id": "1_017_20",
+        "path": "/shapes/motifs/1_017_20.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7df94951b18d1a9ce018031a7f2c1a866c155f31baa1c15659e79a098d37d282",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:41.509Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 1680,
+        "init_height": 889,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240925,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_05",
+        "item": "1_015_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -230,
+        "y": -289,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 155,
+        "ratio": 0.2958015267175573,
+        "itemID": 1
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_08",
+        "item": "1_015_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -226,
+        "y": -36,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 148,
+        "ratio": 0.33867276887871856,
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_24",
+        "item": "1_017_24",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 209,
+        "y": -212,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 262,
+        "ratio": 0.3786127167630058,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_25",
+        "item": "1_017_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 225,
+        "y": 155,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 169,
+        "ratio": 0.34917355371900827,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_018_08",
+        "item": "1_018_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -82,
+        "y": 179,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 114,
+        "ratio": 0.23700623700623702,
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_017_20",
+        "item": "1_017_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -308,
+        "y": 186,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 109,
+        "ratio": 0.1963963963963964,
+        "itemID": 6
+      }
+    ]
+  }
+}

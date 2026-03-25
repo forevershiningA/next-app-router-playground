@@ -1,7 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { loadCanonicalDesignIntoEditor, DEFAULT_CANONICAL_DESIGN_VERSION, type CanonicalDesignData } from '#/lib/saved-design-loader-utils';
+import {
+  loadCanonicalDesignIntoEditor,
+  getCanonicalDesignUrl,
+  type CanonicalDesignData,
+} from '#/lib/saved-design-loader-utils';
 
 const DEFAULT_DESIGN_ID = '1725769905504';
 
@@ -13,7 +17,7 @@ export default function TestCanonicalLoader() {
     setStatus('Loading...');
     setError('');
     
-    const canonicalDesignUrl = `/canonical-designs/${DEFAULT_CANONICAL_DESIGN_VERSION}/${DEFAULT_DESIGN_ID}.json`;
+    const canonicalDesignUrl = getCanonicalDesignUrl(DEFAULT_DESIGN_ID);
     
     try {
       console.log('Fetching:', canonicalDesignUrl);

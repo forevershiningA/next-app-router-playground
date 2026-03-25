@@ -1,0 +1,339 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:29.332Z",
+  "units": "mm",
+  "source": {
+    "id": "1589678529086",
+    "slug": "legacy-1589678529086",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1589678529086.json",
+    "savedAt": "2020-05-17T01:22:09.086Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 2",
+    "material": {
+      "name": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1663,
+      "height": 845,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    },
+    "base": {
+      "width_mm": 660,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Paradiso-TILE-900-x-900.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Paulette Rose-Ann Curtis",
+        "font": {
+          "family": "French Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "28.12.1957 - 06.08.2019",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 11,
+          "y_px": 54
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "\"QUOTE/INSCRIPTION\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 122
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-19",
+        "asset": "1_155_24",
+        "position": {
+          "x_px": -6.3,
+          "y_px": 234
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f7de8c",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_24",
+        "path": "/shapes/motifs/1_155_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1f873102d6901dfe4a07428b84f3ae57817002860badc003b150cb6534cc0ee3",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:29.332Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 2",
+        "shape": "Headstone 2",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+        "price": "1132.11",
+        "quantity": 1,
+        "width": 560,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1663,
+        "init_height": 845
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Paradiso-TILE-900-x-900.jpg",
+        "price": "668.50",
+        "quantity": 1,
+        "width": 660,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1663,
+        "init_height": 845
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1589680671518,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1589680671518img_5185_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -8,
+        "y": -190,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5554905738891303,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_5185.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_24",
+        "item": "1_155_24",
+        "price": 214.5078,
+        "quantity": 1,
+        "color": "#f7de8c",
+        "colorName": "Paint Fill",
+        "x": -6.2997472363945235,
+        "y": 234,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.16666666666666666,
+        "itemID": 19
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Paulette Rose-Ann Curtis",
+        "font": "51.814451530612246px French Script",
+        "font_size": 43,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": 3.000000000000057,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": null,
+        "quantity": 1,
+        "label": " ",
+        "font": "39.764579081632654px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -8,
+        "y": 19,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "28.12.1957 - 06.08.2019",
+        "font": "39.764579081632654px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 11,
+        "y": 54,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 27
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "\"QUOTE/INSCRIPTION\"",
+        "font": "26.509719387755105px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": 122,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 10
+      }
+    ]
+  }
+}

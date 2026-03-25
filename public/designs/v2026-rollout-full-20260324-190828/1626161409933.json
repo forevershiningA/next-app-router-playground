@@ -1,0 +1,498 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.997Z",
+  "units": "mm",
+  "source": {
+    "id": "1626161409933",
+    "slug": "legacy-1626161409933",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1626161409933.json",
+    "savedAt": "2021-07-13T07:30:09.933Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 757,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 900,
+      "height_mm": 150,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Horace Lopez",
+        "font": {
+          "family": "French Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -3.673,
+          "y_px": -182.808
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Roscoe Wong",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 9.741,
+          "y_px": -123.382
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "14-10-2020",
+        "font": {
+          "family": "Garamond",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -8.364,
+          "y_px": -71.265
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Born asleep, yet your love we keep,",
+        "font": {
+          "family": "French Script",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": 0.101,
+          "y_px": -33.282
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Thinking of you always",
+        "font": {
+          "family": "French Script",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -9.248,
+          "y_px": 1.896
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Brother of Kiera",
+        "font": {
+          "family": "French Script",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -5.023,
+          "y_px": 242.984
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Beloved Son of Kevin & Melissa,",
+        "font": {
+          "family": "French Script",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 9.177,
+          "y_px": 204.338
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "teddy-bear_003",
+        "position": {
+          "x_px": -12.024,
+          "y_px": 99.107
+        },
+        "height_px": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_153_21",
+        "position": {
+          "x_px": 260.352,
+          "y_px": -167.08
+        },
+        "height_px": 145,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "teddy-bear_003",
+        "path": "/shapes/motifs/teddy-bear_003.svg"
+      },
+      {
+        "id": "1_153_21",
+        "path": "/shapes/motifs/1_153_21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "44130138818f4563763e8ce24462eebce7d6ce9d4065cfb4b5eef029fb522a77",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.997Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1220.19,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 757,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210629,
+        "mode": "2d",
+        "navigator": "MacIntel, Google Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 958,
+        "quantity": 1,
+        "width": 900,
+        "height": 150,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 757,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_003",
+        "item": "teddy-bear_003",
+        "price": null,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -12.024103053404815,
+        "y": 99.10668124493134,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 180,
+        "ratio": 0.23778071334214002,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_21",
+        "item": "1_153_21",
+        "price": null,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 260.3519812524696,
+        "y": -167.07981081129853,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 145,
+        "ratio": 0.1638418079096045,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 16,
+        "label": "Our Precious Angel",
+        "font": "39.364px French Script",
+        "font_size": 40,
+        "font_family": "French Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -3.6732357490825573,
+        "y": -182.80845672011645,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 20,
+        "label": "Marcus Kendrick Wilson",
+        "font": "32.4753px Lucida Calligraphy",
+        "font_size": 33,
+        "font_family": "Lucida Calligraphy",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 9.741442237021756,
+        "y": -123.3821639049665,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 10,
+        "label": "14-10-2020",
+        "font": "34.44349999999999px Garamond",
+        "font_size": 35,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -8.364323913155438,
+        "y": -71.2645606405164,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 29,
+        "label": "Born asleep, yet your love we keep,",
+        "font": "38.37989999999999px French Script",
+        "font_size": 39,
+        "font_family": "French Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 0.10137859984101551,
+        "y": -33.28212504391006,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 19,
+        "label": "Thinking of you always",
+        "font": "38.37989999999999px French Script",
+        "font_size": 39,
+        "font_family": "French Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -9.248042554303737,
+        "y": 1.8961091838581052,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 14,
+        "label": "Brother of Kiera",
+        "font": "37.395799999999994px French Script",
+        "font_size": 38,
+        "font_family": "French Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -5.023241852788942,
+        "y": 242.98437438472376,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 26,
+        "label": "Beloved Son of Kevin & Melissa,",
+        "font": "36.411699999999996px French Script",
+        "font_size": 37,
+        "font_family": "French Script",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 9.176992988887946,
+        "y": 204.33775652592965,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 10
+      }
+    ]
+  }
+}

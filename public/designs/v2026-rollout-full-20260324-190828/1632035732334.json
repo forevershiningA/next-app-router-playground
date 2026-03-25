@@ -1,0 +1,594 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:31.317Z",
+  "units": "mm",
+  "source": {
+    "id": "1632035732334",
+    "slug": "legacy-1632035732334",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1632035732334.json",
+    "savedAt": "2021-09-19T07:15:32.334Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 545,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/17.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-15",
+        "text": "Clayton, Khadesha, Kianah, Jacob,  Bella, Jaylah,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -24.522,
+          "y_px": 432.753
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Lennox, Anthony, Letiesha, Kylearah, Amarah (Dec.)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 2.478,
+          "y_px": 531.832
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Chevanah, William, Xander, Lebron, Leroy (Dec.)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -18.598,
+          "y_px": 483.691
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Loving Mother of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -20.098,
+          "y_px": 152.411
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Anton Brooks",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -7.699,
+          "y_px": 236.158
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Lyman Bell",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": -12.75,
+          "y_px": -20.95
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Rest in Peace Gorgeous",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": -10.5,
+          "y_px": 331.12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "18.12. 1961 - 05.11. 2016",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -13.5,
+          "y_px": 78.789
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In loving memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -0.37,
+          "y_px": -100.571
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-24",
+        "asset": "1_159_23",
+        "position": {
+          "x_px": 316.879,
+          "y_px": -187.385
+        },
+        "height_px": 202,
+        "rotation": {
+          "z_deg": -14
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-23",
+        "asset": "1_159_23",
+        "position": {
+          "x_px": -317.25,
+          "y_px": -193.382
+        },
+        "height_px": 202,
+        "rotation": {
+          "z_deg": 14
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_159_23",
+        "path": "/shapes/motifs/1_159_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "a67f393c7f7efe1e6cceb65e42d8e3687ae59846d841fc68e216fb466a1e1729",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:31.317Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 1366.61,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 545,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210918,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/09/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1631170787081img_4547_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 2.25,
+        "y": -476.7082568807336,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.48660714285714285,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_4547.jpg",
+        "price": 260,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 25
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 43,
+        "label": "Clayton, Khadesha, Kianah, Jacob,  Bella, Jaylah,",
+        "font": "26.568749999999998px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -24.521739130434753,
+        "y": 432.75323760138247,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 45,
+        "label": "Lennox, Anthony, Letiesha, Kylearah, Amarah (Dec.)",
+        "font": "27.897187499999998px Garamond",
+        "font_size": 21,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2.478260869565247,
+        "y": 531.8321632761601,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 19
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 42,
+        "label": "Chevanah, William, Xander, Lebron, Leroy (Dec.)",
+        "font": "26.568749999999998px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -18.597826086956445,
+        "y": 483.6909985374285,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 17
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_159_23",
+        "item": "1_159_23",
+        "price": 293.6512856,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 316.87896093749964,
+        "y": -187.38532110091748,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": -14,
+        "height": 202,
+        "ratio": 0.25997425997426,
+        "itemID": 24
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_159_23",
+        "item": "1_159_23",
+        "price": 293.6512856,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -317.2499999999996,
+        "y": -193.3816513761467,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 14,
+        "height": 202,
+        "ratio": 0.25997425997426,
+        "itemID": 23
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "Loving Mother of",
+        "font": "41.1815625px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -20.097826086956502,
+        "y": 152.41112219119805,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 25,
+        "label": "Clint, Tina, Ashley & Anthony",
+        "font": "45.166875px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -7.699275362318758,
+        "y": 236.15817710410863,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 18,
+        "label": "Margaret Rose  Graham",
+        "font": "81.03468749999999px Chopin Script",
+        "font_size": 61,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -12.75,
+        "y": -20.949541284403438,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 67,
+        "itemID": 3
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1632036071412,
+        "path": "../upload/2021/09/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1632036071412img_4547_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 1.5,
+        "y": -262.3394495412844,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7299107142857143,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_4547.jpg",
+        "price": 300,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 19,
+        "label": "Rest in Peace Gorgeous",
+        "font": "65.0934375px Chopin Script",
+        "font_size": 49,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -10.5,
+        "y": 331.1196449940169,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 21,
+        "label": "18.12. 1961 - 05.11. 2016",
+        "font": "46.4953125px Chopin Script",
+        "font_size": 35,
+        "font_family": "Chopin Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -13.5,
+        "y": 78.78899082568847,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 16,
+        "label": "In loving memory of",
+        "font": "51.809062499999996px Garamond",
+        "font_size": 39,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -0.3695652173913686,
+        "y": -100.57137348756814,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      }
+    ]
+  }
+}

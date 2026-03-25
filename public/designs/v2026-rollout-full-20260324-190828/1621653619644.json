@@ -1,0 +1,706 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:30.739Z",
+  "units": "mm",
+  "source": {
+    "id": "1621653619644",
+    "slug": "legacy-1621653619644",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1621653619644.json",
+    "savedAt": "2021-05-22T03:20:19.644Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 1083,
+      "height": 550,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 150,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-38",
+        "text": "Eternally beautiful",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -77,
+          "y_px": -21
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Genevieve Norris",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 19,
+          "y_px": -169
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "29/10/02-07/04/20",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 10,
+          "y_px": -129
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-36",
+        "text": "Forever young",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": -39,
+          "y_px": -72
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "Missing you forever",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -88,
+          "y_px": 76
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-33",
+        "text": "Loving you always",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -78,
+          "y_px": 126
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "Adventurous dreamer",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -102,
+          "y_px": 29
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "butterfly_005",
+        "position": {
+          "x_px": -202,
+          "y_px": -110
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 36
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_154_26",
+        "position": {
+          "x_px": 85,
+          "y_px": 152
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "2_131_25",
+        "position": {
+          "x_px": 95,
+          "y_px": 266
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "2_095_19",
+        "position": {
+          "x_px": 211,
+          "y_px": 149
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-34",
+        "asset": "butterfly_020",
+        "position": {
+          "x_px": 338,
+          "y_px": -153
+        },
+        "height_px": 45,
+        "rotation": {
+          "z_deg": -30
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_228_20",
+        "position": {
+          "x_px": -80,
+          "y_px": 171
+        },
+        "height_px": 71,
+        "rotation": {
+          "z_deg": -91
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "2_131_08",
+        "position": {
+          "x_px": -248,
+          "y_px": 151
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_005",
+        "path": "/shapes/motifs/butterfly_005.svg"
+      },
+      {
+        "id": "1_154_26",
+        "path": "/shapes/motifs/1_154_26.svg"
+      },
+      {
+        "id": "2_131_25",
+        "path": "/shapes/motifs/2_131_25.svg"
+      },
+      {
+        "id": "2_095_19",
+        "path": "/shapes/motifs/2_095_19.svg"
+      },
+      {
+        "id": "butterfly_020",
+        "path": "/shapes/motifs/butterfly_020.svg"
+      },
+      {
+        "id": "1_228_20",
+        "path": "/shapes/motifs/1_228_20.svg"
+      },
+      {
+        "id": "2_131_08",
+        "path": "/shapes/motifs/2_131_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "143fe085bacbfda0ce4756d7af02d8aa2d75d349707471cb01f416fc2e924a58",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:30.739Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 344.8,
+        "quantity": 1,
+        "width": 200,
+        "height": 150,
+        "_length": 1,
+        "init_width": 1083,
+        "init_height": 550,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 141,
+        "version_date": 20210519,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_005",
+        "item": "butterfly_005",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -202,
+        "y": -110,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 36,
+        "height": 41,
+        "ratio": 0.07454545454545454,
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_26",
+        "item": "1_154_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 85,
+        "y": 152,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04424778761061947,
+        "itemID": 11
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_25",
+        "item": "2_131_25",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 95,
+        "y": 266,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04550625711035267,
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_095_19",
+        "item": "2_095_19",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 211,
+        "y": 149,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06329113924050633,
+        "itemID": 19
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_020",
+        "item": "butterfly_020",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 338,
+        "y": -153,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -30,
+        "height": 45,
+        "ratio": 0.08181818181818182,
+        "itemID": 34
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2021/05/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1621651748077189024797_11194237685661.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 158,
+        "y": 14,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.936,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "189024797_1119423768566106_5242045864145519884_n.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "96",
+        "width": "193",
+        "height": "257",
+        "itemID": 23
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_228_20",
+        "item": "1_228_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -80,
+        "y": 171,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -91,
+        "height": 71,
+        "ratio": 0.0787139689578714,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Eternally beautiful",
+        "font": "37.5375px Dobkin",
+        "font_size": 14,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -77,
+        "y": -21,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 38
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Jasmine Crystal Ryan",
+        "font": "45.58125px Dobkin",
+        "font_size": 17,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 19,
+        "y": -169,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "29/10/02-07/04/20",
+        "font": "29.49375px Dobkin",
+        "font_size": 11,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 10,
+        "y": -129,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Forever young",
+        "font": "37.5375px Dobkin",
+        "font_size": 14,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -39,
+        "y": -72,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 36
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Missing you forever",
+        "font": "40.21875px Dobkin",
+        "font_size": 15,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -88,
+        "y": 76,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 31
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Loving you always",
+        "font": "40.21875px Dobkin",
+        "font_size": 15,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -78,
+        "y": 126,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 33
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Adventurous dreamer",
+        "font": "42.9px Dobkin",
+        "font_size": 16,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -102,
+        "y": 29,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 29
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_08",
+        "item": "2_131_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -248,
+        "y": 151,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04950495049504951,
+        "itemID": 5
+      }
+    ]
+  }
+}

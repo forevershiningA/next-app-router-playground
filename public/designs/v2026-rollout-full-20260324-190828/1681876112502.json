@@ -1,0 +1,311 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:38.606Z",
+  "units": "mm",
+  "source": {
+    "id": "1681876112502",
+    "slug": "legacy-1681876112502",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1681876112502.json",
+    "savedAt": "2023-04-19T03:48:32.502Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 381.0000000000002,
+      "height_mm": 304.79999999999984
+    },
+    "viewportPx": {
+      "width": 810,
+      "height": 1080,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 381.0000000000002,
+      "height_mm": 304.79999999999984,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 481.0000000000002,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Grandmother",
+        "font": {
+          "family": "French Script",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": -262
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Maynard",
+        "font": {
+          "family": "French Script",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 0.708,
+          "y_px": 619.443
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_228_07",
+        "position": {
+          "x_px": 467.034,
+          "y_px": 70.554
+        },
+        "height_px": 226,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_228_07",
+        "path": "/shapes/motifs/1_228_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e0f3720d4bab583d0f83372fa6b9fb96f267398015e6f292eb7155eea9744665",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:38.606Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1148.34,
+        "quantity": 1,
+        "width": 381.0000000000002,
+        "height": 304.79999999999984,
+        "_length": 80,
+        "init_width": 840,
+        "init_height": 643,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230412,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 810x1080"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 731,
+        "quantity": 1,
+        "width": 481.0000000000002,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 840,
+        "init_height": 643,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_228_07",
+        "item": "1_228_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 467.0339539978095,
+        "y": 70.55365474339033,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 226,
+        "ratio": 0.23890063424947147,
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1681876733853,
+        "path": "../upload/2023/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16818767338534192313f846e477ab1de7b4f.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -14.902519167579385,
+        "y": 99.19440124416792,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.5030266512202266,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "4192313F-846E-477A-B1DE-7B4FF69CD120.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 181,
+        "width": "358",
+        "height": "484",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1681877171870,
+        "path": "../upload/2023/04/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16818771718701d72a1de0f7847e6ae18bb02.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -304,
+        "y": 614,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2925484372577058,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1D72A1DE-0F78-47E6-AE18-BB028D59F5A6.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 50,
+        "width": "117",
+        "height": "134",
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Grandmother",
+        "font": "69.5212106299212px French Script",
+        "font_size": 26,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -12,
+        "y": -262,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 9,
+        "label": "Elizabeth",
+        "font": "114.97738681102354px French Script",
+        "font_size": 43,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0.7075575027382683,
+        "y": 619.4432348367031,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 5
+      }
+    ]
+  }
+}

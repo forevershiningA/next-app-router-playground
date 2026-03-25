@@ -1,0 +1,353 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:06:15.403Z",
+  "units": "mm",
+  "source": {
+    "id": "1686004343880",
+    "slug": "legacy-1686004343880",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1686004343880.json",
+    "savedAt": "2023-06-05T22:32:23.880Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 432,
+      "height": 960,
+      "dpr": 2.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Aug 5,1969-Aug 16,2016",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 101.906,
+          "y_px": -102.88
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Johnnie Perkins",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": 97.909,
+          "y_px": -214.856
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "To the moon and back",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -173.839,
+          "y_px": 412.774
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "tortoise_001",
+        "position": {
+          "x_px": 281.739,
+          "y_px": 331.777
+        },
+        "height_px": 168,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_015_05",
+        "position": {
+          "x_px": 5.595,
+          "y_px": -128.329
+        },
+        "height_px": 410,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "tortoise_001",
+        "position": {
+          "x_px": -350.865,
+          "y_px": 249.832
+        },
+        "height_px": 89,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "tortoise_001",
+        "path": "/shapes/motifs/tortoise_001.svg"
+      },
+      {
+        "id": "1_015_05",
+        "path": "/shapes/motifs/1_015_05.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "689ab17137173dfa7fa9611c3ffce043e9a8b4bc0aa7c876b5c2263b16e54401",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:06:15.403Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1484.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 432,
+        "init_height": 783,
+        "device": "mobile",
+        "dpr": 2.5,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230412,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 432x960"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "tortoise_001",
+        "item": "tortoise_001",
+        "price": 244.355015,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 281.73913955688477,
+        "y": 331.77749205061923,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 168,
+        "ratio": 1.1275167785234899,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_05",
+        "item": "1_015_05",
+        "price": 301.165725,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 5.594886779785156,
+        "y": -128.32854780292166,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 410,
+        "ratio": 0.7824427480916031,
+        "itemID": 7
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "tortoise_001",
+        "item": "tortoise_001",
+        "price": 225.80937,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -350.86522475237325,
+        "y": 249.83248605155723,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 89,
+        "ratio": 0.5973154362416108,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 20,
+        "label": "Aug 5,1969-Aug 16,2016",
+        "font": "55.27559055118111px Lucida Calligraphy",
+        "font_size": 32,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 101.90582275390625,
+        "y": -102.87984980050908,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "Shelly Lawless",
+        "font": "74.27657480314961px Lucida Calligraphy",
+        "font_size": 43,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 97.90946960449219,
+        "y": -214.85561307514922,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "To the moon and back",
+        "font": "53.5482283464567px Lucida Calligraphy",
+        "font_size": 31,
+        "font_family": "Lucida Calligraphy",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": -173.83899688720703,
+        "y": 412.7737741287642,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 11
+      }
+    ]
+  }
+}

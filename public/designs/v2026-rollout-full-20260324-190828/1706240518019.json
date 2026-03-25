@@ -1,0 +1,454 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:39.738Z",
+  "units": "mm",
+  "source": {
+    "id": "1706240518019",
+    "slug": "legacy-1706240518019",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1706240518019.json",
+    "savedAt": "2024-01-26T03:41:58.019Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1200
+    },
+    "viewportPx": {
+      "width": 339,
+      "height": 753,
+      "dpr": 2.125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1200,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Mable Benson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 113
+        },
+        "position": {
+          "x_px": 26.948,
+          "y_px": -147.908
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Ella Sims",
+        "font": {
+          "family": "Garamond",
+          "size_px": 82
+        },
+        "position": {
+          "x_px": -170.674,
+          "y_px": 45.022
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Rhoda Dixon",
+        "font": {
+          "family": "Garamond",
+          "size_px": 94
+        },
+        "position": {
+          "x_px": 224.571,
+          "y_px": 61.012
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "australiancoat",
+        "position": {
+          "x_px": 16,
+          "y_px": -284
+        },
+        "height_px": 161,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-2",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 148,
+          "y_px": 162
+        },
+        "height_px": 731,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 17.002,
+          "y_px": -25.012
+        },
+        "height_px": 803,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": -129,
+          "y_px": 152
+        },
+        "height_px": 792,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 702,
+          "y_px": 156
+        },
+        "height_px": 792,
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "australiancoat",
+        "path": "/shapes/motifs/australiancoat.svg"
+      },
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f00408f180c542211f8720b5d5906f51e2139d6b27586e65317c8ae6f21ce4d2",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:39.738Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 7889,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1200,
+        "_length": 100,
+        "init_width": 339,
+        "init_height": 568,
+        "device": "mobile",
+        "dpr": 2.125,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 339x753"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1098,
+        "quantity": 1,
+        "width": 1200,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 339,
+        "init_height": 568,
+        "mode": "2d"
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "australiancoat",
+        "item": "australiancoat",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 16,
+        "y": -284,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 161,
+        "ratio": 1.694736842105263,
+        "itemID": 1
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 148,
+        "y": 162,
+        "flipx": "-1",
+        "flipy": "-1",
+        "rotation": -90,
+        "height": 731,
+        "ratio": 0.9918588873812755,
+        "itemID": 2
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 17.001896951050924,
+        "y": -25.011768341064453,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 803,
+        "ratio": 1.0895522388059702,
+        "itemID": 3
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -129,
+        "y": 152,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": -90,
+        "height": 792,
+        "ratio": 1.0746268656716418,
+        "itemID": 4
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 702,
+        "y": 156,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": -90,
+        "height": 792,
+        "ratio": 1.0746268656716418,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Mary Patricia",
+        "font": "60.97673296327598px Garamond",
+        "font_size": 113,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 26.948425833102704,
+        "y": -147.90760040283203,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 104,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Jonathan Jeremiah",
+        "font": "44.24860268131531px Garamond",
+        "font_size": 82,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -170.6739685598728,
+        "y": 45.022403717041016,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 74,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Owen Francis",
+        "font": "50.724007951751695px Garamond",
+        "font_size": 94,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 224.57101467436394,
+        "y": 61.01243209838867,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 63,
+        "itemID": 11
+      }
+    ]
+  }
+}

@@ -1,0 +1,438 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-03-24T18:08:33.432Z",
+  "units": "mm",
+  "source": {
+    "id": "1671182493008",
+    "slug": "legacy-1671182493008",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1671182493008.json",
+    "savedAt": "2022-12-16T09:21:33.008Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 38",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1200,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Always together",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": 11,
+          "y_px": 163.856
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Love you miss you",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 105
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 110.028
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Traditional Engraved Headstone - 16/12/2022",
+        "font": {
+          "family": "Arial",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 228.463
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Opera - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 67
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 255.985
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Until we meet again",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 89
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -65.768
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Death cannot part them",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 92
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -121.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "dove_004",
+        "position": {
+          "x_px": 195,
+          "y_px": 118
+        },
+        "height_px": 240,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_004",
+        "path": "/shapes/motifs/dove_004.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0488846ef8818d9b813a219f152953201b50d5ea943072e46915017185ec75d2",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-03-24T18:08:33.432Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 38",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 4542.23,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1200,
+        "_length": 100,
+        "init_width": 1144,
+        "init_height": 596,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20221214,
+        "mode": "2d",
+        "navigator": "Opera (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 809,
+        "quantity": 1,
+        "width": 1200,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1144,
+        "init_height": 596,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 14,
+        "label": "Always together",
+        "font": "30.396000000000008px Franklin Gothic",
+        "font_size": 68,
+        "font_family": "Franklin Gothic",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 11,
+        "y": 163.8560375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 14,
+        "label": "Love you miss you",
+        "font": "46.93500000000001px Great Vibes",
+        "font_size": 105,
+        "font_family": "Great Vibes",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -3,
+        "y": 110.02750000000003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 123,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 39,
+        "label": "Traditional Engraved Headstone - 16/12/2022",
+        "font": "23.244000000000007px Arial",
+        "font_size": 52,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2,
+        "y": 228.46349999999995,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 13,
+        "label": "Opera - desktop",
+        "font": "29.94900000000001px Garamond",
+        "font_size": 67,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 255.984775,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 8
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1671183094066,
+        "path": "../upload/2022/12/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1671183094066pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -202,
+        "y": 128,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3600000000000001,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 18.7,
+        "quantity": 16,
+        "label": "Until we meet again",
+        "font": "39.78300000000001px Chopin Script",
+        "font_size": 89,
+        "font_family": "Chopin Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 1,
+        "y": -65.7679875,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 87,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 19,
+        "label": "Death cannot part them",
+        "font": "41.12400000000001px Chopin Script",
+        "font_size": 92,
+        "font_family": "Chopin Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": -121.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 105,
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 273.6875,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 195,
+        "y": 118,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 240,
+        "ratio": 0.20425531914893616,
+        "itemID": 11
+      }
+    ]
+  }
+}
