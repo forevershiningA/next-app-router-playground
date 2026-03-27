@@ -87,6 +87,12 @@ function toLabel(slug: string): string {
     .join(' ');
 }
 
+function getPopupPreviewSrc(preview?: string): string | null {
+  if (!preview) return null;
+  // Vercel deploy excludes full screenshots via .vercelignore; prefer _small variants.
+  return preview.replace(/\.(jpg|jpeg|png)$/i, '_small.jpg');
+}
+
 function buildTree(designs: SavedDesignMetadata[]): PickerTree {
   return designs.reduce<PickerTree>((acc, design) => {
     const productSlug = design.productSlug || 'uncategorized';
@@ -280,10 +286,19 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                             <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md border border-white/15 bg-black/30">
                                               {design.metadata.preview ? (
                                                 <img
-                                                  src={design.metadata.preview}
+                                                  src={getPopupPreviewSrc(design.metadata.preview) || design.metadata.preview}
                                                   alt={`${design.displayTitle} thumbnail`}
                                                   className="h-full w-full object-cover"
                                                   loading="lazy"
+                                                  onError={(e) => {
+                                                    const img = e.currentTarget;
+                                                    if (img.dataset.fallbackApplied === '1') {
+                                                      img.style.display = 'none';
+                                                      return;
+                                                    }
+                                                    img.dataset.fallbackApplied = '1';
+                                                    img.src = design.metadata.preview as string;
+                                                  }}
                                                 />
                                               ) : (
                                                 <PhotoIcon className="h-5 w-5 text-white/40" />
