@@ -18,11 +18,13 @@ import React from 'react';
 import { MotifsData } from '#/motifs_data';
 import DesignSidebar from '#/components/DesignSidebar';
 import DesignContentBlock from '#/components/DesignContentBlock';
-import { analyzeImageForCrop, type CropBounds } from '#/lib/screenshot-crop';
+import type { CropBounds } from '#/lib/screenshot-crop';
 import { getMotifCategoryName } from '#/lib/motif-translations';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import { logger } from '#/lib/logger';
+
+const FORCE_LEGACY_PARITY_IDS = new Set<string>(['1578016189116']);
 
 // Type for layout items (inscriptions and motifs)
 type LayoutItem = {
@@ -1174,6 +1176,10 @@ export default function DesignPageClient({
 
   const { design: designData, loading } = useSavedDesign(designId, designMetadata.mlDir);
   const canonicalDesignUrl = useMemo(() => (designId ? getCanonicalDesignUrl(designId) : null), [designId]);
+  const shouldForceLegacyParity = useMemo(
+    () => Boolean(designId && FORCE_LEGACY_PARITY_IDS.has(designId)),
+    [designId],
+  );
   const croppedPreviewUrl = useMemo(() => {
     if (!designMetadata.preview) return null;
     const croppedCandidate = designMetadata.preview.replace(/\.(jpg|jpeg|png)$/i, '_cropped$&');
@@ -1197,8 +1203,35 @@ export default function DesignPageClient({
   }, []);
   
   useEffect(() => {
-    if (!designId || !canonicalDesignUrl) return;
+    if (!designId) return;
     let cancelled = false;
+
+    if (shouldForceLegacyParity) {
+      if (!designData) return;
+      setCanonicalLoadState('loading');
+      (async () => {
+        try {
+          await loadSavedDesignIntoEditor(designData, designId, { clearExisting: true });
+          if (!cancelled) {
+            legacyLoadedRef.current = true;
+            canonicalStateIdRef.current = designId;
+            setCanonicalLoadState('success');
+          }
+        } catch (error) {
+          if (!cancelled) {
+            canonicalStateIdRef.current = designId;
+            console.warn('Failed to load forced legacy parity design', error);
+            setCanonicalLoadState('failed');
+          }
+        }
+      })();
+
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    if (!canonicalDesignUrl) return;
 
     setCanonicalLoadState('loading');
     (async () => {
@@ -1226,7 +1259,7 @@ export default function DesignPageClient({
     return () => {
       cancelled = true;
     };
-  }, [designId, canonicalDesignUrl]);
+  }, [designId, canonicalDesignUrl, designData, shouldForceLegacyParity]);
   
   useEffect(() => {
     if (
@@ -1258,7 +1291,7 @@ export default function DesignPageClient({
     };
   }, [canonicalLoadState, designId, designData]);
   
-  // Load screenshot dimensions from metadata JSON file instead of analyzing image
+  // Load screenshot dimensions from metadata JSON; avoid image probing for dimensions.
   useEffect(() => {
     async function loadScreenshotMetadata() {
       if (!designData) return;
@@ -1269,7 +1302,7 @@ export default function DesignPageClient({
         const initHeight = headstoneData?.init_height || 476;
         const designDPR = headstoneData?.dpr || 1;
         
-        // Try to load the cropped metadata JSON
+        // Try to load the cropped metadata JSON first.
         const metadataPath = designMetadata.preview?.replace(/\.(jpg|jpeg|png)$/i, '_cropped.json');
         
         if (metadataPath) {
@@ -1277,47 +1310,68 @@ export default function DesignPageClient({
             const response = await fetch(metadataPath);
             if (response.ok) {
               const metadata = await response.json();
-              
+              const originalWidth = Number(metadata?.original?.width ?? Number.NaN);
+              const originalHeight = Number(metadata?.original?.height ?? Number.NaN);
+              const croppedWidth = Number(metadata?.cropped?.width ?? Number.NaN);
+              const croppedHeight = Number(metadata?.cropped?.height ?? Number.NaN);
+              const hasOriginal =
+                Number.isFinite(originalWidth) &&
+                Number.isFinite(originalHeight) &&
+                originalWidth > 0 &&
+                originalHeight > 0;
+              const hasCropped =
+                Number.isFinite(croppedWidth) &&
+                Number.isFinite(croppedHeight) &&
+                croppedWidth > 0 &&
+                croppedHeight > 0;
+               
               logger.log('📸 Screenshot metadata loaded from JSON:', {
                 designId: designMetadata.id,
                 metadata,
                 canvas: { width: initWidth, height: initHeight }
               });
-              
-              // Set crop bounds from metadata
-              setCropBounds({
-                left: 0,
-                top: 0,
-                right: metadata.cropped.width,
-                bottom: metadata.cropped.height,
-                width: metadata.original.width,
-                height: metadata.original.height,
-                croppedWidth: metadata.cropped.width,
-                croppedHeight: metadata.cropped.height,
-                whiteSpacePercentage: 0,
-                shouldCrop: metadata.wasCropped
-              });
-              
-              // Store the canvas dimensions (logical space for coordinate system)
-              setScreenshotDimensions({ width: initWidth, height: initHeight });
-              return;
+
+              if (hasOriginal && hasCropped) {
+                // Set crop bounds directly from metadata (no JPG analysis).
+                setCropBounds({
+                  left: 0,
+                  top: 0,
+                  right: croppedWidth,
+                  bottom: croppedHeight,
+                  width: originalWidth,
+                  height: originalHeight,
+                  croppedWidth,
+                  croppedHeight,
+                  whiteSpacePercentage: 0,
+                  shouldCrop: Boolean(metadata?.wasCropped)
+                });
+
+                // Keep logical canvas dimensions from saved design fields.
+                setScreenshotDimensions({ width: initWidth, height: initHeight });
+                return;
+              }
+
+              logger.warn('Metadata JSON is missing valid dimensions, using design JSON canvas fallback.');
             }
           } catch (err) {
-            logger.warn('Failed to load metadata JSON, falling back to image analysis:', err);
+            logger.warn('Failed to load metadata JSON, using design JSON canvas fallback:', err);
           }
         }
-        
-        // Fallback: analyze the image if metadata doesn't exist
-        if (designMetadata.preview) {
-          analyzeImageForCrop(designMetadata.preview, 50)
-            .then(bounds => {
-              setCropBounds(bounds);
-              setScreenshotDimensions({ width: initWidth, height: initHeight });
-            })
-            .catch(err => {
-              logger.error('Failed to analyze screenshot for cropping:', err);
-            });
-        }
+
+        // Fallback: derive dimensions only from saved design JSON (no image fetch/probe).
+        setCropBounds({
+          left: 0,
+          top: 0,
+          right: initWidth,
+          bottom: initHeight,
+          width: initWidth,
+          height: initHeight,
+          croppedWidth: initWidth,
+          croppedHeight: initHeight,
+          whiteSpacePercentage: 0,
+          shouldCrop: false
+        });
+        setScreenshotDimensions({ width: initWidth, height: initHeight });
       } catch (err) {
         logger.error('Failed to load screenshot metadata:', err);
       }

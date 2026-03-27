@@ -211,6 +211,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     [selectedImages],
   );
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
+  const loading = useHeadstoneStore((s) => s.loading);
   const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -461,6 +462,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
   React.useEffect(() => {
     if (!shapeUrl) return;
+    if (loading) return;
     const state = useHeadstoneStore.getState();
     const hasExistingHeadstoneLayout =
       state.inscriptions.some((line) => (line.target ?? 'headstone') === 'headstone') ||
@@ -479,9 +481,10 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
       };
     }
     prevShapeUrlRef.current = shapeUrl;
-  }, [shapeUrl]);
+  }, [shapeUrl, loading]);
 
   React.useEffect(() => {
+    if (loading) return;
     const pending = pendingRemapRef.current;
     if (!pending) return;
     if (visibleUrl !== pending.targetShapeUrl) return;
@@ -489,7 +492,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     if (!newBox) return;
     remapLayoutsBetweenBoxes(pending.oldBox, newBox);
     pendingRemapRef.current = null;
-  }, [visibleUrl, remapLayoutsBetweenBoxes, bboxVersion]);
+  }, [visibleUrl, remapLayoutsBetweenBoxes, bboxVersion, loading]);
 
 
   return (

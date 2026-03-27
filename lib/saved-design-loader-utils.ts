@@ -16,6 +16,7 @@ export interface LoadDesignOptions {
 type CanonicalPositionMode = 'legacy-stage-px' | 'surface-mm';
 type CanonicalHeadstonePlacement = 'legacy-stage-offset' | 'auto-center' | 'none';
 type CanonicalFlipMode = 'invert-legacy-bools' | 'preserve';
+type CanonicalCoordinateSpace = 'css-stage' | 'buffer-px';
 export type CanonicalConversionConfidence = 'high' | 'medium' | 'low';
 
 export type CanonicalConversionMetadata = {
@@ -72,6 +73,9 @@ export type CanonicalDesignData = {
       positionMode?: CanonicalPositionMode;
       headstonePlacement?: CanonicalHeadstonePlacement;
       flipMode?: CanonicalFlipMode;
+      coordinateSpace?: CanonicalCoordinateSpace;
+      stageCssPx?: { width?: number; height?: number };
+      bufferPx?: { width?: number; height?: number };
     };
   };
   source?: {
@@ -123,20 +127,12 @@ export const DEFAULT_CANONICAL_DESIGN_BASE_PATH = '/designs';
 const DEFAULT_CANONICAL_LEGACY_BASE_PATH = '/canonical-designs';
 const DEFAULT_CANONICAL_LEGACY_VERSION = 'v2026';
 const DESIGN_SOURCE_OVERRIDES: Record<string, { basePath: string; version: string }> = {
-  // Keep the known-good baseline payload for Load Design 1.
+  // Keep known-good stable canonical payload for this design.
   '1725769905504': {
     basePath: DEFAULT_CANONICAL_LEGACY_BASE_PATH,
     version: DEFAULT_CANONICAL_LEGACY_VERSION,
   },
-  // Keep Load Design 2 on the stable canonical baseline while rollout-full remains under investigation.
-  '1578016189116': {
-    basePath: '/designs',
-    version: 'v2026',
-  },
 };
-const FORCE_LEGACY_PARITY_IDS = new Set<string>([
-  '1578016189116',
-]);
 const ROLLOUT_FULL_SKIPPED_IDS_PATH = '/database-exports/rollout-full-skipped-ids-20260324-190828.json';
 
 type RolloutSkippedIdsArtifact = {
@@ -188,43 +184,20 @@ export const resolveCanonicalLoadPolicy = async (
   designData: CanonicalDesignData,
   fallbackReason?: string | null,
 ): Promise<CanonicalLoadPolicyDecision> => {
-  if (fallbackReason) {
-    return {
-      mode: 'legacy-fallback',
-      reason: fallbackReason,
-    };
-  }
-
-  const sourceDesignId = designData.source?.id;
-  if (sourceDesignId && FORCE_LEGACY_PARITY_IDS.has(sourceDesignId)) {
-    return {
-      mode: 'legacy-fallback',
-      reason: 'forced legacy parity mapping for known outlier',
-    };
-  }
-
-  if (sourceDesignId) {
-    const skippedLookup = await getSkippedDesignReasonLookup();
-    const skipReason = skippedLookup.get(sourceDesignId);
-    if (skipReason) {
-      return {
-        mode: 'legacy-fallback',
-        reason: `design skipped in rollout (${skipReason})`,
-      };
-    }
-  }
-
   const conversionConfidence = designData.migration?.confidence;
-  if (conversionConfidence === 'low') {
-    return {
-      mode: 'legacy-fallback',
-      reason: 'canonical conversion confidence is low',
-    };
-  }
+  const skippedLookup = await getSkippedDesignReasonLookup();
+  const skippedReason = designData.source?.id ? skippedLookup.get(designData.source.id) : null;
 
   return {
     mode: 'canonical',
-    reason: conversionConfidence ? `canonical conversion confidence is ${conversionConfidence}` : 'canonical default',
+    reason:
+      fallbackReason
+        ? `canonical-only mode enabled (ignoring legacy fallback trigger: ${fallbackReason})`
+        : skippedReason
+          ? `canonical-only mode enabled (ignoring skipped-id fallback trigger: ${skippedReason})`
+          : conversionConfidence
+            ? `canonical-only mode enabled (conversion confidence: ${conversionConfidence})`
+            : 'canonical-only mode enabled',
   };
 };
 
@@ -326,6 +299,64 @@ type LegacyCanvasInfo = {
   mmPerPxYBase: number;
 };
 
+type LegacyReplayRatios = {
+  ratio: number;
+  ratioWidth: number;
+  ratioHeight: number;
+};
+
+const computeLegacyReplayRatios = (
+  initW: number,
+  initH: number,
+  savedDpr: number,
+  runtimeViewportOverride?: { width: number; height: number; dpr: number },
+): LegacyReplayRatios => {
+  if (typeof window === 'undefined') {
+    return { ratio: 1, ratioWidth: 1, ratioHeight: 1 };
+  }
+
+  const runtimeW = Math.max(
+    runtimeViewportOverride?.width || window.innerWidth || initW || 1,
+    1,
+  );
+  const runtimeH = Math.max(
+    runtimeViewportOverride?.height || window.innerHeight || initH || 1,
+    1,
+  );
+  const runtimeDpr = Math.max(
+    runtimeViewportOverride?.dpr || window.devicePixelRatio || 1,
+    1,
+  );
+  const legacySavedDpr = Math.max(savedDpr || 1, 1);
+
+  let ratio = 1;
+  if (runtimeW > runtimeH) {
+    if (runtimeDpr > legacySavedDpr) {
+      ratio = runtimeDpr / legacySavedDpr;
+    } else if (legacySavedDpr > 2.5) {
+      ratio = ((initH / legacySavedDpr) / (runtimeH / runtimeDpr)) + (runtimeDpr / legacySavedDpr);
+    } else if (legacySavedDpr > 1.5) {
+      ratio = (initH / legacySavedDpr) / (runtimeH / runtimeDpr);
+    } else {
+      ratio = runtimeDpr / legacySavedDpr;
+    }
+  } else if (runtimeDpr > legacySavedDpr) {
+    ratio = runtimeDpr / 2;
+  } else {
+    ratio = runtimeDpr / legacySavedDpr;
+  }
+
+  if (Number(runtimeDpr) === Number(legacySavedDpr)) {
+    ratio = 1;
+  }
+
+  return {
+    ratio,
+    ratioWidth: (runtimeW / Math.max(initW, 1)) * ratio,
+    ratioHeight: (runtimeH / Math.max(initH, 1)) * ratio,
+  };
+};
+
 const computeLegacyCanvasInfo = (designData: SavedDesignData, baseProduct?: any): LegacyCanvasInfo => {
   const headstoneItem = designData.find((item) => item.type === 'Headstone') || baseProduct || {};
   const baseItem = designData.find((item) => item.type === 'Base');
@@ -375,6 +406,46 @@ const decodeHtmlEntities = (value?: string) => {
     .replace(/&apos;/g, "'")
     .replace(/&quot;/g, '"')
     .replace(/&amp;/g, '&');
+};
+
+const legacyMotifDimensionsCache = new Map<string, Promise<{ width: number; height: number }>>();
+
+const loadLegacyMotifDimensions = async (svgPath: string): Promise<{ width: number; height: number }> => {
+  if (!legacyMotifDimensionsCache.has(svgPath)) {
+    legacyMotifDimensionsCache.set(
+      svgPath,
+      (async () => {
+        try {
+          const response = await fetch(svgPath, { cache: 'force-cache' });
+          if (!response.ok) throw new Error(`Failed to fetch motif SVG (${response.status})`);
+          const svgText = await response.text();
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(svgText, 'image/svg+xml');
+          const svgElement = doc.documentElement as unknown as SVGSVGElement;
+          const viewBoxAttr = svgElement.getAttribute('viewBox');
+          let width = parseFloat(svgElement.getAttribute('width') || '');
+          let height = parseFloat(svgElement.getAttribute('height') || '');
+          if ((!Number.isFinite(width) || width <= 0 || !Number.isFinite(height) || height <= 0) && viewBoxAttr) {
+            const vb = viewBoxAttr
+              .split(/[\s,]+/)
+              .map((token) => parseFloat(token))
+              .filter((num) => Number.isFinite(num));
+            if (vb.length === 4) {
+              width = vb[2];
+              height = vb[3];
+            }
+          }
+          if (!Number.isFinite(width) || width <= 0) width = 100;
+          if (!Number.isFinite(height) || height <= 0) height = 100;
+          return { width, height };
+        } catch (error) {
+          console.warn('[loadSavedDesignIntoEditor] Failed to load motif SVG dimensions:', svgPath, error);
+          return { width: 100, height: 100 };
+        }
+      })(),
+    );
+  }
+  return legacyMotifDimensionsCache.get(svgPath)!;
 };
 
 const canonicalSurfaceTarget = (surface?: string): 'headstone' | 'base' | 'ledger' => {
@@ -623,7 +694,15 @@ export async function loadSavedDesignIntoEditor(
 
   const canvasInfo = computeLegacyCanvasInfo(designData, baseProduct);
   const baseItem = designData.find((item) => item.type === 'Base');
-  const useContainParityMapping = designId === '1578016189116';
+  // Legacy createJS replay scales positions with ratio_height (dyo.h / init_height)
+  // for both axes in most branches. Keep a targeted parity mode for known outliers.
+  const useLegacyRatioHeightMapping = designId === '1578016189116';
+  // The /designs SVG renderer can also map with independent X/Y axis scaling
+  // against init_width/init_height (not "contain" fitting into a square).
+  const useContainParityMapping = false;
+  const legacyReplayRatios = useLegacyRatioHeightMapping
+    ? computeLegacyReplayRatios(canvasInfo.initW, canvasInfo.initH, canvasInfo.designDpr)
+    : { ratio: 1, ratioWidth: 1, ratioHeight: 1 };
 
   const mapCanvasPointToSurfaceMm = (
     canvasX: number,
@@ -668,14 +747,22 @@ export async function loadSavedDesignIntoEditor(
 
     const rawX = typeof insc.x === 'number' ? insc.x : 0;
     const rawY = typeof insc.y === 'number' ? insc.y : 0;
+    const legacyScaledX = Math.round(legacyReplayRatios.ratioHeight * rawX);
+    const legacyScaledY = Math.round(legacyReplayRatios.ratioHeight * rawY);
     const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
     const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
 
     const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
     const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
+    const mmPerPxLegacy = mmPerPxY;
 
     const mapped = useContainParityMapping
       ? mapCanvasPointToSurfaceMm(canvasX, canvasY, surfaceIsBase)
+      : useLegacyRatioHeightMapping
+        ? {
+            xPos: legacyScaledX * mmPerPxLegacy,
+            yPos: -(legacyScaledY * mmPerPxLegacy),
+          }
       : {
           xPos: canvasX * mmPerPxX,
           yPos: -(canvasY * mmPerPxY),
@@ -721,14 +808,22 @@ export async function loadSavedDesignIntoEditor(
       
       const rawX = typeof motif.x === 'number' ? motif.x : 0;
       const rawY = typeof motif.y === 'number' ? motif.y : 0;
+      const legacyScaledX = Math.round(legacyReplayRatios.ratioHeight * rawX);
+      const legacyScaledY = Math.round(legacyReplayRatios.ratioHeight * rawY);
       const canvasX = canvasInfo.usesPhysicalCoords ? rawX / canvasInfo.designDpr : rawX;
       const canvasY = canvasInfo.usesPhysicalCoords ? rawY / canvasInfo.designDpr : rawY;
 
       const mmPerPxY = surfaceIsBase ? canvasInfo.mmPerPxYBase : canvasInfo.mmPerPxYHeadstone;
       const mmPerPxX = surfaceIsBase ? canvasInfo.mmPerPxXBase : canvasInfo.mmPerPxXHeadstone;
+      const mmPerPxLegacy = mmPerPxY;
 
       const mapped = useContainParityMapping
         ? mapCanvasPointToSurfaceMm(canvasX, canvasY, surfaceIsBase)
+        : useLegacyRatioHeightMapping
+          ? {
+              xPos: legacyScaledX * mmPerPxLegacy,
+              yPos: -(legacyScaledY * mmPerPxLegacy),
+            }
         : {
             xPos: canvasX * mmPerPxX,
             yPos: -(canvasY * mmPerPxY),
@@ -737,16 +832,25 @@ export async function loadSavedDesignIntoEditor(
       const yPos = mapped.yPos;
 
       let heightMm = 100;
-      if (typeof motif.height === 'number' && motif.height > 0) {
-        if (motif.height > 10 && motif.height < 2000 && !motif.ratio) {
-          heightMm = motif.height;
-        } else {
-          const canvasHeight = canvasInfo.usesPhysicalCoords ? motif.height / canvasInfo.designDpr : motif.height;
-          heightMm = canvasHeight * mmPerPxY;
-        }
+      if (useLegacyRatioHeightMapping && typeof motif.ratio === 'number' && motif.ratio > 0) {
+        const dims = await loadLegacyMotifDimensions(svgPath);
+        const hasValidDpr = canvasInfo.designDpr > 1.1;
+        const canvasHeight = dims.height * motif.ratio * (hasValidDpr ? canvasInfo.designDpr : 1);
+        const legacyMappedHeight = Math.round(legacyReplayRatios.ratioHeight * canvasHeight);
+        heightMm = legacyMappedHeight * mmPerPxLegacy;
+      } else if (typeof motif.height === 'number' && motif.height > 0 && useLegacyRatioHeightMapping) {
+        const legacyMappedHeight = Math.round(legacyReplayRatios.ratioHeight * motif.height);
+        heightMm = legacyMappedHeight * mmPerPxLegacy;
+      } else if (typeof motif.height === 'number' && motif.height > 10 && motif.height < 2000) {
+        // Legacy payloads often persist motif.height in physical mm even when ratio is present.
+        heightMm = motif.height;
       } else if (typeof motif.ratio === 'number' && motif.ratio > 0) {
-        const basePx = 100;
-        const canvasHeight = basePx * motif.ratio * (canvasInfo.usesPhysicalCoords ? canvasInfo.designDpr : 1);
+        const dims = await loadLegacyMotifDimensions(svgPath);
+        const hasValidDpr = canvasInfo.designDpr > 1.1;
+        const canvasHeight = dims.height * motif.ratio * (hasValidDpr ? canvasInfo.designDpr : 1);
+        heightMm = canvasHeight * mmPerPxY;
+      } else if (typeof motif.height === 'number' && motif.height > 0) {
+        const canvasHeight = canvasInfo.usesPhysicalCoords ? motif.height / canvasInfo.designDpr : motif.height;
         heightMm = canvasHeight * mmPerPxY;
       }
       heightMm = Math.max(20, Math.min(800, heightMm));
@@ -799,6 +903,11 @@ export async function loadCanonicalDesignIntoEditor(
   const { clearExisting = true } = options;
 
   const fetchLegacyDesign = async (): Promise<SavedDesignData | null> => {
+    const embeddedLegacyRaw = designData.legacy?.raw;
+    if (Array.isArray(embeddedLegacyRaw) && embeddedLegacyRaw.length > 0) {
+      return embeddedLegacyRaw as SavedDesignData;
+    }
+
     const legacyPath = designData.source?.legacyFile;
     if (!legacyPath) return null;
     try {
@@ -822,6 +931,7 @@ export async function loadCanonicalDesignIntoEditor(
   const isForevershining = normalizedMlDir === 'forevershining';
   const coordinateSystem = designData.scene?.coordinateSystem;
   const positionMode = coordinateSystem?.positionMode ?? 'legacy-stage-px';
+  const coordinateSpace = coordinateSystem?.coordinateSpace ?? 'css-stage';
   const headstonePlacement =
     coordinateSystem?.headstonePlacement ?? (isForevershining ? 'auto-center' : 'legacy-stage-offset');
   const flipMode =
@@ -960,8 +1070,14 @@ export async function loadCanonicalDesignIntoEditor(
   const BASE_X_SCALE = 1;
   const BASE_Y_SCALE = 1;
 
-  const canonicalViewportWidthCssPx = designData.scene?.viewportPx?.width ?? 0;
-  const canonicalViewportHeightCssPx = designData.scene?.viewportPx?.height ?? 0;
+  const canonicalViewportWidthCssPx =
+    coordinateSystem?.stageCssPx?.width ??
+    designData.scene?.viewportPx?.width ??
+    0;
+  const canonicalViewportHeightCssPx =
+    coordinateSystem?.stageCssPx?.height ??
+    designData.scene?.viewportPx?.height ??
+    0;
   const canonicalViewportDpr = designData.scene?.viewportPx?.dpr ?? 1;
   
   console.log('[Canonical Loader] Viewport data from JSON:', {
@@ -971,34 +1087,113 @@ export async function loadCanonicalDesignIntoEditor(
     canonicalViewportHeightCssPx,
   });
   
+  const bufferWidthPxFromMetadata = coordinateSystem?.bufferPx?.width;
+  const bufferHeightPxFromMetadata = coordinateSystem?.bufferPx?.height;
   const canonicalViewportWidthPx =
-    canonicalViewportWidthCssPx > 0 ? canonicalViewportWidthCssPx * canonicalViewportDpr : canonicalViewportWidthCssPx;
+    (typeof bufferWidthPxFromMetadata === 'number' && bufferWidthPxFromMetadata > 0)
+      ? bufferWidthPxFromMetadata
+      : canonicalViewportWidthCssPx > 0
+        ? canonicalViewportWidthCssPx * canonicalViewportDpr
+        : canonicalViewportWidthCssPx;
   const canonicalViewportHeightPx =
-    canonicalViewportHeightCssPx > 0 ? canonicalViewportHeightCssPx * canonicalViewportDpr : canonicalViewportHeightCssPx;
+    (typeof bufferHeightPxFromMetadata === 'number' && bufferHeightPxFromMetadata > 0)
+      ? bufferHeightPxFromMetadata
+      : canonicalViewportHeightCssPx > 0
+        ? canonicalViewportHeightCssPx * canonicalViewportDpr
+        : canonicalViewportHeightCssPx;
+
+  const safeViewportWidthPx = Math.max(canonicalViewportWidthPx || canonicalViewportWidthCssPx || 1, 1);
+  const safeViewportHeightPx = Math.max(canonicalViewportHeightPx || canonicalViewportHeightCssPx || 1, 1);
+  const useAuthoringDesignSpaceMapping = positionMode === 'legacy-stage-px';
+  const maxAbsLegacyStageYPx = positionMode === 'legacy-stage-px'
+    ? Math.max(
+        ...[
+          ...canonicalInscriptionSnapshot
+            .filter((line) => canonicalSurfaceTarget(line.surface) === 'headstone')
+            .map((line) => Math.abs(line.position?.y_px ?? 0)),
+          ...canonicalMotifSnapshot
+            .filter((motif) => canonicalSurfaceTarget(motif.surface) === 'headstone')
+            .map((motif) => Math.abs(motif.position?.y_px ?? 0)),
+          0,
+        ],
+      )
+    : 0;
+  const shouldTreatCssStageAsBufferPx =
+    positionMode === 'legacy-stage-px' &&
+    coordinateSpace === 'css-stage' &&
+    canonicalViewportDpr > 1 &&
+    canonicalViewportHeightCssPx > 0 &&
+    maxAbsLegacyStageYPx > canonicalViewportHeightCssPx * 0.6;
+  const effectiveCoordinateSpace = shouldTreatCssStageAsBufferPx ? 'buffer-px' : coordinateSpace;
+  if (shouldTreatCssStageAsBufferPx) {
+    console.log('[Canonical Loader] Interpreting legacy-stage coordinates as buffer-px due to large spread:', {
+      maxAbsLegacyStageYPx,
+      stageCssHeight: canonicalViewportHeightCssPx,
+      dpr: canonicalViewportDpr,
+      sourceCoordinateSpace: coordinateSpace,
+    });
+  }
+  const sourceStageWidthPx = effectiveCoordinateSpace === 'buffer-px'
+    ? Math.max(canonicalViewportWidthPx || canonicalViewportWidthCssPx || 1, 1)
+    : Math.max(canonicalViewportWidthCssPx || 1, 1);
+  const sourceStageHeightPx = effectiveCoordinateSpace === 'buffer-px'
+    ? Math.max(canonicalViewportHeightPx || canonicalViewportHeightCssPx || 1, 1)
+    : Math.max(canonicalViewportHeightCssPx || 1, 1);
+  const authoringCanvasWidthPx = Math.max(canonicalViewportWidthCssPx || 1, 1);
+  const authoringCanvasHeightPx = Math.max(canonicalViewportHeightCssPx || 1, 1);
+  const totalMonumentHeightMm = Math.max(canonicalHeadstoneHeightMm + Math.max(canonicalBaseHeightMm, 0), 1);
+  const legacyUsePx = Math.min(safeViewportWidthPx, safeViewportHeightPx) * 0.975;
+  const legacyHeadstoneDrawHeightPx =
+    useAuthoringDesignSpaceMapping
+      ? sourceStageHeightPx
+      : canonicalHeadstoneHeightMm > 0
+        ? legacyUsePx * (canonicalHeadstoneHeightMm / totalMonumentHeightMm)
+        : safeViewportHeightPx;
+  const legacyBaseDrawHeightPx =
+    useAuthoringDesignSpaceMapping
+      ? sourceStageHeightPx
+      : canonicalBaseHeightMm > 0
+        ? legacyUsePx * (canonicalBaseHeightMm / totalMonumentHeightMm)
+        : safeViewportHeightPx;
+  const legacyHeadstoneDrawWidthPx =
+    useAuthoringDesignSpaceMapping
+      ? sourceStageWidthPx
+      : canonicalHeadstoneWidthMm > 0 && canonicalHeadstoneHeightMm > 0
+        ? Math.min(
+            legacyUsePx,
+            legacyHeadstoneDrawHeightPx * (canonicalHeadstoneWidthMm / canonicalHeadstoneHeightMm),
+          )
+        : safeViewportWidthPx;
+  const legacyBaseDrawWidthPx =
+    useAuthoringDesignSpaceMapping
+      ? sourceStageWidthPx
+      : canonicalBaseWidthMm > 0 && canonicalBaseHeightMm > 0
+        ? Math.min(legacyUsePx, legacyBaseDrawHeightPx * (canonicalBaseWidthMm / canonicalBaseHeightMm))
+        : safeViewportWidthPx;
 
   const HEADSTONE_MM_PER_PX_X_CANONICAL =
-    canonicalViewportWidthPx && canonicalHeadstoneWidthMm
-      ? canonicalHeadstoneWidthMm / canonicalViewportWidthPx
+    canonicalHeadstoneWidthMm > 0
+      ? canonicalHeadstoneWidthMm / Math.max(legacyHeadstoneDrawWidthPx, 1)
       : 1;
   const HEADSTONE_MM_PER_PX_Y_CANONICAL =
-    canonicalViewportHeightPx && canonicalHeadstoneHeightMm
-      ? canonicalHeadstoneHeightMm / canonicalViewportHeightPx
+    canonicalHeadstoneHeightMm > 0
+      ? canonicalHeadstoneHeightMm / Math.max(legacyHeadstoneDrawHeightPx, 1)
       : 1;
   const BASE_MM_PER_PX_X_CANONICAL =
-    canonicalViewportWidthPx && canonicalBaseWidthMm
-      ? canonicalBaseWidthMm / canonicalViewportWidthPx
+    canonicalBaseWidthMm > 0
+      ? canonicalBaseWidthMm / Math.max(legacyBaseDrawWidthPx, 1)
       : HEADSTONE_MM_PER_PX_X_CANONICAL;
   const BASE_MM_PER_PX_Y_CANONICAL =
-    canonicalViewportHeightPx && canonicalBaseHeightMm
-      ? canonicalBaseHeightMm / canonicalViewportHeightPx
+    canonicalBaseHeightMm > 0
+      ? canonicalBaseHeightMm / Math.max(legacyBaseDrawHeightPx, 1)
       : HEADSTONE_MM_PER_PX_Y_CANONICAL;
   const LEDGER_MM_PER_PX_X_CANONICAL =
-    canonicalViewportWidthPx && canonicalLedgerWidthMm
-      ? canonicalLedgerWidthMm / canonicalViewportWidthPx
+    canonicalLedgerWidthMm > 0
+      ? canonicalLedgerWidthMm / Math.max(safeViewportWidthPx, 1)
       : HEADSTONE_MM_PER_PX_X_CANONICAL;
   const LEDGER_MM_PER_PX_Z_CANONICAL =
-    canonicalViewportHeightPx && canonicalLedgerDepthMm
-      ? canonicalLedgerDepthMm / canonicalViewportHeightPx
+    canonicalLedgerDepthMm > 0
+      ? canonicalLedgerDepthMm / Math.max(safeViewportHeightPx, 1)
       : HEADSTONE_MM_PER_PX_Y_CANONICAL;
   const HEADSTONE_HALF_MM = canonicalHeadstoneHeightMm ? canonicalHeadstoneHeightMm / 2 : 0;
   const BASE_HALF_MM = canonicalBaseHeightMm ? canonicalBaseHeightMm / 2 : 0;
@@ -1008,6 +1203,171 @@ export async function loadCanonicalDesignIntoEditor(
     ? canonicalHeadstoneHeightMm * 0.08
     : 0;
   let HEADSTONE_STAGE_SCALE = 1;
+
+  const legacyHeadstoneItem = Array.isArray(designData.legacy?.raw)
+    ? designData.legacy?.raw.find((item) => item?.type === 'Headstone' || item?.type === 'Plaque')
+    : null;
+  const legacyInscriptionFontPxByCanonicalId = new Map<string, number>();
+  if (Array.isArray(designData.legacy?.raw)) {
+    designData.legacy.raw
+      .filter((item) => item?.type === 'Inscription')
+      .forEach((item) => {
+        const itemId = Number(item.itemID);
+        const fontStr = typeof item.font === 'string' ? item.font : '';
+        const match = fontStr.match(/([\d.]+)px/i);
+        const parsed = match ? Number(match[1]) : Number.NaN;
+        if (Number.isFinite(itemId) && Number.isFinite(parsed) && parsed > 0) {
+          legacyInscriptionFontPxByCanonicalId.set(`insc-${itemId}`, parsed);
+        }
+      });
+  }
+  const legacyInitWidth = Number(
+    legacyHeadstoneItem?.init_width ?? canonicalViewportWidthCssPx ?? Number.NaN,
+  );
+  const legacyInitHeight = Number(
+    legacyHeadstoneItem?.init_height ?? canonicalViewportHeightCssPx ?? Number.NaN,
+  );
+  const legacySavedDprRaw = Number(legacyHeadstoneItem?.dpr ?? Number.NaN);
+  const hasLegacySavedDpr = Number.isFinite(legacySavedDprRaw) && legacySavedDprRaw > 0;
+  const applyLegacyStageCompensation =
+    needsLegacyStageCompensation && !hasLegacySavedDpr;
+  const inferLegacySavedDprHeuristic = () => {
+    if (hasLegacySavedDpr) return legacySavedDprRaw;
+    if (typeof window === 'undefined') return 1;
+    const headstoneYValues = [
+      ...canonicalInscriptionSnapshot
+        .filter((line) => canonicalSurfaceTarget(line.surface) === 'headstone')
+        .map((line) => Math.abs(line.position?.y_px ?? 0)),
+      ...canonicalMotifSnapshot
+        .filter((motif) => canonicalSurfaceTarget(motif.surface) === 'headstone')
+        .map((motif) => Math.abs(motif.position?.y_px ?? 0)),
+    ].filter((value) => Number.isFinite(value) && value > 0) as number[];
+    const maxAbsHeadstoneYPx = headstoneYValues.length ? Math.max(...headstoneYValues) : 0;
+    if (maxAbsHeadstoneYPx <= 0 || HEADSTONE_HALF_MM <= 0) return 1;
+
+    const targetSpreadMm = HEADSTONE_HALF_MM * 0.72;
+    const candidateDprs = [1, 1.5, 2, 2.5, 3, 4];
+    let best = 1;
+    let bestScore = Number.POSITIVE_INFINITY;
+    for (const candidate of candidateDprs) {
+      const ratios = computeLegacyReplayRatios(
+        Number.isFinite(legacyInitWidth) && legacyInitWidth > 0 ? legacyInitWidth : safeViewportWidthPx,
+        Number.isFinite(legacyInitHeight) && legacyInitHeight > 0 ? legacyInitHeight : safeViewportHeightPx,
+        candidate,
+      );
+      const spreadMm = maxAbsHeadstoneYPx * ratios.ratioHeight * HEADSTONE_MM_PER_PX_Y_CANONICAL;
+      if (!Number.isFinite(spreadMm) || spreadMm <= 0) continue;
+      const score = Math.abs(Math.log(spreadMm / targetSpreadMm));
+      if (score < bestScore) {
+        bestScore = score;
+        best = candidate;
+      }
+    }
+    return best;
+  };
+  const inferLegacySavedDprDeterministic = async (): Promise<number | null> => {
+    if (hasLegacySavedDpr) return legacySavedDprRaw;
+    const sourceId = designData.source?.id;
+    const mlDir = designData.source?.mlDir;
+    if (!sourceId || !mlDir) return null;
+    const standards = [1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4];
+    const snapToStandard = (value: number) =>
+      standards.reduce((closest, candidate) =>
+        Math.abs(candidate - value) < Math.abs(closest - value) ? candidate : closest,
+      standards[0]);
+
+    const savedAt = designData.source?.savedAt ? new Date(designData.source.savedAt) : null;
+    const fromDate = savedAt && !Number.isNaN(savedAt.getTime())
+      ? {
+          year: String(savedAt.getFullYear()),
+          month: String(savedAt.getMonth() + 1).padStart(2, '0'),
+        }
+      : null;
+    const fromStamp = Number.isFinite(Number(sourceId))
+      ? (() => {
+          const dt = new Date(Number(sourceId));
+          if (Number.isNaN(dt.getTime())) return null;
+          return {
+            year: String(dt.getFullYear()),
+            month: String(dt.getMonth() + 1).padStart(2, '0'),
+          };
+        })()
+      : null;
+
+    const candidates = [fromDate, fromStamp]
+      .filter((v): v is { year: string; month: string } => Boolean(v))
+      .map((v) => `/ml/${mlDir}/saved-designs/screenshots/${v.year}/${v.month}/${sourceId}_cropped.json`);
+
+    for (const metadataPath of candidates) {
+      try {
+        const response = await fetch(metadataPath, { cache: 'force-cache' });
+        if (!response.ok) continue;
+        const payload = await response.json() as {
+          original?: { width?: number; height?: number };
+        };
+        const originalW = Number(payload?.original?.width ?? Number.NaN);
+        const originalH = Number(payload?.original?.height ?? Number.NaN);
+        const initW = Number.isFinite(legacyInitWidth) && legacyInitWidth > 0 ? legacyInitWidth : Number.NaN;
+        const initH = Number.isFinite(legacyInitHeight) && legacyInitHeight > 0 ? legacyInitHeight : Number.NaN;
+        const xRatio = Number.isFinite(originalW) && Number.isFinite(initW) && initW > 0 ? originalW / initW : Number.NaN;
+        const yRatio = Number.isFinite(originalH) && Number.isFinite(initH) && initH > 0 ? originalH / initH : Number.NaN;
+        const snappedX = Number.isFinite(xRatio) ? snapToStandard(xRatio) : Number.NaN;
+        const snappedY = Number.isFinite(yRatio) ? snapToStandard(yRatio) : Number.NaN;
+
+        // Width is usually the most deterministic signal for DPR in legacy captures;
+        // height can include browser/toolbars and introduce extra blank stage space.
+        let chosenDpr = Number.NaN;
+        if (Number.isFinite(snappedX) && Math.abs(snappedX - xRatio) <= 0.2) {
+          chosenDpr = snappedX;
+        } else if (Number.isFinite(snappedY) && Math.abs(snappedY - yRatio) <= 0.2) {
+          chosenDpr = snappedY;
+        } else {
+          const candidatesRaw = [xRatio, yRatio].filter((v) => Number.isFinite(v) && v >= 0.8 && v <= 4.5) as number[];
+          if (!candidatesRaw.length) continue;
+          const raw = candidatesRaw.length === 2 ? (candidatesRaw[0] + candidatesRaw[1]) / 2 : candidatesRaw[0];
+          const snapped = snapToStandard(raw);
+          if (Math.abs(snapped - raw) <= 0.35) {
+            chosenDpr = snapped;
+          }
+        }
+
+        if (Number.isFinite(chosenDpr) && chosenDpr > 0) return chosenDpr;
+      } catch {
+        // ignore and try next candidate path
+      }
+    }
+    return null;
+  };
+  const deterministicLegacySavedDpr = await inferLegacySavedDprDeterministic();
+  const effectiveLegacySavedDpr =
+    deterministicLegacySavedDpr ??
+    inferLegacySavedDprHeuristic();
+  const shouldUseAuthoringViewportReplay =
+    !hasLegacySavedDpr &&
+    Number.isFinite(canonicalViewportWidthCssPx) &&
+    canonicalViewportWidthCssPx > 0 &&
+    Number.isFinite(canonicalViewportHeightCssPx) &&
+    canonicalViewportHeightCssPx > 0 &&
+    Number.isFinite(canonicalViewportDpr) &&
+    canonicalViewportDpr > 0;
+  const legacyReplayRatios = positionMode === 'legacy-stage-px'
+    ? computeLegacyReplayRatios(
+        Number.isFinite(legacyInitWidth) && legacyInitWidth > 0 ? legacyInitWidth : safeViewportWidthPx,
+        Number.isFinite(legacyInitHeight) && legacyInitHeight > 0 ? legacyInitHeight : safeViewportHeightPx,
+        effectiveLegacySavedDpr,
+        shouldUseAuthoringViewportReplay
+          ? {
+              width: canonicalViewportWidthCssPx,
+              height: canonicalViewportHeightCssPx,
+              dpr: canonicalViewportDpr,
+            }
+          : undefined,
+      )
+    : { ratio: 1, ratioWidth: 1, ratioHeight: 1 };
+  // Universal authoring-space pipeline: canonical legacy-stage coordinates are already
+  // expressed in authoring CSS-pixel space. Do not replay DPR/runtime ratio scaling.
+  const shouldApplyLegacyReplayRatioHeight = false;
+  const legacyStagePositionScale = 1;
 
   function convertPositionToMm(
     position: { x_mm?: number; y_mm?: number; x_px?: number; y_px?: number } | undefined,
@@ -1042,13 +1402,29 @@ export async function loadCanonicalDesignIntoEditor(
 
     const xPx = position?.x_px ?? 0;
     const yPx = position?.y_px ?? 0;
-    const stageXMm = xPx * mmPerPxX;
-    const stageYMm = -yPx * mmPerPxY;
+    // Legacy parser applies ratio_height to both X and Y for loaded items.
+    const replayRatioHeight = shouldApplyLegacyReplayRatioHeight
+      ? legacyReplayRatios.ratioHeight
+      : 1;
+    const stageXMmRaw = xPx * mmPerPxX * replayRatioHeight * legacyStagePositionScale;
+    const stageYMmRaw = -yPx * mmPerPxY * replayRatioHeight * legacyStagePositionScale;
+    const stageXMm = stageXMmRaw;
+    const stageYMm = stageYMmRaw;
     if (useLedger) {
       return { xMm: stageXMm, yMm: stageYMm };
     }
-    let yMm = useBase ? stageYMm + BASE_CENTER_OFFSET_MM : stageYMm - HEADSTONE_STAGE_OFFSET_MM;
-    if (!useBase && needsLegacyStageCompensation) {
+    // Legacy stage-offset payloads can encode headstone elements in total-monument stage space.
+    // Convert those to headstone-local center by removing the base-half vertical offset.
+    const shouldApplyHeadstoneStageOffset =
+      !useBase &&
+      !useLedger &&
+      needsLegacyStageCompensation &&
+      effectiveCoordinateSpace === 'css-stage';
+    const headstoneStageOffsetMm = shouldApplyHeadstoneStageOffset ? HEADSTONE_STAGE_OFFSET_MM : 0;
+    // Legacy 2D coordinates are center-origin on the headstone surface (0,0 = center).
+    // Base elements still need base-center remap; headstone uses stage-offset normalization above.
+    let yMm = useBase ? stageYMm + BASE_CENTER_OFFSET_MM : stageYMm - headstoneStageOffsetMm;
+    if (!useBase && applyLegacyStageCompensation) {
       yMm = yMm * HEADSTONE_STAGE_SCALE + HEADSTONE_VERTICAL_BIAS_MM;
     }
     return { xMm: stageXMm, yMm };
@@ -1057,9 +1433,17 @@ export async function loadCanonicalDesignIntoEditor(
   function resolveFontSizeMm(
     font: { size_mm?: number; size_px?: number } | undefined,
     targetSurface: 'headstone' | 'base' | 'ledger',
+    canonicalInscriptionId?: string,
   ) {
     if (typeof font?.size_mm === 'number') return font.size_mm;
-    const sizePx = font?.size_px ?? 40;
+    let sizePx =
+      (canonicalInscriptionId
+        ? legacyInscriptionFontPxByCanonicalId.get(canonicalInscriptionId)
+        : undefined) ??
+      font?.size_px ??
+      40;
+    // Universal authoring-space pipeline: keep saved font px as-is (CSS px),
+    // then convert once using surface mm-per-px mapping.
     const mmPerPxY =
       targetSurface === 'ledger'
         ? LEDGER_MM_PER_PX_Z_CANONICAL
@@ -1146,8 +1530,8 @@ export async function loadCanonicalDesignIntoEditor(
   };
 
   const GLOBAL_LAYOUT_SCALE = 1;
-  const DEFAULT_HEADSTONE_Y_SHIFT_MM = needsLegacyStageCompensation ? HEADSTONE_HALF_MM / 2 : 0;
-  const BASE_Y_SHIFT_MM = needsLegacyStageCompensation ? HEADSTONE_HALF_MM / 2 : 0;
+  const DEFAULT_HEADSTONE_Y_SHIFT_MM = applyLegacyStageCompensation ? HEADSTONE_HALF_MM / 2 : 0;
+  const BASE_Y_SHIFT_MM = applyLegacyStageCompensation ? HEADSTONE_HALF_MM / 2 : 0;
   const INSCRIPTION_SIZE_SCALE = 0.85;
 
   type RangeTracker = { min: number; max: number; count: number };
@@ -1229,7 +1613,7 @@ export async function loadCanonicalDesignIntoEditor(
   // CRITICAL: Legacy system uses TOTAL canvas height (headstone + base canvas pixels)
   
   const CANONICAL_TOTAL_HEIGHT_MM = canonicalHeadstoneHeightMm + canonicalBaseHeightMm;
-  if (needsLegacyStageCompensation) {
+  if (applyLegacyStageCompensation) {
     HEADSTONE_STAGE_SCALE = CANONICAL_TOTAL_HEIGHT_MM
       ? canonicalHeadstoneHeightMm / CANONICAL_TOTAL_HEIGHT_MM
       : 1;
@@ -1260,6 +1644,8 @@ export async function loadCanonicalDesignIntoEditor(
 
   const motifAssetMap = buildCanonicalMotifPathMap(designData);
   const headstoneRangeTracker = createRangeTracker();
+  const headstoneInscriptionRangeTracker = createRangeTracker();
+  const headstoneMotifRangeTracker = createRangeTracker();
   const pendingLines: Array<{ target: 'headstone' | 'base' | 'ledger'; line: Line }> = [];
   const pendingMotifs: PendingMotifData[] = [];
 
@@ -1282,11 +1668,12 @@ export async function loadCanonicalDesignIntoEditor(
     const { xMm, yMm } = convertPositionToMm(inscription.position, targetSurface);
     const xPos = xMm * scaleX * GLOBAL_LAYOUT_SCALE;
     const baseYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE;
-    const baseSize = clampCanonicalSize(resolveFontSizeMm(inscription.font, targetSurface));
+    const baseSize = clampCanonicalSize(resolveFontSizeMm(inscription.font, targetSurface, id));
     const scaledSize = clampCanonicalSize(baseSize * GLOBAL_LAYOUT_SCALE);
 
     if (targetSurface === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);
+      recordRangeValue(headstoneInscriptionRangeTracker, baseYPos);
     }
 
     if (index === 0) {
@@ -1346,6 +1733,7 @@ export async function loadCanonicalDesignIntoEditor(
 
     if (target === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);
+      recordRangeValue(headstoneMotifRangeTracker, baseYPos);
     }
 
     pendingMotifs.push({
@@ -1361,18 +1749,52 @@ export async function loadCanonicalDesignIntoEditor(
     });
   });
 
-  const headstoneShiftMm = computeHeadstoneShift(
-    headstoneRangeTracker,
-    HEADSTONE_HALF_MM,
-    DEFAULT_HEADSTONE_Y_SHIFT_MM,
-    headstonePlacement === 'auto-center' ? 'auto-center' : 'default',
-  );
+  // Auto-center against inscription range first (if available), so motifs do not
+  // pull inscription layout downward in legacy-stage coordinate loads.
+  const headstoneShiftSourceTracker =
+    headstoneInscriptionRangeTracker.count > 0
+      ? headstoneInscriptionRangeTracker
+      : headstoneRangeTracker.count > 0
+        ? headstoneRangeTracker
+        : headstoneMotifRangeTracker;
+  const headstoneShiftMm = useAuthoringDesignSpaceMapping
+    ? 0
+    : computeHeadstoneShift(
+        headstoneShiftSourceTracker,
+        HEADSTONE_HALF_MM,
+        DEFAULT_HEADSTONE_Y_SHIFT_MM,
+        headstonePlacement === 'auto-center' ? 'auto-center' : 'default',
+      );
+  const rangeFitHeadstoneShiftMm =
+    useAuthoringDesignSpaceMapping &&
+    headstoneShiftSourceTracker.count > 0 &&
+    HEADSTONE_HALF_MM > 0
+      ? (() => {
+          const currentMinY = headstoneShiftSourceTracker.min;
+          const currentMaxY = headstoneShiftSourceTracker.max;
+          const currentRange = Math.max(currentMaxY - currentMinY, 1);
+          const targetTop = HEADSTONE_HALF_MM * 0.88;
+          const targetBottom = targetTop - currentRange;
+          let shift = targetTop - currentMaxY;
+          if (currentMinY + shift < -HEADSTONE_HALF_MM) {
+            shift = -HEADSTONE_HALF_MM - currentMinY;
+          }
+          if (currentMaxY + shift > HEADSTONE_HALF_MM) {
+            shift = HEADSTONE_HALF_MM - currentMaxY;
+          }
+          if (currentMinY + shift < targetBottom) {
+            shift += targetBottom - (currentMinY + shift);
+          }
+          return shift;
+        })()
+      : 0;
   if (headstonePlacement === 'auto-center') {
     console.log('[Canonical Loader] Forevershining auto-centering applied:', {
       appliedShiftMm: headstoneShiftMm,
       defaultShiftMm: DEFAULT_HEADSTONE_Y_SHIFT_MM,
-      min: headstoneRangeTracker.min,
-      max: headstoneRangeTracker.max,
+      source: headstoneInscriptionRangeTracker.count > 0 ? 'inscriptions' : 'all-headstone-elements',
+      min: headstoneShiftSourceTracker.min,
+      max: headstoneShiftSourceTracker.max,
     });
   }
   const baseShiftMm = BASE_Y_SHIFT_MM;
@@ -1382,7 +1804,7 @@ export async function loadCanonicalDesignIntoEditor(
       entry.target === 'base'
         ? baseShiftMm
         : entry.target === 'headstone'
-          ? headstoneShiftMm
+          ? headstoneShiftMm + rangeFitHeadstoneShiftMm
           : 0;
     return {
       ...entry.line,
@@ -1413,7 +1835,7 @@ export async function loadCanonicalDesignIntoEditor(
           (motifData.target === 'base'
             ? baseShiftMm
             : motifData.target === 'headstone'
-              ? headstoneShiftMm
+              ? headstoneShiftMm + rangeFitHeadstoneShiftMm
               : 0),
         scale: 1.0,
         rotationZ: motifData.rotationZ,

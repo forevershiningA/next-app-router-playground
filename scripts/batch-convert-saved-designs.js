@@ -367,10 +367,22 @@ function mapTexture(texturePath, productId) {
   return String(texturePath);
 }
 
-function buildCoordinateSystem(mlDir) {
+function buildCoordinateSystem(mlDir, stageCssPx, dpr) {
   const normalizedMlDir = String(mlDir || '').toLowerCase();
+  const cssWidth = Math.max(1, Math.round(stageCssPx?.width || 0));
+  const cssHeight = Math.max(1, Math.round(stageCssPx?.height || 0));
+  const safeDpr = Number.isFinite(dpr) && dpr > 0 ? dpr : 1;
   return {
     positionMode: 'legacy-stage-px',
+    coordinateSpace: 'css-stage',
+    stageCssPx: {
+      width: cssWidth,
+      height: cssHeight,
+    },
+    bufferPx: {
+      width: Math.max(1, Math.round(cssWidth * safeDpr)),
+      height: Math.max(1, Math.round(cssHeight * safeDpr)),
+    },
     headstonePlacement: normalizedMlDir === 'forevershining' ? 'auto-center' : 'legacy-stage-offset',
     flipMode:
       normalizedMlDir === 'headstonesdesigner' || normalizedMlDir === 'bronze-plaque'
@@ -495,7 +507,11 @@ function buildCanonicalFromLegacy(saved, designId, meta, opts = {}) {
       canvas: { width_mm: widthMm, height_mm: heightMm },
       viewportPx: { width: viewport.width, height: viewport.height, dpr },
       surface: { origin: [0, 0, 0], normal: [0, 0, 1] },
-      coordinateSystem: buildCoordinateSystem(meta.mlDir),
+      coordinateSystem: buildCoordinateSystem(
+        meta.mlDir,
+        { width: viewport.width, height: viewport.height },
+        dpr,
+      ),
     },
     components: {
       headstone: {

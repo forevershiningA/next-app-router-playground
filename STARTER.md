@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-25
+**Last Updated:** 2026-03-27
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -28,6 +28,46 @@
 20. [Memory Management](#memory-management)
 21. [Common Issues & Solutions](#common-issues--solutions)
 22. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-03-27)
+
+### ⚠️ Legacy design loading parity (in progress)
+
+1. **Legacy coordinate-space pipeline hardening - IN PLACE**
+   - Canonical converter scripts now emit explicit legacy coordinate metadata:
+     - `scene.coordinateSystem.coordinateSpace` (`css-stage` or `buffer-px`)
+     - `scene.coordinateSystem.stageCssPx`
+     - `scene.coordinateSystem.bufferPx`
+   - Updated scripts:
+     - `scripts/convert-saved-design.js`
+     - `scripts/batch-convert-saved-designs.js`
+     - `scripts/convert-legacy-design.js`
+
+2. **Canonical loader universal legacy-stage normalization - IN PLACE**
+   - `lib/saved-design-loader-utils.ts` now reads coordinate-space metadata and maps stage pixels to mm without blanket DPR replay.
+   - Added adaptive reinterpretation (`css-stage` → effective `buffer-px`) for legacy-stage payloads with clear DPR-inflated spread.
+   - Replaced one-off vertical nudge with a universal **range-fit shift** for all `legacy-stage-px` loads so headstone content is top-priority and overflow-safe.
+   - Conditioned headstone stage-offset normalization by effective coordinate space to avoid double-shifting.
+
+3. **Shape remap safety during design load - IN PLACE**
+   - `components/three/headstone/ShapeSwapper.tsx` now skips bbox remap enqueue/apply while `loading === true` to prevent load-time coordinate mutation.
+
+4. **Canonical source update for active regression ID**
+   - Regenerated `public/canonical-designs/v2026/1725769905504.json` with the new coordinate-space metadata.
+
+5. **Current verification status**
+   - `1725769905504`: significantly improved; still under visual parity tuning.
+   - `1597573022772`: improved but requires re-check after universal range-fit update.
+   - `1578016189116`: still requires parity verification.
+   - Build validation after each iteration:
+     - `pnpm build` ✅
+
+### 📌 Next technical steps (legacy parity)
+- Validate both target IDs (`1725769905504`, `1597573022772`) against screenshot parity after the universal range-fit rollout.
+- If residual mismatch remains, capture per-element diagnostics (`x_px/y_px` → computed `xMm/yMm` → final rendered `xPos/yPos`) and adjust only shared mapping rules.
+- Re-run canonical regeneration for additional affected legacy IDs once the universal mapping is signed off.
 
 ---
 

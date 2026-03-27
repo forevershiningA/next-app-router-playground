@@ -7,6 +7,7 @@ import {
   ChevronRightIcon,
   DocumentArrowDownIcon,
   MagnifyingGlassIcon,
+  PhotoIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { getAllSavedDesigns, type SavedDesignMetadata } from '#/lib/saved-designs-data';
@@ -156,14 +157,13 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
 
   const handleLoadDesign = async (designId: string) => {
     setError(null);
+    setIsOpen(false);
     setLoading(true);
     try {
       const result = await loadDesignById(designId);
       if (!result.success) {
         setError(result.message);
-        return;
       }
-      setIsOpen(false);
     } finally {
       setLoading(false);
     }
@@ -184,7 +184,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
   const modalContent = !isOpen
     ? null
     : createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 py-6">
           <div className="flex h-[80vh] w-full max-w-4xl flex-col rounded-2xl border border-white/20 bg-[#15100d]/95 shadow-2xl">
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div>
@@ -270,14 +270,30 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                   {isCategoryExpanded ? (
                                     <div className="space-y-1 border-t border-white/10 p-2">
                                       {designs.map((design) => (
-                                        <button
+                                       <button
                                           key={design.id}
                                           onClick={() => handleLoadDesign(design.id)}
                                           disabled={loading}
                                           className="w-full rounded-md border border-transparent bg-white/5 px-3 py-2 text-left text-sm text-white/90 transition hover:border-white/20 hover:bg-white/10 disabled:opacity-50"
                                         >
-                                          <div className="font-medium">{design.displayTitle}</div>
-                                          <div className="text-xs text-white/60">{design.id}</div>
+                                          <div className="flex items-center gap-3">
+                                            <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md border border-white/15 bg-black/30">
+                                              {design.metadata.preview ? (
+                                                <img
+                                                  src={design.metadata.preview}
+                                                  alt={`${design.displayTitle} thumbnail`}
+                                                  className="h-full w-full object-cover"
+                                                  loading="lazy"
+                                                />
+                                              ) : (
+                                                <PhotoIcon className="h-5 w-5 text-white/40" />
+                                              )}
+                                            </div>
+                                            <div className="min-w-0">
+                                              <div className="truncate font-medium">{design.displayTitle}</div>
+                                              <div className="text-xs text-white/60">{design.id}</div>
+                                            </div>
+                                          </div>
                                         </button>
                                       ))}
                                     </div>
