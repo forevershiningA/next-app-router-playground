@@ -532,6 +532,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                   lift={0.002}
                   xPos={line.xPos}
                   yPos={line.yPos}
+                  coordinateSpace={line.coordinateSpace}
                   rotationDeg={line.rotationDeg}
                   height={line.sizeMm}
                   text={line.text}

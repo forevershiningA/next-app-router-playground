@@ -241,7 +241,7 @@ export default function MotifModel({
 
       const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;
       const coordinateSpace = currentOffset.coordinateSpace ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
-      const isCanonical = coordinateSpace === 'absolute';
+      const isCanonical = coordinateSpace === 'absolute' || coordinateSpace === 'mm-center';
 
       if (isCanonical) {
         dragPositionRef.current = {
@@ -455,7 +455,7 @@ export default function MotifModel({
         } else {
           const coordinateSpace =
             currentOffset.coordinateSpace ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
-          const isCanonical = coordinateSpace === 'absolute';
+          const isCanonical = coordinateSpace === 'absolute' || coordinateSpace === 'mm-center';
           setMotifOffset(id, {
             ...currentOffset,
             ...dragPositionRef.current,
@@ -567,16 +567,19 @@ export default function MotifModel({
   };
 
   // Position the motif:
-  // TWO FORMATS:
+  // THREE FORMATS:
   // 1. Legacy: positions stored as offsets from centerY (Y-down format)
   //    - Uses: displayY = centerY - yPos
   // 2. Canonical: positions are absolute world coords (Y-up format) 
   //    - Uses: displayY = yPos
+  // 3. mm-center: mm offsets from headstone center (Y-up, from canonical loader)
+  //    - Uses: displayY = centerY + yPos * mmToLocalUnits
   //
   // Detection: explicit coordinateSpace flag (fallback to legacy heuristic)
   const coordinateSpace =
     offset.coordinateSpace ?? (offset.target !== undefined ? 'absolute' : 'offset');
   const isCanonical = coordinateSpace === 'absolute';
+  const isMmCenter = coordinateSpace === 'mm-center';
 
   let groupPosition: [number, number, number];
   let groupRotation: [number, number, number];
@@ -589,6 +592,12 @@ export default function MotifModel({
     const ledgerLift = 0.001;
     groupPosition = [displayLedgerX, ledgerTopY + ledgerLift, displayLedgerZ];
     groupRotation = [-Math.PI / 2, offset.rotationZ || 0, 0];
+  } else if (isMmCenter) {
+    // Loaded design: mm offsets from center, positive Y = above center
+    const displayX = centerX + scaledOffsetX * mmToLocalUnits;
+    const displayY = centerY + scaledOffsetY * mmToLocalUnits;
+    groupPosition = [displayX, displayY, centerZ];
+    groupRotation = [0, 0, offset.rotationZ || 0];
   } else {
     const displayX = isCanonical ? scaledOffsetX : centerX + scaledOffsetX;
     const displayY = isCanonical ? scaledOffsetY : centerY - scaledOffsetY;

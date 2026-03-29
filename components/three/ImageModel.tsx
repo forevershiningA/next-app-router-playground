@@ -22,6 +22,7 @@ type Props = {
   headstone?: HeadstoneAPI;
   index?: number;
   surface?: 'headstone' | 'base' | 'ledger';
+  coordinateSpace?: 'mm-center';
 };
 
 export default function ImageModel({ 
@@ -37,6 +38,7 @@ export default function ImageModel({
   headstone, 
   index = 0,
   surface = 'headstone',
+  coordinateSpace,
 }: Props) {
   const { gl, camera, controls } = useThree();
   const router = useRouter();
@@ -86,8 +88,25 @@ export default function ImageModel({
     async function loadTexture() {
       try {
         const loader = new THREE.TextureLoader();
-        const texture = await loader.loadAsync(imageUrl);
-        
+        const candidates = Array.from(new Set([
+          imageUrl,
+          imageUrl.replace(/\/([^/]+)$/, '/$1'),
+          imageUrl
+            .replace(/\/saved-designs\/upload\/(\d{4})\/(\d{2})\/([^/]+)$/i, '/saved-designs/upload/$3')
+            .replace(/\/saved-designs\/upload\/([^/]+)$/i, '/saved-designs/upload/$1'),
+        ])).filter(Boolean);
+        let loaded: THREE.Texture | null = null;
+        for (const candidate of candidates) {
+          try {
+            const texture = await loader.loadAsync(candidate);
+            loaded = texture;
+            break;
+          } catch {
+            // try next candidate
+          }
+        }
+        if (!loaded) throw new Error('No valid image URL candidate resolved');
+        const texture = loaded;
         if (disposed) {
           texture.dispose();
           return;
@@ -502,6 +521,12 @@ export default function ImageModel({
     const ledgerLift = 0.001 + (index ?? 0) * 0.001;
     groupPosition = [displayX, ledgerTopY + ledgerLift, displayZ];
     groupRotation = [-Math.PI / 2, rotationZ || 0, 0];
+  } else if (coordinateSpace === 'mm-center') {
+    // Loaded design: mm offsets from center, positive Y = above center
+    const displayX = centerX + safeX * mmToLocalUnits;
+    const displayY = centerY + safeY * mmToLocalUnits;
+    groupPosition = [displayX, displayY, groupZ];
+    groupRotation = [0, 0, rotationZ];
   } else {
     groupPosition = [safeX, safeY, groupZ];
     groupRotation = [0, 0, rotationZ];

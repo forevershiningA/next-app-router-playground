@@ -582,6 +582,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       lift={0.002}
                       xPos={scaledX}
                       yPos={scaledY}
+                      coordinateSpace={line.coordinateSpace}
                       rotationDeg={line.rotationDeg}
                       height={line.sizeMm}
                       text={line.text}
@@ -635,6 +636,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                        headstone={api}
                        surface="headstone"
                        index={i}
+                       coordinateSpace={image.coordinateSpace}
                      />
                    </React.Suspense>
                  </ErrorBoundary>

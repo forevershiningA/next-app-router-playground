@@ -106,6 +106,23 @@ export type CanonicalDesignData = {
       surface?: string;
       flip?: { x?: boolean; y?: boolean };
     }>;
+    photos?: Array<{
+      id?: string;
+      typeId?: number;
+      typeName?: string;
+      surface?: string;
+      position?: { x_mm?: number; y_mm?: number; x_px?: number; y_px?: number };
+      width_mm?: number;
+      height_mm?: number;
+      width_px?: number;
+      height_px?: number;
+      size_mm?: { width?: number; height?: number };
+      rotation?: { z_deg?: number };
+      source?: { url?: string; item?: string; src?: string; path?: string };
+      mask?: { shape?: string; shape_url?: string };
+      croppedAspectRatio?: number;
+      sizeVariant?: number;
+    }>;
   };
   assets?: {
     motifs?: Array<{ id: string; path: string }>;
@@ -455,6 +472,84 @@ const canonicalSurfaceTarget = (surface?: string): 'headstone' | 'base' | 'ledge
   if (normalized.includes('base')) return 'base';
   return 'headstone';
 };
+
+const canonicalIdToLegacyItemId = (id?: string) => {
+  if (!id) return null;
+  const match = id.match(/-(\d+)$/);
+  if (!match) return null;
+  const parsed = Number(match[1]);
+  return Number.isFinite(parsed) ? parsed : null;
+};
+
+const parseLegacyPhotoSizeMm = (value?: string): { width: number; height: number } | null => {
+  if (!value) return null;
+  const match = value.match(/(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)/i);
+  if (!match) return null;
+  const width = Number(match[1]);
+  const height = Number(match[2]);
+  if (!Number.isFinite(width) || !Number.isFinite(height) || width <= 0 || height <= 0) {
+    return null;
+  }
+  return { width, height };
+};
+
+const normalizeLegacyRelativePath = (value?: string) => {
+  if (!value) return '';
+  return value
+    .replace(/\\/g, '/')
+    .replace(/^(\.\.\/)+/g, '')
+    .replace(/^\/+|\/+$/g, '');
+};
+
+const resolveCanonicalImageUrl = (
+  designData: CanonicalDesignData,
+  source?: { url?: string; item?: string; src?: string; path?: string },
+) => {
+  const fromCanonical = source?.url;
+  if (typeof fromCanonical === 'string' && fromCanonical.trim()) {
+    return fromCanonical;
+  }
+  const itemName = source?.item?.trim();
+  const sourceName = source?.src?.trim();
+  const basePath = normalizeLegacyRelativePath(source?.path);
+  const mlDir = (designData.source?.mlDir ?? '').trim();
+  const candidates: string[] = [];
+
+  // Prefer source filename from legacy payload (`src`) because `item` can be rewritten/truncated.
+  if (sourceName && basePath && mlDir) {
+    candidates.push(`/ml/${mlDir}/saved-designs/${basePath}/${sourceName}`);
+  }
+  if (itemName && basePath && mlDir) {
+    candidates.push(`/ml/${mlDir}/saved-designs/${basePath}/${itemName}`);
+  }
+  if (sourceName && basePath) {
+    candidates.push(`/${basePath}/${sourceName}`);
+  }
+  if (itemName && basePath) {
+    candidates.push(`/${basePath}/${itemName}`);
+  }
+  if (sourceName && mlDir) {
+    candidates.push(`/ml/${mlDir}/saved-designs/upload/${sourceName}`);
+  }
+  if (itemName && mlDir) {
+    candidates.push(`/ml/${mlDir}/saved-designs/upload/${itemName}`);
+  }
+
+  return candidates[0] ?? sourceName ?? itemName ?? '';
+};
+
+const resolveCanonicalMaskShape = (shape?: string) => {
+  if (!shape) return 'oval_vertical';
+  return shape
+    .replace(/\\/g, '/')
+    .replace(/^.*\/([^/]+)\.svg$/i, '$1')
+    .replace(/\.svg$/i, '')
+    .trim() || 'oval_vertical';
+};
+
+const asString = (value: unknown): string | undefined =>
+  typeof value === 'string' ? value : undefined;
+
 
 const buildCanonicalMotifPathMap = (design?: CanonicalDesignData) =>
   new Map((design?.assets?.motifs ?? []).map((asset) => [asset.id, asset.path]));
@@ -855,10 +950,8 @@ export async function loadSavedDesignIntoEditor(
       }
       heightMm = Math.max(20, Math.min(800, heightMm));
 
-      console.log(`[LOADER] Motif ${newMotif.id}: saved=(${motif.x}, ${motif.y}) → offset=(${xPos.toFixed(1)}, ${yPos.toFixed(1)}), height=${heightMm.toFixed(1)}mm`);
-
-      const flipX = Number(motif.flipx) === 1;
-      const flipY = Number(motif.flipy) === 1;
+      const flipX = Number(motif.flipx) === -1;
+      const flipY = Number(motif.flipy) === -1;
 
       store.setMotifOffset(newMotif.id, {
         xPos,
@@ -926,6 +1019,7 @@ export async function loadCanonicalDesignIntoEditor(
   const ledgerComponent = designData.components?.ledger;
   const canonicalInscriptionSnapshot = designData.elements?.inscriptions ?? [];
   const canonicalMotifSnapshot = designData.elements?.motifs ?? [];
+  const canonicalPhotoSnapshot = designData.elements?.photos ?? [];
   const headstoneHalf = headstone?.height_mm ? headstone.height_mm / 2 : null;
   const normalizedMlDir = (designData.source?.mlDir ?? '').toLowerCase();
   const isForevershining = normalizedMlDir === 'forevershining';
@@ -940,7 +1034,7 @@ export async function loadCanonicalDesignIntoEditor(
       ? 'invert-legacy-bools'
       : 'preserve');
   const needsLegacyStageCompensation = headstonePlacement === 'legacy-stage-offset';
-  const invertLegacyFlips = flipMode === 'invert-legacy-bools';
+  void flipMode;
   let canonicalOutOfBounds = () => null as string | null;
 
   if (clearExisting) {
@@ -977,11 +1071,9 @@ export async function loadCanonicalDesignIntoEditor(
   }
 
   if (headstone?.width_mm) {
-    console.log('[loadCanonicalDesignIntoEditor] Setting headstone width:', headstone.width_mm);
     store.setWidthMm(headstone.width_mm);
   }
   if (headstone?.height_mm) {
-    console.log('[loadCanonicalDesignIntoEditor] Setting headstone height:', headstone.height_mm);
     store.setHeightMm(headstone.height_mm);
   }
   if (headstone?.thickness_mm) {
@@ -1080,13 +1172,6 @@ export async function loadCanonicalDesignIntoEditor(
     0;
   const canonicalViewportDpr = designData.scene?.viewportPx?.dpr ?? 1;
   
-  console.log('[Canonical Loader] Viewport data from JSON:', {
-    rawWidth: designData.scene?.viewportPx?.width,
-    rawHeight: designData.scene?.viewportPx?.height,
-    rawDpr: designData.scene?.viewportPx?.dpr,
-    canonicalViewportHeightCssPx,
-  });
-  
   const bufferWidthPxFromMetadata = coordinateSystem?.bufferPx?.width;
   const bufferHeightPxFromMetadata = coordinateSystem?.bufferPx?.height;
   const canonicalViewportWidthPx =
@@ -1126,12 +1211,7 @@ export async function loadCanonicalDesignIntoEditor(
     maxAbsLegacyStageYPx > canonicalViewportHeightCssPx * 0.6;
   const effectiveCoordinateSpace = shouldTreatCssStageAsBufferPx ? 'buffer-px' : coordinateSpace;
   if (shouldTreatCssStageAsBufferPx) {
-    console.log('[Canonical Loader] Interpreting legacy-stage coordinates as buffer-px due to large spread:', {
-      maxAbsLegacyStageYPx,
-      stageCssHeight: canonicalViewportHeightCssPx,
-      dpr: canonicalViewportDpr,
-      sourceCoordinateSpace: coordinateSpace,
-    });
+    console.info('[loadCanonicalDesignIntoEditor] Interpreting legacy-stage coordinates as buffer-px');
   }
   const sourceStageWidthPx = effectiveCoordinateSpace === 'buffer-px'
     ? Math.max(canonicalViewportWidthPx || canonicalViewportWidthCssPx || 1, 1)
@@ -1342,6 +1422,15 @@ export async function loadCanonicalDesignIntoEditor(
   const effectiveLegacySavedDpr =
     deterministicLegacySavedDpr ??
     inferLegacySavedDprHeuristic();
+  const legacyDevice = String(legacyHeadstoneItem?.device ?? '').toLowerCase();
+  const isDesktopLegacyPayload =
+    legacyDevice === 'desktop' || legacyDevice.includes('desktop');
+  const useDirectCssStageDesktopMapping =
+    positionMode === 'legacy-stage-px' &&
+    effectiveCoordinateSpace === 'css-stage' &&
+    isDesktopLegacyPayload &&
+    effectiveLegacySavedDpr <= 1.05 &&
+    canonicalViewportDpr <= 1.05;
   const shouldUseAuthoringViewportReplay =
     !hasLegacySavedDpr &&
     Number.isFinite(canonicalViewportWidthCssPx) &&
@@ -1375,16 +1464,29 @@ export async function loadCanonicalDesignIntoEditor(
   ) {
     const useBase = targetSurface === 'base';
     const useLedger = targetSurface === 'ledger';
-    const mmPerPxX = useLedger
+    const mmPerPxXDefault = useLedger
       ? LEDGER_MM_PER_PX_X_CANONICAL
       : useBase
         ? BASE_MM_PER_PX_X_CANONICAL
         : HEADSTONE_MM_PER_PX_X_CANONICAL;
-    const mmPerPxY = useLedger
+    const mmPerPxYDefault = useLedger
       ? LEDGER_MM_PER_PX_Z_CANONICAL
       : useBase
         ? BASE_MM_PER_PX_Y_CANONICAL
         : HEADSTONE_MM_PER_PX_Y_CANONICAL;
+    const hasLegacyInitViewport =
+      Number.isFinite(legacyInitWidth) &&
+      legacyInitWidth > 0 &&
+      Number.isFinite(legacyInitHeight) &&
+      legacyInitHeight > 0;
+    const mmPerPxX =
+      useDirectCssStageDesktopMapping && !useLedger && hasLegacyInitViewport
+        ? (useBase ? canonicalBaseWidthMm : canonicalHeadstoneWidthMm) / legacyInitWidth
+        : mmPerPxXDefault;
+    const mmPerPxY =
+      useDirectCssStageDesktopMapping && !useLedger && hasLegacyInitViewport
+        ? (useBase ? canonicalBaseHeightMm : canonicalHeadstoneHeightMm) / legacyInitHeight
+        : mmPerPxYDefault;
 
     if (typeof position?.x_mm === 'number' || typeof position?.y_mm === 'number') {
       return {
@@ -1419,7 +1521,8 @@ export async function loadCanonicalDesignIntoEditor(
       !useBase &&
       !useLedger &&
       needsLegacyStageCompensation &&
-      effectiveCoordinateSpace === 'css-stage';
+      effectiveCoordinateSpace === 'css-stage' &&
+      !useDirectCssStageDesktopMapping;
     const headstoneStageOffsetMm = shouldApplyHeadstoneStageOffset ? HEADSTONE_STAGE_OFFSET_MM : 0;
     // Legacy 2D coordinates are center-origin on the headstone surface (0,0 = center).
     // Base elements still need base-center remap; headstone uses stage-offset normalization above.
@@ -1628,17 +1731,6 @@ export async function loadCanonicalDesignIntoEditor(
   
   const DISPLAY_RATIO = totalCanvasHeightPx / CANONICAL_TOTAL_HEIGHT_MM;
   
-  console.log('[Canonical Loader] Display ratio calculation:', {
-    canonicalViewportHeightCssPx,
-    canonicalHeadstoneHeightMm,
-    canonicalBaseHeightMm,
-    headstoneCanvasRatio,
-    baseCanvasHeightPx,
-    totalCanvasHeightPx,
-    totalHeightMm: CANONICAL_TOTAL_HEIGHT_MM,
-    displayRatio: DISPLAY_RATIO,
-  });
-  
   const getMotifSizeScale = () => 1.2;
 
 
@@ -1648,6 +1740,21 @@ export async function loadCanonicalDesignIntoEditor(
   const headstoneMotifRangeTracker = createRangeTracker();
   const pendingLines: Array<{ target: 'headstone' | 'base' | 'ledger'; line: Line }> = [];
   const pendingMotifs: PendingMotifData[] = [];
+  const pendingImages: Array<{
+    id: string;
+    typeId: number;
+    typeName: string;
+    imageUrls: string[];
+    widthMm: number;
+    heightMm: number;
+    xPos: number;
+    yPos: number;
+    rotationZ: number;
+    sizeVariant?: number;
+    croppedAspectRatio?: number;
+    maskShape?: string;
+    target: 'headstone' | 'base' | 'ledger';
+  }> = [];
 
   (designData.elements?.inscriptions ?? []).forEach((inscription, index) => {
     const id = inscription.id ?? `insc-${index}`;
@@ -1674,15 +1781,6 @@ export async function loadCanonicalDesignIntoEditor(
     if (targetSurface === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);
       recordRangeValue(headstoneInscriptionRangeTracker, baseYPos);
-    }
-
-    if (index === 0) {
-      console.log('[Canonical Loader] First inscription size:', {
-        text: inscription.text,
-        baseSizeMm: baseSize,
-        displayRatio: DISPLAY_RATIO,
-        scaledSize,
-      });
     }
 
     pendingLines.push({
@@ -1728,8 +1826,8 @@ export async function loadCanonicalDesignIntoEditor(
     const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
     const rawFlipX = motif.flip?.x ?? false;
     const rawFlipY = motif.flip?.y ?? false;
-    const flipX = invertLegacyFlips ? !rawFlipX : rawFlipX;
-    const flipY = invertLegacyFlips ? !rawFlipY : rawFlipY;
+    const flipX = rawFlipX;
+    const flipY = rawFlipY;
 
     if (target === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);
@@ -1746,6 +1844,86 @@ export async function loadCanonicalDesignIntoEditor(
       rotationZ,
       flipX,
       flipY,
+    });
+  });
+
+  canonicalPhotoSnapshot.forEach((photo, index) => {
+    const canonicalId = photo.id ?? `photo-${index}`;
+    const target = canonicalSurfaceTarget(photo.surface);
+    const { xMm, yMm } = convertPositionToMm(photo.position, target);
+    const primaryImageUrl = resolveCanonicalImageUrl(designData, photo.source);
+    const imageUrlCandidates = [
+      primaryImageUrl,
+      (() => {
+        const srcName = asString(photo.source?.src);
+        const pathName = normalizeLegacyRelativePath(asString(photo.source?.path));
+        const mlDir = (designData.source?.mlDir ?? '').trim();
+        if (srcName && pathName && mlDir) return `/ml/${mlDir}/saved-designs/${pathName}/${srcName}`;
+        return '';
+      })(),
+      (() => {
+        const itemName = asString(photo.source?.item);
+        const pathName = normalizeLegacyRelativePath(asString(photo.source?.path));
+        const mlDir = (designData.source?.mlDir ?? '').trim();
+        if (itemName && pathName && mlDir) return `/ml/${mlDir}/saved-designs/${pathName}/${itemName}`;
+        return '';
+      })(),
+    ].filter((v): v is string => Boolean(v && v.trim()));
+    if (!imageUrlCandidates.length) return;
+
+    const sourceSizeMm =
+      (typeof photo.size_mm?.width === 'number' && typeof photo.size_mm?.height === 'number')
+        ? { width: photo.size_mm.width, height: photo.size_mm.height }
+        : null;
+    const sourceWidthPx = photo.width_px;
+    const sourceHeightPx = photo.height_px;
+    const mmPerPxX = target === 'ledger'
+      ? LEDGER_MM_PER_PX_X_CANONICAL
+      : target === 'base'
+        ? BASE_MM_PER_PX_X_CANONICAL
+        : HEADSTONE_MM_PER_PX_X_CANONICAL;
+    const mmPerPxY = target === 'ledger'
+      ? LEDGER_MM_PER_PX_Z_CANONICAL
+      : target === 'base'
+        ? BASE_MM_PER_PX_Y_CANONICAL
+        : HEADSTONE_MM_PER_PX_Y_CANONICAL;
+    const widthMmRaw =
+      typeof photo.width_mm === 'number'
+        ? photo.width_mm
+        : sourceSizeMm?.width ??
+          (typeof sourceWidthPx === 'number' && sourceWidthPx > 0 ? sourceWidthPx * mmPerPxX : undefined) ??
+          180;
+    const heightMmRaw =
+      typeof photo.height_mm === 'number'
+        ? photo.height_mm
+        : sourceSizeMm?.height ??
+          (typeof sourceHeightPx === 'number' && sourceHeightPx > 0 ? sourceHeightPx * mmPerPxY : undefined) ??
+          240;
+    const widthMm = Math.max(20, Math.min(1200, widthMmRaw));
+    const heightMm = Math.max(20, Math.min(1200, heightMmRaw));
+
+    pendingImages.push({
+      id: canonicalId,
+      typeId:
+        typeof photo.typeId === 'number'
+          ? photo.typeId
+          : 7,
+      typeName: photo.typeName ?? 'Ceramic Image',
+      imageUrls: Array.from(new Set(imageUrlCandidates)),
+      widthMm,
+      heightMm,
+      xPos: xMm,
+      yPos: yMm,
+      rotationZ: canonicalToRadians(photo.rotation?.z_deg),
+      sizeVariant: photo.sizeVariant,
+      croppedAspectRatio:
+        photo.croppedAspectRatio ??
+        (heightMm > 0 ? widthMm / heightMm : undefined),
+      maskShape: resolveCanonicalMaskShape(
+        asString(photo.mask?.shape) ??
+        asString(photo.mask?.shape_url),
+      ),
+      target,
     });
   });
 
@@ -1767,6 +1945,7 @@ export async function loadCanonicalDesignIntoEditor(
       );
   const rangeFitHeadstoneShiftMm =
     useAuthoringDesignSpaceMapping &&
+    !useDirectCssStageDesktopMapping &&
     headstoneShiftSourceTracker.count > 0 &&
     HEADSTONE_HALF_MM > 0
       ? (() => {
@@ -1788,15 +1967,6 @@ export async function loadCanonicalDesignIntoEditor(
           return shift;
         })()
       : 0;
-  if (headstonePlacement === 'auto-center') {
-    console.log('[Canonical Loader] Forevershining auto-centering applied:', {
-      appliedShiftMm: headstoneShiftMm,
-      defaultShiftMm: DEFAULT_HEADSTONE_Y_SHIFT_MM,
-      source: headstoneInscriptionRangeTracker.count > 0 ? 'inscriptions' : 'all-headstone-elements',
-      min: headstoneShiftSourceTracker.min,
-      max: headstoneShiftSourceTracker.max,
-    });
-  }
   const baseShiftMm = BASE_Y_SHIFT_MM;
 
   const canonicalLines: Line[] = pendingLines.map((entry) => {
@@ -1809,6 +1979,7 @@ export async function loadCanonicalDesignIntoEditor(
     return {
       ...entry.line,
       yPos: entry.line.yPos + shift,
+      coordinateSpace: 'mm-center' as const,
     };
   });
 
@@ -1817,7 +1988,6 @@ export async function loadCanonicalDesignIntoEditor(
   store.setSelectedInscriptionId(null);
 
   if (pendingMotifs.length > 0) {
-    console.log('[loadCanonicalDesignIntoEditor] Loading motifs from canonical data:', pendingMotifs.length);
     pendingMotifs.forEach((motifData) => {
       store.addMotif(motifData.svgPath);
 
@@ -1841,7 +2011,7 @@ export async function loadCanonicalDesignIntoEditor(
         rotationZ: motifData.rotationZ,
         heightMm: motifData.heightMm,
         target: motifData.target,
-        coordinateSpace: 'absolute',
+        coordinateSpace: 'mm-center',
         flipX: motifData.flipX,
         flipY: motifData.flipY,
       });
@@ -1852,6 +2022,33 @@ export async function loadCanonicalDesignIntoEditor(
   
   } else {
     console.warn('[loadCanonicalDesignIntoEditor] No motif data available');
+  }
+
+  if (pendingImages.length > 0) {
+    pendingImages.forEach((imageData) => {
+      const shift =
+        imageData.target === 'base'
+          ? baseShiftMm
+          : imageData.target === 'headstone'
+            ? headstoneShiftMm + rangeFitHeadstoneShiftMm
+            : 0;
+      store.addImage({
+        id: imageData.id,
+        typeId: imageData.typeId,
+        typeName: imageData.typeName,
+        imageUrl: imageData.imageUrls[0],
+        widthMm: imageData.widthMm,
+        heightMm: imageData.heightMm,
+        xPos: imageData.xPos,
+        yPos: imageData.yPos + shift,
+        rotationZ: imageData.rotationZ,
+        sizeVariant: imageData.sizeVariant,
+        croppedAspectRatio: imageData.croppedAspectRatio,
+        maskShape: imageData.maskShape,
+        target: imageData.target,
+        coordinateSpace: 'mm-center',
+      });
+    });
   }
 }
 

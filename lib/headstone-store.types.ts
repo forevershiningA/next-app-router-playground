@@ -55,6 +55,8 @@ export type Line = {
   target?: 'headstone' | 'base' | 'ledger';
   baseWidthMm?: number;
   baseHeightMm?: number;
+  /** When 'mm-center', xPos/yPos are mm offsets from headstone center (Y-up). */
+  coordinateSpace?: 'mm-center';
   ref: React.RefObject<Group | null>;
 };
 export type Part = 'headstone' | 'base' | 'ledger' | 'kerbset' | null;
@@ -171,6 +173,7 @@ export type HeadstoneState = {
     maskShape?: string;
     colorMode?: 'full' | 'bw' | 'sepia';
     target?: 'headstone' | 'base' | 'ledger';
+    coordinateSpace?: 'mm-center';
   }>;
   addImage: (image: {
     id: string;
@@ -187,6 +190,7 @@ export type HeadstoneState = {
     croppedAspectRatio?: number;
     colorMode?: 'full' | 'bw' | 'sepia';
     target?: 'headstone' | 'base' | 'ledger';
+    coordinateSpace?: 'mm-center';
   }) => void;
   removeImage: (id: string) => void;
   duplicateImage: (id: string) => void;
@@ -341,7 +345,7 @@ export type HeadstoneState = {
       rotationZ: number;
       heightMm: number;
       target?: 'headstone' | 'base' | 'ledger';
-      coordinateSpace?: 'absolute' | 'offset';
+      coordinateSpace?: 'absolute' | 'offset' | 'mm-center';
       flipX?: boolean;
       flipY?: boolean;
       baseWidthMm?: number;

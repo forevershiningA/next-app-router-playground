@@ -33,6 +33,8 @@ type Props = {
   /** tiny Z offset to disambiguate picking when items overlap in Z */
   zBump?: number;
   surface?: 'headstone' | 'base' | 'ledger';
+  /** When 'mm-center', xPos/yPos are mm offsets from headstone center (Y-up). */
+  coordinateSpace?: 'mm-center';
 };
 
 /* ------------------------------------------------------------------ */
@@ -57,6 +59,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       onSelectInscription,
       zBump = 0,
       surface = 'headstone',
+      coordinateSpace,
     },
     ref,
   ) => {
@@ -163,12 +166,19 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             stone.position.y + stone.scale.y / 2 + liftLocal,
             stone.position.z,
           ));
+        } else if (coordinateSpace === 'mm-center') {
+          // Loaded design: convert mm center-offsets to absolute local coordinates.
+          // Positive yPos = above center → higher Y in geometry space.
+          const absX = bounds.centerX + xPos * mmToLocalUnits;
+          const absY = bounds.centerY + yPos * mmToLocalUnits;
+          updateLineStore(id, { xPos: absX, yPos: absY, coordinateSpace: undefined });
+          setPos(new THREE.Vector3(0, 0, headstone.frontZ + liftLocal));
         } else if (xPos === 0 && yPos === 0) {
           setPos(new THREE.Vector3(bounds.centerX, bounds.centerY, headstone.frontZ + liftLocal));
         }
       });
       return () => cancelAnimationFrame(raf);
-    }, [headstone.mesh, headstone.frontZ, isLedgerSurface, liftLocal, xPos, yPos]);
+    }, [headstone.mesh, headstone.frontZ, isLedgerSurface, liftLocal, xPos, yPos, coordinateSpace, mmToLocalUnits, id, updateLineStore]);
 
     /* ------------------------------ helper: place by pointer ----------------------------- */
     const placeOnLedgerSurface = React.useCallback(
@@ -453,7 +463,13 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const ledgerScaleZ = ledgerMesh ? ledgerMesh.scale.z : 1;
     const groupPosition: [number, number, number] = isLedgerSurface
       ? [pos.x + (xPos ?? 0) * ledgerScaleX, pos.y + zBump, pos.z + (yPos ?? 0) * ledgerScaleZ]
-      : [pos.x + (xPos ?? 0), pos.y + (yPos ?? 0), pos.z + zBump];
+      : coordinateSpace === 'mm-center' && surfaceBounds
+        ? [
+            surfaceBounds.centerX + (xPos ?? 0) * mmToLocalUnits,
+            surfaceBounds.centerY + (yPos ?? 0) * mmToLocalUnits,
+            (headstone.frontZ + liftLocal) + zBump,
+          ]
+        : [pos.x + (xPos ?? 0), pos.y + (yPos ?? 0), pos.z + zBump];
     const groupRotation: [number, number, number] = isLedgerSurface
       ? [-Math.PI / 2, rotationRad, 0]
       : [0, 0, rotationRad];

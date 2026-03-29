@@ -426,7 +426,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   updateImagePosition: (id, xPos, yPos) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
-        img.id === id ? { ...img, xPos, yPos } : img
+        img.id === id ? { ...img, xPos, yPos, coordinateSpace: undefined } : img
       ),
     }));
   },

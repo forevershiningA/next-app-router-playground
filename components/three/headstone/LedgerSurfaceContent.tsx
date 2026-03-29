@@ -143,6 +143,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
                 lift={0.002}
                 xPos={line.xPos}
                 yPos={line.yPos}
+                coordinateSpace={line.coordinateSpace}
                 rotationDeg={line.rotationDeg}
                 height={line.sizeMm}
                 text={line.text}
@@ -182,6 +183,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
               headstone={headstoneApi}
               surface="ledger"
               index={index}
+              coordinateSpace={image.coordinateSpace}
             />
           </React.Suspense>
         ))}
