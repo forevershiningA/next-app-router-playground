@@ -1418,19 +1418,19 @@ export async function loadCanonicalDesignIntoEditor(
     }
     return null;
   };
-  const deterministicLegacySavedDpr = await inferLegacySavedDprDeterministic();
-  const effectiveLegacySavedDpr =
-    deterministicLegacySavedDpr ??
-    inferLegacySavedDprHeuristic();
+  // Deterministic DPR: use stored value directly, default to 1 when absent.
+  // Legacy CreateJS canvas was DPR-scaled (canvas.width = dyo.w * dyo.dpr),
+  // and item positions were saved in DPR-scaled stage coordinates.
+  const effectiveLegacySavedDpr = hasLegacySavedDpr ? legacySavedDprRaw : 1;
   const legacyDevice = String(legacyHeadstoneItem?.device ?? '').toLowerCase();
   const isDesktopLegacyPayload =
     legacyDevice === 'desktop' || legacyDevice.includes('desktop');
+  // Use init dimensions directly for position conversion whenever available.
+  // Legacy positions are center-relative offsets in the DPR-scaled canvas
+  // (init_width × DPR by init_height × DPR physical pixels).
   const useDirectCssStageDesktopMapping =
     positionMode === 'legacy-stage-px' &&
-    effectiveCoordinateSpace === 'css-stage' &&
-    isDesktopLegacyPayload &&
-    effectiveLegacySavedDpr <= 1.05 &&
-    canonicalViewportDpr <= 1.05;
+    hasLegacyInitViewport;
   const shouldUseAuthoringViewportReplay =
     !hasLegacySavedDpr &&
     Number.isFinite(canonicalViewportWidthCssPx) &&
@@ -1481,11 +1481,11 @@ export async function loadCanonicalDesignIntoEditor(
       legacyInitHeight > 0;
     const mmPerPxX =
       useDirectCssStageDesktopMapping && !useLedger && hasLegacyInitViewport
-        ? (useBase ? canonicalBaseWidthMm : canonicalHeadstoneWidthMm) / legacyInitWidth
+        ? (useBase ? canonicalBaseWidthMm : canonicalHeadstoneWidthMm) / (legacyInitWidth * effectiveLegacySavedDpr)
         : mmPerPxXDefault;
     const mmPerPxY =
       useDirectCssStageDesktopMapping && !useLedger && hasLegacyInitViewport
-        ? (useBase ? canonicalBaseHeightMm : canonicalHeadstoneHeightMm) / legacyInitHeight
+        ? (useBase ? canonicalBaseHeightMm : canonicalHeadstoneHeightMm) / (legacyInitHeight * effectiveLegacySavedDpr)
         : mmPerPxYDefault;
 
     if (typeof position?.x_mm === 'number' || typeof position?.y_mm === 'number') {

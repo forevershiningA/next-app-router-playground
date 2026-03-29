@@ -163,6 +163,7 @@ export default function MotifModel({
           ctx.putImageData(imageData, 0, 0);
           
           activeTexture = new THREE.CanvasTexture(canvas);
+          activeTexture.flipY = false;
           if (typeof gl.capabilities.getMaxAnisotropy === 'function') {
             activeTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
           }
@@ -557,7 +558,10 @@ export default function MotifModel({
   const flipY = offset.flipY ?? false;
   
   const scaleX = planeWidthUnits * (flipX ? -1 : 1);
-  const scaleY = planeHeightUnits * (flipY ? -1 : 1);
+  // Canvas Y-down origin maps to GL V=0 (bottom of PlaneGeometry), rendering
+  // the texture upside-down by default.  Negate scaleY so non-flipped motifs
+  // appear right-side up; flipped motifs (flipY=true) keep the inversion.
+  const scaleY = planeHeightUnits * (flipY ? 1 : -1);
 
   const isSelected = selectedMotifId === id;
 
