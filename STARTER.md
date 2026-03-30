@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-27
+**Last Updated:** 2026-03-30
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -31,6 +31,213 @@
 
 ---
 
+## Current Status (2026-03-29)
+
+### ✅ Universal DPR-aware coordinate conversion — COMMITTED
+
+The legacy design loading pipeline now has a **deterministic, universal** coordinate conversion system that handles any device pixel ratio (DPR) without heuristics or per-design tweaks.
+
+#### Root Cause Discovery
+
+Legacy CreateJS designs stored item positions in **DPR-scaled stage coordinates** (physical pixels from center), NOT CSS pixels. The old loader used the viewport CSS dimensions in the mm-per-pixel ratio, which was wrong for DPR > 1 devices:
+- **Old formula (WRONG for DPR>1):** `mmPerPx = headstoneHeightMm / viewportCssHeight`
+- **New formula (CORRECT):** `mmPerPx = headstoneHeightMm / (init_height × DPR)`
+
+Evidence from CreateJS source code (`createJS/modules/Canvas.js`):
+- `canvas.width = dyo.w * dyo.dpr; canvas.height = dyo.h * dyo.dpr` — canvas IS DPR-scaled
+- `dyo.w = window.innerWidth - headerWidth` — these are CSS dimensions = init_width/init_height
+- `stage.scaleX = dyo.dpr` — stage coordinates are in DPR-scaled physical pixels
+- `Item.js`: `this.data.x = container.x` — positions saved as raw stage coordinates
+
+#### Changes Made (commit 9120a4844e)
+
+**`lib/saved-design-loader-utils.ts`:**
+1. **Deterministic DPR** (line ~1421-1424): `effectiveLegacySavedDpr = hasLegacySavedDpr ? legacySavedDprRaw : 1` — uses stored value directly, defaults to 1. Removed `inferLegacySavedDprHeuristic()` and `inferLegacySavedDprDeterministic()` calls (both functions still exist as dead code for future cleanup).
+2. **Broadened useDirectCssStageDesktopMapping** (line ~1431-1433): Now enabled for ALL `positionMode === 'legacy-stage-px'` designs with init dimensions. Removed gates: `effectiveCoordinateSpace === 'css-stage'`, `isDesktopLegacyPayload`, `effectiveLegacySavedDpr <= 1.05`, `canonicalViewportDpr <= 1.05`.
+3. **DPR in denominator** (line ~1482-1489): `mmPerPxY = headstoneHeightMm / (legacyInitHeight * effectiveLegacySavedDpr)` — divides by DPR to convert from physical-pixel stage coords to mm.
+
+**`components/three/MotifModel.tsx`:**
+1. **Texture flip fix** (line 166): `activeTexture.flipY = false` — CanvasTexture with default flipY=true renders right-side-up, but our PlaneGeometry UV mapping needs flipY=false.
+2. **ScaleY negation** (line 564): `scaleY = planeHeightUnits * (flipY ? 1 : -1)` — non-flipped motifs get negative scaleY to compensate the canvas Y-down origin in GL.
+
+#### Heuristics REMOVED (replaced by deterministic logic)
+- `inferLegacySavedDprHeuristic()` — guessed DPR from candidate list by minimizing spread error
+- `inferLegacySavedDprDeterministic()` — async fetch of _cropped.json to compute DPR from screenshot dimensions
+- `effectiveLegacySavedDpr <= 1.05` threshold — blocked init-based mapping for DPR>1 designs
+- `shouldTreatCssStageAsBufferPx` — no longer relevant since `useDirectCssStageDesktopMapping` now covers all init-dimension designs
+
+#### Verification Math
+
+| Design | DPR | init_h | viewport_h | Old mmPerPxY | New mmPerPxY | Change |
+|--------|-----|--------|------------|-------------|-------------|--------|
+| 1725769905504 | 2.325 | 476 | 689 | 0.885 | 0.551 | -37.7% (FIXED) |
+| 1755301653966 | 1 | 860 | 1080 | 1.211 | 1.211 | 0% (unchanged) |
+| 1597573022772 | None→1 | 663 | 663 | 0.905 | 0.905 | 0% (unchanged) |
+
+Design 1725769905504 angel motif verification:
+- y_px=47.239 × 0.551 = 26.0mm below center (8.5% of headstone half) — matches reference screenshot ✓
+- With old ratio: 47.239 × 0.885 = 41.8mm (13.7%) — too far below, triggered range-fit shifting
+
+#### Important: Font/Motif Sizes vs Positions use DIFFERENT ratios
+
+- **Positions**: DPR-scaled physical pixels → use `headstoneHeightMm / (init_height × DPR)` — in `convertPositionToMm()`
+- **Font sizes (CSS px available)**: CSS px (from font string like "40px Arial") → use `HEADSTONE_MM_PER_PX_Y_CANONICAL` (viewport-based) — in `resolveFontSizeMm()`
+- **Font sizes (no CSS px)**: `size_px` field is ALREADY in mm (both forevershining and headstonesdesigner) → return directly
+- **Motif heights (forevershining)**: `height_px` is ALREADY in mm (product catalog units, converter misnamed the field) → return directly
+- **Motif heights (headstonesdesigner)**: `height_px` is in design pixel coordinates (proportional to init_height) → convert with `height_px × headstoneHeightMm / init_height`
+
+---
+
+## Current Status (2026-03-30)
+
+### ✅ Legacy Design Loading — Major Fixes (16+ issues resolved)
+
+Comprehensive debugging of legacy saved design loading across both **forevershining** and **headstonesdesigner** systems. Multiple test designs verified.
+
+#### 1. ReferenceError Fix — `hasLegacyInitViewport` hoisting
+- `hasLegacyInitViewport` was used before its `const` declaration (block-scoped, doesn't hoist)
+- **Fix**: Moved definition to outer scope before first use
+
+#### 2. Motif Flip Handling — Direct Legacy.raw Read
+- **Root cause**: Batch converter used `item.flipx === -1` (strict equality) which fails for STRING values like `"1"` vs number `1`
+- Legacy convention: `flipx=-1` = flipped, `flipx=1` = not flipped (values may be string or number)
+- **Fix**: Reads flip values directly from `legacy.raw` using `Number(item.flipx) === -1`
+- Removed `invertFlips` / `flipMode` logic entirely — legacy.raw flip values are authoritative
+- Built `legacyMotifFlipByCanonicalId` map in the loader
+- Fixed both converter scripts to use `Number()` coercion
+
+#### 3. Uniform mmPerPx Position Scaling
+- Legacy CreateJS uses `use = min(w*dpr, h*dpr) * 0.975` with uniform scaling
+- **Fix**: `uniformMmPerPx = totalMonumentHeightMm / (min(initW, initH) * DPR * 0.975)`
+- DPR falls back to `designData.scene?.viewportPx?.dpr` when not in headstone item
+
+#### 4. Forevershining Motif Height Fix
+- **Critical discovery**: Forevershining stores motif heights in **mm** (product catalog units), NOT CSS px
+- The converter misnames them as `height_px`
+- **Fix**: `resolveMotifHeightMm` returns `height_px` directly as mm when `isForevershining`
+
+#### 5. Headstonesdesigner Motif Height Fix
+- `height_px` is in **design pixel coordinates** (proportional to `init_height`), NOT physical draw px
+- Verified empirically: design 1725769905504 has both `height_mm` and `height_px` → ratio = `headstoneHeightMm / init_height` exactly
+- **Fix**: `resolveMotifHeightMm` uses `height_px × canonicalHeadstoneHeightMm / legacyInitHeight`
+
+#### 6. Font Size Fallback Fix
+- Both systems store `font_size` / `size_px` in **mm** (product catalog units) in the saved JSON
+- The CSS font string (e.g., "104.34px Garamond") is the ONLY value in rendering px
+- **Fix**: When CSS font string unavailable, return `size_px` directly as mm (both systems)
+
+#### 7. Texture Mapping System
+- ALL numbered textures (`01.webp`–`35.webp`) are ~2KB tiny placeholder files in the texture directory
+- `Glory-Black-2.webp` (1540 bytes) is intentionally a solid black texture for laser etching — NOT a placeholder
+- Added `MATERIAL_TEXTURES` dictionary and `mapTexture()` function for named texture resolution
+- Added dimension-suffix stripping regex (`-\d+-x-\d+`) for paths like `White-Carrara-600-x-600.webp`
+- `mapTexture()` is now called before `enforceTexture()` in the canonical loading path
+- `enforceTexture()` sets `store.setIsMaterialChange(true)` so ShapeSwapper updates `visibleTex`
+
+**Texture mappings:**
+| Legacy path | Maps to |
+|-------------|---------|
+| `/17.jpg` (catalog ID 18) | `Glory-Black-1.webp` (Glory Gold Spots) |
+| `/18.jpg` or `/19.jpg` | `Glory-Black-2.webp` (Glory Black — solid black for laser etching) |
+| `White-Carrara-*` | `White-Carrara.webp` |
+| `Blue-Pearl` | `Blue-Pearl.webp` |
+
+#### 8. Base Element Routing
+- Converter `convert-saved-design.js` was hardcoding `surface: "headstone/front"` for all items
+- **Fix**: Uses legacy `item.part` field for surface detection
+- Loader also has position-based fallback: items with `yMm < -(HEADSTONE_HALF_MM * 1.02)` are reclassified to base
+- Built `legacyItemPartByCanonicalId` map from `legacy.raw` items for cross-referencing
+
+#### 9. Photo/Image Element Loading
+- Batch converter excluded photos by default (requires `--include-photos` flag)
+- All rollout designs have `photos: []` even when `legacy.raw` contains Photo/Picture items
+- **Fix**: Loader now synthesizes photo entries from `legacy.raw` when `canonicalPhotoSnapshot` is empty
+- Extracts: `typeId`, `typeName`, `surface`, `position`, `size` (parsed from "180 x 240 mm"), `mask.shape`, `source`
+- Falls back to `/jpg/photos/vitreous-enamel-image.jpg` placeholder when original images unavailable
+
+#### 10. Photo Rendering — Oval/Rect Masking
+- Photos rendered as rectangular planes would cover the ceramic base (JPG has no alpha channel)
+- **Fix**: `ImageModel.tsx` creates a flat `ShapeGeometry` from the same SVG mask used for the ceramic base
+- UV coordinates normalized to [0,1] with Y-flip compensation for negative scale
+- Photo plane now clips to oval/rect shape, with white ceramic base visible as border
+- Fallback to rectangular `PlaneGeometry` when no mask SVG available
+
+#### Files Modified
+- `lib/saved-design-loader-utils.ts` — 16+ fixes (coordinate conversion, texture mapping, photo synthesis, flip handling, font/motif sizes, base routing)
+- `components/three/ImageModel.tsx` — Photo masking with SVG ShapeGeometry, vitreous enamel placeholder fallback
+- `scripts/convert-saved-design.js` — Surface detection from `item.part`, flip `Number()` coercion
+- `scripts/batch-convert-saved-designs.js` — Flip `Number()` coercion, texture mappings
+- `scripts/convert-legacy-design.js` — Texture mapping fixes
+- `public/canonical-designs/v2026/1725769905504.json` — Corrected flip values
+- Various rollout JSON files — Texture path fixes
+
+#### Designs Verified
+| Design ID | System | Status |
+|-----------|--------|--------|
+| 1725769905504 | headstonesdesigner | ✅ Positions, motifs, flips correct |
+| 1578016189116 | forevershining | ✅ Textures, motif heights, font sizes correct |
+| 1654222051474 | forevershining | ✅ White-Carrara dimension suffix fixed |
+| 1704011685894 | forevershining | ✅ Base routing for 40-motif floral border |
+| 1630558777652 | forevershining | ✅ Texture mapping (mapTexture before enforceTexture) |
+| 1714311178594 | headstonesdesigner | ✅ Motif heights (init_height ratio) |
+| 1739765356856 | headstonesdesigner | ✅ Motif flips (legacy.raw direct read) |
+| 1610832359060 | forevershining | ✅ Glory-Black-2 laser etching texture confirmed correct |
+| 1702923274519 | headstonesdesigner | ✅ Photo element loading with ceramic oval mask |
+
+### 🔑 Key Architecture Knowledge for Legacy Design Loading (Updated)
+
+**Canonical JSON structure** (`public/designs/v2026-rollout-full-20260324-190828/<id>.json`):
+- `legacy.raw[]` — array of items, first item is headstone with `init_width`, `init_height`, `dpr` fields
+- `scene.viewportPx` — `{ width, height, dpr }` — represents PAGE viewport (larger than canvas)
+- `scene.coordinateSystem` — `{ positionMode, headstonePlacement, coordinateSpace, flipMode }`
+- Elements: `inscriptions[]`, `motifs[]`, `photos[]` with `position: { x_px, y_px }` in DPR-scaled stage coords
+- **Note**: Batch converter excluded photos by default — `photos: []` in most rollout files. Loader synthesizes from `legacy.raw`.
+
+**Key dimensions distinction**:
+- `init_width/init_height` = CSS canvas dimensions (viewport minus UI chrome) = `dyo.w/dyo.h`
+- `scene.viewportPx.width/height` = may be PAGE viewport dimensions (NOT the same as init!)
+- Physical canvas pixels = `init_width × DPR` by `init_height × DPR`
+- Stored positions are in physical canvas pixel space (center-relative, Y-down)
+
+**Loader pipeline** (`lib/saved-design-loader-utils.ts`, ~2200+ lines):
+- `convertPositionToMm()` — converts legacy px positions to mm using uniform mmPerPx scaling
+- `resolveFontSizeMm()` — CSS px font string → mm via viewport ratio; OR returns `size_px` directly (already mm)
+- `resolveMotifHeightMm()` — forevershining: `height_px` is mm; headstonesdesigner: `height_px × headstoneHeightMm / init_height`
+- `mapTexture()` — maps legacy texture paths (numbered files, dimension suffixes) to real named textures
+- `enforceTexture()` — applies texture to store with `isMaterialChange=true` for ShapeSwapper
+- `legacyMotifFlipByCanonicalId` — reads flips from `legacy.raw` using `Number()` coercion
+- `legacyItemPartByCanonicalId` — reads surface target (headstone/base) from `legacy.raw`
+- Photo synthesis from `legacy.raw` when `canonicalPhotoSnapshot` is empty
+
+**Motif rendering** (`components/three/MotifModel.tsx`):
+- Uses CanvasTexture with `flipY=false` (compensated by negative scaleY)
+- flipX/flipY convention: `1` or `false` = NOT flipped, `-1` or `true` = flipped
+- Flip values read directly from `legacy.raw` (handles string/number types via `Number()`)
+- Supports coordinateSpace: 'mm-center' (loaded designs) and 'offset' (user-placed)
+
+**Photo rendering** (`components/three/ImageModel.tsx`):
+- Creates 3D ceramic/enamel base from SVG mask shape (extruded with bevels)
+- Photo texture masked to SVG shape via flat `ShapeGeometry` (not rectangular plane)
+- UV coordinates normalized [0,1] with Y-flip for negative scale compensation
+- Fallback image: `/jpg/photos/vitreous-enamel-image.jpg` when original photos unavailable
+- `typeId=7` (Ceramic Image) gets ceramic base; `typeId=21` (Granite Image) renders flat
+
+**Texture system**:
+- ALL numbered textures (`01.webp`–`35.webp`) in `/textures/forever/l/` are ~2KB placeholders
+- `Glory-Black-2.webp` (1540 bytes) is intentionally solid black for laser etching — NOT broken
+- Real textures are 150KB–330KB named files (e.g., `African-Black.webp`, `Blue-Pearl.webp`)
+- `mapTexture()` must be called before `enforceTexture()` in the canonical loading path
+- ShapeSwapper `visibleTex` only updates when `isMaterialChange=true` (set by `enforceTexture`)
+
+### 📌 Next Steps
+
+1. **Continue testing additional legacy designs** — verify more designs across both systems
+2. **Dead code cleanup** (low priority): remove `inferLegacySavedDprHeuristic()`, `inferLegacySavedDprDeterministic()`, `shouldTreatCssStageAsBufferPx`
+3. **Re-run batch converter with `--include-photos`** to populate `photos[]` in canonical JSONs (currently synthesized at load time)
+4. **Audit remaining placeholder textures** — verify which named `.webp` files are real vs placeholder
+
+---
+
 ## Current Status (2026-03-27)
 
 ### ⚠️ Legacy design loading parity (in progress)
@@ -54,20 +261,29 @@
 3. **Shape remap safety during design load - IN PLACE**
    - `components/three/headstone/ShapeSwapper.tsx` now skips bbox remap enqueue/apply while `loading === true` to prevent load-time coordinate mutation.
 
-4. **Canonical source update for active regression ID**
+4. **Canonical source update for active regression ID - COMPLETE**
    - Regenerated `public/canonical-designs/v2026/1725769905504.json` with the new coordinate-space metadata.
 
-5. **Current verification status**
-   - `1725769905504`: significantly improved; still under visual parity tuning.
-   - `1597573022772`: improved but requires re-check after universal range-fit update.
-   - `1578016189116`: still requires parity verification.
-   - Build validation after each iteration:
+5. **Load Design popup thumbnails on Vercel - FIXED**
+   - Root cause: `.vercelignore` excludes full screenshot JPGs under `public/ml/**/saved-designs/screenshots/**`, keeping `_small.jpg`.
+   - Updated `components/LoadDesignButton.tsx` to prefer `_small.jpg` and fallback to original preview URL on image error.
+   - Result: popup thumbnails now resolve on Vercel deployments.
+
+6. **Debug cleanup after parity iteration - COMPLETE**
+   - Removed transient loader debug logs added during coordinate-system investigation.
+   - Kept functional warnings/info for fallback and failure paths.
+
+7. **Current verification status**
+   - `1725769905504`: major parity improvement after universal legacy-stage normalization updates.
+   - `1597573022772`: major parity improvement after universal range-fit application.
+   - `1578016189116`: still flagged for follow-up parity verification.
+   - Build validation remains green:
      - `pnpm build` ✅
 
 ### 📌 Next technical steps (legacy parity)
-- Validate both target IDs (`1725769905504`, `1597573022772`) against screenshot parity after the universal range-fit rollout.
-- If residual mismatch remains, capture per-element diagnostics (`x_px/y_px` → computed `xMm/yMm` → final rendered `xPos/yPos`) and adjust only shared mapping rules.
-- Re-run canonical regeneration for additional affected legacy IDs once the universal mapping is signed off.
+- Final visual sign-off pass for `1578016189116`.
+- If residual mismatch appears on any additional ID, capture per-element diagnostics (`x_px/y_px` → computed `xMm/yMm` → final rendered `xPos/yPos`) and adjust shared mapping rules only.
+- Re-run canonical regeneration for additional affected legacy IDs using the new coordinate-space metadata pipeline.
 
 ---
 

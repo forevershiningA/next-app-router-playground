@@ -36,7 +36,7 @@ const MATERIAL_TEXTURES = {
   'blue pearl': '/textures/forever/l/Blue-Pearl.webp',
   'glory-black': '/textures/forever/l/Glory-Black-2.webp',
   'glory black': '/textures/forever/l/Glory-Black-2.webp',
-  'glory-gold-spots': '/textures/forever/l/Glory-Gold-Spots.webp',
+  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.webp',
   'african-black': '/textures/forever/l/African-Black.webp',
   'noble-black': '/textures/forever/l/Noble-Black.webp',
   g654: '/textures/forever/l/01.webp',
@@ -350,7 +350,10 @@ function mapTexture(texturePath, productId) {
     const match = texturePath.match(/phoenix[\\/](l|s)[\\/](\d+)\.(jpg|webp)$/i);
     if (match) return `/textures/phoenix/${match[1]}/${match[2]}.webp`;
   }
-  if (lower.includes('18.jpg') || lower.includes('19.jpg') || lower.includes('glory-black')) {
+  if (lower.includes('/17.jpg') || lower.includes('glory-gold-spots') || lower.includes('glory gold spots')) {
+    return MATERIAL_TEXTURES['glory-gold-spots'];
+  }
+  if (lower.includes('/18.jpg') || lower.includes('/19.jpg') || lower.includes('glory-black')) {
     return MATERIAL_TEXTURES['glory-black'];
   }
   if (lower.includes('blue-pearl') || lower.includes('bluepearl')) {
@@ -360,10 +363,13 @@ function mapTexture(texturePath, productId) {
     if (lower.includes(key)) return value;
   }
   if (String(texturePath).startsWith('/textures/')) {
-    return String(texturePath).replace(/\.jpg$/i, '.webp');
+    return String(texturePath).replace(/-\d+-x-\d+/i, '').replace(/\.jpg$/i, '.webp');
   }
   const match = String(texturePath).match(/[\\/]([A-Za-z0-9-]+)\.(jpg|webp)$/i);
-  if (match) return `/textures/forever/l/${match[1]}.webp`;
+  if (match) {
+    const name = match[1].replace(/-\d+-x-\d+/i, '');
+    return `/textures/forever/l/${name}.webp`;
+  }
   return String(texturePath);
 }
 
@@ -447,7 +453,7 @@ function buildCanonicalFromLegacy(saved, designId, meta, opts = {}) {
       position: { x_px: round(item.x || 0), y_px: round(item.y || 0) },
       rotation: { z_deg: item.rotation || 0 },
       color: item.color || '#000000',
-      surface: `headstone/${(item.side || 'front').toLowerCase()}`,
+      surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
     }));
 
   const motifs = saved
@@ -459,7 +465,8 @@ function buildCanonicalFromLegacy(saved, designId, meta, opts = {}) {
       ...(item.height ? { height_px: round(Number(item.height)) } : {}),
       rotation: { z_deg: item.rotation || 0 },
       color: item.color || '#000000',
-      flip: { x: item.flipx === -1, y: item.flipy === -1 },
+      flip: { x: Number(item.flipx) === -1, y: Number(item.flipy) === -1 },
+      surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
     }));
 
   const photos = includePhotos
@@ -471,6 +478,25 @@ function buildCanonicalFromLegacy(saved, designId, meta, opts = {}) {
           width_px: item.width ? round(item.width) : undefined,
           height_px: item.height ? round(item.height) : undefined,
           rotation: { z_deg: item.rotation || 0 },
+          typeId: Number.isFinite(Number(item.productid)) ? Number(item.productid) : undefined,
+          typeName: item.name || undefined,
+          surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
+          source: {
+            item: item.item || undefined,
+            src: item.src || undefined,
+            path: item.path || undefined,
+          },
+          mask: {
+            shape_url: item.shape_url || undefined,
+          },
+          ...(item.size ? { size_mm: (() => {
+            const match = String(item.size).match(/(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)/i);
+            if (!match) return undefined;
+            const width = Number(match[1]);
+            const height = Number(match[2]);
+            if (!Number.isFinite(width) || !Number.isFinite(height)) return undefined;
+            return { width: round(width), height: round(height) };
+          })() } : {}),
         }))
     : [];
 

@@ -1,6 +1,6 @@
 {
   "version": "2026.01",
-  "generatedAt": "2026-03-24T18:08:43.556Z",
+  "generatedAt": "2026-03-28T17:19:32.814Z",
   "units": "mm",
   "source": {
     "id": "1755301653966",
@@ -46,6 +46,15 @@
     },
     "coordinateSystem": {
       "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
       "headstonePlacement": "legacy-stage-offset",
       "flipMode": "invert-legacy-bools"
     }
@@ -252,7 +261,7 @@
           "z_deg": 0
         },
         "color": "#ffffff",
-        "surface": "headstone/front"
+        "surface": "base/front"
       },
       {
         "id": "insc-12",
@@ -441,7 +450,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-24",
@@ -458,7 +468,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-25",
@@ -475,10 +486,38 @@
         "flip": {
           "x": false,
           "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [
+      {
+        "id": "photo-19",
+        "position": {
+          "x_px": -7,
+          "y_px": -95,
+          "z_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "typeId": 7,
+        "typeName": "Ceramic Image",
+        "surface": "headstone/front",
+        "source": {
+          "item": "1755317924365473102691_23959355440980.jpg",
+          "src": "473102691_2395935544098059_5366129975471832935_n.jpg",
+          "path": "../upload/2025/08/"
+        },
+        "mask": {
+          "shape_url": "shapes/photos/oval_vertical.svg"
+        },
+        "size_mm": {
+          "width": 180,
+          "height": 240
         }
       }
     ],
-    "photos": [],
     "logos": [],
     "additions": []
   },
@@ -502,7 +541,7 @@
     "sourceItemCount": 27,
     "warnings": [],
     "confidence": "high",
-    "migratedAt": "2026-03-24T18:08:43.556Z",
+    "migratedAt": "2026-03-28T17:19:32.815Z",
     "policyVersion": "1",
     "warningScore": 0
   },

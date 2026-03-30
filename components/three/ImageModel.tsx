@@ -69,6 +69,7 @@ export default function ImageModel({
   const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.Texture; aspect: number } | null>(null);
   const [ceramicBaseData, setCeramicBaseData] = React.useState<{
     geometry: THREE.ExtrudeGeometry;
+    flatGeometry: THREE.ShapeGeometry | null;
     svgWidth: number;
     svgHeight: number;
   } | null>(null);
@@ -88,12 +89,14 @@ export default function ImageModel({
     async function loadTexture() {
       try {
         const loader = new THREE.TextureLoader();
+        const PLACEHOLDER_IMAGE = '/jpg/photos/vitreous-enamel-image.jpg';
         const candidates = Array.from(new Set([
           imageUrl,
           imageUrl.replace(/\/([^/]+)$/, '/$1'),
           imageUrl
             .replace(/\/saved-designs\/upload\/(\d{4})\/(\d{2})\/([^/]+)$/i, '/saved-designs/upload/$3')
             .replace(/\/saved-designs\/upload\/([^/]+)$/i, '/saved-designs/upload/$1'),
+          PLACEHOLDER_IMAGE,
         ])).filter(Boolean);
         let loaded: THREE.Texture | null = null;
         for (const candidate of candidates) {
@@ -185,8 +188,34 @@ export default function ImageModel({
         const centerY = (bbox.min.y + bbox.max.y) / 2;
         geometry.translate(-centerX, -centerY, 0);
 
+        // Create a flat 2D shape for the photo plane (masked to SVG outline)
+        let flatGeometry: THREE.ShapeGeometry | null = null;
+        try {
+          flatGeometry = new THREE.ShapeGeometry(shapes[0], 64);
+          flatGeometry.computeBoundingBox();
+          const fb = flatGeometry.boundingBox!;
+          const fw = fb.max.x - fb.min.x || 1;
+          const fh = fb.max.y - fb.min.y || 1;
+          // Remap UVs to [0,1] so the photo texture fills the shape
+          // Use (1 - normalizedY) because the geometry is rendered with negative Y scale (SVG flip)
+          const uvs = flatGeometry.getAttribute('uv') as THREE.BufferAttribute;
+          const pos = flatGeometry.getAttribute('position') as THREE.BufferAttribute;
+          for (let i = 0; i < pos.count; i++) {
+            uvs.setXY(
+              i,
+              (pos.getX(i) - fb.min.x) / fw,
+              1 - (pos.getY(i) - fb.min.y) / fh,
+            );
+          }
+          uvs.needsUpdate = true;
+          // Center it (same center as the extruded geometry)
+          flatGeometry.translate(-centerX, -centerY, 0);
+        } catch {
+          flatGeometry = null;
+        }
+
         if (!disposed) {
-          setCeramicBaseData({ geometry, svgWidth, svgHeight });
+          setCeramicBaseData({ geometry, flatGeometry, svgWidth, svgHeight });
         }
       } catch (error) {
         console.error('[ImageModel] Failed to load mask shape:', error);
@@ -553,15 +582,19 @@ export default function ImageModel({
         </mesh>
       )}
       
-      {/* Photo texture on top (ABOVE ceramic base, flush with ceramic surface) */}
+      {/* Photo texture — masked to SVG shape when available, else rectangular plane */}
       <mesh
         onPointerDown={handlePointerDown}
         onClick={(e) => {
           e.stopPropagation();
         }}
-        position={[0, 0, actualCeramicDepthInUnits + 0.1 * mmToLocalUnits]} // Photo slightly above ceramic surface
-        geometry={planeGeometry}
-        scale={[width, height, 1]}
+        position={[0, 0, actualCeramicDepthInUnits + 0.1 * mmToLocalUnits]}
+        geometry={ceramicBaseData?.flatGeometry ?? planeGeometry}
+        scale={
+          ceramicBaseData?.flatGeometry
+            ? [width / ceramicBaseData.svgWidth, -height / ceramicBaseData.svgHeight, 1]
+            : [width, height, 1]
+        }
         renderOrder={999}
         visible={true}
       >

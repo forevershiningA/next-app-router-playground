@@ -673,7 +673,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           const texturePath = shape.table.color.startsWith('/') 
             ? shape.table.color 
             : `/${shape.table.color}`;
-
           set({ headstoneMaterialUrl: texturePath });
         }
         if (shape.stand.color) {

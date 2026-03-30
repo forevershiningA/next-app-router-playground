@@ -1039,13 +1039,7 @@ export async function loadCanonicalDesignIntoEditor(
   const coordinateSpace = coordinateSystem?.coordinateSpace ?? 'css-stage';
   const headstonePlacement =
     coordinateSystem?.headstonePlacement ?? (isForevershining ? 'auto-center' : 'legacy-stage-offset');
-  const flipMode =
-    coordinateSystem?.flipMode ??
-    (normalizedMlDir === 'headstonesdesigner' || normalizedMlDir === 'bronze-plaque'
-      ? 'invert-legacy-bools'
-      : 'preserve');
   const needsLegacyStageCompensation = headstonePlacement === 'legacy-stage-offset';
-  const invertFlips = flipMode === 'invert-legacy-bools';
   let canonicalOutOfBounds = () => null as string | null;
 
   if (clearExisting) {
@@ -1305,6 +1299,7 @@ export async function loadCanonicalDesignIntoEditor(
     : null;
   const legacyInscriptionFontPxByCanonicalId = new Map<string, number>();
   const legacyItemPartByCanonicalId = new Map<string, string>();
+  const legacyMotifFlipByCanonicalId = new Map<string, { x: boolean; y: boolean }>();
   if (Array.isArray(designData.legacy?.raw)) {
     designData.legacy.raw.forEach((item) => {
       if (!item) return;
@@ -1324,6 +1319,13 @@ export async function loadCanonicalDesignIntoEditor(
         if (Number.isFinite(itemId) && Number.isFinite(parsed) && parsed > 0) {
           legacyInscriptionFontPxByCanonicalId.set(`insc-${itemId}`, parsed);
         }
+      }
+      // Legacy flip values: -1 = flipped, 1 = not flipped (may be string or number)
+      if (item.type === 'Motif' && Number.isFinite(itemId)) {
+        legacyMotifFlipByCanonicalId.set(`motif-${itemId}`, {
+          x: Number(item.flipx) === -1,
+          y: Number(item.flipy) === -1,
+        });
       }
     });
   }
@@ -1578,14 +1580,13 @@ export async function loadCanonicalDesignIntoEditor(
         : undefined) ??
       font?.size_px ??
       40;
-    // Forevershining legacy stores font sizes in mm (product catalog units).
-    // If the CSS-px lookup from legacy.raw succeeded, sizePx is a genuine CSS value
-    // and the normal conversion is correct. But if we fell through to font.size_px
-    // from a pilot-era conversion, size_px may actually be the mm value.
+    // Both systems store font_size in mm in the saved JSON (product catalog units).
+    // Only the CSS font string from legacy.raw (e.g. "104.34px Garamond") is in
+    // rendering px. If we didn't get a CSS string, size_px is actually the mm value.
     const gotLegacyCssPx = canonicalInscriptionId
       ? legacyInscriptionFontPxByCanonicalId.has(canonicalInscriptionId)
       : false;
-    if (isForevershining && !gotLegacyCssPx) return sizePx;
+    if (!gotLegacyCssPx) return sizePx;
     // Universal authoring-space pipeline: keep saved font px as-is (CSS px),
     // then convert once using surface mm-per-px mapping.
     const mmPerPxY =
@@ -1606,6 +1607,17 @@ export async function loadCanonicalDesignIntoEditor(
       // Forevershining legacy stores motif heights in mm (product catalog units),
       // not CSS pixels. The converter misnamed them as height_px.
       if (isForevershining) return motif.height_px;
+      // Headstonesdesigner stores motif heights in design pixel coordinates
+      // (proportional to init_height canvas size, not physical draw px).
+      // Convert: height_mm = height_px × headstoneHeightMm / init_height
+      if (
+        Number.isFinite(legacyInitHeight) &&
+        legacyInitHeight > 0 &&
+        canonicalHeadstoneHeightMm > 0
+      ) {
+        return motif.height_px * canonicalHeadstoneHeightMm / legacyInitHeight;
+      }
+      // Fallback when init_height is unavailable: use draw-px based conversion
       const mmPerPxY =
         targetSurface === 'ledger'
           ? LEDGER_MM_PER_PX_Z_CANONICAL
@@ -1896,10 +1908,11 @@ export async function loadCanonicalDesignIntoEditor(
     const canonicalHeight = clampCanonicalMotifHeight(resolveMotifHeightMm(motif, target));
     const scaledHeight = clampCanonicalMotifHeight(canonicalHeight * GLOBAL_LAYOUT_SCALE);
     const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
-    const rawFlipX = motif.flip?.x ?? false;
-    const rawFlipY = motif.flip?.y ?? false;
-    const flipX = invertFlips ? !rawFlipX : rawFlipX;
-    const flipY = invertFlips ? !rawFlipY : rawFlipY;
+    // Prefer legacy.raw flip values (handles both string/number types correctly).
+    // Fall back to canonical flip bools when legacy.raw is unavailable.
+    const legacyFlip = legacyMotifFlipByCanonicalId.get(motif.id);
+    const flipX = legacyFlip ? legacyFlip.x : (motif.flip?.x ?? false);
+    const flipY = legacyFlip ? legacyFlip.y : (motif.flip?.y ?? false);
 
     if (target === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);
@@ -1919,7 +1932,50 @@ export async function loadCanonicalDesignIntoEditor(
     });
   });
 
-  canonicalPhotoSnapshot.forEach((photo, index) => {
+  // If no canonical photos but legacy.raw has Photo/Picture items, synthesise entries
+  const effectivePhotos: typeof canonicalPhotoSnapshot =
+    canonicalPhotoSnapshot.length > 0
+      ? canonicalPhotoSnapshot
+      : (() => {
+          if (!Array.isArray(designData.legacy?.raw)) return [];
+          return designData.legacy.raw
+            .filter(
+              (item): item is Record<string, unknown> =>
+                !!item &&
+                (item.type === 'Photo' || item.type === 'Picture'),
+            )
+            .map((item) => {
+              const sizeStr = typeof item.size === 'string' ? item.size : '';
+              const sizeMatch = sizeStr.match(/([\d.]+)\s*x\s*([\d.]+)/i);
+              const widthMm = sizeMatch ? Number(sizeMatch[1]) : undefined;
+              const heightMm = sizeMatch ? Number(sizeMatch[2]) : undefined;
+              const partStr = typeof item.part === 'string' ? item.part.toLowerCase() : 'headstone';
+              const sideStr = typeof item.side === 'string' ? item.side.toLowerCase() : 'front';
+              return {
+                id: `photo-${item.itemID ?? item.id ?? 0}`,
+                typeId: typeof item.productid === 'number' ? item.productid : 7,
+                typeName: typeof item.name === 'string' ? item.name : 'Ceramic Image',
+                surface: `${partStr}/${sideStr}`,
+                position: {
+                  x_px: typeof item.x === 'number' ? item.x : 0,
+                  y_px: typeof item.y === 'number' ? item.y : 0,
+                },
+                width_mm: widthMm,
+                height_mm: heightMm,
+                rotation: { z_deg: typeof item.rotation === 'number' ? item.rotation : 0 },
+                source: {
+                  item: typeof item.item === 'string' ? item.item : undefined,
+                  src: typeof item.src === 'string' ? item.src : undefined,
+                  path: typeof item.path === 'string' ? item.path : undefined,
+                },
+                mask: {
+                  shape: typeof item.shape_url === 'string' ? item.shape_url : undefined,
+                },
+              };
+            });
+        })();
+
+  effectivePhotos.forEach((photo, index) => {
     const canonicalId = photo.id ?? `photo-${index}`;
     const target = canonicalSurfaceTarget(photo.surface);
     const { xMm, yMm } = convertPositionToMm(photo.position, target);
@@ -1941,7 +1997,10 @@ export async function loadCanonicalDesignIntoEditor(
         return '';
       })(),
     ].filter((v): v is string => Boolean(v && v.trim()));
-    if (!imageUrlCandidates.length) return;
+    // Always include the vitreous enamel placeholder so photos render even if the original image is gone
+    if (!imageUrlCandidates.length) {
+      imageUrlCandidates.push('/jpg/photos/vitreous-enamel-image.jpg');
+    }
 
     const sourceSizeMm =
       (typeof photo.size_mm?.width === 'number' && typeof photo.size_mm?.height === 'number')

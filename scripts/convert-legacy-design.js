@@ -444,7 +444,7 @@ function mapTexture(texturePath) {
   // Mapping from old numbered texture paths to new named material files
   const textureMapping = {
     'forever2/l/17.jpg': 'Glory-Black-1.webp',
-    'forever2/l/18.jpg': 'Glory-Gold-Spots.webp',
+    'forever2/l/18.jpg': 'Glory-Black-2.webp',
   };
   
   // Try to match the texture path with our mapping
@@ -454,10 +454,10 @@ function mapTexture(texturePath) {
     }
   }
   
-  // Fallback: extract filename and convert extension
+  // Fallback: extract filename, strip dimension suffixes, and convert extension
   const file = texturePath.split(/[\\/]/).pop();
   if (!file) return null;
-  return `/textures/forever/l/${file.replace(/\.(jpg|jpeg)$/i, '.webp')}`;
+  return `/textures/forever/l/${file.replace(/-\d+-x-\d+/i, '').replace(/\.(jpg|jpeg)$/i, '.webp')}`;
 }
 
 function buildComponents(legacyData, existingCanonical) {

@@ -338,8 +338,8 @@ function buildMotif(item, _pxPerMmX, _pxPerMmY) {
     rotation: { z_deg: item.rotation || 0 },
     color: item.color || '#000000',
     flip: {
-      x: item.flipx === -1,
-      y: item.flipy === -1,
+      x: Number(item.flipx) === -1,
+      y: Number(item.flipy) === -1,
     },
     surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
   };
