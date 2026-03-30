@@ -19,15 +19,17 @@
 11. [Slant Headstone Feature](#slant-headstone-feature)
 12. [Design Gallery & SEO](#design-gallery--seo)
 13. [Check Price Feature](#check-price-feature)
-14. [Save Design Feature](#save-design-feature)
-15. [My Account System](#my-account-system)
-16. [Authentication System](#authentication-system)
-17. [File Storage System](#file-storage-system)
-18. [Database & Catalog System](#database--catalog-system)
-19. [Performance Considerations](#performance-considerations)
-20. [Memory Management](#memory-management)
-21. [Common Issues & Solutions](#common-issues--solutions)
-22. [Development Workflow](#development-workflow)
+14. [Pricing System](#pricing-system)
+15. [Save Design Feature](#save-design-feature)
+16. [My Account System](#my-account-system)
+17. [Authentication System](#authentication-system)
+18. [File Storage System](#file-storage-system)
+19. [Database & Catalog System](#database--catalog-system)
+20. [ML Smart Search](#ml-smart-search)
+21. [Performance Considerations](#performance-considerations)
+22. [Memory Management](#memory-management)
+23. [Common Issues & Solutions](#common-issues--solutions)
+24. [Development Workflow](#development-workflow)
 
 ---
 
@@ -88,7 +90,100 @@ Design 1725769905504 angel motif verification:
 
 ---
 
-## Current Status (2026-03-30)
+## Current Status (2026-03-30) — Pricing & ML Smart Search
+
+### ✅ Dynamic Pricing Across All Panels
+
+All sidebar panels now display **dynamic prices** from XML catalog data instead of hardcoded flat rates. Prices update reactively when items are resized, duplicated, or changed.
+
+#### Panel Price Displays
+
+| Panel | Source | Calculation |
+|-------|--------|-------------|
+| **Motif** | `motifs-biondan.xml` via `motif-pricing.ts` | `calculateMotifPrice(heightMm, color, priceModel, isLaser)` — height-based tiers, color note matching (Gold/Silver Gilding, Paint Fill) |
+| **Inscription** | `inscriptions.xml` via store `inscriptionPriceModel` | `calculatePrice(priceModel, sizeMm)` — Height quantity type, color-aware tier matching. Shows "Free" for free products (e.g., Black Granite laser) |
+| **Image** | `images.xml` via `lib/image-pricing.ts` | `calculateImagePrice(product, widthMm, heightMm, colorMode)` — Width+Height quantity, BW/Color note tiers |
+| **Addition** | `FALLBACK_SIZES` in `_additions-loader.ts` | `activeAdditionSize.retailPrice` — Pre-computed from `motifs-biondan.xml` per sourceId + sizeVariant |
+
+#### Price Pill (Canvas Bottom)
+
+The floating price pill (`components/ThreeScene.tsx`) now includes **all** cost components:
+
+```
+totalPrice = headstonePrice + basePrice + ledgerPrice + kerbsetPrice
+           + inscriptionCost + motifCost + imageCost + additionCost
+```
+
+New store fields added:
+- `imageCost: number` — recalculated on add/remove/duplicate/resize image
+- `additionCost: number` — recalculated on add/remove/duplicate/resize/sizeVariant change
+- `calculateImageCost()` — async, fetches XML pricing map, sums per-image prices
+- `calculateAdditionCost()` — sync, sums `retailPrice` from `FALLBACK_SIZES`
+
+#### Save/Checkout Pricing
+
+`DesignerNav.tsx` `handleSaveDesign()` now computes actual per-item prices:
+- **Additions**: Iterates `selectedAdditions`, looks up `retailPrice` from `data.additions[baseId].sizes[variant-1]`
+- **Inscriptions**: Iterates valid inscriptions, applies `calculatePrice()` with color-tier matching
+
+#### Files Modified
+- `components/InscriptionEditPanel.tsx` — Dynamic inscription price display
+- `components/ImageSelector.tsx` — Dynamic image price display (already existed)
+- `components/DesignerNav.tsx` — Dynamic addition price, save pricing, panel UI cleanup
+- `components/ThreeScene.tsx` — Price pill includes imageCost + additionCost
+- `lib/headstone-store.ts` — Added imageCost, additionCost, calculate functions, recalc triggers
+- `lib/headstone-store.types.ts` — Added type definitions for new fields
+
+### ✅ Panel UI Consistency
+
+All item panels (Motif, Addition, Inscription, Image) now share a consistent style:
+- **Removed**: Grey wrapper div (`rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95`)
+- **Removed**: "Selected: {long-instance-id}" text and "Clear selection" button
+- **Unified**: `space-y-4` layout, gold Duplicate button (`bg-[#D7B356]`), red Delete button
+- Pattern established by `InscriptionEditPanel.tsx` — other panels now match
+
+### ✅ TF.js Smart Search for Design Gallery
+
+Implemented ML-powered search and filtering for the `/designs` gallery page and the Load Design modal.
+
+#### ML Data Structure (`public/ml/`)
+- **forevershining**: `ml/forevershining/ml.json` — 3,021 entries with classification labels
+- **headstonesdesigner**: `ml/headstonesdesigner/ml.json` — 1,100 entries
+- Each entry has: `ml_style`, `ml_type`, `ml_motif`, `ml_tags` (comma-separated keywords)
+- Categories: 6 types, 5 styles, 40+ motif categories
+
+#### TF.js Model
+- `public/ml/forevershining/my-model.json` — Model topology (generated)
+- `public/ml/forevershining/my-model.weights.bin` — 626,672 bytes (3,018 output units)
+- Architecture: Dense(3→50) → LeakyReLU → Dropout → Dense(50→50) → LeakyReLU → Dropout → Dense(50→N, softmax)
+- Input: `[type_idx/types_count, style_idx/styles_count, motif_idx/motifs_count]`
+
+#### Search Service (`lib/ml-search-service.ts`)
+- Loads and caches ML data from both forevershining and headstonesdesigner
+- **Text search**: Tokenized multi-word scoring against design titles, descriptions, ml_tags
+- **Category filters**: Type, Style, Motif dropdown filtering
+- **TF.js ranking**: Lazy-loads model, runs inference for similarity scoring
+- **Feature toggles**: Filter by photo/motif/addition presence
+
+#### UI Components
+- `components/DesignSmartSearch.tsx` — Search bar + Type/Style/Motif filter dropdowns + feature toggles
+- `app/designs/DesignsPageClient.tsx` — Integrated smart search with debounced queries, ML tag badges, AI Recommended markers, pricing from ml.json
+- `components/LoadDesignButton.tsx` — ML filter dropdowns, enhanced search with ml_tags, motif tag badges
+
+#### Dependencies Added
+- `@tensorflow/tfjs` (v4.22.0) — TensorFlow.js for browser-side model inference
+
+### 📌 Next Steps
+
+1. **Continue testing additional legacy designs** — verify more designs across both systems
+2. **Dead code cleanup** (low priority): remove `inferLegacySavedDprHeuristic()`, `inferLegacySavedDprDeterministic()`, `shouldTreatCssStageAsBufferPx`
+3. **Re-run batch converter with `--include-photos`** to populate `photos[]` in canonical JSONs
+4. **Update Check Price detail modal** — addition price column still shows "$75.00" (should use dynamic pricing)
+5. **Script-based ML categorization** — for auto-categorizing newly downloaded saved designs from all 3 sites
+
+---
+
+## Current Status (2026-03-30) — Legacy Design Loading
 
 ### ✅ Legacy Design Loading — Major Fixes (16+ issues resolved)
 
@@ -2235,6 +2330,29 @@ Pricing is based on the `quantity_type` specified in the XML catalog for each pr
 - **Formula**: `quantity = widthMm + heightMm`
 - **Model**: `"143.00+0.4273($q-160)"` (base price + rate per mm over threshold)
 
+**Inscription Pricing** (`xml/en_EN/inscriptions.xml`):
+- **Quantity Type**: `"Height"` — uses `sizeMm` (font height in mm) as quantity
+- **Color-aware tiers**: Prices have `note` field (Gold Gilding, Silver Gilding, Paint Fill)
+- **Product examples**: Product 16 (Free/Black Granite), Product 41/42 (Steel), Product 78 (Bronze), Product 125 (Traditional Engraved), Product 1701 (Enamel/Free)
+- **Store field**: `inscriptionPriceModel` set during `setProductId()`, `inscriptionCost` recalculated via `calculateInscriptionCost()`
+
+**Motif Pricing** (`xml/en_EN/motifs.xml` via `lib/motif-pricing.ts`):
+- **Quantity Type**: Height-based — uses motif `heightMm`
+- **Color-aware**: Gold Gilding, Silver Gilding, Paint Fill tiers
+- **Laser exemption**: Laser-etched products have free motifs (`isLaser = true`)
+- **Store field**: `motifPriceModel` fetched on product load, `motifCost` recalculated via `calculateMotifCost()`
+
+**Image Pricing** (`xml/en_EN/images.xml` via `lib/image-pricing.ts`):
+- **Quantity Type**: `"Width + Height"` — image widthMm + heightMm
+- **Color mode**: BW vs Color tiers (note field matching)
+- **Size variants**: `getImageSizeOption(typeId, sizeVariant)` returns predefined widths/heights
+- **Store field**: `imageCost` recalculated via `calculateImageCost()` (async — fetches XML on first call)
+
+**Addition Pricing** (`xml/en_EN/motifs-biondan.xml` pre-computed in `_additions-loader.ts`):
+- **Pre-computed**: `FALLBACK_SIZES[sourceId][variant-1].retailPrice` — retail price per product + size variant
+- **Formula**: XML formula × retail_multiplier (e.g., `76.11+0($q-245)` × 2.6 = $197.89)
+- **Store field**: `additionCost` recalculated via `calculateAdditionCost()`
+
 ### Price Calculation
 ```typescript
 function calculatePrice(priceModel: PriceModel, quantity: number): number {
@@ -2257,6 +2375,15 @@ function calculatePrice(priceModel: PriceModel, quantity: number): number {
   return price * applicablePrice.retailMultiplier;
 }
 ```
+
+### Total Price Composition (Price Pill)
+The floating price pill at the bottom of the 3D canvas (`ThreeScene.tsx`) shows:
+```
+totalPrice = headstonePrice + basePrice + ledgerPrice + kerbsetPrice
+           + inscriptionCost + motifCost + imageCost + additionCost
+```
+
+Each `*Cost` field is a reactive store value updated via `calculate*Cost()` when items change.
 
 ---
 
@@ -3400,7 +3527,7 @@ Custom Inscriptions: 9 inscriptions (clickable)
 2. **Size**: Type (statue, vase, application)
 3. **Color**: "-" (not applicable)
 4. **(Empty)**: Alignment column
-5. **Price**: Individual addition price ($75.00)
+5. **Price**: Individual addition price (from `FALLBACK_SIZES[sourceId][sizeVariant-1].retailPrice`)
 
 ### Modal Styling
 - **Dark gradient theme**: Matches Check Price page design
@@ -3566,6 +3693,39 @@ const mappedMaterials = materials.map(mapMaterialFromDB);
 // components/MaterialSelector.tsx
 const materials = useHeadstoneStore(state => state.materials);
 ```
+
+---
+
+## ML Smart Search
+
+### Overview
+The ML smart search system provides intelligent filtering and ranking for the `/designs` gallery and the Load Design modal. It combines text search, category filtering, and TF.js model-based ranking.
+
+### Data Sources
+- **`public/ml/forevershining/ml.json`** — 3,021 design entries with classification labels
+- **`public/ml/headstonesdesigner/ml.json`** — 1,100 design entries
+- Each entry contains: `ml_style`, `ml_type`, `ml_motif`, `ml_tags` (comma-separated keywords)
+- Categories: 6 types (Headstone, Plaque, Mini Headstone, Urn, Pet Headstone, Pet Plaque), 5 styles (Laser Etched, Traditional Engraved, Bronze, Stainless Steel, Full Color), 40+ motif categories
+
+### TF.js Model
+- **Topology**: `public/ml/forevershining/my-model.json`
+- **Weights**: `public/ml/forevershining/my-model.weights.bin` (626,672 bytes)
+- **Architecture**: Sequential — Dense(3→50, L2 0.01) → LeakyReLU → Dropout(0.3) → Dense(50→50) → LeakyReLU → Dropout(0.3) → Dense(50→3018, softmax)
+- **Input**: Normalized indices `[type_idx/types_count, style_idx/styles_count, motif_idx/motifs_count]`
+- **Output**: 3,018 design similarity scores
+- **Usage**: Lazy-loaded via `@tensorflow/tfjs` when user enables ML ranking
+
+### Key Files
+- **`lib/ml-search-service.ts`** — Data loading, caching, text search (tokenized multi-word scoring), category filtering, TF.js model inference
+- **`components/DesignSmartSearch.tsx`** — Search bar + Type/Style/Motif filter dropdowns + feature toggles (Has Photo, Has Motifs, Has Additions)
+- **`app/designs/DesignsPageClient.tsx`** — Gallery page with integrated smart search, ML tag badges, AI Recommended markers
+- **`components/LoadDesignButton.tsx`** — Load Design modal with ML filter dropdowns and tag display
+
+### Search Pipeline
+1. **Text search**: Splits query into tokens, scores each design against title, description, and `ml_tags`
+2. **Category filters**: Narrows results by `ml_type`, `ml_style`, `ml_motif` dropdowns
+3. **Feature toggles**: Boolean filters for designs with photos, motifs, or additions
+4. **TF.js ranking** (optional): Runs model inference to rank remaining results by similarity score
 
 ---
 
