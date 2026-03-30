@@ -630,7 +630,9 @@ export default function DesignerNav() {
                 Addition Price
               </div>
               <div className="text-2xl font-semibold text-white">
-                $75.00
+                {activeAdditionSize?.retailPrice
+                  ? `$${activeAdditionSize.retailPrice.toFixed(2)}`
+                  : 'N/A'}
               </div>
             </div>
 
@@ -1524,7 +1526,21 @@ export default function DesignerNav() {
           ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
           : 0;
 
-      const additionsPrice = state.selectedAdditions.length * 75;
+      // Calculate addition prices from size variant data
+      let additionsPrice = 0;
+      if (state.selectedAdditions && state.selectedAdditions.length > 0) {
+        additionsPrice = state.selectedAdditions.reduce((total, addId) => {
+          const offset = state.additionOffsets?.[addId];
+          const baseId = addId.split('_')[0];
+          const addition = (data.additions || []).find((a) => a.id === baseId);
+          if (addition?.sizes?.length) {
+            const variant = Math.max(1, Math.min(addition.sizes.length, Math.round(offset?.sizeVariant ?? 1)));
+            const sizeData = addition.sizes[variant - 1] ?? addition.sizes[0];
+            return total + (sizeData?.retailPrice ?? 0);
+          }
+          return total;
+        }, 0);
+      }
 
       // Calculate motif prices (same pricing model used by Check Price)
       let motifsPrice = 0;
@@ -1545,10 +1561,29 @@ export default function DesignerNav() {
         }, 0);
       }
 
+      // Calculate inscription prices from price model
       const validInscriptions = (state.inscriptions || []).filter((line) =>
         line.text?.trim(),
       );
-      const inscriptionPrice = validInscriptions.length * 50;
+      let inscriptionPrice = 0;
+      if (state.inscriptionPriceModel && validInscriptions.length > 0) {
+        inscriptionPrice = validInscriptions.reduce((total, line) => {
+          const qty = line.sizeMm;
+          const colorName = data.colors.find((c: { hex: string; name: string }) => c.hex === line.color)?.name;
+          let mappedNote = colorName;
+          if (colorName && !['Gold Gilding', 'Silver Gilding'].includes(colorName)) {
+            mappedNote = 'Paint Fill';
+          }
+          const tier = state.inscriptionPriceModel!.prices.find(
+            (p) => qty >= p.startQuantity && qty <= p.endQuantity && p.note === mappedNote,
+          ) ?? state.inscriptionPriceModel!.prices.find(
+            (p) => qty >= p.startQuantity && qty <= p.endQuantity,
+          );
+          if (!tier) return total;
+          const price = calculatePrice({ ...state.inscriptionPriceModel!, prices: [tier] }, qty);
+          return total + price;
+        }, 0);
+      }
       const imagePrice = 0; // Image pricing is computed on Check Price save path
       const subtotal =
         headstonePrice +

@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
+import { calculatePrice } from '#/lib/xml-parser';
 
 const FONTS = data.fonts;
 
@@ -19,6 +20,7 @@ export default function InscriptionEditPanel() {
   const activeInscriptionText = useHeadstoneStore((s) => s.activeInscriptionText);
   const setActiveInscriptionText = useHeadstoneStore((s) => s.setActiveInscriptionText);
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
+  const inscriptionPriceModel = useHeadstoneStore((s) => s.inscriptionPriceModel);
 
   const active = lines.find((l) => l.id === selectedInscriptionId) ?? null;
   const [selectedFont, setSelectedFont] = React.useState(active?.font || 'Franklin Gothic');
@@ -83,7 +85,23 @@ export default function InscriptionEditPanel() {
             Inscription Price
           </div>
           <div className="text-2xl font-semibold text-white">
-            $50.00
+            {(() => {
+              if (!inscriptionPriceModel || !showInscriptionColor) return 'Free';
+              const quantity = active.sizeMm;
+              const colorName = data.colors.find((c) => c.hex === active.color)?.name;
+              let mappedNote = colorName;
+              if (colorName && !['Gold Gilding', 'Silver Gilding'].includes(colorName)) {
+                mappedNote = 'Paint Fill';
+              }
+              const tier = inscriptionPriceModel.prices.find(
+                (p) => quantity >= p.startQuantity && quantity <= p.endQuantity && p.note === mappedNote,
+              ) ?? inscriptionPriceModel.prices.find(
+                (p) => quantity >= p.startQuantity && quantity <= p.endQuantity,
+              );
+              if (!tier) return 'Free';
+              const price = calculatePrice({ ...inscriptionPriceModel, prices: [tier] }, quantity);
+              return price > 0 ? `$${price.toFixed(2)}` : 'Free';
+            })()}
           </div>
         </div>
       )}
