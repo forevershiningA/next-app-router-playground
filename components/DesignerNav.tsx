@@ -605,26 +605,7 @@ export default function DesignerNav() {
     return (
       <div className="flex h-full flex-col gap-4">
         {hasActiveAddition ? (
-          <div className="space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-6 shadow-xl backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-300">
-                Selected:{' '}
-                <span className="font-semibold text-white">
-                  {selectedAdditionId}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedAdditionId(null);
-                  setActivePanel(null);
-                }}
-                className="text-xs text-white/60 transition-colors hover:text-white"
-              >
-                Clear selection
-              </button>
-            </div>
-
+          <div className="space-y-4">
             <div className="rounded-xl border border-white/15 bg-white/5 p-4">
               <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
                 Addition Price
@@ -636,10 +617,10 @@ export default function DesignerNav() {
               </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex space-x-2">
               <button
                 type="button"
-                className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-700"
+                className="flex-1 cursor-pointer rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors shadow-md"
                 onClick={() =>
                   selectedAdditionId && duplicateAddition(selectedAdditionId)
                 }
@@ -648,13 +629,11 @@ export default function DesignerNav() {
               </button>
               <button
                 type="button"
-                className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors shadow-md"
                 onClick={() => {
                   if (selectedAdditionId) {
                     removeAddition(selectedAdditionId);
                     setSelectedAdditionId(null);
-                    // Keep activePanel as 'addition' to show the addition catalog
-                    // Don't set to null so user can immediately add another addition
                   }
                 }}
               >
@@ -1001,26 +980,7 @@ export default function DesignerNav() {
     return (
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
-          <div className="space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-6 shadow-xl backdrop-blur-sm">
-            <div className="flex items-center justify-between">
-              <div className="text-sm text-gray-300">
-                Selected:{' '}
-                <span className="font-semibold text-white">
-                  {selectedMotifId}
-                </span>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setSelectedMotifId(null);
-                  setActivePanel(null);
-                }}
-                className="text-xs text-white/60 transition-colors hover:text-white"
-              >
-                Clear selection
-              </button>
-            </div>
-
+          <div className="space-y-4">
             {motifPriceValue !== null && (
               <div className="rounded-xl border border-white/15 bg-white/5 p-4">
                 <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
@@ -1032,10 +992,10 @@ export default function DesignerNav() {
               </div>
             )}
 
-            <div className="flex gap-2">
+            <div className="flex space-x-2">
               <button
                 type="button"
-                className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-violet-700"
+                className="flex-1 cursor-pointer rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors shadow-md"
                 onClick={() =>
                   selectedMotifId && duplicateMotif(selectedMotifId)
                 }
@@ -1044,7 +1004,7 @@ export default function DesignerNav() {
               </button>
               <button
                 type="button"
-                className="flex-1 rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700"
+                className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors shadow-md"
                 onClick={() => {
                   if (selectedMotifId) {
                     removeMotif(selectedMotifId);
