@@ -306,6 +306,12 @@ export type HeadstoneState = {
   motifCost: number;
   calculateMotifCost: () => void;
 
+  imageCost: number;
+  calculateImageCost: () => Promise<void>;
+
+  additionCost: number;
+  calculateAdditionCost: () => void;
+
   selectedAdditionId: string | null;
   additionRefs: Record<string, React.RefObject<Group | null>>;
   additionOffsets: Record<

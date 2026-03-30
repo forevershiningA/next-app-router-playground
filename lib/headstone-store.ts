@@ -22,6 +22,11 @@ import {
   calculateMotifPrice,
 } from '#/lib/motif-pricing';
 import {
+  fetchImagePricing,
+  calculateImagePrice,
+} from '#/lib/image-pricing';
+import { getImageSizeOption } from '#/lib/image-size-config';
+import {
   DEFAULT_TEX,
   MAX_HEADSTONE_DIM,
   MAX_INSCRIPTION_SIZE_MM,
@@ -252,6 +257,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         },
       };
     });
+    setTimeout(() => get().calculateAdditionCost(), 0);
   },
   removeAddition: (id) => {
     set((s) => {
@@ -268,6 +274,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedAdditionId: s.selectedAdditionId === id ? null : s.selectedAdditionId,
       };
     });
+    setTimeout(() => get().calculateAdditionCost(), 0);
   },
   hasStatue: () => {
     const { selectedAdditions, additionOffsets } = get();
@@ -393,12 +400,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       ],
       cropCanvasData: null,
     }));
+    setTimeout(() => get().calculateImageCost(), 0);
   },
   removeImage: (id) => {
     set((s) => ({
       selectedImages: s.selectedImages.filter((img) => img.id !== id),
       selectedImageId: s.selectedImageId === id ? null : s.selectedImageId,
     }));
+    setTimeout(() => get().calculateImageCost(), 0);
   },
   duplicateImage: (id) => {
     set((s) => {
@@ -422,6 +431,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedImageId: newImage.id,
       };
     });
+    setTimeout(() => get().calculateImageCost(), 0);
   },
   updateImagePosition: (id, xPos, yPos) => {
     set((s) => ({
@@ -436,6 +446,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         img.id === id ? { ...img, widthMm, heightMm } : img
       ),
     }));
+    setTimeout(() => get().calculateImageCost(), 0);
   },
   updateImageSizeVariant: (id, sizeVariant) => {
     set((s) => ({
@@ -443,6 +454,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         img.id === id ? { ...img, sizeVariant } : img
       ),
     }));
+    setTimeout(() => get().calculateImageCost(), 0);
   },
   updateImageRotation: (id, rotationZ) => {
     set((s) => ({
@@ -1159,6 +1171,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   motifPriceModel: null,
   motifCost: 0,
 
+  imageCost: 0,
+  additionCost: 0,
+
   selectedAdditionId: null,
   additionRefs: {},
   // Sample template: Pre-positioned additions for beautiful composition
@@ -1437,6 +1452,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         },
       };
     });
+    setTimeout(() => get().calculateAdditionCost(), 0);
   },
   duplicateAddition: (id: string) => {
     const { additionOffsets } = get();
@@ -1476,6 +1492,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedAdditionId: instanceId,
       };
     });
+    setTimeout(() => get().calculateAdditionCost(), 0);
   },
 
   setSelectedMotifId: (id) => {
@@ -1655,6 +1672,51 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
 
     set({ motifCost: totalCost });
+  },
+
+  calculateImageCost: async () => {
+    const { selectedImages } = get();
+    if (!selectedImages.length) {
+      set({ imageCost: 0 });
+      return;
+    }
+
+    try {
+      const pricingMap = await fetchImagePricing();
+      let totalCost = 0;
+      selectedImages.forEach((img) => {
+        const product = pricingMap[String(img.typeId)];
+        if (!product) return;
+        const sizeOpt = getImageSizeOption(img.typeId, img.sizeVariant);
+        const w = sizeOpt?.width ?? Math.round(img.widthMm || 0);
+        const h = sizeOpt?.height ?? Math.round(img.heightMm || 0);
+        totalCost += calculateImagePrice(product, w, h, img.colorMode);
+      });
+      set({ imageCost: totalCost });
+    } catch {
+      set({ imageCost: 0 });
+    }
+  },
+
+  calculateAdditionCost: () => {
+    const { selectedAdditions, additionOffsets } = get();
+    if (!selectedAdditions.length) {
+      set({ additionCost: 0 });
+      return;
+    }
+
+    let totalCost = 0;
+    selectedAdditions.forEach((addId) => {
+      const offset = additionOffsets[addId];
+      const baseId = addId.split('_')[0];
+      const addition = (data.additions || []).find((a) => a.id === baseId);
+      if (addition?.sizes?.length) {
+        const variant = Math.max(1, Math.min(addition.sizes.length, Math.round(offset?.sizeVariant ?? 1)));
+        const sizeData = addition.sizes[variant - 1] ?? addition.sizes[0];
+        totalCost += sizeData?.retailPrice ?? 0;
+      }
+    });
+    set({ additionCost: totalCost });
   },
 
   /* router injection */

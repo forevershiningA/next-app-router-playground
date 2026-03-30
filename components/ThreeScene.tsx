@@ -63,6 +63,8 @@ function ProductNameHeader() {
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
+  const imageCost = useHeadstoneStore((s) => s.imageCost);
+  const additionCost = useHeadstoneStore((s) => s.additionCost);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const unitSystem = useUnitSystem();
   const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(null);
@@ -176,7 +178,9 @@ function ProductNameHeader() {
       ledgerPrice +
       kerbsetPrice +
       inscriptionCost +
-      motifCost
+      motifCost +
+      imageCost +
+      additionCost
     );
   }, [
     activeCatalog,
@@ -184,6 +188,8 @@ function ProductNameHeader() {
     baseQuantity,
     inscriptionCost,
     motifCost,
+    imageCost,
+    additionCost,
     showBase,
     selectedShape,
     widthMm,
