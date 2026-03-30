@@ -1124,7 +1124,8 @@ export async function loadCanonicalDesignIntoEditor(
   };
 
   if (headstone?.texture) {
-    enforceTexture('headstone', headstone.texture);
+    const mappedHeadstoneTexture = mapTexture(headstone.texture, String(productId ?? ''));
+    enforceTexture('headstone', mappedHeadstoneTexture);
   } else {
     console.warn('[loadCanonical] NO headstone.texture found in canonical data');
   }
@@ -1141,7 +1142,8 @@ export async function loadCanonicalDesignIntoEditor(
       store.setBaseThickness(base.depth_mm);
     }
     if (base.texture) {
-      enforceTexture('base', base.texture);
+      const mappedBaseTexture = mapTexture(base.texture, String(productId ?? ''));
+      enforceTexture('base', mappedBaseTexture);
     }
   } else {
     store.setShowBase(false);
