@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { AdditionData } from '#/lib/xml-parser';
 import Image from 'next/image';
 import { fetchMaskMetrics } from '#/lib/mask-metrics';
-import { getFlexibleImageBounds, getImageSizeOptions } from '#/lib/image-size-config';
+import { getFlexibleImageBounds, getImageSizeOptions, getImageSizeOption } from '#/lib/image-size-config';
 import { MASK_OPTIONS, getMaskAspectRatio, getMaskUrl } from '#/lib/image-mask';
 import { useImageCropState } from './useImageCropState';
+import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 
 interface ImageSelectorProps {
   onImageSelect?: (imageType: AdditionData) => void;
@@ -81,6 +82,12 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const addImage = useHeadstoneStore((s) => s.addImage);
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
+
+  // Image pricing state
+  const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
+  useEffect(() => {
+    fetchImagePricing().then(setImagePricingData).catch(() => {});
+  }, []);
 
   // Callback to update crop area from CropCanvas
   const updateCropAreaCallback = (newCropArea: typeof cropArea) => {
@@ -575,6 +582,24 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             Clear selection
           </button>
         </div>
+
+        {(() => {
+          const product = imagePricingData?.[String(selectedImage.typeId)];
+          const sizeOpt = getImageSizeOption(selectedImage.typeId, currentSizeVariant);
+          const w = sizeOpt?.width ?? Math.round(selectedImage.widthMm || 0);
+          const h = sizeOpt?.height ?? Math.round(selectedImage.heightMm || 0);
+          const price = product ? calculateImagePrice(product, w, h, selectedImage.colorMode) : null;
+          return price !== null ? (
+            <div className="rounded-xl border border-white/15 bg-white/5 p-4">
+              <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+                Image Price
+              </div>
+              <div className="text-2xl font-semibold text-white">
+                ${price.toFixed(2)}
+              </div>
+            </div>
+          ) : null;
+        })()}
         
         <div className="flex gap-2">
           <button

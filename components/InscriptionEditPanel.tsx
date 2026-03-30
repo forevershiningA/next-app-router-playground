@@ -77,6 +77,17 @@ export default function InscriptionEditPanel() {
         />
       </div>
 
+      {active && (
+        <div className="rounded-xl border border-white/15 bg-white/5 p-4">
+          <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+            Inscription Price
+          </div>
+          <div className="text-2xl font-semibold text-white">
+            $50.00
+          </div>
+        </div>
+      )}
+
       <div className="flex space-x-2">
         {active ? (
           <>

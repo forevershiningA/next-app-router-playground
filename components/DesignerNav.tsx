@@ -625,6 +625,15 @@ export default function DesignerNav() {
               </button>
             </div>
 
+            <div className="rounded-xl border border-white/15 bg-white/5 p-4">
+              <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+                Addition Price
+              </div>
+              <div className="text-2xl font-semibold text-white">
+                $75.00
+              </div>
+            </div>
+
             <div className="flex gap-2">
               <button
                 type="button"
