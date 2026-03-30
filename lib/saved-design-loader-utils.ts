@@ -597,12 +597,17 @@ const MATERIAL_TEXTURES: Record<string, string> = {
   'blue-pearl': '/textures/forever/l/Blue-Pearl.webp',
   'blue pearl': '/textures/forever/l/Blue-Pearl.webp',
   
+  // Glory Gold Spots (material #17 — dark granite with golden speckle)
+  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.webp',
+  'glory gold spots': '/textures/forever/l/Glory-Black-1.webp',
   // Glory Black (for laser etched - IDs 18 and 19)
   'glory-black': '/textures/forever/l/Glory-Black-2.webp',
   'glory black': '/textures/forever/l/Glory-Black-2.webp',
-  'glory-gold-spots': '/textures/forever/l/Glory-Gold-Spots.webp',
-  'glory gold spots': '/textures/forever/l/Glory-Gold-Spots.webp',
   
+  // White Carrara (legacy path includes dimensions suffix)
+  'white-carrara': '/textures/forever/l/White-Carrara.webp',
+  'white carrara': '/textures/forever/l/White-Carrara.webp',
+
   // Other common materials
   'african-black': '/textures/forever/l/African-Black.webp',
   'noble-black': '/textures/forever/l/Noble-Black.webp',
@@ -638,8 +643,12 @@ function mapTexture(texturePath: string, productId: string): string {
     return BRONZE_TEXTURES[0].img;
   }
   
-  // For headstones, check material IDs 18 or 19 (Glory Black)
-  if (texturePath.includes('18') || texturePath.includes('19') || 
+  // For headstones, map numbered forevershining textures to named materials
+  if (texturePath.includes('/17.') || texturePath.includes('/17"') ||
+      texturePath.endsWith('17.jpg') || texturePath.endsWith('17.webp')) {
+    return MATERIAL_TEXTURES['glory-gold-spots'];
+  }
+  if (texturePath.includes('/18.') || texturePath.includes('/19.') ||
       texturePath.includes('Glory-Black')) {
     return MATERIAL_TEXTURES['glory-black'];
   }
@@ -658,16 +667,18 @@ function mapTexture(texturePath: string, productId: string): string {
     }
   }
   
-  // If path already looks valid, convert .jpg to .webp if needed
+  // If path already looks valid, strip dimension suffixes (e.g. -600-x-600) and convert .jpg to .webp
   if (texturePath.startsWith('/textures/')) {
-    return texturePath.replace(/\.jpg$/i, '.webp');
+    return texturePath
+      .replace(/-\d+-x-\d+/i, '')
+      .replace(/\.jpg$/i, '.webp');
   }
   
   // Handle legacy paths like "src/granites/forever2/l/Blue-Pearl.jpg"
   if (texturePath.includes('granites/forever') || texturePath.includes('forever2')) {
     const match = texturePath.match(/[\/\\]([\w-]+)\.(jpg|webp)$/i);
     if (match) {
-      const materialName = match[1];
+      const materialName = match[1].replace(/-\d+-x-\d+/i, '');
       return `/textures/forever/l/${materialName}.webp`;
     }
   }
@@ -1034,7 +1045,7 @@ export async function loadCanonicalDesignIntoEditor(
       ? 'invert-legacy-bools'
       : 'preserve');
   const needsLegacyStageCompensation = headstonePlacement === 'legacy-stage-offset';
-  void flipMode;
+  const invertFlips = flipMode === 'invert-legacy-bools';
   let canonicalOutOfBounds = () => null as string | null;
 
   if (clearExisting) {
@@ -1092,21 +1103,30 @@ export async function loadCanonicalDesignIntoEditor(
       ? () => useHeadstoneStore.getState().headstoneMaterialUrl
       : () => useHeadstoneStore.getState().baseMaterialUrl;
 
+    // Signal ShapeSwapper that this is a material change so it updates visibleTex
+    store.setIsMaterialChange(true);
     setter(texture);
 
     if (attempt >= 5) {
+      // Clear flag after final attempt
+      setTimeout(() => store.setIsMaterialChange(false), 300);
       return;
     }
 
     setTimeout(() => {
       if (getter() !== texture) {
         enforceTexture(type, texture, attempt + 1);
+      } else {
+        // Texture is set, clear the flag after a short delay
+        setTimeout(() => store.setIsMaterialChange(false), 300);
       }
     }, 150 + attempt * 75);
   };
 
   if (headstone?.texture) {
     enforceTexture('headstone', headstone.texture);
+  } else {
+    console.warn('[loadCanonical] NO headstone.texture found in canonical data');
   }
 
   if (base) {
@@ -1223,33 +1243,27 @@ export async function loadCanonicalDesignIntoEditor(
   const authoringCanvasHeightPx = Math.max(canonicalViewportHeightCssPx || 1, 1);
   const totalMonumentHeightMm = Math.max(canonicalHeadstoneHeightMm + Math.max(canonicalBaseHeightMm, 0), 1);
   const legacyUsePx = Math.min(safeViewportWidthPx, safeViewportHeightPx) * 0.975;
+  // Legacy CreateJS draws the monument within min(w,h)*DPR*0.975 px (uniform scale).
+  // The headstone and base each take their proportional share of that draw area.
   const legacyHeadstoneDrawHeightPx =
-    useAuthoringDesignSpaceMapping
-      ? sourceStageHeightPx
-      : canonicalHeadstoneHeightMm > 0
-        ? legacyUsePx * (canonicalHeadstoneHeightMm / totalMonumentHeightMm)
-        : safeViewportHeightPx;
+    canonicalHeadstoneHeightMm > 0
+      ? legacyUsePx * (canonicalHeadstoneHeightMm / totalMonumentHeightMm)
+      : safeViewportHeightPx;
   const legacyBaseDrawHeightPx =
-    useAuthoringDesignSpaceMapping
-      ? sourceStageHeightPx
-      : canonicalBaseHeightMm > 0
-        ? legacyUsePx * (canonicalBaseHeightMm / totalMonumentHeightMm)
-        : safeViewportHeightPx;
+    canonicalBaseHeightMm > 0
+      ? legacyUsePx * (canonicalBaseHeightMm / totalMonumentHeightMm)
+      : safeViewportHeightPx;
   const legacyHeadstoneDrawWidthPx =
-    useAuthoringDesignSpaceMapping
-      ? sourceStageWidthPx
-      : canonicalHeadstoneWidthMm > 0 && canonicalHeadstoneHeightMm > 0
-        ? Math.min(
-            legacyUsePx,
-            legacyHeadstoneDrawHeightPx * (canonicalHeadstoneWidthMm / canonicalHeadstoneHeightMm),
-          )
-        : safeViewportWidthPx;
+    canonicalHeadstoneWidthMm > 0 && canonicalHeadstoneHeightMm > 0
+      ? Math.min(
+          legacyUsePx,
+          legacyHeadstoneDrawHeightPx * (canonicalHeadstoneWidthMm / canonicalHeadstoneHeightMm),
+        )
+      : safeViewportWidthPx;
   const legacyBaseDrawWidthPx =
-    useAuthoringDesignSpaceMapping
-      ? sourceStageWidthPx
-      : canonicalBaseWidthMm > 0 && canonicalBaseHeightMm > 0
-        ? Math.min(legacyUsePx, legacyBaseDrawHeightPx * (canonicalBaseWidthMm / canonicalBaseHeightMm))
-        : safeViewportWidthPx;
+    canonicalBaseWidthMm > 0 && canonicalBaseHeightMm > 0
+      ? Math.min(legacyUsePx, legacyBaseDrawHeightPx * (canonicalBaseWidthMm / canonicalBaseHeightMm))
+      : safeViewportWidthPx;
 
   const HEADSTONE_MM_PER_PX_X_CANONICAL =
     canonicalHeadstoneWidthMm > 0
@@ -1288,18 +1302,28 @@ export async function loadCanonicalDesignIntoEditor(
     ? designData.legacy?.raw.find((item) => item?.type === 'Headstone' || item?.type === 'Plaque')
     : null;
   const legacyInscriptionFontPxByCanonicalId = new Map<string, number>();
+  const legacyItemPartByCanonicalId = new Map<string, string>();
   if (Array.isArray(designData.legacy?.raw)) {
-    designData.legacy.raw
-      .filter((item) => item?.type === 'Inscription')
-      .forEach((item) => {
-        const itemId = Number(item.itemID);
+    designData.legacy.raw.forEach((item) => {
+      if (!item) return;
+      const itemId = Number(item.itemID);
+      const partLower = typeof item.part === 'string' ? item.part.toLowerCase() : '';
+      if (Number.isFinite(itemId) && partLower) {
+        if (item.type === 'Inscription') {
+          legacyItemPartByCanonicalId.set(`insc-${itemId}`, partLower);
+        } else if (item.type === 'Motif') {
+          legacyItemPartByCanonicalId.set(`motif-${itemId}`, partLower);
+        }
+      }
+      if (item.type === 'Inscription') {
         const fontStr = typeof item.font === 'string' ? item.font : '';
         const match = fontStr.match(/([\d.]+)px/i);
         const parsed = match ? Number(match[1]) : Number.NaN;
         if (Number.isFinite(itemId) && Number.isFinite(parsed) && parsed > 0) {
           legacyInscriptionFontPxByCanonicalId.set(`insc-${itemId}`, parsed);
         }
-      });
+      }
+    });
   }
   const legacyInitWidth = Number(
     legacyHeadstoneItem?.init_width ?? canonicalViewportWidthCssPx ?? Number.NaN,
@@ -1307,7 +1331,9 @@ export async function loadCanonicalDesignIntoEditor(
   const legacyInitHeight = Number(
     legacyHeadstoneItem?.init_height ?? canonicalViewportHeightCssPx ?? Number.NaN,
   );
-  const legacySavedDprRaw = Number(legacyHeadstoneItem?.dpr ?? Number.NaN);
+  const legacySavedDprRaw = Number(
+    legacyHeadstoneItem?.dpr ?? designData.scene?.viewportPx?.dpr ?? Number.NaN,
+  );
   const hasLegacySavedDpr = Number.isFinite(legacySavedDprRaw) && legacySavedDprRaw > 0;
   const applyLegacyStageCompensation =
     needsLegacyStageCompensation && !hasLegacySavedDpr;
@@ -1428,6 +1454,11 @@ export async function loadCanonicalDesignIntoEditor(
   // Use init dimensions directly for position conversion whenever available.
   // Legacy positions are center-relative offsets in the DPR-scaled canvas
   // (init_width × DPR by init_height × DPR physical pixels).
+  const hasLegacyInitViewport =
+    Number.isFinite(legacyInitWidth) &&
+    legacyInitWidth > 0 &&
+    Number.isFinite(legacyInitHeight) &&
+    legacyInitHeight > 0;
   const useDirectCssStageDesktopMapping =
     positionMode === 'legacy-stage-px' &&
     hasLegacyInitViewport;
@@ -1474,18 +1505,18 @@ export async function loadCanonicalDesignIntoEditor(
       : useBase
         ? BASE_MM_PER_PX_Y_CANONICAL
         : HEADSTONE_MM_PER_PX_Y_CANONICAL;
-    const hasLegacyInitViewport =
-      Number.isFinite(legacyInitWidth) &&
-      legacyInitWidth > 0 &&
-      Number.isFinite(legacyInitHeight) &&
-      legacyInitHeight > 0;
+    // Legacy CreateJS uses uniform scaling: the monument fits inside
+    // min(canvasW, canvasH) * DPR * 0.975 px. Use that for both X and Y.
+    const legacyMonumentDrawPx =
+      Math.min(legacyInitWidth, legacyInitHeight) * effectiveLegacySavedDpr * 0.975;
+    const uniformMmPerPx = totalMonumentHeightMm / Math.max(legacyMonumentDrawPx, 1);
     const mmPerPxX =
       useDirectCssStageDesktopMapping && !useLedger && hasLegacyInitViewport
-        ? (useBase ? canonicalBaseWidthMm : canonicalHeadstoneWidthMm) / (legacyInitWidth * effectiveLegacySavedDpr)
+        ? uniformMmPerPx
         : mmPerPxXDefault;
     const mmPerPxY =
       useDirectCssStageDesktopMapping && !useLedger && hasLegacyInitViewport
-        ? (useBase ? canonicalBaseHeightMm : canonicalHeadstoneHeightMm) / (legacyInitHeight * effectiveLegacySavedDpr)
+        ? uniformMmPerPx
         : mmPerPxYDefault;
 
     if (typeof position?.x_mm === 'number' || typeof position?.y_mm === 'number') {
@@ -1545,6 +1576,14 @@ export async function loadCanonicalDesignIntoEditor(
         : undefined) ??
       font?.size_px ??
       40;
+    // Forevershining legacy stores font sizes in mm (product catalog units).
+    // If the CSS-px lookup from legacy.raw succeeded, sizePx is a genuine CSS value
+    // and the normal conversion is correct. But if we fell through to font.size_px
+    // from a pilot-era conversion, size_px may actually be the mm value.
+    const gotLegacyCssPx = canonicalInscriptionId
+      ? legacyInscriptionFontPxByCanonicalId.has(canonicalInscriptionId)
+      : false;
+    if (isForevershining && !gotLegacyCssPx) return sizePx;
     // Universal authoring-space pipeline: keep saved font px as-is (CSS px),
     // then convert once using surface mm-per-px mapping.
     const mmPerPxY =
@@ -1562,6 +1601,9 @@ export async function loadCanonicalDesignIntoEditor(
   ) {
     if (typeof motif?.height_mm === 'number') return motif.height_mm;
     if (typeof motif?.height_px === 'number') {
+      // Forevershining legacy stores motif heights in mm (product catalog units),
+      // not CSS pixels. The converter misnamed them as height_px.
+      if (isForevershining) return motif.height_px;
       const mmPerPxY =
         targetSurface === 'ledger'
           ? LEDGER_MM_PER_PX_Z_CANONICAL
@@ -1759,7 +1801,23 @@ export async function loadCanonicalDesignIntoEditor(
   (designData.elements?.inscriptions ?? []).forEach((inscription, index) => {
     const id = inscription.id ?? `insc-${index}`;
     const text = decodeHtmlEntities(inscription.text ?? '');
-    const targetSurface = canonicalSurfaceTarget(inscription.surface);
+    let targetSurface = canonicalSurfaceTarget(inscription.surface);
+    let { xMm, yMm } = convertPositionToMm(inscription.position, targetSurface);
+
+    // Infer base target from legacy part field or position below headstone
+    if (
+      targetSurface === 'headstone' &&
+      positionMode === 'legacy-stage-px' &&
+      HEADSTONE_HALF_MM > 0 &&
+      BASE_HALF_MM > 0
+    ) {
+      const legacyPart = legacyItemPartByCanonicalId.get(id);
+      if (legacyPart === 'base' || yMm < -(HEADSTONE_HALF_MM * 1.02)) {
+        targetSurface = 'base';
+        ({ xMm, yMm } = convertPositionToMm(inscription.position, 'base'));
+      }
+    }
+
     const scaleX =
       targetSurface === 'base'
         ? BASE_X_SCALE
@@ -1772,7 +1830,6 @@ export async function loadCanonicalDesignIntoEditor(
         : targetSurface === 'ledger'
           ? 1
           : HEADSTONE_Y_SCALE;
-    const { xMm, yMm } = convertPositionToMm(inscription.position, targetSurface);
     const xPos = xMm * scaleX * GLOBAL_LAYOUT_SCALE;
     const baseYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE;
     const baseSize = clampCanonicalSize(resolveFontSizeMm(inscription.font, targetSurface, id));
@@ -1805,7 +1862,21 @@ export async function loadCanonicalDesignIntoEditor(
   canonicalMotifs.forEach((motif, index) => {
     const svgPath = resolveCanonicalMotifPath(motif.asset, motif.id ?? `motif-${index}`, motifAssetMap);
     const color = motif.color ?? DEFAULT_CANONICAL_COLOR;
-    const target = canonicalSurfaceTarget(motif.surface);
+    let target = canonicalSurfaceTarget(motif.surface);
+    let { xMm, yMm } = convertPositionToMm(motif.position, target);
+
+    // Infer base target from position below headstone bounds
+    if (
+      target === 'headstone' &&
+      positionMode === 'legacy-stage-px' &&
+      HEADSTONE_HALF_MM > 0 &&
+      BASE_HALF_MM > 0 &&
+      yMm < -(HEADSTONE_HALF_MM * 1.02)
+    ) {
+      target = 'base';
+      ({ xMm, yMm } = convertPositionToMm(motif.position, 'base'));
+    }
+
     const scaleX =
       target === 'base'
         ? BASE_X_SCALE
@@ -1818,7 +1889,6 @@ export async function loadCanonicalDesignIntoEditor(
         : target === 'ledger'
           ? 1
           : HEADSTONE_Y_SCALE;
-    const { xMm, yMm } = convertPositionToMm(motif.position, target);
     const xPos = xMm * scaleX * GLOBAL_LAYOUT_SCALE;
     const baseYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE;
     const canonicalHeight = clampCanonicalMotifHeight(resolveMotifHeightMm(motif, target));
@@ -1826,8 +1896,8 @@ export async function loadCanonicalDesignIntoEditor(
     const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
     const rawFlipX = motif.flip?.x ?? false;
     const rawFlipY = motif.flip?.y ?? false;
-    const flipX = rawFlipX;
-    const flipY = rawFlipY;
+    const flipX = invertFlips ? !rawFlipX : rawFlipX;
+    const flipY = invertFlips ? !rawFlipY : rawFlipY;
 
     if (target === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);

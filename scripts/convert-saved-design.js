@@ -229,7 +229,7 @@ const MATERIAL_TEXTURES = {
   'blue pearl': '/textures/forever/l/Blue-Pearl.webp',
   'glory-black': '/textures/forever/l/Glory-Black-2.webp',
   'glory black': '/textures/forever/l/Glory-Black-2.webp',
-  'glory-gold-spots': '/textures/forever/l/Glory-Gold-Spots.webp',
+  'glory-gold-spots': '/textures/forever/l/Glory-Black-1.webp',
   'african-black': '/textures/forever/l/African-Black.webp',
   'noble-black': '/textures/forever/l/Noble-Black.webp',
   g654: '/textures/forever/l/01.webp',
@@ -242,7 +242,10 @@ function mapTexture(texturePath, productId) {
     const match = texturePath.match(/phoenix[\\/](l|s)[\\/](\d+)\.(jpg|webp)$/i);
     if (match) return `/textures/phoenix/${match[1]}/${match[2]}.webp`;
   }
-  if (lower.includes('18.jpg') || lower.includes('19.jpg') || lower.includes('glory-black')) {
+  if (lower.includes('/17.jpg') || lower.includes('glory-gold-spots') || lower.includes('glory gold spots')) {
+    return MATERIAL_TEXTURES['glory-gold-spots'];
+  }
+  if (lower.includes('/18.jpg') || lower.includes('/19.jpg') || lower.includes('glory-black')) {
     return MATERIAL_TEXTURES['glory-black'];
   }
   if (lower.includes('blue-pearl') || lower.includes('bluepearl')) {
@@ -252,11 +255,12 @@ function mapTexture(texturePath, productId) {
     if (lower.includes(key)) return value;
   }
   if (texturePath.startsWith('/textures/')) {
-    return texturePath.replace(/\.jpg$/i, '.webp');
+    return texturePath.replace(/-\d+-x-\d+/i, '').replace(/\.jpg$/i, '.webp');
   }
   const match = texturePath.match(/[\\/]([A-Za-z0-9-]+)\.(jpg|webp)$/i);
   if (match) {
-    return `/textures/forever/l/${match[1]}.webp`;
+    const name = match[1].replace(/-\d+-x-\d+/i, '');
+    return `/textures/forever/l/${name}.webp`;
   }
   return texturePath;
 }
@@ -318,7 +322,7 @@ function buildInscription(item, _pxPerMmX, _pxPerMmY, category) {
     rotation: { z_deg: item.rotation || 0 },
     color: item.color || '#000000',
     align: 'center',
-    surface: `headstone/${(item.side || 'front').toLowerCase()}`,
+    surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
   };
 }
 
@@ -337,6 +341,7 @@ function buildMotif(item, _pxPerMmX, _pxPerMmY) {
       x: item.flipx === -1,
       y: item.flipy === -1,
     },
+    surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
   };
 }
 
