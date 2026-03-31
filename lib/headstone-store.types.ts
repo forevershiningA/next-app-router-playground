@@ -107,6 +107,8 @@ export type PanelName =
   | 'motifs'
   | 'motif'
   | 'image'
+  | 'emblems'
+  | 'emblem'
   | 'checkprice'
   | 'designs'
   | null;
@@ -157,6 +159,33 @@ export type HeadstoneState = {
   addMotif: (svgPath: string) => void;
   removeMotif: (id: string) => void;
   setMotifColor: (id: string, color: string) => void;
+
+  selectedEmblems: Array<{ id: string; emblemId: string; imageUrl: string }>;
+  addEmblem: (emblemId: string, imageUrl: string) => void;
+  removeEmblem: (id: string) => void;
+  duplicateEmblem: (id: string) => void;
+  selectedEmblemId: string | null;
+  setSelectedEmblemId: (id: string | null) => void;
+  emblemRefs: Record<string, React.RefObject<Group | null>>;
+  setEmblemRef: (id: string, ref: React.RefObject<Group | null>) => void;
+  emblemOffsets: Record<
+    string,
+    {
+      xPos: number;
+      yPos: number;
+      sizeVariant: number;
+      rotationZ: number;
+      flipX: boolean;
+      flipY: boolean;
+      widthMm: number;
+      heightMm: number;
+      target: 'headstone' | 'base' | 'ledger';
+      coordinateSpace?: 'offset' | 'mm-center';
+      baseWidthMm?: number;
+      baseHeightMm?: number;
+    }
+  >;
+  setEmblemOffset: (id: string, offset: Partial<HeadstoneState['emblemOffsets'][string]>) => void;
 
   selectedImages: Array<{
     id: string;

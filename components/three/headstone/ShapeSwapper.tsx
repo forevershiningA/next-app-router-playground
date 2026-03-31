@@ -11,6 +11,7 @@ import FullMonumentFit from '../FullMonumentFit';
 import AdditionModel from '../AdditionModel';
 import MotifModel from '../MotifModel';
 import ImageModel from '../ImageModel';
+import EmblemModel from '../EmblemModel';
 import SvgHeadstone, { HeadstoneAPI } from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import { BronzeBorder } from '../BronzeBorder';
@@ -184,6 +185,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages || []);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
+  const selectedEmblems = useHeadstoneStore((s) => s.selectedEmblems || []);
+  const emblemOffsets = useHeadstoneStore((s) => s.emblemOffsets);
 
   const headstoneInscriptions = React.useMemo(
     () => inscriptions.filter((line) => (line.target ?? 'headstone') === 'headstone'),
@@ -209,6 +212,14 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const headstoneImages = React.useMemo(
     () => selectedImages.filter((image) => (image.target ?? 'headstone') === 'headstone'),
     [selectedImages],
+  );
+
+  const headstoneEmblems = React.useMemo(
+    () =>
+      selectedEmblems.filter(
+        (emblem) => (emblemOffsets[emblem.id]?.target ?? 'headstone') === 'headstone',
+      ),
+    [selectedEmblems, emblemOffsets],
   );
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const loading = useHeadstoneStore((s) => s.loading);
@@ -637,6 +648,21 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                        surface="headstone"
                        index={i}
                        coordinateSpace={image.coordinateSpace}
+                     />
+                   </React.Suspense>
+                 </ErrorBoundary>
+               ))}
+
+               {headstoneEmblems.map((emblem, i) => (
+                 <ErrorBoundary key={`emblem-${emblem.id}-${i}`}>
+                   <React.Suspense fallback={null}>
+                     <EmblemModel
+                       id={emblem.id}
+                       emblemId={emblem.emblemId}
+                       imageUrl={emblem.imageUrl}
+                       headstone={api}
+                       surface="headstone"
+                       index={i}
                      />
                    </React.Suspense>
                  </ErrorBoundary>

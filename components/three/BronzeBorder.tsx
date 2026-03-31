@@ -479,7 +479,7 @@ export function BronzeBorder({
   useEffect(() => {
     if (!shouldRender || !svgData) {
       disposeResources();
-      setBuiltState({ group: null, dims: { w: localWidth, h: localHeight } });
+      setBuiltState({ group: null, dims: { w: debouncedDims.w, h: debouncedDims.h } });
       return;
     }
 
@@ -508,7 +508,10 @@ export function BronzeBorder({
       geometries: built.geometries,
     };
     setBuiltState({ group: built.group, dims: { w: debouncedDims.w, h: debouncedDims.h } });
-  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, localWidth, localHeight, resolvedSlug]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- localWidth/localHeight intentionally
+    // excluded: the useLayoutEffect fast-path handles smooth scaling during drag; only debouncedDims
+    // should trigger expensive geometry rebuilds.
+  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, unitScale, resolvedSlug]);
 
   if (!builtState.group) {
     return null;

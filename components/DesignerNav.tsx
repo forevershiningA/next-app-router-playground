@@ -19,12 +19,14 @@ import {
   PhotoIcon,
   UserCircleIcon,
   CloudArrowUpIcon,
+  ShieldCheckIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice } from '#/lib/xml-parser';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
+import { loadEmblems } from '#/app/_internal/_emblems-loader';
 import InscriptionEditPanel from './InscriptionEditPanel';
 import SegmentedControl from './ui/SegmentedControl';
 import MaterialSelector from './MaterialSelector';
@@ -32,6 +34,8 @@ import ShapeSelector from './ShapeSelector';
 import BorderSelector from './BorderSelector';
 import AdditionSelector from './AdditionSelector';
 import MotifSelectorPanel from './MotifSelectorPanel';
+import EmblemOverlayPanel from './EmblemOverlayPanel';
+import EmblemSelectionGrid from '#/app/select-emblems/_ui/EmblemSelectionGrid';
 import ImageSelector from './ImageSelector';
 import SaveDesignModal from './SaveDesignModal';
 import { formatDimensionPair } from '#/lib/unit-system';
@@ -63,6 +67,13 @@ const menuGroups = [
         slug: 'select-additions',
         name: 'Select Additions',
         icon: PlusCircleIcon,
+        hiddenForPlaque: true,
+      },
+      {
+        slug: 'select-emblems',
+        name: 'Select Emblems',
+        icon: ShieldCheckIcon,
+        requiresPlaque: true,
       },
       { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
       { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
@@ -87,6 +98,7 @@ const fullscreenPanelSlugs = new Set([
   'inscriptions',
   'select-images',
   'select-additions',
+  'select-emblems',
   'select-motifs',
 ]);
 
@@ -316,6 +328,8 @@ export default function DesignerNav() {
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
+  const selectedEmblems = useHeadstoneStore((s) => s.selectedEmblems);
+  const selectedEmblemId = useHeadstoneStore((s) => s.selectedEmblemId);
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
   const editingObject = useHeadstoneStore((s) => s.editingObject);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
@@ -336,7 +350,8 @@ export default function DesignerNav() {
   const hasCustomizations =
     inscriptions.length > 0 ||
     selectedAdditions.length > 0 ||
-    selectedMotifs.length > 0;
+    selectedMotifs.length > 0 ||
+    selectedEmblems.length > 0;
 
   const {
     expandedSections,
@@ -438,6 +453,7 @@ export default function DesignerNav() {
     '/select-border',
     '/select-additions',
     '/select-images',
+    '/select-emblems',
   ];
   const isCanvasVisible = canvasVisiblePages.some((page) => pathname === page);
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
@@ -1340,6 +1356,24 @@ export default function DesignerNav() {
       <div className="flex h-full flex-col">
         <div className="flex-1">
           <ImageSelector />
+        </div>
+      </div>
+    );
+  };
+
+  const renderSelectEmblemsPanel = () => {
+    const emblems = loadEmblems();
+    return (
+      <div className="flex h-full flex-col">
+        {/* Emblem edit panel when an emblem is selected */}
+        {activePanel === 'emblem' && selectedEmblemId && (
+          <div className="mb-4 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+            <EmblemOverlayPanel />
+          </div>
+        )}
+        {/* Emblem catalog grid */}
+        <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 shadow-xl backdrop-blur-sm">
+          <EmblemSelectionGrid emblems={emblems} />
         </div>
       </div>
     );
@@ -2623,6 +2657,17 @@ export default function DesignerNav() {
               ) : (
                 renderSelectMotifsPanel()
               ))}
+            {activeFullscreenPanel === 'select-emblems' &&
+              (isLoadingPanel ? (
+                <div className="flex h-64 items-center justify-center">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
+                    <p className="text-sm text-white/60">Loading emblems...</p>
+                  </div>
+                </div>
+              ) : (
+                renderSelectEmblemsPanel()
+              ))}
           </div>
         </div>
       ) : (
@@ -2808,6 +2853,22 @@ export default function DesignerNav() {
                       if (
                         item.slug === 'select-additions' &&
                         catalog?.product?.laser === '1'
+                      ) {
+                        return null;
+                      }
+
+                      // Hide "Select Emblems" for non-plaque products
+                      if (
+                        (item as { requiresPlaque?: boolean }).requiresPlaque &&
+                        !isPlaque
+                      ) {
+                        return null;
+                      }
+
+                      // Hide "Select Additions" for plaque products
+                      if (
+                        (item as { hiddenForPlaque?: boolean }).hiddenForPlaque &&
+                        isPlaque
                       ) {
                         return null;
                       }

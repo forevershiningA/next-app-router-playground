@@ -42,19 +42,19 @@ export default function AutoFit({
   const lastDims = React.useRef({ h: heightMm, w: widthMm });
   const animId = React.useRef<number | null>(null);
   const didFirst = React.useRef(false);
+  const retryTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const easeInOutCubic = (x: number) =>
     x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
-  /** Compute a deterministic pose given current camera view direction. */
-  React.useLayoutEffect(() => {
+  const fitCamera = React.useCallback(() => {
     const obj = target.current;
-    if (!obj) return;
+    if (!obj) return false;
 
     obj.updateWorldMatrix(true, true);
 
     const box = new THREE.Box3().setFromObject(obj);
-    if (box.isEmpty()) return;
+    if (box.isEmpty()) return false;
 
     const sphere = new THREE.Sphere();
     box.getBoundingSphere(sphere);
@@ -116,7 +116,41 @@ export default function AutoFit({
     camera.far = far;
     camera.updateProjectionMatrix();
     invalidate();
-  }, [target, anchor, camera, size.width, size.height, margin, pad, controls, trigger, heightMm, widthMm, showBase]);
+    return true;
+  }, [target, anchor, camera, size.width, size.height, margin, pad, controls, showBase, invalidate]);
+
+  /** Compute a deterministic pose given current camera view direction. */
+  React.useLayoutEffect(() => {
+    // Clear any pending retry
+    if (retryTimer.current) {
+      clearTimeout(retryTimer.current);
+      retryTimer.current = null;
+    }
+
+    const success = fitCamera();
+    if (!success) {
+      // Mesh not ready yet — retry up to 5 times with increasing delays
+      let attempt = 0;
+      const MAX_RETRIES = 5;
+      const scheduleRetry = () => {
+        if (attempt >= MAX_RETRIES) return;
+        attempt++;
+        const delay = attempt * 100; // 100ms, 200ms, 300ms, 400ms, 500ms
+        retryTimer.current = setTimeout(() => {
+          if (fitCamera()) return;
+          scheduleRetry();
+        }, delay);
+      };
+      scheduleRetry();
+    }
+
+    return () => {
+      if (retryTimer.current) {
+        clearTimeout(retryTimer.current);
+        retryTimer.current = null;
+      }
+    };
+  }, [fitCamera, trigger, heightMm, widthMm]);
 
   return null;
 }

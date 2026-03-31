@@ -17,6 +17,7 @@ import {
   fetchAndParseInscriptionDetails,
 } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
+import { EMBLEM_SIZES, DEFAULT_EMBLEM_SIZE_VARIANT } from '#/app/_internal/_emblems-loader';
 import {
   fetchAndParseMotifPricing,
   calculateMotifPrice,
@@ -64,6 +65,7 @@ const isDesktopViewport = () => {
 };
 type AdditionOffset = HeadstoneState['additionOffsets'][string];
 type MotifOffset = HeadstoneState['motifOffsets'][string];
+type EmblemOffset = HeadstoneState['emblemOffsets'][string];
 
 const MIN_SURFACE_DIMENSION_MM = 1;
 
@@ -159,6 +161,7 @@ const clampEditingObject = (
 
 const genId = () => `l-${crypto.randomUUID()}`;
 const genMotifId = () => `motif-${crypto.randomUUID()}`;
+const genEmblemId = () => `emblem-${crypto.randomUUID()}`;
 
 export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   catalog: null,
@@ -369,6 +372,102 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     }));
     // Recalculate cost when color changes
     setTimeout(() => get().calculateMotifCost(), 0);
+  },
+
+  // Emblem management (Bronze Plaques)
+  selectedEmblems: [],
+  selectedEmblemId: null,
+  setSelectedEmblemId: (id) => set({ selectedEmblemId: id }),
+  emblemRefs: {},
+  setEmblemRef: (id, ref) => set((s) => ({ emblemRefs: { ...s.emblemRefs, [id]: ref } })),
+  emblemOffsets: {},
+  addEmblem: (emblemId, imageUrl) => {
+    const id = genEmblemId();
+    const state = get();
+    const { selected } = state;
+    const target: 'headstone' | 'base' | 'ledger' =
+      selected === 'base' ? 'base' : selected === 'ledger' ? 'ledger' : 'headstone';
+    const sizeEntry = EMBLEM_SIZES.find((s) => s.variant === DEFAULT_EMBLEM_SIZE_VARIANT) ?? EMBLEM_SIZES[2];
+    set((s) => {
+      const defaultOffset = withOffsetSurfaceDimensions<EmblemOffset>(
+        {
+          xPos: 0,
+          yPos: 0,
+          sizeVariant: DEFAULT_EMBLEM_SIZE_VARIANT,
+          rotationZ: 0,
+          flipX: false,
+          flipY: false,
+          widthMm: sizeEntry.widthMm,
+          heightMm: sizeEntry.heightMm,
+          target,
+          coordinateSpace: 'offset',
+        },
+        target,
+        s,
+        true,
+      );
+      return {
+        selectedEmblems: [...s.selectedEmblems, { id, emblemId, imageUrl }],
+        emblemOffsets: { ...s.emblemOffsets, [id]: defaultOffset },
+        selectedEmblemId: id,
+        activePanel: 'emblem' as const,
+      };
+    });
+  },
+  removeEmblem: (id) => {
+    set((s) => {
+      const updated = { ...s.emblemOffsets };
+      delete updated[id];
+      const isActive = s.selectedEmblemId === id;
+      return {
+        selectedEmblems: s.selectedEmblems.filter((e) => e.id !== id),
+        emblemOffsets: updated,
+        selectedEmblemId: isActive ? null : s.selectedEmblemId,
+        activePanel: isActive ? null : s.activePanel,
+      };
+    });
+  },
+  duplicateEmblem: (id) => {
+    const state = get();
+    const emblem = state.selectedEmblems.find((e) => e.id === id);
+    const currentOffset = state.emblemOffsets[id];
+    if (!emblem || !currentOffset) return;
+    const newId = genEmblemId();
+    const deltaX = 20;
+    const deltaY = 20;
+    const surface = currentOffset.target ?? 'headstone';
+    set((s) => {
+      const duplicatedOffset = withOffsetSurfaceDimensions<EmblemOffset>(
+        {
+          ...currentOffset,
+          xPos: (currentOffset.xPos ?? 0) + deltaX,
+          yPos: (currentOffset.yPos ?? 0) + deltaY,
+        },
+        surface,
+        s,
+      );
+      return {
+        selectedEmblems: [...s.selectedEmblems, { id: newId, emblemId: emblem.emblemId, imageUrl: emblem.imageUrl }],
+        emblemOffsets: { ...s.emblemOffsets, [newId]: duplicatedOffset },
+        selectedEmblemId: newId,
+        activePanel: 'emblem' as const,
+      };
+    });
+  },
+  setEmblemOffset: (id, offset) => {
+    set((s) => {
+      const previous = s.emblemOffsets[id];
+      if (!previous) return {};
+      const surface = offset.target ?? previous.target ?? 'headstone';
+      const shouldRefreshDims = offset.target !== undefined && offset.target !== previous.target;
+      const nextOffset = withOffsetSurfaceDimensions<EmblemOffset>(
+        { ...previous, ...offset, target: surface },
+        surface,
+        s,
+        shouldRefreshDims,
+      );
+      return { emblemOffsets: { ...s.emblemOffsets, [id]: nextOffset } };
+    });
   },
 
   // Image management
@@ -636,11 +735,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         let targetWidth = clampedWidth;
         let targetHeight = clampedHeight;
         if (shouldForceSquarePlaque) {
-          const desiredSquare = 300;
+          const desiredWidth = 300;
+          const desiredHeight = 200;
           const maxAllowedWidth = Math.max(widthMin, widthMax);
           const maxAllowedHeight = Math.max(heightMin, heightMax);
-          targetWidth = Math.max(widthMin, Math.min(maxAllowedWidth, desiredSquare));
-          targetHeight = Math.max(heightMin, Math.min(maxAllowedHeight, desiredSquare));
+          targetWidth = Math.max(widthMin, Math.min(maxAllowedWidth, desiredWidth));
+          targetHeight = Math.max(heightMin, Math.min(maxAllowedHeight, desiredHeight));
         }
         const clampedStandWidth = Math.max(targetWidth, Math.min(Math.max(baseWidthMin, baseWidthMax), shape.stand.initWidth || currentState.baseWidthMm));
         const clampedStandHeight = Math.max(baseHeightMin, Math.min(Math.max(baseHeightMin, baseHeightMax), shape.stand.initHeight || currentState.baseHeightMm));
@@ -1191,6 +1291,10 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   //   'motif_dove_1': { xPos: -170, yPos: 0, scale: 1.2, rotationZ: 0, heightMm: 40 },   // Dove - centered vertically
   // },
   motifOffsets: {},
+
+  selectedEmblemId: null,
+  emblemRefs: {},
+  emblemOffsets: {},
 
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
@@ -1788,10 +1892,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       inscriptions: [],
       selectedAdditions: [],
       selectedMotifs: [],
+      selectedEmblems: [],
       selectedImages: [],
       selectedInscriptionId: null,
       selectedAdditionId: null,
       selectedMotifId: null,
+      selectedEmblemId: null,
       selectedImageId: null,
       cropCanvasData: null,
       activePanel: null,

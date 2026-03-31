@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-30
+**Last Updated:** 2026-03-31
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
 
 ---
@@ -33,9 +33,80 @@
 
 ---
 
-## Current Status (2026-03-29)
+## Current Status (2026-03-31) — Bronze Plaque Emblems & Fixes
 
-### ✅ Universal DPR-aware coordinate conversion — COMMITTED
+### ✅ Emblem System for Bronze Plaques (Product ID 5)
+
+Bronze Plaques now support **Emblems** — decorative PNG icons placed on the plaque surface. The entire feature is plaque-only and hidden for other product types.
+
+#### Data Layer (`app/_internal/_emblems-loader.ts`)
+- **236 emblem IDs** sourced from `createJS/dyo/Data.js` EmblemsData array
+- PNG images in 3 sizes: `/public/png/emblems/{xs,s,m}/{id}.png`
+- **7 fixed height sizes** from `public/xml/en_EN/emblems.xml`: 50, 75, 100, 150, 220, 300, 400mm
+- Sizes control the **largest dimension** — if the emblem is landscape (wider than tall), the size sets the width and height is auto-calculated from the image aspect ratio; if portrait, the size sets the height
+- Default size variant: 3 (100mm on largest dimension)
+
+#### Store (`lib/headstone-store.ts` + `lib/headstone-store.types.ts`)
+- `selectedEmblems: Array<{ id, emblemId, imageUrl }>` — added emblems list
+- `emblemOffsets: Record<string, EmblemOffset>` — per-emblem position/size/rotation/flip state
+- `EmblemOffset` includes: `xPos, yPos, sizeVariant, rotationZ, flipX, flipY, widthMm, heightMm, target, coordinateSpace`
+- Actions: `addEmblem()`, `removeEmblem()`, `duplicateEmblem()`, `setEmblemOffset()`, `setSelectedEmblemId()`
+- `activePanel: 'emblem'` triggers emblem edit panel
+- Uses `withOffsetSurfaceDimensions<EmblemOffset>()` for surface-aware positioning
+
+#### UI Components
+- **`app/select-emblems/_ui/EmblemSelectionGrid.tsx`** — Flat grid of all 236 emblem thumbnails with search filter, lazy-loaded images, renders in sidebar panel (not fullscreen overlay)
+- **`components/EmblemOverlayPanel.tsx`** — Edit panel with size slider (TailwindSlider, 7 discrete steps), rotation slider, flip X/Y buttons, duplicate/delete. Size label shows `Size WIDTHxHEIGHTmm` with actual computed dimensions
+- **`app/select-emblems/page.tsx`** — Route page, hidden on desktop (returns null), shows grid on mobile only. Auto-selects Bronze Plaque (product '5') if not already selected
+
+#### 3D Rendering (`components/three/EmblemModel.tsx`)
+- Loads emblem PNG as `THREE.Texture` (tries `/m/` then `/s/` then `/xs/` size)
+- Renders as textured `PlaneGeometry` on the headstone front face
+- **Proportional sizing**: Derives aspect ratio from loaded texture. If landscape (aspect ≥ 1), `sizeVariant` controls width, height = width/aspect. If portrait, `sizeVariant` controls height, width = height×aspect. Writes computed `widthMm`/`heightMm` back to store for UI display
+- Supports drag-to-reposition via raycasting to headstone mesh surface
+- Selection box with rotation handle when active
+- Integrated in `ShapeSwapper.tsx` scene graph
+
+#### Sidebar Integration (`components/DesignerNav.tsx`)
+- Menu item "Select Emblems" with `requiresPlaque: true` — only visible for plaque products
+- Menu item "Select Additions" with `hiddenForPlaque: true` — hidden for plaque products (additions not applicable to plaques)
+- `/select-emblems` added to `canvasVisiblePages` array (required for panel to stay open)
+- `/select-emblems` added to `fullscreenPanelSlugs` set
+- `renderSelectEmblemsPanel()` renders emblem grid + edit panel inside sidebar content area
+- `ConditionalCanvas.tsx` updated to show 3D canvas on `/select-emblems` route
+
+### ✅ Bronze Plaque Landscape Default
+
+- Default plaque dimensions changed from 300×300mm (square) to **300×200mm (landscape)**
+- `setProductId()` in `headstone-store.ts`: `shouldForceSquarePlaque` now sets `desiredWidth=300, desiredHeight=200`
+- Navigating to `/select-emblems` auto-selects Bronze Plaque if no plaque product is active
+
+### ✅ Bronze Plaque Coordinate Fixes
+
+1. **Landscape plaque scaling** — Legacy loader now uses `maxMonumentDimensionMm = max(width, height)` for landscape plaques where width constrains the viewport fit
+2. **Headstone dimension fallback** — Added tertiary fallback: reads `width`/`height` from `legacy.raw[0]` (headstone item) when `headstone` section is empty `{}`
+3. **legacyUsePx canvas dims** — Now prefers `init_width/init_height` from legacy item over viewport dims
+
+### ✅ Bronze Border Drag Smoothness
+
+- Removed `localWidth`/`localHeight` from build effect dependencies in `BronzeBorder.tsx`
+- Added `unitScale` to dependencies, uses `debouncedDims` consistently
+- Prevents full SVG rebuild on every pixel during resize, eliminates flickering
+
+### ✅ Camera Framing for Plaques
+
+- **Scene.tsx**: Orbit target lowered to `[0, 0.15, 0]` for plaque products (vs `[0, 3.8, 0]` for headstones)
+- **AutoFit.tsx**: Refactored with retry mechanism (up to 5 retries, 100–500ms delays) when bbox is empty on initial render
+
+### 📌 Next Steps
+
+1. **Emblem pricing** — Wire emblem costs into the price pill and Check Price panel
+2. **Emblem save/load** — Persist emblems in saved design JSON and restore on load
+3. **Test emblem rendering** with various plaque shapes (oval, circle, landscape, portrait)
+
+---
+
+## Current Status (2026-03-30) — Pricing & ML Smart Search
 
 The legacy design loading pipeline now has a **deterministic, universal** coordinate conversion system that handles any device pixel ratio (DPR) without heuristics or per-design tweaks.
 
@@ -2028,9 +2099,9 @@ A Next.js-based 3D headstone designer allowing users to:
 ### Product Types
 - **Traditional Engraved Headstones**: Granite/marble with sandblasted and painted text (shadow effect, no outline)
 - **Laser Etched Black Granite**: High-detail laser etching (outlined text with 0.002 unit black outline)
-- **Bronze Plaques**: Metal plaques with decorative borders (no outline on inscriptions)
-  - **Rectangle (Landscape)**: 300×200mm
-  - **Rectangle (Portrait)**: 600×600mm
+- **Bronze Plaques**: Metal plaques with decorative borders and emblems (no outline on inscriptions)
+  - **Rectangle (Landscape)**: 300×200mm (default)
+  - **Rectangle (Portrait)**: 200×300mm
   - **Square**: 300×300mm
   - **Oval (Landscape)**: 400×275mm
   - **Oval (Portrait)**: 275×400mm
@@ -2255,6 +2326,8 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 - Bronze material texture from XML catalog
 - Fixed 10mm depth
 - Simplified UI (no base, no thickness controls)
+- **Emblems**: Decorative PNG icons (236 available), placed on plaque surface with drag-to-position, 7 fixed sizes (50–400mm controlling largest dimension, proportional aspect), rotation, flip. Sidebar panel with search grid + edit controls.
+- **No Additions**: Select Additions menu item hidden for plaques (not applicable)
 
 **Border Workflow (2026-01-17, updated 2026-02-07):**
 - Catalog products flagged with `border="1"` (all bronze plaques) automatically advance to **Select Border** after the user confirms a shape. The shape selector now pushes to `/select-border` and dispatches `openFullscreenPanel('select-border')` so the sidebar panel opens immediately.
@@ -2472,7 +2545,8 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - **Select Size** – Shares the exact sliders/toggles documented earlier, but now consumes the entire sidebar height for effortless scrolling.
 - **Select Shape** and **Select Material** – Their grids sit inside `flex-1 overflow-hidden` containers so the selectors stretch to the bottom of the viewport; the previous `max-h-*` caps were removed to avoid double scroll bars.
 - **Inscriptions** – Embeds `InscriptionEditPanel` so editing text or fonts feels identical whether opened from the menu or a canvas selection.
-- **Select Additions** – Provides a split experience: if an addition is selected, the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise a dashed guidance card appears above the catalog.
+- **Select Additions** – Provides a split experience: if an addition is selected, the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise a dashed guidance card appears above the catalog. Hidden for plaque products.
+- **Select Emblems** – Plaque-only panel. Shows a flat grid of 236 emblem thumbnails with search filter. Clicking adds the emblem to the plaque. When an emblem is selected on canvas, the edit panel shows a size slider (7 fixed steps controlling largest dimension), rotation, flip X/Y, duplicate/delete.
 - **Select Motifs** – Mirrors the additions flow but also surfaces price estimates (non-laser products) plus curated gold/silver buttons and the full color palette.
 - **Convert Design** – Replaces the old 3D Preview link with a fullscreen product picker; it mirrors Select Product but enforces a single column list, so seniors can quickly audition alternate catalogs without leaving the designer.
 
@@ -2491,7 +2565,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - Material and shape selectors keep the headstone/base toggle in view so seniors always know which part they are updating.
 
 ### Implementation Highlights
-- `fullscreenPanelSlugs` defines which menu items should open over the nav; the click handler prevents default navigation, opens the overlay, then routes if needed (so `/select-size` stays synced with Canvas requirements).
+- `fullscreenPanelSlugs` defines which menu items should open over the nav; the click handler prevents default navigation, opens the overlay, then routes if needed (so `/select-size` stays synced with Canvas requirements). Current slugs: `select-size`, `select-shape`, `select-material`, `select-border`, `inscriptions`, `select-images`, `select-additions`, `select-emblems`, `select-motifs`.
 - Closing the overlay sets `dismissedPanelSlug` so re-opening the page doesn’t auto-trigger the panel unless the user explicitly clicks again.
 - See `FULLSCREEN_PANEL_SYSTEM.md` for wireframes, state diagrams, and future enhancement ideas (e.g., ESC shortcuts, slide animations).
 
@@ -2544,11 +2618,14 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
   selectedInscriptionId: string | null;
   selectedAdditionId: string | null;
   selectedMotifId: string | null;
+  selectedEmblemId: string | null;  // Plaque emblems
   
   // Content (2026-01-28: Now starts empty by default)
   inscriptions: Line[];            // Text overlays (empty array on init)
   selectedAdditions: string[];     // 3D models (empty array on init - no default angel/cross)
   selectedMotifs: Motif[];         // SVG motifs (empty array on init)
+  selectedEmblems: Array<{ id: string; emblemId: string; imageUrl: string }>;  // Emblem PNGs (plaque-only)
+  emblemOffsets: Record<string, EmblemOffset>;  // Per-emblem position/size/rotation/flip
   
   // UI
   activePanel: PanelName | null;
@@ -2574,6 +2651,8 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - `updateInscription()` - Modify existing text
 - `addMotif()` - Add SVG motif
 - `addAddition()` - Add 3D model
+- `addEmblem()` - Add emblem PNG to plaque (plaque-only)
+- `setEmblemOffset()` - Update emblem position/size/rotation/flip
 - `calculateInscriptionCost()` - Pricing
 - `loadDesignFromXML()` - Import saved design
 

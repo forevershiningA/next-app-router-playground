@@ -61,6 +61,9 @@ export default function ConditionalCanvas() {
   // Show canvas on select-motifs page (sidebar flow like materials)
   const isSelectMotifsPage = pathname === '/select-motifs';
   
+  // Show canvas on select-emblems page (sidebar flow like materials)
+  const isSelectEmblemsPage = pathname === '/select-emblems';
+  
   // Show canvas on select-border page (sidebar flow like materials)
   const isSelectBorderPage = pathname === '/select-border';
   

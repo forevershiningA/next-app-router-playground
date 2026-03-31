@@ -173,13 +173,17 @@ export default function Scene({
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const isFullMonument = productType === 'full-monument';
+  const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
 
   // For full monument the whole assembly is shifted back by ledgerDepthMm/1000 in Z.
   // The camera target needs to follow: lower Y (ledger is at ground level, not 3.8m up)
   // and negative Z to orbit around the centre of the grave plot.
+  // For plaques: they sit near ground level (Y≈0.1m), so target much lower than headstones.
   const orbitTarget: [number, number, number] = isFullMonument
     ? [0, 0.8, -(ledgerDepthMm / 1000) * 0.55]
-    : [0, 3.8, 0];
+    : isPlaque
+      ? [0, 0.15, 0]
+      : [0, 3.8, 0];
   const viewportWidth = useThree((state) => state.size.width);
   const isMobileViewport = viewportWidth < 1024;
   const fogSettings = isMobileViewport

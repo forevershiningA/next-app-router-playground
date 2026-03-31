@@ -1075,11 +1075,22 @@ export async function loadCanonicalDesignIntoEditor(
     store.setShapeUrl(resolveCanonicalShapeUrl(shapeName));
   }
 
+  // Early legacy headstone data extraction for dimension fallbacks
+  const legacyRawHeadstoneItem = Array.isArray(designData.legacy?.raw)
+    ? designData.legacy.raw.find((item) => item?.type === 'Headstone' || item?.type === 'Plaque')
+    : null;
+
   if (headstone?.width_mm) {
     store.setWidthMm(headstone.width_mm);
+  } else {
+    const lw = Number(legacyRawHeadstoneItem?.width);
+    if (Number.isFinite(lw) && lw > 0) store.setWidthMm(lw);
   }
   if (headstone?.height_mm) {
     store.setHeightMm(headstone.height_mm);
+  } else {
+    const lh = Number(legacyRawHeadstoneItem?.height);
+    if (Number.isFinite(lh) && lh > 0) store.setHeightMm(lh);
   }
   if (headstone?.thickness_mm) {
     store.setUprightThickness(headstone.thickness_mm);
@@ -1161,10 +1172,14 @@ export async function loadCanonicalDesignIntoEditor(
   // CRITICAL FIX: For canonical designs, we just set the dimensions into the store above,
   // so the "active" dimensions should match the "canonical" dimensions.
   // Use the canonical values directly instead of reading from store to avoid race conditions.
+  const legacyWidthFallback = Number(legacyRawHeadstoneItem?.width);
+  const legacyHeightFallback = Number(legacyRawHeadstoneItem?.height);
   const canonicalHeadstoneWidthMm =
-    headstone?.width_mm ?? designData.scene?.canvas?.width_mm ?? 0;
+    headstone?.width_mm ?? designData.scene?.canvas?.width_mm
+    ?? (Number.isFinite(legacyWidthFallback) && legacyWidthFallback > 0 ? legacyWidthFallback : 0);
   const canonicalHeadstoneHeightMm =
-    headstone?.height_mm ?? designData.scene?.canvas?.height_mm ?? 0;
+    headstone?.height_mm ?? designData.scene?.canvas?.height_mm
+    ?? (Number.isFinite(legacyHeightFallback) && legacyHeightFallback > 0 ? legacyHeightFallback : 0);
   const canonicalBaseWidthMm = base?.width_mm ?? canonicalHeadstoneWidthMm;
   const canonicalBaseHeightMm = base?.height_mm ?? 0;
   const canonicalLedgerWidthMm = ledgerComponent?.width_mm ?? 0;
@@ -1238,16 +1253,28 @@ export async function loadCanonicalDesignIntoEditor(
   const authoringCanvasWidthPx = Math.max(canonicalViewportWidthCssPx || 1, 1);
   const authoringCanvasHeightPx = Math.max(canonicalViewportHeightCssPx || 1, 1);
   const totalMonumentHeightMm = Math.max(canonicalHeadstoneHeightMm + Math.max(canonicalBaseHeightMm, 0), 1);
-  const legacyUsePx = Math.min(safeViewportWidthPx, safeViewportHeightPx) * 0.975;
+  const totalMonumentWidthMm = Math.max(canonicalHeadstoneWidthMm || 0, canonicalBaseWidthMm || 0, 1);
+  // Legacy CreateJS fits the monument within a use×use pixel square (use = min(w,h)*0.975).
+  // For landscape monuments (wider than tall), width constrains the fit, shrinking the draw height.
+  const maxMonumentDimensionMm = Math.max(totalMonumentWidthMm, totalMonumentHeightMm);
+  // CreateJS uses canvas dims (init_width/init_height), NOT viewport dims.
+  const legacyCanvasW = Number(legacyRawHeadstoneItem?.init_width);
+  const legacyCanvasH = Number(legacyRawHeadstoneItem?.init_height);
+  const hasLegacyCanvas =
+    Number.isFinite(legacyCanvasW) && legacyCanvasW > 0 &&
+    Number.isFinite(legacyCanvasH) && legacyCanvasH > 0;
+  const legacyUsePx = hasLegacyCanvas
+    ? Math.min(legacyCanvasW, legacyCanvasH) * 0.975
+    : Math.min(safeViewportWidthPx, safeViewportHeightPx) * 0.975;
   // Legacy CreateJS draws the monument within min(w,h)*DPR*0.975 px (uniform scale).
   // The headstone and base each take their proportional share of that draw area.
   const legacyHeadstoneDrawHeightPx =
     canonicalHeadstoneHeightMm > 0
-      ? legacyUsePx * (canonicalHeadstoneHeightMm / totalMonumentHeightMm)
+      ? legacyUsePx * (canonicalHeadstoneHeightMm / maxMonumentDimensionMm)
       : safeViewportHeightPx;
   const legacyBaseDrawHeightPx =
     canonicalBaseHeightMm > 0
-      ? legacyUsePx * (canonicalBaseHeightMm / totalMonumentHeightMm)
+      ? legacyUsePx * (canonicalBaseHeightMm / maxMonumentDimensionMm)
       : safeViewportHeightPx;
   const legacyHeadstoneDrawWidthPx =
     canonicalHeadstoneWidthMm > 0 && canonicalHeadstoneHeightMm > 0
@@ -1294,9 +1321,8 @@ export async function loadCanonicalDesignIntoEditor(
     : 0;
   let HEADSTONE_STAGE_SCALE = 1;
 
-  const legacyHeadstoneItem = Array.isArray(designData.legacy?.raw)
-    ? designData.legacy?.raw.find((item) => item?.type === 'Headstone' || item?.type === 'Plaque')
-    : null;
+  // Reuse early lookup (legacyRawHeadstoneItem defined above)
+  const legacyHeadstoneItem = legacyRawHeadstoneItem;
   const legacyInscriptionFontPxByCanonicalId = new Map<string, number>();
   const legacyItemPartByCanonicalId = new Map<string, string>();
   const legacyMotifFlipByCanonicalId = new Map<string, { x: boolean; y: boolean }>();
@@ -1513,7 +1539,7 @@ export async function loadCanonicalDesignIntoEditor(
     // min(canvasW, canvasH) * DPR * 0.975 px. Use that for both X and Y.
     const legacyMonumentDrawPx =
       Math.min(legacyInitWidth, legacyInitHeight) * effectiveLegacySavedDpr * 0.975;
-    const uniformMmPerPx = totalMonumentHeightMm / Math.max(legacyMonumentDrawPx, 1);
+    const uniformMmPerPx = maxMonumentDimensionMm / Math.max(legacyMonumentDrawPx, 1);
     const mmPerPxX =
       useDirectCssStageDesktopMapping && !useLedger && hasLegacyInitViewport
         ? uniformMmPerPx
