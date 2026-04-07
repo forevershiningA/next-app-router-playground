@@ -8,6 +8,21 @@ module.exports = {
   ],
   theme: {
     extend: {
+      colors: {
+        primary: {
+          DEFAULT: '#DEBD68',
+          50: '#FBF6E8',
+          100: '#F6EDD1',
+          200: '#EEDCA3',
+          300: '#E6CB76',
+          400: '#DEBD68',
+          500: '#C9A44B',
+          600: '#A6863A',
+          700: '#7D652C',
+          800: '#54431D',
+          900: '#2B220F',
+        },
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },

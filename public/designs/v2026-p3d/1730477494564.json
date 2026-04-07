@@ -1,0 +1,166 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:23.963Z",
+  "units": "mm",
+  "source": {
+    "id": "1730477494564",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/p3d/1730477494564.p3d",
+    "savedAt": "2024-11-01T16:11:34.564Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 160,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 945.0000000000001,
+      "height_mm": 150,
+      "depth_mm": 290,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "test",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 1,
+    "inscriptionCount": 1,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:23.963Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/headstonesdesigner/saved-designs/p3d/1730477494564.p3d",
+    "companionJson": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1391.04,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 76.19999999999999,
+        "init_width": 1140,
+        "init_height": 847,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 992.75,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1140,
+        "init_height": 847,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 4,
+        "label": "test",
+        "font": "232.23425196850394px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      }
+    ]
+  }
+}

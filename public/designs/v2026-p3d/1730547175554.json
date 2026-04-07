@@ -1,0 +1,619 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:23.969Z",
+  "units": "mm",
+  "source": {
+    "id": "1730547175554",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/p3d/1730547175554.p3d",
+    "savedAt": "2024-11-02T11:32:55.554Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 152.39999999999998,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 939.8,
+      "height_mm": 152.39999999999998,
+      "depth_mm": 279.4,
+      "texture": "/textures/forever/l/Imperial-Red.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Hettie Hicks",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 58,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.771,
+          "y_mm": 86.069
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "☀15.VII.1922   ☯3.10.2018",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.055,
+          "y_mm": 134.503
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "“My ambition is to live to see all of physics",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 32,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 2.715,
+          "y_mm": 193.699
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "reduced to a formula so elegant and simple",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 32,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 2.715,
+          "y_mm": 227.699
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "that it will fit easily on the front of a T-shirt.”",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 32,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 2.715,
+          "y_mm": 261.699
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 6.277,
+          "y_mm": -39.41
+        },
+        "width_mm": 140.094,
+        "height_mm": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 10,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 122.304,
+          "y_mm": -188.265
+        },
+        "width_mm": 60,
+        "height_mm": 46.508,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 10,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 68.186,
+          "y_mm": -187.968
+        },
+        "width_mm": 60,
+        "height_mm": 46.508,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 10,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 5.431,
+          "y_mm": -186.458
+        },
+        "width_mm": 60,
+        "height_mm": 46.508,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 10,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -58.834,
+          "y_mm": -184.648
+        },
+        "width_mm": 60,
+        "height_mm": 46.508,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 10,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -103.843,
+          "y_mm": -183.041
+        },
+        "width_mm": 31.132,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 10,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 11,
+    "inscriptionCount": 5,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:23.969Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/headstonesdesigner/saved-designs/p3d/1730547175554.p3d",
+    "companionJson": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Imperial-Red.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2416.28,
+        "quantity": 1,
+        "width": 939.8,
+        "height": 152.39999999999998,
+        "_length": 76.19999999999999,
+        "init_width": 1680,
+        "init_height": 847,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 966.42,
+        "quantity": 1,
+        "width": 939.8,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1680,
+        "init_height": 847,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 15,
+        "label": "Leon Max Lederman",
+        "font": "133.56607788891253px Great Vibes",
+        "font_size": 58,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 2
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1730399581590,
+        "path": "../upload/2024/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1730399581590leon_m_lederman_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.28351290117929545,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Leon_M._Lederman.jpg",
+        "price": 440,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "☀15.VII.1922   ☯3.10.2018",
+        "font": "133.56607788891253px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1,
+        "y": 142,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 3
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1730547609876,
+        "path": "../upload/2024/11/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1730547609876fnallogoblack_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.09450430039309848,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FNAL-Logo-Black.png",
+        "price": 260,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 4
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1730547634198,
+        "path": "../upload/2024/11/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1730547634198fnallogoblack_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.09450430039309848,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FNAL-Logo-Black.png",
+        "price": 260,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 5
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1730547657228,
+        "path": "../upload/2024/11/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1730547657228fnallogoblack_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.09450430039309848,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FNAL-Logo-Black.png",
+        "price": 260,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 6
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1730547675284,
+        "path": "../upload/2024/11/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1730547675284fnallogoblack_cropped.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.09450430039309848,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FNAL-Logo-Black.png",
+        "price": 260,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 7
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1730547727032,
+        "path": "../upload/2024/11/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1730547727032fnallogoblack_cropped.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.06300286692873233,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FNAL-Logo-Black.png",
+        "price": 180,
+        "quantity": 1,
+        "size": "30 x 40 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 36,
+        "label": "“My ambition is to live to see all of physics",
+        "font": "133.56607788891253px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 35,
+        "label": "reduced to a formula so elegant and simple",
+        "font": "133.56607788891253px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2.715409905949855,
+        "y": 257.5687489233477,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 41,
+        "label": "that it will fit easily on the front of a T-shirt.”",
+        "font": "133.56607788891253px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 2.715409905949855,
+        "y": 261.6992399578804,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 11
+      }
+    ]
+  }
+}

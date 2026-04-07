@@ -1,0 +1,634 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:23.120Z",
+  "units": "mm",
+  "source": {
+    "id": "1693943634084",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/p3d/1693943634084.p3d",
+    "savedAt": "2023-09-05T19:53:54.084Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "headstone-30"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 914.4,
+      "height_mm": 914.4,
+      "thickness_mm": 101.6,
+      "shape": "headstone-30",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1,
+      "height_mm": 1,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Stanley Dawson",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 56,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 224.852,
+          "y_mm": 38.788
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Pryor",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 111.249,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -1.755,
+          "y_mm": 350.615
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Jesse Rodriguez",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 44,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -228.478,
+          "y_mm": 40.052
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Georgianna Rogers",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 28,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -237.334,
+          "y_mm": 111.338
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "B: November 28, 1957",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 24,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -235.507,
+          "y_mm": 162.273
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Curtis Sandoval 21, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -226.749,
+          "y_mm": 212.798
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "B: November 29, 1953",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 24,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 233.728,
+          "y_mm": 131.082
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "\"Thank You Jesus\"",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 37.458,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.648,
+          "y_mm": -62.353
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 5.265,
+          "y_mm": -261.482
+        },
+        "width_mm": 165,
+        "height_mm": 230,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 12,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_065_04",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 178.059,
+          "y_mm": -202.298
+        },
+        "width_mm": 110.611,
+        "height_mm": 110,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7013,
+        "surface": "headstone/front",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_065_04",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -170.085,
+          "y_mm": -203.57
+        },
+        "width_mm": 110.611,
+        "height_mm": 110,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7013,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-14",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 1.755,
+          "y_mm": 128.107
+        },
+        "width_mm": 146,
+        "height_mm": 131,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 16,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_065_04",
+        "path": "/shapes/motifs/1_065_04.svg"
+      },
+      {
+        "id": "1_065_04",
+        "path": "/shapes/motifs/1_065_04.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 12,
+    "inscriptionCount": 8,
+    "svgMotifCount": 2,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:23.120Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/headstonesdesigner/saved-designs/p3d/1693943634084.p3d",
+    "companionJson": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 5310.22,
+        "quantity": 1,
+        "width": 914.4,
+        "height": 914.4,
+        "_length": 100,
+        "init_width": 1296,
+        "init_height": 675,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "John Patrick",
+        "font": "179.93356299212599px Garamond",
+        "font_size": 56,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Pryor",
+        "font": "179.93356299212599px Garamond",
+        "font_size": 111.24925256440665,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 111,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Irene Camille",
+        "font": "179.93356299212599px Garamond",
+        "font_size": 44,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Nee Dabrowski",
+        "font": "179.93356299212599px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -214,
+        "y": 122,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "D: June 21, 2023",
+        "font": "179.93356299212599px Garamond",
+        "font_size": 22,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -205,
+        "y": 210,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "B: November 28, 1957",
+        "font": "179.93356299212599px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 165,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "B: November 29, 1953",
+        "font": "179.93356299212599px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 207,
+        "y": 45,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "\"Thank You Jesus\"",
+        "font": "179.93356299212599px Adorable",
+        "font_size": 37.45806517116609,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 45,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 13
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_04",
+        "item": "1_065_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": "-1",
+        "flipy": "-1",
+        "rotation": 0,
+        "height": 110,
+        "ratio": 0.1527777777777778,
+        "itemID": 11
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_04",
+        "item": "1_065_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -40,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "-1",
+        "rotation": 0,
+        "height": 110,
+        "ratio": 0.1527777777777778,
+        "itemID": 12
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1693942586883,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1693942586883istockphoto165744259612x.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6801073459348856,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "istockphoto-165744259-612x612 (1)-PhotoRoom.png-PhotoRoom.png",
+        "price": 0,
+        "quantity": 1,
+        "size": "255.51240035862665",
+        "width": "165",
+        "height": "230",
+        "itemID": 10
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1693943702505,
+        "path": "../upload/2023/09/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1693943702505screenshot_20230905_1450.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3863161894218935,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot 2023-09-05 145008.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 145.13676031671093,
+        "width": "146",
+        "height": "131",
+        "itemID": 14
+      }
+    ]
+  }
+}

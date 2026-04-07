@@ -1,0 +1,291 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.920Z",
+  "units": "mm",
+  "source": {
+    "id": "1668640382200",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1668640382200.p3d",
+    "savedAt": "2022-11-16T23:13:02.200Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 404,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "My children",
+        "font": {
+          "family": "Chopin Script",
+          "size_mm": 44.619,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -2.731,
+          "y_mm": 2.372
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Beatrice Rivera",
+        "font": {
+          "family": "French Script",
+          "size_mm": 40.395,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.286,
+          "y_mm": -72.954
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Carl Chambers",
+        "font": {
+          "family": "French Script",
+          "size_mm": 56.613,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 6.9,
+          "y_mm": -127.239
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "LOWE",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 53.994,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.961,
+          "y_mm": 99.495
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 4,
+    "inscriptionCount": 4,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:19.920Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1668640382200.p3d",
+    "companionJson": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1669.61,
+        "quantity": 1,
+        "width": 600,
+        "height": 404,
+        "_length": 80,
+        "init_width": 1079,
+        "init_height": 593,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221116,
+        "mode": "3d",
+        "navigator": "Edge (chromium based) (desktop), 1366x768"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1506.72,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 130,
+        "init_width": 1079,
+        "init_height": 593,
+        "mode": "3d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "WILLIAMS",
+        "font": "162.07303319475938px Garamond",
+        "font_size": 53.994265808446976,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 171.11006438728805,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Chelsea Alexus",
+        "font": "162.07303319475938px French Script",
+        "font_size": 40.39517014270033,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 131.11006438728805,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Aliyah Brody",
+        "font": "162.07303319475938px French Script",
+        "font_size": 56.612842597691525,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 171.11006438728805,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 57,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "My children",
+        "font": "162.07303319475938px Chopin Script",
+        "font_size": 44.61903190487001,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 91.11006438728805,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 1
+      }
+    ]
+  }
+}

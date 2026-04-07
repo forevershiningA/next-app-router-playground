@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import {
   loadCanonicalDesignIntoEditor,
-  getCanonicalDesignUrl,
+  fetchCanonicalDesign,
   type CanonicalDesignData,
 } from '#/lib/saved-design-loader-utils';
 
@@ -17,17 +17,11 @@ export default function TestCanonicalLoader() {
     setStatus('Loading...');
     setError('');
     
-    const canonicalDesignUrl = getCanonicalDesignUrl(DEFAULT_DESIGN_ID);
-    
     try {
-      console.log('Fetching:', canonicalDesignUrl);
-      const response = await fetch(canonicalDesignUrl, { cache: 'no-cache' });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      const canonicalData = await fetchCanonicalDesign(DEFAULT_DESIGN_ID);
+      if (!canonicalData) {
+        throw new Error('No canonical design found');
       }
-      
-      const canonicalData: CanonicalDesignData = await response.json();
       console.log('Canonical data:', canonicalData);
       
       setStatus('Data fetched, loading into editor...');

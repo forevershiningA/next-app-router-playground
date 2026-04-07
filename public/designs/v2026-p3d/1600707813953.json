@@ -1,0 +1,291 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.010Z",
+  "units": "mm",
+  "source": {
+    "id": "1600707813953",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1600707813953.p3d",
+    "savedAt": "2020-09-21T17:03:33.953Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 100,
+      "shape": "serpentine",
+      "texture": ""
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": ""
+    },
+    "ledger": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": ""
+    },
+    "kerb": {
+      "width_mm": 1200,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-0",
+        "asset": "/designs/p3d-assets/1600707813953/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -2.672,
+          "y_mm": 196.427
+        },
+        "width_mm": 341.724,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#C99D44",
+        "sandblasted": true,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-1",
+        "asset": "/designs/p3d-assets/1600707813953/motif-1.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -323.369,
+          "y_mm": -179.056
+        },
+        "width_mm": 160.366,
+        "height_mm": 240,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": true,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-2",
+        "asset": "/designs/p3d-assets/1600707813953/motif-2.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -1.336,
+          "y_mm": 56.122
+        },
+        "width_mm": 380.591,
+        "height_mm": 210,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#C99D44",
+        "sandblasted": true,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1600707813953/motif-0.png",
+        "path": "/designs/p3d-assets/1600707813953/motif-0.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1600707813953/motif-1.png",
+        "path": "/designs/p3d-assets/1600707813953/motif-1.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1600707813953/motif-2.png",
+        "path": "/designs/p3d-assets/1600707813953/motif-2.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 3,
+    "inscriptionCount": 0,
+    "svgMotifCount": 0,
+    "pngMotifCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:19.010Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1600707813953.p3d",
+    "companionJson": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 900,
+        "height": 700,
+        "_length": 1,
+        "init_width": 1175,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 1000,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1175,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1175,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": "NaN",
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1175,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "In Loving Memory",
+        "font": "126.1px Arial",
+        "font_size": 40,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1600707905271,
+        "path": "../upload/2020/09/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1600707905271designheadstoneapp_cropp.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.34627002288329517,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Design-Headstone-App.jpg",
+        "price": 980,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_135_21",
+        "item": "1_135_21",
+        "price": 238.7606,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 210,
+        "ratio": 0.5398457583547558,
+        "itemID": 3
+      }
+    ]
+  }
+}

@@ -1,0 +1,584 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.160Z",
+  "units": "mm",
+  "source": {
+    "id": "1682509472979",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1682509472979.p3d",
+    "savedAt": "2023-04-26T11:44:32.979Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "ledger": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "kerb": {
+      "width_mm": 1200,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Beloved",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Always together",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 200
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Safari - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -290
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Here lies",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 146.386
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Beloved",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.021,
+          "y_mm": 85.987
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Always together, never apart, joined as one heart",
+        "font": {
+          "family": "French Script",
+          "size_mm": 55,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -14.473,
+          "y_mm": -163.314
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Always together",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.034,
+          "y_mm": -104.686
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Traditional Engraved Full Monument - 26/04/2023",
+        "font": {
+          "family": "Arial",
+          "size_mm": 30,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -250
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -271.893,
+          "y_mm": 118.889
+        },
+        "width_mm": 187.183,
+        "height_mm": 240,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 11,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_169_07",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 286.367,
+          "y_mm": 129.227
+        },
+        "width_mm": 113.781,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7011,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_169_07",
+        "path": "/shapes/motifs/1_169_07.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 10,
+    "inscriptionCount": 8,
+    "svgMotifCount": 1,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.160Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1682509472979.p3d",
+    "companionJson": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "name": "Traditional Engraved Full Monument",
+        "price": 3051.53,
+        "quantity": 1,
+        "width": 414,
+        "height": 343,
+        "_length": 80,
+        "init_width": 1308,
+        "init_height": 1136,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230329,
+        "mode": "3d",
+        "navigator": "Safari (desktop), 2048x1280"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 6357.35,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1308,
+        "init_height": 1136,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 6205.99,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1308,
+        "init_height": 1136,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 3855.31,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1308,
+        "init_height": 1136,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 7,
+        "label": "Beloved",
+        "font": "264.8338457034109px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Always together",
+        "font": "264.8338457034109px Dobkin",
+        "font_size": 40,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -200,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "Safari - desktop",
+        "font": "264.8338457034109px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 290,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 8,
+        "label": "Here lies",
+        "font": "264.8338457034109px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -104,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 7,
+        "label": "Beloved",
+        "font": "264.8338457034109px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -56,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 42,
+        "label": "Always together, never apart, joined as one heart",
+        "font": "264.8338457034109px French Script",
+        "font_size": 55,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -152,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Always together",
+        "font": "264.8338457034109px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -8,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 42,
+        "label": "Traditional Engraved Full Monument - 26/04/2023",
+        "font": "264.8338457034109px Arial",
+        "font_size": 30,
+        "font_family": "Arial",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 250,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 7
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1682509506407,
+        "path": "../upload/2023/04/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1682509506407portraitg964e99f3d_1920_.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5595081247255159,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "portrait-g964e99f3d_1920.jpg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 9
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_169_07",
+        "item": "1_169_07",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.17667844522968199,
+        "itemID": 10
+      }
+    ]
+  }
+}

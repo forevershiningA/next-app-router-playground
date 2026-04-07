@@ -1,0 +1,367 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.656Z",
+  "units": "mm",
+  "source": {
+    "id": "1707102460427",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1707102460427.p3d",
+    "savedAt": "2024-02-05T03:07:40.427Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "square"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 345,
+      "height_mm": 230,
+      "thickness_mm": 10,
+      "shape": "square",
+      "texture": "/textures/forever/l/01.webp"
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/04.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/04.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Loved and Remembered Always",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 24.603,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -0.773,
+          "y_mm": 78.98
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Alton Robertson",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 21.603,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.264,
+          "y_mm": -18.804
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "23 December 19xx - 1 March 2014",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 14.603,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.556,
+          "y_mm": -41.706
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Loving Huband, Father and Grandfather",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 14.603,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -67.789
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Fought till the end, Resting Peacefully Now",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 14.603,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0.798,
+          "y_mm": -90.77
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 0.798,
+          "y_mm": 31.924
+        },
+        "width_mm": 54.367,
+        "height_mm": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 8,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 6,
+    "inscriptionCount": 5,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.656Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1707102460427.p3d",
+    "companionJson": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Lugs with Studs",
+        "price": 1052.49,
+        "quantity": 1,
+        "width": 345,
+        "height": 230,
+        "_length": 10,
+        "init_width": 1204,
+        "init_height": 598.0079879760742,
+        "device": "desktop",
+        "dpr": 1.3300000429153442,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1444x813"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "William (Bill) James BOWTELL",
+        "font": "449.54601937976804px Garamond",
+        "font_size": 21.60322958509227,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 26,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "23 December 19xx - 1 March 2014",
+        "font": "449.54601937976804px Garamond",
+        "font_size": 14.603229585092269,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 48,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 33,
+        "label": "Loving Huband, Father and Grandfather",
+        "font": "449.54601937976804px Garamond",
+        "font_size": 14.603229585092269,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 63,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "Fought till the end, Resting Peacefully Now",
+        "font": "449.54601937976804px Garamond",
+        "font_size": 14.603229585092269,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 78,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 5
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1707102954916,
+        "path": "../upload/2024/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1707102954916bill_5_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5244703559430627,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Bill_5.jpg",
+        "price": 180,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "Loved and Remembered Always",
+        "font": "449.54601937976804px Garamond",
+        "font_size": 24.60322958509227,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      }
+    ]
+  }
+}

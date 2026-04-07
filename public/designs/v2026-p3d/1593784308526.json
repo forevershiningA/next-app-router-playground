@@ -1,0 +1,116 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:18.911Z",
+  "units": "mm",
+  "source": {
+    "id": "1593784308526",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1593784308526.p3d",
+    "savedAt": "2020-07-03T13:51:48.526Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "curved-top"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 1200,
+      "thickness_mm": 100,
+      "shape": "curved-top",
+      "texture": ""
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 200,
+      "depth_mm": 250,
+      "texture": ""
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 0,
+    "inscriptionCount": 0,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:18.911Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1593784308526.p3d",
+    "companionJson": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Curved Top",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "3968.64",
+        "quantity": 1,
+        "width": 600,
+        "height": 1200,
+        "_length": 100,
+        "init_width": 1116,
+        "init_height": 873
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "964.60",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1116,
+        "init_height": 873
+      }
+    ]
+  }
+}

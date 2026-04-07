@@ -1,0 +1,567 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.370Z",
+  "units": "mm",
+  "source": {
+    "id": "1690077828379",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1690077828379.p3d",
+    "savedAt": "2023-07-23T02:03:48.379Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving memory",
+        "font": {
+          "family": "Chopin Script",
+          "size_mm": 48,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.309,
+          "y_mm": 273.601
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Rev. Pasiaka Havea",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 31,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 60.218
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "31/07/1961-4/09/2022",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 19,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 27.218
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "To act justly and to love mercy and to walk humbly with your God.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 25.303,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -16.654
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Micah 6:8",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 19.303,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -41.654
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Ka ko e fai fakalao, mo e manako ki he meesi,",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 22.303,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -1.309,
+          "y_mm": -76.054
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "pea ke taka angavaivai &apos;I ho&apos;o feangai mo ho &apos;Otua.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 25.303,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -102.6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Beloved father of Aminiasi, Amelia, Cathrine, Meleane, Taniela, Halaapiapi and Mele Lata &apos;I Tahi.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 23.228,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.309,
+          "y_mm": -148.418
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Your life was a blessing & your memory forever treasured.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 23.228,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.309,
+          "y_mm": -184.509
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Eternally loved by your Red Army.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 23.228,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.309,
+          "y_mm": -207.509
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -3.927,
+          "y_mm": 162.328
+        },
+        "width_mm": 116.927,
+        "height_mm": 150,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 4,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 11,
+    "inscriptionCount": 10,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.370Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1690077828379.p3d",
+    "companionJson": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4339.34,
+        "quantity": 1,
+        "width": 900,
+        "height": 700,
+        "_length": 80,
+        "init_width": 1625,
+        "init_height": 897,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230329,
+        "mode": "3d",
+        "navigator": "Edge (chromium based) (desktop), 1920x1080"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1690077925887,
+        "path": "../upload/2023/07/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1690077925887dad_pic_1_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3246380846325167,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dad pic 1.png",
+        "price": 450,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving memory",
+        "font": "194.34999999999997px Chopin Script",
+        "font_size": 48,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Rev. Pasiaka Havea",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "31/07/1961-4/09/2022",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.4921397450962104e-13,
+        "y": -27.21838356479003,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 52,
+        "label": "To act justly and to love mercy and to walk humbly with your God.",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 25.30348258706468,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.4921397450962104e-13,
+        "y": -8.218383564790031,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Micah 6:8",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 19.30348258706468,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.4210854715202004e-13,
+        "y": 41.65442703805809,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Ka ko e fai fakalao, mo e manako ki he meesi,",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 22.30348258706468,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.4210854715202004e-13,
+        "y": 61.65442703805809,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 42,
+        "label": "pea ke taka angavaivai &apos;I ho&apos;o feangai mo ho &apos;Otua.",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 25.30348258706468,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1.3090952948864754,
+        "y": 96.0544752818123,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 84,
+        "label": "Beloved father of Aminiasi, Amelia, Cathrine, Meleane, Taniela, Halaapiapi and Mele Lata &apos;I Tahi.",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 23.22824536376605,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 96.0544752818123,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 48,
+        "label": "Your life was a blessing & your memory forever treasured.",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 23.22824536376605,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.309095294886788,
+        "y": 171.41828707728226,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Eternally loved by your Red Army.",
+        "font": "194.34999999999997px Garamond",
+        "font_size": 23.22824536376605,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.30909529488693,
+        "y": 207.50924002614985,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 11
+      }
+    ]
+  }
+}

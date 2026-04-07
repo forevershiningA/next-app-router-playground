@@ -1,0 +1,615 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.635Z",
+  "units": "mm",
+  "source": {
+    "id": "1706404745805",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1706404745805.p3d",
+    "savedAt": "2024-01-28T01:19:05.805Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1200,
+      "thickness_mm": 100,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 1300,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Delores O&apos;Guin",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 100.358,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 32.221,
+          "y_mm": 66.159
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Gussie",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 87,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 5.897,
+          "y_mm": -41.876
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "May 24, 1931",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 74.519,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 2.458,
+          "y_mm": -206.623
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "August 6, 2023",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 75.226,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -4.208,
+          "y_mm": -309.086
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "DeeDee",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 40.139,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -2.477,
+          "y_mm": 497.832
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Forever in our heart",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 58,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 2.276,
+          "y_mm": -502.919
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -8.416,
+          "y_mm": 306.048
+        },
+        "width_mm": 234,
+        "height_mm": 300,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "dove_001",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -289.347,
+          "y_mm": 293.799
+        },
+        "width_mm": 166.978,
+        "height_mm": 220,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7012,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "dove_001",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 282.993,
+          "y_mm": 289.254
+        },
+        "width_mm": 166.978,
+        "height_mm": 220,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7012,
+        "surface": "headstone/front",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "2_129_05",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -435.9,
+          "y_mm": -507.105
+        },
+        "width_mm": 109.457,
+        "height_mm": 109,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7011,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "2_129_05",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 416.215,
+          "y_mm": -509.696
+        },
+        "width_mm": 100.419,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7012,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_001",
+        "path": "/shapes/motifs/dove_001.svg"
+      },
+      {
+        "id": "dove_001",
+        "path": "/shapes/motifs/dove_001.svg"
+      },
+      {
+        "id": "2_129_05",
+        "path": "/shapes/motifs/2_129_05.svg"
+      },
+      {
+        "id": "2_129_05",
+        "path": "/shapes/motifs/2_129_05.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 11,
+    "inscriptionCount": 6,
+    "svgMotifCount": 4,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.636Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1706404745805.p3d",
+    "companionJson": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 4542.23,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1200,
+        "_length": 80,
+        "init_width": 1343,
+        "init_height": 700,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1600x900"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 1542.13,
+        "quantity": 1,
+        "width": 1200,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1343,
+        "init_height": 700,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 13,
+        "label": "Delores O&apos;Guin",
+        "font": "105px Lucida Calligraphy",
+        "font_size": 100.35796239725347,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 100,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 18.7,
+        "quantity": 8,
+        "label": "Mitchell",
+        "font": "105px Lucida Calligraphy",
+        "font_size": 87,
+        "font_family": "Lucida Calligraphy",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -12.550274383997198,
+        "y": 4.7043483725319675,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 87,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 10,
+        "label": "May 24, 1931",
+        "font": "105px Garamond",
+        "font_size": 74.51883545298523,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 4.7043483725319675,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 75,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 12,
+        "label": "August 6, 2023",
+        "font": "105px Garamond",
+        "font_size": 75.22594944471143,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 4.7043483725319675,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 75,
+        "itemID": 4
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1706405445656,
+        "path": "../upload/2024/01/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1706405445656img_8938_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.45,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_8938.jpg",
+        "price": 816,
+        "quantity": 1,
+        "size": "240 x 300 mm",
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 256.562275,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 220,
+        "ratio": 0.39568345323741005,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_001",
+        "item": "dove_001",
+        "price": 256.562275,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 220,
+        "ratio": 0.39568345323741005,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 6,
+        "label": "DeeDee",
+        "font": "105px Garamond",
+        "font_size": 40.139173863147995,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 4.7043483725319675,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 17,
+        "label": "Forever in our heart",
+        "font": "105px Garamond",
+        "font_size": 58,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 4.7043483725319675,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 9
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_129_05",
+        "item": "2_129_05",
+        "price": 230.50447,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 109,
+        "ratio": 0.15223463687150837,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_129_05",
+        "item": "2_129_05",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.13966480446927373,
+        "itemID": 11
+      }
+    ]
+  }
+}

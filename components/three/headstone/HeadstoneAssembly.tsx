@@ -10,7 +10,7 @@ import LedgerSlab from './LedgerSlab';
 import KerbsetBorder from './KerbsetBorder';
 import RotatingBoxOutline from '../RotatingBoxOutline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { FULL_MONUMENT_GROUP_NAME } from '../constants';
+import { FULL_MONUMENT_GROUP_NAME, UPRIGHT_ASSEMBLY_NAME } from '../constants';
 import { data } from '#/app/_internal/_data';
 import LedgerSurfaceContent from './LedgerSurfaceContent';
 
@@ -79,6 +79,11 @@ export default function HeadstoneAssembly() {
     if (!monumentGroupRef.current) return;
     monumentGroupRef.current.name = FULL_MONUMENT_GROUP_NAME;
   }, [isFullMonument]);
+
+  useEffect(() => {
+    if (!assemblyRef.current) return;
+    assemblyRef.current.name = UPRIGHT_ASSEMBLY_NAME;
+  }, []);
 
   useEffect(() => {
     if (!isFullMonument) return;

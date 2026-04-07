@@ -1,0 +1,307 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.057Z",
+  "units": "mm",
+  "source": {
+    "id": "1679082412506",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1679082412506.p3d",
+    "savedAt": "2023-03-17T19:46:52.506Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 2500,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 2500,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 2300,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 2500,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -1019.047,
+          "y_mm": -114.466
+        },
+        "width_mm": 53,
+        "height_mm": 76,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 8,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 1036.542,
+          "y_mm": -116.572
+        },
+        "width_mm": 54,
+        "height_mm": 76,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "cross_005",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -12.602,
+          "y_mm": 148.077
+        },
+        "width_mm": 204.504,
+        "height_mm": 289,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7010,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_005",
+        "path": "/shapes/motifs/cross_005.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 3,
+    "inscriptionCount": 0,
+    "svgMotifCount": 1,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.057Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1679082412506.p3d",
+    "companionJson": [
+      {
+        "productid": 100,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Full Monument",
+        "price": 12053.72,
+        "quantity": 1,
+        "width": 2500,
+        "height": 700,
+        "_length": 80,
+        "init_width": 1680,
+        "init_height": 865,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230317,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 100,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 18833.94,
+        "quantity": 1,
+        "width": 2500,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1680,
+        "init_height": 865,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 20297.61,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1680,
+        "init_height": 865,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 5397.44,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1680,
+        "init_height": 865,
+        "mode": "3d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1679082456808,
+        "path": "../upload/2023/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16790824568084211_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.1745753616739929,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "4-(2)-(1)-(1).jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 336.10996711800317,
+        "width": "53",
+        "height": "76",
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1679082526707,
+        "path": "../upload/2023/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "167908252670728223_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.17574799535799215,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "282-23.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 338.3676389062276,
+        "width": "54",
+        "height": "76",
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_005",
+        "item": "cross_005",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 289,
+        "ratio": 1.2245762711864407,
+        "itemID": 9
+      }
+    ]
+  }
+}

@@ -1,0 +1,672 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:22.750Z",
+  "units": "mm",
+  "source": {
+    "id": "1680109979703",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/p3d/1680109979703.p3d",
+    "savedAt": "2023-03-29T17:12:59.703Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 762,
+      "thickness_mm": 76.19999999999999,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Susie Rice",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 42.98,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 3.465,
+          "y_mm": -210.209
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Lottie Acosta",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 28.41,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -1.155,
+          "y_mm": -164.434
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Mont Henderson",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 31,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 5.775,
+          "y_mm": -116.349
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Augustus Williams",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 29,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 8.085,
+          "y_mm": -63.644
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Wonderful parents, beloved grandparents,",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 6.929,
+          "y_mm": 28.997
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Loved by all, your lives taught us",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.435,
+          "y_mm": 135.916
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "the lessons of Grace and Humility",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -0.001,
+          "y_mm": 190.973
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "We miss you so much every day.",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -0.001,
+          "y_mm": 250.572
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "and great grandparents.",
+        "font": {
+          "family": "Dobkin",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 4.61,
+          "y_mm": 84.051
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "1_037_10",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -246.014,
+          "y_mm": -250.634
+        },
+        "width_mm": 75.082,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7006,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "1_037_10",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 250.946,
+          "y_mm": -251.79
+        },
+        "width_mm": 75.082,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7007,
+        "surface": "headstone/front",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_037_10",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 248.287,
+          "y_mm": 298.925
+        },
+        "width_mm": 75.082,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7008,
+        "surface": "headstone/front",
+        "flip": {
+          "x": true,
+          "y": true
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_037_10",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -244.356,
+          "y_mm": 299.75
+        },
+        "width_mm": 75.082,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7009,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": true
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_037_10",
+        "path": "/shapes/motifs/1_037_10.svg"
+      },
+      {
+        "id": "1_037_10",
+        "path": "/shapes/motifs/1_037_10.svg"
+      },
+      {
+        "id": "1_037_10",
+        "path": "/shapes/motifs/1_037_10.svg"
+      },
+      {
+        "id": "1_037_10",
+        "path": "/shapes/motifs/1_037_10.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 13,
+    "inscriptionCount": 9,
+    "svgMotifCount": 4,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:22.750Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/headstonesdesigner/saved-designs/p3d/1680109979703.p3d",
+    "companionJson": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 861.77,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 762,
+        "_length": 80,
+        "init_width": 2132,
+        "init_height": 862,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230323,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 3840x1080"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 15,
+        "label": "John Philip Smith",
+        "font": "220.59055118110234px Garamond",
+        "font_size": 42.97998869265101,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "Mavis Doreen Smith",
+        "font": "220.59055118110234px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 80,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_10",
+        "item": "1_037_10",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1092896174863388,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_10",
+        "item": "1_037_10",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -321.09556227251903,
+        "y": -250.63356867532485,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1092896174863388,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_10",
+        "item": "1_037_10",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 175.86391608111637,
+        "y": -251.78992572544365,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1092896174863388,
+        "itemID": 7
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_10",
+        "item": "1_037_10",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 173.2052813910919,
+        "y": 298.9252503983773,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1092896174863388,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 37,
+        "label": "Wonderful parents, beloved grandparents,",
+        "font": "220.59055118110234px Dobkin",
+        "font_size": 39.99999999999997,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 149,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 31,
+        "label": "August 21st 1932 - September 5th 2017",
+        "font": "220.59055118110234px Dobkin",
+        "font_size": 28.41025641025641,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 27,
+        "label": "March 22nd 1932 -  August 7th 2019",
+        "font": "220.59055118110234px Dobkin",
+        "font_size": 29,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 120,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "and great grandparents.",
+        "font": "220.59055118110234px Dobkin",
+        "font_size": 39.99999999999997,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "We miss you so much every day.",
+        "font": "220.59055118110234px Dobkin",
+        "font_size": 40,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 269,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 28,
+        "label": "Loved by all, your lives taught us",
+        "font": "220.59055118110234px Dobkin",
+        "font_size": 40,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 28,
+        "label": "the lessons of Grace and Humility",
+        "font": "220.59055118110234px Dobkin",
+        "font_size": 40,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 229,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 12
+      }
+    ]
+  }
+}

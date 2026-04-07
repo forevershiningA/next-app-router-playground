@@ -1,0 +1,670 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.648Z",
+  "units": "mm",
+  "source": {
+    "id": "1706580120100",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1706580120100.p3d",
+    "savedAt": "2024-01-30T02:02:00.100Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "headstone-5"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 979,
+      "height_mm": 1013,
+      "thickness_mm": 100,
+      "shape": "headstone-5",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1078,
+      "height_mm": 600,
+      "depth_mm": 290,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 878,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 1078,
+      "height_mm": 500,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "LOUIE JENSEN",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 117,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-10",
+        "text": "Lawrence Woods",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 54.497,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 162.093,
+          "y_mm": -11.399
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 52.885,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 205.208,
+          "y_mm": 233.983
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "of",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 41.936,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -96.399
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "16/04/1981-18/07/2016",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 27.629,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -58.399
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 31.666,
+          "y_mm": -28.349
+        },
+        "width_mm": 84,
+        "height_mm": 120,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -296.072,
+          "y_mm": 377.427
+        },
+        "width_mm": 65,
+        "height_mm": 20,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "width_mm": 24,
+        "height_mm": 26,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "width_mm": 31,
+        "height_mm": 24,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 318.269,
+          "y_mm": -807.284
+        },
+        "width_mm": 36,
+        "height_mm": 25,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 0,
+          "y_mm": -142.399
+        },
+        "width_mm": 22,
+        "height_mm": 20,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 11,
+    "inscriptionCount": 5,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [
+      "auto-stacked-positions"
+    ],
+    "confidence": "medium",
+    "migratedAt": "2026-04-02T16:23:20.648Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1706580120100.p3d",
+    "companionJson": [
+      {
+        "productid": 100,
+        "type": "Headstone",
+        "shape": "Guitar 3",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Full Monument",
+        "price": 4764.64,
+        "quantity": 1,
+        "width": 580,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1248,
+        "init_height": 678,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "3d",
+        "navigator": "Edge (chromium based) (desktop), 1536x864"
+      },
+      {
+        "productid": 100,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "4",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 978.31,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1248,
+        "init_height": 678,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 7748.39,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1248,
+        "init_height": 678,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 100,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 7421.18,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1248,
+        "init_height": 678,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "EL  LOCO",
+        "font": "20.657812500000002px Adorable",
+        "font_size": 117,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 117,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Wade Robert Brown",
+        "font": "20.657812500000002px Garamond",
+        "font_size": 54.49687089776922,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "20.657812500000002px Garamond",
+        "font_size": 52.88514336865915,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "of",
+        "font": "20.657812500000002px Garamond",
+        "font_size": 41.93641531941694,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "16/04/1981-18/07/2016",
+        "font": "20.657812500000002px Garamond",
+        "font_size": 27.628692071025323,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 13
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1702476495318,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17024764953181000010509_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.35323102984958754,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000010509.png",
+        "price": 0,
+        "quantity": 1,
+        "size": "1159.3223543781332",
+        "width": "84",
+        "height": "120",
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1702476585361,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1702476585361dads_funeral_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.05945200893166203,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dads funeral.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "195.1245421346856",
+        "width": "65",
+        "height": "20",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1702476796414,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17024767964142_page_at_bottom_of_page.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.07582625630458655,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2 page at bottom of page.JPG",
+        "price": 80,
+        "quantity": 1,
+        "size": "248.86566171761734",
+        "width": "24",
+        "height": "26",
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1702476939765,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1702476939765robyn_wade_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.07071557196151103,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "robyn wade.JPG",
+        "price": 80,
+        "quantity": 1,
+        "size": "232.0921336172669",
+        "width": "31",
+        "height": "24",
+        "itemID": 5
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1702478091518,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1702478091518wadedadnadine_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.05804283182091646,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "wade,dad,nadine.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": 190.49955059172578,
+        "width": "22",
+        "height": "20",
+        "itemID": 8
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1702478272870,
+        "path": "../upload/2023/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1702478272870family_cropped.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.07413357376616277,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "family.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "243.31019082227775",
+        "width": "36",
+        "height": "25",
+        "itemID": 9
+      }
+    ]
+  }
+}

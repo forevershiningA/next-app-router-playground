@@ -1,0 +1,361 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:22.421Z",
+  "units": "mm",
+  "source": {
+    "id": "1762864158409",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1762864158409.p3d",
+    "savedAt": "2025-11-11T12:29:18.409Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1075,
+      "height_mm": 829,
+      "thickness_mm": 100,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 290,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 1200,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-19",
+        "asset": "butterfly_008",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -266.701,
+          "y_mm": 677.761
+        },
+        "width_mm": 313.644,
+        "height_mm": 235,
+        "rotation": {
+          "z_deg": -13
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7023,
+        "surface": "lid/top"
+      },
+      {
+        "id": "motif-21",
+        "asset": "butterfly_008",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 310.48,
+          "y_mm": -462.01
+        },
+        "width_mm": 206.871,
+        "height_mm": 155,
+        "rotation": {
+          "z_deg": -9
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7023,
+        "surface": "lid/top"
+      },
+      {
+        "id": "motif-22",
+        "asset": "butterfly_025",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 4.015,
+          "y_mm": 61.749
+        },
+        "width_mm": 243.846,
+        "height_mm": 170,
+        "rotation": {
+          "z_deg": -11
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7023,
+        "surface": "lid/top"
+      },
+      {
+        "id": "motif-23",
+        "asset": "alyogynehakeifolia(nativehibiscus)",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "width_mm": 28.18,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7024,
+        "surface": "lid/top"
+      },
+      {
+        "id": "motif-1",
+        "asset": "/designs/p3d-assets/1762864158409/motif-4.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0.568,
+          "y_mm": 319.107
+        },
+        "width_mm": 587.692,
+        "height_mm": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9015,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-3",
+        "asset": "/designs/p3d-assets/1762864158409/motif-5.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -289.202,
+          "y_mm": -225.404
+        },
+        "width_mm": 358.418,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9015,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "/designs/p3d-assets/1762864158409/motif-6.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 318.471,
+          "y_mm": -218.301
+        },
+        "width_mm": 292.881,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9015,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-6",
+        "asset": "/designs/p3d-assets/1762864158409/motif-7.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 20.424,
+          "y_mm": 265.83
+        },
+        "width_mm": 438.344,
+        "height_mm": 37,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9015,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "/designs/p3d-assets/1762864158409/motif-8.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 20.33,
+          "y_mm": -358.338
+        },
+        "width_mm": 498.855,
+        "height_mm": 37,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9015,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "/designs/p3d-assets/1762864158409/motif-9.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -278.054,
+          "y_mm": -293.131
+        },
+        "width_mm": 476.707,
+        "height_mm": 38,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9015,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "/designs/p3d-assets/1762864158409/motif-10.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 281.096,
+          "y_mm": -292.306
+        },
+        "width_mm": 463.737,
+        "height_mm": 38,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9015,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-15",
+        "asset": "/designs/p3d-assets/1762864158409/motif-11.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -54.257,
+          "y_mm": -63.724
+        },
+        "width_mm": 600.109,
+        "height_mm": 736.405,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 20,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_008",
+        "path": "/shapes/motifs/butterfly_008.svg"
+      },
+      {
+        "id": "butterfly_008",
+        "path": "/shapes/motifs/butterfly_008.svg"
+      },
+      {
+        "id": "butterfly_025",
+        "path": "/shapes/motifs/butterfly_025.svg"
+      },
+      {
+        "id": "alyogynehakeifolia(nativehibiscus)",
+        "path": "/shapes/motifs/alyogynehakeifolia(nativehibiscus).svg"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-4.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-4.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-5.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-5.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-6.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-6.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-7.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-7.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-8.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-8.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-9.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-9.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-10.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-10.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1762864158409/motif-11.png",
+        "path": "/designs/p3d-assets/1762864158409/motif-11.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 12,
+    "inscriptionCount": 0,
+    "svgMotifCount": 4,
+    "pngMotifCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:22.421Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1762864158409.p3d",
+    "companionJson": null
+  }
+}

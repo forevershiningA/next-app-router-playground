@@ -1,0 +1,177 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:24.514Z",
+  "units": "mm",
+  "source": {
+    "id": "1770997130116",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/p3d/1770997130116.p3d",
+    "savedAt": "2026-02-13T15:38:50.116Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 812.8,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 127,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 945.0000000000001,
+      "height_mm": 150,
+      "depth_mm": 257,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "/designs/p3d-assets/1770997130116/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -0.174,
+          "y_mm": -105.128
+        },
+        "width_mm": 360.902,
+        "height_mm": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#BDC6C2",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9002,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-2",
+        "asset": "/designs/p3d-assets/1770997130116/motif-1.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0.035,
+          "y_mm": 15.318
+        },
+        "width_mm": 492.464,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#BDC6C2",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9004,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-3",
+        "asset": "/designs/p3d-assets/1770997130116/motif-2.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 57.352,
+          "y_mm": 91.009
+        },
+        "width_mm": 375.827,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#BDC6C2",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9004,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_017_18",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 3.563,
+          "y_mm": 5.142
+        },
+        "width_mm": 768.474,
+        "height_mm": 558,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#BDC6C2",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7005,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1770997130116/motif-0.png",
+        "path": "/designs/p3d-assets/1770997130116/motif-0.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1770997130116/motif-1.png",
+        "path": "/designs/p3d-assets/1770997130116/motif-1.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1770997130116/motif-2.png",
+        "path": "/designs/p3d-assets/1770997130116/motif-2.png"
+      },
+      {
+        "id": "1_017_18",
+        "path": "/shapes/motifs/1_017_18.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 4,
+    "inscriptionCount": 0,
+    "svgMotifCount": 1,
+    "pngMotifCount": 3,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:24.514Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/headstonesdesigner/saved-designs/p3d/1770997130116.p3d",
+    "companionJson": null
+  }
+}

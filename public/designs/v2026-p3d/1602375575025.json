@@ -1,0 +1,148 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.017Z",
+  "units": "mm",
+  "source": {
+    "id": "1602375575025",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1602375575025.p3d",
+    "savedAt": "2020-10-11T00:19:35.025Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "square"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 460,
+      "height_mm": 60,
+      "thickness_mm": 15,
+      "shape": "square",
+      "texture": ""
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-0",
+        "asset": "/designs/p3d-assets/1602375575025/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "width_mm": 426.894,
+        "height_mm": 33,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "sandblasted": true,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1602375575025/motif-0.png",
+        "path": "/designs/p3d-assets/1602375575025/motif-0.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 1,
+    "inscriptionCount": 0,
+    "svgMotifCount": 0,
+    "pngMotifCount": 1,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:19.017Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1602375575025.p3d",
+    "companionJson": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": "400.26",
+        "quantity": 1,
+        "width": 460,
+        "height": 60,
+        "_length": 15,
+        "init_width": 1296,
+        "init_height": 690,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Murray Gerlach Anderson 19.4.44-26.1.17",
+        "font": "292.5px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 7
+      }
+    ]
+  }
+}

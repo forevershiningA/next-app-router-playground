@@ -1,0 +1,384 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:23.684Z",
+  "units": "mm",
+  "source": {
+    "id": "1708994697310",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/p3d/1708994697310.p3d",
+    "savedAt": "2024-02-27T00:44:57.310Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "headstone-30"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 356,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 76.19999999999999,
+      "shape": "headstone-30",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "base": {
+      "width_mm": 711.1999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 254,
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "GEORGE",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 68.531,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -312.173
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "SNYDER",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 32,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.693,
+          "y_mm": 48.003
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "O&apos;NEAL",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 31.756,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -2.77,
+          "y_mm": 93.233
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "JANUARY 24, 1949-",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 3.708,
+          "y_mm": 227.748
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "AUGUST 20, 2022",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 3.696,
+          "y_mm": 258.349
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "2_095_12",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -1.956,
+          "y_mm": -233.173
+        },
+        "width_mm": 77.37,
+        "height_mm": 77,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7007,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_095_12",
+        "path": "/shapes/motifs/2_095_12.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 6,
+    "inscriptionCount": 5,
+    "svgMotifCount": 1,
+    "pngMotifCount": 0,
+    "warnings": [
+      "auto-stacked-positions"
+    ],
+    "confidence": "medium",
+    "migratedAt": "2026-04-02T16:23:23.684Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/headstonesdesigner/saved-designs/p3d/1708994697310.p3d",
+    "companionJson": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Headstone 25",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1342.41,
+        "quantity": 1,
+        "width": 356,
+        "height": 609.5999999999999,
+        "_length": 76.19999999999999,
+        "init_width": 1469,
+        "init_height": 863,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1792x1120"
+      },
+      {
+        "productid": 102,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 663.89,
+        "quantity": 1,
+        "width": 456,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1469,
+        "init_height": 863,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 5,
+        "label": "SIPES",
+        "font": "473.24240719910017px Franklin Gothic",
+        "font_size": 68.53105051719447,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 8,
+        "label": "BRADFORD",
+        "font": "473.24240719910017px Franklin Gothic",
+        "font_size": 32,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1.8462692340739508,
+        "y": -6.004500128888424,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 6,
+        "label": "O&apos;NEAL",
+        "font": "473.24240719910017px Franklin Gothic",
+        "font_size": 31.755719114965146,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1.8462692340739508,
+        "y": 54.15148070148189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "JANUARY 24, 1949-",
+        "font": "473.24240719910017px Franklin Gothic",
+        "font_size": 22,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1.8462692340739508,
+        "y": 80.15148070148189,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "AUGUST 20, 2022",
+        "font": "473.24240719910017px Franklin Gothic",
+        "font_size": 22,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1.8462692340740556,
+        "y": 237.85226940602544,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_095_12",
+        "item": "2_095_12",
+        "price": 222.99231,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 77,
+        "ratio": 0.1232,
+        "itemID": 6
+      }
+    ]
+  }
+}

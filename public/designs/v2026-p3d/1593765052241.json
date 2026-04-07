@@ -1,0 +1,168 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:18.896Z",
+  "units": "mm",
+  "source": {
+    "id": "1593765052241",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1593765052241.p3d",
+    "savedAt": "2020-07-03T08:30:52.241Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "cropped-peak"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 100,
+      "shape": "cropped-peak",
+      "texture": ""
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": ""
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-0",
+        "asset": "/designs/p3d-assets/1593765052241/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "width_mm": 258.647,
+        "height_mm": 369.374,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1593765052241/motif-0.png",
+        "path": "/designs/p3d-assets/1593765052241/motif-0.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 1,
+    "inscriptionCount": 0,
+    "svgMotifCount": 0,
+    "pngMotifCount": 1,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:18.896Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1593765052241.p3d",
+    "companionJson": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "19.84",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1116,
+        "init_height": 873
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "964.60",
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1116,
+        "init_height": 873
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1593765126588,
+        "path": "../upload/2020/07/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1593765126588motifs_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.027793859919918,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "motifs.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 369.37426704203364,
+        "width": "315",
+        "height": "449",
+        "itemID": 1
+      }
+    ]
+  }
+}

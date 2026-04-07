@@ -274,6 +274,9 @@ export type HeadstoneState = {
   borderName: string | null;
   setBorderName: (name: string | null) => void;
 
+  showInsetContour: boolean;
+  setShowInsetContour: (show: boolean) => void;
+
   materialUrl: string | null;
   setMaterialUrl: (url: string) => void;
 
@@ -334,6 +337,9 @@ export type HeadstoneState = {
   motifPriceModel: MotifProductData | null;
   motifCost: number;
   calculateMotifCost: () => void;
+
+  emblemCost: number;
+  calculateEmblemCost: () => void;
 
   imageCost: number;
   calculateImageCost: () => Promise<void>;

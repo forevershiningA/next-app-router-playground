@@ -1,0 +1,372 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.791Z",
+  "units": "mm",
+  "source": {
+    "id": "1714537943445",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1714537943445.p3d",
+    "savedAt": "2024-05-01T04:32:23.445Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "base": {
+      "width_mm": 1220,
+      "height_mm": 350,
+      "depth_mm": 300,
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "ledger": {
+      "width_mm": 1020,
+      "height_mm": 50,
+      "depth_mm": 1940,
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "kerb": {
+      "width_mm": 1220,
+      "height_mm": 250,
+      "depth_mm": 2040,
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -2.666,
+          "y_mm": 253.279
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Lela Richards",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 96.508,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.235,
+          "y_mm": 168.825
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "11/07/1948 – 21/03/2024",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 30.61,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -14.466,
+          "y_mm": 84.706
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Forever In Our Hearts",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -1.501,
+          "y_mm": -312.873
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "cross_004",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -7.178,
+          "y_mm": 350
+        },
+        "width_mm": 88.384,
+        "height_mm": 140,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7007,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_004",
+        "path": "/shapes/motifs/cross_004.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 5,
+    "inscriptionCount": 4,
+    "svgMotifCount": 1,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.791Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1714537943445.p3d",
+    "companionJson": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Full Monument",
+        "price": 3372.88,
+        "quantity": 1,
+        "width": 1220,
+        "height": 350,
+        "_length": 80,
+        "init_width": 1505,
+        "init_height": 795.0085258483887,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 931.2,
+        "quantity": 1,
+        "width": 2400,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1505,
+        "init_height": 795.0085258483887,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 5990.44,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1505,
+        "init_height": 795.0085258483887,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 3748.55,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1505,
+        "init_height": 795.0085258483887,
+        "mode": "3d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_004",
+        "item": "cross_004",
+        "price": 237.781875,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 140,
+        "ratio": 0.7070707070707071,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "63.53551743460483px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 13,
+        "label": "John Kwaje woko",
+        "font": "63.53551743460483px Lucida Calligraphy",
+        "font_size": 96.5075588750429,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 97,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "11/07/1948 – 21/03/2024",
+        "font": "63.53551743460483px Garamond",
+        "font_size": 30.60959572988993,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 10.826389713722227,
+        "y": -127.5030445998652,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "Forever In Our Hearts",
+        "font": "63.53551743460483px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -127.5030445998652,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      }
+    ]
+  }
+}

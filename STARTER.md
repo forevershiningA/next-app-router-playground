@@ -1,7 +1,7 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-03-31
-**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL)
+**Last Updated:** 2026-04-06
+**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
 
 ---
 
@@ -26,10 +26,457 @@
 18. [File Storage System](#file-storage-system)
 19. [Database & Catalog System](#database--catalog-system)
 20. [ML Smart Search](#ml-smart-search)
-21. [Performance Considerations](#performance-considerations)
-22. [Memory Management](#memory-management)
-23. [Common Issues & Solutions](#common-issues--solutions)
-24. [Development Workflow](#development-workflow)
+21. [Load Design Popup](#load-design-popup)
+22. [P3D Format & Converter](#p3d-format--converter)
+23. [Performance Considerations](#performance-considerations)
+24. [Memory Management](#memory-management)
+25. [Common Issues & Solutions](#common-issues--solutions)
+26. [UI Theming & Primary Color](#ui-theming--primary-color)
+27. [Design Management Scripts](#design-management-scripts)
+28. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-04-06) — 3D Screenshot Thumbnails, Design Dedup Siblings, Transparent PNGs, Image Placeholder Fix
+
+### ✅ 3D Screenshots Wired into Load Design Popup
+
+The Load Design popup now uses `public/screenshots/v2026-3d/` 3D screenshots as thumbnail images, with proper fallback to legacy ML screenshots.
+
+#### Thumbnail Source Priority
+```typescript
+// getPopupPreviewSrc(id: string) in LoadDesignButton.tsx
+1. v2026-3d screenshot (if design ID is in V2026_3D_IDS set)  →  /screenshots/v2026-3d/{id}_small.jpg
+2. Legacy ML screenshot (fallback)                             →  /ml/{mlDir}/saved-designs/screenshots/*/{id}_small.jpg
+```
+
+A hardcoded `V2026_3D_IDS` Set (222 design IDs) prevents 404 spam — only designs with actual 3D screenshots try the v2026-3d path. Both `<img>` locations (favorites list + category grid) have 3-stage `onError` fallback chains.
+
+#### Files Changed
+- `components/LoadDesignButton.tsx` — Added `V2026_3D_IDS` Set (~lines 94-150), `getPopupPreviewSrc()`, `getLegacySmallSrc()`, updated both `<img>` onError handlers
+
+### ✅ Design Dedup: Sibling Detection (148 New Duplicates)
+
+The dedup script (`scripts/dedup-designs.ts`) previously only detected "drafts that grew richer" (older → newer with more content). It missed **reverse evolution** — families simplifying designs over time.
+
+#### New Sibling Detection Pass (Step 1b)
+For pairs in the same `shapeName + mlDir` group with ≥70% **bidirectional** word overlap in inscriptions:
+- Keeps the **richest** design (highest richness score)
+- Hides all others as siblings
+- Bidirectional: both `wordsA⊂B ≥ 70%` AND `wordsB⊂A ≥ 70%`
+
+**Results:** 148 new sibling duplicates found. `data/hidden-designs.json` grew from 657 → 793 entries.
+
+#### Example (LOCI Family)
+- `1708723212727` — **kept** (richest: 4 inscriptions + 2 motifs)
+- `1712843604404` — hidden (3 inscriptions + 2 motifs, sibling)
+- `1708790342849` — hidden (2 inscriptions + 2 motifs, sibling)
+
+#### Files Changed
+- `scripts/dedup-designs.ts` — Added sibling detection pass (~lines 163-200)
+- `data/hidden-designs.json` — Updated (657 → 793 entries)
+
+### ✅ Batch Screenshot Overhaul: Transparent PNGs, Environment Strip, Auto-Crop
+
+The batch screenshot script was completely reworked to produce clean, tightly-cropped monument-only images.
+
+#### Environment Strip
+Before capture, the script accesses the Three.js scene via `window.__r3fScene` (exposed by `Scene.tsx`) and hides all environment objects:
+
+| Object | Detection Method |
+|--------|-----------------|
+| GrassFloor / SimpleGrassFloor | PlaneGeometry with width or height ≥ 10 |
+| GradientBackground sky dome | SphereGeometry + BackSide (side === 1) |
+| AtmosphericSky dome | SphereGeometry + BackSide |
+| SunRays | ShaderMaterial with `uInnerColor` or `colorTop` uniforms |
+| ContactShadows | Group containing OrthographicCamera child |
+| Sparkles | Points objects |
+| SelectionBox outlines | LineSegments objects |
+| Clouds (drei) | Group containing Sprite or InstancedMesh children |
+| Fog | `scene.fog = null` |
+
+#### Transparent Background
+- `scene.background = null` + `gl.setClearColor(0x000000, 0)` → fully transparent WebGL canvas
+- Auto-crop uses **alpha channel** detection (`alpha > 10` threshold) instead of color matching
+- Full-size PNG saved with RGBA transparency (color type 6)
+- JPEG thumbnails get `#1a1a1a` dark background fill (JPEG has no transparency)
+
+#### Auto-Crop Pipeline
+1. `gl.readPixels()` — Read all pixels from WebGL canvas (bottom-to-top, Y-flipped)
+2. Alpha-threshold scan — Find tight bounding box of non-transparent pixels
+3. Add 4% padding (minimum 8px) on each side
+4. Draw cropped region to offscreen 2D canvas → export as base64 PNG + JPEG
+5. Save both files; fallback to uncropped Playwright screenshot if crop fails
+
+#### Scene.tsx Exposure
+`Scene.tsx` now exposes `window.__r3fScene` and `window.__r3fGL` via useEffect for external tooling (batch screenshots, debugging).
+
+#### Results (April 6, 2026)
+- **222 transparent PNGs** + 222 JPEG thumbnails in `public/screenshots/v2026-3d/`
+- Tightly cropped to monument bounds (typical: 350-800px wide × 500-960px tall)
+- No grass, sky, fog, sun rays, selection outlines, or sparkles
+- Runtime: ~2h for 223 designs (~35s each)
+
+#### Files Changed
+- `scripts/batch-screenshot.js` — Environment strip, transparent background, alpha-based auto-crop, configurable BASE_URL (default port 3001)
+- `components/three/Scene.tsx` — Added `window.__r3fScene` / `window.__r3fGL` exposure (~line 165-172)
+
+### ✅ Vitreous Enamel Image Placeholder: JPG → PNG
+
+The photo placeholder image was migrated from `.jpg` to `.png` across the entire codebase.
+
+#### Code References Fixed
+| File | Change |
+|------|--------|
+| `components/three/ImageModel.tsx` | `vitreous-enamel-image.jpg` → `.png` |
+| `components/HeroCanvas.tsx` | `vitreous-enamel-image.jpg` → `.png` |
+| `lib/saved-design-loader-utils.ts` | Fallback URL + motif asset remap (`.jpg` → `.png`) |
+| `scripts/convert-p3d-design.js` | Converter output uses `.png` |
+
+#### Design JSON Batch Fix
+421 P3D design JSON files in `public/designs/v2026-p3d/` had `vitreous-enamel-image.jpg` baked into the `asset` field. All were batch-updated to `.png`.
+
+#### Loader Safety Net
+`saved-design-loader-utils.ts` line 2005: motif assets with `assetType: "photo-placeholder"` now apply `.replace('vitreous-enamel-image.jpg', 'vitreous-enamel-image.png')` — catches any remaining old JSONs that weren't batch-fixed.
+
+### 📌 Next Steps
+
+1. **Update PRODUCT_STATS** — Pets count still shows 254 in `saved-designs-data.ts`, should be 111
+2. **Batch-convert remaining ~2,891 designs** — Only 223 have canonical JSON; the rest need conversion before screenshotting
+3. **Photo anonymization** — Stock photos from original designs remain as-is (not yet handled)
+4. **Visual QA pass** — Compare more designs side-by-side with original screenshots
+5. **Category sidebar navigation** — Deferred from UX review; prevents "accordion jump" when browsing many folders
+6. **Update V2026_3D_IDS set** — When new screenshots are generated, add their IDs to the set in `LoadDesignButton.tsx`
+
+---
+
+## Current Status (2026-04-04) — Load Design Category-First Redesign, Pets Cleanup, Batch 3D Screenshot Generator
+
+### ✅ Load Design Popup: Category-First Redesign
+
+The Load Design modal was **completely rewritten** from product-first grouping to category-first grouping with a polished thumbnail grid.
+
+#### Architecture Change
+- **Before:** `PickerTree` — Product → Category → Design (list rows with 64px thumbnails)
+- **After:** `CategoryTree` — Category → Design (visual grid cards, no product nesting)
+
+```typescript
+// New CategoryTree structure (replaces PickerTree)
+{
+  [categorySlug]: {
+    categoryLabel: string;
+    designs: Array<{ id, displayTitle, metadata }>;
+  }
+}
+```
+
+`buildCategoryTree()` groups all designs by category regardless of product type. `CATEGORY_ORDER` array controls curated sort priority (Pets first, then family categories, themes, religious).
+
+#### Visual Grid Cards
+- **Layout:** `grid-cols-2 gap-3 sm:grid-cols-3` — 2 columns on mobile, 3 on desktop
+- **Thumbnails:** `aspect-[4/3]` container, `object-contain` on black background — all designs uniform
+- **Opacity:** 80% idle → 100% on hover with scale `1.03` transition
+- **Metadata:** Date derived from 13-digit timestamp ID instead of repeating category name
+
+#### Hover UX
+- Centered **"Open Design"** button appears on hover with semi-transparent backdrop
+- ⭐ Favorite and ↗ Open-in-new-tab icons in top-right (localhost only)
+- 🗑️ Trash icon isolated at bottom-left to prevent accidental deletion
+
+#### Files Changed
+- `components/LoadDesignButton.tsx` — Complete rewrite (~578 lines)
+
+### ✅ Pets Category Cleanup (254 → 111 Designs)
+
+The Pets product category contained many human memorials that were miscategorized.
+
+#### Audit Script (`scripts/audit-pets-category.js`)
+Created a text-based classifier using:
+- **Name detection**: Common first/last name databases
+- **Lifespan analysis**: Short lifespans typical for pets vs human lifespans
+- **Keyword matching**: Pet-specific ("paw", "furry friend") vs human-specific ("wife", "mother") keywords
+- **Inscription structure**: Memorial phrase patterns
+
+#### Results
+- **140 automatic reclassifications** — Designs with human relationship words, human-length lifespans, or no pet indicators
+- **4 manual reclassifications** — Confirmed by visual inspection (1659117755289, 1744068681242, 1727308984905, 1668799359538)
+- **1 pet found in other categories** — Winston (`1741675923334`) moved to Pets
+- **Final count: 111 genuine pet designs** (down from 254)
+
+#### Files Changed
+- `lib/saved-designs-data.ts` — 145 design entries reclassified
+- `scripts/audit-pets-category.js` — Audit/reclassification script (created)
+
+### ✅ Batch 3D Screenshot Generator (221/223 Success → Overhauled April 6)
+
+> **Note:** This section describes the initial implementation. See **Current Status (2026-04-06)** above for the overhauled version with transparent PNGs, environment strip, and auto-crop.
+
+Playwright-based automation that loads each design into the 3D editor, anonymizes inscriptions via route interception, hides UI chrome, and captures a clean canvas screenshot.
+
+#### Pipeline Overview
+1. **Chromium with SwiftShader** (`--use-angle=swiftshader`) for headless WebGL
+2. **Route interception**: `page.route()` intercepts design JSON fetches, applies `sanitizeInscription()` before fulfilling
+3. **Load design** via `window.__loadDesignById(id)` (dev-only bridge)
+4. **Wait for render**: `store.loading === false` (30s hard gate) → `store.baseSwapping === false` (8s soft gate, force-clear if stuck) → 1500ms settle
+5. **Deselect all items**: Clears selection outlines before capture
+6. **Visibility check**: WebGL pixel sampling at 3 center points — skips sky-only renders
+7. **DOM tree walk**: Hides all non-canvas elements (product title, price pill, nav arrows, buttons)
+8. **`canvas.screenshot()`** — Playwright's native screenshot (NOT `canvas.toDataURL()` — troika-three-text fonts aren't in framebuffer)
+
+#### Anonymization
+- `scripts/utils/inscription-sanitizer.js` — Gender-aware name replacement
+- Name databases: `public/json/firstnames_f_small.json`, `firstnames_m_small.json`, `surnames_small.json`
+- Deterministic replacement via hash of original text
+- Preserves memorial phrases, dates, and structure
+
+#### Known Issues & Workarounds
+- **baseSwapping stuck**: `enforceTexture()` sets `baseSwapping: true`; if `PreloadTexture.onReady` never fires, stays true forever. Script force-clears after 8s.
+- **Sky-only renders**: Some P3D designs have `coordinateSpace: "headstone-center-mm"` → missing viewport dims → elements scaled to ~0.7px. Only 2 affected: `1636037970908` (failed), `1752608698736` (removed).
+- **`canvas.toDataURL()` DOES NOT WORK**: troika-three-text loads fonts async — text not in framebuffer when `toDataURL()` is called. Always use Playwright `canvas.screenshot()`.
+
+#### Results
+- **221 good screenshots** in `public/screenshots/v2026-3d/` (186 MB total, ~860 KB avg)
+- **1 failure**: `1636037970908` (headstone not visible — p3d viewport issue)
+- **Runtime**: ~2h 50min for 223 designs
+- Error report: `public/screenshots/v2026-3d/_errors.json`
+
+#### Dev-Only Bridges Added
+- `window.__loadDesignById` in `components/DefaultDesignLoader.tsx` (line ~50)
+- `window.__headstoneStore` in `lib/headstone-store.ts` (line ~1940)
+- Both guarded by `isDevEnvironment` check — not exposed in production
+
+#### Files Created
+- `scripts/batch-screenshot.js` — Main batch generator (~548 lines)
+- `scripts/utils/inscription-sanitizer.js` — Name anonymizer
+- `public/screenshots/v2026-3d/*.png` — 221 anonymized screenshots
+
+#### Files Modified
+- `components/DefaultDesignLoader.tsx` — Added `window.__loadDesignById`
+- `lib/headstone-store.ts` — Added `window.__headstoneStore`
+- `package.json` — Added `playwright@1.59.1` and `@playwright/test@1.59.1` as devDependencies
+
+### ⚠️ Dev Server: Turbopack Required
+
+**`pnpm dev` (webpack) causes `EvalError` in Edge Runtime middleware.** Webpack uses `eval()` at line 348 of compiled middleware.js — disallowed in Edge Runtime.
+
+**Fix:** Always use Turbopack for local development:
+```bash
+npx next dev --turbopack
+```
+
+The `turbopack: { root: process.cwd() }` config already exists in `next.config.ts`. Turbopack compiles middleware without `eval()` and works correctly.
+
+### 📌 Next Steps (Completed in April 6 session — see above)
+
+1. ~~**Wire 3D screenshots into Load Design popup**~~ ✅ Done — V2026_3D_IDS set + fallback chain
+2. **Update PRODUCT_STATS** — Pets count still shows 254 in `saved-designs-data.ts`, should be 111
+3. **Batch-convert remaining ~2,891 designs** — Only 223 have canonical JSON; the rest need conversion before screenshotting
+4. **Photo anonymization** — Stock photos from original designs remain as-is (not yet handled)
+5. **Visual QA pass** — Compare more designs side-by-side with original screenshots
+6. **Category sidebar navigation** — Deferred from UX review; prevents "accordion jump" when browsing many folders
+
+---
+
+## Current Status (2026-04-03) — P3D Motif/Inscription Positioning, Bronze Plaque Fixes, Load Design Popup & Pet Categories
+
+### ✅ P3D Converter: Universal Motif & Inscription Positioning (12 fixes)
+
+All fixes are **universal mechanisms** applied to all 860 P3D designs, not design-specific tweaks.
+
+#### Coordinate System Fixes
+- **Forevershining P3D positions**: Negate BOTH X and Y (`p3dSign = -1`). The haxe 3D model faces the opposite direction; P3D regionPosition uses Y-DOWN + X-LEFT convention.
+- **Forevershining companion JSON positions**: Negate Y only (`ySign = -1`). Companion JSON uses Y-DOWN (negative Y = upward) but X is already correct.
+- **Headstonesdesigner**: No negation needed (Y-UP convention matches canonical).
+- P3D positions exactly match companion JSON positions when both exist (verified: design 1595787261483, motif 2 at y=104.9 in both sources).
+
+#### Auto-Layout Algorithm (for motifs with lost positions)
+~80% of P3D headstone motifs have `(0,0)` positions — original layouts from the haxe renderer were never saved.
+
+The converter handles these with a multi-stage layout:
+1. **Memorial phrases** ("IN LOVING MEMORY", "REST IN PEACE" etc.) placed ABOVE the positioned reference inscription
+2. **Names/dates** placed BELOW the reference inscription
+3. **Deco zone** computed from lowest inscription Y position (init `Infinity`, not `0`)
+4. **Zero-group motifs**: Flow layout in rows below text, size-capped to 10% headstone height / 35% width
+5. **All motifs**: Universal size cap — no motif exceeds headstone dimensions
+
+#### Embedded PNG Rendering
+- **No oval mask**: P3D embedded-png and photo-placeholder motifs render with `maskShape: ''` (empty string) → no ceramic oval base, flat plane rendering
+- **Photo placeholders**: Companion JSON `type='Photo'` recognized; uses `jpg/photos/vitreous-enamel-image.png` as placeholder (migrated from `.jpg` in April 2026)
+- **Photo dimensions**: Uses companion JSON width/height when available (P3D stores oversized dimensions)
+
+#### Anonymization Fix
+- `sanitizeInscription()` regex for sentence detection (the, you, me, etc.) now uses `\b` word boundaries
+- Prevents false matches like "the" in "HEATHER" or "or" in "DOROTHY"
+
+#### Files Changed
+- `scripts/convert-p3d-design.js` — P3D→canonical converter (12 fixes, see below)
+- `lib/saved-design-loader-utils.ts` — Added `photo-placeholder` to image loading, `maskShape: ''` for all P3D images
+- `public/designs/v2026-p3d/*.json` — All 860 designs re-converted
+
+#### Batch Results
+- **860/869** designs convert successfully (9 corrupted p3d files — unchanged)
+- `pnpm build` passes ✅
+
+### ✅ Bronze Plaque Position & Border Fix (Rollout Designs)
+
+Bronze plaque designs (`mlDir: 'bronze-plaque'`) from the rollout conversion pipeline had two issues:
+
+#### Problem: Positions Treated as Pixels Instead of Millimeters
+The bronze-plaque companion JSON stores inscription/motif positions in **mm** (like forevershining), but the rollout converter (`batch-convert-saved-designs.js` / `convert-saved-design.js`) stored them as `x_px`/`y_px`. The loader then applied a px→mm conversion ratio, shrinking positions to ~1/3 of correct values.
+
+**Fix:** When `mlDir === 'bronze-plaque'`, store positions as `x_mm`/`y_mm` with Y negation (companion uses Y-DOWN), and font sizes as `size_mm`. The loader's `convertPositionToMm()` returns `_mm` values directly (line 1621) — no scaling, no stage compensation.
+
+Example: Design 1669305872595 (560×241mm plaque, 20 inscriptions)
+- Before: y_px=-88 → converted to yMm=31.8 (wrong, clustered in center)
+- After: y_mm=88 → used directly (correct, 88mm above center = near top)
+
+#### Problem: Border Not Loading in Canonical Loader
+`loadCanonicalDesignIntoEditor()` didn't extract border name from embedded legacy data. The legacy loader (`loadSavedDesignIntoEditor()`) did call `setBorderName()`, but the canonical path skipped it.
+
+**Fix:** Added extraction of `legacyRawHeadstoneItem.border` in canonical loader → `store.setBorderName()`.
+
+#### Files Changed
+- `scripts/batch-convert-saved-designs.js` — Bronze-plaque `_mm` position/font handling
+- `scripts/convert-saved-design.js` — Same changes in `buildInscription`/`buildMotif`
+- `lib/saved-design-loader-utils.ts` — Border extraction from legacy raw data in canonical loader
+- `public/designs/v2026-rollout-full-*/1669305872595.json` — Re-converted with correct `_mm` fields
+
+### 📌 Next Steps
+
+1. **Visual QA pass** — Compare more designs side-by-side with original screenshots
+2. **Bronze plaque batch reconversion** — Run full batch for all 2,814 bronze-plaque designs with `_mm` fix
+3. **Forevershining rollout designs** — May need same `_mm` fix (companion JSON also stores mm, not px)
+4. **Border rendering at non-standard sizes** — Border SVG artwork needs manual design work for large/unusual plaque dimensions
+5. **Lid/top motif rendering** — Positions in mm need proper conversion to ledger surface coordinates
+
+---
+
+## Current Status (2026-04-01) — P3D Converter, Inset Borders, Camera Fixes
+
+### ✅ Inset Contour Border Lines
+
+A **white/coloured inset contour line** that follows the headstone shape a few cm inside the edges, rendered with Three.js fat lines (`Line2` + `LineGeometry` + `LineMaterial`).
+
+#### Implementation (`components/three/InsetContourLine.tsx`)
+- Samples the headstone SVG path at `SAMPLE_COUNT = 200` points
+- Offsets each point inward by `INSET_MM = 15` using vertex normals
+- Trims bottom edge (below `BOTTOM_TRIM_Y`) and top region for certain shapes
+- Renders as `Line2` with `linewidth: 2`, `worldUnits: true`, white default color
+- Limited to first 11 traditional shapes (not slant/ogee/gothic etc.)
+
+#### Store Integration
+- `borderName: string | null` in Zustand store (via `setBorderName()`)
+- Toggle in `ShapeSelector` panel — shows/hides border toggle for supported shapes
+- Persisted in saved designs
+
+### ✅ P3D Binary Format Converter
+
+Decodes the proprietary `.p3d` file format (used by the legacy haxe 3D designer) and converts to canonical v2026 JSON.
+
+#### P3D Format (`haxe/` directory heritage)
+- **Header:** `FF FF 00 00` + `"WPF0"` (magic) + `00 00 FF FF` + `"PROJ"` + 10 metadata bytes = 26 bytes total
+- **Payload:** zlib-compressed → 3 skip bytes + XML scene tree + binary section (embedded PNGs)
+- **Variant:** 12 files use text-CSV encoding (byte values as comma-separated ASCII decimals)
+- **Corrupted:** 9 files are undecompressable
+
+#### XML Hierarchy
+```
+project > scenery > base > kerb > (lid-back > lid > elements[motifs])
+                                 + (stand-back > stand > table[headstone] > inscriptions[motifs])
+```
+
+Each motif has:
+- `<regionPosition x="" y="" rotation="">` — position in mm from surface center
+- `<storageObject>` with model properties (width, height, depth, texture)
+- `<displayObjectValue embed-pointer="">` — pointer to PNG in binary section
+- `<extra type="json"><![CDATA[{"id":N,"src":"path/to/motif.svg"}]]></extra>` — links to companion JSON via `itemID`
+
+#### Converter Script (`scripts/convert-p3d-design.js`)
+- **Companion JSON cross-reference**: `itemID` in companion JSON (`ml/*/saved-designs/json/`) matches p3d `extraJson.id`
+- **Inscriptions → editable text**: Extracts label, font_family, font_size (mm), color, position from companion JSON
+- **Motifs → SVG refs**: Maps `companionMotif.src` (e.g., `"butterfly_005"`) to `/shapes/motifs/butterfly_005.svg`
+- **Photos → placeholder**: Companion `type='Photo'` → `vitreous-enamel-image.jpg`, uses companion dimensions over P3D's oversized values
+- **Fallback → embedded PNG**: Items without companion match use extracted PNG from p3d binary
+- **Name anonymization**: `sanitizeInscription()` replaces real names with fake ones (uses `\b` word boundaries to avoid false matches)
+- **Coordinate negation**: Forevershining P3D positions negate both X and Y; companion positions negate Y only
+- **Auto-layout algorithm**: Flow layout below text with size capping; memorial phrases above reference, names below
+- **Universal size cap**: All motifs capped to headstone dimensions; zero-group motifs capped to 10%/35%
+
+```bash
+# Convert single design
+node scripts/convert-p3d-design.js 1680456686045
+
+# Batch convert all p3d designs
+node scripts/convert-p3d-design.js
+```
+
+#### Batch Results
+- **860/869** designs converted successfully (9 corrupted p3d files)
+- **651** designs with editable inscriptions (5,065 inscription elements total)
+- **428** designs with SVG motif references (1,187 motif elements total)
+- Output: `public/designs/v2026-p3d/`
+- Extracted PNG assets: `public/designs/p3d-assets/`
+
+#### Position Data Limitations (KEY KNOWLEDGE)
+- **P3D `regionPosition`**: ~80% of headstone motifs have `(0,0)`. The haxe renderer used an internal auto-layout system NOT captured in saved files.
+- **Companion JSON `x`/`y`**: Inscriptions have partially-correct positions. Motifs mostly `(0,0)`. Multiple inscriptions can share the same y-coordinate (e.g., several at `y=119.619`) causing overlap.
+- **Auto-layout handles 3 cases**:
+  - All items positioned (601 designs) → use as-is
+  - All items at (0,0) (38 designs) → full auto-stack
+  - Mixed positions (147 designs) → hybrid: keep positioned items, auto-distribute (0,0) items in grid
+- **Lid/top motif positions**: Correct mm values from p3d XML but relative to lid center coordinate system
+
+### ✅ P3D Loader Integration
+
+#### `fetchCanonicalDesign()` (`lib/saved-design-loader-utils.ts`)
+- **Priority order**: tries `v2026-p3d/` first, then falls back to main rollout `v2026/`
+- **Position mode**: `p3d-mm-center` — positions in mm from surface center, no DPR or stage compensation
+- **Shape loading**: Reads from `product.shape` OR `components.headstone.shape` (fallback added for p3d designs)
+- **Kerb component**: Loads kerb dimensions and texture when present in canonical JSON
+- **Embedded-PNG routing**: P3d motifs with `assetType: 'embedded-png'` or `'photo-placeholder'` → `pendingImages` with `maskShape: ''` (no ceramic oval base — flat plane rendering)
+- **Border loading**: Extracts `border` from `legacy.raw` headstone item → `store.setBorderName()` (added 2026-04-02)
+- `headstoneShiftMm = 0` for p3d designs (already in headstone-center coords)
+- `GLOBAL_LAYOUT_SCALE = 1` for p3d designs
+
+#### Callers Updated
+- `components/DefaultDesignLoader.tsx` — uses `fetchCanonicalDesign()`
+- `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` — uses `fetchCanonicalDesign()`
+- `components/TestCanonicalLoader.tsx` — uses `fetchCanonicalDesign()`
+
+### ✅ Camera Zoom Fix for Full Monument Components
+
+**Problem:** Clicking Base or Ledger caused camera to zoom way out (1800m bounding box) because `Box3.setFromObject()` included motif meshes positioned at mm coordinates in a meters scene.
+
+#### Fix (`components/three/FullMonumentFit.tsx`)
+- **`computeMeshBox()`**: Mesh-only bounding box traversal — skips `motif-*` named meshes, meshes >10m from origin, and `LineSegments` (border/outline helpers)
+- **`shouldFocusBase`**: Detects base click → targets upright-assembly group (headstone+base) instead of full monument
+- **`shouldZoomIn` / `shouldFocusHeadstone`**: Proper zoom levels per component
+- **`UPRIGHT_ASSEMBLY_NAME`** constant in `components/three/constants.ts`
+- **`HeadstoneAssembly.tsx`**: Names the assembly group `'upright-assembly'` via useEffect
+
+### ⚠️ Known Position Limitations (P3D Designs)
+
+1. **Haxe auto-layout not captured**: The haxe renderer placed items in bordered frames and two-column layouts using an internal system. These spatial arrangements are NOT saved in p3d or companion JSON data. The converter uses a flow-layout algorithm to approximate the original placement.
+2. **~80% of headstone motifs at (0,0)**: Original positions permanently lost. Converter auto-layouts these below text content with size capping.
+3. **Some inscription positions inaccurate**: Items like "September 21, 1960" have `x=0` (center) in companion JSON but were visually positioned to the right by the auto-layout engine.
+4. **Font sizes are mm-accurate**: The companion JSON stores font_size in real mm, but the haxe renderer used bordered text frames that made text appear smaller relative to the headstone.
+5. **Lid motif coordinate system**: Lid motifs have correct mm positions but relative to lid center. They render on the ledger surface.
+
+### ✅ Position Issues Resolved (2026-04-02)
+
+1. ~~Motifs rendered with oval grey ceramic masks~~ → `maskShape: ''` for all P3D images
+2. ~~Forevershining positions inverted (X/Y)~~ → `p3dSign = -1` for P3D, `ySign = -1` for companion
+3. ~~Motifs oversized (100%+ of headstone)~~ → Universal size cap + zero-group flow layout cap
+4. ~~Photo placeholders not loaded~~ → `type='Photo'` recognized, vitreous-enamel-image.jpg used
+5. ~~Name anonymization false positives~~ → `\b` word boundaries on sentence regex
+6. ~~Bronze plaque positions shrunk to 1/3~~ → `_mm` fields for bronze-plaque companion positions
+
+### 📌 Next Steps (Updated 2026-04-02)
+
+1. ~~Improve p3d inscription layout~~ — ✅ Done (flow layout, text ordering, size capping)
+2. **Fix lid/top motif rendering** — Positions in mm need proper conversion to ledger surface coordinates
+3. ~~Visual QA pass~~ — Ongoing; multiple designs verified with original screenshots
+4. **Build verification** — `pnpm build` passes ✅
 
 ---
 
@@ -3436,10 +3883,14 @@ public/ml/{mlDir}/saved-designs/
 
 ### Canonical v2026 Saved Design Pipeline
 - Canonical millimetre snapshots live under `public/canonical-designs/v2026/{designId}.json`, safely outside the `/designs/*` route tree.
-- `loadCanonicalDesignIntoEditor` (in `lib/saved-design-loader-utils.ts`) ingests these files and directly seeds the Zustand store—product, dimensions, materials, inscriptions, and motif offsets—without running the pixel/DPR conversion.
-- `DesignPageClient.tsx` now fetches `/canonical-designs/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json` first; if that fetch fails it falls back to `loadSavedDesignIntoEditor` with the legacy ML JSON.
-- `v2026/1725769905504.json` (Curved Gable biblical memorial) is the first migrated file and serves as the QA baseline when testing the new save/load flow.
-- Future migrations simply drop additional JSON into the same folder; the client automatically uses whichever IDs exist there.
+- **P3D-converted designs** live under `public/designs/v2026-p3d/{designId}.json` — these come from the haxe 3D designer's binary `.p3d` format.
+- **Rollout designs** live under `public/designs/v2026-rollout-full-*/` — batch-converted from companion JSON via `scripts/batch-convert-saved-designs.js`.
+- `fetchCanonicalDesign()` (in `lib/saved-design-loader-utils.ts`) tries `v2026-p3d/` first, falls back to main rollout `v2026/` — this means p3d designs take priority when both exist.
+- `loadCanonicalDesignIntoEditor` ingests these files and directly seeds the Zustand store—product, dimensions, materials, inscriptions, motif offsets, and **border name** (extracted from legacy raw data).
+- `DesignPageClient.tsx`, `DefaultDesignLoader.tsx`, and `TestCanonicalLoader.tsx` all use `fetchCanonicalDesign()`.
+- Position modes supported: `legacy-stage-px`, `surface-mm`, `p3d-mm-center`
+- `p3d-mm-center` mode: positions are in mm from surface center, no DPR/stage compensation applied.
+- **Bronze-plaque rollout designs**: Positions stored as `x_mm`/`y_mm` (not `_px`), font sizes as `size_mm`. Companion JSON uses mm units with Y-DOWN convention; converter negates Y for canonical Y-UP.
 
 **Design Metadata** (`lib/saved-designs-data.ts`):
 ```typescript
@@ -3808,6 +4259,173 @@ The ML smart search system provides intelligent filtering and ranking for the `/
 
 ---
 
+## Load Design Popup
+
+### Overview
+The Load Design modal (`components/LoadDesignButton.tsx`) is a searchable category-first browser for all 3,114+ saved designs. It opens from the canvas top-right corner and allows loading any design into the 3D editor.
+
+### Tree Structure (Category-First — April 2026)
+Designs are organized in a **single-level collapsible tree** grouped by content category (not product type):
+1. **Category** (top-level): Groups by `category` (e.g., "Pet Memorial", "Mother Memorial", "Biblical Memorial")
+2. **Design** (leaf): Individual designs shown as visual grid cards with thumbnail, title, and date
+
+```typescript
+// CategoryTree structure (replaced PickerTree in April 2026)
+{
+  [categorySlug]: {
+    categoryLabel: string;          // Display name via toLabel()
+    designs: Array<{ id, displayTitle, metadata }>;
+  }
+}
+```
+
+**Category sort order** is controlled by `CATEGORY_ORDER` array — curated priority with Pets first, then family categories (mother, father, wife, husband, son, daughter, baby), then themes (memorial, rest-in-peace, in-loving-memory), then religious. Unlisted categories sort alphabetically at end.
+
+**Note:** The `/designs/` SEO catalog pages remain product-first (separate from the popup). Only the Load Design popup uses category-first grouping.
+
+### Design Categories (DesignCategory type)
+Defined in `lib/saved-designs-data.ts` as a union type. Current categories:
+
+| Category Slug | Description |
+|--------------|-------------|
+| `memorial` | General memorial designs |
+| `biblical-memorial` | Designs with scripture/bible verses |
+| `mother-memorial` | Dedicated to mothers |
+| `father-memorial` | Dedicated to fathers |
+| `wife-memorial` | Dedicated to wives |
+| `husband-memorial` | Dedicated to husbands |
+| `son-memorial` | Dedicated to sons |
+| `daughter-memorial` | Dedicated to daughters |
+| `brother-memorial` | Dedicated to brothers |
+| `sister-memorial` | Dedicated to sisters |
+| `baby-memorial` | Baby/infant memorials |
+| `child-memorial` | Child memorials |
+| `pet-memorial` | **All pet types merged** (dogs, cats, horses, etc.) |
+| `dove-memorial` | Designs featuring doves |
+| `butterfly-memorial` | Designs featuring butterflies |
+| `floral-memorial` | Floral/garden themed |
+| `garden-memorial` | Garden themed |
+| `religious-memorial` | Religious symbols (crosses, etc.) |
+| `islamic-memorial` | Islamic themed |
+| `jewish-memorial` | Jewish themed |
+| `military-veteran` | Military/veteran themed |
+| `rest-in-peace` | RIP themed designs |
+| `in-loving-memory` | ILM themed designs |
+| `commemorative` | Commemorative plaques |
+| `dedication` | Dedication plaques |
+| And more... | fishing, music, maori, nurse, doctor, teacher, etc. |
+
+**Note:** `dog-memorial`, `cat-memorial`, and `horse-memorial` were merged into `pet-memorial` (April 2026). The "Legacy Memorial" product was renamed to "Pets" (`productSlug: "pets"`).
+
+### Product: Pets
+The "Pets" product (`productSlug: "pets"`, `productId: "135"`) contains **111 designs** (cleaned from 254 in April 2026) with verified animal content (dog, cat, horse motifs or pet-related inscriptions). Designs with family relationship words (wife, mother, father, etc.) are excluded even if they have animal motifs as decoration — those remain in their original product/category.
+
+### Features
+
+#### Visual Grid Cards (April 2026)
+Each category expands into a responsive thumbnail grid (`grid-cols-2 sm:grid-cols-3`). Cards use `aspect-[4/3]` containers with `object-contain` on black backgrounds for uniform appearance. Date is shown below each title (derived from the 13-digit timestamp ID).
+
+#### ML Category Filters
+Three filter dropdowns at the top (Type, Style, Motif) with dark backgrounds and gold (#DEBD68) active state styling.
+
+#### Popular Drawer
+A collapsible "Popular" drawer at the top of the scroll area displays favorited designs. The drawer is visible on all environments (localhost and production). Styled with gold star icon and `primary` color accents.
+
+#### Localhost-Only Actions
+Three action icons appear per design card **only on localhost** (`window.location.hostname === 'localhost'`), revealed on hover:
+1. **⭐ Star** — Toggle favorite status (top-right of card, persisted to `data/favorite-designs.json` via API)
+2. **↗ Preview** — Open full-size design image in new tab (top-right of card)
+3. **🗑️ Trash** — Hide design from list (bottom-left of card, isolated to prevent accidental clicks, persisted to `data/hidden-designs.json` via API)
+
+#### Hidden Designs
+Hidden designs are filtered from both the Load Design popup and the `/designs/` page on localhost. The hidden list is stored in `data/hidden-designs.json` and managed via `app/api/hidden-designs/route.ts` (GET/POST/DELETE).
+
+#### Favorite Designs
+Favorite designs are toggled via `app/api/favorite-designs/route.ts` (GET/POST) and stored in `data/favorite-designs.json`. The favorites list is fetched on all environments (not just localhost) so the Popular drawer works in production.
+
+### Key Files
+| File | Purpose |
+|------|---------|
+| `components/LoadDesignButton.tsx` | Main popup component with tree, search, filters, icons, V2026_3D_IDS screenshot set |
+| `lib/useHiddenDesigns.ts` | Shared hook for hidden + favorite design state |
+| `lib/saved-designs-data.ts` | 2.6MB design catalog with `SAVED_DESIGNS`, `DesignCategory`, `DESIGN_CATEGORIES`, `CATEGORY_STATS`, `PRODUCT_STATS` |
+| `app/api/hidden-designs/route.ts` | REST API for hidden design list |
+| `app/api/favorite-designs/route.ts` | REST API for favorite design list |
+| `data/hidden-designs.json` | Persistent hidden design IDs (793 entries as of April 2026) |
+| `data/favorite-designs.json` | Persistent favorite design IDs |
+
+---
+
+## P3D Format & Converter
+
+### Overview
+The `.p3d` format is a binary file used by the legacy haxe 3D designer (code in `haxe/` directory). Full Monuments (product IDs 100, 101) and occasionally Headstones (IDs 4, 124) have p3d files containing the 3D scene tree with embedded textures and motif PNGs.
+
+### File Locations
+| Path | Contents |
+|------|----------|
+| `public/ml/forevershining/saved-designs/p3d/` | 635 p3d files |
+| `public/ml/headstonesdesigner/saved-designs/p3d/` | 234 p3d files |
+| `public/ml/*/saved-designs/json/` | Companion JSON (text data, motif SVG refs) |
+| `public/designs/v2026-p3d/` | Converted canonical JSON output |
+| `public/designs/p3d-assets/` | Extracted PNG motif images |
+| `scripts/convert-p3d-design.js` | Converter script (~1030 lines) |
+
+### Binary Format Details
+```
+Offset  Size  Description
+0-3     4B    Magic: FF FF 00 00
+4-7     4B    "WPF0"
+8-11    4B    Separator: 00 00 FF FF
+12-15   4B    "PROJ"
+16-25   10B   Metadata (version, flags)
+26+     var   zlib-compressed payload
+```
+
+After decompression: 3 skip bytes + UTF-8 XML scene tree. Binary section follows XML (embedded PNGs found by scanning for PNG magic `89 50 4E 47`).
+
+### Companion JSON Cross-Reference
+The companion JSON (`ml/*/saved-designs/json/{id}.json`) is an array of items with:
+- `itemID` — matches p3d `<extra type="json">{"id": N}</extra>`
+- `type` — `"Inscription"`, `"Motif"`, or `"Photo"`
+- `label` — text content (for inscriptions)
+- `font_family`, `font_size` — font info in mm
+- `x`, `y` — position in mm from headstone center
+- `color` — hex color
+- `src` — SVG motif name (e.g., `"butterfly_005"`)
+- `width`, `height` — dimensions (used for photos; P3D stores oversized photo dimensions)
+
+### Coordinate Systems (Critical Knowledge)
+
+| Source | Origin | Y Convention | X Convention | Units | Negation Needed |
+|--------|--------|-------------|-------------|-------|----------------|
+| **Canonical JSON** | center | Y-UP (+Y = top) | X-RIGHT (+X = right) | mm | — (target format) |
+| **Forevershining companion JSON** | center | Y-DOWN (-Y = top) | X-RIGHT | mm | Negate Y only |
+| **Forevershining P3D regionPosition** | center | Y-DOWN (-Y = top) | X-LEFT (-X = right) | mm | Negate both X and Y |
+| **Headstonesdesigner companion JSON** | center | Y-UP (+Y = top) | X-RIGHT | mm | None |
+| **Headstonesdesigner legacy stage** | center | Y-DOWN | X-RIGHT | canvas-px | Loader negates Y in px→mm |
+| **Bronze-plaque companion JSON** | center | Y-DOWN (-Y = top) | X-RIGHT | mm | Negate Y only |
+
+**Verified:** P3D regionPosition values exactly match companion JSON values when both exist (design 1595787261483, motif 2 at y=104.9 in both sources).
+
+### Auto-Layout Algorithm (Updated 2026-04-02)
+The converter handles motifs with lost positions (~80% of headstone motifs at (0,0)):
+
+1. **Positioned items**: Use companion JSON / P3D positions with coordinate negation per mlDir
+2. **Text ordering**: Memorial phrases ("IN LOVING MEMORY" etc.) placed ABOVE positioned reference, names/dates BELOW
+3. **Deco zone**: Computed from lowest inscription Y position
+4. **Zero-group motifs**: Flow layout in rows below text, size-capped to 10% headstone height / 35% width
+5. **Universal size cap**: ALL motifs capped to not exceed headstone dimensions
+6. **Photo handling**: Companion `type='Photo'` → `vitreous-enamel-image.jpg` placeholder, uses companion dimensions
+
+### Key Coordinate Facts
+- Font sizes in companion JSON are in **mm** (not px) for ALL mlDirs
+- Positions are in **mm from headstone center**
+- Layer values: inscriptions ≥9000, decorative motifs <9000
+- Headstone dimensions come from p3d XML `<property id="width/height" value="..."/>`
+
+---
+
 ## Performance Considerations
 
 ### Texture Optimization
@@ -4110,10 +4728,11 @@ useEffect(() => {
 ## Saved Designs & Canonical Format (Updated Jan 26, 2026)
 
 ### Design Storage Overview
-The application supports two design storage formats:
+The application supports three design storage formats:
 
 1. **Legacy ML Format**: Pixel-based coordinates from the original 2D designer
-2. **Canonical v2026 Format**: Millimeter-based coordinates for 3D designer
+2. **Canonical v2026 Format**: Millimeter-based coordinates for 3D designer (converted from legacy)
+3. **P3D v2026 Format**: Millimeter-based coordinates converted from the haxe 3D designer's `.p3d` binary files — stored in `public/designs/v2026-p3d/`
 
 ### Canonical v2026 Format Structure
 
@@ -4203,36 +4822,23 @@ if (!surfaceIsBase && baseHeightMm > 0) {
 
 **File:** `lib/saved-design-loader-utils.ts`
 
-The `loadCanonicalDesignIntoEditor()` function loads designs:
+The `loadCanonicalDesignIntoEditor()` function loads designs from all three formats:
 
-✅ **All Working (as of Jan 26, 2026):**
-- Inscriptions load with correct positions
-- Motifs load with correct positions
+✅ **All Working (as of April 1, 2026):**
+- Inscriptions load with correct positions (legacy px, surface mm, and p3d mm-center)
+- Motifs load with correct positions (SVG motifs from catalog + embedded PNGs from p3d)
 - Sizes and colors correct
-- Product, shape, dimensions load correctly
+- Product, shape, dimensions load correctly (shape falls back to `components.headstone.shape`)
 - Automatic base offset handling
-- No fallback to legacy needed
+- P3D kerb component loading
+- `fetchCanonicalDesign()` priority: v2026-p3d → v2026 → legacy fallback
 
-**Loading Process:**
-```typescript
-// 1. Load inscription
-const inscriptionMm = convertCanonicalPosition(inscription.position, 'headstone');
-store.addInscription({
-  xPos: inscriptionMm.xMm,
-  yPos: inscriptionMm.yMm,
-  fontSize: convertFontSize(inscription.font, 'headstone'),
-  ...
-});
-
-// 2. Load motif
-const motifMm = convertCanonicalPosition(motif.position, canonicalSurfaceTarget(motif.surface));
-store.setMotifOffset(motifId, {
-  xPos: motifMm.xMm,
-  yPos: motifMm.yMm,
-  target: canonicalSurfaceTarget(motif.surface),
-  ...
-});
-```
+**Position Modes:**
+| Mode | Source | Conversion |
+|------|--------|-----------|
+| `legacy-stage-px` | Legacy 2D designer | CSS px → mm via DPR + viewport ratios |
+| `surface-mm` | Already in mm | Pass-through |
+| `p3d-mm-center` | Haxe 3D designer | Pass-through (mm from surface center) |
 
 ### Conversion Script (Enhanced Jan 26, 2026)
 
@@ -4594,13 +5200,184 @@ before any DML. Otherwise tables appear in `information_schema` but fail on dire
 
 ---
 
+## UI Theming & Primary Color
+
+### Primary Color: #DEBD68
+The application uses a gold/amber primary color `#DEBD68` for all CTAs, selection highlights, and UI accents. This is defined as a full Tailwind color scale in `tailwind.config.js`:
+
+```javascript
+// tailwind.config.js
+primary: {
+  50: '#FDF8ED',
+  100: '#FAF0D5',
+  200: '#F5E0AA',
+  300: '#EFCF7F',
+  400: '#EABD54',
+  500: '#DEBD68',  // DEFAULT
+  600: '#C9A24B',
+  700: '#A68035',
+  800: '#836224',
+  900: '#614818',
+  DEFAULT: '#DEBD68',
+}
+```
+
+### Usage Patterns
+- **Selection/Active state**: `border-primary/50 bg-primary/10 text-primary`
+- **Focus rings**: `focus:ring-primary/40`
+- **Headers/Accents**: `text-primary`
+- **Filter dropdowns**: Dark backgrounds (`bg-neutral-900`) with gold active state
+- **Popular drawer**: Gold star icon, primary color borders and text
+- **Hover effects**: `hover:text-primary` on interactive elements
+
+### Key Files
+- `tailwind.config.js` — Primary color scale definition
+- `components/LoadDesignButton.tsx` — Primary color usage in ML filters, Popular drawer, action buttons
+
+---
+
+## Design Management Scripts
+
+### Smart Dedup Script (`scripts/dedup-designs.ts`)
+Finds duplicate/draft designs using content-evolution analysis and hides them, keeping only the final version.
+
+**Algorithm:**
+1. Groups designs by `shapeName + mlDir`
+2. Compares pairs using word overlap in inscriptions, motif containment, and feature growth
+3. Thresholds: 70% word overlap + motif subset + growth, or 85% words alone, or 100% words + richer score
+4. "Richness" scoring: `inscriptionCount×2 + motifNames×3 + photo×5 + logo×3 + additions×2`
+5. Also flags designs containing "test" in inscriptions
+
+**Usage:**
+```bash
+npx tsx scripts/dedup-designs.ts          # Apply (writes to data/hidden-designs.json)
+npx tsx scripts/dedup-designs.ts --dry-run # Preview only
+```
+
+**Results (April 2026):** 592 evolution drafts + 148 sibling duplicates + 1 slug dupe + 34 test designs = 793 hidden, ~2,321 remaining visible.
+
+### Pet Design Scanner (`scripts/scan-pet-designs.py`)
+Scans all saved designs for pet-related content and reassigns matching designs to the "Pets" product.
+
+**Detection methods:**
+- `motifNames` containing: dog, cat, horse, paw, parrot, rabbit, etc.
+- `inscriptions` containing pet-related keywords (dog, cat, horse, pet, paw, puppy, kitten, etc.)
+- `slug` or `shapeName` containing pet keywords
+- Existing pet categories (pet-memorial, cat-memorial, horse-memorial)
+
+**Exclusion rule:** Designs with family relationship words (wife, husband, mother, father, son, daughter, etc.) in inscriptions are **excluded** — these are human memorials with decorative animal motifs.
+
+**Usage:**
+```bash
+python scripts/scan-pet-designs.py          # Apply changes
+python scripts/scan-pet-designs.py --dry-run # Preview only
+```
+
+**Fix false positives:**
+```bash
+python scripts/fix-pet-false-positives.py          # Revert family-word designs
+python scripts/fix-pet-false-positives.py --dry-run # Preview
+```
+
+**Results (April 2026):** ~~254~~ → 111 genuine pet designs after audit cleanup (see below).
+
+### Pets Category Audit (`scripts/audit-pets-category.js`)
+Text-based classifier that separates human memorials from genuine pet designs in the Pets category.
+
+**Classification signals:**
+- Name detection (common first/last name databases)
+- Lifespan analysis (short lifespans typical for pets vs human lifespans)
+- Pet-specific keywords ("paw", "furry friend") vs human-specific ("wife", "mother")
+- Inscription structure patterns
+
+**Usage:**
+```bash
+node scripts/audit-pets-category.js
+```
+
+**Results:** 140 automatic + 4 manual reclassifications. Output: `database-exports/pets-audit-report.json`.
+
+### Batch 3D Screenshot Generator (`scripts/batch-screenshot.js`)
+Playwright-based automation that loads each design into the 3D editor, anonymizes inscriptions, strips the 3D environment, and captures clean auto-cropped transparent PNG screenshots.
+
+**Requirements:**
+- `playwright` and `@playwright/test` in devDependencies
+- Dev server running: `npx next dev --turbopack` (NOT `pnpm dev` — see Turbopack note)
+- Chromium installed: `npx playwright install chromium`
+- Default dev server port: 3001 (configurable via `BASE_URL` env var)
+
+**Usage:**
+```bash
+# Full batch (overwrites existing screenshots)
+node scripts/batch-screenshot.js
+
+# Skip existing screenshots
+node scripts/batch-screenshot.js --skip-existing
+
+# Specific designs
+node scripts/batch-screenshot.js --ids 1673880911330,1680266135598
+
+# By category
+node scripts/batch-screenshot.js --category pet-memorial --limit 10
+
+# Dry run (list designs without capturing)
+node scripts/batch-screenshot.js --dry-run
+```
+
+**Key flags:** `--category`, `--ids`, `--limit`, `--concurrency`, `--out`, `--width`, `--height`, `--render-wait`, `--timeout`, `--skip-existing`, `--dry-run`
+
+**Output:**
+- `public/screenshots/v2026-3d/{id}.png` — Transparent RGBA PNGs, auto-cropped to monument bounds
+- `public/screenshots/v2026-3d/{id}_small.jpg` — 400px-wide JPEG thumbnails with `#1a1a1a` dark background
+
+**Pipeline (April 2026 overhaul):**
+1. Chromium with SwiftShader (`--use-angle=swiftshader`) for headless WebGL
+2. Route interception: `page.route()` intercepts design JSON, applies `sanitizeInscription()`
+3. Load design via `window.__loadDesignById(id)`
+4. Wait for render: `store.loading === false` → `store.baseSwapping === false` → 1500ms settle
+5. Visibility check: WebGL pixel sampling at center (sky-blue detection) — skips empty renders
+6. **Environment strip**: Hides grass, sky dome, fog, sun rays, sparkles, selection outlines, clouds via `window.__r3fScene`
+7. **Transparent background**: `scene.background = null`, `gl.setClearColor(0x000000, 0)`
+8. DOM chrome hide: All non-canvas elements hidden
+9. **Auto-crop**: `gl.readPixels()` → alpha-threshold bounding box → offscreen 2D canvas → transparent PNG + JPEG thumbnail
+
+**Dependencies:** `scripts/utils/inscription-sanitizer.js` (gender-aware name anonymizer), name databases in `public/json/`.
+
+**⚠️ Important:** Uses `canvas.screenshot()` (Playwright native), NOT `canvas.toDataURL()`. troika-three-text loads fonts asynchronously — text won't be in the WebGL framebuffer for `toDataURL()`.
+
+**⚠️ Playwright constraint:** `page.evaluate()` accepts only ONE argument. Multiple values must be wrapped in an object: `page.evaluate(({a, b}) => {}, {a, b})`.
+
+**Results (April 2026):** 222/223 success, 1 failure (p3d viewport issue), runtime ~2h for 223 designs (~35s each). All PNGs have RGBA transparency (color type 6).
+
+### Design Analyzer (`scripts/analyze-saved-designs.js`)
+Generates `lib/saved-designs-data.ts` from raw design JSON files. Contains the `determineCategory()` function that assigns categories based on inscription keywords and motif types.
+
+**Key product mapping (line 10-31):**
+- Product `135` → `Pets` (slug: `pets`) — formerly "Legacy Memorial"
+- All animal-related inscriptions (dog, cat, horse) → category `pet-memorial`
+
+### Hidden/Favorite API
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/hidden-designs` | GET | List all hidden design IDs |
+| `/api/hidden-designs` | POST | Add design ID to hidden list |
+| `/api/hidden-designs` | DELETE | Remove design ID from hidden list |
+| `/api/favorite-designs` | GET | List all favorite design IDs |
+| `/api/favorite-designs` | POST | Toggle design ID in favorites |
+
+Data stored in `data/hidden-designs.json` and `data/favorite-designs.json` (file-based, no database needed).
+
+---
+
 ## Development Workflow
 
 ### Starting Development
 ```bash
 npm install
-npm run dev
+npx next dev --turbopack    # ⚠️ MUST use Turbopack (see below)
 ```
+
+**⚠️ Turbopack Required:** `pnpm dev` / `npm run dev` (webpack) causes `EvalError: Code generation from strings disallowed for this context` in Edge Runtime middleware. Webpack uses `eval()` in compiled middleware.js — disallowed in Edge Runtime. Always use `npx next dev --turbopack` for local development. The `turbopack` config already exists in `next.config.ts`.
 
 ### Database Setup
 ```bash
@@ -4691,20 +5468,25 @@ npm start
 2. `components/SvgHeadstone.tsx` - Core 3D logic
 3. `components/ThreeScene.tsx` - Canvas setup
 4. `components/three/Scene.tsx` - Lighting/environment
-5. `SLANT_COMPLETE_SUMMARY.md` - Slant rotation implementation (production-ready)
-6. `SLANT_ROTATION_FIX.md` - Rotation debugging process
-7. `TEXTURE_IMPROVEMENTS_SUMMARY.md` - Texture optimization & known limitations
+5. `lib/saved-design-loader-utils.ts` - Design loading (legacy, canonical, p3d)
+6. `scripts/convert-p3d-design.js` - P3D → canonical JSON converter
+7. `components/LoadDesignButton.tsx` - Load Design popup (category-first grid)
+8. `scripts/batch-screenshot.js` - Batch 3D screenshot generator
+9. `SLANT_COMPLETE_SUMMARY.md` - Slant rotation implementation (production-ready)
 
 ### For Adding Features
 - **New Shape**: Add SVG to `/public/shapes/`, update data
 - **New Texture**: Add WebP to `/public/textures/`, update catalog
 - **New Font**: Add to `/public/fonts/`, update `_data/fonts.ts`
 - **New Motif**: Add SVG to `/public/motifs/`, categorize
+- **New P3D support**: Extend `convert-p3d-design.js` parser, re-run batch
 
 ### For Debugging
 - **Performance**: Check `SvgHeadstone.tsx` memoization
 - **Positioning**: Check `HeadstoneInscription.tsx` raycasting
 - **Materials**: Check texture loading in `ShapeSwapper.tsx`
+- **Design loading**: Check `lib/saved-design-loader-utils.ts` — `fetchCanonicalDesign()`, `convertPositionToMm()`, `resolveFontSizeMm()`
+- **Camera framing**: Check `components/three/FullMonumentFit.tsx` — `computeMeshBox()`, `fitCamera()`
 - **Texture Issues**: Review `TEXTURE_IMPROVEMENTS_SUMMARY.md` for UV mapping limitations
 
 ---
@@ -4798,6 +5580,34 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-04-03**: Load Design Popup Enhancements, Pet Category & Design Management
+  - **Load Design Popup UI**:
+    - Thumbnail images increased to 64px (`h-16 w-16`)
+    - **Localhost-only actions**: ⭐ Favorite toggle, ↗ Full-image preview (new tab), 🗑️ Hide design
+    - **Popular drawer**: Collapsible gold-themed section at top showing favorited designs (visible on all environments)
+    - **ML filter styling**: Dark dropdown backgrounds with gold (#DEBD68) active state
+    - **Hidden designs**: Filtered from both popup and `/designs/` page; persisted in `data/hidden-designs.json`
+    - **Favorite designs**: Toggle API with `data/favorite-designs.json` persistence
+  - **Primary Color System**:
+    - Added `primary` color scale to `tailwind.config.js` with `#DEBD68` as DEFAULT
+    - Full 50-900 shade range for consistent CTA/selection styling across the UI
+  - **NaN Bounding Sphere Fix** (`components/three/RotatingBoxOutline.tsx`):
+    - Fixed `THREE.BufferGeometry.computeBoundingSphere(): Computed radius is NaN` error
+    - Root cause: empty `positions` array when both scale factors < 0.0001
+    - Fix: early return with `helper.visible = false` when positions array is empty
+  - **Design Category Changes**:
+    - Renamed product "Legacy Memorial" → "Pets" (productSlug: `legacy-memorial` → `pets`)
+    - Merged categories: `dog-memorial`, `cat-memorial`, `horse-memorial` → all now `pet-memorial`
+    - Removed `dog-memorial`, `cat-memorial`, `horse-memorial` from `DesignCategory` type
+    - Pet design scanner: 254 genuine pet designs identified via motif/inscription analysis
+    - Family-word exclusion: designs mentioning wife/mother/father/etc. kept in original category even with animal motifs
+  - **Smart Dedup Script** (`scripts/dedup-designs.ts`):
+    - Content-evolution algorithm detects progressive saves of same design idea
+    - Groups by shape+source, compares word overlap + motif containment + richness growth
+    - Result: 633 drafts/test designs hidden, 2,481 remaining visible
+  - **Files Created**: `data/hidden-designs.json`, `data/favorite-designs.json`, `app/api/hidden-designs/route.ts`, `app/api/favorite-designs/route.ts`, `lib/useHiddenDesigns.ts`, `scripts/dedup-designs.ts`, `scripts/scan-pet-designs.py`, `scripts/fix-pet-false-positives.py`
+  - **Files Modified**: `components/LoadDesignButton.tsx`, `tailwind.config.js`, `components/three/RotatingBoxOutline.tsx`, `lib/saved-designs-data.ts`, `scripts/analyze-saved-designs.js`, `app/designs/DesignsPageClient.tsx`
 
 - **2026-01-29 (Evening)**: Canonical Loader Fixes & Motif Color Recoloring
   - **Canonical Loader Scaling Fix**:
@@ -5779,5 +6589,5 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
-*End of STARTER.md - Last updated: March 2, 2026*
+*End of STARTER.md - Last updated: April 4, 2026*
 

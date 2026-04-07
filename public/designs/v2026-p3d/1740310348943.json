@@ -1,0 +1,591 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:21.568Z",
+  "units": "mm",
+  "source": {
+    "id": "1740310348943",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1740310348943.p3d",
+    "savedAt": "2025-02-23T11:32:28.943Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 760,
+      "height_mm": 700,
+      "thickness_mm": 105,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 960,
+      "height_mm": 540,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 760,
+      "height_mm": 50,
+      "depth_mm": 2300,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 960,
+      "height_mm": 440,
+      "depth_mm": 2400,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Efim NOVIKOV",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 36.167,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -194.057,
+          "y_mm": 20.715
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "30.11.1936 - 28.02.2024",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 18.138,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -190.624,
+          "y_mm": -38.922
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Rozalia DIMENT",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 35.516,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 177.021,
+          "y_mm": 22.996
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "12.02.1937 - 27.01.2025",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 17.557,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 175.882,
+          "y_mm": -39.982
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "The warmth of your hearts, your unconditional love,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 24.22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -4.706,
+          "y_mm": -162.058
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "kindness and your amazing art will live with us forever.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 24.22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.123,
+          "y_mm": -208.161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "May your memory be a blessing!",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 24.22,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -11.483,
+          "y_mm": -254.205
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -7.839,
+          "y_mm": 194.077
+        },
+        "width_mm": 240,
+        "height_mm": 186.764,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 16,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "flower_004",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -253.773,
+          "y_mm": 183.727
+        },
+        "width_mm": 123.842,
+        "height_mm": 131,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7013,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-13",
+        "asset": "flower_004",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 247.857,
+          "y_mm": 188.32
+        },
+        "width_mm": 123.842,
+        "height_mm": 131,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7014,
+        "surface": "headstone/front",
+        "flip": {
+          "x": true,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "flower_004",
+        "path": "/shapes/motifs/flower_004.svg"
+      },
+      {
+        "id": "flower_004",
+        "path": "/shapes/motifs/flower_004.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 10,
+    "inscriptionCount": 7,
+    "svgMotifCount": 2,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:21.568Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1740310348943.p3d",
+    "companionJson": [
+      {
+        "productid": 100,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Full Monument",
+        "price": 2412.99,
+        "quantity": 1,
+        "width": 760,
+        "height": 700,
+        "_length": 80,
+        "init_width": 1680,
+        "init_height": 855,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 100,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 5598.35,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1680,
+        "init_height": 855,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 3775.43,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1680,
+        "init_height": 855,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 3414.82,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1680,
+        "init_height": 855,
+        "mode": "3d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1740311139135,
+        "path": "../upload/2025/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1740311139135__cropped.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.307535046728972,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Фото_щмфд.jpg",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Efim NOVIKOV",
+        "font": "146.25px Franklin Gothic",
+        "font_size": 36.1673625408912,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "30.11.1936 - 28.02.2024",
+        "font": "146.25px Franklin Gothic",
+        "font_size": 18.137511704066245,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 194.06163158283715,
+        "y": -55.973732172368045,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Rozalia DIMENT",
+        "font": "146.25px Franklin Gothic",
+        "font_size": 35.51567034808361,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -55.973732172368045,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "12.02.1937 - 27.01.2025",
+        "font": "146.25px Franklin Gothic",
+        "font_size": 17.557498759280573,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -181.49880283726782,
+        "y": -3.7426407608478485,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "The warmth of your hearts, your unconditional love,",
+        "font": "146.25px Lucida Calligraphy",
+        "font_size": 24.21970528031038,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 36.25735923915215,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "May your memory be a blessing!",
+        "font": "146.25px Lucida Calligraphy",
+        "font_size": 24.21970528031038,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 84.25735923915215,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 47,
+        "label": "kindness and your amazing art will live with us forever.",
+        "font": "146.25px Lucida Calligraphy",
+        "font_size": 24.21970528031038,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 60.25735923915215,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_004",
+        "item": "flower_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 131,
+        "ratio": 0.35792349726775957,
+        "itemID": 12
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flower_004",
+        "item": "flower_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 129.93137278557361,
+        "y": -183.72698848150947,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 131,
+        "ratio": 0.35792349726775957,
+        "itemID": 13
+      }
+    ]
+  }
+}

@@ -1,0 +1,635 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:21.312Z",
+  "units": "mm",
+  "source": {
+    "id": "1734397557689",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1734397557689.p3d",
+    "savedAt": "2024-12-17T01:05:57.689Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "square"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 10,
+      "shape": "square",
+      "texture": "/textures/forever/l/01.webp"
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/04.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/04.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "DOUGLAS",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 24.83,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0.788,
+          "y_mm": 102.387
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "RAY BERRY",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -88.998,
+          "y_mm": 65.155
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "ISOM JOHNSTON",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 90.573,
+          "y_mm": 63.606
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "10-9-1928 – 29-8-2018",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -88.21,
+          "y_mm": 47.067
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "16-6-1933 – 7-9-2024",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 91.669,
+          "y_mm": 46.849
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "MAURIE  AND  CONNIE,  HAPPILY  MARRIED  FOR  67 YEARS",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 37.067
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "MAURIE  AND  CONNIE,  HAPPILY  MARRIED  FOR  67 YEARS",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -1.63,
+          "y_mm": -34.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "BELOVED FATHER AND MOTHER OF NORMAN, ANDREW, MARK & ADRIAN",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0.788,
+          "y_mm": -48.393
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "TO ALL THEIR GRANDIES & GREAT GRANDCHILDREN",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -1.996,
+          "y_mm": -79.326
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "TOGETHER NOW AND WILL BE FOREVER IN OUR HEARTS",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -1.28,
+          "y_mm": -104.301
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "POPPY MO AND NANA CON",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -0.777,
+          "y_mm": -67.349
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-13",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 1.087,
+          "y_mm": 8.01
+        },
+        "width_mm": 60,
+        "height_mm": 46.542,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 12,
+    "inscriptionCount": 11,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:21.312Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1734397557689.p3d",
+    "companionJson": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 2",
+        "shape_url": "shapes/photos/border2.svg",
+        "fixingSystem": 1,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/01.jpg",
+        "name": "Bronze Plaque - Black - Flat Back",
+        "price": 1296.71,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 10,
+        "init_width": 3200,
+        "init_height": 1186,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "3d",
+        "navigator": "Mozilla Firefox (desktop), 3440x1440"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 255,
+        "label": "VANDERFEEN MAURICE EVERTON CONSTANCE JUNE 10-9-1928 – 29-8-2018 16-6-1933 – 7-9-2024 MAURIE AND CONNIE, HAPPILY MARRIED FOR 67 YEARS BELOVED FATHER AND MOTHER OF NORMAN, ANDREW, MARK & ADRIAN POPPY MO AND NANA CON TO ALL THEIR GRANDIES & GREAT GRANDCHILDREN TOGETHER NOW AND WILL BE FOREVER IN OUR HEARTS",
+        "font": "340.7368421052631px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 10,
+        "label": "VANDERFEEN",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 24.83044083121137,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 14,
+        "label": "MAURICE  EVERTON",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -58.85434594958646,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 13,
+        "label": "CONSTANCE  JUNE",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 158.96253056250168,
+        "y": -54.1550590056536,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "10-9-1928 – 29-8-2018",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -54.1550590056536,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "16-6-1933 – 7-9-2024",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 157.55578250442656,
+        "y": -37.06675681757811,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 143,
+        "label": "MAURIE AND CONNIE, HAPPILY MARRIED FOR 67 YEARS BELOVED FATHER AND MOTHER OF NORMAN, ANDREW, MARK & ADRIAN POPPY MO AND NANA CON TO ALL THEIR GRANDIES & GREAT GRANDCHILDREN",
+        "font": "340.7368421052631px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -37.06675681757811,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 40,
+        "label": "MAURIE  AND  CONNIE,  HAPPILY  MARRIED  FOR  67 YEARS",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": -37.06675681757811,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 49,
+        "label": "BELOVED FATHER AND MOTHER OF NORMAN, ANDREW, MARK & ADRIAN",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 43.66731958430016,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "TOGETHER NOW AND WILL BE FOREVER IN OUR HEARTS",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8.440488348451673,
+        "y": 71.26874569643437,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 37,
+        "label": "TO ALL THEIR GRANDIES & GREAT GRANDCHILDREN",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1.406748058075307,
+        "y": 56.3928543763505,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "POPPY MO AND NANA CON",
+        "font": "608.6052631578947px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 71.26874569643437,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 12
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1734405003311,
+        "path": "../upload/2024/12/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1734405003311abt_railway_dads_happy_d.jpg",
+        "color": 0,
+        "mask": 2,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3666296766011414,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "ABT Railway Dads Happy Day Around Tas trip 1 5-1-2015.jpg",
+        "price": 190,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 13
+      }
+    ]
+  }
+}

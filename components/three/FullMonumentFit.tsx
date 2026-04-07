@@ -7,7 +7,7 @@ import * as React from 'react';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { FULL_MONUMENT_GROUP_NAME } from './constants';
+import { FULL_MONUMENT_GROUP_NAME, UPRIGHT_ASSEMBLY_NAME } from './constants';
 
 type FullMonumentFitProps = {
   trigger?: number;
@@ -17,6 +17,31 @@ const HEADSTONE_OBJECT_NAME = 'headstone';
 const CAMERA_ANIMATION_MS = 630;
 const BOX_EPSILON = 1e-4;
 const HEADSTONE_FRONT_ELEVATION = 0.06;
+
+/** Compute bounding box from structural Mesh children only, skipping motifs/helpers. */
+const computeMeshBox = (root: THREE.Object3D): THREE.Box3 => {
+  const box = new THREE.Box3();
+  const _childBox = new THREE.Box3();
+  root.updateWorldMatrix(true, true);
+  root.traverse((child) => {
+    if (!child.visible) return;
+    if (!(child instanceof THREE.Mesh)) return;
+    if (!child.geometry) return;
+    // Skip motifs — placed on surfaces, shouldn't affect camera framing
+    if (child.name.startsWith('motif-')) return;
+    if (!child.geometry.boundingBox) child.geometry.computeBoundingBox();
+    if (!child.geometry.boundingBox) return;
+    _childBox.copy(child.geometry.boundingBox);
+    _childBox.applyMatrix4(child.matrixWorld);
+    // Sanity: skip meshes with extreme world positions (>10m from origin)
+    const cx = (_childBox.min.x + _childBox.max.x) / 2;
+    const cy = (_childBox.min.y + _childBox.max.y) / 2;
+    const cz = (_childBox.min.z + _childBox.max.z) / 2;
+    if (Math.abs(cx) > 10 || Math.abs(cy) > 10 || Math.abs(cz) > 10) return;
+    box.union(_childBox);
+  });
+  return box;
+};
 
 type CameraPose = {
   position: THREE.Vector3;
@@ -79,7 +104,15 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     selectedAdditionSurface === 'headstone' ||
     selectedMotifSurface === 'headstone' ||
     selectedImageSurface === 'headstone';
-  const lastSelectedRef = React.useRef(shouldFocusHeadstone);
+  const shouldFocusBase =
+    selected === 'base' ||
+    selectedInscriptionSurface === 'base' ||
+    selectedAdditionSurface === 'base' ||
+    selectedMotifSurface === 'base' ||
+    selectedImageSurface === 'base';
+  // Zoom in for headstone or base (both are on the upright assembly)
+  const shouldZoomIn = shouldFocusHeadstone || shouldFocusBase;
+  const lastSelectedRef = React.useRef(shouldZoomIn);
   const lastFitKeyRef = React.useRef<string | null>(null);
   const materialChangeActiveRef = React.useRef(false);
   const lastAppliedBoxRef = React.useRef<THREE.Box3 | null>(null);
@@ -102,9 +135,9 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
 
   React.useLayoutEffect(() => {
     let retryRafId: number | null = null;
-    const previousFocusHeadstone = lastSelectedRef.current;
+    const previousZoomIn = lastSelectedRef.current;
     const previousFitKey = lastFitKeyRef.current;
-    const selectionChanged = previousFocusHeadstone !== shouldFocusHeadstone;
+    const selectionChanged = previousZoomIn !== shouldZoomIn;
     const fitInputsChanged = previousFitKey !== fitKey;
     const materialChangeJustEnded = materialChangeActiveRef.current && !isMaterialChange;
 
@@ -114,7 +147,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       materialChangeActiveRef.current = false;
     }
 
-    lastSelectedRef.current = shouldFocusHeadstone;
+    lastSelectedRef.current = shouldZoomIn;
     lastFitKeyRef.current = fitKey;
 
     if (isMaterialChange && hasAppliedInitialPoseRef.current) {
@@ -129,8 +162,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       hasAppliedInitialPoseRef.current &&
       selectionChanged &&
       !fitInputsChanged &&
-      !shouldFocusHeadstone &&
-      !previousFocusHeadstone
+      !shouldZoomIn &&
+      !previousZoomIn
     ) {
       return;
     }
@@ -299,16 +332,19 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     };
 
     const fitCamera = () => {
-      const zoomToHeadstone = shouldFocusHeadstone;
-      const shouldAnimateFromHeadstoneOverview =
+      const zoomIn = shouldZoomIn;
+      const shouldAnimateFromZoomOut =
         hasAppliedInitialPoseRef.current &&
         selectionChanged &&
         !fitInputsChanged &&
-        previousFocusHeadstone &&
-        !shouldFocusHeadstone;
-      const targetObj = zoomToHeadstone
+        previousZoomIn &&
+        !shouldZoomIn;
+      // Headstone → headstone mesh, Base → upright assembly, otherwise → full monument
+      const targetObj = shouldFocusHeadstone
         ? scene.getObjectByName(HEADSTONE_OBJECT_NAME)
-        : scene.getObjectByName(FULL_MONUMENT_GROUP_NAME);
+        : shouldFocusBase
+          ? (scene.getObjectByName(UPRIGHT_ASSEMBLY_NAME) ?? scene.getObjectByName(HEADSTONE_OBJECT_NAME))
+          : scene.getObjectByName(FULL_MONUMENT_GROUP_NAME);
 
       if (!targetObj) {
         scheduleRetry();
@@ -316,7 +352,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       }
 
       targetObj.updateWorldMatrix(true, true);
-      const box = new THREE.Box3().setFromObject(targetObj);
+      const box = computeMeshBox(targetObj);
       if (box.isEmpty()) {
         scheduleRetry();
         return;
@@ -325,7 +361,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const previousBox = lastAppliedBoxRef.current;
       const boxChanged =
         !previousBox ||
-        lastZoomModeRef.current !== zoomToHeadstone ||
+        lastZoomModeRef.current !== zoomIn ||
         previousBox.min.distanceToSquared(box.min) > BOX_EPSILON ||
         previousBox.max.distanceToSquared(box.max) > BOX_EPSILON;
 
@@ -341,13 +377,13 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const currentTarget = controls?.target
         ? controls.target.clone()
         : new THREE.Vector3(0, 0, 0);
-      const preferredDirection = zoomToHeadstone
+      const preferredDirection = zoomIn
         ? getHeadstoneFrontDirection(targetObj)
-        : shouldAnimateFromHeadstoneOverview
+        : shouldAnimateFromZoomOut
           ? camera.position.clone().sub(currentTarget).normalize()
           : undefined;
 
-      applyFitFromBox(box, zoomToHeadstone, preferredDirection);
+      applyFitFromBox(box, zoomIn, preferredDirection);
       retryRafId = null;
     };
 
@@ -369,6 +405,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
     selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,
     isMaterialChange, camera, size.width, size.height, controls, invalidate, scene, fitKey,
+    shouldFocusHeadstone, shouldFocusBase, shouldZoomIn,
   ]);
 
   return null;

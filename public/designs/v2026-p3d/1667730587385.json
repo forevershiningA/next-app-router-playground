@@ -1,0 +1,452 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.903Z",
+  "units": "mm",
+  "source": {
+    "id": "1667730587385",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1667730587385.p3d",
+    "savedAt": "2022-11-06T10:29:47.385Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/African-Red.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/African-Red.webp"
+    },
+    "ledger": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/African-Red.webp"
+    },
+    "kerb": {
+      "width_mm": 1200,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/African-Red.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "WILLAM GARCIA",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 54.741,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 26.427,
+          "y_mm": 71.153
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-41",
+        "asset": "/designs/p3d-assets/1667730587385/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -500.219,
+          "y_mm": 110.884
+        },
+        "width_mm": 1310.573,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9047,
+        "surface": "lid/top"
+      },
+      {
+        "id": "motif-48",
+        "asset": "/designs/p3d-assets/1667730587385/motif-1.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0,
+          "y_mm": -120
+        },
+        "width_mm": 524.444,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9049,
+        "surface": "lid/top"
+      },
+      {
+        "id": "motif-12",
+        "asset": "/designs/p3d-assets/1667730587385/motif-3.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0,
+          "y_mm": -108.159
+        },
+        "width_mm": 541.754,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9013,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "/designs/p3d-assets/1667730587385/motif-4.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -1.847,
+          "y_mm": -62.159
+        },
+        "width_mm": 851.72,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9032,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-22",
+        "asset": "/designs/p3d-assets/1667730587385/motif-5.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 7.007,
+          "y_mm": 240.506
+        },
+        "width_mm": 428.87,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9028,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1667730587385/motif-0.png",
+        "path": "/designs/p3d-assets/1667730587385/motif-0.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1667730587385/motif-1.png",
+        "path": "/designs/p3d-assets/1667730587385/motif-1.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1667730587385/motif-3.png",
+        "path": "/designs/p3d-assets/1667730587385/motif-3.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1667730587385/motif-4.png",
+        "path": "/designs/p3d-assets/1667730587385/motif-4.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1667730587385/motif-5.png",
+        "path": "/designs/p3d-assets/1667730587385/motif-5.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 6,
+    "inscriptionCount": 1,
+    "svgMotifCount": 0,
+    "pngMotifCount": 5,
+    "warnings": [
+      "auto-stacked-positions"
+    ],
+    "confidence": "medium",
+    "migratedAt": "2026-04-02T16:23:19.903Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1667730587385.p3d",
+    "companionJson": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Red.jpg",
+        "name": "Traditional Engraved Full Monument",
+        "price": 3051.53,
+        "quantity": 1,
+        "width": 900,
+        "height": 700,
+        "_length": 80,
+        "init_width": 360,
+        "init_height": 692,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.43",
+        "version_date": 20221104,
+        "mode": "3d",
+        "navigator": "Linux armv8l, Google Inc., Mozilla/5.0 (Linux; Android 12; CPH2195) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Mobile Safari/537.36, 360x800"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 6357.35,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 100,
+        "init_width": 360,
+        "init_height": 692,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 6205.99,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 360,
+        "init_height": 692,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 3855.31,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 360,
+        "init_height": 692,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 10,
+        "label": "ELSIE BAKER",
+        "font": "156px Garamond",
+        "font_size": 54.74084286016452,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 55,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "31/01/1956 - 10/10/2019",
+        "font": "156px Garamond",
+        "font_size": 40.35398230088496,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 49,
+        "label": "Philipians 1:21 For me to live is Christ, and to die is gain.",
+        "font": "156px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 44,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "Our Beloved Mother",
+        "font": "156px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 88,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 70,
+        "label": "Your Love & Teaching of Lord will live on through us forevermore until we meet again.",
+        "font": "156px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 132,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 27,
+        "label": "Your Love & Teachings of the Lord",
+        "font": "156px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 132,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "Our Beloved Mother",
+        "font": "156px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 8
+      }
+    ]
+  }
+}

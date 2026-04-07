@@ -1,0 +1,591 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.611Z",
+  "units": "mm",
+  "source": {
+    "id": "1698236658345",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1698236658345.p3d",
+    "savedAt": "2023-10-25T12:24:18.345Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "square"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 304,
+      "height_mm": 203,
+      "thickness_mm": 15,
+      "shape": "square",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Forever In Our Hearts",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18.986,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -22.298,
+          "y_mm": 82.897
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Sister, Aunt, Mother, and Grandma",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -10.284,
+          "y_mm": 61.543
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Jean Holt",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 26.986,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -8.541,
+          "y_mm": 35.967
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Jan 14, 1964",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -85.732,
+          "y_mm": -39.873
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Jan 6, 2022",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 66.257,
+          "y_mm": -37.073
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Your love continues to light our way,",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.513,
+          "y_mm": -65.068
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "your memory will never leave us",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 18.128,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.513,
+          "y_mm": -83.068
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -11.277,
+          "y_mm": -21.542
+        },
+        "width_mm": 62.222,
+        "height_mm": 80,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 8,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "bronze8",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 54.845,
+          "y_mm": -4.226
+        },
+        "width_mm": 33.691,
+        "height_mm": 43,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7012,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "dove_002",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -70.89,
+          "y_mm": -7.877
+        },
+        "width_mm": 32.192,
+        "height_mm": 43,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7012,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_176_13",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 123.247,
+          "y_mm": 74.597
+        },
+        "width_mm": 42.344,
+        "height_mm": 44,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7013,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "bronze8",
+        "path": "/shapes/motifs/bronze8.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "1_176_13",
+        "path": "/shapes/motifs/1_176_13.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 11,
+    "inscriptionCount": 7,
+    "svgMotifCount": 3,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.611Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1698236658345.p3d",
+    "companionJson": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 246.07,
+        "quantity": 1,
+        "width": 304,
+        "height": 203,
+        "_length": 15,
+        "init_width": 1664,
+        "init_height": 862,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230822,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 18,
+        "label": "Forever In Our Hearts",
+        "font": "552.9276315789473px Garamond",
+        "font_size": 18.98606635404364,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "Jacqueline Farmer",
+        "font": "552.9276315789473px Garamond",
+        "font_size": 26.98606635404364,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 21,
+        "y": -35,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "Jan 14, 1964",
+        "font": "552.9276315789473px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -35,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 9,
+        "label": "Jan 6, 2022",
+        "font": "552.9276315789473px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -35,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 31,
+        "label": "Your love continues to light our way,",
+        "font": "552.9276315789473px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 7,
+        "y": -39,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 10
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 215.01064,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 43,
+        "ratio": 0.07719928186714542,
+        "itemID": 6
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronze8",
+        "item": "bronze8",
+        "price": 215.01064,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 43,
+        "ratio": 0.055412371134020616,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 26,
+        "label": "your memory will never leave us",
+        "font": "552.9276315789473px Garamond",
+        "font_size": 18.128292531763247,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 4,
+        "y": 80,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 11
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1698174249048,
+        "path": "../upload/2023/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1698174249048screenshot_2023101807070.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.513157894736842,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20231018-070700_Chrome.jpg",
+        "price": 260,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 4
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_176_13",
+        "item": "1_176_13",
+        "price": 215.245395,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 44,
+        "ratio": 0.05913978494623656,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 29,
+        "label": "Sister, Aunt, Mother, and Grandma",
+        "font": "552.9276315789473px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 20,
+        "y": -58,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 2
+      }
+    ]
+  }
+}

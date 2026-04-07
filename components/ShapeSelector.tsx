@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore, type ShapeOption } from '#/lib/headstone-store';
+import { isContourSupported } from '#/components/three/InsetContourLine';
 
 type ShapeSelectorProps = {
   shapes: ShapeOption[];
@@ -15,6 +16,9 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const hasBorder = useHeadstoneStore((s) => s.catalog?.product?.border === '1');
+  const isPlaque = useHeadstoneStore((s) => s.catalog?.product?.type === 'plaque');
+  const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
+  const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
 
   const getShapeUrl = (shape: ShapeOption) => {
     if (shape.image) {
@@ -45,6 +49,36 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
 
   return (
     <div className="space-y-3">
+      {/* Inset contour border toggle — headstones with supported shapes only */}
+      {!isPlaque && isContourSupported(currentShapeUrl) && (
+        <div className="rounded-xl border border-white/10 bg-[#0f0a07] p-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-slate-200">
+                Inset Contour Border
+              </div>
+              <div className="text-xs text-slate-200/60">
+                White line following the shape, 15mm from edges
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowInsetContour(!showInsetContour)}
+              className={`relative inline-flex h-6 w-11 flex-shrink-0 items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
+                showInsetContour ? 'bg-white' : 'bg-white/20'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 rounded-full transition-transform duration-200 ${
+                  showInsetContour
+                    ? 'translate-x-6 bg-[#0f0a07]'
+                    : 'translate-x-1 bg-slate-400'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+      )}
       <div
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >

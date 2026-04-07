@@ -432,7 +432,7 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
 
           <HeroCeramicImage
             position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.32, textZ + 0.008]}
-            imageUrl="/jpg/photos/vitreous-enamel-image.jpg"
+            imageUrl="/jpg/photos/vitreous-enamel-image.png"
             maskPath="/shapes/masks/oval_horizontal.svg"
             width={0.58}
             height={0.74}

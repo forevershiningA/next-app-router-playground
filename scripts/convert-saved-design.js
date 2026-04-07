@@ -297,9 +297,7 @@ function buildCoordinateSystem(mlDir, stageCssPx, dpr) {
   };
 }
 
-function buildInscription(item, _pxPerMmX, _pxPerMmY, category) {
-  const xPx = round(item.x || 0);
-  const yPx = round(item.y || 0);
+function buildInscription(item, _pxPerMmX, _pxPerMmY, category, isMmCompanion) {
   let fontPx = null;
   if (typeof item.font === 'string') {
     const match = item.font.match(/([\d.]+)px/);
@@ -310,15 +308,21 @@ function buildInscription(item, _pxPerMmX, _pxPerMmY, category) {
   }
   const fontFamily = item.font_family || (typeof item.font === 'string' ? item.font.split(' ').slice(1).join(' ') : 'Arial');
   const sanitized = sanitizeInscription(item.label || '', category);
+  const pos = isMmCompanion
+    ? { x_mm: round(item.x || 0), y_mm: round(-(item.y || 0)) }
+    : { x_px: round(item.x || 0), y_px: round(item.y || 0) };
+  const fontSize = isMmCompanion && fontPx
+    ? { size_mm: round(fontPx) }
+    : (fontPx ? { size_px: round(fontPx) } : {});
   return {
     id: `insc-${item.itemID || item.id || Math.random().toString(36).slice(2, 8)}`,
     text: sanitized,
     font: {
       family: fontFamily.trim() || 'Arial',
-      ...(fontPx ? { size_px: round(fontPx) } : {}),
+      ...fontSize,
       weight: 400,
     },
-    position: { x_px: xPx, y_px: yPx },
+    position: pos,
     rotation: { z_deg: item.rotation || 0 },
     color: item.color || '#000000',
     align: 'center',
@@ -326,15 +330,18 @@ function buildInscription(item, _pxPerMmX, _pxPerMmY, category) {
   };
 }
 
-function buildMotif(item, _pxPerMmX, _pxPerMmY) {
-  const xPx = round(item.x || 0);
-  const yPx = round(item.y || 0);
-  const heightPx = item.height ? Number(item.height) : null;
+function buildMotif(item, _pxPerMmX, _pxPerMmY, isMmCompanion) {
+  const pos = isMmCompanion
+    ? { x_mm: round(item.x || 0), y_mm: round(-(item.y || 0)) }
+    : { x_px: round(item.x || 0), y_px: round(item.y || 0) };
+  const heightField = isMmCompanion && item.height
+    ? { height_mm: round(Number(item.height)) }
+    : (item.height ? { height_px: round(Number(item.height)) } : {});
   return {
     id: `motif-${item.itemID || item.id || Math.random().toString(36).slice(2, 8)}`,
     asset: item.src || item.item || 'motif',
-    position: { x_px: xPx, y_px: yPx },
-    ...(heightPx ? { height_px: round(heightPx) } : {}),
+    position: pos,
+    ...heightField,
     rotation: { z_deg: item.rotation || 0 },
     color: item.color || '#000000',
     flip: {
@@ -387,15 +394,16 @@ function convertDesign(designId) {
   const heightMm = headstone.height || headstone.init_height || 600;
   const pxPerMmX = canvasPxW / widthMm;
   const pxPerMmY = canvasPxH / heightMm;
+  const isMmCompanion = String(meta.mlDir || '').toLowerCase() === 'bronze-plaque';
 
   const inscriptions = saved
     .filter((item) => item.type === 'Inscription' && (item.label || '').trim())
-    .map((item) => buildInscription(item, pxPerMmX, pxPerMmY, meta.category))
-    .sort((a, b) => (b.position.y_px ?? 0) - (a.position.y_px ?? 0));
+    .map((item) => buildInscription(item, pxPerMmX, pxPerMmY, meta.category, isMmCompanion))
+    .sort((a, b) => (b.position.y_px ?? b.position.y_mm ?? 0) - (a.position.y_px ?? a.position.y_mm ?? 0));
 
   const motifs = saved
     .filter((item) => item.type === 'Motif' && item.src)
-    .map((item) => buildMotif(item, pxPerMmX, pxPerMmY));
+    .map((item) => buildMotif(item, pxPerMmX, pxPerMmY, isMmCompanion));
 
   const photos = saved
     .filter((item) => item.type === 'Photo' || item.type === 'Picture')

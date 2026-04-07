@@ -31,10 +31,25 @@ export default function DesignsPageClient() {
   const mlIndexRef = useRef<Map<string, MLDesignEntry>>(new Map());
   const searchTimerRef = useRef<ReturnType<typeof setTimeout>>();
 
-  // Load designs
+  // Load designs (filter out hidden ones on localhost)
   useEffect(() => {
-    import('#/lib/saved-designs-data').then(({ SAVED_DESIGNS }) => {
-      const designs = Object.values(SAVED_DESIGNS);
+    const loadDesigns = async () => {
+      const { SAVED_DESIGNS } = await import('#/lib/saved-designs-data');
+      let designs = Object.values(SAVED_DESIGNS);
+
+      const isLocal =
+        window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      if (isLocal) {
+        try {
+          const res = await fetch('/api/hidden-designs');
+          const hiddenIds: string[] = await res.json();
+          if (hiddenIds.length > 0) {
+            const hiddenSet = new Set(hiddenIds);
+            designs = designs.filter((d) => !hiddenSet.has(d.id));
+          }
+        } catch {}
+      }
+
       setAllDesigns(designs);
 
       const grouped = designs.reduce((acc, design) => {
@@ -46,7 +61,8 @@ export default function DesignsPageClient() {
 
       setGroupedDesigns(grouped);
       setLoading(false);
-    });
+    };
+    loadDesigns();
   }, []);
 
   // Load ML data in background

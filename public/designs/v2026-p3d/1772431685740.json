@@ -1,0 +1,430 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:22.675Z",
+  "units": "mm",
+  "source": {
+    "id": "1772431685740",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1772431685740.p3d",
+    "savedAt": "2026-03-02T06:08:05.740Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "headstone-41"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "shape": "headstone-41",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1000,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "/designs/p3d-assets/1772431685740/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -88.756,
+          "y_mm": 143.771
+        },
+        "width_mm": 176.204,
+        "height_mm": 264.602,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 10,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "/designs/p3d-assets/1772431685740/motif-1.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 64.356,
+          "y_mm": 91.758
+        },
+        "width_mm": 135.931,
+        "height_mm": 20,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9018,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-5",
+        "asset": "/designs/p3d-assets/1772431685740/motif-2.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 63.051,
+          "y_mm": 69.994
+        },
+        "width_mm": 112,
+        "height_mm": 16,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9018,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-6",
+        "asset": "/designs/p3d-assets/1772431685740/motif-3.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 62.285,
+          "y_mm": 44.753
+        },
+        "width_mm": 103.914,
+        "height_mm": 19,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9018,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "/designs/p3d-assets/1772431685740/motif-4.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -6.142,
+          "y_mm": -7.897
+        },
+        "width_mm": 305.086,
+        "height_mm": 32,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9010,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-8",
+        "asset": "/designs/p3d-assets/1772431685740/motif-5.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -3.89,
+          "y_mm": -33.937
+        },
+        "width_mm": 215.585,
+        "height_mm": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9014,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-9",
+        "asset": "/designs/p3d-assets/1772431685740/motif-6.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -4.391,
+          "y_mm": -64.066
+        },
+        "width_mm": 186.33,
+        "height_mm": 12,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9014,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "/designs/p3d-assets/1772431685740/motif-7.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 158.947,
+          "y_mm": -43.857
+        },
+        "width_mm": 120.709,
+        "height_mm": 172,
+        "rotation": {
+          "z_deg": -18
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 19,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-11",
+        "asset": "/designs/p3d-assets/1772431685740/motif-8.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -1.78,
+          "y_mm": -80.453
+        },
+        "width_mm": 219.779,
+        "height_mm": 12,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9014,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-12",
+        "asset": "/designs/p3d-assets/1772431685740/motif-9.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -3.508,
+          "y_mm": -115.431
+        },
+        "width_mm": 262.387,
+        "height_mm": 16,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9014,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "/designs/p3d-assets/1772431685740/motif-10.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -2.636,
+          "y_mm": -131.61
+        },
+        "width_mm": 175.688,
+        "height_mm": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9014,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "/designs/p3d-assets/1772431685740/motif-11.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 1.832,
+          "y_mm": -203.243
+        },
+        "width_mm": 238.704,
+        "height_mm": 16,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9018,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-15",
+        "asset": "/designs/p3d-assets/1772431685740/motif-12.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0.893,
+          "y_mm": -158.593
+        },
+        "width_mm": 298.129,
+        "height_mm": 16,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9016,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-16",
+        "asset": "/designs/p3d-assets/1772431685740/motif-13.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -4.343,
+          "y_mm": -177.536
+        },
+        "width_mm": 58.883,
+        "height_mm": 16,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9017,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "/designs/p3d-assets/1772431685740/motif-14.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 8.833,
+          "y_mm": -252.452
+        },
+        "width_mm": 184.239,
+        "height_mm": 22,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9018,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-0.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-0.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-1.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-1.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-2.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-2.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-3.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-3.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-4.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-4.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-5.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-5.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-6.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-6.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-7.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-7.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-8.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-8.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-9.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-9.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-10.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-10.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-11.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-11.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-12.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-12.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-13.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-13.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1772431685740/motif-14.png",
+        "path": "/designs/p3d-assets/1772431685740/motif-14.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 15,
+    "inscriptionCount": 0,
+    "svgMotifCount": 0,
+    "pngMotifCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:22.675Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1772431685740.p3d",
+    "companionJson": null
+  }
+}

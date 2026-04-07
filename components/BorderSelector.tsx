@@ -22,11 +22,14 @@ const BRONZE_HEX = '#CD7F32';
 type BorderSelectorProps = {
   borders: BorderOption[];
   disableInternalScroll?: boolean;
+  isPlaque?: boolean;
 };
 
-export default function BorderSelector({ borders, disableInternalScroll = false }: BorderSelectorProps) {
+export default function BorderSelector({ borders, disableInternalScroll = false, isPlaque = true }: BorderSelectorProps) {
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
   const currentBorderName = useHeadstoneStore((s) => s.borderName);
+  const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
+  const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
 
   const borderOptions = React.useMemo(() => {
     return borders && borders.length > 0 ? borders : FALLBACK_BORDERS;
@@ -51,6 +54,42 @@ export default function BorderSelector({ borders, disableInternalScroll = false 
     return null;
   };
 
+  // Headstone inset contour UI
+  if (!isPlaque) {
+    return (
+      <div className="space-y-4">
+        <div className="rounded-xl border border-white/10 bg-[#0f0a07] p-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <div className="text-sm font-medium text-slate-200">
+                Inset Contour Border
+              </div>
+              <div className="text-xs text-slate-200/60">
+                A white line following the headstone shape, 15mm from the edges
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowInsetContour(!showInsetContour)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 ${
+                showInsetContour ? 'bg-white' : 'bg-white/20'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 rounded-full transition-transform duration-200 ${
+                  showInsetContour
+                    ? 'translate-x-6 bg-[#0f0a07]'
+                    : 'translate-x-1 bg-slate-400'
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Plaque bronze border grid
   return (
     <div className="space-y-3">
       <div className={`grid grid-cols-3 gap-2 pl-1 pr-2 py-1 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}>

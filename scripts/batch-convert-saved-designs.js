@@ -441,33 +441,53 @@ function buildCanonicalFromLegacy(saved, designId, meta, opts = {}) {
   const widthMm = headstone.width || headstone.init_width || 600;
   const heightMm = headstone.height || headstone.init_height || 600;
 
+  // Bronze-plaque companion JSON stores positions/fonts in mm (Y-down convention).
+  // Other mlDirs store in canvas-pixel space.
+  const isMmCompanion = String(meta.mlDir || '').toLowerCase() === 'bronze-plaque';
+
   const inscriptions = saved
     .filter((item) => item.type === 'Inscription' && (item.label || '').trim())
-    .map((item) => ({
-      id: `insc-${item.itemID || item.id || Math.random().toString(36).slice(2, 8)}`,
-      text: anonymize ? sanitizeInscription(item.label || '', meta.category) : item.label || '',
-      font: {
-        family: item.font_family || 'Arial',
-        ...(item.font_size ? { size_px: round(Number(item.font_size)) } : {}),
-      },
-      position: { x_px: round(item.x || 0), y_px: round(item.y || 0) },
-      rotation: { z_deg: item.rotation || 0 },
-      color: item.color || '#000000',
-      surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
-    }));
+    .map((item) => {
+      const pos = isMmCompanion
+        ? { x_mm: round(item.x || 0), y_mm: round(-(item.y || 0)) }
+        : { x_px: round(item.x || 0), y_px: round(item.y || 0) };
+      const fontSize = isMmCompanion && item.font_size
+        ? { size_mm: round(Number(item.font_size)) }
+        : (item.font_size ? { size_px: round(Number(item.font_size)) } : {});
+      return {
+        id: `insc-${item.itemID || item.id || Math.random().toString(36).slice(2, 8)}`,
+        text: anonymize ? sanitizeInscription(item.label || '', meta.category) : item.label || '',
+        font: {
+          family: item.font_family || 'Arial',
+          ...fontSize,
+        },
+        position: pos,
+        rotation: { z_deg: item.rotation || 0 },
+        color: item.color || '#000000',
+        surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
+      };
+    });
 
   const motifs = saved
     .filter((item) => item.type === 'Motif' && item.src)
-    .map((item) => ({
-      id: `motif-${item.itemID || item.id || Math.random().toString(36).slice(2, 8)}`,
-      asset: item.src || item.item || 'motif',
-      position: { x_px: round(item.x || 0), y_px: round(item.y || 0) },
-      ...(item.height ? { height_px: round(Number(item.height)) } : {}),
-      rotation: { z_deg: item.rotation || 0 },
-      color: item.color || '#000000',
-      flip: { x: Number(item.flipx) === -1, y: Number(item.flipy) === -1 },
-      surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
-    }));
+    .map((item) => {
+      const pos = isMmCompanion
+        ? { x_mm: round(item.x || 0), y_mm: round(-(item.y || 0)) }
+        : { x_px: round(item.x || 0), y_px: round(item.y || 0) };
+      const heightField = isMmCompanion && item.height
+        ? { height_mm: round(Number(item.height)) }
+        : (item.height ? { height_px: round(Number(item.height)) } : {});
+      return {
+        id: `motif-${item.itemID || item.id || Math.random().toString(36).slice(2, 8)}`,
+        asset: item.src || item.item || 'motif',
+        position: pos,
+        ...heightField,
+        rotation: { z_deg: item.rotation || 0 },
+        color: item.color || '#000000',
+        flip: { x: Number(item.flipx) === -1, y: Number(item.flipy) === -1 },
+        surface: `${String(item.part || 'Headstone').toLowerCase()}/${(item.side || 'front').toLowerCase()}`,
+      };
+    });
 
   const photos = includePhotos
     ? saved

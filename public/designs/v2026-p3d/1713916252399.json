@@ -1,0 +1,992 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:20.780Z",
+  "units": "mm",
+  "source": {
+    "id": "1713916252399",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1713916252399.p3d",
+    "savedAt": "2024-04-23T23:50:52.399Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 684,
+      "height_mm": 1080,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "base": {
+      "width_mm": 1100,
+      "height_mm": 600,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "ledger": {
+      "width_mm": 900,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "kerb": {
+      "width_mm": 1100,
+      "height_mm": 500,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-8",
+        "text": "Within his arms",
+        "font": {
+          "family": "French Script",
+          "size_mm": 122,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 19.118,
+          "y_mm": 229.311
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-9",
+        "text": "he will hold you tight",
+        "font": {
+          "family": "French Script",
+          "size_mm": 122,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 10.024,
+          "y_mm": 65.464
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-10",
+        "text": "my heavenly angel",
+        "font": {
+          "family": "French Script",
+          "size_mm": 122,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 17.884,
+          "y_mm": -76.093
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-11",
+        "text": "my guiding light",
+        "font": {
+          "family": "French Script",
+          "size_mm": 122,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 11.182,
+          "y_mm": -224.097
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-2",
+        "text": "Lizzie Weaver",
+        "font": {
+          "family": "French Script",
+          "size_mm": 109,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -9.666,
+          "y_mm": 230.965
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Lizzie Weaver",
+        "font": {
+          "family": "French Script",
+          "size_mm": 109,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 9.963,
+          "y_mm": 96.766
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Born: 5:40pm",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 50.5,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -4.918,
+          "y_mm": -92.529
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Baptised: 5:45pm",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 50.188,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -15.201,
+          "y_mm": -150.397
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Died: 5:55pm",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 50.188,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.451,
+          "y_mm": -212.85
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "23rd of May 2023",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 47.789,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 4.352,
+          "y_mm": 0.698
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "In loving memory of a precious child",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 43.414,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 3.128,
+          "y_mm": 329.959
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "\"To thine Immaculate Heart",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 37.71,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -6.727,
+          "y_mm": -325.36
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "we consecrate our very being",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 44.581,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -11.27,
+          "y_mm": -376.076
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "all that we love, all that we are\"",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 40.592,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 2.14,
+          "y_mm": -480.327
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "and our whole life; all that we have,",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 41.072,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 1.81,
+          "y_mm": -426.968
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-17",
+        "asset": "cross_001",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -360.251,
+          "y_mm": 920.766
+        },
+        "width_mm": 143.92,
+        "height_mm": 179,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7021,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-18",
+        "asset": "cross_001",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -363.499,
+          "y_mm": -926.506
+        },
+        "width_mm": 143.92,
+        "height_mm": 179,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7021,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-19",
+        "asset": "cross_001",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 367.104,
+          "y_mm": -924.041
+        },
+        "width_mm": 143.92,
+        "height_mm": 179,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7021,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-20",
+        "asset": "cross_001",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 363.933,
+          "y_mm": 921.438
+        },
+        "width_mm": 143.92,
+        "height_mm": 179,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7021,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 0.733,
+          "y_mm": 443.666
+        },
+        "width_mm": 140.16,
+        "height_mm": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 14,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 20,
+    "inscriptionCount": 15,
+    "svgMotifCount": 4,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:20.780Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1713916252399.p3d",
+    "companionJson": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Full Monument",
+        "price": 3955.15,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1200,
+        "init_height": 749,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 987.91,
+        "quantity": 1,
+        "width": 1200,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1200,
+        "init_height": 749,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 5585.39,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1200,
+        "init_height": 749,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 7473.38,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1200,
+        "init_height": 749,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 12,
+        "label": "Sophia Teresa",
+        "font": "252.44074074074075px French Script",
+        "font_size": 109,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 109,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Born: 5:40pm",
+        "font": "252.44074074074075px Garamond",
+        "font_size": 50.499991633785534,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 15,
+        "label": "Baptised: 5:45pm",
+        "font": "252.44074074074075px Garamond",
+        "font_size": 50.18817204301075,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 58.33348116682623,
+        "y": 174.0862599464773,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 11,
+        "label": "Died: 5:55pm",
+        "font": "252.44074074074075px Garamond",
+        "font_size": 50.18817204301075,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 58.33348116682623,
+        "y": 214.0862599464773,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1713916502991,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1713916502991images_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 104.4771548247135,
+        "y": -357.383593487448,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6058577777777777,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "images.jpeg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 13,
+        "label": "Within his arms",
+        "font": "252.44074074074075px French Script",
+        "font_size": 122,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 127.98932838180212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 122,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 18,
+        "label": "he will hold you tight",
+        "font": "252.44074074074075px French Script",
+        "font_size": 122,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 167.98932838180212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 122,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 15,
+        "label": "my heavenly angel",
+        "font": "252.44074074074075px French Script",
+        "font_size": 122,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 207.98932838180212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 122,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 28,
+        "quantity": 14,
+        "label": "my guiding light",
+        "font": "252.44074074074075px French Script",
+        "font_size": 122,
+        "font_family": "French Script",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 247.98932838180212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 122,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 30,
+        "label": "In loving memory of a precious child",
+        "font": "252.44074074074075px Garamond",
+        "font_size": 43.41433154361421,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0.25753163008796776,
+        "y": -201.12614706519253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 23,
+        "label": "\"To thine Immaculate Heart",
+        "font": "252.44074074074075px Adorable",
+        "font_size": 37.71023320314309,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -201.12614706519253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 24,
+        "label": "we consecrate our very being",
+        "font": "252.44074074074075px Adorable",
+        "font_size": 44.58050180817384,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -165.12614706519253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 27,
+        "label": "all that we love, all that we are\"",
+        "font": "252.44074074074075px Adorable",
+        "font_size": 40.59227800367728,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -129.12614706519253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 30,
+        "label": "and our whole life; all that we have,",
+        "font": "252.44074074074075px Adorable",
+        "font_size": 41.07216523282746,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 5.860986864540678,
+        "y": 339.02561137053544,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 41,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 13,
+        "label": "23rd of May 2023",
+        "font": "252.44074074074075px Garamond",
+        "font_size": 47.78902503667642,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 1.8817251989300843,
+        "y": 127.98932838180212,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 246.93732,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 179,
+        "ratio": 0.2998324958123953,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 246.93732,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 279.91665974740386,
+        "y": -896.1973056792071,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 179,
+        "ratio": 0.2998324958123953,
+        "itemID": 18
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 246.93732,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 199.5146496971526,
+        "y": -896.1973056792071,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 179,
+        "ratio": 0.2998324958123953,
+        "itemID": 19
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 246.93732,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 119.11263964690134,
+        "y": -896.1973056792071,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 179,
+        "ratio": 0.2998324958123953,
+        "itemID": 20
+      }
+    ]
+  }
+}

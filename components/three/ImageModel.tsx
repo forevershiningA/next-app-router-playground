@@ -89,7 +89,7 @@ export default function ImageModel({
     async function loadTexture() {
       try {
         const loader = new THREE.TextureLoader();
-        const PLACEHOLDER_IMAGE = '/jpg/photos/vitreous-enamel-image.jpg';
+        const PLACEHOLDER_IMAGE = '/jpg/photos/vitreous-enamel-image.png';
         const candidates = Array.from(new Set([
           imageUrl,
           imageUrl.replace(/\/([^/]+)$/, '/$1'),

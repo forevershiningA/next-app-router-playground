@@ -32,6 +32,21 @@ export type SavedMotifOffset = {
   baseHeightMm?: number;
 };
 
+export type SavedEmblemOffset = {
+  xPos: number;
+  yPos: number;
+  sizeVariant: number;
+  rotationZ: number;
+  flipX: boolean;
+  flipY: boolean;
+  widthMm: number;
+  heightMm: number;
+  target: 'headstone' | 'base' | 'ledger';
+  coordinateSpace?: 'offset' | 'mm-center';
+  baseWidthMm?: number;
+  baseHeightMm?: number;
+};
+
 export type SavedImage = {
   id: string;
   typeId: number;
@@ -68,6 +83,7 @@ export type DesignerSnapshot = {
   productId: string | null;
   shapeUrl: string | null;
   borderName: string | null;
+  showInsetContour?: boolean;
   materialUrl: string | null;
   headstoneMaterialUrl: string | null;
   baseMaterialUrl: string | null;
@@ -95,6 +111,8 @@ export type DesignerSnapshot = {
   additionOffsets: Record<string, SavedAdditionOffset>;
   selectedMotifs: Array<{ id: string; svgPath: string; color: string }>;
   motifOffsets: Record<string, SavedMotifOffset>;
+  selectedEmblems?: Array<{ id: string; emblemId: string; imageUrl: string }>;
+  emblemOffsets?: Record<string, SavedEmblemOffset>;
   selectedImages: SavedImage[];
   inscriptions: SavedInscription[];
   metadata?: {
@@ -111,6 +129,7 @@ export type PricingBreakdown = {
   kerbsetPrice?: number;
   additionsPrice?: number;
   motifsPrice?: number;
+  emblemsPrice?: number;
   inscriptionPrice?: number;
   imagePrice?: number;
   subtotal?: number;

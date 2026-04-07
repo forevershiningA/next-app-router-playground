@@ -19,6 +19,8 @@ export type HeadstoneAPI = {
   version: number;
   worldWidth: number;
   worldHeight: number;
+  /** Shape outline points in local (pre-meshScale) coords, centered X, Y-flipped, bottom at 0 */
+  outlinePoints?: THREE.Vector2[];
 };
 
 const EPS = 1e-9;
@@ -719,6 +721,15 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       const frontNormal = new THREE.Vector3(0, Math.sin(slantAngleRad), Math.cos(slantAngleRad)).normalize();
       const wrapperQuaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), frontNormal);
       
+      // Outline points for slant headstone (rectangular contour in child coords)
+      const slantCenterX = (minX + maxX) / 2;
+      const slantOutlinePoints = [
+        new THREE.Vector2(minX - slantCenterX, 0),
+        new THREE.Vector2(maxX - slantCenterX, 0),
+        new THREE.Vector2(maxX - slantCenterX, maxY - minY),
+        new THREE.Vector2(minX - slantCenterX, maxY - minY),
+      ];
+
       return {
         geometries: [slantGeometry],
         dims: { worldW, worldH, worldPerim: perim, worldDepth },
@@ -728,7 +739,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
           version: Math.random(),
           worldWidth: worldW,
-          worldHeight: worldSlantH // CRITICAL: Report slant height so children fit the slanted surface
+          worldHeight: worldSlantH, // CRITICAL: Report slant height so children fit the slanted surface
+          outlinePoints: slantOutlinePoints,
         },
         childWrapperPos: [0, 0, zTranslation * scale] as [number, number, number], // Match geometry translation
         childWrapperRotation: wrapperQuaternion // Return THREE.Quaternion object, not array
@@ -960,6 +972,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const wrapperY = 0;  
     const wrapperZ = (depth / 2) * scale; // Position wrapper at front face
 
+    // Compute outline points in child coordinate space (centered X, Y-flipped, bottom at 0)
+    const outlinePoints = outline.pts.map((p) =>
+      new THREE.Vector2(p.x - centerX, bottomTarget_SV - p.y)
+    );
+
     return {
       geometries: [merged],
       dims: { worldW, worldH, worldPerim, worldDepth },
@@ -969,7 +986,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         unitsPerMeter: 1 / Math.max(EPS, scale * sCore),
         version: Math.random(),
         worldWidth: worldW,
-        worldHeight: worldH
+        worldHeight: worldH,
+        outlinePoints,
       },
       childWrapperPos: [wrapperX, wrapperY, wrapperZ] as [number, number, number],
       childWrapperRotation: new THREE.Quaternion() // Identity quaternion for upright
@@ -1101,7 +1119,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     unitsPerMeter: apiData?.unitsPerMeter ?? 100,
     version: apiData?.version ?? 0,
     worldWidth: apiData?.worldWidth ?? 1,
-    worldHeight: apiData?.worldHeight ?? 1
+    worldHeight: apiData?.worldHeight ?? 1,
+    outlinePoints: apiData?.outlinePoints,
   }), [apiData]);
 
   if (!geometries.length || !dims) return null;

@@ -1,0 +1,698 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:22.937Z",
+  "units": "mm",
+  "source": {
+    "id": "1687980532355",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/p3d/1687980532355.p3d",
+    "savedAt": "2023-06-28T19:28:52.355Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "headstone-22"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 787.4,
+      "height_mm": 1193.8,
+      "thickness_mm": 101.6,
+      "shape": "headstone-22",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1190.6,
+      "height_mm": 355.59999999999997,
+      "depth_mm": 254,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 990.5999999999999,
+      "height_mm": 50.8,
+      "depth_mm": 2057.4,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 1190.6,
+      "height_mm": 255.59999999999997,
+      "depth_mm": 2157.4,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-12",
+        "text": "I hate karaoke.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 53.107,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -8.202,
+          "y_mm": 477.403
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-13",
+        "text": "I don&apos;t want to sing karaoke,",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 70.242,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -11.751,
+          "y_mm": 589.068
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-14",
+        "text": "and I don&apos;t want to listen to people sing karaoke.",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 50.622,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -3.527,
+          "y_mm": 675.653
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-15",
+        "text": "~Pedro Pascal",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 69.481,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 15.017,
+          "y_mm": 774.149
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "lid/top"
+      },
+      {
+        "id": "insc-6",
+        "text": "Dolly Hicks",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 43.155,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 4.366,
+          "y_mm": -312.602
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Der",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 3.785,
+          "y_mm": 335.123
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -16.394,
+          "y_mm": -154.191
+        },
+        "width_mm": 561,
+        "height_mm": 516,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 17,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-9",
+        "asset": "1_126_26",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 5.99,
+          "y_mm": -828.602
+        },
+        "width_mm": 319.052,
+        "height_mm": 321,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7012,
+        "surface": "lid/top",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-3",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 0.61,
+          "y_mm": 42.304
+        },
+        "width_mm": 207,
+        "height_mm": 296,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 13,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_010_01",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -1.471,
+          "y_mm": -485.513
+        },
+        "width_mm": 177.625,
+        "height_mm": 116,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7008,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_148_06",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -1.743,
+          "y_mm": 459.485
+        },
+        "width_mm": 102.043,
+        "height_mm": 142,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7011,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_003_26",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -4.977,
+          "y_mm": 43.059
+        },
+        "width_mm": 414.063,
+        "height_mm": 504,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7016,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_126_26",
+        "path": "/shapes/motifs/1_126_26.svg"
+      },
+      {
+        "id": "1_010_01",
+        "path": "/shapes/motifs/1_010_01.svg"
+      },
+      {
+        "id": "1_148_06",
+        "path": "/shapes/motifs/1_148_06.svg"
+      },
+      {
+        "id": "1_003_26",
+        "path": "/shapes/motifs/1_003_26.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 12,
+    "inscriptionCount": 6,
+    "svgMotifCount": 4,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:22.937Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/headstonesdesigner/saved-designs/p3d/1687980532355.p3d",
+    "companionJson": [
+      {
+        "productid": 100,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Full Monument",
+        "price": 5969.9,
+        "quantity": 1,
+        "width": 781.05,
+        "height": 1200,
+        "_length": 76.19999999999999,
+        "init_width": 1680,
+        "init_height": 943,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230412,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 100,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 6722.14,
+        "quantity": 1,
+        "width": 1193.8,
+        "height": 355.59999999999997,
+        "_length": 254,
+        "init_width": 1680,
+        "init_height": 943,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 6471.83,
+        "width": 1041.3999999999999,
+        "height": 50.8,
+        "_length": 2082.7999999999997,
+        "init_width": 1680,
+        "init_height": 943,
+        "mode": "3d"
+      },
+      {
+        "productid": 100,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 2860,
+        "quantity": 1,
+        "width": 1193.8,
+        "height": 254,
+        "_length": 2159,
+        "init_width": 1680,
+        "init_height": 943,
+        "mode": "3d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1687981150799,
+        "path": "../upload/2023/06/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1687981150799img1826_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6267106625001257,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG-1826.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 500.48458798511274,
+        "width": "207",
+        "height": "296",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1687981216732,
+        "path": "../upload/2023/06/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16879812167326a2b28d98039dc7de9fa8dc8.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.092379768591854,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "6a2b28d98039dc7de9fa8dc807b4479f.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 872.3630713828122,
+        "width": "561",
+        "height": "516",
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Lynn Karoline Driller",
+        "font": "118.20840833119055px Lucida Calligraphy",
+        "font_size": 43.155432885446864,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 6
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_010_01",
+        "item": "1_010_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 116,
+        "ratio": 0.24166666666666667,
+        "itemID": 7
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_148_06",
+        "item": "1_148_06",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 142,
+        "ratio": 0.15367965367965367,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_126_26",
+        "item": "1_126_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 321,
+        "ratio": 0.48710166919575115,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "Der",
+        "font": "118.20840833119055px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_003_26",
+        "item": "1_003_26",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 504,
+        "ratio": 0.5840092699884125,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "I hate karaoke.",
+        "font": "118.20840833119055px Lucida Calligraphy",
+        "font_size": 53.106709512707084,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "I don&apos;t want to sing karaoke,",
+        "font": "118.20840833119055px Lucida Calligraphy",
+        "font_size": 70.24215416156319,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 70,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "and I don&apos;t want to listen to people sing karaoke.",
+        "font": "118.20840833119055px Lucida Calligraphy",
+        "font_size": 50.622387429994056,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "~Pedro Pascal",
+        "font": "118.20840833119055px Lucida Calligraphy",
+        "font_size": 69.48146928317055,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 15
+      }
+    ]
+  }
+}

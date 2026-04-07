@@ -1,0 +1,177 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:22.451Z",
+  "units": "mm",
+  "source": {
+    "id": "1766554429205",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1766554429205.p3d",
+    "savedAt": "2025-12-24T05:33:49.205Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 1200,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "/designs/p3d-assets/1766554429205/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -4.275,
+          "y_mm": -70.671
+        },
+        "width_mm": 378.827,
+        "height_mm": 541,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 6,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-2",
+        "asset": "/designs/p3d-assets/1766554429205/motif-1.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -9.783,
+          "y_mm": 237.259
+        },
+        "width_mm": 622.846,
+        "height_mm": 83,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9003,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-3",
+        "asset": "alyogynehakeifolia(nativehibiscus)",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -361.975,
+          "y_mm": -269.004
+        },
+        "width_mm": 178.945,
+        "height_mm": 254,
+        "rotation": {
+          "z_deg": 17
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7004,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "alyogynehakeifolia(nativehibiscus)",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 450,
+          "y_mm": -242.786
+        },
+        "width_mm": 183.877,
+        "height_mm": 261,
+        "rotation": {
+          "z_deg": -17
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7005,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1766554429205/motif-0.png",
+        "path": "/designs/p3d-assets/1766554429205/motif-0.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1766554429205/motif-1.png",
+        "path": "/designs/p3d-assets/1766554429205/motif-1.png"
+      },
+      {
+        "id": "alyogynehakeifolia(nativehibiscus)",
+        "path": "/shapes/motifs/alyogynehakeifolia(nativehibiscus).svg"
+      },
+      {
+        "id": "alyogynehakeifolia(nativehibiscus)",
+        "path": "/shapes/motifs/alyogynehakeifolia(nativehibiscus).svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 4,
+    "inscriptionCount": 0,
+    "svgMotifCount": 2,
+    "pngMotifCount": 2,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:22.451Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1766554429205.p3d",
+    "companionJson": null
+  }
+}

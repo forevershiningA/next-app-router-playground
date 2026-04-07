@@ -1555,6 +1555,9 @@ export default function DesignerNav() {
         }, 0);
       }
 
+      // Calculate emblem prices ($109 flat per emblem from emblems.xml)
+      const emblemsPrice = (state.selectedEmblems?.length ?? 0) * 109;
+
       // Calculate inscription prices from price model
       const validInscriptions = (state.inscriptions || []).filter((line) =>
         line.text?.trim(),
@@ -1584,6 +1587,7 @@ export default function DesignerNav() {
         basePrice +
         additionsPrice +
         motifsPrice +
+        emblemsPrice +
         inscriptionPrice +
         imagePrice;
       const tax = subtotal * 0.1;
@@ -1594,6 +1598,7 @@ export default function DesignerNav() {
         basePrice,
         additionsPrice,
         motifsPrice,
+        emblemsPrice,
         inscriptionPrice,
         imagePrice,
         subtotal,
@@ -1621,6 +1626,7 @@ export default function DesignerNav() {
         baseHeightMm: state.baseHeightMm,
         baseThickness: state.baseThickness,
         borderName: state.borderName,
+        showInsetContour: state.showInsetContour,
         showBase: state.showBase,
         inscriptions: state.inscriptions.map((insc) => ({
           id: insc.id,
@@ -1641,6 +1647,12 @@ export default function DesignerNav() {
           color: motif.color,
         })),
         motifOffsets: state.motifOffsets,
+        selectedEmblems: (state.selectedEmblems || []).map((emb) => ({
+          id: emb.id,
+          emblemId: emb.emblemId,
+          imageUrl: emb.imageUrl,
+        })),
+        emblemOffsets: state.emblemOffsets || {},
         selectedAdditions: state.selectedAdditions,
         additionOffsets: state.additionOffsets,
         selectedImages: state.selectedImages,
@@ -1759,6 +1771,8 @@ export default function DesignerNav() {
       return 'complete';
     if (slug === 'select-motifs' && selectedMotifs.length > 0)
       return 'complete';
+    if (slug === 'select-emblems' && selectedEmblems.length > 0)
+      return 'complete';
     return 'available';
   };
 
@@ -1767,6 +1781,7 @@ export default function DesignerNav() {
     if (slug === 'inscriptions') return inscriptions.length || null;
     if (slug === 'select-additions') return selectedAdditions.length || null;
     if (slug === 'select-motifs') return selectedMotifs.length || null;
+    if (slug === 'select-emblems') return selectedEmblems.length || null;
     return null;
   };
 
@@ -2602,7 +2617,7 @@ export default function DesignerNav() {
                 <div className="space-y-6">
                   <div className="h-[calc(100vh-220px)] overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                     <div className="h-full overflow-y-auto pr-1">
-                      <BorderSelector borders={borders} disableInternalScroll />
+                      <BorderSelector borders={borders} disableInternalScroll isPlaque={isPlaque} />
                     </div>
                   </div>
                 </div>
@@ -2844,8 +2859,8 @@ export default function DesignerNav() {
                         return null;
                       }
 
-                      // Hide "Select Border" for products without border support
-                      if (item.slug === 'select-border' && !hasBorder) {
+                      // Hide "Select Border" for headstones (toggle is in Shape panel) and plaques without border support
+                      if (item.slug === 'select-border' && (!isPlaque || !hasBorder)) {
                         return null;
                       }
 

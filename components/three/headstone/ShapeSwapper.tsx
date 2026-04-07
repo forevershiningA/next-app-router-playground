@@ -15,6 +15,7 @@ import EmblemModel from '../EmblemModel';
 import SvgHeadstone, { HeadstoneAPI } from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import { BronzeBorder } from '../BronzeBorder';
+import InsetContourLine, { isContourSupported } from '../InsetContourLine';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
@@ -156,6 +157,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const borderName = useHeadstoneStore((s) => s.borderName);
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
+  const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
@@ -683,6 +685,11 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                     />
                   </React.Suspense>
                 </ErrorBoundary>
+              )}
+
+              {/* Render inset contour line for headstones */}
+              {showInsetContour && !isPlaque && isContourSupported(shapeUrl) && (
+                <InsetContourLine headstone={api} />
               )}
             </>
             );

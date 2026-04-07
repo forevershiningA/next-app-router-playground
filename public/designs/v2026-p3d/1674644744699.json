@@ -1,0 +1,437 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.985Z",
+  "units": "mm",
+  "source": {
+    "id": "1674644744699",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1674644744699.p3d",
+    "savedAt": "2023-01-25T11:05:44.699Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "headstone-27"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1215,
+      "height_mm": 1225,
+      "thickness_mm": 100,
+      "shape": "headstone-27",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "base": {
+      "width_mm": 1900,
+      "height_mm": 380,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    },
+    "ledger": {
+      "width_mm": 1700,
+      "height_mm": 70,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/Noble-Red.webp"
+    },
+    "kerb": {
+      "width_mm": 1900,
+      "height_mm": 280,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "InLoving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 111.87,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "cross_005",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 73,
+          "y_mm": 234
+        },
+        "width_mm": 186.79,
+        "height_mm": 240,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 6,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "2_119_14",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": 159.413,
+          "y_mm": -80.25
+        },
+        "width_mm": 86.684,
+        "height_mm": 122.5,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7007,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "/designs/p3d-assets/1674644744699/motif-3.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 62.729,
+          "y_mm": -80.25
+        },
+        "width_mm": 86.684,
+        "height_mm": 122.5,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7009,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "2_119_03",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -47.185,
+          "y_mm": -80.25
+        },
+        "width_mm": 113.144,
+        "height_mm": 122.5,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#C99D44",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7011,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_119_14",
+        "assetType": "svg-motif",
+        "position": {
+          "x_mm": -158.256,
+          "y_mm": -80.25
+        },
+        "width_mm": 88.998,
+        "height_mm": 122.5,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#C99D44",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 7013,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_005",
+        "path": "/shapes/motifs/cross_005.svg"
+      },
+      {
+        "id": "2_119_14",
+        "path": "/shapes/motifs/2_119_14.svg"
+      },
+      {
+        "id": "/designs/p3d-assets/1674644744699/motif-3.png",
+        "path": "/designs/p3d-assets/1674644744699/motif-3.png"
+      },
+      {
+        "id": "2_119_03",
+        "path": "/shapes/motifs/2_119_03.svg"
+      },
+      {
+        "id": "2_119_14",
+        "path": "/shapes/motifs/2_119_14.svg"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 6,
+    "inscriptionCount": 1,
+    "svgMotifCount": 4,
+    "pngMotifCount": 1,
+    "warnings": [
+      "auto-stacked-positions"
+    ],
+    "confidence": "medium",
+    "migratedAt": "2026-04-02T16:23:19.985Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1674644744699.p3d",
+    "companionJson": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "shape": "Headstone 22",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Noble-Red.jpg",
+        "name": "Traditional Engraved Full Monument",
+        "price": 9011.55,
+        "quantity": 1,
+        "width": 1900,
+        "height": 380,
+        "_length": 80,
+        "init_width": 1125,
+        "init_height": 865,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230124,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 10928.59,
+        "quantity": 1,
+        "width": 2400,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1125,
+        "init_height": 865,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 14770.25,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1125,
+        "init_height": 865,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 5247.97,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1125,
+        "init_height": 865,
+        "mode": "3d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 14,
+        "label": "InLoving Memory",
+        "font": "46.21232876712329px Garamond",
+        "font_size": 111.87033971565033,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 112,
+        "itemID": 2
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_005",
+        "item": "cross_005",
+        "price": 265.952475,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 260,
+        "ratio": 1.1016949152542372,
+        "itemID": 3
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_005",
+        "item": "cross_005",
+        "price": 265.952475,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 73,
+        "y": -234,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 260,
+        "ratio": 1.1016949152542372,
+        "itemID": 4
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_03",
+        "item": "2_119_03",
+        "price": 257.45678,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 174,
+        "ratio": 0.24611032531824611,
+        "itemID": 5
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_119_14",
+        "item": "2_119_14",
+        "price": 264.58846,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 203,
+        "ratio": 0.2413793103448276,
+        "itemID": 6
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1674643622844,
+        "path": "../upload/2023/01/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1674643622844pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.12807111898509918,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 7
+      }
+    ]
+  }
+}

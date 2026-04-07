@@ -29,6 +29,7 @@ export function captureDesignSnapshot(): DesignerSnapshot {
     productId: state.productId ?? null,
     shapeUrl: state.shapeUrl ?? null,
     borderName: state.borderName ?? null,
+    showInsetContour: state.showInsetContour ?? false,
     materialUrl: state.materialUrl ?? null,
     headstoneMaterialUrl: state.headstoneMaterialUrl ?? null,
     baseMaterialUrl: state.baseMaterialUrl ?? null,
@@ -56,6 +57,8 @@ export function captureDesignSnapshot(): DesignerSnapshot {
     additionOffsets: cloneRecord(state.additionOffsets),
     selectedMotifs: cloneArray(state.selectedMotifs),
     motifOffsets: cloneRecord(state.motifOffsets),
+    selectedEmblems: cloneArray(state.selectedEmblems),
+    emblemOffsets: cloneRecord(state.emblemOffsets),
     selectedImages: cloneArray(state.selectedImages),
     inscriptions: serializeInscriptions(state.inscriptions),
     metadata: {
@@ -81,6 +84,7 @@ export async function applyDesignSnapshot(snapshot: DesignerSnapshot) {
   useHeadstoneStore.setState({
     shapeUrl: snapshot.shapeUrl ?? null,
     borderName: snapshot.borderName ?? null,
+    showInsetContour: snapshot.showInsetContour ?? false,
     materialUrl: snapshot.materialUrl ?? store.materialUrl,
     headstoneMaterialUrl: snapshot.headstoneMaterialUrl ?? store.headstoneMaterialUrl,
     baseMaterialUrl: snapshot.baseMaterialUrl ?? store.baseMaterialUrl,
@@ -108,6 +112,8 @@ export async function applyDesignSnapshot(snapshot: DesignerSnapshot) {
     additionOffsets: snapshot.additionOffsets ?? {},
     selectedMotifs: snapshot.selectedMotifs ?? [],
     motifOffsets: snapshot.motifOffsets ?? {},
+    selectedEmblems: snapshot.selectedEmblems ?? [],
+    emblemOffsets: snapshot.emblemOffsets ?? {},
     selectedImages: snapshot.selectedImages ?? [],
     inscriptions: hydratedInscriptions,
     currentProjectId: snapshot.metadata?.currentProjectId ?? null,

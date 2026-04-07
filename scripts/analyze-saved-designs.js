@@ -26,7 +26,7 @@ const productsData = {
   '9': { name: 'Legacy Design', type: 'plaque', slug: 'legacy-design' },
   '10': { name: 'Legacy Monument', type: 'monument', slug: 'legacy-monument' },
   '102': { name: 'Legacy Full Monument', type: 'monument', slug: 'legacy-full-monument' },
-  '135': { name: 'Legacy Memorial', type: 'headstone', slug: 'legacy-memorial' },
+  '135': { name: 'Pets', type: 'headstone', slug: 'pets' },
   '2350': { name: 'Legacy Product', type: 'plaque', slug: 'legacy-product' },
 };
 
@@ -470,15 +470,15 @@ function determineCategory(designData) {
     return 'child-memorial';
   }
   
-  // Pet - with animal type
+  // Pet - all animal types merged into pet-memorial
   if (inscriptions.match(/\b(dog|puppy|canine|our dog)\b/i) || motifSrcs.includes('dog')) {
-    return 'dog-memorial';
+    return 'pet-memorial';
   }
   if (inscriptions.match(/\b(cat|kitten|feline|our cat)\b/i) || motifSrcs.includes('cat')) {
-    return 'cat-memorial';
+    return 'pet-memorial';
   }
   if (inscriptions.match(/\b(horse|pony|equine|our horse)\b/i) || motifSrcs.includes('horse')) {
-    return 'horse-memorial';
+    return 'pet-memorial';
   }
   if (inscriptions.match(/\b(pet|beloved pet|faithful companion)\b/i)) {
     return 'pet-memorial';

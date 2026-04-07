@@ -2,16 +2,18 @@
 
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
-type GridExpandableSection = 'additions' | 'motifs' | 'images' | 'inscriptions';
+type GridExpandableSection = 'additions' | 'motifs' | 'emblems' | 'images' | 'inscriptions';
 const GRID_SECTION_COLLAPSED_STATE: Record<GridExpandableSection, boolean> = {
   additions: false,
   motifs: false,
+  emblems: false,
   images: false,
   inscriptions: false,
 };
 const GRID_SECTION_EXPANDED_STATE: Record<GridExpandableSection, boolean> = {
   additions: true,
   motifs: true,
+  emblems: true,
   images: true,
   inscriptions: true,
 };
@@ -23,6 +25,7 @@ import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculatePrice } from '#/lib/xml-parser';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
+import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
 import ProjectActions from '#/components/ProjectActions';
 
 type CheckPriceGridProps = {
@@ -48,6 +51,8 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
+  const selectedEmblems = useHeadstoneStore((s) => s.selectedEmblems);
+  const emblemOffsets = useHeadstoneStore((s) => s.emblemOffsets);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
 
@@ -251,7 +256,29 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     return imageItems.reduce((sum, item) => sum + item.price, 0);
   }, [imageItems]);
 
-  const subtotal = headstonePrice + basePrice + additionsPrice + motifsPrice + inscriptionPrice + imagePriceTotal;
+  // Emblem pricing: $109 flat per emblem (from emblems.xml product id 200)
+  const EMBLEM_UNIT_PRICE = 109;
+  const emblemsPrice = selectedEmblems.length * EMBLEM_UNIT_PRICE;
+
+  const emblemItems = useMemo(() => {
+    return selectedEmblems.map((emb) => {
+      const offset = emblemOffsets[emb.id];
+      const sizeEntry = EMBLEM_SIZES.find((s) => s.variant === (offset?.sizeVariant ?? 3));
+      const sizeMm = sizeEntry?.heightMm ?? 100;
+      return {
+        id: emb.id,
+        emblemId: emb.emblemId,
+        name: emb.emblemId.replace(/^br/, '').replace(/-/g, ' '),
+        thumbnail: emb.imageUrl,
+        sizeMm,
+        widthMm: offset?.widthMm ?? sizeMm,
+        heightMm: offset?.heightMm ?? sizeMm,
+        price: EMBLEM_UNIT_PRICE,
+      };
+    });
+  }, [selectedEmblems, emblemOffsets]);
+
+  const subtotal = headstonePrice + basePrice + additionsPrice + motifsPrice + emblemsPrice + inscriptionPrice + imagePriceTotal;
   const tax = subtotal * 0.1; // 10% tax
   const total = subtotal + tax;
 
@@ -260,6 +287,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     basePrice,
     additionsPrice,
     motifsPrice,
+    emblemsPrice,
     inscriptionPrice,
     imagePriceTotal,
     subtotal,
@@ -516,6 +544,51 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                   </div>
                 )}
               </div>
+
+              {/* Emblems */}
+              {emblemItems.length > 0 && (
+                <div className="border-b border-white/5 pb-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <button
+                      type="button"
+                      onClick={() => toggleSection('emblems')}
+                      aria-expanded={expandedSections.emblems}
+                      className="flex flex-col text-left text-white"
+                    >
+                      <p className="flex items-center gap-2 text-sm text-gray-400">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                          {expandedSections.emblems ? '−' : '+'}
+                        </span>
+                        Product ID: 200 - Bronze Emblem ($109.00/unit)
+                      </p>
+                      <p className="text-lg">
+                        {emblemItems.length} emblem{emblemItems.length !== 1 ? 's' : ''}
+                      </p>
+                    </button>
+                    <p className="text-xl text-white font-semibold">${emblemsPrice.toFixed(2)}</p>
+                  </div>
+                  {expandedSections.emblems && (
+                    <div className="mt-3 space-y-2 text-sm text-gray-300">
+                      {emblemItems.map((item) => (
+                        <div key={item.id} className="flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-3">
+                            {item.thumbnail && (
+                              <div className="h-10 w-10 overflow-hidden rounded-md border border-gray-400/70 bg-gray-300/90">
+                                <img src={toAssetPath(item.thumbnail)} alt={item.name} className="h-full w-full object-contain p-1" />
+                              </div>
+                            )}
+                            <div>
+                              <p className="text-white font-medium capitalize">{item.name}</p>
+                              <p className="text-xs text-gray-400">Size: {item.widthMm}×{item.heightMm}mm</p>
+                            </div>
+                          </div>
+                          <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Images */}
               {imageItems.length > 0 && (

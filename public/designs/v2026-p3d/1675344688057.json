@@ -1,0 +1,391 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.997Z",
+  "units": "mm",
+  "source": {
+    "id": "1675344688057",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1675344688057.p3d",
+    "savedAt": "2023-02-02T13:31:28.057Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "shape": "headstone-40"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 590,
+      "height_mm": 840,
+      "thickness_mm": 100,
+      "shape": "headstone-40",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -244.026,
+          "y_mm": 10.063
+        },
+        "width_mm": 77.829,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 4,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -142.298,
+          "y_mm": 10.063
+        },
+        "width_mm": 77.829,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 6,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -40.569,
+          "y_mm": 11.321
+        },
+        "width_mm": 77.829,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 8,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-8",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 61.162,
+          "y_mm": 12.579
+        },
+        "width_mm": 77.829,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 15,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-10",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 157.883,
+          "y_mm": 12.579
+        },
+        "width_mm": 77.829,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 16,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-12",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 257.117,
+          "y_mm": 13.832
+        },
+        "width_mm": 77.829,
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 18,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 6,
+    "inscriptionCount": 0,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:19.997Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1675344688057.p3d",
+    "companionJson": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 40",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 4267.02,
+        "quantity": 1,
+        "width": 590,
+        "height": 840,
+        "_length": 100,
+        "init_width": 1195,
+        "init_height": 865,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230201,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1675344710430,
+        "path": "../upload/2023/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1675344710430pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 90,
+        "ratio": 0.23187479379742656,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 310,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 2
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1675344710430,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1675344710430pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 166.19707164910528,
+        "y": -10.062934884794402,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 90,
+        "ratio": 0.23187479379742656,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 310,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 4
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1675344710430,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1675344710430pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 64.46850199055937,
+        "y": -10.062934884794402,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 90,
+        "ratio": 0.23187479379742656,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 310,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 6
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1675344710430,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1675344710430pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -37.260067667986704,
+        "y": -11.32080174539368,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 90,
+        "ratio": 0.23187479379742656,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 310,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 8
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1675344710430,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1675344710430pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -140.24650418713208,
+        "y": -12.57866860599296,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 90,
+        "ratio": 0.23187479379742656,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 310,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 10
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1675344710430,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1675344710430pomniklechakaczynskiegol.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -240.7172069850787,
+        "y": -12.57866860599296,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 90,
+        "ratio": 0.23187479379742656,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pomnik-lecha-kaczynskiego-lublin.jfif",
+        "price": 310,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 12
+      }
+    ]
+  }
+}

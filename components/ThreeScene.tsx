@@ -65,6 +65,7 @@ function ProductNameHeader() {
   const motifCost = useHeadstoneStore((s) => s.motifCost);
   const imageCost = useHeadstoneStore((s) => s.imageCost);
   const additionCost = useHeadstoneStore((s) => s.additionCost);
+  const emblemCost = useHeadstoneStore((s) => s.emblemCost);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const unitSystem = useUnitSystem();
   const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(null);
@@ -180,7 +181,8 @@ function ProductNameHeader() {
       inscriptionCost +
       motifCost +
       imageCost +
-      additionCost
+      additionCost +
+      emblemCost
     );
   }, [
     activeCatalog,
@@ -190,6 +192,7 @@ function ProductNameHeader() {
     motifCost,
     imageCost,
     additionCost,
+    emblemCost,
     showBase,
     selectedShape,
     widthMm,

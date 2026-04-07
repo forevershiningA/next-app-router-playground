@@ -413,6 +413,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: 'emblem' as const,
       };
     });
+    setTimeout(() => get().calculateEmblemCost(), 0);
   },
   removeEmblem: (id) => {
     set((s) => {
@@ -426,6 +427,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: isActive ? null : s.activePanel,
       };
     });
+    setTimeout(() => get().calculateEmblemCost(), 0);
   },
   duplicateEmblem: (id) => {
     const state = get();
@@ -453,6 +455,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: 'emblem' as const,
       };
     });
+    setTimeout(() => get().calculateEmblemCost(), 0);
   },
   setEmblemOffset: (id, offset) => {
     set((s) => {
@@ -648,6 +651,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         }
       } else if (currentBorderName) {
         set({ borderName: null });
+      }
+
+      // Reset inset contour when switching to plaque
+      if (isPlaque && get().showInsetContour) {
+        set({ showInsetContour: false });
       }
 
       const isBronzePlaqueProduct = catalog.product.id === '5';
@@ -1082,6 +1090,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ borderName: name });
   },
 
+  showInsetContour: false,
+  setShowInsetContour(show) {
+    set({ showInsetContour: show });
+  },
+
   materialUrl: `${TEX_BASE}${DEFAULT_TEX}`,
   setMaterialUrl(materialUrl) {
     const normalized = normalizeTextureUrl(materialUrl) ?? `${TEX_BASE}${DEFAULT_TEX}`;
@@ -1270,6 +1283,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
   motifPriceModel: null,
   motifCost: 0,
+
+  emblemCost: 0,
 
   imageCost: 0,
   additionCost: 0,
@@ -1778,6 +1793,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ motifCost: totalCost });
   },
 
+  // Emblem pricing: $109 flat per emblem (from emblems.xml product id 200)
+  calculateEmblemCost: () => {
+    const { selectedEmblems } = get();
+    const EMBLEM_UNIT_PRICE = 109;
+    set({ emblemCost: selectedEmblems.length * EMBLEM_UNIT_PRICE });
+  },
+
   calculateImageCost: async () => {
     const { selectedImages } = get();
     if (!selectedImages.length) {
@@ -1914,3 +1936,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
   },
 }));
+
+// Expose for Playwright batch screenshot automation (dev only)
+if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
+  (window as any).__headstoneStore = useHeadstoneStore;
+}

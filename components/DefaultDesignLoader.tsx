@@ -3,6 +3,7 @@
 import {
   loadCanonicalDesignIntoEditor,
   getCanonicalDesignUrl,
+  fetchCanonicalDesign,
   type CanonicalDesignData,
 } from '#/lib/saved-design-loader-utils';
 const isDevEnvironment = process.env.NODE_ENV !== 'production';
@@ -19,22 +20,19 @@ export default function DefaultDesignLoader() {
 }
 
 export async function loadDesignById(designId: string) {
-  const canonicalDesignUrl = getCanonicalDesignUrl(designId);
-
   try {
     if (isDevEnvironment) {
       console.log(`[loadDesignById] Loading canonical design: ${designId}`);
     }
 
-    const response = await fetch(canonicalDesignUrl, { cache: 'no-cache' });
-    if (!response.ok) {
+    const canonicalData = await fetchCanonicalDesign(designId);
+    if (!canonicalData) {
       if (isDevEnvironment) {
-        console.warn(`[loadDesignById] Failed to fetch canonical design ${designId}:`, response.status);
+        console.warn(`[loadDesignById] No canonical design found for ${designId}`);
       }
       return { success: false, message: 'Failed to fetch design' };
     }
 
-    const canonicalData: CanonicalDesignData = await response.json();
     await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
 
     if (isDevEnvironment) {
@@ -45,6 +43,11 @@ export async function loadDesignById(designId: string) {
     console.error(`[loadDesignById] Error loading canonical design ${designId}:`, error);
     return { success: false, message: 'Error loading design' };
   }
+}
+
+// Expose for Playwright batch screenshot automation (dev only)
+if (isDevEnvironment && typeof window !== 'undefined') {
+  (window as any).__loadDesignById = loadDesignById;
 }
 
 /**

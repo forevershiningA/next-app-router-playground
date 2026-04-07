@@ -1,0 +1,522 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.357Z",
+  "units": "mm",
+  "source": {
+    "id": "1627797257155",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1627797257155.p3d",
+    "savedAt": "2021-08-01T05:54:17.155Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "curved-gable"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 50,
+      "shape": "curved-gable",
+      "texture": ""
+    },
+    "base": {
+      "width_mm": 200,
+      "height_mm": 50,
+      "depth_mm": 100,
+      "texture": ""
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Gabriel Russell",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 70,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -331
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Even though you are far away we think of you every day silent thoughts secret tears still wishing you were here",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -70
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Love you miss you very much",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -110
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "18 April 1944 - 13 May 2021",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 39.609,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -150
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "18 April 1944 - 13 May 2021",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 39.609,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -190
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "18 April 1944 - 13 May 2021",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 39.609,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -230
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "p3d-motif-1627797257155-1",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -17.682,
+          "y_mm": -391.961
+        },
+        "width_mm": 21.923,
+        "height_mm": 21.923,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "p3d-motif-1627797257155-3",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 14.241,
+          "y_mm": -391.961
+        },
+        "width_mm": 21.923,
+        "height_mm": 21.923,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-6",
+        "asset": "p3d-motif-1627797257155-5",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 46.164,
+          "y_mm": -391.961
+        },
+        "width_mm": 21.923,
+        "height_mm": 21.923,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "/designs/p3d-assets/1627797257155/motif-9.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0,
+          "y_mm": -270
+        },
+        "width_mm": 40,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9000,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-11",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -47.884,
+          "y_mm": -391.961
+        },
+        "width_mm": 18.482,
+        "height_mm": 21.923,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": 1,
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 1,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "p3d-motif-1627797257155-1",
+        "path": "p3d-motif-1627797257155-1"
+      },
+      {
+        "id": "p3d-motif-1627797257155-3",
+        "path": "p3d-motif-1627797257155-3"
+      },
+      {
+        "id": "p3d-motif-1627797257155-5",
+        "path": "p3d-motif-1627797257155-5"
+      },
+      {
+        "id": "/designs/p3d-assets/1627797257155/motif-9.png",
+        "path": "/designs/p3d-assets/1627797257155/motif-9.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 11,
+    "inscriptionCount": 6,
+    "svgMotifCount": 0,
+    "pngMotifCount": 4,
+    "warnings": [
+      "motif-1-no-asset",
+      "motif-3-no-asset",
+      "motif-5-no-asset",
+      "auto-stacked-positions"
+    ],
+    "confidence": "low",
+    "migratedAt": "2026-04-02T16:23:19.357Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1627797257155.p3d",
+    "companionJson": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "name": "Curved Gable",
+        "installationMethod": 1,
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 498.15,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 50,
+        "init_width": 1313,
+        "init_height": 802,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210629,
+        "mode": "3d",
+        "navigator": "MacIntel, Google Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36"
+      },
+      {
+        "productid": 22,
+        "type": "Base",
+        "name": "Rectangle",
+        "installationMethod": 1,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 130.94,
+        "quantity": 1,
+        "width": 200,
+        "height": 50,
+        "_length": 50,
+        "init_width": 1313,
+        "init_height": 802,
+        "mode": "3d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Shirley Mum Nan Great Nan",
+        "font": "446.8285714285713px Franklin Gothic",
+        "font_size": 70,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 70,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 91,
+        "label": "Even though you are far away we think of you every day silent thoughts secret tears still wishing you were here",
+        "font": "446.8285714285713px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 70,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Love you miss you very much",
+        "font": "446.8285714285713px Franklin Gothic",
+        "font_size": 40,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 110,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "18 April 1944 - 13 May 2021",
+        "font": "446.8285714285713px Franklin Gothic",
+        "font_size": 39.60912052117264,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 150,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "18 April 1944 - 13 May 2021",
+        "font": "446.8285714285713px Franklin Gothic",
+        "font_size": 39.60912052117264,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 190,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "18 April 1944 - 13 May 2021",
+        "font": "446.8285714285713px Franklin Gothic",
+        "font_size": 39.60912052117264,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 230,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1627798081779,
+        "path": "../upload/2021/08/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1627798081779fullsizeoutput_3934_crop.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.557142857142857,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "fullsizeoutput_3934.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 100,
+        "width": "188",
+        "height": "223",
+        "itemID": 11
+      }
+    ]
+  }
+}

@@ -1,0 +1,293 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.037Z",
+  "units": "mm",
+  "source": {
+    "id": "1604227399107",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1604227399107.p3d",
+    "savedAt": "2020-11-01T10:43:19.107Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "square"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 302,
+      "height_mm": 307,
+      "thickness_mm": 50,
+      "shape": "square",
+      "texture": ""
+    },
+    "base": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "In Loving memory",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 29.162,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": -0.837,
+          "y_mm": 56.3
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -2.037,
+          "y_mm": -15.907
+        },
+        "width_mm": 184,
+        "height_mm": 263,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-5",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -64.472,
+          "y_mm": 6.518
+        },
+        "width_mm": 96,
+        "height_mm": 137,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-6",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 57.407,
+          "y_mm": 7.22
+        },
+        "width_mm": 92,
+        "height_mm": 131,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 4,
+    "inscriptionCount": 1,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:19.037Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1604227399107.p3d",
+    "companionJson": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Urn Heart",
+        "border": "Border Heart",
+        "shape_url": "shapes/photos/borderheart.svg",
+        "shape": "Urn Heart",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "price": 2606.62,
+        "quantity": 1,
+        "width": 302,
+        "height": 307,
+        "_length": 1,
+        "init_width": 1108,
+        "init_height": 873,
+        "mode": "3d"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1604247751462,
+        "path": "../upload/2020/11/",
+        "type": "Photo",
+        "item": "1604247751462mv5bnte0njm1otc1of5bml5b.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6014313104425913,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "MV5BNTE0NjM1OTc1OF5BMl5BanBnXkFtZTcwOTMwMzU1NQ@@._V1_SY1000_CR0,0,745,1000_AL_.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 94.79533959252518,
+        "width": "184",
+        "height": "263",
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Loving memory",
+        "font": "554.5114006514658px Great Vibes",
+        "font_size": 29.16246236715562,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 4
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1604247816362,
+        "path": "../upload/2020/11/",
+        "type": "Photo",
+        "item": "1604247816362president_prime_minister.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3130617836388065,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "President_Prime_Minister_Admiral_General_Aladeen.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 49.34362009128398,
+        "width": "96",
+        "height": "137",
+        "itemID": 5
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1604247840964,
+        "path": "../upload/2020/11/",
+        "type": "Photo",
+        "item": "1604247840964article2146093132530f800.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2991605401354474,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "article-2146093-132530F8000005DC-555_1024x615_large.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 47.152558409294784,
+        "width": "92",
+        "height": "131",
+        "itemID": 6
+      }
+    ]
+  }
+}

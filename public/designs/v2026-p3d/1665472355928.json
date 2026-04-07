@@ -1,0 +1,491 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.785Z",
+  "units": "mm",
+  "source": {
+    "id": "1665472355928",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1665472355928.p3d",
+    "savedAt": "2022-10-11T07:12:35.928Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "shape": "serpentine",
+      "texture": "/textures/forever/l/African-Black.webp"
+    },
+    "base": {
+      "width_mm": 1,
+      "height_mm": 1,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "ledger": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 0.1,
+      "height_mm": 0.1,
+      "depth_mm": 0.1,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "Uncle Archie one of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -90.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "most inflluencial",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -130.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "and inspiring musicians & was",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 23.337,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -170.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "a great mentor for so many",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 23.034,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -210.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "Aubrey Welch",
+        "font": {
+          "family": "Xirwena",
+          "size_mm": 66.297,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 4.13,
+          "y_mm": 194.1
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-42",
+        "text": "Born on the 8th of january 1956",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 23.988,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 14.917,
+          "y_mm": 76.798
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-44",
+        "text": "Died on the 30th of july 2022",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 25.582,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 17.262,
+          "y_mm": 112.39
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": -234.312,
+          "y_mm": -213.637
+        },
+        "width_mm": 116.327,
+        "height_mm": 150,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 4,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      },
+      {
+        "id": "motif-4",
+        "asset": "/jpg/photos/vitreous-enamel-image.png",
+        "assetType": "photo-placeholder",
+        "position": {
+          "x_mm": 217.73,
+          "y_mm": -183.059
+        },
+        "width_mm": 120,
+        "height_mm": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 6,
+        "surface": "headstone/front",
+        "flip": {
+          "x": false,
+          "y": false
+        }
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 9,
+    "inscriptionCount": 7,
+    "svgMotifCount": 0,
+    "pngMotifCount": 0,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:19.785Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1665472355928.p3d",
+    "companionJson": [
+      {
+        "productid": 102,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1434.89,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "init_width": 960,
+        "init_height": 586.007022857666,
+        "device": "desktop",
+        "dpr": 2.134999990463257,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221010,
+        "mode": "3d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36, 1799x1012"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1665472458215,
+        "path": "../upload/2022/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1665472458215ezgifcomgifmaker_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0372847478802767,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "ezgif.com-gif-maker.jpg",
+        "price": 350,
+        "quantity": 1,
+        "size": "110 x 150 mm",
+        "itemID": 1
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1665472520622,
+        "path": "../upload/2022/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1665472520622archieroachremovebgprevi.jpg",
+        "color": 0,
+        "mask": 1,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.2447416974563321,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Archie-Roach-removebg-preview.png",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "Uncle Archie one of",
+        "font": "406.6156211690685px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#a22b2a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 90.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "most inflluencial",
+        "font": "406.6156211690685px Lucida Calligraphy",
+        "font_size": 40,
+        "font_family": "Lucida Calligraphy",
+        "color": "#a22b2a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 130.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 25,
+        "label": "and inspiring musicians & was",
+        "font": "406.6156211690685px Lucida Calligraphy",
+        "font_size": 23.33678638610968,
+        "font_family": "Lucida Calligraphy",
+        "color": "#a22b2a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 170.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "a great mentor for so many",
+        "font": "406.6156211690685px Lucida Calligraphy",
+        "font_size": 23.034035781620844,
+        "font_family": "Lucida Calligraphy",
+        "color": "#a22b2a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 210.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 21,
+        "label": "Archibald William Roach",
+        "font": "406.6156211690685px Xirwena",
+        "font_size": 66.29663660315258,
+        "font_family": "Xirwena",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 250.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 66,
+        "itemID": 25
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 25,
+        "label": "Born on the 8th of january 1956",
+        "font": "406.6156211690685px Adorable",
+        "font_size": 23.988085030078,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 250.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 42
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Died on the 30th of july 2022",
+        "font": "406.6156211690685px Adorable",
+        "font_size": 25.581757286200627,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 290.50179936668223,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 44
+      }
+    ]
+  }
+}

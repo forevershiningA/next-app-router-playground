@@ -1,0 +1,274 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:19.313Z",
+  "units": "mm",
+  "source": {
+    "id": "1620014691815",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1620014691815.p3d",
+    "savedAt": "2021-05-03T04:04:51.815Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "full-monument",
+    "slug": "traditional-monument",
+    "shape": "serpentine"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 900,
+      "height_mm": 700,
+      "thickness_mm": 100,
+      "shape": "serpentine",
+      "texture": ""
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": ""
+    },
+    "ledger": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": ""
+    },
+    "kerb": {
+      "width_mm": 1200,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": ""
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Fanny Romero",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 40,
+          "weight": 400
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 105
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "align": "center",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "p3d-motif-1620014691815-1",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -80,
+          "y_mm": 35
+        },
+        "width_mm": 70,
+        "height_mm": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-3",
+        "asset": "p3d-motif-1620014691815-2",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 0,
+          "y_mm": 35
+        },
+        "width_mm": 70,
+        "height_mm": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "p3d-motif-1620014691815-3",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 80,
+          "y_mm": 35
+        },
+        "width_mm": 70,
+        "height_mm": 70,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 0,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "p3d-motif-1620014691815-1",
+        "path": "p3d-motif-1620014691815-1"
+      },
+      {
+        "id": "p3d-motif-1620014691815-2",
+        "path": "p3d-motif-1620014691815-2"
+      },
+      {
+        "id": "p3d-motif-1620014691815-3",
+        "path": "p3d-motif-1620014691815-3"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 4,
+    "inscriptionCount": 1,
+    "svgMotifCount": 0,
+    "pngMotifCount": 3,
+    "warnings": [
+      "motif-1-no-asset",
+      "motif-2-no-asset",
+      "motif-3-no-asset",
+      "auto-stacked-positions"
+    ],
+    "confidence": "low",
+    "migratedAt": "2026-04-02T16:23:19.313Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1620014691815.p3d",
+    "companionJson": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 2604.42,
+        "quantity": 1,
+        "width": 900,
+        "height": 700,
+        "_length": 1,
+        "init_width": 1264,
+        "init_height": 797,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": 140,
+        "version_date": 20210428,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": 3617.25,
+        "quantity": 1,
+        "width": 1000,
+        "height": 350,
+        "_length": 250,
+        "init_width": 1264,
+        "init_height": 797,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": 3531.13,
+        "width": 1050,
+        "height": 50,
+        "_length": 2080,
+        "init_width": 1264,
+        "init_height": 797,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl-TILE-900-X-900.jpg",
+        "price": 2799.06,
+        "quantity": 1,
+        "width": 1200,
+        "height": 250,
+        "_length": 2150,
+        "init_width": 1264,
+        "init_height": 797,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 16,
+        "label": "Matthew Ashelford",
+        "font": "172.6833333333333px Garamond",
+        "font_size": 40,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 1
+      }
+    ]
+  }
+}

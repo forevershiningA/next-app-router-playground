@@ -1,0 +1,177 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-02T16:23:22.406Z",
+  "units": "mm",
+  "source": {
+    "id": "1761881624253",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/p3d/1761881624253.p3d",
+    "savedAt": "2025-10-31T03:33:44.253Z",
+    "format": "p3d"
+  },
+  "product": {
+    "id": "100",
+    "name": "Laser-etched Black Granite Full Monument",
+    "type": "full-monument",
+    "slug": "laser-monument",
+    "shape": "square"
+  },
+  "scene": {
+    "coordinateSystem": {
+      "positionMode": "p3d-mm-center",
+      "coordinateSpace": "headstone-center-mm",
+      "headstonePlacement": "auto-center"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1000,
+      "height_mm": 500,
+      "thickness_mm": 80,
+      "shape": "square",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 350,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Australian-Calca.webp"
+    },
+    "ledger": {
+      "width_mm": 1000,
+      "height_mm": 50,
+      "depth_mm": 2050,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "kerb": {
+      "width_mm": 1200,
+      "height_mm": 250,
+      "depth_mm": 2150,
+      "texture": "/textures/forever/l/Australian-Calca.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "/designs/p3d-assets/1761881624253/motif-0.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -9.92,
+          "y_mm": 168.106
+        },
+        "width_mm": 276.742,
+        "height_mm": 30,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9002,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-2",
+        "asset": "/designs/p3d-assets/1761881624253/motif-1.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -15.585,
+          "y_mm": 112.211
+        },
+        "width_mm": 416.79,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9005,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-3",
+        "asset": "/designs/p3d-assets/1761881624253/motif-2.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": -21.858,
+          "y_mm": 52.263
+        },
+        "width_mm": 79.853,
+        "height_mm": 30,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9005,
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "/designs/p3d-assets/1761881624253/motif-3.png",
+        "assetType": "embedded-png",
+        "position": {
+          "x_mm": 15.4,
+          "y_mm": -5.298
+        },
+        "width_mm": 448.539,
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#FFFFFF",
+        "sandblasted": false,
+        "alpha": 1,
+        "layer": 9005,
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "/designs/p3d-assets/1761881624253/motif-0.png",
+        "path": "/designs/p3d-assets/1761881624253/motif-0.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1761881624253/motif-1.png",
+        "path": "/designs/p3d-assets/1761881624253/motif-1.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1761881624253/motif-2.png",
+        "path": "/designs/p3d-assets/1761881624253/motif-2.png"
+      },
+      {
+        "id": "/designs/p3d-assets/1761881624253/motif-3.png",
+        "path": "/designs/p3d-assets/1761881624253/motif-3.png"
+      }
+    ]
+  },
+  "monument": {
+    "type": "tomb_006"
+  },
+  "migration": {
+    "pipeline": "p3d-to-canonical3d",
+    "converter": "convert-p3d-design.js",
+    "converterVersion": "2026.01",
+    "sourceFormat": "p3d",
+    "motifCount": 4,
+    "inscriptionCount": 0,
+    "svgMotifCount": 0,
+    "pngMotifCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-02T16:23:22.406Z"
+  },
+  "legacy": {
+    "p3dFile": "/ml/forevershining/saved-designs/p3d/1761881624253.p3d",
+    "companionJson": null
+  }
+}

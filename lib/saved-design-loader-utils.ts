@@ -13,7 +13,7 @@ export interface LoadDesignOptions {
   autoSave?: boolean; // Whether to auto-save after loading
 }
 
-type CanonicalPositionMode = 'legacy-stage-px' | 'surface-mm';
+type CanonicalPositionMode = 'legacy-stage-px' | 'surface-mm' | 'p3d-mm-center';
 type CanonicalHeadstonePlacement = 'legacy-stage-offset' | 'auto-center' | 'none';
 type CanonicalFlipMode = 'invert-legacy-bools' | 'preserve';
 type CanonicalCoordinateSpace = 'css-stage' | 'buffer-px';
@@ -65,6 +65,12 @@ export type CanonicalDesignData = {
       height_mm?: number;
       texture?: string;
     };
+    kerb?: {
+      width_mm?: number;
+      height_mm?: number;
+      depth_mm?: number;
+      texture?: string;
+    };
   };
   scene?: {
     canvas?: { width_mm?: number; height_mm?: number };
@@ -98,7 +104,9 @@ export type CanonicalDesignData = {
     motifs?: Array<{
       id?: string;
       asset?: string;
+      assetType?: string;
       position?: { x_mm?: number; y_mm?: number; x_px?: number; y_px?: number };
+      width_mm?: number;
       height_mm?: number;
       height_px?: number;
       rotation?: { z_deg?: number };
@@ -130,6 +138,8 @@ export type CanonicalDesignData = {
   migration?: CanonicalConversionMetadata;
   legacy?: {
     raw?: SavedDesignData;
+    p3dFile?: string;
+    companionJson?: unknown;
   };
 };
 
@@ -167,6 +177,37 @@ export const getCanonicalDesignUrl = (designId: string) => {
     return `${override.basePath}/${override.version}/${designId}.json`;
   }
   return `${DEFAULT_CANONICAL_DESIGN_BASE_PATH}/${DEFAULT_CANONICAL_DESIGN_VERSION}/${designId}.json`;
+};
+
+/**
+ * Fetch canonical design JSON, preferring p3d-converted data when available.
+ * Tries v2026-p3d/ first (correct positions for full monuments), then
+ * falls back to the main rollout directory.
+ */
+export const fetchCanonicalDesign = async (
+  designId: string,
+): Promise<CanonicalDesignData | null> => {
+  const p3dUrl = `${DEFAULT_CANONICAL_DESIGN_BASE_PATH}/v2026-p3d/${designId}.json`;
+  try {
+    const response = await fetch(p3dUrl, { cache: 'no-store' });
+    if (response.ok) {
+      return (await response.json()) as CanonicalDesignData;
+    }
+  } catch {
+    // p3d not available, continue to fallback
+  }
+
+  const mainUrl = getCanonicalDesignUrl(designId);
+  try {
+    const response = await fetch(mainUrl, { cache: 'no-store' });
+    if (response.ok) {
+      return (await response.json()) as CanonicalDesignData;
+    }
+  } catch {
+    // main canonical not available either
+  }
+
+  return null;
 };
 
 const getSkippedDesignReasonLookup = async (): Promise<Map<string, string>> => {
@@ -1028,6 +1069,7 @@ export async function loadCanonicalDesignIntoEditor(
   const headstone = designData.components?.headstone;
   const base = designData.components?.base;
   const ledgerComponent = designData.components?.ledger;
+  const kerbComponent = designData.components?.kerb;
   const canonicalInscriptionSnapshot = designData.elements?.inscriptions ?? [];
   const canonicalMotifSnapshot = designData.elements?.motifs ?? [];
   const canonicalPhotoSnapshot = designData.elements?.photos ?? [];
@@ -1036,6 +1078,7 @@ export async function loadCanonicalDesignIntoEditor(
   const isForevershining = normalizedMlDir === 'forevershining';
   const coordinateSystem = designData.scene?.coordinateSystem;
   const positionMode = coordinateSystem?.positionMode ?? 'legacy-stage-px';
+  const isP3dDesign = positionMode === 'p3d-mm-center';
   const coordinateSpace = coordinateSystem?.coordinateSpace ?? 'css-stage';
   const headstonePlacement =
     coordinateSystem?.headstonePlacement ?? (isForevershining ? 'auto-center' : 'legacy-stage-offset');
@@ -1069,8 +1112,8 @@ export async function loadCanonicalDesignIntoEditor(
     }
   }
 
-  // Set shape if available
-  const shapeName = designData.product?.shape;
+  // Set shape if available (check product.shape, then components.headstone.shape)
+  const shapeName = designData.product?.shape ?? designData.components?.headstone?.shape;
   if (shapeName) {
     store.setShapeUrl(resolveCanonicalShapeUrl(shapeName));
   }
@@ -1095,6 +1138,15 @@ export async function loadCanonicalDesignIntoEditor(
   if (headstone?.thickness_mm) {
     store.setUprightThickness(headstone.thickness_mm);
     store.setSlantThickness(headstone.thickness_mm);
+  }
+
+  // Set border from legacy data if available (e.g. "Border 4" for bronze plaques)
+  const legacyBorderName =
+    typeof legacyRawHeadstoneItem?.border === 'string' && legacyRawHeadstoneItem.border.trim()
+      ? legacyRawHeadstoneItem.border.trim()
+      : null;
+  if (legacyBorderName) {
+    store.setBorderName(legacyBorderName);
   }
   const enforceTexture = (
     type: 'headstone' | 'base',
@@ -1169,7 +1221,24 @@ export async function loadCanonicalDesignIntoEditor(
     store.setShowLedger(false);
   }
 
-  // CRITICAL FIX: For canonical designs, we just set the dimensions into the store above,
+  if (kerbComponent) {
+    store.setShowKerbset(true);
+    if (kerbComponent.width_mm) {
+      store.setKerbWidthMm(kerbComponent.width_mm);
+    }
+    if (kerbComponent.height_mm) {
+      store.setKerbHeightMm(kerbComponent.height_mm);
+    }
+    if (kerbComponent.depth_mm) {
+      store.setKerbDepthMm(kerbComponent.depth_mm);
+    }
+    if (kerbComponent.texture) {
+      const mappedKerbTexture = mapTexture(kerbComponent.texture, String(productId ?? ''));
+      store.setKerbsetMaterialUrl(mappedKerbTexture);
+    }
+  }
+
+  // CRITICAL FIX:For canonical designs, we just set the dimensions into the store above,
   // so the "active" dimensions should match the "canonical" dimensions.
   // Use the canonical values directly instead of reading from store to avoid race conditions.
   const legacyWidthFallback = Number(legacyRawHeadstoneItem?.width);
@@ -1613,15 +1682,18 @@ export async function loadCanonicalDesignIntoEditor(
       ? legacyInscriptionFontPxByCanonicalId.has(canonicalInscriptionId)
       : false;
     if (!gotLegacyCssPx) return sizePx;
-    // Universal authoring-space pipeline: keep saved font px as-is (CSS px),
-    // then convert once using surface mm-per-px mapping.
+    // Legacy CSS font strings (e.g. "101.57px Garamond") are in DPR-scaled physical
+    // pixels because the CreateJS canvas was DPR-scaled. The mmPerPx conversion
+    // factors are computed from CSS-pixel draw dimensions. Divide by DPR to convert
+    // the physical-px font value to CSS-px before applying the conversion.
     const mmPerPxY =
       targetSurface === 'ledger'
         ? LEDGER_MM_PER_PX_Z_CANONICAL
         : targetSurface === 'base'
           ? BASE_MM_PER_PX_Y_CANONICAL
           : HEADSTONE_MM_PER_PX_Y_CANONICAL;
-    return sizePx * mmPerPxY;
+    const fontCssPx = sizePx / Math.max(effectiveLegacySavedDpr, 1);
+    return fontCssPx * mmPerPxY;
   }
 
   function resolveMotifHeightMm(
@@ -1858,6 +1930,16 @@ export async function loadCanonicalDesignIntoEditor(
       }
     }
 
+    // Skip inscriptions placed far outside the surface bounds (off-screen duplicates
+    // from legacy designs). Use 1.3× tolerance so only clearly off-screen items are
+    // filtered while keeping a generous margin for legitimate edge positioning.
+    if (targetSurface === 'headstone' && HEADSTONE_HALF_MM > 0) {
+      const halfW = canonicalHeadstoneWidthMm ? canonicalHeadstoneWidthMm / 2 : HEADSTONE_HALF_MM;
+      if (Math.abs(yMm) > HEADSTONE_HALF_MM * 1.3 || Math.abs(xMm) > halfW * 1.3) {
+        return;
+      }
+    }
+
     const scaleX =
       targetSurface === 'base'
         ? BASE_X_SCALE
@@ -1900,6 +1982,38 @@ export async function loadCanonicalDesignIntoEditor(
   const canonicalMotifs = designData.elements?.motifs ?? [];
 
   canonicalMotifs.forEach((motif, index) => {
+    // P3d embedded PNGs and photo placeholders are loaded as images, not SVG motifs
+    if ((motif.assetType === 'embedded-png' || motif.assetType === 'photo-placeholder') && motif.asset) {
+      let target = canonicalSurfaceTarget(motif.surface);
+      let { xMm, yMm } = convertPositionToMm(motif.position, target);
+      const xPos = xMm * GLOBAL_LAYOUT_SCALE;
+      const yPos = yMm * GLOBAL_LAYOUT_SCALE;
+      const heightMm = clampCanonicalMotifHeight(motif.height_mm ?? 100);
+      const widthMm = motif.width_mm ?? heightMm;
+      const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
+      const isPhoto = motif.assetType === 'photo-placeholder';
+
+      if (target === 'headstone') {
+        recordRangeValue(headstoneRangeTracker, yPos);
+        recordRangeValue(headstoneMotifRangeTracker, yPos);
+      }
+
+      pendingImages.push({
+        id: motif.id ?? `p3d-motif-${index}`,
+        typeId: 0,
+        typeName: isPhoto ? 'p3d-photo' : 'p3d-motif',
+        imageUrls: [motif.asset.replace('vitreous-enamel-image.jpg', 'vitreous-enamel-image.png')],
+        widthMm,
+        heightMm,
+        xPos,
+        yPos,
+        rotationZ,
+        target,
+        maskShape: '', // P3D images render flat on stone (no ceramic oval base)
+      });
+      return;
+    }
+
     const svgPath = resolveCanonicalMotifPath(motif.asset, motif.id ?? `motif-${index}`, motifAssetMap);
     const color = motif.color ?? DEFAULT_CANONICAL_COLOR;
     let target = canonicalSurfaceTarget(motif.surface);
@@ -2025,7 +2139,7 @@ export async function loadCanonicalDesignIntoEditor(
     ].filter((v): v is string => Boolean(v && v.trim()));
     // Always include the vitreous enamel placeholder so photos render even if the original image is gone
     if (!imageUrlCandidates.length) {
-      imageUrlCandidates.push('/jpg/photos/vitreous-enamel-image.jpg');
+      imageUrlCandidates.push('/jpg/photos/vitreous-enamel-image.png');
     }
 
     const sourceSizeMm =
@@ -2092,7 +2206,7 @@ export async function loadCanonicalDesignIntoEditor(
       : headstoneRangeTracker.count > 0
         ? headstoneRangeTracker
         : headstoneMotifRangeTracker;
-  const headstoneShiftMm = useAuthoringDesignSpaceMapping
+  const headstoneShiftMm = useAuthoringDesignSpaceMapping || isP3dDesign
     ? 0
     : computeHeadstoneShift(
         headstoneShiftSourceTracker,

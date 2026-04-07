@@ -7,6 +7,7 @@ import {
   loadSavedDesignIntoEditor,
   loadCanonicalDesignIntoEditor,
   getCanonicalDesignUrl,
+  fetchCanonicalDesign,
 } from '#/lib/saved-design-loader-utils';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
@@ -1236,11 +1237,11 @@ export default function DesignPageClient({
     setCanonicalLoadState('loading');
     (async () => {
       try {
-        const response = await fetch(canonicalDesignUrl, { cache: 'no-store' });
-        if (!response.ok) {
-          throw new Error(`Canonical design request failed with status ${response.status}`);
+        // Use fetchCanonicalDesign which tries p3d-converted data first
+        const canonicalData = await fetchCanonicalDesign(designId);
+        if (!canonicalData) {
+          throw new Error(`No canonical design found for ${designId}`);
         }
-        const canonicalData = await response.json();
         if (cancelled) return;
         await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
         if (!cancelled) {

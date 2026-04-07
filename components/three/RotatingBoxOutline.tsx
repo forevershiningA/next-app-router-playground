@@ -323,6 +323,11 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       // Skip the depth leg so corners stay like a 2D viewfinder even on thick meshes
     });
 
+    if (positions.length === 0) {
+      helper.visible = false;
+      return;
+    }
+
     const vertices = new Float32Array(positions);
     helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     helper.geometry.computeBoundingSphere();
