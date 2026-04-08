@@ -183,13 +183,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             stone.position.z,
           ));
         } else if (isBaseSurface && coordinateSpace === 'mm-center') {
-          // Base mesh is a unit cube scaled in meters (assembly space).
-          // Anchor mm offsets to the base mesh's world position.
-          const absX = stone.position.x + (xPos ?? 0) * mmToLocalUnits;
-          const absY = stone.position.y + (yPos ?? 0) * mmToLocalUnits;
-          const posZ = stone.position.z + stone.scale.z / 2 + liftLocal;
-          updateLineStore(id, { xPos: absX, yPos: absY, coordinateSpace: undefined });
-          setPos(new THREE.Vector3(0, 0, posZ));
+          // Base inscription: position computed at render time from mesh ref
+          // (same pattern as MotifModel). No coordinate conversion needed —
+          // just setting surfaceBounds above triggers visibility.
         } else if (coordinateSpace === 'mm-center') {
           // Headstone: geometry is in mm, convert mm center-offsets to absolute local coordinates.
           // Positive yPos = above center → higher Y in geometry space.
@@ -503,9 +499,16 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const ledgerMesh = isLedgerSurface ? (headstone.mesh.current as THREE.Mesh | null) : null;
     const ledgerScaleX = ledgerMesh ? ledgerMesh.scale.x : 1;
     const ledgerScaleZ = ledgerMesh ? ledgerMesh.scale.z : 1;
+    const baseMesh = isBaseSurface ? (headstone.mesh.current as THREE.Mesh | null) : null;
     const groupPosition: [number, number, number] = isLedgerSurface
       ? [pos.x + (xPos ?? 0) * ledgerScaleX, pos.y + zBump, pos.z + (yPos ?? 0) * ledgerScaleZ]
-      : coordinateSpace === 'mm-center' && surfaceBounds
+      : isBaseSurface && coordinateSpace === 'mm-center' && baseMesh && surfaceBounds
+        ? [
+            baseMesh.position.x + (xPos ?? 0) * mmToLocalUnits,
+            baseMesh.position.y + (yPos ?? 0) * mmToLocalUnits,
+            baseMesh.position.z + baseMesh.scale.z / 2 + liftLocal + zBump,
+          ]
+        : coordinateSpace === 'mm-center' && surfaceBounds
         ? [
             surfaceBounds.centerX + (xPos ?? 0) * mmToLocalUnits,
             surfaceBounds.centerY + (yPos ?? 0) * mmToLocalUnits,
