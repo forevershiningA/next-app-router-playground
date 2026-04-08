@@ -137,10 +137,19 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
     /* ---------------- position on current mesh bbox once available ---------------- */
     React.useEffect(() => {
-      const stone = headstone.mesh.current as THREE.Mesh | null;
-      if (!stone || !stone.geometry) return;
+      let cancelled = false;
+      let rafId: number;
 
-      const raf = requestAnimationFrame(() => {
+      const trySetup = () => {
+        if (cancelled) return;
+        const stone = headstone.mesh.current as THREE.Mesh | null;
+        if (!stone || !stone.geometry) {
+          // Mesh not ready yet (e.g. base texture still loading via Suspense).
+          // Retry next frame so we don't miss the conversion.
+          rafId = requestAnimationFrame(trySetup);
+          return;
+        }
+
         const g = stone.geometry as THREE.BufferGeometry;
         g.computeBoundingBox();
         const bb = g.boundingBox;
@@ -183,8 +192,10 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         } else if (xPos === 0 && yPos === 0) {
           setPos(new THREE.Vector3(bounds.centerX, bounds.centerY, headstone.frontZ + liftLocal));
         }
-      });
-      return () => cancelAnimationFrame(raf);
+      };
+
+      rafId = requestAnimationFrame(trySetup);
+      return () => { cancelled = true; cancelAnimationFrame(rafId); };
     }, [headstone.mesh, headstone.frontZ, isLedgerSurface, isBaseSurface, liftLocal, xPos, yPos, coordinateSpace, mmToLocalUnits, id, updateLineStore]);
 
     /* ------------------------------ helper: place by pointer ----------------------------- */
@@ -486,6 +497,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         ref={groupRef}
         position={groupPosition}
         rotation={groupRotation}
+        visible={coordinateSpace !== 'mm-center' || !!surfaceBounds}
       >
         {/* Main text */}
         <Text
