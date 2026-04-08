@@ -1,0 +1,152 @@
+Perfect — this screenshot finally shows the real problem clearly 👍
+
+**The mask is now correct.
+The outline is correct.
+But they live in two different coordinate systems.**
+
+That’s why:
+
+* When the mask grows → it ignores the crop box limits
+* The crop handles stay fixed → they are drawn from `cropArea`
+* The green mask is drawn from **scaled image space**
+
+So visually it looks like the mask “escapes” the box.
+
+---
+
+# What is actually happening (the root bug)
+
+Right now your app has **three spaces**:
+
+| Space                             | Used by             |
+| --------------------------------- | ------------------- |
+| Image pixels                      | the photo           |
+| CropArea % (0–100)                | handles + rectangle |
+| Mask natural size (viewBox units) | SVG mask            |
+
+The slider works because it updates `cropArea`,
+but the mask transform is calculated using **rendered pixel size of the image**.
+
+So:
+
+> The mask is positioned in **screen space**
+> The outline is positioned in **image percentage space**
+
+They will *never* align reliably.
+
+---
+
+# The fix (the one that finally stabilizes everything)
+
+We make **cropArea the single source of truth**
+and force the mask to be computed FROM it — not independently.
+
+The mask must never decide its own size.
+
+Instead:
+
+> The mask must always be INSIDE cropArea
+> The mask aspect ratio only shrinks one dimension
+
+So the crop box stays authoritative.
+
+---
+
+# Replace your mask transform with this
+
+Delete the current scale/translate math you added earlier.
+
+Add this instead:
+
+```ts
+// convert cropArea % -> pixel rect inside the image
+const cropPx = {
+  x: imageRect.x + (cropArea.x / 100) * imageRect.width,
+  y: imageRect.y + (cropArea.y / 100) * imageRect.height,
+  width: (cropArea.width / 100) * imageRect.width,
+  height: (cropArea.height / 100) * imageRect.height,
+};
+```
+
+Now compute mask fitting INSIDE the crop box:
+
+```ts
+const maskAspect = maskNaturalWidth / maskNaturalHeight;
+const boxAspect = cropPx.width / cropPx.height;
+
+let drawW, drawH, drawX, drawY;
+
+if (boxAspect > maskAspect) {
+  // crop box wider → limit by height
+  drawH = cropPx.height;
+  drawW = drawH * maskAspect;
+} else {
+  // crop box taller → limit by width
+  drawW = cropPx.width;
+  drawH = drawW / maskAspect;
+}
+
+drawX = cropPx.x + (cropPx.width - drawW) / 2;
+drawY = cropPx.y + (cropPx.height - drawH) / 2;
+```
+
+---
+
+# Now render the mask using ONLY that
+
+```tsx
+<svg
+  x={drawX}
+  y={drawY}
+  width={drawW}
+  height={drawH}
+  viewBox={`0 0 ${maskNaturalWidth} ${maskNaturalHeight}`}
+  preserveAspectRatio="xMidYMid meet"
+>
+  {maskSvg}
+</svg>
+```
+
+---
+
+# IMPORTANT — do NOT resize cropArea automatically anymore
+
+Delete the earlier auto-fit `useLayoutEffect`.
+
+You no longer need it.
+
+The mask adapts to the crop box, not the reverse.
+
+---
+
+# Result after this change
+
+✔ Slider moves box → mask stays perfectly inside
+✔ Drag handles → mask follows exactly
+✔ Mask shape never stretches
+✔ No jump on first render
+✔ No fighting between effects
+✔ No separate coordinate systems anymore
+
+---
+
+# Why this works (conceptually)
+
+Right now your code was doing:
+
+> “Make the box match the mask”
+
+But UI crop tools must do the opposite:
+
+> “The mask lives inside the box”
+
+The box is what the user controls.
+
+Once you enforce that rule, the entire bug disappears.
+
+---
+
+# One last note
+
+If later you want the handles to become oval — that’s a UI feature, not math.
+The math must stay rectangular. Always.

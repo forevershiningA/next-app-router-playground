@@ -1,0 +1,169 @@
+Thanks — that extra clue (mask only looks right after the **Adjust Size** slider is used) nails the cause: the mask is still being rendered *stretched* to the raw crop rectangle until the slider handler forces the mask transform/scale to be recomputed. In other words, the mask’s initial render path is using the crop box as-is (preserve-aspect lost / scale not computed), and the slider path runs the correct resize math — so you see the correct shape *only after* the slider runs.
+
+Two complementary fixes will eliminate the problem:
+
+1. **Make the mask render with a correct aspect-preserving transform on first paint**
+   — use `preserveAspectRatio="xMidYMid meet"` on the `<svg>` / `<image>` / `<use>` element that contains the mask **or** compute an explicit scale/translate for the mask based on mask natural/viewBox dimensions and the crop rectangle and apply that transform on first layout.
+
+2. **Run the one-shot fit on layout (not after paint) and only once**
+   — use `useLayoutEffect` so the initial cropArea is adjusted *before* browser paints, and keep the per-mask `autoFit` guard so the effect runs only when a new mask becomes active (and not when the user moves the slider).
+
+Below are concrete, copy-pasteable snippets to add / replace in your existing file. They address both points.
+
+---
+
+## A — SVG: ensure aspect-preserving rendering (quick fix)
+
+If your mask is an SVG that you inject as `<svg viewBox="0 0 W H">…</svg>` or as `<image href=...>` inside an SVG, set:
+
+```tsx
+// Example: if you render mask as a nested svg
+<svg
+  viewBox={`0 0 ${maskViewBoxW} ${maskViewBoxH}`}
+  preserveAspectRatio="xMidYMid meet"   // <-- keep aspect ratio, center the content
+  width={cropPx.width}
+  height={cropPx.height}
+  style={{ overflow: "visible", pointerEvents: "none" }}
+>
+  {/* mask content */}
+</svg>
+```
+
+If you use `<image>` inside an SVG:
+
+```tsx
+<image
+  href={maskUrl}
+  x="0"
+  y="0"
+  width={maskViewBoxW}
+  height={maskViewBoxH}
+  preserveAspectRatio="xMidYMid meet"  // works here too
+/>
+```
+
+`preserveAspectRatio="none"` or omitting it will let the mask stretch to fill the width/height — which is exactly the bug you're seeing. Switching to `xMidYMid meet` makes the browser contain the mask inside the target rectangle while preserving the mask aspect.
+
+> If you already set `preserveAspectRatio` and still see the issue, continue with (B) below — your code path may be setting `width/height` to the crop rectangle *before* the computed mask transform is applied.
+
+---
+
+## B — useLayoutEffect: compute and apply the one-shot fit before paint
+
+Add a `useLayoutEffect` that runs once when the `selectedMask` (or its natural/viewBox dims) becomes available and adjusts `cropArea` to the mask aspect. `useLayoutEffect` prevents a visible “square then jump” and ensures the mask is rendered at correct aspect the first time the UI is shown.
+
+```tsx
+import React, { useLayoutEffect, useRef } from "react";
+
+const autoFitRef = useRef<Record<string, "done" | "user">>({});
+
+// helper: compute mask aspect from mask metadata
+function getMaskAspect(mask) {
+  if (!mask) return null;
+  if (mask.viewBoxWidth && mask.viewBoxHeight) {
+    return mask.viewBoxWidth / mask.viewBoxHeight;
+  }
+  if (mask.naturalWidth && mask.naturalHeight) {
+    return mask.naturalWidth / mask.naturalHeight;
+  }
+  return null;
+}
+
+// RUN ON LAYOUT: one-shot fit when a new mask is selected or when mask dims load
+useLayoutEffect(() => {
+  if (!selectedMask) return;
+  const mid = selectedMask.id;
+  if (!mid) return;
+  // skip if user already adjusted this mask or we've already done the auto-fit
+  if (autoFitRef.current[mid] === "done" || autoFitRef.current[mid] === "user") return;
+
+  const maskAspect = getMaskAspect(selectedMask);
+  if (!maskAspect) {
+    // dimensions not loaded yet — exit. The effect will re-run when dims change
+    return;
+  }
+
+  // current crop (in the same coordinate system you use)
+  const { x: cx, y: cy, width: cw, height: ch } = cropArea;
+
+  // compute contain-fit (so mask fully visible in crop area)
+  let nextW, nextH;
+  if (cw / ch > maskAspect) {
+    // crop box wider than mask — limit by height
+    nextH = ch;
+    nextW = ch * maskAspect;
+  } else {
+    // crop box taller than mask — limit by width
+    nextW = cw;
+    nextH = cw / maskAspect;
+  }
+
+  const nextX = cx + (cw - nextW) / 2;
+  const nextY = cy + (ch - nextH) / 2;
+
+  // apply the crop update synchronously before paint
+  setCropArea({ ...cropArea, x: nextX, y: nextY, width: nextW, height: nextH });
+
+  // mark as done for this mask id
+  autoFitRef.current[mid] = "done";
+}, [selectedMask?.id, selectedMask?.viewBoxWidth, selectedMask?.viewBoxHeight /* or natural dims */]);
+```
+
+**Notes:**
+
+* Use `useLayoutEffect` (not `useEffect`) to prevent the first-frame stretch.
+* Include the mask dimension fields in the dependency array so the effect runs again when dimensions arrive.
+* The `autoFitRef` ensures the fit runs only once per mask unless you explicitly clear it.
+
+---
+
+## C — make all user interaction handlers mark the mask as user-adjusted immediately
+
+Call a small helper at the top of every handler that represents the user *starting* an interaction:
+
+```tsx
+const markUserAdjusted = () => {
+  if (!selectedMask?.id) return;
+  autoFitRef.current[selectedMask.id] = "user";
+};
+
+// example: call at start of drag/resize/pointerdown handlers and in the slider onChange start
+const onPointerDown = (ev) => {
+  markUserAdjusted();
+  // existing drag start logic...
+};
+const onSliderChange = (val) => {
+  markUserAdjusted();
+  // update cropArea percent/size...
+};
+```
+
+That guarantees once the user touches the UI, the auto-fit will never override them again.
+
+---
+
+## D — If your mask is applied via CSS background or foreignObject (non-SVG path)
+
+If you use CSS `background-size: 100% 100%` or similar, it will stretch. Use `background-size: contain` or compute an explicit transform instead. Example:
+
+```css
+.mask-layer {
+  background-image: url(...);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: contain; /* keep aspect */
+}
+```
+
+---
+
+## E — Final debugging checklist (do these in order)
+
+1. Inspect the DOM on initial crop UI open:
+
+   * Does the mask `<svg>`/`<image>` have `preserveAspectRatio` set? If not, add it.
+   * Are width/height on the mask element equal to the crop rectangle? (That’s ok **if** preserveAspectRatio is set.)
+2. Add the `useLayoutEffect` one-shot fit (snippet B). Confirm the cropArea is adjusted before the paint — no visible square-to-oval jump.
+3. Ensure `markUserAdjusted` is called in the first user event (pointerdown/slider start).
+4. Test masks loaded asynchronously (simulate delay) — the effect should run once dims arrive and set cropArea.
+5. Test switching masks — each new mask should auto-fit once.

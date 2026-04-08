@@ -1,0 +1,204 @@
+Yes — this behaviour is classic **axis-aligned bounding box (AABB) vs rotated object** mismatch.
+
+The key clue you gave:
+
+> Works at 0°, 90°, 180°, 270°
+> Breaks at other angles
+> Works when using OrbitControls
+
+That tells us almost exactly what’s happening.
+
+---
+
+## 🔎 What’s Really Going Wrong
+
+You are almost certainly calculating the selection outline using:
+
+```ts
+new THREE.Box3().setFromObject(object)
+```
+
+or something similar.
+
+`Box3` is **axis-aligned** in world space.
+
+That means:
+
+* It does NOT rotate with the object
+* It expands to contain the rotated geometry
+* At 45°, 30°, etc → the box becomes larger than the mesh
+* At 0° / 90° → it matches perfectly (because axes align)
+
+So what you’re seeing is this:
+
+```
+Rotated mesh  →  AABB grows to contain it
+```
+
+At 30° the box looks “stretched” because it is.
+
+---
+
+## 🧠 Why OrbitControls Looks Correct
+
+When using OrbitControls:
+
+* The object is not rotating
+* The camera is rotating
+* So the object remains axis-aligned
+* Therefore the AABB stays correct
+
+That confirms this is not a rendering issue — it's a bounding math issue.
+
+---
+
+# 🎯 The Core Problem
+
+You are building an **axis-aligned selection box**
+but visually expecting an **oriented selection box**
+
+Those are different things.
+
+---
+
+# ✅ The Correct Fix
+
+You need one of these:
+
+---
+
+## OPTION 1 — Use BoxHelper (Correct & Simple)
+
+Instead of manually building geometry:
+
+```ts
+const helper = new THREE.BoxHelper(object, 0xffff00)
+scene.add(helper)
+```
+
+This updates automatically and rotates with the object.
+
+If you need dynamic updates:
+
+```ts
+helper.update()
+```
+
+This is the easiest fix.
+
+---
+
+## OPTION 2 — Build an Oriented Bounding Box (OBB)
+
+If you are doing something more custom:
+
+Instead of:
+
+```ts
+const box = new THREE.Box3().setFromObject(object)
+```
+
+You must:
+
+1. Compute geometry bounding box once
+2. Build a box mesh from geometry dimensions
+3. Parent it to the object
+4. Do NOT recalc with world axis alignment
+
+Example:
+
+```ts
+geometry.computeBoundingBox()
+const bbox = geometry.boundingBox!
+
+const size = new THREE.Vector3()
+bbox.getSize(size)
+
+const center = new THREE.Vector3()
+bbox.getCenter(center)
+
+const boxGeo = new THREE.BoxGeometry(size.x, size.y, size.z)
+const boxMesh = new THREE.LineSegments(
+  new THREE.EdgesGeometry(boxGeo),
+  new THREE.LineBasicMaterial({ color: 0xffff00 })
+)
+
+boxMesh.position.copy(center)
+object.add(boxMesh)
+```
+
+Now the box rotates WITH the object.
+
+---
+
+# ⚠️ Why Yours Breaks Only at Certain Angles
+
+At 30°:
+
+The AABB is computed like:
+
+```
+newWidth = |w*cosθ| + |d*sinθ|
+newDepth = |w*sinθ| + |d*cosθ|
+```
+
+So it expands.
+
+That’s mathematically correct behaviour for AABB.
+
+It’s not a bug — it’s geometry math.
+
+---
+
+# 🎯 What To Check In Your Code
+
+Search for:
+
+```ts
+Box3
+setFromObject
+expandByObject
+computeBoundingBox
+```
+
+If you are recalculating bounding in world space every time rotation changes,
+that’s your problem.
+
+---
+
+# 🔥 The Most Likely Exact Cause
+
+You are:
+
+1. Rotating object manually via arrow buttons
+2. Then recalculating `Box3.setFromObject(object)`
+3. Then drawing selection box from that world-space box
+
+Which produces an expanded AABB.
+
+---
+
+# 💡 Best Practice For Your Headstone Designer
+
+For precision tools like yours:
+
+Use **local-space bounding box**
+and attach selection frame as child of the object.
+
+Never use world-aligned Box3 for rotated selection visuals.
+
+---
+
+# 🏁 Final Diagnosis
+
+This is NOT a rendering bug
+This is NOT a math error
+This is NOT camera related
+
+It is:
+
+> Axis-Aligned Bounding Box being used instead of Oriented Bounding Box
+
+---
+
+If you want, upload `RotatingBoxOutline.tsx` again (the system says it expired) and I’ll point to the exact line causing it and give you the surgical fix.

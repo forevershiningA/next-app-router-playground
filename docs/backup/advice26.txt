@@ -1,0 +1,174 @@
+Thanks — that extra screenshot made the symptom clear: the mask is still being *painted stretched* at first (square crop box), and only when the slider handler runs do you recompute the mask transform/scale — so the visual fixes itself. I couldn’t patch your file directly here, so below I’m giving a **precise, copy-paste patch** you can apply to `CropCanvas.tsx`. It:
+
+* makes the mask render with `preserveAspectRatio` so SVGs are never stretched,
+* runs a **one-shot** aspect-fit *before paint* using `useLayoutEffect`, and
+* prevents re-running auto-fit when the user starts interacting (keeps auto-fit from fighting user input).
+
+Do these three edits (1 → 3). If you want, I can also create a git-style unified diff if you tell me to patch the file.
+
+---
+
+## 1) Ensure SVG mask uses `preserveAspectRatio="xMidYMid meet"`
+
+Find where you render the mask SVG (something like `<svg ...>` or `<image ...>` inside your mask layer). Replace or add the attribute:
+
+```tsx
+// BEFORE (example)
+<svg viewBox={`0 0 ${maskViewBoxW} ${maskViewBoxH}`} width={maskW} height={maskH}>
+  { /* mask contents */ }
+</svg>
+
+// AFTER — add preserveAspectRatio
+<svg
+  viewBox={`0 0 ${maskViewBoxW} ${maskViewBoxH}`}
+  preserveAspectRatio="xMidYMid meet"    // <- KEEP aspect, center it
+  width={maskW}
+  height={maskH}
+  style={{ overflow: "visible", pointerEvents: "none" }}
+>
+  { /* mask contents */ }
+</svg>
+```
+
+If you use `<image>` inside an `<svg>`:
+
+```tsx
+<image
+  href={maskUrl}
+  x="0" y="0"
+  width={maskViewBoxW} height={maskViewBoxH}
+  preserveAspectRatio="xMidYMid meet"  // important
+/>
+```
+
+**Why:** if `preserveAspectRatio` is missing or `none` the browser stretches to fill the rect; adding `xMidYMid meet` tells the browser to *contain* the mask and preserve its proportions.
+
+---
+
+## 2) Add a `useLayoutEffect` one-shot fit (run *before* paint)
+
+Add these top-level hooks/refs near your other `useRef` / hook declarations (adjust names to match your file):
+
+```tsx
+import React, { useLayoutEffect, useRef } from "react";
+
+/** near other refs at top of component **/
+const autoFitRef = useRef<Record<string, "done" | "user">>({}); // per-mask state so each mask can be auto-fitted once
+```
+
+Then *replace* or add the one-shot layout effect (this must run before the DOM paints so the user never sees the stretched shape):
+
+```tsx
+// helper: compute mask aspect from whatever data you have
+const getMaskAspect = (mask) => {
+  if (!mask) return null;
+  if (mask.viewBoxWidth && mask.viewBoxHeight) return mask.viewBoxWidth / mask.viewBoxHeight;
+  if (mask.naturalWidth && mask.naturalHeight) return mask.naturalWidth / mask.naturalHeight;
+  return null;
+};
+
+// useLayoutEffect so it runs synchronously before paint
+useLayoutEffect(() => {
+  if (!selectedMask) return;
+  const mid = selectedMask.id;
+  if (!mid) return;
+
+  // skip if we've already auto-fitted or the user has adjusted this mask
+  if (autoFitRef.current[mid] === "done" || autoFitRef.current[mid] === "user") return;
+
+  const maskAspect = getMaskAspect(selectedMask);
+  if (!maskAspect || !cropArea) {
+    // dims not ready yet — wait until they load (effect will re-run)
+    return;
+  }
+
+  // compute a contain-fit of the mask inside the current crop box
+  const cw = cropArea.width;
+  const ch = cropArea.height;
+  let nextW, nextH;
+  if (cw / ch > maskAspect) {
+    // crop box wider than mask -> limit height
+    nextH = ch;
+    nextW = ch * maskAspect;
+  } else {
+    // crop box taller -> limit width
+    nextW = cw;
+    nextH = cw / maskAspect;
+  }
+
+  const nextX = cropArea.x + (cw - nextW) / 2;
+  const nextY = cropArea.y + (ch - nextH) / 2;
+
+  // Apply synchronously (before paint)
+  setCropArea((prev) => ({
+    ...prev,
+    x: nextX,
+    y: nextY,
+    width: nextW,
+    height: nextH,
+  }));
+
+  // mark done so this only runs once per mask (unless user resets)
+  autoFitRef.current[mid] = "done";
+}, [
+  selectedMask?.id,
+  selectedMask?.viewBoxWidth, selectedMask?.viewBoxHeight, // include any fields that arrive async
+  selectedMask?.naturalWidth, selectedMask?.naturalHeight,
+  // don't include maskBoundsPx.width/height or cropArea width/height here,
+  // otherwise the effect may re-run during user adjustments.
+]);
+```
+
+**Important notes:**
+
+* **Do not** include `maskBoundsPx.width` or `cropArea.width` in the dependency array — that re-enables auto-fit while the user is moving the slider. Only include fields that indicate a *new mask* or *mask dims arriving*.
+* If mask dimensions arrive asynchronously, ensure those dimension fields are in the dependency array so the effect re-runs once they exist. The `autoFitRef` guard prevents reapplying.
+
+---
+
+## 3) Prevent auto-fit from re-applying when the user interacts
+
+Add this helper and call it at the start of every user interaction handler (pointerdown, drag start, resize start, slider start). Place it with your other handlers:
+
+```tsx
+const markUserAdjusted = () => {
+  if (!selectedMask?.id) return;
+  autoFitRef.current[selectedMask.id] = "user";
+};
+```
+
+Then in each entry-point user handler:
+
+```tsx
+// example: on pointer down for drag/resizer handles
+const onHandlePointerDown = (ev, handle) => {
+  markUserAdjusted();         // <--- important, block further auto-fits for this mask
+  // existing drag start logic...
+};
+
+// example: at the start of slider-change (when user starts dragging the Adjust Size knob)
+const onSizeSliderStart = () => {
+  markUserAdjusted();
+};
+
+// if you have onChange for the slider, you may not need to mark there, but mark on start
+// for keyboard adjustments or touch starts, markUserAdjusted() there too
+```
+
+Also, **remove** any logic that clears the `autoFitRef` whenever the crop box or mask bounds change. You should only reset the per-mask object when the mask changes. If you have something like this:
+
+```ts
+useEffect(() => {
+  autoSizeAppliedRef.current = false;
+}, [selectedMask, allowFreeformHandles, maskBoundsPx.width, maskBoundsPx.height]);
+```
+
+Replace with:
+
+```ts
+useEffect(() => {
+  autoFitRef.current = {}; // fresh per-mask object for a brand new mask selection
+}, [selectedMask?.id, allowFreeformHandles]);
+```
+
+(Do not reset on `maskBoundsPx` changes — those come from user input and would re-enable the auto-fit.)

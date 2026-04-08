@@ -1,0 +1,210 @@
+OK — I get why you’re furious. The screenshots show the mask and outline still living in different coordinate systems and the latest change made the mask bigger than the crop box. Let’s stop the oscillation and put everything in a single coordinate system so the overlay, mask, and handles are always in sync.
+
+Below is a **single, deterministic pattern** you can drop into your component (or use to patch `/mnt/data/CropCanvas.tsx`). It makes the overlay SVG the authoritative rendering surface (sized to the *rendered image* in pixels), converts `cropArea` into pixels, places the mask *inside the crop box* (contain-fit), and draws the outline/handles from the same crop box. No state rewrite while dragging, no racing effects, no slider-only fixes — everything is computed at render time and therefore always consistent.
+
+If you paste this into your component and wire the few small bits (refs, mask metadata, slider hooks) it should immediately stop the “mask escapes the box / slider only fixes it” behaviour.
+
+---
+
+# 1) Key idea (one-sentence)
+
+Render one absolute `<svg>` overlay the same size as the displayed image and compute everything (crop rect, mask scale, outline/handles) inside that SVG in **pixels** every render.
+
+---
+
+# 2) Minimal code (React + TypeScript-ish, paste into `CropCanvas.tsx` — replace the current mask/outline rendering)
+
+```tsx
+// Required imports
+import React, { useRef, useLayoutEffect, useMemo, useState } from "react";
+
+/*
+  Assumptions (rename to your variables if needed)
+  - `imageRef` -> ref to the <img> or canvas showing the photo
+  - `selectedMask` -> object with mask metadata:
+        { id, url?, viewBoxWidth?, viewBoxHeight?, naturalWidth?, naturalHeight?, svgContent? }
+  - `cropArea` -> your canonical crop area in percentages { x, y, width, height } (0..100)
+  - `setCropArea` -> setter for cropArea (percent)
+  - overlay is drawn in pixels relative to the rendered image.
+*/
+
+// 1) get image rendered rect (px)
+const imageRef = useRef<HTMLImageElement | null>(null);
+const [imageRect, setImageRect] = useState({ x: 0, y: 0, width: 0, height: 0 });
+
+useLayoutEffect(() => {
+  const el = imageRef.current;
+  if (!el) return;
+  const r = el.getBoundingClientRect();
+  setImageRect({ x: r.left, y: r.top, width: r.width, height: r.height });
+  // also update on resize
+  const ro = new ResizeObserver(() => {
+    const r2 = el.getBoundingClientRect();
+    setImageRect({ x: r2.left, y: r2.top, width: r2.width, height: r2.height });
+  });
+  ro.observe(el);
+  return () => ro.disconnect();
+}, [imageRef.current]);
+
+// helper: mask natural/viewBox dims
+const maskNaturalW = selectedMask?.viewBoxWidth ?? selectedMask?.naturalWidth ?? 100;
+const maskNaturalH = selectedMask?.viewBoxHeight ?? selectedMask?.naturalHeight ?? 100;
+
+// 2) compute crop rectangle in pixels (inside the image area)
+const cropPx = useMemo(() => {
+  if (!imageRect.width || !imageRect.height) return { x: 0, y: 0, width: 0, height: 0 };
+  return {
+    x: (cropArea.x / 100) * imageRect.width,
+    y: (cropArea.y / 100) * imageRect.height,
+    width: (cropArea.width / 100) * imageRect.width,
+    height: (cropArea.height / 100) * imageRect.height,
+  };
+}, [cropArea, imageRect]);
+
+// 3) compute mask drawn size INSIDE cropPx (contain)
+const maskFit = useMemo(() => {
+  const mw = maskNaturalW || 1;
+  const mh = maskNaturalH || 1;
+  const boxW = cropPx.width || 1;
+  const boxH = cropPx.height || 1;
+  const maskAspect = mw / mh;
+  const boxAspect = boxW / boxH;
+
+  let drawnW: number, drawnH: number;
+  if (boxAspect > maskAspect) {
+    // box wider => limit by height
+    drawnH = boxH;
+    drawnW = drawnH * maskAspect;
+  } else {
+    drawnW = boxW;
+    drawnH = drawnW / maskAspect;
+  }
+  const drawX = cropPx.x + (boxW - drawnW) / 2;
+  const drawY = cropPx.y + (boxH - drawnH) / 2;
+  const scale = drawnW / mw; // or drawnH / mh, same
+  return { drawX, drawY, drawnW, drawnH, scale, mw, mh, boxW, boxH };
+}, [maskNaturalW, maskNaturalH, cropPx]);
+
+// 4) Render — single SVG overlay, absolutely positioned over the image area
+return (
+  <div style={{ position: "relative", width: imageRect.width || "100%", height: imageRect.height || "auto" }}>
+    {/* the image (your existing element) */}
+    <img ref={imageRef} src={imageSrc} style={{ display: "block", width: "100%" }} />
+
+    {/* SVG overlay in the same pixel coordinate space */}
+    <svg
+      width={imageRect.width}
+      height={imageRect.height}
+      viewBox={`0 0 ${imageRect.width} ${imageRect.height}`}
+      style={{
+        position: "absolute",
+        left: 0,
+        top: 0,
+        pointerEvents: "none", // overlay is passive; handles can be separate DOM elements with pointerEvents
+      }}
+      preserveAspectRatio="xMinYMin none"
+    >
+      {/* 4a: optional dim overlay outside crop */}
+      <defs>
+        <mask id="cropMask">
+          {/* outside area masked out: white inside crop, black outside */}
+          <rect x="0" y="0" width={imageRect.width} height={imageRect.height} fill="black" />
+          <rect x={cropPx.x} y={cropPx.y} width={cropPx.width} height={cropPx.height} fill="white" />
+        </mask>
+      </defs>
+      <rect x="0" y="0" width={imageRect.width} height={imageRect.height} fill="rgba(0,0,0,0.45)" mask="url(#cropMask)" />
+
+      {/* 4b: actual mask drawn INSIDE crop (use transform to position + scale) */}
+      <g transform={`translate(${maskFit.drawX}, ${maskFit.drawY}) scale(${maskFit.scale})`} >
+        {/* if you have inline SVG paths for the mask, render them here in natural units (0..mw,0..mh) */}
+        {/* Example: if selectedMask.svgContent is raw <path/> elements: */}
+        <svg viewBox={`0 0 ${maskFit.mw} ${maskFit.mh}`} width={maskFit.mw} height={maskFit.mh} preserveAspectRatio="xMidYMid meet" style={{ pointerEvents: "none" }}>
+          {/* Ideally include selectedMask.svgContent as JSX or parse it */}
+          {selectedMask?.svgContent}
+        </svg>
+
+        {/* OR if you use mask image raster: */}
+        {/* <image href={selectedMask.url} x="0" y="0" width={maskFit.mw} height={maskFit.mh} preserveAspectRatio="xMidYMid meet" /> */}
+      </g>
+
+      {/* 4c: outline/handles drawn from the same cropPx (pixel rect) */}
+      {/* outline rectangle */}
+      <rect
+        x={cropPx.x}
+        y={cropPx.y}
+        width={cropPx.width}
+        height={cropPx.height}
+        fill="none"
+        stroke="#E8C86A"
+        strokeWidth={2}
+        rx={4}
+        pointerEvents="none"
+      />
+
+      {/* optional ellipse outline that matches mask bounds (if you want the outline to be oval): */}
+      <ellipse
+        cx={maskFit.drawX + maskFit.drawnW / 2}
+        cy={maskFit.drawY + maskFit.drawnH / 2}
+        rx={maskFit.drawnW / 2}
+        ry={maskFit.drawnH / 2}
+        fill="none"
+        stroke="#E8C86A"
+        strokeWidth={2}
+        pointerEvents="none"
+      />
+
+      {/* You can render visible small handle circles at crop corners using cropPx coords (pointerEvents for handles should be 'all' and handlers attached via separate elements) */}
+      <circle cx={cropPx.x} cy={cropPx.y} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+      <circle cx={cropPx.x + cropPx.width} cy={cropPx.y} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+      <circle cx={cropPx.x} cy={cropPx.y + cropPx.height} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+      <circle cx={cropPx.x + cropPx.width} cy={cropPx.y + cropPx.height} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+
+    </svg>
+  </div>
+);
+```
+
+---
+
+# 3) Important wiring notes (do these exactly)
+
+1. **Image element:** make sure `imageRef` refers to the exact DOM element that is rendered and that the image is not inside a transformed container (no CSS `transform` scale on ancestor). `getBoundingClientRect()` must return the pixel size the user sees.
+
+2. **Units:** `cropArea` here must be percentages 0..100. If your `cropArea` is already pixels, skip the percent→px conversion and use directly.
+
+3. **Mask SVG content:** the snippet expects the mask SVG to be available as `selectedMask.svgContent` (JSX). If you store mask as external url, use `<image href=...>` inside the inner svg and preserveAspectRatio. The inner svg uses `viewBox="0 0 mw mh"` so its natural coordinates match `maskNaturalW`/`maskNaturalH`.
+
+4. **Pointer events / handlers:** the overlay is `pointerEvents: none` so it doesn't swallow mouse. Attach resize/drag handlers to separate absolutely positioned elements (or enable pointerEvents on handles only). When user starts dragging or moves slider, update `cropArea` (percent) and React will re-render; `cropPx` and `maskFit` will recompute automatically and everything will stay aligned.
+
+5. **Avoid state rewrites while user is dragging:** do NOT have effects that change `cropArea` based on maskFit while user is active. If you must auto-fit initial crop area on mask load, do it only once on selectedMask change (use a per-mask guard) — but prefer the pattern above which never rewrites cropArea for initial paint.
+
+---
+
+# 4) Debugging knobs (temporary logs)
+
+Add these logs to verify every render:
+
+```ts
+console.log("imageRect", imageRect);
+console.log("cropArea%", cropArea);
+console.log("cropPx", cropPx);
+console.log("maskNatural", maskNaturalW, maskNaturalH);
+console.log("maskFit", maskFit);
+```
+
+Expected quick checks:
+
+* cropPx.width should equal `cropArea.width / 100 * imageRect.width`
+* maskFit.drawnW <= cropPx.width, drawnH <= cropPx.height (contain)
+* drawX >= cropPx.x && drawY >= cropPx.y
+  If anything violates these, you have a unit mismatch.
+
+---
+
+# 5) If you want me to patch it
+
+Your earlier uploads expired. If you upload the current `/mnt/data/CropCanvas.tsx` again I will apply exactly the code above (minimal changes) and paste the patched file here so you can run it. Say “patch file” and upload it, or paste the current JSX section that draws the mask + outline + slider handlers and I’ll give the minimal in-place edits.
+
+---
+
+I know it’s been painful — but this single-overlay approach is how production editors keep SVG masks and crop handles perfectly in sync. Paste the file or say “patch file” and upload the current `CropCanvas.tsx` and I’ll patch it directly for you.

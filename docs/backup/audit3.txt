@@ -1,0 +1,104 @@
+Got it — the statue disappearing is **because your Z logic is now pushing it to the wrong place**, and it’s doing it by mixing coordinate spaces.
+
+I opened `/mnt/data/AdditionModel.tsx` and the culprit is here:
+
+```ts
+// surfaceZ is in HEADSTONE space (stone.worldToLocal(...).z)
+const baseDepth = baseBBox.max.z - baseBBox.min.z;     // <-- BASE-LOCAL space
+const centerOffset = -baseDepth / 2;                   // <-- BASE-LOCAL units
+zPosition = surfaceZ + centerOffset + statueHalfDepth; // <-- mixed frames
+```
+
+That `centerOffset` is **not meaningful** in headstone space, so you end up shifting the statue by a big amount in the wrong frame → it goes behind/inside/away and you stop seeing it.
+
+---
+
+## Fix 1: Remove the mixed-frame “centerOffset” block
+
+Replace the entire **statue/vase** Z block with this (safe + visible immediately):
+
+```ts
+} else {
+  // statues + vases
+  zPosition = surfaceZ; // put the model's origin on the chosen surface reference
+}
+```
+
+Yes — just that. This will bring the statue back into view.
+
+Why: your `defaultOffsetResult` already places the statue at the *base depth center* (you set `targetZ = (min.z + max.z)/2`). So **you do NOT also “center it” again in zPosition**.
+
+Right now you are centering it twice.
+
+---
+
+## Fix 2 (optional but correct): If you want “front-of-base” instead of “center-of-base”
+
+Then compute **baseFrontZ in headstone space** (no mixing), and use it consistently:
+
+```ts
+let surfaceZ = headFrontZ;
+
+if (offset.targetSurface === 'base' && baseMesh) {
+  if (!baseMesh.geometry.boundingBox) baseMesh.geometry.computeBoundingBox();
+  const bb = baseMesh.geometry.boundingBox!;
+  const topFrontLocal = new THREE.Vector3(0, bb.max.y, bb.max.z);
+  const topFrontWorld = baseMesh.localToWorld(topFrontLocal.clone());
+  const topFrontInHead = stone.worldToLocal(topFrontWorld.clone());
+  surfaceZ = topFrontInHead.z;
+}
+
+// For statues/vases, put their *center* on the base depth center OR use front plane
+zPosition = surfaceZ;            // if surfaceZ is already the “center”
+/* OR */
+zPosition = surfaceZ - actualDepth / 2 - 0.01; // if surfaceZ is the “front plane” and you want it sitting ON the base, not hanging off
+```
+
+Pick one approach and stick to it.
+
+---
+
+## One more thing: your X offset can still be “stuck to the edge”
+
+Even after unit conversion, you currently do:
+
+```ts
+targetX = minX + posConfig.xOffset;
+targetX = clamp(minX..maxX, targetX);
+```
+
+So if `xOffset` is negative (like `-0.08`), it **always clamps back to `minX`** (edge). That part is expected with the current formula.
+
+If you want “80mm IN from the left edge”, your statue offset must be **positive**:
+
+* left statue: `+0.08`
+* right vase: `-0.03` (if you’re using `maxX + xOffset`)
+
+---
+
+## Minimal patch that will make the statue visible again
+
+In `/mnt/data/AdditionModel.tsx`, change this:
+
+```ts
+// current statue/vase block computes centerOffset using baseBBox depth
+zPosition = surfaceZ + centerOffset + statueHalfDepth;
+```
+
+To:
+
+```ts
+zPosition = surfaceZ;
+```
+
+That’s the core fix.
+
+---
+
+If you want, paste the values you’re seeing for:
+
+* `headFrontZ`
+* `baseSurfaceZ`
+* `zPosition`
+
+(and whether your camera looks toward +Z or -Z), and I’ll tell you which of the “front-plane” vs “center-plane” variants is the right one for your scene.

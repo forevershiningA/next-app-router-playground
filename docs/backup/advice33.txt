@@ -1,0 +1,179 @@
+Thanks — I tried to open the file you uploaded so I could patch it automatically but the runtime couldn’t read it. That usually means the upload expired or the file didn’t land in the container. Could you re-upload **/mnt/data/CropCanvas.tsx** now? I’ll apply the patch immediately and paste the updated file back.
+
+While you re-upload, here’s a **single, copy-paste patch** you can drop into your component right now if you prefer to edit the file yourself. It is the *minimal, deterministic* solution I described earlier: one SVG overlay in image pixel space, convert your crop (percent) → pixels, compute `maskFit` to contain the mask inside the crop rect, then draw mask + rectangle + handles from the same pixels so everything lines up and never fights the slider.
+
+**Important:** make a backup of `CropCanvas.tsx` before applying this.
+
+---
+
+# Manual patch — full ready-to-paste block
+
+Find the component render area where you currently render the image, mask, outline and slider. Replace that block with the code below (you may need to rename a couple of variables to match your file: `imageSrc`, `selectedMask`, `cropArea`, `setCropArea`, `startDragHandle` — adapt names if they differ).
+
+```tsx
+// --- Required imports at top of file (add if missing) ---
+import React, { useRef, useLayoutEffect, useMemo, useState } from "react";
+
+// --- Inside your component function, add these refs/state/hooks ---
+// ref to the actual <img> element that displays the photo
+const imageRef = useRef<HTMLImageElement | null>(null);
+// track rendered image pixel size
+const [imageRect, setImageRect] = useState({ width: 0, height: 0 });
+
+// measure image size once and on resize
+useLayoutEffect(() => {
+  const el = imageRef.current;
+  if (!el) return;
+  const update = () => {
+    const r = el.getBoundingClientRect();
+    setImageRect({ width: Math.round(r.width), height: Math.round(r.height) });
+  };
+  update();
+  const ro = new ResizeObserver(update);
+  ro.observe(el);
+  return () => ro.disconnect();
+}, [imageRef.current]);
+
+// mask natural/viewBox dims (fallback defaults)
+const maskNaturalW = selectedMask?.viewBoxWidth ?? selectedMask?.naturalWidth ?? 100;
+const maskNaturalH = selectedMask?.viewBoxHeight ?? selectedMask?.naturalHeight ?? 100;
+
+// convert your cropArea (percent 0..100) into pixels within the imageRect
+const cropPx = useMemo(() => {
+  const iw = imageRect.width || 1;
+  const ih = imageRect.height || 1;
+  return {
+    x: (cropArea.x / 100) * iw,
+    y: (cropArea.y / 100) * ih,
+    width: (cropArea.width / 100) * iw,
+    height: (cropArea.height / 100) * ih,
+  };
+}, [cropArea, imageRect]);
+
+// compute maskFit that contains the mask inside cropPx (centered, aspect preserved)
+const maskFit = useMemo(() => {
+  const mw = maskNaturalW || 1;
+  const mh = maskNaturalH || 1;
+  const boxW = cropPx.width || 1;
+  const boxH = cropPx.height || 1;
+  const maskAspect = mw / mh;
+  const boxAspect = boxW / boxH;
+
+  let drawnW: number, drawnH: number;
+  if (boxAspect > maskAspect) {
+    drawnH = boxH;
+    drawnW = drawnH * maskAspect;
+  } else {
+    drawnW = boxW;
+    drawnH = drawnW / maskAspect;
+  }
+  const drawX = cropPx.x + (boxW - drawnW) / 2;
+  const drawY = cropPx.y + (boxH - drawnH) / 2;
+  const scale = drawnW / mw;
+  return { drawX, drawY, drawnW, drawnH, scale, mw, mh };
+}, [maskNaturalW, maskNaturalH, cropPx]);
+
+// guard so auto-fit logic (if any) doesn't fight the user — call markUserAdjusted() on pointer/slider start
+const autoFitRef = useRef<Record<string, "done" | "user">>({});
+const markUserAdjusted = () => {
+  if (!selectedMask?.id) return;
+  autoFitRef.current[selectedMask.id] = "user";
+};
+
+// --- Render block: replace whatever currently draws image + overlay with this block ---
+return (
+  <div style={{ position: "relative", width: "100%", maxWidth: "100%" }}>
+    {/* The actual image — be sure this is the DOM element visible on screen */}
+    <img ref={imageRef} src={imageSrc} alt="" style={{ display: "block", width: "100%" }} />
+
+    {/* Single SVG overlay matching image pixel dimensions */}
+    <svg
+      width={imageRect.width}
+      height={imageRect.height}
+      viewBox={`0 0 ${imageRect.width} ${imageRect.height}`}
+      style={{ position: "absolute", left: 0, top: 0, pointerEvents: "none" }}
+      preserveAspectRatio="xMinYMin none"
+      aria-hidden
+    >
+      {/* Dim outside crop */}
+      <defs>
+        <mask id="outsideMask">
+          <rect x="0" y="0" width={imageRect.width} height={imageRect.height} fill="black" />
+          <rect x={cropPx.x} y={cropPx.y} width={cropPx.width} height={cropPx.height} fill="white" />
+        </mask>
+      </defs>
+      <rect x="0" y="0" width={imageRect.width} height={imageRect.height} fill="rgba(0,0,0,0.45)" mask="url(#outsideMask)" />
+
+      {/* Draw the mask inside the crop using a transform (scale + translate) so it never stretches */}
+      <g transform={`translate(${maskFit.drawX}, ${maskFit.drawY}) scale(${maskFit.scale})`} style={{ pointerEvents: "none" }}>
+        {/* If your mask is inline SVG content, render it inside an inner svg sized to natural mask dims */}
+        <svg viewBox={`0 0 ${maskFit.mw} ${maskFit.mh}`} width={maskFit.mw} height={maskFit.mh} preserveAspectRatio="xMidYMid meet">
+          {selectedMask?.svgContent /* your mask paths/elements here */ }
+        </svg>
+
+        {/* OR if mask is an external image (url), use:
+        <image href={selectedMask.url} x="0" y="0" width={maskFit.mw} height={maskFit.mh} preserveAspectRatio="xMidYMid meet" />
+        */}
+      </g>
+
+      {/* Crop rectangle outline (canonical) */}
+      <rect
+        x={cropPx.x}
+        y={cropPx.y}
+        width={cropPx.width}
+        height={cropPx.height}
+        fill="none"
+        stroke="#E8C86A"
+        strokeWidth={2}
+        rx={4}
+        pointerEvents="none"
+      />
+
+      {/* Optional oval guide that matches the mask bounds (drawn using maskFit so it lines up) */}
+      <ellipse
+        cx={maskFit.drawX + maskFit.drawnW / 2}
+        cy={maskFit.drawY + maskFit.drawnH / 2}
+        rx={maskFit.drawnW / 2}
+        ry={maskFit.drawnH / 2}
+        fill="none"
+        stroke="#E8C86A"
+        strokeWidth={2}
+        pointerEvents="none"
+      />
+
+      {/* Corner handles (visual). For interactions attach separate absolutely positioned elements with pointerEvents enabled. */}
+      <circle cx={cropPx.x} cy={cropPx.y} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+      <circle cx={cropPx.x + cropPx.width} cy={cropPx.y} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+      <circle cx={cropPx.x} cy={cropPx.y + cropPx.height} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+      <circle cx={cropPx.x + cropPx.width} cy={cropPx.y + cropPx.height} r={6} fill="#fff" stroke="#E8C86A" strokeWidth={2} />
+    </svg>
+
+    {/* Example interactive handle (TL). Repeat/position other handles similarly and hook into your existing drag logic */}
+    <div
+      onMouseDown={(e) => { markUserAdjusted(); startDragHandle && startDragHandle("tl", e); }}
+      style={{
+        position: "absolute",
+        left: Math.max(0, (cropPx.x - 6)),
+        top: Math.max(0, (cropPx.y - 6)),
+        width: 12,
+        height: 12,
+        borderRadius: 6,
+        background: "#fff",
+        border: "2px solid #E8C86A",
+        cursor: "nwse-resize",
+        pointerEvents: "all"
+      }}
+    />
+    {/* Add other interactive handle divs for tr, bl, br using cropPx positions */}
+  </div>
+);
+```
+
+---
+
+# What this patch changes (summary)
+
+* Uses a **single SVG overlay** measured in rendered image pixels so overlay coordinates match the image exactly.
+* Computes the mask `drawX/drawY/drawnW/drawnH` from the crop pixel rectangle every render (no race conditions).
+* Draws both the mask and rectangle from the same pixel coordinate system — no more drifting or slider-only fixes.
+* Keeps user interactions authoritative: calling `markUserAdjusted()` at the start of drag/slider prevents any auto-fit effect from fighting the user.

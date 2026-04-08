@@ -13,14 +13,14 @@ exports.injectIntoDevTools @ react-reconciler.development.js:8741
 createReconciler @ events-e3cb66e2.esm.js:1275
 eval @ events-e3cb66e2.esm.js:1545
 (app-pages-browser)/./node_modules/.pnpm/@react-three+fiber@9.3.0_@types+react@19.1.12_react-dom@19.1.2_react@19.1.2__react@19.1.2_three@0.180.0/node_modules/@react-three/fiber/dist/events-e3cb66e2.esm.js @ _app-pages-browser_components_ThreeScene_tsx.js:448
-options.factory @ webpack.js?v=1775061125817:716
-__webpack_require__ @ webpack.js?v=1775061125817:29
-fn @ webpack.js?v=1775061125817:373
+options.factory @ webpack.js?v=1775656419152:716
+__webpack_require__ @ webpack.js?v=1775656419152:29
+fn @ webpack.js?v=1775656419152:373
 eval @ ThreeScene.tsx:6
 (app-pages-browser)/./components/ThreeScene.tsx @ _app-pages-browser_components_ThreeScene_tsx.js:48
-options.factory @ webpack.js?v=1775061125817:716
-__webpack_require__ @ webpack.js?v=1775061125817:29
-fn @ webpack.js?v=1775061125817:373
+options.factory @ webpack.js?v=1775656419152:716
+__webpack_require__ @ webpack.js?v=1775656419152:29
+fn @ webpack.js?v=1775656419152:373
 Promise.then
 ThreeScene.loadableGenerated.modules @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ConditionalCanvas.tsx:23
 eval @ loadable.js:40
@@ -83,10 +83,10 @@ eval @ react-dom-client.development.js:6229
 reconcileChildren @ react-dom-client.development.js:8783
 updateClassComponent @ react-dom-client.development.js:9829
 beginWork @ react-dom-client.development.js:10796
+replayBeginWork @ react-dom-client.development.js:15784
 runWithFiberInDEV @ react-dom-client.development.js:872
-performUnitOfWork @ react-dom-client.development.js:15727
-workLoopConcurrentByScheduler @ react-dom-client.development.js:15721
-renderRootConcurrent @ react-dom-client.development.js:15696
+replaySuspendedUnitOfWork @ react-dom-client.development.js:15748
+renderRootConcurrent @ react-dom-client.development.js:15624
 performWorkOnRoot @ react-dom-client.development.js:14990
 performWorkOnRootViaSchedulerTask @ react-dom-client.development.js:16816
 performWorkUntilDeadline @ scheduler.development.js:45
@@ -103,51 +103,48 @@ ResponseInstance @ react-server-dom-webpack-client.browser.development.js:2039
 createResponseFromOptions @ react-server-dom-webpack-client.browser.development.js:3092
 exports.createFromReadableStream @ react-server-dom-webpack-client.browser.development.js:3477
 eval @ app-index.js:130
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_@babel+core@7.29.0_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1775061125817:160
-options.factory @ webpack.js?v=1775061125817:716
-__webpack_require__ @ webpack.js?v=1775061125817:29
-fn @ webpack.js?v=1775061125817:373
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_@babel+core@7.29.0_@playwright+test@1.59.1_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-index.js @ main-app.js?v=1775656419152:160
+options.factory @ webpack.js?v=1775656419152:716
+__webpack_require__ @ webpack.js?v=1775656419152:29
+fn @ webpack.js?v=1775656419152:373
 eval @ app-next-dev.js:14
 eval @ app-bootstrap.js:59
 loadScriptsInSequence @ app-bootstrap.js:24
 appBootstrap @ app-bootstrap.js:53
 eval @ app-next-dev.js:13
-(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_@babel+core@7.29.0_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1775061125817:182
-options.factory @ webpack.js?v=1775061125817:716
-__webpack_require__ @ webpack.js?v=1775061125817:29
-__webpack_exec__ @ main-app.js?v=1775061125817:1878
-(anonimowa) @ main-app.js?v=1775061125817:1879
-webpackJsonpCallback @ webpack.js?v=1775061125817:1392
-(anonimowa) @ main-app.js?v=1775061125817:9
+(app-pages-browser)/./node_modules/.pnpm/next@15.5.7_@babel+core@7.29.0_@playwright+test@1.59.1_react-dom@19.1.2_react@19.1.2__react@19.1.2/node_modules/next/dist/client/app-next-dev.js @ main-app.js?v=1775656419152:182
+options.factory @ webpack.js?v=1775656419152:716
+__webpack_require__ @ webpack.js?v=1775656419152:29
+__webpack_exec__ @ main-app.js?v=1775656419152:1878
+(anonimowa) @ main-app.js?v=1775656419152:1879
+webpackJsonpCallback @ webpack.js?v=1775656419152:1392
+(anonimowa) @ main-app.js?v=1775656419152:9
 C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: 'Traditional Engraved Headstone', catalogId: '124', productId: '124', fallbackProductId: '124', fallbackName: 'Traditional Engraved Headstone'}
 C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: 'Traditional Engraved Headstone', catalogId: '124', productId: '124', fallbackProductId: '124', fallbackName: 'Traditional Engraved Headstone'}
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\DefaultDesignLoader.tsx:25 [loadDesignById] Loading canonical design: 1680456686045
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: undefined, catalogId: undefined, productId: '100', fallbackProductId: '100', fallbackName: 'Laser-etched Black Granite Full Monument'}
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: undefined, catalogId: undefined, productId: '100', fallbackProductId: '100', fallbackName: 'Laser-etched Black Granite Full Monument'}
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\xml-parser.ts:445 Parsing catalog XML - found stand/base product: true
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\xml-parser.ts:451 Stand/base product has price_model: true
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\xml-parser.ts:456 Base price model parsed: {id: '', code: 'H-TABLE', name: '*', quantityType: 'Width', currency: 'Dollars', …}
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\headstone-store.ts:606 [Store] Catalog set for product 100 : {catalogName: 'Laser Etched Black Granite Full Monument', catalogId: '100', catalogType: 'full-monument'}
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: 'Laser Etched Black Granite Full Monument', catalogId: '100', productId: '100', fallbackProductId: '100', fallbackName: 'Laser-etched Black Granite Full Monument'}
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: 'Laser Etched Black Granite Full Monument', catalogId: '100', productId: '100', fallbackProductId: '100', fallbackName: 'Laser-etched Black Granite Full Monument'}
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\three\FullMonumentFit.tsx:365 [FitCamera] ZOOM-IN target: headstone box min: (3) ['-0.450', '0.350', '-2.120'] max: (3) ['0.450', '1.050', '-2.040'] size: (3) ['0.900', '0.700', '0.080'] center: (3) ['0.000', '0.700', '-2.080'] meshes: 1 headstone(0.90,0.70,0.08)
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\three\FullMonumentFit.tsx:365 [FitCamera] ZOOM-IN target: headstone box min: (3) ['-0.450', '0.350', '-2.120'] max: (3) ['0.450', '1.050', '-2.040'] size: (3) ['0.900', '0.700', '0.080'] center: (3) ['0.000', '0.700', '-2.080'] meshes: 1 headstone(0.90,0.70,0.08)
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\three\FullMonumentFit.tsx:365 [FitCamera] OVERVIEW target: full-monument-fit-target box min: (3) ['-0.450', '0.251', '-2.130'] max: (3) ['0.450', '1.050', '-1.880'] size: (3) ['0.900', '0.799', '0.250'] center: (3) ['0.000', '0.650', '-2.005'] meshes: 2 headstone(0.90,0.70,0.08), base(0.70,0.10,0.25)
 hot-reloader-app.js:197 [Fast Refresh] rebuilding
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\three\FullMonumentFit.tsx:365 [FitCamera] OVERVIEW target: full-monument-fit-target box min: (3) ['-0.600', '0.001', '-2.100'] max: (3) ['0.600', '0.934', '0.310'] size: (3) ['1.200', '0.933', '2.410'] center: (3) ['0.000', '0.468', '-0.895'] meshes: 7 headstone(0.91,0.58,0.08), base(0.70,0.10,0.25), ledger(1.00,0.05,2.05), 3623c8(1.20,0.25,0.10), 60880c(1.20,0.25,0.10), e88e02(0.10,0.25,1.95), d32460(0.10,0.25,1.95)
-report-hmr-latency.js:14 [Fast Refresh] done in 1846ms
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:221 [resolveCanonicalLoadPolicy] Failed to load skipped-ID artifact (404); continuing without skipped-ID routing.
+report-hmr-latency.js:14 [Fast Refresh] done in 3590ms
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\DefaultDesignLoader.tsx:25 [loadDesignById] Loading canonical design: 1682392499309
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 2894ms
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: undefined, catalogId: undefined, productId: '124', fallbackProductId: '124', fallbackName: 'Traditional Engraved Headstone'}
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: undefined, catalogId: undefined, productId: '124', fallbackProductId: '124', fallbackName: 'Traditional Engraved Headstone'}
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\headstone-store.ts:606 [Store] Catalog set for product 124 : {catalogName: 'Traditional Engraved Headstone', catalogId: '124', catalogType: 'headstone'}
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: 'Traditional Engraved Headstone', catalogId: '124', productId: '124', fallbackProductId: '124', fallbackName: 'Traditional Engraved Headstone'}
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\ThreeScene.tsx:108 [ThreeScene] Product name calc: {catalogName: 'Traditional Engraved Headstone', catalogId: '124', productId: '124', fallbackProductId: '124', fallbackName: 'Traditional Engraved Headstone'}
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 2375ms
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:222 [resolveCanonicalLoadPolicy] Failed to load skipped-ID artifact (404); continuing without skipped-ID routing.
 overrideMethod @ hook.js:608
-eval @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:221
+eval @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:222
 await in eval
-getSkippedDesignReasonLookup @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:237
-resolveCanonicalLoadPolicy @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:246
-loadCanonicalDesignIntoEditor @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:1827
+getSkippedDesignReasonLookup @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:238
+resolveCanonicalLoadPolicy @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:247
+loadCanonicalDesignIntoEditor @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:1837
 await in loadCanonicalDesignIntoEditor
 loadDesignById @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\DefaultDesignLoader.tsx:36
 await in loadDesignById
-handleLoadDesign @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:210
-onClick @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:385
+handleLoadDesign @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:321
+onClick @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:620
 executeDispatch @ react-dom-client.development.js:16971
 runWithFiberInDEV @ react-dom-client.development.js:872
 processDispatchQueue @ react-dom-client.development.js:17021
@@ -156,28 +153,45 @@ batchedUpdates$1 @ react-dom-client.development.js:3312
 dispatchEventForPluginEventSystem @ react-dom-client.development.js:17175
 dispatchEvent @ react-dom-client.development.js:21358
 dispatchDiscreteEvent @ react-dom-client.development.js:21326
-<button>
-exports.jsxDEV @ react-jsx-dev-runtime.development.js:323
-eval @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:383
-eval @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:382
-eval @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:357
-LoadDesignButton @ C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\LoadDesignButton.tsx:334
-react_stack_bottom_frame @ react-dom-client.development.js:23584
-renderWithHooksAgain @ react-dom-client.development.js:6893
-renderWithHooks @ react-dom-client.development.js:6805
-updateFunctionComponent @ react-dom-client.development.js:9247
-beginWork @ react-dom-client.development.js:10858
-runWithFiberInDEV @ react-dom-client.development.js:872
-performUnitOfWork @ react-dom-client.development.js:15727
-workLoopSync @ react-dom-client.development.js:15547
-renderRootSync @ react-dom-client.development.js:15527
-performWorkOnRoot @ react-dom-client.development.js:14991
-performSyncWorkOnRoot @ react-dom-client.development.js:16831
-flushSyncWorkAcrossRoots_impl @ react-dom-client.development.js:16677
-processRootScheduleInMicrotask @ react-dom-client.development.js:16715
-eval @ react-dom-client.development.js:16850
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:1844 [loadCanonicalDesignIntoEditor] Using canonical coordinates (canonical-only mode enabled (conversion confidence: high))
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\DefaultDesignLoader.tsx:39 [loadDesignById] Successfully loaded canonical design 1680456686045
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\three\headstone\ShapeSwapper.tsx:535 [ShapeSwapper] Headstone onClick, event object: headstone
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\three\FullMonumentFit.tsx:365 [FitCamera] ZOOM-IN target: headstone box min: (3) ['-0.457', '0.350', '-2.090'] max: (3) ['0.457', '0.934', '-2.010'] size: (3) ['0.914', '0.584', '0.080'] center: (3) ['0.000', '0.642', '-2.050'] meshes: 1 headstone(0.91,0.58,0.08)
-C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\three\FullMonumentFit.tsx:365 [FitCamera] OVERVIEW target: full-monument-fit-target box min: (3) ['-0.600', '0.001', '-1809.327'] max: (3) ['331.059', '0.934', '0.310'] size: (3) ['331.659', '0.933', '1809.637'] center: (3) ['165.230', '0.468', '-904.508'] meshes: 36 headstone(0.91,0.58,0.08), e693fc(0.37,0.04,0.00), 24f768(0.30,0.04,0.00), 4e8258(0.32,0.04,0.00), a7ce5c(0.23,0.03,0.00), ae097c(0.39,0.04,0.00), 72b6e8(0.38,0.04,0.00), 06c8f7(0.22,0.02,0.00), 807de3(0.24,0.07,0.00), e7323d(0.14,0.01,0.00), motif-motif-c6e0b58a-860d-4532-86bf-66aaf7f40166(0.05,0.04,0.00), motif-motif-702cd34b-b3b6-478c-8243-9c1baf039df0(0.05,0.04,0.00), motif-motif-f18ff532-5faa-48b2-9d23-ebd5148a8a92(0.05,0.04,0.00), motif-motif-a72712a0-532e-4f9b-8dfd-886814d8917a(0.09,0.05,0.00), motif-motif-e154ef06-d096-4f60-9569-513a6e765c1f(0.12,0.10,0.00), motif-motif-7bfaec1a-6b4d-4193-82b6-4942c9a96ed6(0.32,0.15,0.00), motif-motif-c79e44a3-fb91-4ecf-b9c8-8dbbf9c8cffc(0.34,0.10,0.00), motif-motif-709511de-f888-465f-8cb2-faa27a450297(0.34,0.10,0.00), motif-motif-934863ab-72fb-4ce6-8a97-993cd76e84c1(0.04,0.08,0.00), motif-motif-8ba57680-8872-4903-8184-d0d8fec96a43(0.06,0.11,0.00), motif-motif-34bdeeb2-5e3a-4a00-9a7d-f835c90d0ab9(0.06,0.09,0.00), motif-motif-faf9c666-caa0-41f1-9840-13a528d11c1f(0.08,0.04,0.00), motif-motif-2d64a56f-7adb-446e-8159-c883d3a364b9(0.12,0.09,0.00), motif-motif-b1225f60-8f38-4d6d-bb50-5ab6913b0487(0.02,0.04,0.00), motif-motif-ecc2bb87-5c86-416a-ae0c-c64d1e7beadb(0.14,0.11,0.00), motif-motif-10f4850b-c812-43ed-a705-29c75925a86a(0.15,0.12,0.00), motif-motif-c98697c2-336b-4e0a-ad16-068e42194dfc(0.08,0.04,0.00), base(1.20,0.35,0.25), ledger(1.00,0.05,2.05), motif-motif-64895a4d-137c-4258-a674-1bdfec606b5b(0.11,0.00,0.07), motif-motif-6cffbb3d-47fb-452d-889f-d67f37e148fb(0.14,0.00,0.10), motif-motif-331f00c0-0dd7-424f-bfb1-fe9e249463b9(0.05,0.00,0.10), 3623c8(1.20,0.25,0.10), 60880c(1.20,0.25,0.10), e88e02(0.10,0.25,1.95), d32460(0.10,0.25,1.95)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\lib\saved-design-loader-utils.ts:1854 [loadCanonicalDesignIntoEditor] Using canonical coordinates (canonical-only mode enabled (conversion confidence: high))
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\DefaultDesignLoader.tsx:39 [loadDesignById] Successfully loaded canonical design 1682392499309
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:510 [BASE-INSC:insc-23] text="CICERO" cs=mm-center surfaceBounds=false baseMesh=true fontSize=0.0600 visible=false xPos=-17.531645569620256 yPos=-45.06231742940611
+C:\Users\polcr\Documents\GitHub\next-app-router-playground\components\HeadstoneInscription.tsx:512 [BASE-INSC:insc-23] meshPos=(0.0000,-0.0635,0.0750) meshScale=(0.8310,0.1290,0.2500)

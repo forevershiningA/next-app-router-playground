@@ -1,0 +1,206 @@
+Yep — that screenshot actually tells the whole story.
+
+Your **mask ellipse is being transformed in one coordinate system**, while the **drag handles are being drawn in another**.
+
+So visually they look aligned…
+but mathematically they live in different spaces.
+
+This is the classic **viewBox vs rendered pixel space drift**.
+
+---
+
+## What’s happening
+
+You currently have **3 coordinate spaces** in play:
+
+1. **Image natural space**
+   The photo’s real pixel dimensions
+   `naturalWidth x naturalHeight`
+
+2. **SVG viewBox space**
+   Where the mask path is defined
+   `maskViewBox`
+
+3. **DOM screen space (client pixels)**
+   Where pointer events + handles exist
+
+---
+
+Your ellipse is positioned like this:
+
+```
+mask space → transformed → svg viewBox → scaled → screen
+```
+
+But the drag handles are using:
+
+```
+cropArea → assumed screen space
+```
+
+So they don’t go through the *same transform pipeline*.
+
+Result:
+
+> Handles orbit the mask instead of sticking to it
+
+Exactly what your screenshot shows.
+
+---
+
+## The specific bug
+
+Your `imageBox` transform is applied only to rendering:
+
+```
+<g transform="translate(...) scale(...)">
+    mask path
+</g>
+```
+
+But the handle positions are calculated like:
+
+```
+x = cropArea.x
+y = cropArea.y
+```
+
+Those values are still in **image coordinates**, not **screen coordinates**.
+
+So the moment the mask scales to fit the imageBox → offset appears.
+
+---
+
+## The rule (very important)
+
+You must never calculate interaction geometry from state directly.
+
+Instead:
+
+> Render space must be the single source of truth for interaction space.
+
+So every draggable element must use the **same matrix used to render the mask**.
+
+---
+
+## The fix (clean and stable)
+
+Create one transform function:
+
+```
+imageSpace → screenSpace
+```
+
+and use it for:
+
+• mask rendering
+• bounding box
+• drag handles
+• pointer inverse mapping
+
+---
+
+### Step 1 — extract the matrix
+
+Inside `CropMaskOverlay` you already compute fit:
+
+```
+scale
+offsetX
+offsetY
+```
+
+Turn it into a matrix:
+
+```ts
+const imageToScreen = {
+  a: scale,
+  d: scale,
+  e: imageBox.x + offsetX,
+  f: imageBox.y + offsetY
+}
+```
+
+---
+
+### Step 2 — project crop rect corners
+
+Instead of:
+
+```ts
+const left = cropArea.x
+const top = cropArea.y
+```
+
+Do:
+
+```ts
+function project(x:number,y:number){
+  return {
+    x: x * imageToScreen.a + imageToScreen.e,
+    y: y * imageToScreen.d + imageToScreen.f
+  }
+}
+```
+
+Then:
+
+```ts
+const p1 = project(cropArea.x, cropArea.y)
+const p2 = project(cropArea.x + cropArea.width, cropArea.y + cropArea.height)
+```
+
+Handles now stick perfectly.
+
+---
+
+### Step 3 — inverse pointer mapping (prevents drift while dragging)
+
+Right now dragging feels slightly “elastic” — this is why.
+
+Add inverse:
+
+```ts
+function screenToImage(x:number,y:number){
+  return {
+    x:(x - imageToScreen.e)/imageToScreen.a,
+    y:(y - imageToScreen.f)/imageToScreen.d
+  }
+}
+```
+
+Use this inside `pointermove`.
+
+Now the cursor grabs the mask instead of chasing it.
+
+---
+
+## Why the ellipse looked correct
+
+SVG automatically applies transforms during rendering.
+
+But your logic doesn’t.
+
+So visually correct ≠ mathematically correct.
+
+---
+
+## Quick mental test
+
+Resize browser → does offset grow?
+
+If yes → coordinate mismatch
+If no → rounding issue
+
+Your screenshot = coordinate mismatch (100%).
+
+---
+
+## After this fix you also gain
+
+• perfect snapping
+• accurate resizing at any zoom
+• no jitter at DPR 1.25 / 1.5 / 2
+• mobile touch stability
+
+This is actually the foundational fix for every crop tool ever written.

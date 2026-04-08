@@ -1,0 +1,150 @@
+Good news: you’re back to a “visible + predictable” version. The reason it’s **still not centred** is now very specific and easy to fix.
+
+Also quick note: I got a system notice that **some of your previously uploaded files have expired**, so if you want me to inspect any other files again later, you may need to re-upload them. The current `/mnt/data/AdditionModel.tsx` is available and that’s what I’m referencing here.
+
+---
+
+# What’s causing the statue to not be centred (in your current `AdditionModel.tsx`)
+
+There are **two separate “not centred” behaviours** happening:
+
+## A) Depth (Z) is being offset twice
+
+In your file:
+
+* `baseSurfaceZ` is computed using the base **top centre** point (local z=0):
+
+  ```ts
+  const topPoint = new THREE.Vector3(0, targetBBox.max.y, 0);
+  ...
+  return stone.worldToLocal(worldTop.clone()).z;
+  ```
+
+  So **baseSurfaceZ already represents the base depth-centre** (in headstone space).
+
+But then you do, for statues/vases:
+
+```ts
+zPosition = surfaceZ + actualDepth / 2;
+```
+
+…and then you also do this hack:
+
+```ts
+zPosition + (prefersBaseSurface ? -0.15 : 0)
+```
+
+So the statue gets pushed forward by `actualDepth/2`, then shoved back by 150mm, which will *never* be “centred”.
+
+✅ **Fix:** if your `baseSurfaceZ` is the base depth centre, then statues/vases should use:
+
+```ts
+zPosition = surfaceZ;
+```
+
+…and you should remove the `-0.15` hack.
+
+---
+
+## B) X is clamping to the edge because your statue xOffset is negative
+
+In the base placement default:
+
+```ts
+if (addition.type === 'statue') {
+  targetX = minX + posConfig.xOffset;
+}
+targetX = clamp(minX..maxX, targetX);
+```
+
+Your statue xOffset is currently:
+
+```ts
+statue: { xOffset: -80 * MM }
+```
+
+So:
+
+* `minX + (-0.08)` is **outside the allowed range**
+* clamp snaps it back to **minX**
+* result: statue sits hard on the left edge, not nicely centred/inset.
+
+✅ **Fix:** treat statue offset as an **inset from the left edge**, not “left of something”, so make it **positive**.
+
+---
+
+# The exact code changes to make it centred
+
+## 1) Fix Z centring (recommended “do this first”)
+
+In the Z calculation block around line ~647:
+
+**Change this:**
+
+```ts
+} else {
+  // For statues and vases, center them on the surface depth-wise
+  zPosition = surfaceZ + actualDepth / 2;
+}
+```
+
+**To this:**
+
+```ts
+} else {
+  // For statues and vases on base, baseSurfaceZ is already the base depth-centre
+  zPosition = surfaceZ;
+}
+```
+
+Now remove the extra shove-back in the group position:
+
+**Change this:**
+
+```ts
+zPosition + (prefersBaseSurface ? -0.15 : 0)
+```
+
+**To this:**
+
+```ts
+zPosition
+```
+
+That will make the statue sit centred front-to-back on the base.
+
+---
+
+## 2) Fix X “centred on the base end” (stop edge-clamping)
+
+Update the default statue xOffset:
+
+```ts
+statue: {
+  xOffset: 80 * MM,   // ✅ 80mm inset from left edge (NOT negative)
+  yOffset: 0,
+},
+vase: {
+  xOffset: -30 * MM,  // ✅ 30mm inset from right edge (keep negative here)
+  yOffset: 0,
+},
+```
+
+Why vase stays negative: you place vases using `maxX + xOffset`, so negative moves inward.
+
+---
+
+# If you want “true centring” (statue centred in the left extension area)
+
+Right now you’re anchoring relative to the base edge. If you mean “centre the statue on the *extra base length* to the left of the headstone”, then we need one more step:
+
+* compute headstone footprint X in base space
+* compute the left-extension span = `[base.minX .. headstone.minX]`
+* place statue at the middle of that span
+
+If that’s what you mean by centred, tell me which is correct:
+
+1. **Inset from base end** (simple, looks like your screenshot intent)
+2. **Centred in the left extension area** (more “designed” placement)
+
+Either way, do the Z fix above first — that’s the one making it look “off” even when X is right.

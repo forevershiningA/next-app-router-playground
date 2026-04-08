@@ -1,0 +1,47 @@
+Based on the screenshot provided, here is a detailed UX/UI critique categorized by areas for improvement. The overall dark mode aesthetic is clean, but the visual hierarchy, button grouping, and data presentation need refinement.
+
+### 1. Hierarchy & Action Buttons (The biggest issue)
+Right now, there are 9 buttons on the screen competing for the user's attention, and they are scattered. The social sharing buttons hold almost as much visual weight as the primary actions.
+
+*   **De-emphasize Social Sharing:** Sharing a headstone design on Facebook, Twitter/X, or LinkedIn is likely a very rare edge case compared to sharing via Email or copying a link to send to family.
+    *   *Fix:* Collapse these into a single **"Share"** button with an icon (like an arrow pointing out of a box). When clicked, it can open a small dropdown or modal with those options. This cleans up the UI significantly.
+*   **Clarify Primary vs. Secondary Actions:** "Edit Design" and "Buy Now" are exactly the same style and color.
+    *   *Fix:* Determine which action you want users to take most. Make **"Buy Now"** the solid primary color (the gold/yellow), and make **"Edit Design"** a secondary style (e.g., an outline button with yellow text, or a lighter gray solid button).
+*   **Group Actions Logically:** The actions are split left and right.
+    *   *Fix:* Group the core project actions together near the image. For example, place "Edit Design," "Export PDF," and "Delete" near each other, but keep the destructive "Delete" button visually distinct (as it currently is) and perhaps further away to prevent accidental clicks. Place "Buy Now" prominently on the right side.
+
+### 2. The "Price Quote" Table (Data Presentation)
+The nested scrolling area is the main functional UI issue here.
+
+*   **Remove Nested Scrollbar:** There is a visible, thick default scrollbar inside the "Price Quote" container. "Scroll within a scroll" is a common UX anti-pattern that frustrates users, especially on trackpads or touch devices.
+    *   *Fix:* Allow the table container to expand its height automatically to fit all the content. Let the user scroll the *entire page* rather than just a small box inside the page.
+*   **Table Styling:** The heavy, dark gray header row (`Product | Qty | Price | Item Total`) feels a bit dated and visually heavy compared to the rest of the sleek dark theme.
+    *   *Fix:* Remove the background color from the header row. Instead, use a simple bottom border line to separate the headers from the content.
+*   **De-clutter "Included" Items:** The list shows multiple "Motif (included)" items that cost $0.00. While necessary for the invoice, displaying them with the exact same visual hierarchy as the main $2,180.95 item makes the table hard to scan.
+    *   *Fix:* Reduce the opacity or font size of these $0.00 included items, or group them under a single line item like "Included Accessories" with a dropdown to view specifics.
+
+### 3. Layout & Visual Polish
+*   **Alignment issues:**
+    *   The label "SHARE THIS DESIGN" feels floating and disconnected from the buttons below it.
+    *   The buttons "Export PDF" and "Delete" are floating in the middle right, not aligned to the bottom of the image block or the top of the table.
+*   **Information under the image:** The string `Created 27-02-2026 18:11 - $2,180.95` is functional but a bit raw.
+    *   *Fix:* Format the date better (e.g., "Created Feb 27, 2026"). Consider breaking the price out. Since the price is the most important piece of data, making it larger and right-aligned opposite the "Created" date would improve scannability.
+*   **Border Radii inconsistencies:** The main outer container has large rounded corners. The image has smaller rounded corners. The buttons have very slight rounded corners. The table container has medium rounded corners.
+    *   *Fix:* Standardize the `border-radius` variables across the app so elements feel like they belong to the same design system.
+
+### Summary Mockup Idea (Mental restructuring)
+Imagine the layout shifted to this structure:
+
+**Top Section:**
+*   [Breadcrumbs]
+*   **Header:** "test" (Left) | **Total:** $2,180.95 (Right - Large)
+*   **Left Column:** Product Image + "Created on [Date]" text below it.
+*   **Right Column (Actions aligned vertically or cleanly grouped):**
+    *   [ Buy Now ] (Primary Solid Button)
+    *   [ Edit Design ] (Outline Button)
+    *   [ Share ] [ Export PDF ] (Secondary Buttons)
+    *   [ Delete ] (Red, placed lower or away from Buy/Edit)
+
+**Bottom Section:**
+*   **PRICE QUOTE** (Header)
+*   Clean table (no nested scrollbar, light header row, $0 items de-emphasized visually).

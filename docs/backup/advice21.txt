@@ -1,0 +1,136 @@
+Good — that narrowed it quickly. The teardrop was mis-positioned because your `getMaskShapeBounds` only returns hardcoded bounds for a few shapes (oval, rectangle, etc.). Teardrop isn’t in that map, so the code falls back to `0,0,500,500` which makes the handler positions and the visible teardrop path disagree.
+
+Fix: **compute the mask path’s actual bounding box at runtime** instead of relying only on the small hardcoded map. The browser’s SVG API (`SVGPathElement.getBBox()`) gives exactly the coordinates you need in the same viewBox space the SVG uses, so handles and the drawn mask will use the same geometry.
+
+Below is a drop-in replacement for your current `getMaskShapeBounds` function. It keeps your existing hardcoded values for common masks (fast path) but for others (like `teardrop`) it creates a temporary SVG, inserts the mask path, calls `getBBox()` and returns the real bounds in the 0–500 viewBox coordinates.
+
+### Replace your current `getMaskShapeBounds` with this
+
+```ts
+// Replace existing getMaskShapeBounds with this version
+const getMaskShapeBounds = (mask: string) => {
+  // Fast-path map for simple masks (keeps your current behaviour)
+  const boundsMap: Record<string, { left: number; top: number; width: number; height: number }> = {
+    oval: { left: 50, top: 0, width: 400, height: 500 },           // Oval vertical path
+    'horizontal-oval': { left: 0, top: 50, width: 500, height: 400 },
+    square: { left: 50, top: 0, width: 400, height: 500 },
+    rectangle: { left: 0, top: 50, width: 500, height: 400 },
+    // keep other known masks here...
+  };
+
+  if (boundsMap[mask]) return boundsMap[mask];
+
+  // ----- Dynamic fallback using getBBox() -----
+  // If you store full SVGs for masks, selectedMask should contain the SVG path(s).
+  // We expect `mask` to be an identifier or raw svg string. If it's an id/slug,
+  // try to fetch the path markup from your mask registry first.
+  try {
+    // If `mask` is a key to your mask registry (e.g. 'teardrop'), retrieve its SVG markup:
+    // const svgMarkup = maskRegistry[mask]; // <- implement if you already have registry
+    // For robustness, try both: if `mask` looks like raw svg markup, use it directly.
+    let svgMarkup = (mask || '').trim();
+
+    // If mask is just a name (e.g. 'teardrop'), attempt to find an element in DOM by id.
+    // (Optional) uncomment if you keep mask SVGs inline with ids:
+    // if (!svgMarkup) {
+    //   const el = document.getElementById(mask);
+    //   if (el) svgMarkup = el.outerHTML;
+    // }
+
+    // If still empty, fall back to full viewBox
+    if (!svgMarkup) return { left: 0, top: 0, width: 500, height: 500 };
+
+    // Build a temporary SVG container using the same viewBox (0 0 500 500)
+    const parser = new DOMParser();
+    // If `svgMarkup` already contains <svg ...>, parse it and extract paths.
+    const doc = parser.parseFromString(svgMarkup, 'image/svg+xml');
+
+    let pathElement: SVGGraphicsElement | null = null;
+
+    // Try to find a path/polygon/ellipse/group in parsed SVG
+    pathElement = doc.querySelector('path, ellipse, circle, rect, polygon, g');
+
+    // If not found but the provided mask string is a raw path 'd="M..."', create a path
+    if (!pathElement) {
+      // try to wrap mask as a path element
+      try {
+        const wrapped = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">${svgMarkup}</svg>`;
+        const doc2 = parser.parseFromString(wrapped, 'image/svg+xml');
+        pathElement = doc2.querySelector('path, ellipse, circle, rect, polygon, g');
+      } catch (err) {
+        /* ignore */
+      }
+    }
+
+    // Nothing to measure -> fallback
+    if (!pathElement) return { left: 0, top: 0, width: 500, height: 500 };
+
+    // Create a real in-DOM SVG (hidden) so getBBox works reliably across browsers
+    const tmpSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    tmpSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    tmpSvg.setAttribute('viewBox', '0 0 500 500');
+    tmpSvg.style.position = 'absolute';
+    tmpSvg.style.width = '1px';
+    tmpSvg.style.height = '1px';
+    tmpSvg.style.left = '-10000px';
+    tmpSvg.style.top = '-10000px';
+    tmpSvg.style.opacity = '0';
+    tmpSvg.style.pointerEvents = 'none';
+
+    // Import the node into the current document to make a live element
+    const imported = document.importNode(pathElement, true) as SVGGraphicsElement;
+    tmpSvg.appendChild(imported);
+    document.body.appendChild(tmpSvg);
+
+    // Measure in the SVG coordinate system
+    const bbox = (imported as SVGGraphicsElement).getBBox();
+    // Clean up
+    document.body.removeChild(tmpSvg);
+
+    // bbox is in the same units as viewBox if the SVG viewBox is 0 0 500 500.
+    // Ensure numbers are within expected 0-500 ranges and clamp small values.
+    const left = Math.max(0, Math.min(500, bbox.x || 0));
+    const top = Math.max(0, Math.min(500, bbox.y || 0));
+    const width = Math.max(0, Math.min(500 - left, bbox.width || 0));
+    const height = Math.max(0, Math.min(500 - top, bbox.height || 0));
+
+    return { left, top, width, height };
+  } catch (err) {
+    // On any error, fall back to full box
+    console.warn('getMaskShapeBounds dynamic bbox failed for mask:', mask, err);
+    return { left: 0, top: 0, width: 500, height: 500 };
+  }
+};
+```
+
+### Notes & integration tips
+
+1. **What `mask` should contain**
+
+   * Best approach: store each mask as its full SVG string (or at least the mask's `<path d="...">` markup) in your mask registry. Then `selectedMask` can be that SVG markup or a key into the registry. The fallback code handles both styles (raw markup or id-based lookup if you add it).
+
+2. **Why we create a DOM SVG**
+
+   * `getBBox()` only works on elements in the document (some browsers/contexts may give 0 for detached nodes). Appending a tiny off-screen SVG ensures a reliable bbox.
+
+3. **Units & viewBox**
+
+   * This assumes your mask SVGs use `viewBox="0 0 500 500"` like the rest of your code. If they use a different viewBox, you should normalize them or divide/scale accordingly.
+
+4. **Performance**
+
+   * This runs only when you calculate `shapeBounds` (render time). If you have many masks / frequent re-renders, cache the result keyed by mask id or mask hash to avoid repeated DOM insert/remove.
+
+5. **Rotation / Transform**
+
+   * If your displayed mask is rotated/scaled further (e.g., via `<g transform="...">`), `getBBox()` returns the path’s untransformed bbox. That’s correct for your approach because you compute transforms elsewhere (SVG render area → crop area). If you *do* need the transformed bbox, use `getCTM()` + matrix multiplication on bbox corners — but try the simple approach first.
+
+6. **Check DPR & CSS transforms**
+
+   * You already map shape coords to percentages; once `shapeBounds` is correct, the handles should align. If you later add CSS transforms (scale/translate) to the containing element, ensure that the same transform is applied to handle coordinate projection (you handled that before using `svgWidthPercent`, etc.).
+
+### Short test checklist after patch
+
+1. Add a unique `console.log('teardrop bounds', shapeBounds)` temporarily to verify values for teardrop.
+2. Resize viewport and verify handles remain stuck to the shape.
+3. Drag/resize with mouse and touch — check for jitter (if jitter persists, the pointer → image inverse mapping discussed earlier is the next step).

@@ -1,0 +1,40 @@
+Based on the screenshot provided, the design has a strong, moody aesthetic that fits the "memorial" theme well. However, there are several areas where the User Experience (UX), visual hierarchy, and information architecture can be improved to make the interface cleaner and drive better conversions.
+
+Here is a breakdown of how to improve the "My Account" design:
+
+### 1. Optimize the "Saved Design" Cards (Crucial for Conversion)
+The cards displaying the individual designs are currently heavy on text and lack a clear primary action.
+
+*   **Prioritize the "BUY" Button:** Right now, `EDIT`, `BUY`, `EMAIL`, and `MORE` carry the exact same visual weight (outlined pills). **"BUY" should be a solid, primary button** (perhaps using the green from the top right button, or a brand gold) so the user's eye goes straight to the purchase action. `EDIT` can remain an outline, and `EMAIL/MORE` could even be reduced to icons to declutter.
+*   **Move the Price:** The price (`$5,369.00`) is floating in the top right corner. It should be moved down next to the `BUY` button. Contextually, price and the intent to purchase belong together.
+*   **Truncate the Description:** The paragraph text ("A life lived with passion...") is too long and stretches the card vertically. Truncate this text to a maximum of 2 lines with a `...` or a "Show more" link. The user already knows what they wrote; they don't need to read the full inscription on the dashboard.
+*   **Clean Up the Image Preview:** The preview image on the right has redundant text overlaid on the bottom ("Laser-etched Black Granite..."). This text already exists in a tag on the left side of the card. Remove the text overlay on the image so the user can see the design more clearly.
+*   **Highlight the Status:** "DESIGN PROOF" in small grey caps is easy to miss. Consider using a small colored dot (e.g., Yellow for proof, Green for approved, Blue for in production) or a clearer badge to help users scan the status of multiple designs quickly.
+
+### 2. Improve the Top "Account Menu" Grid
+This section serves as quick navigation, but the visual cues could be stronger.
+
+*   **Change the Arrows:** The arrows pointing up and right (`↗`) are universally understood on the web to mean **"Open in a new tab"** or **"External Link"**. If these buttons just navigate to different sections within the dashboard, use a right-pointing arrow (`→`) or a chevron (`>`).
+*   **Clarify Active State:** You are currently on "Saved Designs", which is indicated by a white background behind the book icon. This is a bit subtle. Consider giving the active card a distinct border color (like gold) or a slight background tint so it's immediately obvious which section the user is currently viewing.
+*   **Emphasize "New Design":** If creating a new design is the main goal of the app, that specific card could have a slightly different treatment (e.g., a solid background color rather than just an outline) to make it stand out from administrative links like "Privacy Policy".
+
+### 3. Navigation and Sidebar Context
+There is a slight disconnect between what is happening on the left and what is happening on the right.
+
+*   **Context Confusion:** The left sidebar appears to be a step-by-step builder (`01 Setup`, `02 Design`), but the main screen is an Account Dashboard. If the user is in their Account Dashboard, the builder steps in the sidebar might be irrelevant or confusing unless they are currently editing a specific stone. Consider having a distinct "Dashboard Navigation" sidebar when they are in "My Account," separate from the "Editor Navigation."
+*   **Error State:** There is a red bubble in the bottom left corner ("1 Issue X") overlapping the "Motifs" text. This needs to be repositioned so it doesn't block UI elements. It feels disconnected—is the issue with the account, or with a specific design?
+
+### 4. General Typography and Spacing
+*   **Hierarchy in Headers:** The title "Mother Memorial" is good, but the "Updated 30-10-2025" tag next to the material tag feels a bit cluttered. You could move the updated date above the title, or right-align it, to let the material tags breathe.
+*   **Contrast:** Ensure the dark grey text (like the descriptions) has enough contrast against the dark brown background to meet accessibility standards (WCAG). It looks a little bit washed out currently.
+
+### Summary Mockup Idea for a Card:
+Imagine the bottom card looking like this logically:
+
+> **[Status: Design Proof]**
+> ### Mother Memorial
+> [Laser-etched Black Granite Headstone] *(Tag)*
+>
+> *A life lived with passion, A love that never faded Maria Toppo A Special Lady...*
+>
+> **$5,369.00**  [ **BUY NOW** ]  [ Edit ]  [ Email ]  [ ⋮ ]

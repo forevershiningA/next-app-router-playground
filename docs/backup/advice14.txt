@@ -1,0 +1,208 @@
+Perfect — those two screenshots make the issue 100% clear now.
+
+When you convert:
+
+**Traditional Headstone → Bronze Plaque**
+
+you are:
+
+* Changing the geometry proportions
+* But NOT remapping the layout coordinate system
+
+So the elements are still positioned using the **headstone’s original width/height logic**, and when applied to the plaque (different aspect ratio), they collapse inward and overlap.
+
+---
+
+# 🔎 What’s Actually Happening
+
+Your layout positions (text + motifs) are stored relative to:
+
+```
+Headstone width/height
+```
+
+Then you switch to plaque which has:
+
+```
+Different width/height ratio
+```
+
+But you reuse:
+
+```tsx
+xPos={line.xPos}
+yPos={line.yPos}
+```
+
+So you are effectively doing:
+
+```
+Apply headstone layout onto plaque dimensions
+```
+
+Which compresses everything.
+
+---
+
+# 🎯 The Real Fix
+
+When switching shape type, you must **scale positions from old base size → new size**.
+
+You need to treat layout like this:
+
+```
+Original layout was created on:
+  baseWidthMm
+  baseHeightMm
+
+Now we are rendering on:
+  widthMm
+  heightMm
+```
+
+So we remap.
+
+---
+
+# ✅ Correct Conversion Logic
+
+Inside `ShapeSwapper.tsx`, before rendering inscriptions:
+
+### STEP 1 — Determine base size
+
+If converting shape types, you must store the original layout dimensions.
+
+Example:
+
+```ts
+const baseWidthMm = design.baseWidthMm ?? widthMm;
+const baseHeightMm = design.baseHeightMm ?? heightMm;
+```
+
+If not stored, then use the previous shape's width/height.
+
+---
+
+### STEP 2 — Scale positions proportionally
+
+If positions are CENTER-BASED (very likely in your 3D system):
+
+```tsx
+const scaleX = widthMm / baseWidthMm;
+const scaleY = heightMm / baseHeightMm;
+
+const x = line.xPos * scaleX;
+const y = line.yPos * scaleY;
+```
+
+Then:
+
+```tsx
+<HeadstoneInscription
+  ...
+  xPos={x}
+  yPos={y}
+/>
+```
+
+---
+
+### If positions are TOP-LEFT based
+
+Then use centered scaling:
+
+```tsx
+const scaleX = widthMm / baseWidthMm;
+const scaleY = heightMm / baseHeightMm;
+
+const x =
+  (line.xPos - baseWidthMm / 2) * scaleX +
+  widthMm / 2;
+
+const y =
+  (line.yPos - baseHeightMm / 2) * scaleY +
+  heightMm / 2;
+```
+
+---
+
+# 🔥 Why This Works
+
+Because you're converting:
+
+```
+Relative position inside original shape
+```
+
+to:
+
+```
+Relative position inside new shape
+```
+
+Instead of keeping absolute mm positions.
+
+---
+
+# 💡 What You Are Missing Architecturally
+
+Right now your system assumes:
+
+```
+Layout coordinates are universal
+```
+
+But they are not.
+
+Layout coordinates are only meaningful relative to the geometry they were created on.
+
+You must either:
+
+### Option A (best long-term)
+
+Store all layout positions as normalized coordinates:
+
+```
+u = x / width
+v = y / height
+```
+
+Then render using:
+
+```
+x = (u - 0.5) * width
+y = (v - 0.5) * height
+```
+
+Then ANY shape conversion just works automatically.
+
+---
+
+### Option B (minimal change)
+
+Store baseWidth/baseHeight with each design and rescale on render.
+
+---
+
+# 🧠 Why Bronze Conversion Looks Worse
+
+Because the bronze plaque is more rectangular,
+so vertical compression exaggerates layout crowding.
+
+The headstone was tall.
+The plaque is wider and shorter.
+So vertical spacing collapses.
+
+---
+
+# 🎯 What To Do Next
+
+Tell me:
+
+* Are your `line.xPos/yPos` values around `-0.2..0.2` (meters)?
+  → then they are center-based.
+
+* Or are they around `0..600` etc?
+  → then they are mm-from-edge based.
+
+If you paste one real `line` object, I will give you the exact final code patch for your coordinate system.

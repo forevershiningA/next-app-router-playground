@@ -1,0 +1,40 @@
+Zrobiłem to: wstawiłem do canvasa plik `CropMaskOverlay.tsx` — komponent, który naprawia skalowanie i pozycjonowanie masek oraz rysuje dopasowany SVG overlay (maskę, zielone wypełnienie i ramkę z uchwytami).
+
+Co zrobiłem i dlaczego to naprawia problem:
+
+* preloaduję rozmiary naturalne maski (żeby wiedzieć jej aspect-ratio i padding),
+* obliczam transform, który *fituje* maskę do wewnętrznego `viewBox` (500×500) bez deformacji,
+* renderuję jednego SVG ustawionego **dokładnie** nad rzeczywistym `imageBox` (ten sam układ współrzędnych dla maski i ramki), więc owal zawsze trzyma się dokładnie miejsca, w którym powinien być, niezależnie od `object-fit`, skalowania czy letterboxu,
+* dodałem uchwyty i eventy (callbacki) dla Twojej istniejącej logiki drag/resize — komponent wywołuje `onHandlePointerDown(handleIndex, clientX, clientY)` i `onRectPointerDown(clientX, clientY)` (podpinasz swoje handlery i wszystko działa tak jak wcześniej, ale bez offsetów).
+
+Dalsze kroki (co musisz zrobić, aby włączyć patch):
+
+1. Otwórz swój `CropCanvas.tsx`.
+2. Zastąp sekcję, która teraz renderuje maskę + zielony overlay + ramkę (prawdopodobnie tam gdzie masz `<svg ...> ... </svg>` dla maski), jednym importem i wywołaniem komponentu:
+
+```tsx
+import CropMaskOverlay from './CropMaskOverlay';
+
+// gdzieś w renderze, zamiast starego kodu
+<CropMaskOverlay
+  imageBox={imageBox}
+  cropArea={cropArea}
+  selectedMask={selectedMask}
+  getMaskUrl={getMaskUrl}
+  onHandlePointerDown={(handle, x, y) => startHandleDrag(handle, x, y)} // twoja funkcja
+  onRectPointerDown={(x, y) => startMoveDrag(x, y)} // twoja funkcja
+  strokeWidth={4}
+/>
+```
+
+3. Upewnij się, że `imageBox` jest prawidłowo mierzony (left/top/width/height w px relative do preview). Jeśli jeszcze nie masz tej logiki, w moich wcześniejszych wiadomościach masz dokładny snippet `measureImageBox()` — użyj go.
+4. W handlerach drag/resize użyj `imageBox.width` / `imageBox.height` do konwersji pikseli → procenty (zamiast previewRect.width/height) — to gwarantuje, że ruchy kursora są interpretowane względem tej samej przestrzeni, w której rysujemy maskę.
+
+Kilka krótkich uwag:
+
+* Jeśli chcesz, mogę przygotować *pewny* PR-style patch (pełen diff) bezpośrednio modyfikujący Twój `CropCanvas.tsx`. Wygląda na to, że część wersji pliku w uploadach wygasła — jeśli chcesz, zrób teraz **jedno** push/upload aktualnego `CropCanvas.tsx` (wyślij go w tej rozmowie). Po otrzymaniu aktualnego pliku wkleję gotowy, dokładny diff/zmiany i zaktualizowany plik (PR-ready).
+* Jeśli wolisz samodzielnie podpiąć komponent — instrukcja powyżej wystarczy. Komponent został zapisany jako `CropMaskOverlay.tsx` w canvase, możesz skopiować go do repo i importować bez zmian.
+
+Powiedz, czy chcesz że:
+A) zrobię pełny patch i wgram poprawiony `CropCanvas.tsx` (jeśli prześlesz aktualny plik), czy
+B) wolisz wgrać `CropMaskOverlay.tsx` ręcznie i podpiąć go samodzielnie — w tym wypadku pomogę poprawić event handlery jeśli zajdzie potrzeba.

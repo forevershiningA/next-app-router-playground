@@ -1,0 +1,224 @@
+Yep — **the problem is right here in `ShapeSwapper.tsx`:**
+
+```tsx
+<HeadstoneInscription
+  ...
+  xPos={line.xPos}
+  yPos={line.yPos}
+  ...
+/>
+```
+
+You’re passing the stored `xPos/yPos` straight through, **without re-mapping them to the new plaque width/height**.
+
+So when you increase plaque width (square → wide), the plaque mesh gets wider, but the inscriptions/motifs/additions keep using the *old coordinate meaning* — which makes them look “off-center”.
+
+---
+
+## What to change (the fix)
+
+### ✅ Fix concept
+
+Make element positions **plaque-local and center-origin**, i.e.:
+
+* plaque center = `(0, 0)`
+* left edge = `-width/2`
+* right edge = `+width/2`
+
+Then all elements remain centered relative to the plaque as width changes.
+
+---
+
+## Patch in `ShapeSwapper.tsx` (minimal, surgical)
+
+Right before rendering `HeadstoneInscription`, convert from “top-left mm” (or “left/bottom mm”) to **center-origin meters** using the *current* `widthMm/heightMm`.
+
+Add these helpers inside the `(api) => { ... }` block:
+
+```tsx
+const plaqueWidthMm = widthMm;
+const plaqueHeightMm = heightMm;
+
+const mmToM = (mm: number) => mm / 1000;
+
+// If your stored coords are from TOP-LEFT (common UI):
+const toCenteredLocalMeters_TopLeft = (xMm: number, yMm: number) => {
+  const wM = mmToM(plaqueWidthMm);
+  const hM = mmToM(plaqueHeightMm);
+
+  const xM = mmToM(xMm) - wM / 2;     // shift so center is 0
+  const yM = hM / 2 - mmToM(yMm);     // invert so up is +
+  return { xM, yM };
+};
+```
+
+Then change:
+
+```tsx
+xPos={line.xPos}
+yPos={line.yPos}
+```
+
+to:
+
+```tsx
+const p = toCenteredLocalMeters_TopLeft(line.xPos, line.yPos);
+
+xPos={p.xM}
+yPos={p.yM}
+```
+
+So your block becomes:
+
+```tsx
+{inscriptions.map((line, i) => {
+  const zBump = (inscriptions.length - 1 - i) * 0.00005;
+  const p = toCenteredLocalMeters_TopLeft(line.xPos, line.yPos);
+
+  return (
+    <HeadstoneInscription
+      ...
+      xPos={p.xM}
+      yPos={p.yM}
+      zBump={zBump}
+    />
+  );
+})}
+```
+
+✅ Result: when width increases, the positions are reinterpreted correctly around the plaque center, so everything stays visually “centered within the plaque”.
+
+---
+
+## Important: apply the same rule to Motifs and Additions
+
+You render:
+
+```tsx
+<AdditionModel ... />
+<MotifModel ... />
+```
+
+Those components almost certainly also read stored positions/offsets and will drift the same way unless they also convert using current `widthMm/heightMm` (or use normalized `u/v` coordinates).
+
+---
+
+## One quick sanity check
+
+If your stored `xPos/yPos` are **already centered** (i.e., `0` means center), then the correct fix is different: you’d scale by width ratio instead.
+
+You can tell immediately:
+
+* If `line.xPos` values look like `0..widthMm` → it’s top-left based → use the conversion above.
+* If they look like `-200..+200` mm-ish → already centered → don’t subtract `width/2`.
+
+If you paste a single sample `line` object (one inscription) showing `xPos/yPos` values, I’ll tell you which coordinate system you’re using and give the exact final mapping (no guessing).
+
+Yep — that screenshot is exactly what happens when **the plaque/headstone mesh is being resized** but the inscription/motif positions are still interpreted in the **old coordinate space**.
+
+And in your code, that’s literally happening here in `ShapeSwapper.tsx`:
+
+```tsx
+xPos={line.xPos}
+yPos={line.yPos}
+```
+
+So when width grows (square → wide), the geometry changes, but the element layout doesn’t get “re-based” to the new width.
+
+---
+
+## The practical fix: re-map positions using a base width/height
+
+You need one extra piece of info: **what width/height were these element positions created for?**
+
+### Add these to each inscription (or store globally per design)
+
+* `baseWidthMm`
+* `baseHeightMm`
+
+When you first create/place a line, set:
+
+```ts
+baseWidthMm: currentWidthMm,
+baseHeightMm: currentHeightMm
+```
+
+Then when rendering, scale positions to current size.
+
+---
+
+## If your `xPos/yPos` are **center-based** (most likely in 3D)
+
+(0,0 is plaque center)
+
+Use this:
+
+```tsx
+const scaleX = widthMm / (line.baseWidthMm ?? widthMm);
+const scaleY = heightMm / (line.baseHeightMm ?? heightMm);
+
+const x = line.xPos * scaleX;
+const y = line.yPos * scaleY;
+
+<HeadstoneInscription
+  ...
+  xPos={x}
+  yPos={y}
+/>
+```
+
+✅ Result: the *whole layout expands/contracts proportionally* while staying centered.
+
+---
+
+## If your `xPos/yPos` are **top-left based** (UI style)
+
+(0..widthMm from left, 0..heightMm from top)
+
+Use centered scaling around the middle:
+
+```tsx
+const baseW = line.baseWidthMm ?? widthMm;
+const baseH = line.baseHeightMm ?? heightMm;
+
+const scaleX = widthMm / baseW;
+const scaleY = heightMm / baseH;
+
+// scale around center (not around left edge)
+const x = (line.xPos - baseW / 2) * scaleX + widthMm / 2;
+const y = (line.yPos - baseH / 2) * scaleY + heightMm / 2;
+
+<HeadstoneInscription
+  ...
+  xPos={x}
+  yPos={y}
+/>
+```
+
+✅ Result: elements keep their *relative position within the plaque* as width changes, not drifting or compressing.
+
+---
+
+## Don’t forget: apply the same mapping to Motifs + Additions
+
+Right now you render:
+
+```tsx
+<AdditionModel ... />
+<MotifModel ... />
+```
+
+Those components will need the same “base size → current size” remap, or they’ll drift differently from text.
+
+The cleanest way is to pass `widthMm/heightMm` (and base dims) into them, or do the remap in their own code.
+
+---
+
+## Quick way to confirm which coordinate system you’re using
+
+Look at one real value of `line.xPos`:
+
+* If it’s like **20, 150, 600** → it’s probably **mm from left/top**
+* If it’s like **-0.12, 0.08** or **-120..+120** → it’s probably **center-based**
+
+If you paste one `line` object (just `xPos`, `yPos`, and typical range), I’ll tell you which of the two formulas is the correct one for your system and give you the exact final patch (no guesswork).
