@@ -145,7 +145,14 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         const stone = headstone.mesh.current as THREE.Mesh | null;
         if (!stone || !stone.geometry) {
           // Mesh not ready yet (e.g. base texture still loading via Suspense).
-          // Retry next frame so we don't miss the conversion.
+          rafId = requestAnimationFrame(trySetup);
+          return;
+        }
+
+        // Base mesh starts as a unit cube (scale 1,1,1) before useFrame sets
+        // the real dimensions. Wait until useFrame has initialised the mesh so
+        // we read the correct position/scale for coordinate conversion.
+        if (isBaseSurface && Math.abs(stone.scale.y - 1) < 0.01) {
           rafId = requestAnimationFrame(trySetup);
           return;
         }
@@ -178,15 +185,16 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         } else if (isBaseSurface && coordinateSpace === 'mm-center') {
           // Base mesh is a unit cube scaled in meters (assembly space).
           // Anchor mm offsets to the base mesh's world position.
-          const absX = stone.position.x + xPos * mmToLocalUnits;
-          const absY = stone.position.y + yPos * mmToLocalUnits;
+          const absX = stone.position.x + (xPos ?? 0) * mmToLocalUnits;
+          const absY = stone.position.y + (yPos ?? 0) * mmToLocalUnits;
+          const posZ = stone.position.z + stone.scale.z / 2 + liftLocal;
           updateLineStore(id, { xPos: absX, yPos: absY, coordinateSpace: undefined });
-          setPos(new THREE.Vector3(0, 0, stone.position.z + stone.scale.z / 2 + liftLocal));
+          setPos(new THREE.Vector3(0, 0, posZ));
         } else if (coordinateSpace === 'mm-center') {
           // Headstone: geometry is in mm, convert mm center-offsets to absolute local coordinates.
           // Positive yPos = above center → higher Y in geometry space.
-          const absX = bounds.centerX + xPos * mmToLocalUnits;
-          const absY = bounds.centerY + yPos * mmToLocalUnits;
+          const absX = bounds.centerX + (xPos ?? 0) * mmToLocalUnits;
+          const absY = bounds.centerY + (yPos ?? 0) * mmToLocalUnits;
           updateLineStore(id, { xPos: absX, yPos: absY, coordinateSpace: undefined });
           setPos(new THREE.Vector3(0, 0, headstone.frontZ + liftLocal));
         } else if (xPos === 0 && yPos === 0) {
@@ -323,13 +331,29 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             ? state.baseHeightMm ?? state.heightMm
             : state.heightMm;
 
-        updateLineStore(id, {
-          xPos: clampedX,
-          yPos: clampedY,
-          baseWidthMm: baseWidth,
-          baseHeightMm: baseHeight,
-        });
-        setPos(new THREE.Vector3(0, 0, headstone.frontZ + liftLocal));
+        if (isBaseSurface) {
+          // Base mesh is a unit cube: clamped coords are ±0.5.
+          // Convert to assembly-meters for correct rendering.
+          const absX = stone.position.x + clampedX * stone.scale.x;
+          const absY = stone.position.y + clampedY * stone.scale.y;
+          const posZ = stone.position.z + stone.scale.z / 2 + liftLocal;
+          updateLineStore(id, {
+            xPos: absX,
+            yPos: absY,
+            coordinateSpace: undefined,
+            baseWidthMm: baseWidth,
+            baseHeightMm: baseHeight,
+          });
+          setPos(new THREE.Vector3(0, 0, posZ));
+        } else {
+          updateLineStore(id, {
+            xPos: clampedX,
+            yPos: clampedY,
+            baseWidthMm: baseWidth,
+            baseHeightMm: baseHeight,
+          });
+          setPos(new THREE.Vector3(0, 0, headstone.frontZ + liftLocal));
+        }
       },
       [
         camera,

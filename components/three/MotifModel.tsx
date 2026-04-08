@@ -244,7 +244,14 @@ export default function MotifModel({
       const coordinateSpace = currentOffset.coordinateSpace ?? (currentOffset.target !== undefined ? 'absolute' : 'offset');
       const isCanonical = coordinateSpace === 'absolute' || coordinateSpace === 'mm-center';
 
-      if (isCanonical) {
+      if (isBaseSurface && isCanonical) {
+        // Base mesh is a unit cube: localPt is ±0.5. Convert to mm offsets
+        // from the base center so the mm-center rendering path handles z correctly.
+        dragPositionRef.current = {
+          xPos: localPt.x * targetMesh.scale.x * 1000,
+          yPos: localPt.y * targetMesh.scale.y * 1000,
+        };
+      } else if (isCanonical) {
         dragPositionRef.current = {
           xPos: localPt.x,
           yPos: localPt.y,
@@ -264,7 +271,8 @@ export default function MotifModel({
             setMotifOffset(id, {
               ...currentOffset,
               ...dragPositionRef.current,
-              coordinateSpace: isCanonical ? 'absolute' : 'offset',
+              // Keep mm-center for base so z is computed from mesh position
+              coordinateSpace: isBaseSurface ? 'mm-center' : (isCanonical ? 'absolute' : 'offset'),
               target: surface,
             });
           }
