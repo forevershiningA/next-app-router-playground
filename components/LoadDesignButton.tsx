@@ -20,6 +20,7 @@ import { getAllSavedDesigns, type SavedDesignMetadata } from '#/lib/saved-design
 import { loadDesignById } from '#/components/DefaultDesignLoader';
 import { loadMLData, getMLCategories, type MLDesignEntry } from '#/lib/ml-search-service';
 import { useHiddenDesigns } from '#/lib/useHiddenDesigns';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 interface LoadDesignButtonProps {
   label?: string;
@@ -226,6 +227,9 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
 
   const { isLocalhost, hiddenIds, hideDesign, favoriteIds, toggleFavorite } = useHiddenDesigns();
 
+  // Get current product from store for filtering
+  const productId = useHeadstoneStore((s) => s.productId);
+
   const allDesigns = useMemo(() => {
     const designs = getAllSavedDesigns();
     if (hiddenIds.size === 0) return designs;
@@ -245,8 +249,13 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
   const filteredDesigns = useMemo(() => {
     let result = allDesigns;
 
-    // Text search
+    // Filter by current product when no search/ML filters are active
     const needle = search.trim().toLowerCase();
+    if (!needle && !hasMLFilters && productId) {
+      result = result.filter((d) => d.productId === productId);
+    }
+
+    // Text search
     if (needle) {
       result = result.filter((design) => {
         const ml = mlIndex.get(design.id);
@@ -275,7 +284,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
     }
 
     return result;
-  }, [allDesigns, search, mlType, mlStyle, mlMotif, mlIndex]);
+  }, [allDesigns, search, mlType, mlStyle, mlMotif, mlIndex, hasMLFilters, productId]);
 
   const tree = useMemo(() => buildCategoryTree(filteredDesigns), [filteredDesigns]);
   const categoryEntries = useMemo(() => sortCategoryEntries(Object.entries(tree)), [tree]);
@@ -338,7 +347,14 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
             <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
               <div>
                 <h2 className="text-xl font-semibold text-white">Load Design</h2>
-                <p className="text-sm text-white/70">{totalCount.toLocaleString()} designs available</p>
+                <p className="text-sm text-white/70">
+                  {totalCount.toLocaleString()} designs available
+                  {productId && !search.trim() && !hasMLFilters && filteredDesigns.length > 0 && (
+                    <span className="ml-1 text-amber-400/80">
+                      · {filteredDesigns[0].productName}
+                    </span>
+                  )}
+                </p>
               </div>
               <button
                 onClick={closeModal}

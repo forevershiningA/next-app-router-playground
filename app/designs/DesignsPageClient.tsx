@@ -29,7 +29,7 @@ export default function DesignsPageClient() {
   const [isSearching, setIsSearching] = useState(false);
   const [mlReady, setMlReady] = useState(false);
   const mlIndexRef = useRef<Map<string, MLDesignEntry>>(new Map());
-  const searchTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Load designs (filter out hidden ones on localhost)
   useEffect(() => {

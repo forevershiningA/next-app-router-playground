@@ -1307,10 +1307,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   // },
   motifOffsets: {},
 
-  selectedEmblemId: null,
-  emblemRefs: {},
-  emblemOffsets: {},
-
   setInscriptions: (inscriptions) => {
     if (typeof inscriptions === 'function') {
       set((s) => ({

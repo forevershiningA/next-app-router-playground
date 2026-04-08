@@ -52,6 +52,7 @@ export type CanonicalDesignData = {
       height_mm?: number;
       thickness_mm?: number;
       texture?: string;
+      shape?: string;
     };
     base?: {
       width_mm?: number;
@@ -1955,7 +1956,7 @@ export async function loadCanonicalDesignIntoEditor(
     const xPos = xMm * scaleX * GLOBAL_LAYOUT_SCALE;
     const baseYPos = yMm * scaleY * GLOBAL_LAYOUT_SCALE;
     const baseSize = clampCanonicalSize(resolveFontSizeMm(inscription.font, targetSurface, id));
-    const scaledSize = clampCanonicalSize(baseSize * GLOBAL_LAYOUT_SCALE);
+    const scaledSize = clampCanonicalSize(baseSize * INSCRIPTION_SIZE_SCALE * GLOBAL_LAYOUT_SCALE);
 
     if (targetSurface === 'headstone') {
       recordRangeValue(headstoneRangeTracker, baseYPos);
@@ -2050,7 +2051,7 @@ export async function loadCanonicalDesignIntoEditor(
     const rotationZ = canonicalToRadians(motif.rotation?.z_deg);
     // Prefer legacy.raw flip values (handles both string/number types correctly).
     // Fall back to canonical flip bools when legacy.raw is unavailable.
-    const legacyFlip = legacyMotifFlipByCanonicalId.get(motif.id);
+    const legacyFlip = motif.id ? legacyMotifFlipByCanonicalId.get(motif.id) : undefined;
     const flipX = legacyFlip ? legacyFlip.x : (motif.flip?.x ?? false);
     const flipY = legacyFlip ? legacyFlip.y : (motif.flip?.y ?? false);
 
@@ -2080,7 +2081,7 @@ export async function loadCanonicalDesignIntoEditor(
           if (!Array.isArray(designData.legacy?.raw)) return [];
           return designData.legacy.raw
             .filter(
-              (item): item is Record<string, unknown> =>
+              (item) =>
                 !!item &&
                 (item.type === 'Photo' || item.type === 'Picture'),
             )

@@ -369,11 +369,14 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
 
     const baseAPI: HeadstoneAPI = useMemo(() => {
       const baseDepth = baseThickness / 1000; // Convert mm to meters
+      // Base mesh is a unit cube (±0.5) scaled in meters (assembly space).
+      // Use unitsPerMeter=1 so mmToLocalUnits=0.001 (mm→meters), matching
+      // the assembly coordinate space that base inscriptions/motifs live in.
       return {
         group: dummyGroupRef as React.RefObject<THREE.Group>,
         mesh: baseRef as React.RefObject<THREE.Mesh>,
         frontZ: baseDepth / 2,
-        unitsPerMeter: 1000,
+        unitsPerMeter: 1,
         version: 1,
         worldWidth: (widthMm / 1000) * BASE_WIDTH_MULTIPLIER,
         worldHeight: height,

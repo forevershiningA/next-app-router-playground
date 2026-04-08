@@ -166,8 +166,15 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             stone.position.y + stone.scale.y / 2 + liftLocal,
             stone.position.z,
           ));
+        } else if (isBaseSurface && coordinateSpace === 'mm-center') {
+          // Base mesh is a unit cube scaled in meters (assembly space).
+          // Anchor mm offsets to the base mesh's world position.
+          const absX = stone.position.x + xPos * mmToLocalUnits;
+          const absY = stone.position.y + yPos * mmToLocalUnits;
+          updateLineStore(id, { xPos: absX, yPos: absY, coordinateSpace: undefined });
+          setPos(new THREE.Vector3(0, 0, stone.position.z + stone.scale.z / 2 + liftLocal));
         } else if (coordinateSpace === 'mm-center') {
-          // Loaded design: convert mm center-offsets to absolute local coordinates.
+          // Headstone: geometry is in mm, convert mm center-offsets to absolute local coordinates.
           // Positive yPos = above center → higher Y in geometry space.
           const absX = bounds.centerX + xPos * mmToLocalUnits;
           const absY = bounds.centerY + yPos * mmToLocalUnits;
@@ -178,7 +185,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         }
       });
       return () => cancelAnimationFrame(raf);
-    }, [headstone.mesh, headstone.frontZ, isLedgerSurface, liftLocal, xPos, yPos, coordinateSpace, mmToLocalUnits, id, updateLineStore]);
+    }, [headstone.mesh, headstone.frontZ, isLedgerSurface, isBaseSurface, liftLocal, xPos, yPos, coordinateSpace, mmToLocalUnits, id, updateLineStore]);
 
     /* ------------------------------ helper: place by pointer ----------------------------- */
     const placeOnLedgerSurface = React.useCallback(

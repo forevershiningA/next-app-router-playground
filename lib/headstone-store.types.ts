@@ -180,8 +180,7 @@ export type HeadstoneState = {
       widthMm: number;
       heightMm: number;
       target: 'headstone' | 'base' | 'ledger';
-      coordinateSpace?: 'offset' | 'mm-center';
-      baseWidthMm?: number;
+      coordinateSpace?: 'offset' | 'mm-center' | 'absolute';      baseWidthMm?: number;
       baseHeightMm?: number;
     }
   >;

@@ -25,7 +25,7 @@ export type SavedMotifOffset = {
   rotationZ: number;
   heightMm: number;
   target?: 'headstone' | 'base' | 'ledger';
-  coordinateSpace?: 'absolute' | 'offset';
+  coordinateSpace?: 'absolute' | 'offset' | 'mm-center';
   flipX?: boolean;
   flipY?: boolean;
   baseWidthMm?: number;
@@ -42,7 +42,7 @@ export type SavedEmblemOffset = {
   widthMm: number;
   heightMm: number;
   target: 'headstone' | 'base' | 'ledger';
-  coordinateSpace?: 'offset' | 'mm-center';
+  coordinateSpace?: 'offset' | 'mm-center' | 'absolute';
   baseWidthMm?: number;
   baseHeightMm?: number;
 };

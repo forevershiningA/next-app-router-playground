@@ -596,6 +596,14 @@ export default function MotifModel({
     const ledgerLift = 0.001;
     groupPosition = [displayLedgerX, ledgerTopY + ledgerLift, displayLedgerZ];
     groupRotation = [-Math.PI / 2, offset.rotationZ || 0, 0];
+  } else if (isBaseSurface && isMmCenter) {
+    // Base mesh is a unit cube at stone.position, scaled in meters (assembly space).
+    // Anchor mm offsets to the base mesh's world position.
+    const absX = stone.position.x + scaledOffsetX * mmToLocalUnits;
+    const absY = stone.position.y + scaledOffsetY * mmToLocalUnits;
+    const baseFrontZ = stone.position.z + stone.scale.z / 2 + 0.001;
+    groupPosition = [absX, absY, baseFrontZ];
+    groupRotation = [0, 0, offset.rotationZ || 0];
   } else if (isMmCenter) {
     // Loaded design: mm offsets from center, positive Y = above center
     const displayX = centerX + scaledOffsetX * mmToLocalUnits;

@@ -167,11 +167,11 @@ export default function Scene({
 
   // Expose scene & renderer for external tools (batch screenshot script)
   useEffect(() => {
-    (window as Record<string, unknown>).__r3fScene = scene;
-    (window as Record<string, unknown>).__r3fGL = gl;
+    (window as unknown as Record<string, unknown>).__r3fScene = scene;
+    (window as unknown as Record<string, unknown>).__r3fGL = gl;
     return () => {
-      delete (window as Record<string, unknown>).__r3fScene;
-      delete (window as Record<string, unknown>).__r3fGL;
+      delete (window as unknown as Record<string, unknown>).__r3fScene;
+      delete (window as unknown as Record<string, unknown>).__r3fGL;
     };
   }, [scene, gl]);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
