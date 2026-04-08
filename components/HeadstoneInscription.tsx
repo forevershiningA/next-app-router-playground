@@ -503,13 +503,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
     const groupPosition: [number, number, number] = isLedgerSurface
       ? [pos.x + (xPos ?? 0) * ledgerScaleX, pos.y + zBump, pos.z + (yPos ?? 0) * ledgerScaleZ]
-      : isBaseSurface && coordinateSpace === 'mm-center' && baseMesh
-        ? [
-            baseMesh.position.x + (xPos ?? 0) * mmToLocalUnits,
-            baseMesh.position.y + (yPos ?? 0) * mmToLocalUnits,
-            baseMesh.position.z + baseMesh.scale.z / 2 + liftLocal + zBump,
-          ]
-        : coordinateSpace === 'mm-center' && surfaceBounds
+      : coordinateSpace === 'mm-center' && surfaceBounds
         ? [
             surfaceBounds.centerX + (xPos ?? 0) * mmToLocalUnits,
             surfaceBounds.centerY + (yPos ?? 0) * mmToLocalUnits,
@@ -519,6 +513,20 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const groupRotation: [number, number, number] = isLedgerSurface
       ? [-Math.PI / 2, rotationRad, 0]
       : [0, 0, rotationRad];
+
+    // Base inscriptions: useFrame tracks the base mesh position imperatively
+    // because the mesh position is set by HeadstoneBaseAuto's useFrame (not
+    // React state), so it's (0,0,0) at first render. This mirrors the pattern
+    // used by HeadstoneBaseAuto itself.
+    useFrame(() => {
+      if (!isBaseSurface || coordinateSpace !== 'mm-center' || !baseMesh || !groupRef.current) return;
+      groupRef.current.position.set(
+        baseMesh.position.x + (xPos ?? 0) * mmToLocalUnits,
+        baseMesh.position.y + (yPos ?? 0) * mmToLocalUnits,
+        baseMesh.position.z + baseMesh.scale.z / 2 + liftLocal + zBump,
+      );
+      groupRef.current.visible = true;
+    });
 
     return (
       <group
