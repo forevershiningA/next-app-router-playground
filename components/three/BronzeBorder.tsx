@@ -652,7 +652,7 @@ function buildBorderGroup(
       const lerpedOverride = THREE.MathUtils.lerp(1, rawOverride, smallPlaqueFactor);
       uniformScale *= lerpedOverride;
     }
-    uniformScale *= 2.5;
+    uniformScale *= 5.0;
     merged.scale(uniformScale, uniformScale, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
@@ -668,8 +668,8 @@ function buildBorderGroup(
     const coverageX = (scaledBounds.max.x - scaledBounds.min.x) / width;
     const coverageY = (scaledBounds.max.y - scaledBounds.min.y) / height;
     const coverageLerp = clamp01((minDimensionMm - 320) / 520);
-    const minTargetCoverage = 0.92;
-    const maxTargetCoverage = 0.96;
+    const minTargetCoverage = 0.97;
+    const maxTargetCoverage = 0.99;
     const targetCoverage = THREE.MathUtils.lerp(minTargetCoverage, maxTargetCoverage, coverageLerp);
     const dominantCoverage = Math.max(coverageX, coverageY);
 

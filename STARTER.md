@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-06
+**Last Updated:** 2026-04-08
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
 
 ---
@@ -34,6 +34,147 @@
 26. [UI Theming & Primary Color](#ui-theming--primary-color)
 27. [Design Management Scripts](#design-management-scripts)
 28. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-04-08) — Base Inscription/Motif Rendering, Border Sizing, Anonymization Fix, Load Design Filtering, VitePress Docs
+
+### ✅ Base Inscription Rendering (Full Monuments)
+
+Base inscriptions (e.g., "CICERO" on the pedestal base of a full monument) were completely invisible in loaded designs. This was a deep multi-layered bug:
+
+#### Root Cause Chain
+1. **`INSCRIPTION_SIZE_SCALE = 0.85` was declared but NEVER applied** — font sizes in loaded designs were 15% too large
+2. **Base mesh `unitsPerMeter = 1000`** was wrong — base is a unit cube scaled in meters, changed to `unitsPerMeter = 1`
+3. **`useEffect` for `surfaceBounds` was perpetually cancelled** — 19 headstone inscriptions each call `updateLineStore`, causing re-renders that cancel the base inscription's useEffect before it can compute bounds
+4. **`baseMesh.position` is `(0,0,0)` at React render time** — `HeadstoneBaseAuto` sets position via `useFrame` (not React state), so the inscription group was placed at the origin
+
+#### Solution
+- **useFrame hook** in `HeadstoneInscription.tsx` (~line 517): imperatively tracks base mesh `position` and `scale` every frame, matching `HeadstoneBaseAuto`'s own pattern. Bypasses React rendering entirely.
+- **Visibility guard**: `visible={coordinateSpace !== 'mm-center' || !!surfaceBounds || (isBaseSurface && !!baseMesh)}`
+- **mm-center branch**: dedicated coordinate handling for base surface inscriptions (unit-cube local coords → assembly meters)
+
+#### Files Changed
+- `components/HeadstoneInscription.tsx` — useFrame position tracking, visibility guard, base mm-center branch
+- `components/three/headstone/HeadstoneBaseAuto.tsx` — `baseAPI.unitsPerMeter = 1` (was 1000)
+- `lib/saved-design-loader-utils.ts` — Applied `INSCRIPTION_SIZE_SCALE` to font sizes
+
+### ✅ Base Motif Rendering & Drag (Full Monuments)
+
+Base motifs now render correctly and can be dragged on the base surface.
+
+#### Fixes
+- **mm-center groupPosition branch** in `MotifModel.tsx` (~lines 607-614): reads `stone.position` directly for base surface placement
+- **Drag handler** in `MotifModel.tsx` (~lines 247-275): converts unit-cube local coords to mm offsets for base surface
+- **Inscription drag handler** in `HeadstoneInscription.tsx` (~lines 289-357): base-specific unit-cube → assembly-meters conversion
+
+### ✅ Bronze Plaque Border Sizing
+
+Border ornaments on bronze plaques were too small compared to legacy original designs.
+
+#### Root Cause
+The `buildBorderGroup()` function in `BronzeBorder.tsx` had two issues:
+1. **`uniformScale *= 2.5`** — initial SVG scale was too small, border stayed undersized
+2. **Coverage targets too low** — `minTargetCoverage = 0.78`, `maxTargetCoverage = 0.90` capped the border at 78-90% of plaque area. Original legacy borders filled ~97%+ of the plaque
+
+#### Fix
+- `uniformScale` multiplier: `2.5` → `5.0`
+- `minTargetCoverage`: `0.78` → `0.97`
+- `maxTargetCoverage`: `0.90` → `0.99`
+
+For a 306×200mm plaque, border ornaments now cover 97% of the plaque area (was 78%), placing decorative elements right near the edges like the original.
+
+#### Files Changed
+- `components/three/BronzeBorder.tsx` — Coverage targets and scale multiplier
+
+### ✅ Anonymization Sanitizer Fixes
+
+Design 1635118332028 showed real names ("Margaret Edith SEATON", "nee (DICKINS)") — the sanitizer had three bugs:
+
+#### Bug 1: Substring Matching in Sentence Regex
+The `sentenceRegex` used `/(are|or|is|be|me|...)/i` WITHOUT word boundaries (`\b`). This matched substrings inside names:
+- "M**are**garet" → matched `are` → classified as "sentence" → skipped anonymization
+- "Vict**or**ia", "Rob**ert**" (contains `be`), "Ja**me**s" (contains `me`), etc.
+
+**Fix:** Added `\b` word boundaries: `/\b(the|you|me|...)\b/i`
+
+#### Bug 2: Parentheses Not Stripped
+`upperWords` cleanup regex `['".,!?]` didn't include `()`. So `"(DICKINS)"` was never matched against the surname database.
+
+**Fix:** Extended regex to `['".,!?()]`
+
+#### Bug 3: "nee (SURNAME)" Pattern Not Handled
+The maiden name pattern "nee (DICKINS)" or "née SURNAME" was never explicitly handled.
+
+**Fix:** Added dedicated handler before word-level analysis:
+```javascript
+const neeMatch = text.match(/\b(?:nee|née)\s*\(?([A-Za-z'-]+)\)?/i);
+```
+
+#### Impact Assessment
+Full scan of 23,086 designs found 18,090 potentially affected by the regex bug. Many are already-anonymized replacement names being re-matched (harmless), but some contain real names that slipped through.
+
+#### Files Changed
+- `scripts/utils/inscription-sanitizer.js` — All three fixes + nee handler
+- `public/designs/v2026-rollout-full-20260324-190828/1635118332028.json` — Re-anonymized
+
+### ✅ Load Design Popup: Product Filtering
+
+The Load Design popup now filters designs by the **current product ID** (not just broad product type). Previously selecting "Traditional Engraved Headstone" still showed "Laser Etched Black Granite" designs.
+
+#### Implementation
+- `getProductTypeFromId()` in `LoadDesignButton.tsx` maps product IDs to their exact product type
+- Each design in `SAVED_DESIGNS` has a `productId` that is matched against the currently selected product
+- Fallback: if no product is selected, all designs are shown
+
+### ✅ VitePress Documentation
+
+Created structured project documentation in `/docs/` with VitePress static site generator.
+
+#### Documentation Pages
+| Page | Contents |
+|------|----------|
+| `docs/index.md` | Overview & quick start |
+| `docs/architecture.md` | Tech stack, directory structure, data flow |
+| `docs/routes.md` | App Router structure, all routes |
+| `docs/three-scene.md` | 3D scene graph, lighting, camera |
+| `docs/components.md` | React component inventory |
+| `docs/state-management.md` | Zustand store architecture |
+| `docs/database-schema.md` | Drizzle ORM schema |
+| `docs/configuration.md` | Config files, env vars |
+| `docs/scripts.md` | Build & utility scripts |
+| `docs/api-store.md` | Store API reference |
+| `docs/api-utilities.md` | Utility functions reference |
+| `docs/api-three.md` | Three.js components reference |
+| `docs/api-auth-db.md` | Auth & DB API reference |
+| `docs/api-hooks-constants.md` | Hooks & constants reference |
+
+#### Commands
+```bash
+pnpm docs:dev    # Dev server with hot reload
+pnpm docs:build  # Static HTML build (14 pages)
+```
+
+VitePress configured with `base: './'` for `file://` protocol browsing.
+
+### ✅ Type Error Fixes
+
+Reduced pre-existing TypeScript errors from 28 to 13 across 7 files:
+- `app/designs/DesignsPageClient.tsx` — Fixed `useRef` for React 19
+- `lib/headstone-store.types.ts` — Added `'absolute'` to emblem coordinateSpace union
+- `lib/headstone-store.ts` — Removed 3 duplicate properties
+- `components/three/Scene.tsx` — Fixed window cast
+- `lib/project-schemas.ts` — Added coordinate space values to unions
+
+Remaining 13 errors are config-level (`downlevelIteration` tsconfig issues).
+
+### 📌 Next Steps
+
+1. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top (math analysis shows positions SHOULD be correct; likely useEffect timing or geometry bounds issue)
+2. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug. Need user approval before bulk re-run.
+3. **Visual QA pass** — Continue comparing designs with original screenshots
+4. **Batch-convert remaining ~2,891 designs** — Only 223 have canonical JSON
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
 
 ---
 
@@ -228,6 +369,11 @@ Playwright-based automation that loads each design into the 3D editor, anonymize
 - Name databases: `public/json/firstnames_f_small.json`, `firstnames_m_small.json`, `surnames_small.json`
 - Deterministic replacement via hash of original text
 - Preserves memorial phrases, dates, and structure
+- **2026-04-08 Fixes:**
+  - Added `\b` word boundaries to sentence-detection regex (was matching "are" inside "Margaret", "be" inside "Robert", etc.)
+  - Added `()` to word cleanup regex so `"(DICKINS)"` is matched in surname database
+  - Added "nee (SURNAME)" / "née SURNAME" dedicated pattern handler
+  - Impact: ~18k of 23k designs potentially affected by the original regex bug
 
 #### Known Issues & Workarounds
 - **baseSwapping stuck**: `enforceTexture()` sets `baseSwapping: true`; if `PreloadTexture.onReady` never fires, stays true forever. Script force-clears after 8s.
@@ -2725,6 +2871,26 @@ The old comment "// OLD designs: saved in Y-down coordinates (entire group was Y
 - **SVG scale**: 0.01 (scaled down in world space)
 - **BBox units**: Direct mm values (e.g., 600mm width)
 - **unitsPerMeter**: ~667 (conversion factor from SVG to world space)
+- **`mmToLocalUnits`**: varies per surface — ~1.0 for standard headstones, ~1.739 for landscape plaques, 0.001 for base
+
+### Base Surface Coordinate System (Updated 2026-04-08)
+- **Base mesh**: `BoxGeometry(1,1,1)` — unit cube, `unitsPerMeter = 1`
+- **Position/scale**: Set by `HeadstoneBaseAuto.useFrame()` via lerp, NOT React state
+- **`mmToLocalUnits = 0.001`** — converts mm to base local units (unit cube scaled in meters)
+- **Inscription/motif rendering**: Must use `useFrame` to track base mesh position every frame (React render sees `(0,0,0)`)
+- **Drag conversion**: Unit-cube local coords → mm offsets via `localPoint * baseDim` (where baseDim comes from mesh scale × 1000)
+
+### Legacy Position Conversion Chain (Updated 2026-04-08)
+1. Legacy px coordinates (center-origin, from CreateJS canvas at DPR-scaled resolution)
+2. → mm offsets via `uniformMmPerPx = maxMonumentDimensionMm / legacyMonumentDrawPx`
+3. → stored as `coordinateSpace: 'mm-center'` in Zustand store
+4. → `HeadstoneInscription.useEffect` converts to absolute SVG local units: `absY = bounds.centerY + yPosMm * mmToLocalUnits`
+5. → stored back with `coordinateSpace: undefined`
+6. → rendered via default `groupPosition` path: `[pos.x + xPos, pos.y + yPos, pos.z]`
+
+**Key Ratios:**
+- Position conversion: `mmPerPx = headstoneHeightMm / (init_height × DPR)` — DPR-scaled physical px
+- Font size conversion: viewport-based `HEADSTONE_MM_PER_PX_Y_CANONICAL` — CSS px (not DPR-scaled)
 
 ### Z-Positioning (Depth)
 - **Headstone surface**: `headstone.frontZ` (front face of stone)
@@ -2782,6 +2948,7 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 - **2026-01-19 update:** every catalog slug now maps to a dedicated `borderXa.svg` file that already contains the extended rail artwork. BronzeBorder scales the merged SVG to the plaque bounds, clamps it inside a four-plane mask (±width/2, 0→height), and disposes/rehydrates textures for each load so the rail artwork stretches perfectly to whatever width/height the user selects without overlapping neighboring corners. The legacy dual-line rail generator still runs for any slug that lacks a suffixed SVG.
 - **2026-01-20 rollback:** the experimental 9-slice border system from advice8/9 was reverted after a console error surfaced; BronzeBorder is presently back to the "single merged mesh" workflow with whole-group scaling plus the debounced rebuild/fast-path stretch described below. The 9-slice plan (per advice7‑9) remains documented for future reimplementation once the runtime error is understood, and the refreshed `border1a.svg` now ships at 4800×4800px so its engraved detail stays crisp even though the current code continues to scale the entire mesh uniformly.
 - **2026-02-07 update:** edge thickness, line gaps, and decorative rail spans now scale off the plaque’s shorter side with aggressive compression on near-square plaques, fallback inset anchors inherit the same scaling so the dual selection rails hug the plaque edges, and the bronze highlight color lightened to `#FFDFA3` for better contrast. *(Resolved 2026-02-14 — inset clamps now subtract an extra 12 mm per edge on ≤0.9 aspect plaques, matching the latest QA captures.)*
+- **2026-04-08 fix:** border coverage targets increased from 78-90% to 97-99% and initial `uniformScale` multiplier from 2.5× to 5.0×. Small plaques (e.g., 306×200mm) now match legacy border sizing where ornaments fill nearly the entire plaque face.
 
 **Detection:**
 ```typescript
@@ -4264,6 +4431,8 @@ The ML smart search system provides intelligent filtering and ranking for the `/
 ### Overview
 The Load Design modal (`components/LoadDesignButton.tsx`) is a searchable category-first browser for all 3,114+ saved designs. It opens from the canvas top-right corner and allows loading any design into the 3D editor.
 
+**Product Filtering (2026-04-08):** The popup filters designs by the current product ID — selecting "Traditional Engraved Headstone" only shows headstone designs, not laser-etched or bronze plaque designs. Uses `getProductTypeFromId()` to map product IDs to exact types. Falls back to showing all designs if no product is selected.
+
 ### Tree Structure (Category-First — April 2026)
 Designs are organized in a **single-level collapsible tree** grouped by content category (not product type):
 1. **Category** (top-level): Groups by `category` (e.g., "Pet Memorial", "Mother Memorial", "Biblical Memorial")
@@ -4548,6 +4717,22 @@ useEffect(() => {
 ---
 
 ## Common Issues & Solutions
+
+### Issue: Base Inscriptions Not Rendering (Fixed 2026-04-08)
+**Symptom:** Inscriptions on the base surface (e.g., "CICERO") are invisible when loading full monument designs.
+
+**Root Cause (4 layers):**
+1. `INSCRIPTION_SIZE_SCALE = 0.85` was declared but never applied → fonts 15% too large
+2. `baseAPI.unitsPerMeter = 1000` was wrong for unit cube → changed to `1`
+3. `useEffect` for `surfaceBounds` perpetually cancelled by sibling inscription re-renders
+4. `baseMesh.position` is `(0,0,0)` at React render time (set by `useFrame`, not React state)
+
+**Solution:**
+- `useFrame` hook in `HeadstoneInscription.tsx` imperatively tracks base mesh position every frame
+- Visibility guard bypasses `surfaceBounds` requirement for base inscriptions
+- Separate mm-center coordinate branch for base surface
+
+**Commits:** `3e52214687`, `4a0cad30a5`, `fbaa40ee35`
 
 ### Issue: Headstone/Base Alignment Issues on Init
 **Symptom:** Headstone back edge and base back edge not aligned on initial load for Traditional Engraved Headstone
