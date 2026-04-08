@@ -122,12 +122,21 @@ function sanitizeInscription(text, category = '') {
     }
   }
 
+  // "nee (SURNAME)" or "née SURNAME" — maiden name pattern, always contains a real surname
+  const neeMatch = text.match(/\b(?:nee|née)\s*\(?([A-Za-z'-]+)\)?/i);
+  if (neeMatch) {
+    const maidenName = getRandomSurname(neeMatch[1]);
+    const wasUpper = neeMatch[1] === neeMatch[1].toUpperCase();
+    const replacement = wasUpper ? maidenName.toUpperCase() : maidenName;
+    return text.replace(neeMatch[1], replacement);
+  }
+
   const words = text.split(/\s+/).filter(Boolean);
-  const upperWords = words.map((w) => w.toUpperCase().replace(/['".,!?]/g, ''));
+  const upperWords = words.map((w) => w.toUpperCase().replace(/['".,!?()]/g, ''));
   const hasFirstName = upperWords.some((w) => db.firstNames.has(w));
   const hasSurname = upperWords.some((w) => db.surnames.has(w));
 
-  const sentenceRegex = /(the|you|me|my|your|when|feel|know|am|are|is|see|being|part|of|and|or|not|lost|may|be|thine|thy|thee|heaven|eternal|happiness|shall|will|has|had|was|were|would|could|should|our|their|us|we)/i;
+  const sentenceRegex = /\b(the|you|me|my|your|when|feel|know|am|are|is|see|being|part|of|and|or|not|lost|may|be|thine|thy|thee|heaven|eternal|happiness|shall|will|has|had|was|were|would|could|should|our|their|us|we)\b/i;
   const looksLikeSentence = sentenceRegex.test(text);
 
   if (hasFirstName && words.length === 1 && !hasDatePattern) {
@@ -167,7 +176,7 @@ function sanitizeInscription(text, category = '') {
 
   const hasLowerCase = /[a-z]/.test(text);
   const shortPhrase = words.length <= 8;
-  const sentenceWords = /(the|you|me|my|your|when|feel|know|am|are|is|see|being|part|of|and|or|not|lost)/i.test(text);
+  const sentenceWords = /\b(the|you|me|my|your|when|feel|know|am|are|is|see|being|part|of|and|or|not|lost)\b/i.test(text);
   if (hasLowerCase && shortPhrase && sentenceWords) {
     return text;
   }

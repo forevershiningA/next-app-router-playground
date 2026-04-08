@@ -668,8 +668,8 @@ function buildBorderGroup(
     const coverageX = (scaledBounds.max.x - scaledBounds.min.x) / width;
     const coverageY = (scaledBounds.max.y - scaledBounds.min.y) / height;
     const coverageLerp = clamp01((minDimensionMm - 320) / 520);
-    const minTargetCoverage = 0.78;
-    const maxTargetCoverage = 0.9;
+    const minTargetCoverage = 0.92;
+    const maxTargetCoverage = 0.96;
     const targetCoverage = THREE.MathUtils.lerp(minTargetCoverage, maxTargetCoverage, coverageLerp);
     const dominantCoverage = Math.max(coverageX, coverageY);
 
