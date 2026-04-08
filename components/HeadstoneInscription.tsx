@@ -500,9 +500,10 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const ledgerScaleX = ledgerMesh ? ledgerMesh.scale.x : 1;
     const ledgerScaleZ = ledgerMesh ? ledgerMesh.scale.z : 1;
     const baseMesh = isBaseSurface ? (headstone.mesh.current as THREE.Mesh | null) : null;
+
     const groupPosition: [number, number, number] = isLedgerSurface
       ? [pos.x + (xPos ?? 0) * ledgerScaleX, pos.y + zBump, pos.z + (yPos ?? 0) * ledgerScaleZ]
-      : isBaseSurface && coordinateSpace === 'mm-center' && baseMesh && surfaceBounds
+      : isBaseSurface && coordinateSpace === 'mm-center' && baseMesh
         ? [
             baseMesh.position.x + (xPos ?? 0) * mmToLocalUnits,
             baseMesh.position.y + (yPos ?? 0) * mmToLocalUnits,
@@ -524,7 +525,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         ref={groupRef}
         position={groupPosition}
         rotation={groupRotation}
-        visible={coordinateSpace !== 'mm-center' || !!surfaceBounds}
+        visible={coordinateSpace !== 'mm-center' || !!surfaceBounds || (isBaseSurface && !!baseMesh)}
       >
         {/* Main text */}
         <Text
