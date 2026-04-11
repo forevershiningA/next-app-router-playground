@@ -37,7 +37,88 @@
 
 ---
 
-## Current Status (2026-04-11) — Batch Screenshot Generation Complete & Thumbnail Fix
+## Current Status (2026-04-11) — Volume-Based Pricing, PNG Thumbnails, Load Design & Nav Fixes
+
+### ✅ Volume-Based Pricing with Thickness (computeQuantity)
+
+**Critical discovery:** The legacy 3D system (`createJS/Quote.js:1476-1486`) overrides `quantityType` to `"Area"` for ALL products in 3D mode except IDs 4, 5, 30, 34. `"Area"` pricing uses `MODEL_STONE_VOLUME_CUBIC_METERS` (actual 3D mesh volume) × material m³ price × retail multiplier. This is fundamentally different from the XML formula-based pricing.
+
+Since we don't have m³ material pricing data, we adapted by including `depth` (thickness) in the formula-based quantity calculation:
+
+- **Created `computeQuantity()`** — shared helper in `lib/xml-parser.ts` (replaces duplicated switch logic across 7 files)
+- **`"Width + Height"`** formula changed: `width + height` → `width + height + depth` (headstone thickness now affects price)
+- **`"Width"`** formula unchanged: `width + depth` (base thickness already affected price)
+- **Default fallback**: `width + height + depth`
+
+```typescript
+// lib/xml-parser.ts
+export function computeQuantity(
+  priceModel: PriceModel,
+  dims: { width: number; height: number; depth: number },
+): number {
+  switch (priceModel.quantityType) {
+    case 'Width * Height':  return dims.width * dims.height;
+    case 'Width + Height':  return dims.width + dims.height + dims.depth;
+    case 'Width':           return dims.width + dims.depth;
+    case 'Area':            return dims.width * dims.height;
+    default:                return dims.width + dims.height + dims.depth;
+  }
+}
+```
+
+**Files updated to use `computeQuantity()`:**
+- `components/ThreeScene.tsx` — bottom price chip
+- `components/CheckPricePanel.tsx` — price popup
+- `components/DesignerNav.tsx` — sidebar price
+- `components/MobileHeader.tsx` — mobile header price
+- `components/DesignsTreeNav.tsx` — tree nav price
+- `app/check-price/_ui/CheckPriceGrid.tsx` — /check-price page
+- `app/select-size/(checkout)/checkout/page.tsx` — checkout
+
+### ✅ Thickness Dimensions in Pricing UI
+
+All pricing displays now show **W × H × D** (width × height × depth/thickness) instead of just W × H:
+
+- **CheckPricePanel** (popup) — headstone row changed from `formatDimensionPair` to `formatDimensionTriplet`
+- **CheckPriceGrid** (/check-price page) — headstone and base rows show `{widthMm}mm × {heightMm}mm × {uprightThickness}mm`
+- **Bug fix**: CheckPricePanel headstone row was incorrectly showing `ledgerMaterialUrl` instead of `headstoneMaterialUrl`
+
+### ✅ PNG Thumbnails for Load Design Popup
+
+- **Generated 3,041 `_small.png` thumbnails** (56.7 MB total, ~19KB avg) from full-size transparent PNGs using `scripts/generate-png-thumbnails.js` (Sharp, 300px wide, preserves transparency, concurrency=8)
+- **Load Design popup** now uses `_small.png` (was `_small.jpg`) with `bg-[#cccccc]` backgrounds (was `bg-black`)
+- **Removed `opacity-80`** from thumbnails — only hover zoom animation remains
+- **"Open Design" chip** styled with `border-2 border-[#d4af37] bg-black`
+
+### ✅ Popular Category: Grid Layout & Auto-Expand
+
+The "Popular" (favorites) drawer in the Load Design popup now uses the **same thumbnail grid layout** as all other categories (2-3 column responsive grid with aspect-4/3 cards, hover zoom, "Open Design" button, localhost tools). Previously it used a flat list with small inline thumbnails.
+
+**Auto-expand:** Popular is now toggled open by default whenever it has designs (via `useEffect` on `favoriteDesigns.length`).
+
+### ✅ Navigation Bounce Fix
+
+Fixed a visual glitch when clicking panel items (e.g., "Select Size") from non-canvas routes (e.g., `/select-product`). The panel would briefly flash open, bounce back to the main nav, then re-open after ~1 second.
+
+**Root cause:** `handleMenuClick` called `openFullscreenPanel()` immediately, but the route-sync `useEffect` saw the old non-canvas route, cleared the panel (`setActiveFullscreenPanel(null)`), then re-opened it once navigation settled.
+
+**Fix:** When navigating to a different route, only call `router.push()` — let the route-sync effect open the panel once the route settles on a canvas-visible page.
+
+### ✅ Vercel Build Size Fix
+
+Added `'public/screenshots/**/*'` to `outputFileTracingExcludes` in `next.config.ts`. The `public/screenshots/` directory (~245 MB) was being bundled into the serverless function, exceeding Vercel's 300 MB limit.
+
+### 📌 Next Steps
+
+1. **Add 6 new failures to KNOWN_FAILURES** — `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+2. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+4. **Visual QA pass** — Compare designs with original screenshots
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+
+---
+
+## Previous Status (2026-04-11) — Batch Screenshot Generation Complete & Thumbnail Fix
 
 ### ✅ Batch Screenshot Generation Complete (3,041/3,092)
 
@@ -80,12 +161,12 @@ function getPopupPreviewSrc(designId, preview) {
 ```typescript
 // Always try 3D screenshot first — onError fallback handles the ~50 missing ones
 function getPopupPreviewSrc(designId, preview) {
-  return `/screenshots/v2026-3d/${designId}_small.jpg`;
+  return `/screenshots/v2026-3d/${designId}_small.png`;
 }
 ```
 
-The `onError` fallback chain on both `<img>` elements (favorites list + category grid) gracefully handles the ~50 designs without 3D screenshots:
-1. Try `/screenshots/v2026-3d/{id}_small.jpg` (3D screenshot)
+The `onError` fallback chain on both `<img>` elements (Popular grid + category grid) gracefully handles the ~50 designs without 3D screenshots:
+1. Try `/screenshots/v2026-3d/{id}_small.png` (3D transparent PNG)
 2. Try legacy `_small.jpg` path (ML screenshot)
 3. Try full-size legacy preview
 4. Hide image element
@@ -3214,14 +3295,37 @@ for (let i = 0; i < data.length; i += 4) {
 
 ## Pricing System
 
+### Shared Quantity Helper: `computeQuantity()`
+All pricing calculations go through `computeQuantity(priceModel, dims)` in `lib/xml-parser.ts`. This replaced duplicated switch/if logic across 7 files.
+
+```typescript
+export function computeQuantity(
+  priceModel: PriceModel,
+  dims: { width: number; height: number; depth: number },
+): number {
+  switch (priceModel.quantityType) {
+    case 'Width * Height':  return dims.width * dims.height;
+    case 'Width + Height':  return dims.width + dims.height + dims.depth;
+    case 'Width':           return dims.width + dims.depth;
+    case 'Area':            return dims.width * dims.height;
+    default:                return dims.width + dims.height + dims.depth;
+  }
+}
+```
+
+### Legacy 3D Volume-Based Pricing (Critical Reference)
+The legacy 3D system (`createJS/Quote.js:1476-1486`) overrides `quantityType` to `"Area"` for ALL products in 3D mode **except** IDs 4, 5, 30, 34. In legacy "Area" mode, pricing uses `MODEL_STONE_VOLUME_CUBIC_METERS` (actual 3D mesh volume) × material m³ price × retail multiplier — fundamentally different from XML formula pricing.
+
+Since we don't have m³ material pricing data, we adapted by including `depth` (thickness) in the formula-based quantity for `"Width + Height"`. This means headstone thickness always affects price, matching the legacy system's behavior where volume (which inherently includes depth) determines cost.
+
 ### Quantity Type Calculation
 Pricing is based on the `quantity_type` specified in the XML catalog for each product.
 
 **Headstone Pricing:**
-- **Quantity Type**: `"Width + Height"` (perimeter-based)
-- **Formula**: `quantity = widthMm + heightMm`
+- **Quantity Type**: `"Width + Height"` (perimeter + depth)
+- **Formula**: `quantity = widthMm + heightMm + uprightThickness`
 - **Model**: `"600.00+1.32($q-600)"` (base price + rate per mm over threshold)
-- **Example**: 600mm wide × 900mm tall = 1500mm quantity
+- **Example**: 600mm wide × 900mm tall × 50mm thick = 1550mm quantity
 
 **Base Pricing:**
 - **Quantity Type**: `"Width"` (width + thickness)
@@ -3397,7 +3501,9 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - Material and shape selectors keep the headstone/base toggle in view so seniors always know which part they are updating.
 
 ### Implementation Highlights
-- `fullscreenPanelSlugs` defines which menu items should open over the nav; the click handler prevents default navigation, opens the overlay, then routes if needed (so `/select-size` stays synced with Canvas requirements). Current slugs: `select-size`, `select-shape`, `select-material`, `select-border`, `inscriptions`, `select-images`, `select-additions`, `select-emblems`, `select-motifs`.
+- `fullscreenPanelSlugs` defines which menu items should open over the nav. Current slugs: `select-size`, `select-shape`, `select-material`, `select-border`, `inscriptions`, `select-images`, `select-additions`, `select-emblems`, `select-motifs`.
+- **Navigation from non-canvas routes** (e.g., `/select-product` → `/select-size`): `handleMenuClick` only calls `router.push()` and lets the route-sync `useEffect` open the panel once the page settles on a canvas-visible route. Opening the panel eagerly causes a bounce — the effect clears it (old route isn't canvas-visible) then re-opens after navigation.
+- **Navigation from canvas routes** (e.g., `/inscriptions` → `/select-size`): `handleMenuClick` calls `openFullscreenPanel()` immediately (no route change needed or route already matches).
 - Closing the overlay sets `dismissedPanelSlug` so re-opening the page doesn’t auto-trigger the panel unless the user explicitly clicks again.
 - See `FULLSCREEN_PANEL_SYSTEM.md` for wireframes, state diagrams, and future enhancement ideas (e.g., ESC shortcuts, slide animations).
 
@@ -4711,13 +4817,20 @@ The "Pets" product (`productSlug: "pets"`, `productId: "135"`) contains **111 de
 ### Features
 
 #### Visual Grid Cards (April 2026)
-Each category expands into a responsive thumbnail grid (`grid-cols-2 sm:grid-cols-3`). Cards use `aspect-[4/3]` containers with `object-contain` on black backgrounds for uniform appearance. Date is shown below each title (derived from the 13-digit timestamp ID).
+Each category expands into a responsive thumbnail grid (`grid-cols-2 sm:grid-cols-3`). Cards use `aspect-[4/3]` containers with `object-contain` on `bg-[#cccccc]` backgrounds for uniform appearance. Date is shown below each title (derived from the 13-digit timestamp ID).
+
+#### Thumbnails (April 2026)
+Thumbnails use `_small.png` files (300px wide, transparent, ~19KB avg, generated by `scripts/generate-png-thumbnails.js`). The `#cccccc` background provides contrast for transparent PNGs. Fallback chain on `<img>` `onError`:
+1. Try `/screenshots/v2026-3d/{id}_small.png` (3D transparent PNG)
+2. Try legacy `_small.jpg` path (ML screenshot)
+3. Try full-size legacy preview
+4. Hide image element
 
 #### ML Category Filters
 Three filter dropdowns at the top (Type, Style, Motif) with dark backgrounds and gold (#DEBD68) active state styling.
 
 #### Popular Drawer
-A collapsible "Popular" drawer at the top of the scroll area displays favorited designs. The drawer is visible on all environments (localhost and production). Styled with gold star icon and `primary` color accents.
+A collapsible "Popular" drawer at the top of the scroll area displays favorited designs. **Auto-expands by default** when favorites exist (via `useEffect`). Uses the **same thumbnail grid layout** as regular categories (2-3 column responsive grid, aspect-4/3 cards, hover zoom, "Open Design" button). Styled with gold star icon and `primary` color accents.
 
 #### Localhost-Only Actions
 Three action icons appear per design card **only on localhost** (`window.location.hostname === 'localhost'`), revealed on hover:
@@ -5732,7 +5845,8 @@ node scripts/batch-screenshot.js --dry-run
 
 **Output:**
 - `public/screenshots/v2026-3d/{id}.png` — Transparent RGBA PNGs, auto-cropped to monument bounds
-- `public/screenshots/v2026-3d/{id}_small.jpg` — 400px-wide JPEG thumbnails with `#1a1a1a` dark background
+- `public/screenshots/v2026-3d/{id}_small.png` — 300px-wide transparent PNG thumbnails (generated by `scripts/generate-png-thumbnails.js`, ~19KB avg)
+- `public/screenshots/v2026-3d/{id}_small.jpg` — 400px-wide JPEG thumbnails with `#1a1a1a` dark background (legacy, no longer used in popup)
 
 **Pipeline (April 2026 overhaul):**
 1. Chromium with SwiftShader (`--use-angle=swiftshader`) for headless WebGL
@@ -5752,6 +5866,21 @@ node scripts/batch-screenshot.js --dry-run
 **⚠️ Playwright constraint:** `page.evaluate()` accepts only ONE argument. Multiple values must be wrapped in an object: `page.evaluate(({a, b}) => {}, {a, b})`.
 
 **Results (April 2026):** First batch: 221/223 success (original P3D designs), runtime ~2h. Second batch: 3,092 total designs (after mass conversion of 22,226 legacy designs to canonical JSON), in progress. All PNGs have RGBA transparency (color type 6). Process may hang on problematic designs — use `--skip-existing` to resume after manual restart.
+
+### PNG Thumbnail Generator (`scripts/generate-png-thumbnails.js`)
+Generates `_small.png` thumbnails from full-size transparent PNGs using Sharp. Used by the Load Design popup for fast, transparent thumbnail display.
+
+**Usage:**
+```bash
+node scripts/generate-png-thumbnails.js
+```
+
+**Behavior:**
+- Resizes to 300px wide, preserves aspect ratio and transparency
+- Concurrency: 8 parallel jobs
+- Skips existing `_small.png` files
+- Output: `public/screenshots/v2026-3d/{id}_small.png`
+- Results (April 2026): 3,041 thumbnails, 56.7 MB total (~19KB avg)
 
 ### Design Analyzer (`scripts/analyze-saved-designs.js`)
 Generates `lib/saved-designs-data.ts` from raw design JSON files. Contains the `determineCategory()` function that assigns categories based on inscription keywords and motif types.
@@ -5816,6 +5945,7 @@ npm run db:studio
 - `webpack.parallelism = 2` — limits concurrent module compilation to prevent OOM
 - `ConditionalCanvas` dynamically imports `ThreeScene`/`CropCanvas` with `ssr: false` so static generation does not render the heavy 3D canvas on the server
 - **Do NOT set `config.cache = false`** — disabling webpack cache causes 30+ minute builds (Three.js/R3F must recompile from scratch every time)
+- **`outputFileTracingExcludes`** in `next.config.ts` excludes `public/screenshots/**/*` (~245 MB) from serverless function bundling. Without this, the function exceeds Vercel's 300 MB limit.
 
 ### Building for Production
 ```bash
