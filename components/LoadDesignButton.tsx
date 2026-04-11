@@ -246,6 +246,18 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
       }));
   }, [allDesigns, favoriteIds]);
 
+  // Auto-expand Popular when it has designs
+  useEffect(() => {
+    if (favoriteDesigns.length > 0) {
+      setExpandedNodes((prev) => {
+        if (prev.has('popular')) return prev;
+        const next = new Set(prev);
+        next.add('popular');
+        return next;
+      });
+    }
+  }, [favoriteDesigns.length]);
+
   const toggleNode = (nodeKey: string) => {
     setExpandedNodes((current) => {
       const next = new Set(current);
@@ -416,21 +428,25 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                     </span>
                   </button>
                   {expandedNodes.has('popular') && (
-                    <div className="space-y-1 border-t border-[#d4af37]/20 p-2">
-                      {favoriteDesigns.map((design) => (
-                        <div key={design.id} className="flex items-center gap-1">
-                          <button
-                            onClick={() => handleLoadDesign(design.id)}
-                            disabled={loading}
-                            className="min-w-0 flex-1 rounded-xl border border-transparent bg-white/[0.03] px-3 py-2 text-left text-sm text-white/90 transition hover:border-[#d4af37]/30 hover:bg-white/[0.06] disabled:opacity-50 cursor-pointer"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#d4af37]/20 bg-[#cccccc]">
+                    <div className="border-t border-[#d4af37]/20 p-4">
+                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                        {favoriteDesigns.map((design) => {
+                          const ts = Number(design.id);
+                          const dateLabel = ts && ts >= 1e12
+                            ? new Date(ts).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+                            : '';
+                          return (
+                            <div
+                              key={design.id}
+                              className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40"
+                            >
+                              {/* Thumbnail */}
+                              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#cccccc]">
                                 {design.metadata.preview ? (
                                   <img
                                     src={getPopupPreviewSrc(design.id, design.metadata.preview)}
-                                    alt={`${design.displayTitle} thumbnail`}
-                                    className="h-full w-full object-cover"
+                                    alt={design.displayTitle}
+                                    className="h-full w-full object-contain transition-transform duration-500 group-hover:scale-[1.03]"
                                     loading="lazy"
                                     onError={(e) => {
                                       const img = e.currentTarget;
@@ -449,43 +465,63 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                     }}
                                   />
                                 ) : (
-                                  <PhotoIcon className="h-5 w-5 text-white/40" />
+                                  <div className="flex h-full items-center justify-center">
+                                    <PhotoIcon className="h-8 w-8 text-white/15" />
+                                  </div>
+                                )}
+
+                                {/* Hover: "Open Design" button */}
+                                <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+                                  <button
+                                    onClick={() => handleLoadDesign(design.id)}
+                                    disabled={loading}
+                                    className="pointer-events-auto rounded-full border-2 border-[#d4af37] bg-black px-4 py-2 text-xs font-semibold tracking-wide text-white shadow-lg backdrop-blur-sm transition hover:bg-[#d4af37]/25 disabled:opacity-50 cursor-pointer"
+                                  >
+                                    Open Design
+                                  </button>
+                                </div>
+
+                                {/* Localhost: favorite + open-in-new-tab (top-right) */}
+                                {isLocalhost && (
+                                  <div className="absolute right-1 top-1 flex gap-1 rounded-lg bg-black/70 p-0.5 opacity-0 backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
+                                    <span
+                                      role="button"
+                                      onClick={(e) => { e.stopPropagation(); toggleFavorite(design.id); }}
+                                      className="rounded p-1 text-[#d4af37] transition"
+                                    >
+                                      <StarIconSolid className="h-3.5 w-3.5" />
+                                    </span>
+                                    {design.metadata.preview && (
+                                      <a
+                                        href={design.metadata.preview}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={(e) => e.stopPropagation()}
+                                        title="Open full image"
+                                        className="rounded p-1 text-white/50 transition hover:text-white/80"
+                                      >
+                                        <ArrowTopRightOnSquareIcon className="h-3.5 w-3.5" />
+                                      </a>
+                                    )}
+                                  </div>
                                 )}
                               </div>
-                              <div className="min-w-0 flex-1">
-                                <div className="truncate font-medium">{design.displayTitle}</div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs text-white/60">{design.id}</span>
-                                </div>
+
+                              {/* Card footer */}
+                              <div className="px-3 py-2">
+                                <span className="block truncate text-xs font-medium text-white/90">
+                                  {design.displayTitle}
+                                </span>
+                                {dateLabel && (
+                                  <span className="mt-0.5 block text-[10px] text-white/35">
+                                    {dateLabel}
+                                  </span>
+                                )}
                               </div>
                             </div>
-                          </button>
-                          {isLocalhost && (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleFavorite(design.id);
-                              }}
-                              title="Remove from favorites"
-                              className="shrink-0 rounded-full p-1.5 text-[#d4af37] transition hover:bg-[#d4af37]/20 cursor-pointer"
-                            >
-                              <StarIconSolid className="h-4 w-4" />
-                            </button>
-                          )}
-                          {isLocalhost && design.metadata.preview && (
-                            <a
-                              href={design.metadata.preview}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              onClick={(e) => e.stopPropagation()}
-                              title="Open full image"
-                              className="shrink-0 rounded p-1.5 text-white/30 transition hover:bg-white/10 hover:text-white/70"
-                            >
-                              <ArrowTopRightOnSquareIcon className="h-4 w-4" />
-                            </a>
-                          )}
-                        </div>
-                      ))}
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                 </div>
