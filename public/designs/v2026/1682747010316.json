@@ -1,0 +1,336 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:00.982Z",
+  "units": "mm",
+  "source": {
+    "id": "1682747010316",
+    "slug": "legacy-1682747010316",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1682747010316.json",
+    "savedAt": "2023-04-29T05:43:30.316Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 590,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 812,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 375,
+        "height": 812
+      },
+      "bufferPx": {
+        "width": 1125,
+        "height": 2436
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 590,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 690,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "dove_004",
+        "position": {
+          "x_px": 489,
+          "y_px": 537.899
+        },
+        "height_px": 94,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "dove_004",
+        "position": {
+          "x_px": -486,
+          "y_px": 537.426
+        },
+        "height_px": 94,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_159_13",
+        "position": {
+          "x_px": 246,
+          "y_px": -327.45
+        },
+        "height_px": 175,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_159_13",
+        "position": {
+          "x_px": -228,
+          "y_px": -327.45
+        },
+        "height_px": 175,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_004",
+        "path": "/shapes/motifs/dove_004.svg"
+      },
+      {
+        "id": "1_159_13",
+        "path": "/shapes/motifs/1_159_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d0ea112915596e17794f3e523b61ae11bf77086015ece2f0f39d62c287a2181a",
+    "sourceItemCount": 7,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:00.982Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2434.32,
+        "quantity": 1,
+        "width": 590,
+        "height": 600,
+        "_length": 80,
+        "init_width": 375,
+        "init_height": 579,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 375x812"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 828,
+        "quantity": 1,
+        "width": 690,
+        "height": 100,
+        "_length": 130,
+        "init_width": 375,
+        "init_height": 579,
+        "mode": "2d"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1682747538148,
+        "path": "../upload/2023/04/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "16827475381485c83960fd67f4036ba298d5d.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 6,
+        "y": -272.97333333333324,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.9725985221674875,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "5C83960F-D67F-4036-BA29-8D5D074C3EC7.jpeg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 489,
+        "y": 537.8990981963927,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 94,
+        "ratio": 0.08,
+        "itemID": 3
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_004",
+        "item": "dove_004",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -486,
+        "y": 537.426152304609,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 94,
+        "ratio": 0.08,
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_159_13",
+        "item": "1_159_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 246,
+        "y": -327.45,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 175,
+        "ratio": 0.23333333333333334,
+        "itemID": 7
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_159_13",
+        "item": "1_159_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -228,
+        "y": -327.45,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 175,
+        "ratio": 0.23333333333333334,
+        "itemID": 8
+      }
+    ]
+  }
+}

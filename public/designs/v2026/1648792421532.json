@@ -1,0 +1,483 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:54.720Z",
+  "units": "mm",
+  "source": {
+    "id": "1648792421532",
+    "slug": "legacy-1648792421532",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1648792421532.json",
+    "savedAt": "2022-04-01T05:53:41.532Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 470,
+      "height_mm": 310
+    },
+    "viewportPx": {
+      "width": 686,
+      "height": 1098,
+      "dpr": 1.75
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 686,
+        "height": 1098
+      },
+      "bufferPx": {
+        "width": 1201,
+        "height": 1922
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 470,
+      "height_mm": 310,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 11.904,
+          "y_px": -260.75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "BROOKS",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 36
+        },
+        "position": {
+          "x_px": -29.621,
+          "y_px": -164.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "ABRAHAM ANDERSON",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 31.286
+        },
+        "position": {
+          "x_px": -1.799,
+          "y_px": -73.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "JAN.15.1967~Feb.04.1967",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -1.366,
+          "y_px": -17.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Shortly in Our Lives",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -14.09,
+          "y_px": 59.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Forever in our Hearts",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28.571
+        },
+        "position": {
+          "x_px": -16.975,
+          "y_px": 147
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "teddy-bear_003",
+        "position": {
+          "x_px": -287.098,
+          "y_px": -178.044
+        },
+        "height_px": 65,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f0b3cb",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_168_24",
+        "position": {
+          "x_px": -9.165,
+          "y_px": 361.726
+        },
+        "height_px": 65,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f0b3cb",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "teddy-bear_003",
+        "position": {
+          "x_px": 417.739,
+          "y_px": -267.992
+        },
+        "height_px": 65,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f0b3cb",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "teddy-bear_003",
+        "path": "/shapes/motifs/teddy-bear_003.svg"
+      },
+      {
+        "id": "1_168_24",
+        "path": "/shapes/motifs/1_168_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ecea326e47444f77f29d6b8114002cc97da55d9093a489f01a6a85fbb1c09160",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:54.720Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+        "price": 427.52,
+        "quantity": 1,
+        "width": 470,
+        "height": 310,
+        "_length": 1,
+        "init_width": 686,
+        "init_height": 898,
+        "backgroundOption": "undefined",
+        "device": "tablet",
+        "dpr": 1.75,
+        "orientation": "portrait",
+        "version": "1.42",
+        "version_date": 20220327,
+        "mode": "2d",
+        "navigator": "Linux armv8l, Google Inc., Mozilla/5.0 (Linux; Android 11; SM-T515) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.58 Safari/537.36, 686x1098"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_003",
+        "item": "teddy-bear_003",
+        "price": 220.17525,
+        "quantity": 1,
+        "color": "#f0b3cb",
+        "colorName": "Paint Fill",
+        "x": -287.0982181781552,
+        "y": -178.04390271828163,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 65,
+        "ratio": 0.12149532710280374,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "72.22156914893615px Lucida Calligraphy",
+        "font_size": 29,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 11.903777184404447,
+        "y": -260.75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 4,
+        "label": "BABY",
+        "font": "89.65436170212764px Lucida Calligraphy",
+        "font_size": 36,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -29.621121169223414,
+        "y": -164.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 4
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_168_24",
+        "item": "1_168_24",
+        "price": 220.17525,
+        "quantity": 1,
+        "color": "#f0b3cb",
+        "colorName": "Paint Fill",
+        "x": -9.164767660767433,
+        "y": 361.72619825270846,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 65,
+        "ratio": 0.10743801652892562,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 12,
+        "label": "GAIL AGNES HAY",
+        "font": "77.91381185896851px Lucida Calligraphy",
+        "font_size": 31.285675048828125,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1.799199175611534,
+        "y": -73.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 6
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_003",
+        "item": "teddy-bear_003",
+        "price": 220.17525,
+        "quantity": 1,
+        "color": "#f0b3cb",
+        "colorName": "Paint Fill",
+        "x": 417.7385144010393,
+        "y": -267.99226989994173,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 65,
+        "ratio": 0.12149532710280374,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "JAN.15.1967~Feb.04.1967",
+        "font": "47.31757978723404px Lucida Calligraphy",
+        "font_size": 19,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -1.3662931687230184,
+        "y": -17.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 17,
+        "label": "Shortly in Our Lives",
+        "font": "69.73117021276595px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -14.089715705678032,
+        "y": 59.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 18,
+        "label": "Forever in our Hearts",
+        "font": "71.15413588909391px Lucida Calligraphy",
+        "font_size": 28.571380615234375,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -16.97508680217524,
+        "y": 147,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 10
+      }
+    ]
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:39.648Z",
+  "units": "mm",
+  "source": {
+    "id": "1573205243876",
+    "slug": "legacy-1573205243876",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1573205243876.json",
+    "savedAt": "2019-11-08T09:27:23.876Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Oval",
+    "material": {
+      "name": "src/bronzes/phoenix/l/07.jpg",
+      "texture": "/textures/phoenix/l/07.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 275,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 784,
+      "height": 584,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 784,
+        "height": 584
+      },
+      "bufferPx": {
+        "width": 784,
+        "height": 584
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 275,
+      "height_mm": 400,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/07.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Egg",
+        "font": {
+          "family": "Arial",
+          "size_mm": 20
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "snake_001",
+        "position": {
+          "x_mm": 0.5,
+          "y_mm": -191.5
+        },
+        "height_mm": 79,
+        "rotation": {
+          "z_deg": 180
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-6",
+        "asset": "2_080_11",
+        "position": {
+          "x_mm": -3,
+          "y_mm": 174
+        },
+        "height_mm": 120,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "snake_001",
+        "path": "/shapes/motifs/snake_001.svg"
+      },
+      {
+        "id": "2_080_11",
+        "path": "/shapes/motifs/2_080_11.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "82cf9682c408e90c50105416aec4328c2d632667e688305a33334ecac7b019d7",
+    "sourceItemCount": 6,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:39.648Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Holly Green - Lugs with Studs",
+        "border": "No Border",
+        "shape_url": "shapes/photos/noborder.svg",
+        "fixingSystem": 2,
+        "shape": "Oval",
+        "color": "#07723a",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/07.jpg",
+        "price": "1112.08",
+        "quantity": 1,
+        "width": 275,
+        "height": 400,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 584
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Egg",
+        "font": "27.49134375px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br148r-footballer-rugby",
+        "color": "#ffb35a",
+        "x": 116,
+        "y": 20,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.70611328125,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br148r-footballer-rugby",
+        "price": 99,
+        "quantity": 1,
+        "size": "150 x 150 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br148r-footballer-rugby",
+        "color": "#ffb35a",
+        "x": -103.91138671875001,
+        "y": 21,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.70611328125,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br148r-footballer-rugby",
+        "price": 99,
+        "quantity": 1,
+        "size": "150 x 150 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "snake_001",
+        "item": "snake_001",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0.5,
+        "y": 191.5,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 180,
+        "height": 79,
+        "ratio": 0.15581854043392504,
+        "itemID": 5
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_080_11",
+        "item": "2_080_11",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": -174,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 120,
+        "ratio": 0.20236087689713322,
+        "itemID": 6
+      }
+    ]
+  }
+}

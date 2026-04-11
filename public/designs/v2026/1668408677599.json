@@ -1,0 +1,272 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:57.933Z",
+  "units": "mm",
+  "source": {
+    "id": "1668408677599",
+    "slug": "legacy-1668408677599",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1668408677599.json",
+    "savedAt": "2022-11-14T06:51:17.599Z"
+  },
+  "product": {
+    "id": "22",
+    "name": "Laser-etched Black Granite Mini Headstone",
+    "type": "headstone",
+    "slug": "mini-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 880,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 360,
+        "height": 880
+      },
+      "bufferPx": {
+        "width": 1080,
+        "height": 2640
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 300,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Lettie Young",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 66.833
+        },
+        "position": {
+          "x_px": -398.769,
+          "y_px": -175.169
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "base/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "LAVINIA TURNER",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -31.385,
+          "y_px": -144.371
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "2_152_08",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_152_08",
+        "path": "/shapes/motifs/2_152_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "dc539b234898a29da908203bc300fcf8317dd7f3124d6c98e5e7a0daf00189ca",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:57.933Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 22,
+        "type": "Headstone",
+        "installationMethod": 2,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Mini Headstone",
+        "price": 572.87,
+        "quantity": 1,
+        "width": 200,
+        "height": 300,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 689,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.43",
+        "version_date": 20221108,
+        "mode": "2d",
+        "navigator": "Safari (mobile(android)), 360x880"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1668408842340,
+        "path": "../upload/2022/11/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1668408842340screenshot_20221105_1423.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 7.9122161865234375,
+        "y": 118.60667086628715,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.6888695652173913,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Screenshot_20221105_142300_Messenger.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 166,
+        "width": "409",
+        "height": "583",
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_08",
+        "item": "2_152_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.04739336492890995,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Paula Lee Derschow",
+        "font": "234.5828398132324px Great Vibes",
+        "font_size": 66.83271789550781,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -398.76949310302734,
+        "y": -175.16888887121013,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 77,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "R I P",
+        "font": "84.24px Franklin Gothic",
+        "font_size": 24,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -31.3846435546875,
+        "y": -144.37105573907957,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 9
+      }
+    ]
+  }
+}

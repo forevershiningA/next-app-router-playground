@@ -1,0 +1,291 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:10.829Z",
+  "units": "mm",
+  "source": {
+    "id": "1699393023669",
+    "slug": "legacy-1699393023669",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1699393023669.json",
+    "savedAt": "2023-11-07T21:37:03.669Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 311.15
+    },
+    "viewportPx": {
+      "width": 428,
+      "height": 926,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 428,
+        "height": 926
+      },
+      "bufferPx": {
+        "width": 1284,
+        "height": 2778
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 311.15,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Every single day, Every time I pray, I’ll be missing you",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -259.597
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Je’Vuan Jennings",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 59
+        },
+        "position": {
+          "x_px": -5.5,
+          "y_px": -147.48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "January 18,2022",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": -19.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "e9632c31c59da3ecaa6ae37a60be574c5d26b0c0c0ceb636b10ff8138b9aa698",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:10.829Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 1647.66,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 311.15,
+        "_length": 80,
+        "init_width": 428,
+        "init_height": 573,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 428x926"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1699393044559,
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16993930445597670595bb32d4a5896bbc38f.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 1583.1011705880978,
+        "y": 258,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": -6,
+        "ratio": 2.9555378046216036,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "7670595B-B32D-4A58-96BB-C38F9816240C.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 485,
+        "width": "828",
+        "height": "996",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1699393232727,
+        "path": "../upload/2023/11/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16993932327279e0b7ab2e5f5461ab7d91cec.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -444,
+        "y": 129,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7434548704408983,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "9E0B7AB2-E5F5-461A-B7D9-1CEC5918909C.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 122,
+        "width": "204",
+        "height": "251",
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 46,
+        "label": "Every single day, Every time I pray, I’ll be missing you",
+        "font": "57.501968503937015px Chopin Script",
+        "font_size": 28,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": -259.59685863874347,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "Je’Vuan Jennings",
+        "font": "121.16486220472443px Chopin Script",
+        "font_size": 59,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -5.5,
+        "y": -147.47993019197213,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "January 18,2022",
+        "font": "67.77017716535434px Chopin Script",
+        "font_size": 33,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 8,
+        "y": -19.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 7
+      }
+    ]
+  }
+}

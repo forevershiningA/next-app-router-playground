@@ -1,0 +1,119 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:46.082Z",
+  "units": "mm",
+  "source": {
+    "id": "1590377815759",
+    "slug": "legacy-1590377815759",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590377815759.json",
+    "savedAt": "2020-05-25T03:36:55.759Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Urn Heart",
+    "material": {
+      "name": "src/backgrounds/colors/l/34.jpg",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 302,
+      "height_mm": 307
+    },
+    "viewportPx": {
+      "width": 1649,
+      "height": 892,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1649,
+        "height": 892
+      },
+      "bufferPx": {
+        "width": 1649,
+        "height": 892
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 302,
+      "height_mm": 307,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "ea2f658df97285a61836ae616e9ebb094b1d0789838102b9ba8eca2b2db0cb42",
+    "sourceItemCount": 1,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:46.082Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Urn Heart",
+        "border": "Border Heart",
+        "shape_url": "shapes/photos/borderheart.svg",
+        "shape": "Urn Heart",
+        "color": "undefinedundefined_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "price": "2606.62",
+        "quantity": 1,
+        "width": 302,
+        "height": 307,
+        "_length": 1,
+        "init_width": 1649,
+        "init_height": 892,
+        "backgroundOption": "photo"
+      }
+    ]
+  }
+}

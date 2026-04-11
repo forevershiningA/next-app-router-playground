@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-08
+**Last Updated:** 2026-04-11
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
 
 ---
@@ -34,6 +34,221 @@
 26. [UI Theming & Primary Color](#ui-theming--primary-color)
 27. [Design Management Scripts](#design-management-scripts)
 28. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-04-11) — Batch Screenshot Generation Complete & Thumbnail Fix
+
+### ✅ Batch Screenshot Generation Complete (3,041/3,092)
+
+All screenshot generation is now finished. The batch ran for ~15 hours overnight, capturing the remaining ~1,200 designs.
+
+#### Final Results
+| Metric | Value |
+|--------|-------|
+| **Total PNGs on disk** | **3,041** |
+| **JPG thumbnails** | **3,040** |
+| **New this session** | **+1,208** |
+| **Skipped (existing)** | 1,878 |
+| **Known failures (blocklisted)** | 47 designs |
+| **New failures** | 6 designs |
+| **Remaining (no JSON)** | 22 designs |
+| **Capture rate** | ~2/min (~120/hour) with concurrency=1 |
+| **Total runtime** | ~15 hours |
+
+#### New Failures (Headstone Not Visible)
+6 additional designs failed with "Headstone not visible in render" — likely missing viewport dimensions in their JSON:
+- `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+
+These should be added to the `KNOWN_FAILURES` set in `scripts/batch-screenshot.js`.
+
+### ✅ Load Design Popup: 3D Thumbnails for All Designs
+
+Removed the hardcoded `V2026_3D_IDS` Set (~221 IDs) from `LoadDesignButton.tsx`. This set was created during the first batch run and never updated — causing ~2,800 designs to still show old legacy screenshots even though 3D screenshots existed.
+
+#### Before
+```typescript
+// Hardcoded set of 221 design IDs — all other designs used legacy thumbnails
+const V2026_3D_IDS = new Set(['1578016189116', '1593953642523', ...]);
+function getPopupPreviewSrc(designId, preview) {
+  if (V2026_3D_IDS.has(designId)) return `/screenshots/v2026-3d/${designId}_small.jpg`;
+  return preview.replace(/\.(jpg|jpeg|png)$/i, '_small.jpg'); // legacy fallback
+}
+```
+
+#### After
+```typescript
+// Always try 3D screenshot first — onError fallback handles the ~50 missing ones
+function getPopupPreviewSrc(designId, preview) {
+  return `/screenshots/v2026-3d/${designId}_small.jpg`;
+}
+```
+
+The `onError` fallback chain on both `<img>` elements (favorites list + category grid) gracefully handles the ~50 designs without 3D screenshots:
+1. Try `/screenshots/v2026-3d/{id}_small.jpg` (3D screenshot)
+2. Try legacy `_small.jpg` path (ML screenshot)
+3. Try full-size legacy preview
+4. Hide image element
+
+#### Files Changed
+- `components/LoadDesignButton.tsx` — Removed `V2026_3D_IDS` set, simplified `getPopupPreviewSrc()` to always use 3D path, updated both `onError` handlers to remove `V2026_3D_IDS` guard
+
+### 📌 Next Steps
+
+1. **Add 6 new failures to KNOWN_FAILURES** — `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+2. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+4. **Visual QA pass** — Compare designs with original screenshots
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+
+---
+
+## Previous Status (2026-04-10) — Batch Screenshot Generation Progress & Script Hardening
+
+### 🔄 Batch Screenshot Generation (In Progress — 1,827/3,092)
+
+Continued batch screenshot generation for all 3,092 designs with canonical JSON. Major stability improvements to the script after repeated browser crashes.
+
+#### Progress Summary
+| Metric | Value |
+|--------|-------|
+| **Total PNGs on disk** | **1,827** (was 641 at session start) |
+| **New this session** | **+1,186** |
+| **JPG thumbnails** | 1,826 |
+| **Known failures** | 41 designs (blocklisted) |
+| **Remaining** | ~1,265 designs |
+| **Capture rate** | ~2/min (~120/hour) with concurrency=1 |
+
+#### Script Improvements (`scripts/batch-screenshot.js`)
+
+1. **Chunked browser relaunch** — Instead of one long-lived browser, the script now launches a fresh Chromium every 200 designs. Prevents OOM crashes from accumulated WebGL/SwiftShader memory.
+
+2. **Known-failures blocklist** — `KNOWN_FAILURES` Set (41 IDs) skips designs that permanently fail. Two failure types:
+   - "Headstone not visible" — missing viewport/init dimensions in JSON (older 2020-2022 designs)
+   - "Canvas timeout" — page never renders the WebGL canvas
+
+3. **Context refresh after failures** — Browser context is recreated after any failed design to prevent corruption propagating to subsequent captures.
+
+4. **Incremental error saving** — `_errors.json` is written after each failure so crash doesn't lose error data.
+
+5. **Chromium stability flags** — Added `--disable-dev-shm-usage`, `--no-sandbox`, `--disable-setuid-sandbox`, `--disable-extensions`, `--disable-background-networking`.
+
+6. **maxRetries=0** — No retries (was 2). Each failure costs ~20s instead of ~2min. Known-failing designs are blocklisted instead.
+
+#### How to Resume
+```bash
+# Start dev server (must use Turbopack to avoid middleware EvalError)
+npx next dev --turbopack --port 3001
+
+# Run batch (skips existing PNGs + blocklisted designs)
+node scripts/batch-screenshot.js --skip-existing --concurrency=1
+```
+
+#### Files Changed
+- `scripts/batch-screenshot.js` — Chunked browser relaunch, KNOWN_FAILURES blocklist (41 IDs), context refresh after failures, incremental error saving, stability flags, maxRetries=0
+
+### 📌 Next Steps
+
+1. **Complete screenshot generation** — ~1,265 designs remaining (~10.5 hours at current rate)
+2. **Review `_errors.json`** — Add any new failures to KNOWN_FAILURES blocklist
+3. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+4. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+5. **Visual QA pass** — Compare designs with original screenshots
+6. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+
+---
+
+## Previous Status (2026-04-09) — Popup Restyling, Mass Design Conversion & Screenshot Generation
+
+### ✅ Check Price Popup Restyled (Dark Luxury Theme)
+
+The Check Price popup (`components/CheckPricePanel.tsx`) was restyled to match the HomeSplash modal aesthetic from the home page.
+
+#### Changes
+- **Outer shell**: `rounded-3xl` container with `border-[#d4af37]/35` gold border and gold gradient glow overlay (`bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent`)
+- **Eyebrow pill badge**: "Price Breakdown" pill with `border-[#d4af37]/45 bg-[#d4af37]/10 text-[#f3d48f]`
+- **Native dark classes**: Replaced all CSS override hacks (`.check-price-panel__table .text-gray-900 { color: #f5eee1 !important; }`) with native Tailwind dark-theme classes throughout
+- **Gold-accented expand/collapse buttons**: Matching HomeSplash close button style (`rounded-full border border-white/25 bg-black/25`)
+- **Serif title**: "Your Design Pricing" in `font-serif` matching HomeSplash pattern
+
+#### Files Changed
+- `components/CheckPricePanel.tsx` — Complete restyle of header, table headers, all row sections, footer; removed all CSS override hacks
+
+### ✅ Load Design Popup Restyled (Dark Luxury Theme)
+
+The Load Design popup (`components/LoadDesignButton.tsx`) was restyled with the same HomeSplash modal aesthetic.
+
+#### Changes
+- **Outer container**: `rounded-3xl` with gold border, gold gradient glow overlay
+- **Eyebrow pill badge**: "Design Gallery" pill badge
+- **Search bar**: Gold-accented focus ring (`focus:ring-[#d4af37]/50 focus:border-[#d4af37]/50`)
+- **ML filter buttons**: Gold-themed active state styling
+- **Category sections**: `rounded-2xl` containers with `bg-white/[0.03]` subtle backgrounds
+- **Card grid**: Gold star icons for favorites, gold "Open Design" hover button
+- **Close button**: Matching HomeSplash style
+
+#### Files Changed
+- `components/LoadDesignButton.tsx` — Complete restyle of outer container, header, search bar, ML filters, favorites drawer, category sections, card grid, and action buttons
+
+### ✅ Mass Legacy Design Conversion (22,226 Designs)
+
+Batch-converted all legacy designs from three `ml/` source directories to canonical JSON format.
+
+#### Before
+- **3,114** designs in catalog (`lib/saved-designs-data.ts`)
+- **223** had canonical JSON (from prior P3D conversions)
+- **2,891** missing — no screenshots possible
+
+#### Conversion Run
+```bash
+node scripts/batch-convert-saved-designs.js --out-dir public/designs/v2026
+```
+
+#### Source Breakdown
+| mlDir | JSON source files | In catalog |
+|-------|------------------|------------|
+| `forevershining/` | 12,487 | 1,426 |
+| `headstonesdesigner/` | 7,529 | 1,224 |
+| `bronze-plaque/` | 2,814 | 241 |
+| **Total** | **22,830** | **2,891** |
+
+#### Results
+- **22,226 converted** (0 failures), all high confidence
+- **3,092 of 3,114** catalog designs now have canonical JSON (was 223)
+- **22 remaining** — no source files in any mlDir
+- Output: `public/designs/v2026/{id}.json`
+- Report: `database-exports/conversion-report-*.json`
+
+#### Files Used (not modified)
+- `scripts/batch-convert-saved-designs.js` — Handles all three mlDirs (forevershining, headstonesdesigner, bronze-plaque)
+
+### ✅ Batch Screenshot Generation (Initial Runs — see 2026-04-10 for latest)
+
+Regenerating 3D screenshots for all 3,092 designs with canonical JSON.
+
+#### First Run (223 original designs)
+```bash
+node scripts/batch-screenshot.js
+```
+- **221/223 success**, 2 failures (designs 1636037970908 and 1726182269646 — "Headstone not visible")
+- Runtime: ~113 min (~30s per design)
+
+#### Second Run (all 3,092 designs, skip existing)
+```bash
+node scripts/batch-screenshot.js --skip-existing
+```
+- Completed 616/3,092 before stalling — continued in 2026-04-10 session
+- Rate: ~90 designs/hour
+- ⚠️ Process hung on problematic designs — fixed in 2026-04-10 with chunked browser relaunch + blocklist
+- Dev server (`npx next dev --turbopack --port 3001`) needs restart if it crashes under load
+
+### 📌 Next Steps
+
+1. **Complete screenshot generation** — ~2,476 designs remaining
+2. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+4. **Visual QA pass** — Compare designs with original screenshots
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
 
 ---
 
@@ -173,7 +388,7 @@ Remaining 13 errors are config-level (`downlevelIteration` tsconfig issues).
 1. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top (math analysis shows positions SHOULD be correct; likely useEffect timing or geometry bounds issue)
 2. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug. Need user approval before bulk re-run.
 3. **Visual QA pass** — Continue comparing designs with original screenshots
-4. **Batch-convert remaining ~2,891 designs** — Only 223 have canonical JSON
+4. ~~**Batch-convert remaining ~2,891 designs**~~ — ✅ Done (2026-04-09): 22,226 converted, 3,092/3,114 now have canonical JSON
 5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
 
 ---
@@ -187,14 +402,16 @@ The Load Design popup now uses `public/screenshots/v2026-3d/` 3D screenshots as 
 #### Thumbnail Source Priority
 ```typescript
 // getPopupPreviewSrc(id: string) in LoadDesignButton.tsx
-1. v2026-3d screenshot (if design ID is in V2026_3D_IDS set)  →  /screenshots/v2026-3d/{id}_small.jpg
-2. Legacy ML screenshot (fallback)                             →  /ml/{mlDir}/saved-designs/screenshots/*/{id}_small.jpg
+// Always tries 3D screenshot first — onError fallback handles missing ones
+1. v2026-3d screenshot (always tried first)  →  /screenshots/v2026-3d/{id}_small.jpg
+2. Legacy ML screenshot (onError fallback)   →  /ml/{mlDir}/saved-designs/screenshots/*/{id}_small.jpg
+3. Full-size legacy preview (final fallback) →  original preview URL
 ```
 
-A hardcoded `V2026_3D_IDS` Set (222 design IDs) prevents 404 spam — only designs with actual 3D screenshots try the v2026-3d path. Both `<img>` locations (favorites list + category grid) have 3-stage `onError` fallback chains.
+As of 2026-04-11, 3,040 designs have `_small.jpg` thumbnails in `v2026-3d/`. The ~50 designs without 3D screenshots gracefully fall back to legacy previews via the `onError` chain. The original hardcoded `V2026_3D_IDS` Set (222 IDs from April 6) was removed — no longer needed since nearly all designs now have 3D screenshots.
 
 #### Files Changed
-- `components/LoadDesignButton.tsx` — Added `V2026_3D_IDS` Set (~lines 94-150), `getPopupPreviewSrc()`, `getLegacySmallSrc()`, updated both `<img>` onError handlers
+- `components/LoadDesignButton.tsx` — `getPopupPreviewSrc()` always returns 3D path, both `<img>` onError handlers fall back through legacy paths
 
 ### ✅ Design Dedup: Sibling Detection (148 New Duplicates)
 
@@ -252,11 +469,12 @@ Before capture, the script accesses the Three.js scene via `window.__r3fScene` (
 #### Scene.tsx Exposure
 `Scene.tsx` now exposes `window.__r3fScene` and `window.__r3fGL` via useEffect for external tooling (batch screenshots, debugging).
 
-#### Results (April 6, 2026)
-- **222 transparent PNGs** + 222 JPEG thumbnails in `public/screenshots/v2026-3d/`
+#### Results (April 6, 2026 → Completed April 11, 2026)
+- **Initial:** 222 transparent PNGs + 222 JPEG thumbnails
+- **Final (April 11):** **3,041 transparent PNGs** + **3,040 JPEG thumbnails** in `public/screenshots/v2026-3d/`
 - Tightly cropped to monument bounds (typical: 350-800px wide × 500-960px tall)
 - No grass, sky, fog, sun rays, selection outlines, or sparkles
-- Runtime: ~2h for 223 designs (~35s each)
+- Total runtime: ~15 hours for ~1,208 new captures + ~5 hours for earlier batches
 
 #### Files Changed
 - `scripts/batch-screenshot.js` — Environment strip, transparent background, alpha-based auto-crop, configurable BASE_URL (default port 3001)
@@ -287,7 +505,7 @@ The photo placeholder image was migrated from `.jpg` to `.png` across the entire
 3. **Photo anonymization** — Stock photos from original designs remain as-is (not yet handled)
 4. **Visual QA pass** — Compare more designs side-by-side with original screenshots
 5. **Category sidebar navigation** — Deferred from UX review; prevents "accordion jump" when browsing many folders
-6. **Update V2026_3D_IDS set** — When new screenshots are generated, add their IDs to the set in `LoadDesignButton.tsx`
+6. ~~**Update V2026_3D_IDS set**~~ — ✅ Done (2026-04-11): Removed hardcoded set entirely; all designs now try 3D screenshots first with legacy fallback
 
 ---
 
@@ -348,9 +566,9 @@ Created a text-based classifier using:
 - `lib/saved-designs-data.ts` — 145 design entries reclassified
 - `scripts/audit-pets-category.js` — Audit/reclassification script (created)
 
-### ✅ Batch 3D Screenshot Generator (221/223 Success → Overhauled April 6)
+### ✅ Batch 3D Screenshot Generator (3,041/3,092 — Complete as of April 11)
 
-> **Note:** This section describes the initial implementation. See **Current Status (2026-04-06)** above for the overhauled version with transparent PNGs, environment strip, and auto-crop.
+> **Note:** This section describes the initial implementation. See **Current Status (2026-04-06)** for the overhaul (transparent PNGs, environment strip, auto-crop) and **Current Status (2026-04-11)** for final completion results.
 
 Playwright-based automation that loads each design into the 3D editor, anonymizes inscriptions via route interception, hides UI chrome, and captures a clean canvas screenshot.
 
@@ -380,10 +598,10 @@ Playwright-based automation that loads each design into the 3D editor, anonymize
 - **Sky-only renders**: Some P3D designs have `coordinateSpace: "headstone-center-mm"` → missing viewport dims → elements scaled to ~0.7px. Only 2 affected: `1636037970908` (failed), `1752608698736` (removed).
 - **`canvas.toDataURL()` DOES NOT WORK**: troika-three-text loads fonts async — text not in framebuffer when `toDataURL()` is called. Always use Playwright `canvas.screenshot()`.
 
-#### Results
-- **221 good screenshots** in `public/screenshots/v2026-3d/` (186 MB total, ~860 KB avg)
-- **1 failure**: `1636037970908` (headstone not visible — p3d viewport issue)
-- **Runtime**: ~2h 50min for 223 designs
+#### Results (Final — April 11, 2026)
+- **3,041 transparent PNGs** + **3,040 JPEG thumbnails** in `public/screenshots/v2026-3d/`
+- **53 failures** total: 47 original blocklisted + 6 new (all "headstone not visible" — missing viewport dims)
+- **22 designs** have no canonical JSON at all (no source files in any mlDir)
 - Error report: `public/screenshots/v2026-3d/_errors.json`
 
 #### Dev-Only Bridges Added
@@ -4227,11 +4445,12 @@ Custom Inscriptions: 9 inscriptions (clickable)
 5. **Price**: Individual addition price (from `FALLBACK_SIZES[sourceId][sizeVariant-1].retailPrice`)
 
 ### Modal Styling
-- **Dark gradient theme**: Matches Check Price page design
-- **Gold accents**: Headers with gold gradient (#cfac6c)
+- **Dark luxury theme** (April 2026): Matches HomeSplash modal from home page — `rounded-3xl` container, `border-[#d4af37]/35` gold border, gold gradient glow overlay, eyebrow pill badge, serif title
+- **Native dark classes**: All dark-theme styling via Tailwind classes (no CSS override hacks)
+- **Gold accents**: Headers with gold gradient, `#d4af37` border accents, `#f3d48f` light gold text
 - **Sticky headers**: Table headers stay visible while scrolling
 - **Hover effects**: Rows highlight with subtle white/5 background
-- **Close button**: Large × in header, plus Close button in footer
+- **Close button**: `rounded-full border border-white/25 bg-black/25` matching HomeSplash style
 
 ### Implementation Files
 - **Component**: `app/check-price/_ui/CheckPriceGrid.tsx`
@@ -4429,7 +4648,7 @@ The ML smart search system provides intelligent filtering and ranking for the `/
 ## Load Design Popup
 
 ### Overview
-The Load Design modal (`components/LoadDesignButton.tsx`) is a searchable category-first browser for all 3,114+ saved designs. It opens from the canvas top-right corner and allows loading any design into the 3D editor.
+The Load Design modal (`components/LoadDesignButton.tsx`) is a searchable category-first browser for all 3,114+ saved designs. It opens from the canvas top-right corner and allows loading any design into the 3D editor. Styled with the HomeSplash dark luxury theme (April 2026): `rounded-3xl` gold-bordered container, gold gradient glow, eyebrow pill badge, gold-accented search/filters, serif title.
 
 **Product Filtering (2026-04-08):** The popup filters designs by the current product ID — selecting "Traditional Engraved Headstone" only shows headstone designs, not laser-etched or bronze plaque designs. Uses `getProductTypeFromId()` to map product IDs to exact types. Falls back to showing all designs if no product is selected.
 
@@ -4515,7 +4734,7 @@ Favorite designs are toggled via `app/api/favorite-designs/route.ts` (GET/POST) 
 ### Key Files
 | File | Purpose |
 |------|---------|
-| `components/LoadDesignButton.tsx` | Main popup component with tree, search, filters, icons, V2026_3D_IDS screenshot set |
+| `components/LoadDesignButton.tsx` | Main popup component with tree, search, filters, icons, 3D screenshot fallback chain |
 | `lib/useHiddenDesigns.ts` | Shared hook for hidden + favorite design state |
 | `lib/saved-designs-data.ts` | 2.6MB design catalog with `SAVED_DESIGNS`, `DesignCategory`, `DESIGN_CATEGORIES`, `CATEGORY_STATS`, `PRODUCT_STATS` |
 | `app/api/hidden-designs/route.ts` | REST API for hidden design list |
@@ -5532,7 +5751,7 @@ node scripts/batch-screenshot.js --dry-run
 
 **⚠️ Playwright constraint:** `page.evaluate()` accepts only ONE argument. Multiple values must be wrapped in an object: `page.evaluate(({a, b}) => {}, {a, b})`.
 
-**Results (April 2026):** 222/223 success, 1 failure (p3d viewport issue), runtime ~2h for 223 designs (~35s each). All PNGs have RGBA transparency (color type 6).
+**Results (April 2026):** First batch: 221/223 success (original P3D designs), runtime ~2h. Second batch: 3,092 total designs (after mass conversion of 22,226 legacy designs to canonical JSON), in progress. All PNGs have RGBA transparency (color type 6). Process may hang on problematic designs — use `--skip-existing` to resume after manual restart.
 
 ### Design Analyzer (`scripts/analyze-saved-designs.js`)
 Generates `lib/saved-designs-data.ts` from raw design JSON files. Contains the `determineCategory()` function that assigns categories based on inscription keywords and motif types.
@@ -5765,6 +5984,21 @@ git log --oneline -10   # Recent commits
 ---
 
 ## Version History
+
+- **2026-04-09**: Popup Restyling (HomeSplash Dark Luxury Theme), Mass Design Conversion & Screenshots
+  - **Check Price Popup Restyle** (`components/CheckPricePanel.tsx`):
+    - Restyled to match HomeSplash modal: `rounded-3xl` gold-bordered container, gold gradient glow, eyebrow pill badge, serif title
+    - Native dark-theme classes throughout — removed all CSS override hacks
+  - **Load Design Popup Restyle** (`components/LoadDesignButton.tsx`):
+    - Same HomeSplash aesthetic: gold border, glow, eyebrow badge, serif title
+    - Gold-accented search focus ring, filter buttons, category containers, star icons
+  - **Mass Legacy Design Conversion**:
+    - Batch-converted 22,226 legacy designs from 3 mlDirs (forevershining: 12,487, headstonesdesigner: 7,529, bronze-plaque: 2,814)
+    - Catalog coverage: 223 → 3,092 of 3,114 designs now have canonical JSON
+    - Script: `node scripts/batch-convert-saved-designs.js --out-dir public/designs/v2026`
+  - **Batch Screenshot Generation**:
+    - First batch: 221/223 success (original designs)
+    - Second batch: 3,092 designs with `--skip-existing`, in progress
 
 - **2026-04-03**: Load Design Popup Enhancements, Pet Category & Design Management
   - **Load Design Popup UI**:

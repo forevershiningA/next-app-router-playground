@@ -1,0 +1,232 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:06.702Z",
+  "units": "mm",
+  "source": {
+    "id": "1740028010791",
+    "slug": "legacy-1740028010791",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1740028010791.json",
+    "savedAt": "2025-02-20T05:06:50.791Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Circle",
+    "material": {
+      "name": "src/bronzes/phoenix/l/15.jpg",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 150,
+      "height_mm": 150
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 832,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 384,
+        "height": 832
+      },
+      "bufferPx": {
+        "width": 1080,
+        "height": 2340
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 150,
+      "height_mm": 150,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "testing",
+        "font": {
+          "family": "Adorable",
+          "size_px": 62
+        },
+        "position": {
+          "x_px": -8,
+          "y_px": -477
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_044_24",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_044_24",
+        "path": "/shapes/motifs/1_044_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b026e6fad7156f5f6ffb1e21b3e510cdfcb93027937c1fb998926a46bc9e805f",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:06.702Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border Circle",
+        "shape_url": "shapes/photos/bordercircle.svg",
+        "fixingSystem": 3,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Circle",
+        "color": "#ffffff",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/15.jpg",
+        "name": "Bronze Plaque - White - Screws (visible from front)",
+        "price": 518.1,
+        "quantity": 1,
+        "width": 150,
+        "height": 150,
+        "_length": 10,
+        "init_width": 384,
+        "init_height": 642,
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20241120,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x832"
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br111l-horse-head",
+        "color": "#ffb35a",
+        "x": 0,
+        "y": 0,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": -55,
+        "ratio": 1.5305232558139534,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br111l-horse-head",
+        "price": 109,
+        "quantity": 1,
+        "size": "75 x 75 mm",
+        "itemID": 1
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_044_24",
+        "item": "1_044_24",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.12594458438287154,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "testing",
+        "font": "435.23999999999995px Adorable",
+        "font_size": 62,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": -477,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 58,
+        "itemID": 3
+      }
+    ]
+  }
+}

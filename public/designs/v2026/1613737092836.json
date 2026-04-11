@@ -1,0 +1,117 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:49.755Z",
+  "units": "mm",
+  "source": {
+    "id": "1613737092836",
+    "slug": "legacy-1613737092836",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1613737092836.json",
+    "savedAt": "2021-02-19T12:18:12.836Z"
+  },
+  "product": {
+    "id": "9",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Plaque (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 125,
+      "height_mm": 175
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 603,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1126,
+        "height": 603
+      },
+      "bufferPx": {
+        "width": 1126,
+        "height": 603
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 125,
+      "height_mm": 175,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f94880e6d00de4b7bb92f07f2a0037913330052513997f9b0c7a3ec71ddde596",
+    "sourceItemCount": 1,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:49.755Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 9,
+        "type": "Headstone",
+        "name": "Plaque (Landscape)",
+        "shape": "Plaque (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 201.98,
+        "quantity": 1,
+        "width": 125,
+        "height": 175,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 603,
+        "mode": "2d"
+      }
+    ]
+  }
+}

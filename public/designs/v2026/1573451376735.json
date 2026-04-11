@@ -1,0 +1,335 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:39.649Z",
+  "units": "mm",
+  "source": {
+    "id": "1573451376735",
+    "slug": "legacy-1573451376735",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1573451376735.json",
+    "savedAt": "2019-11-11T05:49:36.735Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/15.jpg",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 243,
+      "height_mm": 283
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 902,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1680,
+        "height": 902
+      },
+      "bufferPx": {
+        "width": 1680,
+        "height": 902
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 243,
+      "height_mm": 283,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "abcdefg",
+        "font": {
+          "family": "Xirwena",
+          "size_mm": 46
+        },
+        "position": {
+          "x_mm": -111,
+          "y_mm": 283
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "RICE",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 20
+        },
+        "position": {
+          "x_mm": -306,
+          "y_mm": -352
+        },
+        "rotation": {
+          "z_deg": -65
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "1_137_17",
+        "position": {
+          "x_mm": -252,
+          "y_mm": -115
+        },
+        "height_mm": 46,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_137_17",
+        "path": "/shapes/motifs/1_137_17.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "4c45a96dcc9f7e57b3b5af704b23635e13e85c4321eb01f58121d3f54c160d89",
+    "sourceItemCount": 8,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:39.649Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - White - Screws (visible from front)",
+        "border": "Border 10",
+        "shape_url": "shapes/photos/border10.svg",
+        "fixingSystem": 3,
+        "shape": "Square",
+        "color": "#ffffff",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/15.jpg",
+        "price": "791.14",
+        "quantity": 1,
+        "width": 243,
+        "height": 283,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 902
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "abcdefg",
+        "font": "142.9494699646643px Xirwena",
+        "font_size": 46,
+        "font_family": "Xirwena",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -111,
+        "y": -283,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 79,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "XYZ",
+        "font": "62.15194346289752px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -306,
+        "y": 352,
+        "rotation": -65,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1573452119219,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1573452119219girl1.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 169,
+        "y": 273,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 94,
+        "ratio": 0.868197879858657,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "girl1.jpg",
+        "price": 380,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 3
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1573452178739,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1573452178739girl2.jpg",
+        "color": 2,
+        "mask": 0,
+        "x": 264,
+        "y": -136,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.48233215547703173,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "girl2.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 4
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1573452178739,
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1573452178739girl2.jpg",
+        "color": 2,
+        "mask": 0,
+        "x": -259.72438162544177,
+        "y": -142,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.48233215547703173,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "girl2.jpg",
+        "price": 250,
+        "quantity": 1,
+        "size": "50 x 70 mm",
+        "itemID": 5
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "type": "Emblem",
+        "item": "br151-horse-head-and-shoe",
+        "color": "#ffb35a",
+        "x": -148,
+        "y": 310,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3445229681978798,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br151-horse-head-and-shoe",
+        "price": 99,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 6
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_137_17",
+        "item": "1_137_17",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -252,
+        "y": 115,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 46,
+        "ratio": 0.07666666666666666,
+        "itemID": 7
+      }
+    ]
+  }
+}

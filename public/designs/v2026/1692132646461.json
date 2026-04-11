@@ -1,0 +1,618 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:41.582Z",
+  "units": "mm",
+  "source": {
+    "id": "1692132646461",
+    "slug": "legacy-1692132646461",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1692132646461.json",
+    "savedAt": "2023-08-15T20:50:46.461Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "560.0699999999999",
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1440,
+      "height": 900,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1440,
+        "height": 900
+      },
+      "bufferPx": {
+        "width": 2880,
+        "height": 1800
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "560.0699999999999",
+      "height_mm": 400,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "The Woodrow Nash Studios & Gallery was opened in Akron, Ohio in August 2002 with the purpose to ",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -2,
+          "y_mm": 30
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "nurture and promote a sense of cultural awareness. The studio/gallery which resonates as a labor of",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -14,
+          "y_mm": -2
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "love was established by Woodrow Nash internationally renowned artist. Nash has a passion to elevate",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -8,
+          "y_mm": -40
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "the human spirit through art. The gallery represents over 30 years of a journey of discovery, cultural,",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -2,
+          "y_mm": -74
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "social and spiritual experiences transformed into statues, busts, torsos and timeless objects of sacred",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -112
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "art, Woodrow Nash’s gallery houses one of the most recognized collections of ceramic tribal art in the",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -4,
+          "y_mm": -150
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "world.  The majestic sculptures present a merging of 15th Century Benin and 18th Century French",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -4,
+          "y_mm": -188
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Nouveau, creating what he has coined as “African Nouveau”. Through his body of art, Nash works to",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -6,
+          "y_mm": -230
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "achieve a goal of Integrating expression, complex symbolism and sophisticated aesthetics to embody ",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": 0,
+          "y_mm": -264
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "the human soul.",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 14
+        },
+        "position": {
+          "x_mm": -2,
+          "y_mm": -304
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "woodrownashstudios.com",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 26
+        },
+        "position": {
+          "x_mm": 22,
+          "y_mm": -368
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Etta Peters",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_mm": 28
+        },
+        "position": {
+          "x_mm": -12,
+          "y_mm": 344
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f45ef8c084bd477b3807c384ecc1e265ba9cab84f40d751d9e45d0d23ce9c676",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:41.582Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 2275.01,
+        "quantity": 1,
+        "width": "560.0699999999999",
+        "height": 400,
+        "_length": 0,
+        "init_width": 1200,
+        "init_height": 616,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1440x900"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 78,
+        "label": "The Woodrow Nash Studios & Gallery was opened in Akron, Ohio in August 2002 with the purpose to ",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": -30,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 84,
+        "label": "nurture and promote a sense of cultural awareness. The studio/gallery which resonates as a labor of",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -14,
+        "y": 2,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 85,
+        "label": "love was established by Woodrow Nash internationally renowned artist. Nash has a passion to elevate",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -8,
+        "y": 40,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 87,
+        "label": "the human spirit through art. The gallery represents over 30 years of a journey of discovery, cultural,",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": 74,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 90,
+        "label": "social and spiritual experiences transformed into statues, busts, torsos and timeless objects of sacred",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 112,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 86,
+        "label": "art, Woodrow Nash’s gallery houses one of the most recognized collections of ceramic tribal art in the",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4,
+        "y": 150,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 80,
+        "label": "world.  The majestic sculptures present a merging of 15th Century Benin and 18th Century French",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4,
+        "y": 188,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 81,
+        "label": "Nouveau, creating what he has coined as “African Nouveau”. Through his body of art, Nash works to",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6,
+        "y": 230,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 86,
+        "label": "achieve a goal of Integrating expression, complex symbolism and sophisticated aesthetics to embody ",
+        "font": "25.736782902137232px Franklin Gothic",
+        "font_size": 12,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 264,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "the human soul.",
+        "font": "30.026246719160106px Franklin Gothic",
+        "font_size": 14,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2,
+        "y": 304,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "woodrownashstudios.com",
+        "font": "55.763029621297335px Franklin Gothic",
+        "font_size": 26,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 22,
+        "y": 368,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Woodrow Nash",
+        "font": "60.05249343832021px Franklin Gothic",
+        "font_size": 28,
+        "font_family": "Franklin Gothic",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -12,
+        "y": -344,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 12
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1692133597254,
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1692133597254woodrow_nash__cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -6,
+        "y": -188,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8356098344849751,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "woodrow nash .png",
+        "price": 335,
+        "quantity": 1,
+        "size": "90 x 120 mm",
+        "itemID": 13
+      }
+    ]
+  }
+}

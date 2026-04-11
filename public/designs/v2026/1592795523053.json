@@ -1,0 +1,227 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:46.695Z",
+  "units": "mm",
+  "source": {
+    "id": "1592795523053",
+    "slug": "legacy-1592795523053",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1592795523053.json",
+    "savedAt": "2020-06-22T03:12:03.053Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/English-Brown-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/English-Brown-TILE.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 308,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1552,
+      "height": 945,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1552,
+        "height": 945
+      },
+      "bufferPx": {
+        "width": 1552,
+        "height": 945
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 308,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/English-Brown-TILE.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "demo inscription",
+        "font": {
+          "family": "Arial",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 13,
+          "y_px": 187.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_129_14",
+        "position": {
+          "x_px": -212,
+          "y_px": -44.5
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_129_14",
+        "path": "/shapes/motifs/1_129_14.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "146e907bc30b920f09da7e39421cff3211b5c03c6339b2680046b880531a2a49",
+    "sourceItemCount": 4,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:46.695Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "name": "Square",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/English-Brown-TILE-900-X-900.jpg",
+        "price": "394.15",
+        "quantity": 1,
+        "width": 308,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1552,
+        "init_height": 945,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_129_14",
+        "item": "1_129_14",
+        "price": 205.6886,
+        "quantity": 1,
+        "color": "#d41568",
+        "colorName": "Paint Fill",
+        "x": -212,
+        "y": -44.5,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 60,
+        "ratio": 0.11049723756906077,
+        "itemID": 1
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "path": "../upload/2020/06/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1592794731131happy_girl_stock_cropped.jpg",
+        "color": 2,
+        "mask": 0,
+        "x": 138,
+        "y": -99.5,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6640700076878724,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "happy_girl_stock.jpg",
+        "price": 290,
+        "quantity": 1,
+        "size": "70 x 90 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 48,
+        "quantity": 16,
+        "label": "demo inscription",
+        "font": "92.73579545454545px Arial",
+        "font_size": 31,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 13,
+        "y": 187.5,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 2
+      }
+    ]
+  }
+}

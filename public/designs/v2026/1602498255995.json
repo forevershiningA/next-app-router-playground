@@ -1,0 +1,934 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:48.142Z",
+  "units": "mm",
+  "source": {
+    "id": "1602498255995",
+    "slug": "legacy-1602498255995",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1602498255995.json",
+    "savedAt": "2020-10-12T10:24:15.995Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1000,
+      "height_mm": 1000
+    },
+    "viewportPx": {
+      "width": 1188,
+      "height": 678,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1188,
+        "height": 678
+      },
+      "bufferPx": {
+        "width": 1188,
+        "height": 678
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1000,
+      "height_mm": 1000,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1100,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "VASQUEZ",
+        "font": {
+          "family": "Arial",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": -208.512
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Maynard Neal 88 - 30 July 2020",
+        "font": {
+          "family": "Arial",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 16.25,
+          "y_px": 164.161
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Edwin Sharp",
+        "font": {
+          "family": "Arial",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 9,
+          "y_px": 135.738
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Elias Haynes",
+        "font": {
+          "family": "Arial",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 7.656,
+          "y_px": -6.764
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Florence Greene",
+        "font": {
+          "family": "Arial",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 3.406,
+          "y_px": -117.764
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "10 January 1960",
+        "font": {
+          "family": "Arial",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 1.938,
+          "y_px": -80.152
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Arthur Smith",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": 25.488
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-10",
+        "asset": "2_121_23",
+        "position": {
+          "x_px": 230.5,
+          "y_px": 184.238
+        },
+        "height_px": 77,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_184_23",
+        "position": {
+          "x_px": 0.25,
+          "y_px": -261.262
+        },
+        "height_px": 69,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_158_20",
+        "position": {
+          "x_px": -245.531,
+          "y_px": 54.486
+        },
+        "height_px": 600,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-15",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 173.25,
+          "y_px": 224.988
+        },
+        "height_px": 53,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-16",
+        "asset": "abelmoschusmoschatus(nativerosella)",
+        "position": {
+          "x_px": 217.5,
+          "y_px": -103.262
+        },
+        "height_px": 61,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "1_065_05",
+        "position": {
+          "x_px": -264.875,
+          "y_px": -185.839
+        },
+        "height_px": 118,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_208_15",
+        "position": {
+          "x_px": 268.625,
+          "y_px": -194.152
+        },
+        "height_px": 105,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-20",
+        "asset": "2_087_24",
+        "position": {
+          "x_px": 169.625,
+          "y_px": -69.777
+        },
+        "height_px": 62,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-23",
+        "asset": "2_098_08",
+        "position": {
+          "x_px": 130.438,
+          "y_px": -20.714
+        },
+        "height_px": 84,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-24",
+        "asset": "2_121_21",
+        "position": {
+          "x_px": 179.25,
+          "y_px": 141.238
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-30",
+        "asset": "1_148_07",
+        "position": {
+          "x_px": 221,
+          "y_px": 104.738
+        },
+        "height_px": 80,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-33",
+        "asset": "1_157_22",
+        "position": {
+          "x_px": -193.492,
+          "y_px": 68.377
+        },
+        "height_px": 145,
+        "rotation": {
+          "z_deg": -19
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_121_23",
+        "path": "/shapes/motifs/2_121_23.svg"
+      },
+      {
+        "id": "1_184_23",
+        "path": "/shapes/motifs/1_184_23.svg"
+      },
+      {
+        "id": "1_158_20",
+        "path": "/shapes/motifs/1_158_20.svg"
+      },
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "abelmoschusmoschatus(nativerosella)",
+        "path": "/shapes/motifs/abelmoschusmoschatus(nativerosella).svg"
+      },
+      {
+        "id": "1_065_05",
+        "path": "/shapes/motifs/1_065_05.svg"
+      },
+      {
+        "id": "1_208_15",
+        "path": "/shapes/motifs/1_208_15.svg"
+      },
+      {
+        "id": "2_087_24",
+        "path": "/shapes/motifs/2_087_24.svg"
+      },
+      {
+        "id": "2_098_08",
+        "path": "/shapes/motifs/2_098_08.svg"
+      },
+      {
+        "id": "2_121_21",
+        "path": "/shapes/motifs/2_121_21.svg"
+      },
+      {
+        "id": "1_148_07",
+        "path": "/shapes/motifs/1_148_07.svg"
+      },
+      {
+        "id": "1_157_22",
+        "path": "/shapes/motifs/1_157_22.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "44d71ea1265d62592b07b592ec35cd4f4c43de26d331278af11bcf069bba0e18",
+    "sourceItemCount": 21,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:48.142Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "4793.04",
+        "quantity": 1,
+        "width": 1000,
+        "height": 1000,
+        "_length": 1,
+        "init_width": 1188,
+        "init_height": 678,
+        "mode": "2d"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "1952.72",
+        "quantity": 1,
+        "width": 1100,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1188,
+        "init_height": 678,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "FLYNN",
+        "font": "33.052499999999995px Arial",
+        "font_size": 55,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -2.5,
+        "y": -208.51191637473886,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "04 June 1988 - 30 July 2020",
+        "font": "16.225772727272727px Arial",
+        "font_size": 27,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 16.25,
+        "y": 164.16065473995627,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Paul William",
+        "font": "24.63913636363636px Arial",
+        "font_size": 41,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 9,
+        "y": 135.73806502016845,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Terrence William",
+        "font": "24.63913636363636px Arial",
+        "font_size": 41,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 7.65625,
+        "y": -6.764220128460181,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Barbara Anne",
+        "font": "24.63913636363636px Arial",
+        "font_size": 41,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 3.40625,
+        "y": -117.76421575079135,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "10 January 1960",
+        "font": "16.826727272727272px Arial",
+        "font_size": 28,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 1.9375,
+        "y": -80.15183185343278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "20 June 1960",
+        "font": "19.8315px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -1.25,
+        "y": 25.488070978662165,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 9
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_121_23",
+        "item": "2_121_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 230.5,
+        "y": 184.23806239897158,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 77,
+        "ratio": 0.0818278427205101,
+        "itemID": 10
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_23",
+        "item": "1_184_23",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0.25,
+        "y": -261.26191352384956,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 69,
+        "ratio": 0.08668341708542714,
+        "itemID": 11
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_158_20",
+        "item": "1_158_20",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -245.53125,
+        "y": 54.48577291320822,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 600,
+        "ratio": 0.6629834254143646,
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 173.25,
+        "y": 224.98806019662584,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 53,
+        "ratio": 0.06257378984651712,
+        "itemID": 15
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "abelmoschusmoschatus(nativerosella)",
+        "item": "abelmoschusmoschatus(nativerosella)",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 217.5,
+        "y": -103.26192206300612,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 61,
+        "ratio": 0.07201889020070838,
+        "itemID": 16
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_065_05",
+        "item": "1_065_05",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -264.875,
+        "y": -185.83932715486995,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 118,
+        "ratio": 0.1673758865248227,
+        "itemID": 17
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_15",
+        "item": "1_208_15",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 268.625,
+        "y": -194.15182670561848,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 105,
+        "ratio": 0.18453427065026362,
+        "itemID": 18
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_087_24",
+        "item": "2_087_24",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 169.625,
+        "y": -69.77683342750194,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 62,
+        "ratio": 0.06546990496304118,
+        "itemID": 20
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_098_08",
+        "item": "2_098_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 130.4375,
+        "y": -20.714336079099326,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 84,
+        "ratio": 0.12727272727272726,
+        "itemID": 23
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_121_21",
+        "item": "2_121_21",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 179.25,
+        "y": 141.23806472291926,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.0800438596491228,
+        "itemID": 24
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_148_07",
+        "item": "1_148_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 221,
+        "y": 104.73806669557257,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 80,
+        "ratio": 0.1032258064516129,
+        "itemID": 30
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_157_22",
+        "item": "1_157_22",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -193.4921875,
+        "y": 68.37653848312704,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -19,
+        "height": 145,
+        "ratio": 0.18518518518518517,
+        "itemID": 33
+      }
+    ]
+  }
+}

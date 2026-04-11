@@ -1,0 +1,586 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:16.049Z",
+  "units": "mm",
+  "source": {
+    "id": "1721251980786",
+    "slug": "legacy-1721251980786",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1721251980786.json",
+    "savedAt": "2024-07-17T21:33:00.786Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 892,
+      "dpr": 2.625
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 412,
+        "height": 892
+      },
+      "bufferPx": {
+        "width": 1082,
+        "height": 2342
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 609.5999999999999,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-5",
+        "text": "Lawrence Walsh",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 68
+        },
+        "position": {
+          "x_px": -0.12,
+          "y_px": -17.624
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "May 20th, 1954",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -223.99,
+          "y_px": 119.913
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Father, Husband",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": -18.701,
+          "y_px": -231.521
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Brother, friend",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": -1.71,
+          "y_px": 300.884
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Nov 23rd, 2023",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 192.277,
+          "y_px": 125.017
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-12",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": 392.937,
+          "y_px": 342.645
+        },
+        "height_px": 184,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": -384.327,
+          "y_px": 345.037
+        },
+        "height_px": 184,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": -379.264,
+          "y_px": -225.841
+        },
+        "height_px": 184,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-15",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": 373.197,
+          "y_px": -244.363
+        },
+        "height_px": 184,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_037_12",
+        "path": "/shapes/motifs/1_037_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "821629e0f0b3f53b1453cb18eb2333c861d41aca6d2f8212775c2a07d414fd7c",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:16.050Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2565.95,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 609.5999999999999,
+        "_length": 80,
+        "init_width": 412,
+        "init_height": 703,
+        "device": "mobile",
+        "dpr": 2.625,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 412x892"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1721251340816,
+        "path": "../upload/2024/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17212513408161000008189_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -340.4676783663556,
+        "y": -193.63575460290167,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6142618319948997,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000008189.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "125",
+        "width": "152",
+        "height": "216",
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1721251411777,
+        "path": "../upload/2024/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17212514117771000008193_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 339.73126546619005,
+        "y": -217.07480448781178,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6290041159627774,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000008193.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "128",
+        "width": "155",
+        "height": "221",
+        "itemID": 2
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1721251698036,
+        "path": "../upload/2024/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17212516980361000008190_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": -335.47768163218086,
+        "y": 297.1485316573635,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5995195480270222,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000008190.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "122",
+        "width": "148",
+        "height": "211",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1721251745889,
+        "path": "../upload/2024/07/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "17212517458891000008191_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 364.0308934183952,
+        "y": 308.01155405058125,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5995195480270222,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1000008191.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "122",
+        "width": "148",
+        "height": "211",
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 392.93670920510453,
+        "y": 342.64546357720496,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 184,
+        "ratio": 0.2010928961748634,
+        "itemID": 12
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -384.3274629215534,
+        "y": 345.03690141702214,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 184,
+        "ratio": 0.2010928961748634,
+        "itemID": 13
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -379.2640727530937,
+        "y": -225.84124330436583,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 184,
+        "ratio": 0.2010928961748634,
+        "itemID": 14
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 373.19662010629656,
+        "y": -244.36280262758567,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 184,
+        "ratio": 0.2010928961748634,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Stephen B Chilsted",
+        "font": "117.62376968503936px Chopin Script",
+        "font_size": 68,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -0.11993011919014407,
+        "y": -17.624401152218525,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 73,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "May 20th, 1954",
+        "font": "48.43331692913386px Chopin Script",
+        "font_size": 28,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -223.98979894397303,
+        "y": 119.9127164707752,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Father, Husband",
+        "font": "69.19045275590551px Chopin Script",
+        "font_size": 40,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -18.701292871271676,
+        "y": -231.52075091127324,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Brother, friend",
+        "font": "88.21782726377953px Chopin Script",
+        "font_size": 51,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -1.710235188308161,
+        "y": 300.884439959465,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Nov 23rd, 2023",
+        "font": "51.89283956692913px Chopin Script",
+        "font_size": 30,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 192.27692991090066,
+        "y": 125.01692809624478,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 9
+      }
+    ]
+  }
+}

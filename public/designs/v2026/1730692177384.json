@@ -1,0 +1,750 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:42.642Z",
+  "units": "mm",
+  "source": {
+    "id": "1730692177384",
+    "slug": "legacy-1730692177384",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1730692177384.json",
+    "savedAt": "2024-11-04T03:49:37.384Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/02.jpg",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 381.00000000000006,
+      "height_mm": 330.20000000000005
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1536,
+        "height": 864
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 381.00000000000006,
+      "height_mm": 330.20000000000005,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/02.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Hardy Webb",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 19
+        },
+        "position": {
+          "x_mm": 0.883,
+          "y_mm": 266.738
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "You have not dreamed of wheeled and soared and swung.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -0.887,
+          "y_mm": 82.578
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "High in the sunlit silence, hov&apos;ring there",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -4.386,
+          "y_mm": 51.645
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "I&apos;ve chased the shouting winds along and flung",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -4.273,
+          "y_mm": 18.548
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "My eager craft through footless halls of air.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -9.245,
+          "y_mm": -13.574
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Up,up the long delirious burning blue",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -12.618,
+          "y_mm": -46.201
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Where never lark nor ever eagle flew",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -5.232,
+          "y_mm": -110.568
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "And, while with silent, lifting mind I&apos;ve trod",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -4.424,
+          "y_mm": -143.912
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "The high untresspassed sancity of space,",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -2.592,
+          "y_mm": -175.042
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "Put out my hand and touched the face of God.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -6.613,
+          "y_mm": -206.065
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "-John Gillespie Magee Jr.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": 153.445,
+          "y_mm": -255.477
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Oh! I  have slipped the surly bonds of Earth",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -0.989,
+          "y_mm": 215.892
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "And danced the skies on laughter-silvered wings",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -4.421,
+          "y_mm": 182.392
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Sunward I&apos;ve climbed, and joined the tumbling mirth",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -5.708,
+          "y_mm": 149.013
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Of sun-split clouds and done a hundred things",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -6.217,
+          "y_mm": 115.971
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "I&apos;ve topped the wind-swept heights with easy grace",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -11.88,
+          "y_mm": -77.711
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "6b246b5599bac45fa244397e63468208bea5a1d9a34ea165ae3a77232468dfa1",
+    "sourceItemCount": 17,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:42.642Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "No Border",
+        "shape_url": "shapes/photos/noborder.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#48280f",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/02.jpg",
+        "name": "Bronze Plaque - Brown - Lugs with Studs",
+        "price": 1463.64,
+        "quantity": 1,
+        "width": 381.00000000000006,
+        "height": 330.20000000000005,
+        "_length": 0,
+        "init_width": 726,
+        "init_height": 594,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x864"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 10,
+        "label": "High Flight",
+        "font": "36.101870078740156px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0.8825859044936806,
+        "y": -266.7377360362035,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 44,
+        "label": "You have not dreamed of wheeled and soared and swung.",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -0.8869872307776632,
+        "y": -82.57775692677848,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 36,
+        "label": "High in the sunlit silence, hov&apos;ring there",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4.386471427820084,
+        "y": -51.644763788324894,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 39,
+        "label": "I&apos;ve chased the shouting winds along and flung",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4.273399429903786,
+        "y": -18.548034064320902,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 38,
+        "label": "My eager craft through footless halls of air.",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -9.24523777466444,
+        "y": 13.574495904885074,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 32,
+        "label": "Up,up the long delirious burning blue",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -12.617815942461107,
+        "y": 46.20144702258375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Where never lark nor ever eagle flew",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -5.232499135960111,
+        "y": 110.56792176807527,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "And, while with silent, lifting mind I&apos;ve trod",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4.424485037699583,
+        "y": 143.91230050423098,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "The high untresspassed sancity of space,",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2.591883687754944,
+        "y": 175.0421983018241,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 14
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Put out my hand and touched the face of God.",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.6132985993076545,
+        "y": 206.06502290362437,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "-John Gillespie Magee Jr.",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 153.44460697450336,
+        "y": 255.47661154364255,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 35,
+        "label": "Oh! I  have slipped the surly bonds of Earth",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -0.9891590434685895,
+        "y": -215.89199675599033,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "And danced the skies on laughter-silvered wings",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4.420812217068828,
+        "y": -182.39236969479083,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 44,
+        "label": "Sunward I&apos;ve climbed, and joined the tumbling mirth",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -5.707756395362708,
+        "y": -149.01306319240274,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 38,
+        "label": "Of sun-split clouds and done a hundred things",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.216818732886395,
+        "y": -115.97144900029045,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 43,
+        "label": "I&apos;ve topped the wind-swept heights with easy grace",
+        "font": "30.401574803149604px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -11.880198760058647,
+        "y": 77.71135075170804,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 11
+      }
+    ]
+  }
+}

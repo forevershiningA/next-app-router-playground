@@ -1,0 +1,722 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:17.744Z",
+  "units": "mm",
+  "source": {
+    "id": "1727191284260",
+    "slug": "legacy-1727191284260",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1727191284260.json",
+    "savedAt": "2024-09-24T15:21:24.260Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 736.6000000000004,
+      "height_mm": 647.7
+    },
+    "viewportPx": {
+      "width": 1728,
+      "height": 1117,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1728,
+        "height": 1117
+      },
+      "bufferPx": {
+        "width": 3456,
+        "height": 2234
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 736.6000000000004,
+      "height_mm": 647.7,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": 811.2000000000003,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "xxx. 88, xxx",
+        "font": {
+          "family": "Arial",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -316,
+          "y_px": 385
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Aug. 8, 1959",
+        "font": {
+          "family": "Arial",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -318,
+          "y_px": 325
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Almeda Boyd",
+        "font": {
+          "family": "Arial",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": 288,
+          "y_px": 252
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Dec. 4, 1963",
+        "font": {
+          "family": "Arial",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 278,
+          "y_px": 330
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Xxx., xx, xxxx",
+        "font": {
+          "family": "Arial",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": 266,
+          "y_px": 382
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Mable Keller",
+        "font": {
+          "family": "Arial",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -314,
+          "y_px": 249
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Sophie Baldwin",
+        "font": {
+          "family": "Adorable",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": -2,
+          "y_px": 9
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "PENA",
+        "font": {
+          "family": "Garamond",
+          "size_px": 84
+        },
+        "position": {
+          "x_px": 18,
+          "y_px": -170
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-7",
+        "asset": "bronzeangel2",
+        "position": {
+          "x_px": 554,
+          "y_px": -136
+        },
+        "height_px": 130,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-9",
+        "asset": "2_116_05",
+        "position": {
+          "x_px": -526,
+          "y_px": -118
+        },
+        "height_px": 134,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_155_07",
+        "position": {
+          "x_px": -494,
+          "y_px": -16
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 18
+        },
+        "color": "#154733",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_132_07",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_155_11",
+        "position": {
+          "x_px": 572,
+          "y_px": -54
+        },
+        "height_px": 46,
+        "rotation": {
+          "z_deg": 29
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "2_056_01",
+        "position": {
+          "x_px": 554,
+          "y_px": 316
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "bronzeangel2",
+        "path": "/shapes/motifs/bronzeangel2.svg"
+      },
+      {
+        "id": "2_116_05",
+        "path": "/shapes/motifs/2_116_05.svg"
+      },
+      {
+        "id": "1_155_07",
+        "path": "/shapes/motifs/1_155_07.svg"
+      },
+      {
+        "id": "1_132_07",
+        "path": "/shapes/motifs/1_132_07.svg"
+      },
+      {
+        "id": "1_155_11",
+        "path": "/shapes/motifs/1_155_11.svg"
+      },
+      {
+        "id": "2_056_01",
+        "path": "/shapes/motifs/2_056_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "08085186b9f9d9adedcbed7444f8b57f409e2e6df1c731dbad4e60aeb4cf09ac",
+    "sourceItemCount": 16,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:17.744Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1912.17,
+        "quantity": 1,
+        "width": 736.6000000000004,
+        "height": 647.7,
+        "_length": 80,
+        "init_width": 1296,
+        "init_height": 773,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240903,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1728x1117"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "price": 631,
+        "quantity": 1,
+        "width": 811.2000000000003,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1296,
+        "init_height": 773,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "bronzeangel2",
+        "item": "bronzeangel2",
+        "price": 235.43432499999997,
+        "quantity": 1,
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "colorName2": "undefined",
+        "x": 554,
+        "y": -136,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 130,
+        "ratio": 0.253411306042885,
+        "itemID": 7
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_116_05",
+        "item": "2_116_05",
+        "price": 236.37334499999997,
+        "quantity": 1,
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "colorName2": "undefined",
+        "x": -526,
+        "y": -118,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 134,
+        "ratio": 0.18406593406593408,
+        "itemID": 9
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_07",
+        "item": "1_155_07",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "colorName2": "undefined",
+        "x": -494,
+        "y": -16,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 18,
+        "height": 40,
+        "ratio": 0.05291005291005291,
+        "itemID": 10
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_132_07",
+        "item": "1_132_07",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "colorName2": "undefined",
+        "x": 0,
+        "y": 0,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.11682242990654206,
+        "itemID": 12
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_11",
+        "item": "1_155_11",
+        "price": 215.714905,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 572,
+        "y": -54,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 29,
+        "height": 46,
+        "ratio": 0.06469760900140648,
+        "itemID": 13
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_056_01",
+        "item": "2_056_01",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 554,
+        "y": 316,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06451612903225806,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "xxx. 88, xxx",
+        "font": "47.04122941437778px Arial",
+        "font_size": 26,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -316,
+        "y": 385,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "Aug. 8, 1959",
+        "font": "43.422673305579494px Arial",
+        "font_size": 24,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -318,
+        "y": 325,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 17,
+        "label": "Kathleen Jean Evans",
+        "font": "52.46906357757522px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 288,
+        "y": 252,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "Dec. 4, 1963",
+        "font": "43.422673305579494px Arial",
+        "font_size": 24,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 278,
+        "y": 330,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "Xxx., xx, xxxx",
+        "font": "47.04122941437778px Arial",
+        "font_size": 26,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 266,
+        "y": 382,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "Daniel Antonio Marsiglia",
+        "font": "52.46906357757522px Arial",
+        "font_size": 29,
+        "font_family": "Arial",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -314,
+        "y": 249,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "In Love Forever",
+        "font": "86.84534661115899px Adorable",
+        "font_size": 48,
+        "font_family": "Adorable",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -2,
+        "y": 9,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 9,
+        "label": "MARSIGLIA",
+        "font": "151.97935656952822px Garamond",
+        "font_size": 84,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 18,
+        "y": -170,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 59,
+        "itemID": 8
+      }
+    ]
+  }
+}

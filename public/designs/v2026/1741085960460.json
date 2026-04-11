@@ -1,0 +1,558 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:06.797Z",
+  "units": "mm",
+  "source": {
+    "id": "1741085960460",
+    "slug": "legacy-1741085960460",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1741085960460.json",
+    "savedAt": "2025-03-04T10:59:20.460Z"
+  },
+  "product": {
+    "id": "52",
+    "name": "YAG Lasered Stainless Steel Plaque",
+    "type": "plaque",
+    "slug": "stainless-steel-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/brushed-ss-swatch.jpg",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 158,
+      "height_mm": 114
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 1024,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1536,
+        "height": 1024
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1280
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 158,
+      "height_mm": 114,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/brushed-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Horatio Rivera",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -7,
+          "y_px": -175
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Much loved father of Jeff, Nicky, Brett and Lance.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 58
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Dearly loved husband of Shirley.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": -3.998
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Adored Grandfather of Michael, Maddalyn and Amelia.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 117
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Always loved, Never Forgotten, Forever Missed!",
+        "font": {
+          "family": "Garamond",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": -5,
+          "y_px": 199.017
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": -257
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "22 April 1942 - 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 8
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": -97.753
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "2_001_08",
+        "position": {
+          "x_px": 438.75,
+          "y_px": 301.107
+        },
+        "height_px": 16,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-9",
+        "asset": "2_001_08",
+        "position": {
+          "x_px": -445.863,
+          "y_px": 299.857
+        },
+        "height_px": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "2_001_08",
+        "position": {
+          "x_px": -444.227,
+          "y_px": -299.857
+        },
+        "height_px": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-11",
+        "asset": "2_001_08",
+        "position": {
+          "x_px": 444.91,
+          "y_px": -296.109
+        },
+        "height_px": 15,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": true
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_001_08",
+        "path": "/shapes/motifs/2_001_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3c89364e8c3822e60df0edd3a9dff0b04f3a35f1aaa545bd39eea31bc7cdec42",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:06.797Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 52,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/brushed-ss-swatch.jpg",
+        "name": "Single Thickness Stainless Steel Plaque - Straight (No drilled holes)",
+        "price": 228.25,
+        "quantity": 1,
+        "width": 158,
+        "height": 114,
+        "_length": 2,
+        "init_width": 1288,
+        "init_height": 842,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1536x1024"
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_001_08",
+        "item": "2_001_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 438.75,
+        "y": 301.1068883610452,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 16,
+        "ratio": 0.02269503546099291,
+        "itemID": 8
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_001_08",
+        "item": "2_001_08",
+        "price": 6.760000000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -445.86328125,
+        "y": 299.8574821852733,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 15,
+        "ratio": 0.02127659574468085,
+        "itemID": 9
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_001_08",
+        "item": "2_001_08",
+        "price": 6.760000000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -444.2265625,
+        "y": -299.85748218527306,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 15,
+        "ratio": 0.02127659574468085,
+        "itemID": 10
+      },
+      {
+        "productid": "75",
+        "name": "YAG Lasered Motif (Stainless Steel)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_001_08",
+        "item": "2_001_08",
+        "price": 6.760000000000001,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 444.91015625,
+        "y": -296.1092636579573,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 15,
+        "ratio": 0.02127659574468085,
+        "itemID": 11
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "Fenton Thomas D&apos;Antoine",
+        "font": "77.9382911392405px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -7,
+        "y": -175,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 1
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 42,
+        "label": "Much loved father of Jeff, Nicky, Brett and Lance.",
+        "font": "45.46400316455696px Garamond",
+        "font_size": 7,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 58,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 5
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 28,
+        "label": "Dearly loved husband of Shirley.",
+        "font": "45.46400316455696px Garamond",
+        "font_size": 7,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 8,
+        "y": -3.997624703087922,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 6
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 45,
+        "label": "Adored Grandfather of Michael, Maddalyn and Amelia.",
+        "font": "45.46400316455696px Garamond",
+        "font_size": 7,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -1,
+        "y": 117,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 4
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 41,
+        "label": "Always loved, Never Forgotten, Forever Missed!",
+        "font": "45.46400316455696px Garamond",
+        "font_size": 7,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -5,
+        "y": 199.01662707838477,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 7
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "64.94857594936708px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -11,
+        "y": -257,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 3
+      },
+      {
+        "productid": "77",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "22 April 1942 - 2024",
+        "font": "51.95886075949367px Garamond",
+        "font_size": 8,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 8,
+        "y": -97.75296912114015,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 2
+      }
+    ]
+  }
+}

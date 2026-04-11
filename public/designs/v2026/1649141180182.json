@@ -1,0 +1,784 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:54.897Z",
+  "units": "mm",
+  "source": {
+    "id": "1649141180182",
+    "slug": "legacy-1649141180182",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1649141180182.json",
+    "savedAt": "2022-04-05T06:46:20.182Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 590,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 590,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 690,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-15",
+        "text": "Tuainekore i te ao nei",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -67
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Devoted Wife to Late  Papa Vano",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 17,
+          "y_px": -12
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Loving Mum, Grandmother and Great Grandma",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 116
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "Fought the Good fight, Finished the Race",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 202
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "Kept the Faith 2 Timothy 4 Verse 7",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 246
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "Who Feared the Lord-Proverb 31Verses 25 and 30",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 162
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "Hanna Munoz",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 285
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "Woman of Grace and Dignity",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 59
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 61
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -146
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "Forever in our Hearts",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 334
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-8",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -336,
+          "y_px": -248
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-9",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 335.933,
+          "y_px": -248
+        },
+        "height_px": 90,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-37",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": 318,
+          "y_px": 305
+        },
+        "height_px": 85,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-40",
+        "asset": "flowerrose_02simpler",
+        "position": {
+          "x_px": -329,
+          "y_px": -138
+        },
+        "height_px": 80,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-41",
+        "asset": "flowerrose_02simpler",
+        "position": {
+          "x_px": 329.686,
+          "y_px": -134
+        },
+        "height_px": 80,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-42",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": -314,
+          "y_px": 304
+        },
+        "height_px": 85,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      },
+      {
+        "id": "flowerrose_02simpler",
+        "path": "/shapes/motifs/flowerrose_02simpler.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "09f50f3ed607e9bf3d84a408a8ee970020fd039a8a49321fc6496b06c003b0a7",
+    "sourceItemCount": 18,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:54.897Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 2116.8,
+        "quantity": 1,
+        "width": 590,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 905,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220404,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 547,
+        "quantity": 1,
+        "width": 690,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 905,
+        "mode": "2d"
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -336,
+        "y": -248,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.1615798922800718,
+        "itemID": 8
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 335.93340279558856,
+        "y": -248,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 90,
+        "ratio": 0.1615798922800718,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Tuainekore i te ao nei",
+        "font": "75.63214285714285px Dobkin",
+        "font_size": 60,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -4,
+        "y": -67,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Devoted Wife to Late  Papa Vano",
+        "font": "60.50571428571429px Dobkin",
+        "font_size": 48,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 17,
+        "y": -12,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 17
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 36,
+        "label": "Loving Mum, Grandmother and Great Grandma",
+        "font": "44.11875px Dobkin",
+        "font_size": 35,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 115.99999999999994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 19
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Fought the Good fight, Finished the Race",
+        "font": "41.597678571428574px Dobkin",
+        "font_size": 33,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 201.99999999999994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 24
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "Kept the Faith 2 Timothy 4 Verse 7",
+        "font": "41.597678571428574px Dobkin",
+        "font_size": 33,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 3,
+        "y": 245.99999999999994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 25
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Who Feared the Lord-Proverb 31Verses 25 and 30",
+        "font": "41.597678571428574px Dobkin",
+        "font_size": 33,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": 161.99999999999994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 21
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Missed Beyond Measure",
+        "font": "41.597678571428574px Dobkin",
+        "font_size": 33,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": 284.99999999999994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 28
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Woman of Grace and Dignity",
+        "font": "60.50571428571429px Dobkin",
+        "font_size": 48,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 6,
+        "y": 59,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 20
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "76.89267857142858px Dobkin",
+        "font_size": 61,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": -146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 62,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Forever in our Hearts",
+        "font": "66.80839285714286px Dobkin",
+        "font_size": 53,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -1,
+        "y": 333.99999999999994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 29
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 318,
+        "y": 304.99999999999994,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 85,
+        "ratio": 0.1452991452991453,
+        "itemID": 37
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerrose_02simpler",
+        "item": "flowerrose_02simpler",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -329,
+        "y": -138,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 80,
+        "ratio": 0.08602150537634409,
+        "itemID": 40
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "flowerrose_02simpler",
+        "item": "flowerrose_02simpler",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 329.68635944700463,
+        "y": -134,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 80,
+        "ratio": 0.08602150537634409,
+        "itemID": 41
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -314,
+        "y": 303.99999999999994,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 85,
+        "ratio": 0.1452991452991453,
+        "itemID": 42
+      }
+    ]
+  }
+}

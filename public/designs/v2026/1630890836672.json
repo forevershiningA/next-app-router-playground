@@ -1,0 +1,265 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:52.653Z",
+  "units": "mm",
+  "source": {
+    "id": "1630890836672",
+    "slug": "legacy-1630890836672",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1630890836672.json",
+    "savedAt": "2021-09-06T01:13:56.672Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Full-colour Plaque",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 250,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 863,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1680,
+        "height": 863
+      },
+      "bufferPx": {
+        "width": 1680,
+        "height": 863
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 250,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Mandy Hunter",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -237
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "01.04.1950-31.12.2020",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": 13,
+          "y_px": -153
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Beloved Mother, Wife,",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 11
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 55.206
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f77175daefcceda927c7e3ff570714cefcaac38b0c9ef44a98f36b3cc106f1eb",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:52.653Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "name": "Full-colour Plaque",
+        "shape": "Full-colour Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/ceramic/l/01.jpg",
+        "price": 549,
+        "quantity": 1,
+        "width": 250,
+        "height": 200,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 863,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210831,
+        "mode": "2d",
+        "navigator": "Win32, , Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1630891066966,
+        "path": "../upload/2021/09/",
+        "name": "Image (free)",
+        "type": "Photo",
+        "item": "1630891066966portraitseniorwomanweari.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": -4,
+        "y": 2,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.581567361111111,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "portrait-senior-woman-wearing-red-shirt.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 203,
+        "width": "1025",
+        "height": "683",
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Michelle Smith",
+        "font": "124.5309px Chopin Script",
+        "font_size": 37,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": -237,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 1
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "01.04.1950-31.12.2020",
+        "font": "43.7541px Franklin Gothic",
+        "font_size": 13,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 13,
+        "y": -153,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Beloved Mother, Wife,",
+        "font": "37.0227px Franklin Gothic",
+        "font_size": 11,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": 55.206298828125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 5
+      }
+    ]
+  }
+}

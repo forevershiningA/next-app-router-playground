@@ -1,0 +1,140 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:49.096Z",
+  "units": "mm",
+  "source": {
+    "id": "1607997764103",
+    "slug": "legacy-1607997764103",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1607997764103.json",
+    "savedAt": "2020-12-15T02:02:44.103Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/Balmoral-Red-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Balmoral-Red-TILE.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 653,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 723,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1200,
+        "height": 723
+      },
+      "bufferPx": {
+        "width": 1200,
+        "height": 723
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 653,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Balmoral-Red-TILE.webp"
+    },
+    "base": {
+      "width_mm": 753,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Balmoral-Red-TILE.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "0e30105b8ba5f0678e81a5f07d8024e785cad73f7eb6779e05b0c633ec37b6ee",
+    "sourceItemCount": 2,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:49.096Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Balmoral-Red-TILE-900-X-900.jpg",
+        "price": 1336.89,
+        "quantity": 1,
+        "width": 653,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 723,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Balmoral-Red-TILE-900-X-900.jpg",
+        "price": 575,
+        "quantity": 1,
+        "width": 753,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 723,
+        "mode": "2d"
+      }
+    ]
+  }
+}

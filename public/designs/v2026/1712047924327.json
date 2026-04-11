@@ -1,0 +1,426 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:03.941Z",
+  "units": "mm",
+  "source": {
+    "id": "1712047924327",
+    "slug": "legacy-1712047924327",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1712047924327.json",
+    "savedAt": "2024-04-02T08:52:04.327Z"
+  },
+  "product": {
+    "id": "31",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Arial",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -6,
+          "y_px": -91
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -275,
+          "y_px": -109
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 274,
+          "y_px": -111
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-5",
+        "asset": "f7_1",
+        "position": {
+          "x_px": 119,
+          "y_px": 82
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-6",
+        "asset": "m1010",
+        "position": {
+          "x_px": -12,
+          "y_px": 94
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "f7",
+        "position": {
+          "x_px": 238,
+          "y_px": 98
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "f7_1",
+        "path": "/shapes/motifs/f7_1.svg"
+      },
+      {
+        "id": "m1010",
+        "path": "/shapes/motifs/m1010.svg"
+      },
+      {
+        "id": "f7",
+        "path": "/shapes/motifs/f7.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bd3b4db86518d5af24b95e5b160a1846b330867ae9b949cd51d2c900513a46f2",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:03.941Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 31,
+        "type": "Headstone",
+        "border": "Raised - No Pattern",
+        "shape_url": "shapes/photos/raised- no pattern.svg",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+        "stand": "",
+        "price": 1090.54,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 2,
+        "init_width": 1157,
+        "init_height": 847,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240308,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 76,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 131.4,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": -275,
+        "y": -109,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.13464991023339318,
+        "itemID": 3,
+        "color_texture": "data/jpg/metals/forever/l/high-polished-ss-swatch.jpg"
+      },
+      {
+        "productid": 14,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 84.5,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 274,
+        "y": -111,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.13464991023339318,
+        "itemID": 4,
+        "color_texture": "data/jpg/glass_backings/m/134w.jpg"
+      },
+      {
+        "productid": 16,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "f7_1",
+        "item": "f7_1",
+        "price": 280.9,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 119,
+        "y": 82,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.18427518427518427,
+        "itemID": 5,
+        "color_texture": "data/jpg/glass_backings/m/5333RR.jpg"
+      },
+      {
+        "productid": 18,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "m1010",
+        "item": "m1010",
+        "price": 131.4,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": -12,
+        "y": 94,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.18427518427518427,
+        "itemID": 6,
+        "color_texture": "data/jpg/glass_backings/m/25072S.jpg",
+        "color_texture2": "data/jpg/glass_backings/m/123RR.jpg"
+      },
+      {
+        "productid": 17,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "f7",
+        "item": "f7",
+        "price": 289.79200000000003,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "colorName2": "undefined",
+        "x": 238,
+        "y": 98,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.18427518427518427,
+        "itemID": 7,
+        "color_texture": "data/jpg/glass_backings/m/151RR.jpg",
+        "color_texture2": "data/jpg/glass_backings/m/123s.jpg"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1712047417947,
+        "path": "../upload/2024/04/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1712047417947zrzut_ekranu_20231023_19.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -168,
+        "y": 69,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5193867924528301,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Zrzut ekranu 2023-10-23 192006.png",
+        "price": 210,
+        "quantity": 1,
+        "size": "60 x 80 mm",
+        "itemID": 8
+      },
+      {
+        "productid": 89,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Border",
+        "border_drawing": "Raised - No Pattern",
+        "part": "Headstone",
+        "price": 178.26250000000002,
+        "quantity": 1,
+        "color": "#000000",
+        "itemID": 9
+      },
+      {
+        "productid": "42",
+        "name": "Stainless Steel Inscription Reflective (first 60 free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "55.05499999999999px Arial",
+        "font_size": 20,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -6,
+        "y": -91,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2,
+        "color_texture": "data/jpg/glass_backings/m/123RR.jpg"
+      }
+    ]
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:46.247Z",
+  "units": "mm",
+  "source": {
+    "id": "1590810709406",
+    "slug": "legacy-1590810709406",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590810709406.json",
+    "savedAt": "2020-05-30T03:51:49.406Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 784,
+      "height": 596,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 784,
+        "height": 596
+      },
+      "bufferPx": {
+        "width": 784,
+        "height": 596
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "teddy-bear_006",
+        "position": {
+          "x_px": 172.5,
+          "y_px": -136
+        },
+        "height_px": 145,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fd4f00",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-2",
+        "asset": "teddy-bear_003",
+        "position": {
+          "x_px": -195.5,
+          "y_px": 184.5
+        },
+        "height_px": 101,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fd4f00",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "teddy-bear_006",
+        "path": "/shapes/motifs/teddy-bear_006.svg"
+      },
+      {
+        "id": "teddy-bear_003",
+        "path": "/shapes/motifs/teddy-bear_003.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "7569faa4b58c1347cbc30a677ad3a8bae74ad60d8d91b895ec9c29321b09eb11",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:46.247Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Right Wave",
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black-TILE-900-X-900.jpg",
+        "price": "1220.19",
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 596
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_006",
+        "item": "teddy-bear_006",
+        "price": 224.42940000000002,
+        "quantity": 1,
+        "color": "#fd4f00",
+        "colorName": "Paint Fill",
+        "x": 172.5,
+        "y": -136,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 145,
+        "ratio": 0.24166666666666667,
+        "itemID": 1
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "teddy-bear_003",
+        "item": "teddy-bear_003",
+        "price": 214.72828,
+        "quantity": 1,
+        "color": "#fd4f00",
+        "colorName": "Paint Fill",
+        "x": -195.5,
+        "y": 184.5,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 101,
+        "ratio": 0.16833333333333333,
+        "itemID": 2
+      }
+    ]
+  }
+}

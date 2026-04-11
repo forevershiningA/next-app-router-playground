@@ -1,0 +1,257 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:03.921Z",
+  "units": "mm",
+  "source": {
+    "id": "1711623804931",
+    "slug": "legacy-1711623804931",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1711623804931.json",
+    "savedAt": "2024-03-28T11:03:24.931Z"
+  },
+  "product": {
+    "id": "31",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Stainless Steel Plaque",
+    "material": {
+      "name": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 2,
+      "surface": "front",
+      "texture": "/textures/forever/l/high-polished-ss-swatch.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 181
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "f7",
+        "position": {
+          "x_px": -325,
+          "y_px": -140
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-2",
+        "asset": "fa4",
+        "position": {
+          "x_px": -172,
+          "y_px": -142
+        },
+        "height_px": 75,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "f7",
+        "path": "/shapes/motifs/f7.svg"
+      },
+      {
+        "id": "fa4",
+        "path": "/shapes/motifs/fa4.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "46dea218f76ea7addc216b6e3f8688f6685658447f836a97eb46265611b3450a",
+    "sourceItemCount": 4,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:03.921Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 31,
+        "type": "Headstone",
+        "border": "No Border",
+        "shape_url": "shapes/photos/noborder.svg",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Stainless Steel Plaque",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/metals/forever/l/high-polished-ss-swatch.jpg",
+        "stand": "",
+        "price": 1090.54,
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 2,
+        "init_width": 1123,
+        "init_height": 847,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240308,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 18,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "f7",
+        "item": "f7",
+        "price": 131.4,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -325,
+        "y": -140,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.18427518427518427,
+        "itemID": 1,
+        "color_texture": "data/jpg/glass_backings/m/123RR.jpg",
+        "color_texture2": "data/jpg/glass_backings/m/123RR.jpg"
+      },
+      {
+        "productid": 17,
+        "name": "Motif (Two Colour Glass Backed Motif) Reflective",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "fa4",
+        "item": "fa4",
+        "price": 289.79200000000003,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -172,
+        "y": -142,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 75,
+        "ratio": 0.18427518427518427,
+        "itemID": 2,
+        "color_texture": "data/jpg/glass_backings/m/5262w.jpg",
+        "color_texture2": "data/jpg/glass_backings/m/5262w.jpg"
+      },
+      {
+        "productid": "42",
+        "name": "Stainless Steel Inscription Reflective (first 60 free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "90.84075px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 3,
+        "y": 181,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3,
+        "color_texture": "data/jpg/glass_backings/m/5333SF.jpg"
+      }
+    ]
+  }
+}

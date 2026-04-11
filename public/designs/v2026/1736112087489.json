@@ -1,0 +1,404 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:19.057Z",
+  "units": "mm",
+  "source": {
+    "id": "1736112087489",
+    "slug": "legacy-1736112087489",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1736112087489.json",
+    "savedAt": "2025-01-05T21:21:27.489Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Right Wave",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 660.4000000000001,
+      "height_mm": 685.8000000000002
+    },
+    "viewportPx": {
+      "width": 1058,
+      "height": 596,
+      "dpr": 1.815000057220459
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1058,
+        "height": 596
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1082
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 660.4000000000001,
+      "height_mm": 685.8000000000002,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 893.7500000000006,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Vincent Warren",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 83
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 7.385
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Beloved Father",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 49
+        },
+        "position": {
+          "x_px": -11,
+          "y_px": 144
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "AUG 6th 1954",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -149,
+          "y_px": 60.923
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "OCT 22nd 2024",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 120,
+          "y_px": 62.769
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "1_030_10",
+        "position": {
+          "x_px": 9.63,
+          "y_px": 367.798
+        },
+        "height_px": 64,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_030_10",
+        "path": "/shapes/motifs/1_030_10.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1569144dd4505b320341ea02ebcc542bf7e291910daf90e2653729b7341bba2f",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:19.057Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Right Wave",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 3138.47,
+        "quantity": 1,
+        "width": 660.4000000000001,
+        "height": 685.8000000000002,
+        "_length": 80,
+        "init_width": 810,
+        "init_height": 420.00206756591797,
+        "device": "desktop",
+        "dpr": 1.815000057220459,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20241015,
+        "mode": "2d",
+        "navigator": "Edge (chromium based) (desktop), 1058x596"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "2",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 942,
+        "quantity": 1,
+        "width": 893.7500000000006,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 810,
+        "init_height": 420.00206756591797,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1730097043409,
+        "path": "../upload/2024/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1730097043409silhouettesunitsoilpumps.jpg",
+        "color": 1,
+        "mask": 2,
+        "x": -211,
+        "y": -119.99999999999996,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6799835543803714,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "silhouettes-units-oil-pump-set-industry-different-positions-39976578.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "152",
+        "width": "156",
+        "height": "143",
+        "itemID": 2
+      },
+      {
+        "productid": 71,
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_030_10",
+        "item": "1_030_10",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "colorName2": "undefined",
+        "x": 9.629652877279682,
+        "y": 367.79792242510166,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 64,
+        "ratio": 1.0847457627118644,
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1733456212014,
+        "path": "../upload/2024/12/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1733456212014mobley4x6_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 200,
+        "y": -164.30769230769226,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.1004996998524432,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "mobley4x6.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": "246",
+        "width": "155",
+        "height": "232",
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "Bryan Mobley",
+        "font": "78.3457367622595px Great Vibes",
+        "font_size": 83,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 1,
+        "y": 7.384615384615382,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 94,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Beloved Father",
+        "font": "46.25230242591224px Great Vibes",
+        "font_size": 49,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -11,
+        "y": 143.99999999999994,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 46,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "AUG 6th 1954",
+        "font": "29.261660718434275px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -149,
+        "y": 60.923076923076906,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "OCT 22nd 2024",
+        "font": "31.149509797042935px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 120,
+        "y": 62.76923076923075,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 7
+      }
+    ]
+  }
+}

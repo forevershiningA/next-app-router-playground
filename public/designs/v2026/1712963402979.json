@@ -1,0 +1,443 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:14.022Z",
+  "units": "mm",
+  "source": {
+    "id": "1712963402979",
+    "slug": "legacy-1712963402979",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1712963402979.json",
+    "savedAt": "2024-04-12T23:10:02.979Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/Blue-Pearl.jpg",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 711.1999999999999,
+      "height_mm": 400.04999999999995
+    },
+    "viewportPx": {
+      "width": 1323,
+      "height": 745,
+      "dpr": 3.1927499771118164
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1323,
+        "height": 745
+      },
+      "bufferPx": {
+        "width": 4224,
+        "height": 2379
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 711.1999999999999,
+      "height_mm": 400.04999999999995,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Blue-Pearl.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Millie Moreno",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 53
+        },
+        "position": {
+          "x_px": -22.808,
+          "y_px": 172.422
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "August 25, 1941 ~ August 16, 2022",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": -41,
+          "y_px": 287
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Grandma",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 48
+        },
+        "position": {
+          "x_px": 402.192,
+          "y_px": -77
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Mom",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 47
+        },
+        "position": {
+          "x_px": -367,
+          "y_px": -73
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "\"A Peacemaker & A Gentle Heart\"",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 19,
+          "y_px": -262
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-3",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": -571,
+          "y_px": -227
+        },
+        "height_px": 165,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_037_12",
+        "position": {
+          "x_px": 574.325,
+          "y_px": 220
+        },
+        "height_px": 165,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-5",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": -35,
+          "y_px": -67
+        },
+        "height_px": 134,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_037_12",
+        "path": "/shapes/motifs/1_037_12.svg"
+      },
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3f5aa3ab1e629ce50fbdce186807017456ae2774e73956c50771c56cb7084207",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:14.022Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Blue-Pearl.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1205.13,
+        "quantity": 1,
+        "width": 711.1999999999999,
+        "height": 400.04999999999995,
+        "_length": 80,
+        "init_width": 963,
+        "init_height": 462.0075149536133,
+        "device": "desktop",
+        "dpr": 3.1927499771118164,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1323x745"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 18,
+        "label": "June Stevens Robison",
+        "font": "107.17726926091277px Lucida Calligraphy",
+        "font_size": 53,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -22.807882899884135,
+        "y": 172.42215637290326,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 27,
+        "label": "August 25, 1941 ~ August 16, 2022",
+        "font": "70.7774419647537px Lucida Calligraphy",
+        "font_size": 35,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -41,
+        "y": 287,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 37,
+        "itemID": 2
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 243.65075,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -571,
+        "y": -227,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 165,
+        "ratio": 0.18032786885245902,
+        "itemID": 3
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_037_12",
+        "item": "1_037_12",
+        "price": 243.65075,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 574.3247694363463,
+        "y": 219.99999999999977,
+        "flipx": "-1",
+        "flipy": "-1",
+        "rotation": 0,
+        "height": 165,
+        "ratio": 0.18032786885245902,
+        "itemID": 4
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 236.37334499999997,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -35,
+        "y": -67,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 134,
+        "ratio": 0.22905982905982905,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 7,
+        "label": "Grandma",
+        "font": "97.06620612309081px Lucida Calligraphy",
+        "font_size": 48,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 402.19211710011587,
+        "y": -77,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 3,
+        "label": "Mom",
+        "font": "95.04399349552641px Lucida Calligraphy",
+        "font_size": 47,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -367,
+        "y": -73,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 26,
+        "label": "\"A Peacemaker & A Gentle Heart\"",
+        "font": "70.7774419647537px Lucida Calligraphy",
+        "font_size": 35,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 19,
+        "y": -262,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 8
+      }
+    ]
+  }
+}

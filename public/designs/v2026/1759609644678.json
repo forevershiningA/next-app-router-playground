@@ -1,0 +1,436 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:44.026Z",
+  "units": "mm",
+  "source": {
+    "id": "1759609644678",
+    "slug": "legacy-1759609644678",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1759609644678.json",
+    "savedAt": "2025-10-04T20:27:24.678Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1200,
+      "height_mm": 1003.3
+    },
+    "viewportPx": {
+      "width": 428,
+      "height": 926,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 428,
+        "height": 926
+      },
+      "bufferPx": {
+        "width": 1284,
+        "height": 2778
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1200,
+      "height_mm": 1003.3,
+      "thickness_mm": 25.4,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-6",
+        "text": "SUNRISE",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 59
+        },
+        "position": {
+          "x_mm": -381,
+          "y_mm": 77.844
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "BURNS",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 51
+        },
+        "position": {
+          "x_mm": 408,
+          "y_mm": -333.156
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "April 21, 1986",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 65
+        },
+        "position": {
+          "x_mm": -378,
+          "y_mm": -9.156
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "January 24, 2025",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 66
+        },
+        "position": {
+          "x_mm": 282,
+          "y_mm": -429.156
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Hector Black",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_mm": 109
+        },
+        "position": {
+          "x_mm": -3,
+          "y_mm": 450
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "LAWRENCE",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 173
+        },
+        "position": {
+          "x_mm": 12,
+          "y_mm": 284.844
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8a15608ddd338b405ac705b2a7cdc02e254cb6c9d9636ea6ab52e295dd97d656",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:44.026Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Plaque",
+        "price": 3367.39,
+        "quantity": 1,
+        "width": 1200,
+        "height": 1003.3,
+        "_length": 25.4,
+        "init_width": 428,
+        "init_height": 695,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 428x926"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1759609814296,
+        "path": "../upload/2025/10/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1759609814296img_4168_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 24,
+        "y": 138,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 2.0835021551724138,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_4168.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": 695,
+        "width": "508",
+        "height": "725",
+        "itemID": 3
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1759609879462,
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1759609879462img_4173_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -432,
+        "y": 300,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.45867025862068966,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_4173.png",
+        "price": 0,
+        "quantity": 1,
+        "size": 153,
+        "width": "228",
+        "height": "160",
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1759610031307,
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1759610031307img_4174_cropped.jpg",
+        "color": 1,
+        "mask": 1,
+        "x": 408,
+        "y": -39,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.6984978448275863,
+        "shape_url": "shapes/photos/rectangle_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_4174.png",
+        "price": 80,
+        "quantity": 1,
+        "size": 233,
+        "width": "243",
+        "height": "243",
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "SUNRISE",
+        "font": "61.55175px Lucida Calligraphy",
+        "font_size": 59,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -381,
+        "y": -77.84375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "SUNSET",
+        "font": "53.20575px Lucida Calligraphy",
+        "font_size": 51,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 408,
+        "y": 333.15625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "April 21, 1986",
+        "font": "67.81125px Lucida Calligraphy",
+        "font_size": 65,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -378,
+        "y": 9.15625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 77,
+        "itemID": 8
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "January 24, 2025",
+        "font": "68.8545px Lucida Calligraphy",
+        "font_size": 66,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 282,
+        "y": 429.15625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 69,
+        "itemID": 9
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 17,
+        "label": "Iakopo Vesipasiano",
+        "font": "113.71425px Lucida Calligraphy",
+        "font_size": 109,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3,
+        "y": -450,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 129,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "TAUMUA",
+        "font": "180.48225px Garamond",
+        "font_size": 173,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 12,
+        "y": -284.84375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 122,
+        "itemID": 2
+      }
+    ]
+  }
+}

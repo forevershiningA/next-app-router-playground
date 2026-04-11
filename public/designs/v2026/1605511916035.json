@@ -1,0 +1,654 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:48.669Z",
+  "units": "mm",
+  "source": {
+    "id": "1605511916035",
+    "slug": "legacy-1605511916035",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1605511916035.json",
+    "savedAt": "2020-11-16T07:31:56.035Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1160,
+      "height": 657,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1160,
+        "height": 657
+      },
+      "bufferPx": {
+        "width": 1160,
+        "height": 657
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "IN LOVING MEMORY",
+        "font": {
+          "family": "Adorable",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -102.793
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "EARL HARRIS",
+        "font": {
+          "family": "Adorable",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 6.686,
+          "y_px": 82.736
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Born : 24 June 1955",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 115.329
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Died : 25 April 2020",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 37
+        },
+        "position": {
+          "x_px": -4.179,
+          "y_px": 145.414
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-16",
+        "text": "Jesus said, \"I am the Way, the Truth and the Life. .",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -6.686,
+          "y_px": 177.171
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "No one come tto the Father except through Me.",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -4.179,
+          "y_px": 195.557
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "Ida Higgins",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -6.686,
+          "y_px": 217.286
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "1_228_20",
+        "position": {
+          "x_px": -217.286,
+          "y_px": 77.721
+        },
+        "height_px": 314,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_228_20",
+        "position": {
+          "x_px": 218.637,
+          "y_px": 77.721
+        },
+        "height_px": 314,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-20",
+        "asset": "cross_001",
+        "position": {
+          "x_px": -1.671,
+          "y_px": -176.336
+        },
+        "height_px": 93,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-21",
+        "asset": "1_175_07",
+        "position": {
+          "x_px": -198.9,
+          "y_px": -153.771
+        },
+        "height_px": 73,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-22",
+        "asset": "2_131_22",
+        "position": {
+          "x_px": 203.079,
+          "y_px": -149.593
+        },
+        "height_px": 101,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_228_20",
+        "path": "/shapes/motifs/1_228_20.svg"
+      },
+      {
+        "id": "cross_001",
+        "path": "/shapes/motifs/cross_001.svg"
+      },
+      {
+        "id": "1_175_07",
+        "path": "/shapes/motifs/1_175_07.svg"
+      },
+      {
+        "id": "2_131_22",
+        "path": "/shapes/motifs/2_131_22.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8536912da644c0c70d5d866d077b93c2fc27c0a38e66101000493abc0531dbef",
+    "sourceItemCount": 15,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:48.669Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 1220.19,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1160,
+        "init_height": 657,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 552,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1160,
+        "init_height": 657,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_228_20",
+        "item": "1_228_20",
+        "price": 218.7443674,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -217.28571428571422,
+        "y": 77.72142857142855,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 314,
+        "ratio": 0.34850166481687017,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_228_20",
+        "item": "1_228_20",
+        "price": 218.7443674,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": 218.63655857720434,
+        "y": 77.72142857142855,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 314,
+        "ratio": 0.34850166481687017,
+        "itemID": 7
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1605512652569,
+        "path": "../upload/2020/11/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1605512652569image_20201113_0003_crop.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 2.5071428571428562,
+        "y": -5.849999999999998,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.47724225897255446,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Image_20201113_0003.jpg",
+        "price": 390,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 15
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_001",
+        "item": "cross_001",
+        "price": 198.3982325,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -1.6714285714285708,
+        "y": -176.33571428571423,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 93,
+        "ratio": 0.13381294964028778,
+        "itemID": 20
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_175_07",
+        "item": "1_175_07",
+        "price": 198.92861689999998,
+        "quantity": 1,
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -198.89999999999992,
+        "y": -153.77142857142852,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 73,
+        "ratio": 0.15113871635610765,
+        "itemID": 21
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_22",
+        "item": "2_131_22",
+        "price": 208.4931056,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 203.07857142857137,
+        "y": -149.5928571428571,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 101,
+        "ratio": 0.10966340933767643,
+        "itemID": 22
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "IN LOVING MEMORY",
+        "font": "41.520076530612236px Adorable",
+        "font_size": 45,
+        "font_family": "Adorable",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -102.7928571428571,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "LUYAH ANAK WATT",
+        "font": "34.13872959183673px Adorable",
+        "font_size": 37,
+        "font_family": "Adorable",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": 6.685714285714283,
+        "y": 82.73571428571425,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Born : 24 June 1955",
+        "font": "34.13872959183673px Great Vibes",
+        "font_size": 37,
+        "font_family": "Great Vibes",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 115.3285714285714,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Died : 25 April 2020",
+        "font": "34.13872959183673px Great Vibes",
+        "font_size": 37,
+        "font_family": "Great Vibes",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -4.178571428571427,
+        "y": 145.41428571428565,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 14
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Jesus said, \"I am the Way, the Truth and the Life. .",
+        "font": "18.453367346938773px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -6.685714285714283,
+        "y": 177.17142857142852,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "No one come tto the Father except through Me.",
+        "font": "18.453367346938773px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -4.178571428571427,
+        "y": 195.55714285714274,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "John 14:6",
+        "font": "18.453367346938773px Great Vibes",
+        "font_size": 20,
+        "font_family": "Great Vibes",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": -6.685714285714283,
+        "y": 217.28571428571416,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 19
+      }
+    ]
+  }
+}

@@ -1,0 +1,1050 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:53.270Z",
+  "units": "mm",
+  "source": {
+    "id": "1635267928147",
+    "slug": "legacy-1635267928147",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1635267928147.json",
+    "savedAt": "2021-10-26T17:05:28.147Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Bronze Plaque",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 560,
+      "height_mm": 400
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 560,
+      "height_mm": 400,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Lorem",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -300,
+          "y_px": -129
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "ipsum",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -153,
+          "y_px": -129
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "dolor",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": -125
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "sit",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 130,
+          "y_px": -131
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "amet",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 281,
+          "y_px": -130
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "adipiscing",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -154,
+          "y_px": 33
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "consectetur",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -304,
+          "y_px": 32
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "elit",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 38
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Vestibulum",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 133,
+          "y_px": 44
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "mattis",
+        "font": {
+          "family": "Garamond",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 286,
+          "y_px": 46
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Aliquam enim augue, pharetra a lacus a, tempor commodo sem.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 164
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Cras porttitor a mi molestie euismod.",
+        "font": {
+          "family": "Garamond",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 121
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-17",
+        "asset": "dinosaur_003",
+        "position": {
+          "x_px": -307,
+          "y_px": 222
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-19",
+        "asset": "dinosaur_003",
+        "position": {
+          "x_px": 308.596,
+          "y_px": 221
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-24",
+        "asset": "1_135_21",
+        "position": {
+          "x_px": -6,
+          "y_px": 222
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dinosaur_003",
+        "path": "/shapes/motifs/dinosaur_003.svg"
+      },
+      {
+        "id": "1_135_21",
+        "path": "/shapes/motifs/1_135_21.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "83bc27282adb92b7cb72a472fbbbfd9ca2f69f5f21fde45d7392842a897b7fde",
+    "sourceItemCount": 30,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:53.270Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Bronze Plaque",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "price": 2067.98,
+        "quantity": 1,
+        "width": 560,
+        "height": 400,
+        "_length": 1,
+        "init_width": 1115,
+        "init_height": 873,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20211026,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36, 1920x1080"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352671425951609530239331resized_201.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -151,
+        "y": -199,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609530239331resized_20170318_210239.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 6
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352670848791609480190948owl_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -297,
+        "y": -200,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609480190948owl.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 10
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352673542721609643086731sue_with_mu.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 281,
+        "y": -197,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609643086731sue_with_mum_and_dad_50t.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 15
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352673282171609544256569fb_img_1609.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 135,
+        "y": -194,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609544256569fb_img_1609544306041.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 16
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dinosaur_003",
+        "item": "dinosaur_003",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -307,
+        "y": 222,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.045819014891179836,
+        "itemID": 17
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352674844271609647241700les___photo.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -300,
+        "y": -39,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609647241700les___photo_cropped.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 18
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dinosaur_003",
+        "item": "dinosaur_003",
+        "price": 74.4,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 308.5964285714286,
+        "y": 221,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.045819014891179836,
+        "itemID": 19
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352677739971609689795649image_big_c.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 134,
+        "y": -21,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609689795649image_big.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 20
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352677470451609646879950leslie_vinc.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -13,
+        "y": -31,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609646879950leslie_vincent_walsh_big.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 21
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352672858731609543345906img0316_big.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -7,
+        "y": -195,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609543345906img0316_big.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 22
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1635267802952160956213126220201230_17.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 285,
+        "y": -23,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "160956213126220201230_174717_big.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 23
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_135_21",
+        "item": "1_135_21",
+        "price": 74.4,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -6,
+        "y": 222,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.10282776349614396,
+        "itemID": 24
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "16352675112431609647396924les___photo.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -152,
+        "y": -29,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1609647396924les___photo_big.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 25
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 5,
+        "label": "Lorem",
+        "font": "30.399107142857144px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -300,
+        "y": -129,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 45.4,
+        "quantity": 5,
+        "label": "ipsum",
+        "font": "30.399107142857144px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -153,
+        "y": -129,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "dolor",
+        "font": "30.399107142857144px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -10,
+        "y": -125,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 3,
+        "label": "sit",
+        "font": "30.399107142857144px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 130,
+        "y": -131,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "amet",
+        "font": "30.399107142857144px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 281,
+        "y": -130,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "adipiscing",
+        "font": "25.839241071428575px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -154,
+        "y": 33,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "consectetur",
+        "font": "27.35919642857143px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -304,
+        "y": 32,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "elit",
+        "font": "25.839241071428575px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -12,
+        "y": 38,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Vestibulum",
+        "font": "25.839241071428575px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 133,
+        "y": 44,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 6,
+        "label": "mattis",
+        "font": "25.839241071428575px Garamond",
+        "font_size": 17,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 286,
+        "y": 46,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 50,
+        "label": "Aliquam enim augue, pharetra a lacus a, tempor commodo sem.",
+        "font": "30.399107142857144px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 164,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 21,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 32,
+        "label": "Cras porttitor a mi molestie euismod.",
+        "font": "47.118616071428576px Garamond",
+        "font_size": 31,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": 121,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 14
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1635267956812,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1635267956812upload202101160970086423.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 209,
+        "y": -89,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "upload2021011609700864232160970086423985572260208_s_masked.png",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 26
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1635267976447,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1635267976447upload202101160967125471.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 65,
+        "y": -92,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "upload2021011609671254710macy_cropped_masked.png",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 27
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1635267998031,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1635267998031upload202101160956213126.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -83,
+        "y": -91,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "upload202101160956213126220201230_174717_cropped_masked.jpg",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 28
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1635268013907,
+        "path": "../upload/2021/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1635268013907upload202101160967032823.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -228,
+        "y": -90,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2086895227198431,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "upload2021011609670328239unnamed_cropped_s_masked.png",
+        "price": 140,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 29
+      }
+    ]
+  }
+}

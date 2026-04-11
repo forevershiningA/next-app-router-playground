@@ -1,0 +1,378 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:16.824Z",
+  "units": "mm",
+  "source": {
+    "id": "1724564561056",
+    "slug": "legacy-1724564561056",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1724564561056.json",
+    "savedAt": "2024-08-25T05:42:41.056Z"
+  },
+  "product": {
+    "id": "101",
+    "name": "Traditional Engraved Full Monument",
+    "type": "monument",
+    "slug": "traditional-monument",
+    "category": "full-monument",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Black.jpg",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 914.4000000000001,
+      "height_mm": 609.5999999999996
+    },
+    "viewportPx": {
+      "width": 1249,
+      "height": 703,
+      "dpr": 1.537500023841858
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1249,
+        "height": 703
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1081
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 914.4000000000001,
+      "height_mm": 609.5999999999996,
+      "thickness_mm": 76.19999999999999,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    },
+    "base": {
+      "width_mm": 1193.8,
+      "height_mm": 355.59999999999997,
+      "depth_mm": 254,
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Harry and Sal",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 126.622
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Mum and Dad",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 88
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 103
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Nan and Grandad",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 90.622
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 206
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Great Nan, Great Grandad",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 70.622
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 309
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "cross_008",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 579,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_008",
+        "path": "/shapes/motifs/cross_008.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9295daf74e79f8f18fee5236bf7758e710bf4d508805084590adb43766bfbe4f",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:16.824Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 101,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "name": "Traditional Engraved Full Monument",
+        "price": 3103.05,
+        "quantity": 1,
+        "width": 914.4000000000001,
+        "height": 609.5999999999996,
+        "_length": 76.19999999999999,
+        "init_width": 1009,
+        "init_height": 479.00609970092773,
+        "device": "desktop",
+        "dpr": 1.537500023841858,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230919,
+        "mode": "3d",
+        "navigator": "Chrome (desktop), 1249x703"
+      },
+      {
+        "productid": 101,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 921.52,
+        "quantity": 1,
+        "width": 1193.8,
+        "height": 355.59999999999997,
+        "_length": 254,
+        "init_width": 1009,
+        "init_height": 479.00609970092773,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Ledger",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 4569.4,
+        "width": 1041.3999999999999,
+        "height": 50.8,
+        "_length": 2082.7999999999997,
+        "init_width": 1009,
+        "init_height": 479.00609970092773,
+        "mode": "3d"
+      },
+      {
+        "productid": 101,
+        "type": "Kerbset",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "price": 2846.3,
+        "quantity": 1,
+        "width": 1193.8,
+        "height": 254,
+        "_length": 2159,
+        "init_width": 1009,
+        "init_height": 479.00609970092773,
+        "mode": "3d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 11,
+        "label": "Harry and Sal",
+        "font": "99.19327151095554px Lucida Calligraphy",
+        "font_size": 126.62218679920508,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 0,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 127,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 9,
+        "label": "Mum and Dad",
+        "font": "99.19327151095554px Lucida Calligraphy",
+        "font_size": 88,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 103,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 88,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 13,
+        "label": "Nan and Grandad",
+        "font": "99.19327151095554px Lucida Calligraphy",
+        "font_size": 90.62218679920508,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 206,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 91,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 21,
+        "label": "Great Nan, Great Grandad",
+        "font": "99.19327151095554px Lucida Calligraphy",
+        "font_size": 70.62218679920508,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 0,
+        "y": 309,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 71,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_008",
+        "item": "cross_008",
+        "price": 357.05438,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 579,
+        "ratio": 0.5795795795795796,
+        "itemID": 6
+      }
+    ]
+  }
+}

@@ -83,4 +83,42 @@ pandoc ASG_scientific_report_en.md --resource-path=.;.. `
 - Before arXiv submission: rerun the full TeX build, verify figure availability, and update the Zenodo package with the latest chains/scripts.
 - Maintain endorsement outreach notes separately; once endorsement is confirmed, package `asg_threshold_inflation.tex`, figures, and ancillary files for upload.
 
-_Last updated: 2026‑03‑12. Keep this starter concise—expand only with actionable items relevant to onboarding or recurring operations._
+---
+
+## 8. Analiza fizyczna — dlaczego ASG zmienia paradygmat (2026-04-09)
+
+### Zmiana paradygmatu: Grawitacja z tła staje się aktorem
+W konwencjonalnym modelu inflacji grawitacja Einsteina jest sztywnym rusztowaniem, na którym "rozpinamy" potencjał inflatonu. Problem polega na tym, że ten potencjał musi być nienaturalnie płaski (*fine-tuning*).
+
+Propozycja ASG (zgodna z nurtem Asymptotic Safety i grawitacji indukowanej) odwraca tę logikę: **Potencjał może być stromy i "brzydki", ale to dynamika grawitacji go "wygładza"**. Mechanizm, w którym efektywny potencjał w ramie Einsteina $U = V/F^2$ dąży do plateau dzięki rosnącej masie Plancka $F(\chi)$, jest matematycznie znacznie bardziej odporny na poprawki kwantowe niż klasyczny inflaton.
+
+### Warunek atraktora ($V'/V \approx 2F'/F$)
+Inflacja nie jest "wypadkiem przy pracy" pola skalarnego, ale **punktem równowagi między spadkiem gęstości energii materii a wzrostem sztywności czasoprzestrzeni**. Jeśli ten warunek rzeczywiście wynika z dynamiki FRG (Functional Renormalization Group), to inflacja staje się generyczną cechą grawitacji kwantowej, a nie modelem dodanym "ad hoc" do wyjaśnienia płaskości Wszechświata.
+
+### Most EFT i "odfiltrowanie" ciężkich sektorów
+Integrowanie ciężkiego sektora $\xi(\chi)R$ pozwala uniknąć problemu "pustej" grawitacji kwantowej. Jeśli masywne pola (np. z teorii wielkiej unifikacji — GUT) sprzęgają się z krzywizną, to ich wpływ na "biegnięcie" grawitacji jest obliczalny w ramach Efektywnej Teorii Pola. To daje konkretne przewidywania zamiast wolnych parametrów branych "z sufitu".
+
+### CMB jako mikroskop grawitacji kwantowej
+Jeśli spectral tilt ($n_s$) i running ($\alpha_s$) to de facto pochodne biegnącej stałej Newtona $G(\mu)$:
+- **Dane z Planck/LiteBIRD stają się laboratoriami fizyki wysokich energii**, niedostępnymi dla LHC.
+- Zamiast mierzyć "kształt pola", mierzymy **funkcję beta grawitacji**.
+- Grawitacja kwantowa nie jest ukryta w skali Plancka — jej ślady są "rozsmarowane" po całym niebie w postaci fluktuacji temperatury.
+
+### Otwarte pytania i wyzwania
+1. **Degeneracja modeli:** Kluczem do odróżnienia ASG od α-attraktorów jest **running of running** $\beta_s \simeq -4.2 \times 10^{-5}$ (o rząd większe niż w α-attraktorach). Brak sygnału w $f_{NL}$ przy obecności silnego $\beta_s$ byłby dyskryminującym wzorcem.
+2. **Problem progu:** Skala, przy której masa Plancka zaczyna gwałtownie "biec", zależy od spektrum materii. FRG mapping sugeruje, że punkt stały AS *organizuje* biegnięcie, ale konkretna skala progu wymaga modelu cząstek — najsłabsze ogniwo.
+3. **Uniwersalność:** Warunek $V'/V \approx 2F'/F$ jest niezależny od formy $\xi$ (geometryczny warunek na pole-structure), ale siła efektu zależy od sprzężenia — stąd multimodalność w posteriorach MCMC ($\bar\beta = 0.02, 0.04, 0.06$).
+
+### Werdykt
+Bardzo mocna, spójna fizycznie i inspirująca wizja. Jeśli CMB koduje pochodne stałej Newtona, to nie potrzebujemy akceleratora o energii Plancka — niebo *jest* tym akceleratorem, a fluktuacje temperatury to jego dane eksperymentalne. Kierunek, w którym fizyka teoretyczna musi iść, jeśli chce pozostać nauką empiryczną.
+
+---
+
+## 9. Następna analiza — PolyChord / MH 200k (zaplanowana)
+
+- **Sampler:** PolyChord nested sampling + Metropolis-Hastings 200k rows w MontePython
+- **Cel:** Rozstrzygnięcie multimodalności w $(\beta, \Delta)$ — PolyChord naturalnie eksploruje multi-modalne posteriory (w przeciwieństwie do MH, który może utknąć w jednym modzie)
+- **Oczekiwane wyniki:** Potwierdzenie lub odrzucenie trójmodalnej struktury ($\bar\beta = 0.02, 0.04, 0.06$), precyzyjniejsze Bayesian evidence, porównanie z dotychczasowymi łańcuchami MH
+- **Status:** Do uruchomienia na klastrze Linux
+
+_Last updated: 2026‑04‑09. Keep this starter concise—expand only with actionable items relevant to onboarding or recurring operations._

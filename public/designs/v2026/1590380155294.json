@@ -1,0 +1,204 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:46.083Z",
+  "units": "mm",
+  "source": {
+    "id": "1590380155294",
+    "slug": "legacy-1590380155294",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1590380155294.json",
+    "savedAt": "2020-05-25T04:15:55.294Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Oval",
+    "material": {
+      "name": "https://www.forevershining.com.au/design/upload/undefinedundefined_cropped.jpg",
+      "texture": "https://www.forevershining.com.au/design/upload/undefinedundefined_cropped.jpg"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 206,
+      "height_mm": 285
+    },
+    "viewportPx": {
+      "width": 1649,
+      "height": 892,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1649,
+        "height": 892
+      },
+      "bufferPx": {
+        "width": 1649,
+        "height": 892
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 206,
+      "height_mm": 285,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "https://www.forevershining.com.au/design/upload/undefinedundefined_cropped.jpg"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "urn002",
+        "font": {
+          "family": "Garamond",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -44,
+          "y_px": -208
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "butterfly_012",
+        "position": {
+          "x_px": -117,
+          "y_px": -51
+        },
+        "height_px": 66,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_012",
+        "path": "/shapes/motifs/butterfly_012.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9f388a0d55c1e1d39394f5e6eb6f9c7abdef7a81254e99eceb447c2e03b0622c",
+    "sourceItemCount": 3,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:46.083Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Oval",
+        "border": "Border Oval",
+        "shape_url": "shapes/photos/borderoval.svg",
+        "shape": "Oval",
+        "color": "undefinedundefined_cropped.jpg",
+        "fixed": 2,
+        "texture": "https://www.forevershining.com.au/design/upload/undefinedundefined_cropped.jpg",
+        "price": "2504.24",
+        "quantity": 1,
+        "width": 206,
+        "height": 285,
+        "_length": 1,
+        "init_width": 1649,
+        "init_height": 892,
+        "backgroundOption": "photo"
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "urn002",
+        "font": "119.0115789473684px Garamond",
+        "font_size": 39,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -44,
+        "y": -208,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_012",
+        "item": "butterfly_012",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -117,
+        "y": -51,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 66,
+        "ratio": 0.11,
+        "itemID": 2
+      }
+    ]
+  }
+}

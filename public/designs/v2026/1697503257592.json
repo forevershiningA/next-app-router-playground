@@ -1,0 +1,664 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:41.696Z",
+  "units": "mm",
+  "source": {
+    "id": "1697503257592",
+    "slug": "legacy-1697503257592",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1697503257592.json",
+    "savedAt": "2023-10-17T00:40:57.592Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/04.jpg",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 406.4,
+      "height_mm": 304.8000000000001
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1280,
+        "height": 720
+      },
+      "bufferPx": {
+        "width": 3840,
+        "height": 2160
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 406.4,
+      "height_mm": 304.8000000000001,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/04.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "commitment, teamwork, and a multitude of other virtues.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": -475,
+          "y_mm": -809
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "R.E. Lee Hall of Fame",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 23
+        },
+        "position": {
+          "x_mm": 43,
+          "y_mm": 413
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Percy Gibson",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 15
+        },
+        "position": {
+          "x_mm": 5,
+          "y_mm": 332
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Coach Charlie Thompson had a legendary career as one of the most successful coaches in Virginia",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": -5,
+          "y_mm": -75
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "history.  Everywhere he coached, he won.  His years at Lee, from 1978-1990, were among the most",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": -1,
+          "y_mm": -129
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "storied of his career. His Lee teams were known for their mental toughness, with an emphasis on",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": -20,
+          "y_mm": -173
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "defense and fundamentals.  His incredible success on the court however, was matched by the impact",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": -1,
+          "y_mm": -207
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "he had on the hundreds of young men that came through his program. Coach was intensely competitive,",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": 14,
+          "y_mm": -260
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "demanding, and had exacting standards with very high expectations. The lessons learned in his program",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": 7,
+          "y_mm": -304
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "went far beyond the practice court and, undoubtedly, provided life lessons that many still benefit from",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": 4,
+          "y_mm": -350
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "today. Players in his program learned valuable lessons about the importance of a strong work-ethic,",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": -16,
+          "y_mm": -395
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "commitment, teamwork, and a multitude of other virtues.  He was a giant.",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 9
+        },
+        "position": {
+          "x_mm": -156,
+          "y_mm": -429
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_185_04",
+        "position": {
+          "x_mm": -518,
+          "y_mm": 275
+        },
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_185_04",
+        "path": "/shapes/motifs/1_185_04.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "880bbdc8b26443c0fdedac7606c225defc1f7e5151394e53291d53d03531bb33",
+    "sourceItemCount": 15,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:41.696Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 4",
+        "shape_url": "shapes/photos/border4.svg",
+        "fixingSystem": 2,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#24160b",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/04.jpg",
+        "name": "Bronze Plaque - Dark Brown - Lugs with Studs",
+        "price": 1463.64,
+        "quantity": 1,
+        "width": 406.4,
+        "height": 304.8000000000001,
+        "_length": 0,
+        "init_width": 1040,
+        "init_height": 499,
+        "device": "desktop",
+        "dpr": 3,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230714,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1280x720"
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 48,
+        "label": "commitment, teamwork, and a multitude of other virtues.",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -475,
+        "y": 809,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 8,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 17,
+        "label": "R.E. Lee Hall of Fame",
+        "font": "82.60390009842521px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 43,
+        "y": -413,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Coach Charlie Thompson",
+        "font": "53.872108759842526px Garamond",
+        "font_size": 15,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 5,
+        "y": -332,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 80,
+        "label": "Coach Charlie Thompson had a legendary career as one of the most successful coaches in Virginia",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -5,
+        "y": 75,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 78,
+        "label": "history.  Everywhere he coached, he won.  His years at Lee, from 1978-1990, were among the most",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 129,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 79,
+        "label": "storied of his career. His Lee teams were known for their mental toughness, with an emphasis on",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -20,
+        "y": 173,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 82,
+        "label": "defense and fundamentals.  His incredible success on the court however, was matched by the impact",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -1,
+        "y": 207,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 8
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_185_04",
+        "item": "1_185_04",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -518,
+        "y": -275,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.11976047904191617,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 83,
+        "label": "he had on the hundreds of young men that came through his program. Coach was intensely competitive,",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 14,
+        "y": 260,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 87,
+        "label": "demanding, and had exacting standards with very high expectations. The lessons learned in his program",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 7,
+        "y": 304,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 88,
+        "label": "went far beyond the practice court and, undoubtedly, provided life lessons that many still benefit from",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 4,
+        "y": 350,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 12
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1697502907309,
+        "path": "../upload/2023/10/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1697502907309img_1109_cropped.jpg",
+        "color": 2,
+        "mask": 2,
+        "x": -5,
+        "y": -126,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.1492716535433074,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_1109.jpeg",
+        "price": 350,
+        "quantity": 1,
+        "size": "80 x 100 mm",
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 85,
+        "label": "today. Players in his program learned valuable lessons about the importance of a strong work-ethic,",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -16,
+        "y": 395,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 60,
+        "label": "commitment, teamwork, and a multitude of other virtues.  He was a giant.",
+        "font": "32.32326525590552px Garamond",
+        "font_size": 9,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -156,
+        "y": 429,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 14
+      }
+    ]
+  }
+}

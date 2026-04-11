@@ -1,0 +1,256 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:46.448Z",
+  "units": "mm",
+  "source": {
+    "id": "1591465135294",
+    "slug": "legacy-1591465135294",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1591465135294.json",
+    "savedAt": "2020-06-06T17:38:55.294Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Urn Heart",
+    "material": {
+      "name": "src/backgrounds/colors/l/34.jpg",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 302,
+      "height_mm": 307
+    },
+    "viewportPx": {
+      "width": 1084,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1084,
+        "height": 873
+      },
+      "bufferPx": {
+        "width": 1084,
+        "height": 873
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 302,
+      "height_mm": 307,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_133_17",
+        "position": {
+          "x_px": -203,
+          "y_px": -176
+        },
+        "height_px": 92,
+        "rotation": {
+          "z_deg": -7
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "1_143_08",
+        "position": {
+          "x_px": 124,
+          "y_px": 108
+        },
+        "height_px": 52,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_133_17",
+        "path": "/shapes/motifs/1_133_17.svg"
+      },
+      {
+        "id": "1_143_08",
+        "path": "/shapes/motifs/1_143_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "bc884d1c9f75fc1b330b59a774e6c3d2cdc0e0ba784a25cbb2c8a5b731d7433a",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:46.448Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Urn Heart",
+        "border": "Border Heart",
+        "shape_url": "shapes/photos/borderheart.svg",
+        "shape": "Urn Heart",
+        "color": "#000000",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "price": "2606.62",
+        "quantity": 1,
+        "width": 302,
+        "height": 307,
+        "_length": 1,
+        "init_width": 1084,
+        "init_height": 873
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_133_17",
+        "item": "1_133_17",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -203,
+        "y": -176,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -7,
+        "height": 92,
+        "ratio": 0.11151515151515151,
+        "itemID": 1
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1591465150737,
+        "type": "Photo",
+        "item": "1591465150737headstones_pet_this_into.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 175,
+        "y": -161,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 13,
+        "ratio": 0.6661750236659486,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "headstones_pet_this_into_this.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 105,
+        "width": "204",
+        "height": "291",
+        "itemID": 2
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1591465150737,
+        "type": "Photo",
+        "item": "1591465150737headstones_pet_this_into.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -96.1504427582197,
+        "y": 124,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -30,
+        "ratio": 0.6154188313866382,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "headstones_pet_this_into_this.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 97,
+        "width": "188",
+        "height": "269",
+        "itemID": 3
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_143_08",
+        "item": "1_143_08",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 124,
+        "y": 108,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 52,
+        "ratio": 0.07386363636363637,
+        "itemID": 4
+      }
+    ]
+  }
+}

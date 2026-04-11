@@ -1,10 +1,10 @@
 {
   "version": "2026.01",
-  "generatedAt": "2026-03-16T18:26:48.040Z",
+  "generatedAt": "2026-04-09T12:14:44.168Z",
   "units": "mm",
   "source": {
     "id": "1578016189116",
-    "slug": "curved-gable-gods-garden",
+    "slug": "legacy-1578016189116",
     "mlDir": "forevershining",
     "legacyFile": "/ml/forevershining/saved-designs/json/1578016189116.json",
     "savedAt": "2020-01-03T01:49:49.116Z"
@@ -14,8 +14,8 @@
     "name": "Traditional Engraved Headstone",
     "type": "headstone",
     "slug": "traditional-headstone",
-    "category": "biblical-memorial",
-    "title": "Biblical Memorial",
+    "category": "memorial",
+    "title": "Legacy Migration",
     "shape": "Curved Gable",
     "material": {
       "name": "src/granites/forever2/l/17.jpg",
@@ -46,6 +46,15 @@
     },
     "coordinateSystem": {
       "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1126,
+        "height": 561
+      },
+      "bufferPx": {
+        "width": 1126,
+        "height": 561
+      },
       "headstonePlacement": "auto-center",
       "flipMode": "preserve"
     }
@@ -68,88 +77,11 @@
   "elements": {
     "inscriptions": [
       {
-        "id": "insc-8",
-        "text": "Together forever in God's garden",
-        "font": {
-          "family": "Dobkin",
-          "size_px": 37.868,
-          "weight": 400
-        },
-        "position": {
-          "x_px": -10,
-          "y_px": 221
-        },
-        "rotation": {
-          "z_deg": 0
-        },
-        "color": "#ffffff",
-        "align": "center",
-        "surface": "headstone/front"
-      },
-      {
-        "id": "insc-22",
-        "text": "26-01-1944 - 23-11-2019",
-        "font": {
-          "family": "Dobkin",
-          "size_px": 23.141,
-          "weight": 400
-        },
-        "position": {
-          "x_px": 138,
-          "y_px": 175
-        },
-        "rotation": {
-          "z_deg": 0
-        },
-        "color": "#ffffff",
-        "align": "center",
-        "surface": "headstone/front"
-      },
-      {
-        "id": "insc-6",
-        "text": "Jean Thomas",
-        "font": {
-          "family": "Dobkin",
-          "size_px": 25.245,
-          "weight": 400
-        },
-        "position": {
-          "x_px": 138,
-          "y_px": 149
-        },
-        "rotation": {
-          "z_deg": 0
-        },
-        "color": "#ffffff",
-        "align": "center",
-        "surface": "headstone/front"
-      },
-      {
-        "id": "insc-3",
-        "text": "18-05-1971 - 20-06-2018",
-        "font": {
-          "family": "Dobkin",
-          "size_px": 23.141,
-          "weight": 400
-        },
-        "position": {
-          "x_px": -145,
-          "y_px": 112
-        },
-        "rotation": {
-          "z_deg": 0
-        },
-        "color": "#ffffff",
-        "align": "center",
-        "surface": "headstone/front"
-      },
-      {
         "id": "insc-2",
         "text": "Cecil Estrada",
         "font": {
           "family": "Dobkin",
-          "size_px": 25.245,
-          "weight": 400
+          "size_px": 60
         },
         "position": {
           "x_px": -142,
@@ -159,26 +91,23 @@
           "z_deg": 0
         },
         "color": "#ffffff",
-        "align": "center",
         "surface": "headstone/front"
       },
       {
-        "id": "insc-5",
-        "text": "08-05-1948 - 20-07-2018",
+        "id": "insc-3",
+        "text": "18-05-1971 - 20-06-2018",
         "font": {
           "family": "Dobkin",
-          "size_px": 23.141,
-          "weight": 400
+          "size_px": 55
         },
         "position": {
-          "x_px": 136,
-          "y_px": 16
+          "x_px": -145,
+          "y_px": 112
         },
         "rotation": {
           "z_deg": 0
         },
         "color": "#ffffff",
-        "align": "center",
         "surface": "headstone/front"
       },
       {
@@ -186,8 +115,7 @@
         "text": "Mamie Henderson",
         "font": {
           "family": "Dobkin",
-          "size_px": 25.245,
-          "weight": 400
+          "size_px": 60
         },
         "position": {
           "x_px": 135,
@@ -197,7 +125,57 @@
           "z_deg": 0
         },
         "color": "#ffffff",
-        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "08-05-1948 - 20-07-2018",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": 136,
+          "y_px": 16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Jean Thomas",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 60
+        },
+        "position": {
+          "x_px": 138,
+          "y_px": 149
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Together forever in God's garden",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 90
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 221
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
         "surface": "headstone/front"
       },
       {
@@ -205,8 +183,7 @@
         "text": "In loving memory of",
         "font": {
           "family": "Dobkin",
-          "size_px": 34.922,
-          "weight": 400
+          "size_px": 83
         },
         "position": {
           "x_px": 0,
@@ -216,7 +193,23 @@
           "z_deg": 0
         },
         "color": "#ffffff",
-        "align": "center",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "26-01-1944 - 23-11-2019",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": 138,
+          "y_px": 175
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
         "surface": "headstone/front"
       }
     ],
@@ -236,7 +229,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-10",
@@ -253,7 +247,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-11",
@@ -270,7 +265,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-12",
@@ -287,7 +283,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-13",
@@ -304,7 +301,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-14",
@@ -321,7 +319,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-15",
@@ -338,7 +337,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-16",
@@ -355,7 +355,8 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       },
       {
         "id": "motif-17",
@@ -372,44 +373,11 @@
         "flip": {
           "x": false,
           "y": false
-        }
+        },
+        "surface": "headstone/front"
       }
     ],
-    "photos": [
-      {
-        "id": "photo-18",
-        "position": {
-          "x_px": -158,
-          "y_px": 13,
-          "z_px": 0
-        },
-        "rotation": {
-          "z_deg": 0
-        }
-      },
-      {
-        "id": "photo-19",
-        "position": {
-          "x_px": 137,
-          "y_px": -75,
-          "z_px": 0
-        },
-        "rotation": {
-          "z_deg": 0
-        }
-      },
-      {
-        "id": "photo-21",
-        "position": {
-          "x_px": 141,
-          "y_px": 83,
-          "z_px": 0
-        },
-        "rotation": {
-          "z_deg": 0
-        }
-      }
-    ],
+    "photos": [],
     "logos": [],
     "additions": []
   },
@@ -436,6 +404,21 @@
         "path": "/shapes/motifs/2_131_22.svg"
       }
     ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "3d29811386a562cd7ec8fa3de2d5bc2c607153182835d9b109672ef1f20c29cb",
+    "sourceItemCount": 22,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "medium",
+    "migratedAt": "2026-04-09T12:14:44.168Z",
+    "policyVersion": "1",
+    "warningScore": 0
   },
   "legacy": {
     "raw": [

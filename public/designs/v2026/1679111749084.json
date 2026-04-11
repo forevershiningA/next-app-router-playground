@@ -1,0 +1,428 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:00.012Z",
+  "units": "mm",
+  "source": {
+    "id": "1679111749084",
+    "slug": "legacy-1679111749084",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1679111749084.json",
+    "savedAt": "2023-03-18T03:55:49.084Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 854,
+      "height": 480,
+      "dpr": 1.125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 854,
+        "height": 480
+      },
+      "bufferPx": {
+        "width": 961,
+        "height": 540
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Noble-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Lola Douglas",
+        "font": {
+          "family": "Garamond",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": -4.77,
+          "y_px": -65.781
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "14th May 1969 - 22nd Nov 2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": -4.77,
+          "y_px": -33.651
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Loving Husband to Rosa",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -11.449,
+          "y_px": 7.577
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Wonderful Father & Friend  to",
+        "font": {
+          "family": "Garamond",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -0.954,
+          "y_px": 32.606
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Warren Olson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -1.908,
+          "y_px": 59.113
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Thank You for showing Us what True Love Is",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -2.862,
+          "y_px": 96.948
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "84c66592a0be833073ecf7a5df75895e498aa5bf6fdce724c7957ae121c1ee61",
+    "sourceItemCount": 10,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:00.012Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1434.94,
+        "quantity": 1,
+        "width": 600,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1468,
+        "init_height": 548,
+        "device": "desktop",
+        "dpr": 1.125,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 854x480"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Black.jpg",
+        "price": 580,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 250,
+        "init_width": 1468,
+        "init_height": 548,
+        "mode": "2d"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1679112166392,
+        "path": "../upload/2023/03/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1679112166392img20230104wa0015_croppe.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 0.9540454357563908,
+        "y": -174.462958525434,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.4785305174701458,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG-20230104-WA0015.jpg",
+        "price": 440,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 2
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1679113433479,
+        "path": "../upload/2023/03/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1679113433479sethfamilypicture_croppe.jpg",
+        "color": 0,
+        "mask": 3,
+        "x": 12.401434946558624,
+        "y": 300.2937301762951,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.2761081763895268,
+        "shape_url": "shapes/photos/rectangle_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "sethFamilyPicture.jpg",
+        "price": 340,
+        "quantity": 1,
+        "size": "100 x 130 mm",
+        "itemID": 16
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 21,
+        "label": "Edward Benjamin Rebello",
+        "font": "37.78264285714285px Garamond",
+        "font_size": 44,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -4.770227178782147,
+        "y": -65.78111550958985,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 45,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "14th May 1969 - 22nd Nov 2022",
+        "font": "19.75001785714285px Garamond",
+        "font_size": 23,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -4.770227178782051,
+        "y": -33.65087367845947,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Loving Husband to Rosa",
+        "font": "28.336982142857135px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -11.448545229076785,
+        "y": 7.576896165016493,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 34,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "Wonderful Father & Friend  to",
+        "font": "29.195678571428566px Garamond",
+        "font_size": 34,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -0.9540454357563908,
+        "y": 32.605603427618426,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 22,
+        "label": "Antonella, Zac Luca & Seth",
+        "font": "28.336982142857135px Garamond",
+        "font_size": 33,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -1.908090871512878,
+        "y": 59.11292162294275,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 34,
+        "label": "Thank You for showing Us what True Love Is",
+        "font": "27.478285714285708px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -2.8621363072692687,
+        "y": 96.94750261192955,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 14
+      }
+    ]
+  }
+}

@@ -1,0 +1,237 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:42.934Z",
+  "units": "mm",
+  "source": {
+    "id": "1740640373774",
+    "slug": "legacy-1740640373774",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1740640373774.json",
+    "savedAt": "2025-02-27T07:12:53.774Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Circle",
+    "material": {
+      "name": "src/bronzes/phoenix/l/15.jpg",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 406.4,
+      "height_mm": 406.4
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 406.4,
+      "height_mm": 406.4,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/15.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "butterfly_028",
+        "position": {
+          "x_mm": 0,
+          "y_mm": 0
+        },
+        "height_mm": 100,
+        "rotation": {
+          "z_deg": -23
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_028",
+        "path": "/shapes/motifs/butterfly_028.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "194a32e7a88e226d0d1619b4a88d53cb37dfaa6c9a24f1d5c1eec433a79c8b14",
+    "sourceItemCount": 5,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:42.934Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border Circle",
+        "shape_url": "shapes/photos/bordercircle.svg",
+        "fixingSystem": 3,
+        "corner": 2,
+        "hole": 3,
+        "shape": "Circle",
+        "color": "#ffffff",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/15.jpg",
+        "name": "Bronze Plaque - White - Screws (visible from front)",
+        "price": 1794.88,
+        "quantity": 1,
+        "width": 406.4,
+        "height": 406.4,
+        "_length": 0,
+        "init_width": 1680,
+        "init_height": 881,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1740640577260,
+        "path": "../upload/2025/02/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1740640577260win_20240522_11_59_57_pr.jpg",
+        "color": 2,
+        "mask": 2,
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -1,
+        "ratio": 0.33549517247844024,
+        "shape_url": "shapes/photos/oval_horizontal.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "WIN_20240522_11_59_57_Pro.jpg",
+        "price": 282,
+        "quantity": 1,
+        "size": "70 x 90 mm",
+        "itemID": 1
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br4622-lady-of-mount-carmel",
+        "color": "#ffb35a",
+        "x": -141,
+        "y": -215,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 1,
+        "ratio": 1.0956313775510207,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br4622-lady-of-mount-carmel",
+        "price": 99,
+        "quantity": 1,
+        "size": "228.6 x 228.6 mm",
+        "itemID": 2
+      },
+      {
+        "productid": "200",
+        "id": "200",
+        "name": "Bronze Emblem",
+        "type": "Emblem",
+        "item": "br4622-lady-of-mount-carmel",
+        "color": "#ffb35a",
+        "x": 85.36122448979597,
+        "y": -170,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 1.0956313775510207,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br4622-lady-of-mount-carmel",
+        "price": 99,
+        "quantity": 1,
+        "size": "228.6 x 228.6 mm",
+        "itemID": 3
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_028",
+        "item": "butterfly_028",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 0,
+        "y": 0,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": -23,
+        "height": 100,
+        "ratio": 0.09891196834817013,
+        "itemID": 4
+      }
+    ]
+  }
+}

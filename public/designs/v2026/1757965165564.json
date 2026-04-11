@@ -1,0 +1,406 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:44.001Z",
+  "units": "mm",
+  "source": {
+    "id": "1757965165564",
+    "slug": "legacy-1757965165564",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1757965165564.json",
+    "savedAt": "2025-09-15T19:39:25.564Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "457.2",
+      "height_mm": 457.2
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 864,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1536,
+        "height": 864
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "457.2",
+      "height_mm": 457.2,
+      "thickness_mm": 25.4,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Clara Maldonado",
+        "font": {
+          "family": "French Script",
+          "size_mm": 45
+        },
+        "position": {
+          "x_mm": -3.75,
+          "y_mm": 317.309
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "May 10, 1950",
+        "font": {
+          "family": "French Script",
+          "size_mm": 33
+        },
+        "position": {
+          "x_mm": 240,
+          "y_mm": 143.354
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "September 19, 2024",
+        "font": {
+          "family": "French Script",
+          "size_mm": 33
+        },
+        "position": {
+          "x_mm": 228.75,
+          "y_mm": 55.123
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "November 21, 2019",
+        "font": {
+          "family": "French Script",
+          "size_mm": 35
+        },
+        "position": {
+          "x_mm": -216.25,
+          "y_mm": 54.691
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "December 6, 1945",
+        "font": {
+          "family": "French Script",
+          "size_mm": 38
+        },
+        "position": {
+          "x_mm": -210,
+          "y_mm": 142.414
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "butterfly_005",
+        "position": {
+          "x_mm": 222.5,
+          "y_mm": -191.135
+        },
+        "height_mm": 145,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "2_171_26",
+        "position": {
+          "x_mm": -223.75,
+          "y_mm": -166.15
+        },
+        "height_mm": 171,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_005",
+        "path": "/shapes/motifs/butterfly_005.svg"
+      },
+      {
+        "id": "2_171_26",
+        "path": "/shapes/motifs/2_171_26.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d367aafd48875d72ebbb3a33c6041d8f3da51f149ee19ea0f3b177b3c04bb198",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:44.001Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "corner": 2,
+        "hole": 3,
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 1457.24,
+        "quantity": 1,
+        "width": "457.2",
+        "height": 457.2,
+        "_length": 25.4,
+        "init_width": 1296,
+        "init_height": 666,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1536x864"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 5,
+        "quantity": 25,
+        "label": "Stuart + Kathlene MacDougall",
+        "font": "79.89050196850394px French Script",
+        "font_size": 45,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -3.75,
+        "y": -317.3093093093093,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 10,
+        "label": "May 10, 1950",
+        "font": "58.58636811023622px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 240,
+        "y": -143.35435435435437,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 16,
+        "label": "September 19, 2024",
+        "font": "58.58636811023622px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 228.75,
+        "y": -55.123123123123094,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 15,
+        "label": "November 21, 2019",
+        "font": "62.13705708661417px French Script",
+        "font_size": 35,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -216.25,
+        "y": -54.690690690690644,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 14,
+        "label": "December 6, 1945",
+        "font": "67.4630905511811px French Script",
+        "font_size": 38,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -210,
+        "y": -142.41441441441438,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_005",
+        "item": "butterfly_005",
+        "price": 214.2361,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 222.5,
+        "y": 191.1351351351351,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 145,
+        "ratio": 0.34688995215311,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_171_26",
+        "item": "2_171_26",
+        "price": 219.70832,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -223.75,
+        "y": 166.15015015015013,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 171,
+        "ratio": 0.23983169705469845,
+        "itemID": 7
+      }
+    ]
+  }
+}

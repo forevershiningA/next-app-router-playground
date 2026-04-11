@@ -1,0 +1,586 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:47.253Z",
+  "units": "mm",
+  "source": {
+    "id": "1597053114772",
+    "slug": "legacy-1597053114772",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1597053114772.json",
+    "savedAt": "2020-08-10T09:51:54.772Z"
+  },
+  "product": {
+    "id": "9",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 200
+    },
+    "viewportPx": {
+      "width": 412,
+      "height": 627,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 412,
+        "height": 627
+      },
+      "bufferPx": {
+        "width": 412,
+        "height": 627
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 200,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Wesley Roberts",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": -76.883,
+          "y_px": 3.795
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "13/09/1961-15/11/2019",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": -76.63,
+          "y_px": 22.444
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Erma Evans",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -64.268,
+          "y_px": -117.577
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Loving Mother of",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -88.94,
+          "y_px": 39.092
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Dylann & Kayne",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -84.499,
+          "y_px": 53.631
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Loved by many",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -87.954,
+          "y_px": 71.234
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Loved by many will deeply be missed",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": -74.345,
+          "y_px": 87.458
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "❤Gone for now but never forgotten❤",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": -69.867,
+          "y_px": 106.894
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_139_24",
+        "position": {
+          "x_px": -168.523,
+          "y_px": -108.377
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-16",
+        "asset": "1_139_24",
+        "position": {
+          "x_px": 42.226,
+          "y_px": -109.579
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_139_24",
+        "path": "/shapes/motifs/1_139_24.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8c95ebb3601f3811e946339e84cd3c2295d5edad63fa73609dcb7a3dfd2d0527",
+    "sourceItemCount": 14,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:47.253Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 9,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "256.56",
+        "quantity": 1,
+        "width": 300,
+        "height": 200,
+        "_length": 1,
+        "init_width": 412,
+        "init_height": 627,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "60",
+        "name": "Motif (Laser)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_139_24",
+        "item": "1_139_24",
+        "price": 20,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -168.5229470192097,
+        "y": -108.37727863068824,
+        "flipx": -1,
+        "flipy": "1",
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.08070866141732283,
+        "itemID": 1
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1596972228120received_617587128957346.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -71.52878487474925,
+        "y": -51.116536857575056,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.311296178343949,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "received_617587128957346.jpeg",
+        "price": 80,
+        "quantity": 1,
+        "size": 73,
+        "width": "64",
+        "height": "98",
+        "itemID": 4
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1596971351753view_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 129.12932075354814,
+        "y": -11.054892825465004,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7974299363057323,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "view.jpeg.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "187",
+        "width": "145",
+        "height": "250",
+        "itemID": 5
+      },
+      {
+        "productid": "60",
+        "name": "Motif (Laser)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_139_24",
+        "item": "1_139_24",
+        "price": 20,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 42.226260105221115,
+        "y": -109.57859494046309,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.07874015748031496,
+        "itemID": 16
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Marie Kathleen Cadby",
+        "font": "28.118999999999996px Dobkin",
+        "font_size": 21,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -76.88268137834405,
+        "y": 3.79492295145036,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "13/09/1961-15/11/2019",
+        "font": "20.084999999999997px Dobkin",
+        "font_size": 15,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -76.62996205041901,
+        "y": 22.443788517081828,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "In Memory Of",
+        "font": "26.779999999999994px Dobkin",
+        "font_size": 20,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -64.26803035050122,
+        "y": -117.57664071111108,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Loving Mother of",
+        "font": "13.389999999999997px Dobkin",
+        "font_size": 10,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -88.94028244341175,
+        "y": 39.09229810729664,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Dylann & Kayne",
+        "font": "13.389999999999997px Dobkin",
+        "font_size": 10,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -84.49945910291248,
+        "y": 53.63063662130179,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": " ",
+        "font": "26.779999999999994px Dobkin",
+        "font_size": 20,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0,
+        "y": 33,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": null,
+        "itemID": 12
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "Loved by many",
+        "font": "13.389999999999997px Dobkin",
+        "font_size": 10,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -87.953715819348,
+        "y": 71.23355937941176,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 13
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "Loved by many will deeply be missed",
+        "font": "13.389999999999997px Dobkin",
+        "font_size": 10,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -74.34535004840188,
+        "y": 87.458182570318,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 14
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "❤Gone for now but never forgotten❤",
+        "font": "16.067999999999998px Dobkin",
+        "font_size": 12,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -69.86697017564094,
+        "y": 106.89379594239898,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 15
+      }
+    ]
+  }
+}

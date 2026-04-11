@@ -1,0 +1,500 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:49.384Z",
+  "units": "mm",
+  "source": {
+    "id": "1610497411417",
+    "slug": "legacy-1610497411417",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1610497411417.json",
+    "savedAt": "2021-01-13T00:23:31.417Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 577,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 375,
+        "height": 577
+      },
+      "bufferPx": {
+        "width": 375,
+        "height": 577
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 700,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    },
+    "base": {
+      "width_mm": 700,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-8",
+        "text": "Forever loved your three daughters",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -16.5,
+          "y_px": -19.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#87e2d1",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "& missed beyond measure...",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -16.5,
+          "y_px": -35.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#87e2d1",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Your memory a treasure...",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -38.5,
+          "y_px": -70.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#87e2d1",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "You are loved beyond words",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -25.5,
+          "y_px": -53.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#87e2d1",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Your life was a blessing,",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": -52.5,
+          "y_px": -86.461
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#87e2d1",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Libbie Larson",
+        "font": {
+          "family": "Adorable",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": -2.5,
+          "y_px": -104.813
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Entered Eternal Life: 22/12/2017",
+        "font": {
+          "family": "Adorable",
+          "size_px": 42
+        },
+        "position": {
+          "x_px": -6.5,
+          "y_px": 24.852
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Entered Life: 19/07/1974",
+        "font": {
+          "family": "Adorable",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -34.5,
+          "y_px": 1.648
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_015_08",
+        "position": {
+          "x_px": -43.5,
+          "y_px": 103.539
+        },
+        "height_px": 243,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#8f9d9d",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_015_08",
+        "path": "/shapes/motifs/1_015_08.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1067bf6582e9bfaf9c12040f180bd5bd830205140068a2c7f28508202cbc2f89",
+    "sourceItemCount": 11,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:49.384Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 1440.38,
+        "quantity": 1,
+        "width": 600,
+        "height": 700,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 577,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 552,
+        "quantity": 1,
+        "width": 700,
+        "height": 100,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 577,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_015_08",
+        "item": "1_015_08",
+        "price": 399.03507410000003,
+        "quantity": 1,
+        "color": "#8f9d9d",
+        "colorName": "Paint Fill",
+        "x": -43.5,
+        "y": 103.5390625,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 243,
+        "ratio": 0.5560640732265446,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Forever loved your three daughters",
+        "font": "17.3671875px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#87e2d1",
+        "colorName": "Paint Fill",
+        "x": -16.5,
+        "y": -19.4609375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "& missed beyond measure...",
+        "font": "17.3671875px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#87e2d1",
+        "colorName": "Paint Fill",
+        "x": -16.5,
+        "y": -35.4609375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Your memory a treasure...",
+        "font": "17.3671875px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#87e2d1",
+        "colorName": "Paint Fill",
+        "x": -38.5,
+        "y": -70.4609375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "You are loved beyond words",
+        "font": "17.3671875px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#87e2d1",
+        "colorName": "Paint Fill",
+        "x": -25.5,
+        "y": -53.4609375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 140,
+        "label": "Your life was a blessing,",
+        "font": "17.3671875px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#87e2d1",
+        "colorName": "Paint Fill",
+        "x": -52.5,
+        "y": -86.4609375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 1,
+        "label": "In Loving Memory Of Hendrick Vandendolder",
+        "font": "14.16796875px Adorable",
+        "font_size": 31,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -2.5,
+        "y": -104.81250000000102,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 1,
+        "label": "Entered Eternal Life: 22/12/2017",
+        "font": "19.1953125px Adorable",
+        "font_size": 42,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -6.5,
+        "y": 24.8515625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.75,
+        "quantity": 1,
+        "label": "Entered Life: 19/07/1974",
+        "font": "19.65234375px Adorable",
+        "font_size": 43,
+        "font_family": "Adorable",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -34.5,
+        "y": 1.6484375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 9
+      }
+    ]
+  }
+}

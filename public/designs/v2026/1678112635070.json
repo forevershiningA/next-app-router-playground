@@ -1,0 +1,1456 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:59.851Z",
+  "units": "mm",
+  "source": {
+    "id": "1678112635070",
+    "slug": "legacy-1678112635070",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1678112635070.json",
+    "savedAt": "2023-03-06T14:23:55.070Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Heart",
+    "material": {
+      "name": "src/backgrounds/colors/l/34.jpg",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 302,
+      "height_mm": 307
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 302,
+      "height_mm": 307,
+      "thickness_mm": 50,
+      "surface": "front",
+      "texture": "/textures/forever/l/34.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "Dance on...",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -55.088
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Here lies",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -7.87
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 10
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 222.277
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Always together, never apart, joined as one heart",
+        "font": {
+          "family": "Garamond",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -150.524
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Remembered with love",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -102.306
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Devoted in love",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 39.349
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Stainless Steel Inlaid Urn - 06/03/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 7
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 190.928
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In God&apos;s care",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 12
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -196.743
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -302,
+          "y_px": -359.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -276.318,
+          "y_px": -375.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-11",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -251.635,
+          "y_px": -382.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-12",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -223.953,
+          "y_px": -385.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -197.271,
+          "y_px": -386.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -164.588,
+          "y_px": -380.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-15",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -134.906,
+          "y_px": -367.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-16",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -106.224,
+          "y_px": -352.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -82.541,
+          "y_px": -335.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-18",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -58.859,
+          "y_px": -315.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-19",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -39.177,
+          "y_px": -296.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-20",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -23.494,
+          "y_px": -273.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-21",
+        "asset": "cross_035",
+        "position": {
+          "x_px": -0.812,
+          "y_px": -254.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-22",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 26.87,
+          "y_px": -273.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-23",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 46.553,
+          "y_px": -299.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-24",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 66.235,
+          "y_px": -318.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-25",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 85.917,
+          "y_px": -336.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-26",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 107.6,
+          "y_px": -353.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-27",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 134.282,
+          "y_px": -368.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-28",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 157.964,
+          "y_px": -380.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-29",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 183.647,
+          "y_px": -385.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-30",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 209.329,
+          "y_px": -385.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-31",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 235.011,
+          "y_px": -385.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-32",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 259.694,
+          "y_px": -380.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-33",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 285.376,
+          "y_px": -370.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-34",
+        "asset": "cross_035",
+        "position": {
+          "x_px": 309.058,
+          "y_px": -355.114
+        },
+        "height_px": 10,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#a22b2a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "cross_035",
+        "path": "/shapes/motifs/cross_035.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "82a1d3a70aba151573ccd902c04aea84b22ea588b48bb35ad3df0e3a89b19e38",
+    "sourceItemCount": 35,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:59.851Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "border": "Border Heart",
+        "shape_url": "shapes/photos/borderheart.svg",
+        "shape": "Heart",
+        "color": "../upload/2023/03/undefinedbackground_9_cropped.jpg",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/34.jpg",
+        "name": "Stainless Steel Vitreous Enamel Inlaid Urn",
+        "price": 2606.62,
+        "quantity": 1,
+        "width": 302,
+        "height": 307,
+        "_length": 50,
+        "init_width": 1680,
+        "init_height": 865,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -302,
+        "y": -359.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 9
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Dance on...",
+        "font": "43.954397394136805px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -55.08794788273616,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 4
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Here lies",
+        "font": "43.954397394136805px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -7.869706840390879,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 5
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "27.471498371335503px Garamond",
+        "font_size": 10,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 222.27687296416934,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 42,
+        "label": "Always together, never apart, joined as one heart",
+        "font": "32.965798045602604px Garamond",
+        "font_size": 12,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -150.52442996742673,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "Remembered with love",
+        "font": "32.965798045602604px Dobkin",
+        "font_size": 12,
+        "font_family": "Dobkin",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -102.30618892508143,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 11,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Devoted in love",
+        "font": "41.20724755700326px Chopin Script",
+        "font_size": 15,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": 39.34853420195439,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 34,
+        "label": "Stainless Steel Inlaid Urn - 06/03/2023",
+        "font": "19.230048859934854px Arial",
+        "font_size": 7,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 2,
+        "y": 190.92833876221493,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 5,
+        "itemID": 7
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 11,
+        "label": "In God&apos;s care",
+        "font": "32.965798045602604px Chopin Script",
+        "font_size": 12,
+        "font_family": "Chopin Script",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 0,
+        "y": -196.74267100977198,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 1
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -276.31767381781424,
+        "y": -375.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 10
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -251.63534763562848,
+        "y": -382.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 11
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -223.95302145344272,
+        "y": -385.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 12
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -197.27069527125695,
+        "y": -386.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 13
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -164.5883690890712,
+        "y": -380.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 14
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -134.90604290688543,
+        "y": -367.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 15
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -106.22371672469967,
+        "y": -352.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 16
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -82.54139054251391,
+        "y": -335.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 17
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -58.85906436032815,
+        "y": -315.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 18
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -39.17673817814239,
+        "y": -296.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 19
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -23.494411995956625,
+        "y": -273.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 20
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": -0.8120858137708638,
+        "y": -254.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 21
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 26.870240368414898,
+        "y": -273.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 22
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 46.55256655060066,
+        "y": -299.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 23
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 66.23489273278642,
+        "y": -318.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 24
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 85.91721891497218,
+        "y": -336.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 25
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 107.59954509715794,
+        "y": -353.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 26
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 134.2818712793437,
+        "y": -368.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 27
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 157.96419746152947,
+        "y": -380.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 28
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 183.64652364371523,
+        "y": -385.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 29
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 209.328849825901,
+        "y": -385.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 30
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 235.01117600808675,
+        "y": -385.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 31
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 259.6935021902725,
+        "y": -380.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 32
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 285.3758283724583,
+        "y": -370.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 33
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "cross_035",
+        "item": "cross_035",
+        "price": 0,
+        "quantity": 1,
+        "color": "#a22b2a",
+        "colorName": "Brown",
+        "x": 309.05815455464403,
+        "y": -355.114006514658,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 10,
+        "ratio": 0.038314176245210725,
+        "itemID": 34
+      }
+    ]
+  }
+}

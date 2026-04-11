@@ -35,12 +35,30 @@ const DEFAULT_OUTPUT_DIR = path.join(ROOT, 'public', 'screenshots', 'v2026-3d');
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
 const DESIGNER_PATH = '/select-size';
 
+// Designs that permanently fail (missing viewport dims, corrupt JSON, etc.)
+const KNOWN_FAILURES = new Set([
+  // Visibility failures (headstone not visible — missing viewport dims)
+  '1587310089876', '1591313903992', '1595255616104', '1597617098967',
+  '1598193944382', '1615779407165', '1620537504853', '1632791258768',
+  '1636037970908', '1641476957186', '1644238842045', '1647828869487',
+  '1647829703664', '1653887657613', '1654566043825', '1656992160525',
+  '1661848089947', '1673300687155', '1726182269646', '1726754599177',
+  '1726757840228', '1726807837626', '1727441794195', '1727444611151',
+  '1727445171962', '1727533409906', '1727833230185', '1727927086942',
+  '1728104658021', '1728354962938', '1735435908296', '1737599278768',
+  '1751612915619', '1753878785927', '1758107003961', '1761405543829',
+  // Canvas timeout failures
+  '1730496721660', '1730771445921', '1730846919047', '1730875228895',
+  '1731045326746', '1731546462793', '1731925181091', '1732340268903',
+  '1732490707499', '1738461964558', '1748154427470',
+]);
+
 const DEFAULTS = {
   concurrency: 1,
   width: 1280,
   height: 960,
   renderWaitMs: 1500,
-  maxRetries: 2,
+  maxRetries: 0,
   timeoutMs: 30_000,
 };
 
@@ -279,11 +297,23 @@ async function captureDesign(context, designId, opts, workerIdx) {
     // a generous but bounded window — some designs have a bug where baseSwapping
     // never resets because the texture preload callback doesn't fire.
     console.log(`${tag} Waiting for render...`);
-    await page.waitForFunction(() => {
-      const store = window.__headstoneStore;
-      if (!store) return false;
-      return store.getState().loading === false;
-    }, { timeout: opts.timeoutMs });
+    try {
+      await page.waitForFunction(() => {
+        const store = window.__headstoneStore;
+        if (!store) return false;
+        return store.getState().loading === false;
+      }, { timeout: opts.timeoutMs });
+    } catch {
+      // Force-clear loading — shape/texture preload may have failed (e.g. missing SVG)
+      console.log(`${tag} loading stuck — force-clearing`);
+      await page.evaluate(() => {
+        const store = window.__headstoneStore;
+        if (store?.getState()?.setLoading) {
+          store.getState().setLoading(false);
+        }
+      });
+      await page.waitForTimeout(1000);
+    }
 
     // Give baseSwapping up to 8s to resolve, then force-clear it
     try {
@@ -616,20 +646,39 @@ async function processDesigns(browser, designIds, opts) {
   const results = { success: 0, failed: 0, skipped: 0, errors: [] };
   const total = designIds.length;
   let processed = 0;
+  const errorsPath = path.join(opts.outputDir, '_errors.json');
+
+  // Save errors incrementally so we don't lose data on crash
+  function saveErrors() {
+    if (results.errors.length > 0) {
+      fs.writeFileSync(errorsPath, JSON.stringify(results.errors, null, 2));
+    }
+  }
 
   // Process in batches based on concurrency
   const queue = [...designIds];
 
+  // Refresh context every N captures to prevent memory accumulation
+  const CONTEXT_REFRESH_INTERVAL = 50;
+
   async function worker(workerIdx) {
-    // Each worker uses a fresh browser context
-    const context = await browser.newContext({
+    let context = await browser.newContext({
       viewport: { width: opts.width, height: opts.height },
       deviceScaleFactor: 1,
     });
+    let capturesSinceRefresh = 0;
 
     while (queue.length > 0) {
       const designId = queue.shift();
       if (!designId) break;
+
+      // Skip known permanently-failing designs
+      if (KNOWN_FAILURES.has(designId)) {
+        processed++;
+        results.skipped++;
+        console.log(`[W${workerIdx}][${designId}] Skipped (known failure) [${processed}/${total}]`);
+        continue;
+      }
 
       // Skip if already exists
       if (opts.skipExisting) {
@@ -642,22 +691,58 @@ async function processDesigns(browser, designIds, opts) {
         }
       }
 
+      // Refresh browser context periodically to free WebGL memory
+      if (capturesSinceRefresh >= CONTEXT_REFRESH_INTERVAL) {
+        console.log(`[W${workerIdx}] Refreshing browser context (after ${capturesSinceRefresh} captures)...`);
+        try { await context.close(); } catch {}
+        context = await browser.newContext({
+          viewport: { width: opts.width, height: opts.height },
+          deviceScaleFactor: 1,
+        });
+        capturesSinceRefresh = 0;
+      }
+
       let success = false;
       for (let attempt = 0; attempt <= opts.maxRetries; attempt++) {
         if (attempt > 0) {
           console.log(`[W${workerIdx}][${designId}] Retry ${attempt}/${opts.maxRetries}...`);
         }
 
-        const result = await captureDesign(context, designId, opts, workerIdx);
-        if (result.success) {
-          success = true;
-          results.success++;
-          break;
-        }
+        try {
+          const result = await captureDesign(context, designId, opts, workerIdx);
+          if (result.success) {
+            success = true;
+            results.success++;
+            capturesSinceRefresh++;
+            break;
+          }
 
-        if (attempt === opts.maxRetries) {
-          results.failed++;
-          results.errors.push({ id: designId, error: result.error });
+          if (attempt === opts.maxRetries) {
+            results.failed++;
+            results.errors.push({ id: designId, error: result.error });
+            saveErrors();
+            // Refresh context after a failed design to prevent corruption
+            try { await context.close(); } catch {}
+            context = await browser.newContext({
+              viewport: { width: opts.width, height: opts.height },
+              deviceScaleFactor: 1,
+            });
+            capturesSinceRefresh = 0;
+          }
+        } catch (err) {
+          // Browser context may have crashed — recreate it
+          console.error(`[W${workerIdx}][${designId}] Context error: ${err.message}`);
+          try { await context.close(); } catch {}
+          context = await browser.newContext({
+            viewport: { width: opts.width, height: opts.height },
+            deviceScaleFactor: 1,
+          });
+          capturesSinceRefresh = 0;
+          if (attempt === opts.maxRetries) {
+            results.failed++;
+            results.errors.push({ id: designId, error: `Context crash: ${err.message}` });
+            saveErrors();
+          }
         }
       }
 
@@ -666,7 +751,7 @@ async function processDesigns(browser, designIds, opts) {
       console.log(`Progress: ${processed}/${total} (${pct}%) — ✓${results.success} ✗${results.failed} ⊘${results.skipped}`);
     }
 
-    await context.close();
+    try { await context.close(); } catch {}
   }
 
   // Launch workers
@@ -732,22 +817,61 @@ async function main() {
   }
 
   // Launch browser
-  console.log('\nLaunching Chromium...');
-  const browser = await chromium.launch({
-    headless: true,
-    args: [
-      '--disable-gpu-sandbox',
-      '--use-gl=angle',
-      '--use-angle=swiftshader',
-      '--enable-webgl',
-    ],
-  });
+  const BROWSER_ARGS = [
+    '--disable-gpu-sandbox',
+    '--use-gl=angle',
+    '--use-angle=swiftshader',
+    '--enable-webgl',
+    '--disable-dev-shm-usage',
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-extensions',
+    '--disable-background-networking',
+  ];
+
+  // Process in chunks, relaunching the browser between chunks to prevent OOM
+  const CHUNK_SIZE = 200;
+  const chunks = [];
+  for (let i = 0; i < designIds.length; i += CHUNK_SIZE) {
+    chunks.push(designIds.slice(i, i + CHUNK_SIZE));
+  }
 
   const startTime = Date.now();
-  const results = await processDesigns(browser, designIds, opts);
-  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+  const totalResults = { success: 0, failed: 0, skipped: 0, errors: [] };
 
-  await browser.close();
+  for (let ci = 0; ci < chunks.length; ci++) {
+    console.log(`\n── Chunk ${ci + 1}/${chunks.length} (${chunks[ci].length} designs) ──`);
+    console.log('Launching Chromium...');
+
+    let browser;
+    try {
+      browser = await chromium.launch({ headless: true, args: BROWSER_ARGS });
+    } catch (err) {
+      console.error(`Failed to launch browser: ${err.message}`);
+      continue;
+    }
+
+    try {
+      const results = await processDesigns(browser, chunks[ci], opts);
+      totalResults.success += results.success;
+      totalResults.failed += results.failed;
+      totalResults.skipped += results.skipped;
+      totalResults.errors.push(...results.errors);
+    } catch (err) {
+      console.error(`Chunk ${ci + 1} failed: ${err.message}`);
+    }
+
+    try { await browser.close(); } catch {}
+
+    // Brief pause between chunks to let OS reclaim memory
+    if (ci < chunks.length - 1) {
+      console.log('Pausing 5s between chunks...');
+      await new Promise(r => setTimeout(r, 5000));
+    }
+  }
+
+  const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+  const results = totalResults;
 
   // Summary
   console.log('\n═══════════════════════════════════════════════════');

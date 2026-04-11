@@ -1,0 +1,1183 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:41.236Z",
+  "units": "mm",
+  "source": {
+    "id": "1680292719727",
+    "slug": "legacy-1680292719727",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1680292719727.json",
+    "savedAt": "2023-03-31T19:58:39.727Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/bronzes/phoenix/l/11.jpg",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 254,
+      "height_mm": 355.59999999999997
+    },
+    "viewportPx": {
+      "width": 1536,
+      "height": 960,
+      "dpr": 1.25
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1536,
+        "height": 960
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1200
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 254,
+      "height_mm": 355.59999999999997,
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "\"Aloha Elk\" welcomes you to Honolulu",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 61,
+          "y_mm": 371.761
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "lodge #616.  Mahalo to the following",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 62.251,
+          "y_mm": 343.548
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "donors who helped bring this symbol",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 60,
+          "y_mm": 312.48
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "of the BPOE to Hawaii",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 38.749,
+          "y_mm": 276.056
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Victoria TzeRu Yau",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -4.999,
+          "y_mm": -369.614
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Carol A. Hamada           Paul Yu Kwong Yau",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 8.75,
+          "y_mm": -337.83
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Mollie Warren",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 8.25,
+          "y_mm": -304.082
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Christine Sanders",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -2.25,
+          "y_mm": -270.157
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "T & Sue Francis        George West",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -15.25,
+          "y_mm": -234.803
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Augie Rey Fernandez       Carmela C. Toledo",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -15.749,
+          "y_mm": -203.913
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "Frank DeSantis Jr.        Concepcion Saucedo",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 3.749,
+          "y_mm": -142.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-23",
+        "text": "Mabelle Gibson",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -6.25,
+          "y_mm": -112.491
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "PRINCE HUGHES",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -22.746,
+          "y_mm": 233.201
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "CHAS GOMEZ",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 144.975,
+          "y_mm": 199.455
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-18",
+        "text": "DEBORAH NADLER",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -147.226,
+          "y_mm": 200.52
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-19",
+        "text": "WALTER V RODENHURST, Life member",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 5.25,
+          "y_mm": 164.097
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-20",
+        "text": "LENNIE Muttier SORENSON",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -125.479,
+          "y_mm": 127.316
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Basil Carter",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -23.746,
+          "y_mm": 85.172
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "Prince Williamson",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 178.221,
+          "y_mm": 126.776
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Kristin L. Bryant           Deborah G. Knight",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -6.499,
+          "y_mm": 60.352
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "C. Castle 111                Bud & Laurie Lush",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 2.001,
+          "y_mm": 4.642
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-25",
+        "text": "Lorenzo Fox",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -7.749,
+          "y_mm": -54.817
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "Pauline Johnson",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": 18.5,
+          "y_mm": -87.493
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-26",
+        "text": "Alvina Hopkins",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -35.749,
+          "y_mm": -27.14
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-28",
+        "text": "RubenaD. Canikis       Sean & Jodi Lee",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -12.748,
+          "y_mm": 37.674
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Samantha Santos",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -11.249,
+          "y_mm": -174.808
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-16",
+        "asset": "1_138_07",
+        "position": {
+          "x_mm": -207.5,
+          "y_mm": 326.407
+        },
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_138_07",
+        "path": "/shapes/motifs/1_138_07.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "b171449d024505c0916aa94b61fe1855fd2c724330fb7871f770e06728fe9300",
+    "sourceItemCount": 28,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:41.236Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "border": "Border 6",
+        "shape_url": "shapes/photos/border6.svg",
+        "fixingSystem": 2,
+        "shape": "Rectangle (Landscape)",
+        "color": "#513a68",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/11.jpg",
+        "name": "Bronze Plaque - Purple - Lugs with Studs",
+        "price": 1132.4,
+        "quantity": 1,
+        "width": 254,
+        "height": 355.59999999999997,
+        "_length": 0,
+        "init_width": 1209,
+        "init_height": 737,
+        "device": "desktop",
+        "dpr": 1.25,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230222,
+        "mode": "2d",
+        "navigator": "Mozilla Firefox (desktop), 1536x960"
+      },
+      {
+        "productid": 51,
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_138_07",
+        "item": "1_138_07",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -207.49958643507023,
+        "y": -326.4068617949215,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05943536404160475,
+        "itemID": 16
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 31,
+        "label": "\"Aloha Elk\" welcomes you to Honolulu",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 61,
+        "y": -371.76061252180654,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 30,
+        "label": "lodge #616.  Mahalo to the following",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 62.2506203473946,
+        "y": -343.54836208567554,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 30,
+        "label": "donors who helped bring this symbol",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 60,
+        "y": -312.4803256445048,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 4
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 17,
+        "label": "of the BPOE to Hawaii",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 38.74855252274608,
+        "y": -276.0558247722427,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 5
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 16,
+        "label": "Victoria TzeRu Yau",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -4.999172870140569,
+        "y": 369.6136848226399,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 11
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 27,
+        "label": "Carol A. Hamada           Paul Yu Kwong Yau",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 8.75020678246483,
+        "y": 337.83000581508054,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 30,
+        "label": "Delorese Gregoire        Gloria Joann Yau",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 8.249793217535057,
+        "y": 304.0823803062609,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 21,
+        "label": "Bradley Frye        Teru Yasuda",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -2.2497932175351707,
+        "y": 270.1572010079474,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 10
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 22,
+        "label": "T & Sue Francis        George West",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -15.24979321753517,
+        "y": 234.80345028106217,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 13
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 32,
+        "label": "Augie Rey Fernandez       Carmela C. Toledo",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -15.749379652605398,
+        "y": 203.91296762938555,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 12
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 33,
+        "label": "Frank DeSantis Jr.        Concepcion Saucedo",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 3.749379652605512,
+        "y": 142.66737739872065,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 22
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 21,
+        "label": "Deden Family        Judy Rubano",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.249793217535171,
+        "y": 112.49118046132969,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 23
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 14,
+        "label": "JOHN & MARY HILTZ",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -22.746071133167902,
+        "y": -233.2013956193061,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 15
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 12,
+        "label": "JOHN F. NAD;ER",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 144.97518610421832,
+        "y": -199.4551269625897,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 17
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 13,
+        "label": "DEBORAH NADLER",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -147.22580645161304,
+        "y": -200.5204496995542,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 18
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 40.86,
+        "quantity": 28,
+        "label": "WALTER V RODENHURST, Life member",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 5.249793217535171,
+        "y": -164.09730567939528,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 19
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 21,
+        "label": "LENNIE Muttier SORENSON",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -125.47890818858559,
+        "y": -127.31634037604186,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 20
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Harry Brockman         Leslie B Ikawa",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -23.74607113316779,
+        "y": -85.17212638108168,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "JOHN \"Dan\" Hogan",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 178.22084367245657,
+        "y": -126.7755378949409,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 21
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Kristin L. Bryant           Deborah G. Knight",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -6.4987593052109105,
+        "y": -60.35239387478191,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 7
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "C. Castle 111                Bud & Laurie Lush",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 2.000827129859317,
+        "y": -4.642178716805631,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 27
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 26,
+        "label": "Diane M. Conner        Janet H. Murphy",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -7.7485525227459675,
+        "y": 54.81701880209346,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 10,
+        "itemID": 25
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 29,
+        "label": "David W. Conner        Mark Mason Muttick",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": 18.50041356492966,
+        "y": 87.49253731343288,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 24
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 25,
+        "label": "Maria B Castle 111        Marsh Ohana",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -35.74855252274597,
+        "y": 27.14014343865091,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 26
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 27,
+        "label": "RubenaD. Canikis       Sean & Jodi Lee",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -12.747725392886764,
+        "y": -37.67416165923635,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 9,
+        "itemID": 28
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 30,
+        "label": "Brandon Eshenour        Bunnie Takahashi",
+        "font": "25.25924493813274px Adorable",
+        "font_size": 10,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Texas Rose",
+        "x": -11.24896608767574,
+        "y": 174.8075208373715,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 7,
+        "itemID": 14
+      }
+    ]
+  }
+}

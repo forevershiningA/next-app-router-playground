@@ -1,0 +1,407 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:56.951Z",
+  "units": "mm",
+  "source": {
+    "id": "1661929513527",
+    "slug": "legacy-1661929513527",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1661929513527.json",
+    "savedAt": "2022-08-31T07:05:13.527Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Rectangle",
+    "material": {
+      "name": "src/backgrounds/colors/l/21.jpg",
+      "texture": "/textures/forever/l/21.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 200,
+      "height_mm": 270
+    },
+    "viewportPx": {
+      "width": 2144,
+      "height": 1206,
+      "dpr": 0.8955223880597015
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 2144,
+        "height": 1206
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 200,
+      "height_mm": 270,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/21.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "fh",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 45.811,
+          "y_px": -194.269
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "gfhg",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -202.379,
+          "y_px": 89.748
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "ghfh",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 139.695,
+          "y_px": 12.135
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "fh",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -92.093,
+          "y_px": -178.378
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "butterfly_024",
+        "position": {
+          "x_px": -3,
+          "y_px": -73
+        },
+        "height_px": 25,
+        "rotation": {
+          "z_deg": -59
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-5",
+        "asset": "butterfly_024",
+        "position": {
+          "x_px": -223.289,
+          "y_px": -14.828
+        },
+        "height_px": 25,
+        "rotation": {
+          "z_deg": -59
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-8",
+        "asset": "rosellasolid",
+        "position": {
+          "x_px": -53.729,
+          "y_px": 141.403
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_024",
+        "path": "/shapes/motifs/butterfly_024.svg"
+      },
+      {
+        "id": "rosellasolid",
+        "path": "/shapes/motifs/rosellasolid.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "09e342e14d9a8009b6e5dbfd9eb9ec2ebc66b8125bb5075c4e6e23d2087f2ce1",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:56.951Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "border": "Border Rectangle",
+        "shape_url": "shapes/photos/borderrectangle.svg",
+        "shape": "Rectangle",
+        "color": "undefined#000000",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/21.jpg",
+        "name": "Stainless Steel Vitreous Enamel Inlaid Urn",
+        "price": 2475.62,
+        "quantity": 1,
+        "width": 200,
+        "height": 270,
+        "_length": 1,
+        "init_width": 1904,
+        "init_height": 971,
+        "backgroundOption": "color",
+        "device": "desktop",
+        "dpr": 0.8955223880597015,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220831,
+        "mode": "2d",
+        "navigator": "Win32, , Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:104.0) Gecko/20100101 Firefox/104.0, 2144x1206"
+      },
+      {
+        "productid": 1700,
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_024",
+        "item": "butterfly_024",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -3,
+        "y": -73,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -59,
+        "height": 25,
+        "ratio": 0.058823529411764705,
+        "itemID": 2
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "fh",
+        "font": "62.800995024875625px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 45.8114495798319,
+        "y": -194.26879505664263,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 3
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "gfhg",
+        "font": "62.800995024875625px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -202.37920168067228,
+        "y": 89.74768280123584,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 4
+      },
+      {
+        "productid": 1700,
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_024",
+        "item": "butterfly_024",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -223.28886554621852,
+        "y": -14.828012358393437,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": -59,
+        "height": 25,
+        "ratio": 0.058823529411764705,
+        "itemID": 5
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "ghfh",
+        "font": "62.800995024875625px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 139.69537815126046,
+        "y": 12.134912461380111,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 6
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 2,
+        "label": "fh",
+        "font": "62.800995024875625px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -92.09296218487395,
+        "y": -178.3778767066164,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "rosellasolid",
+        "item": "rosellasolid",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -53.72899159663871,
+        "y": 141.40267765190526,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06385696040868455,
+        "itemID": 8
+      }
+    ]
+  }
+}

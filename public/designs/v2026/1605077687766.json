@@ -1,0 +1,439 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:48.589Z",
+  "units": "mm",
+  "source": {
+    "id": "1605077687766",
+    "slug": "legacy-1605077687766",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1605077687766.json",
+    "savedAt": "2020-11-11T06:54:47.766Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/17.jpg",
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 355.599999999999,
+      "height_mm": 507.99999999999955
+    },
+    "viewportPx": {
+      "width": 1200,
+      "height": 663,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1200,
+        "height": 663
+      },
+      "bufferPx": {
+        "width": 1200,
+        "height": 663
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 355.599999999999,
+      "height_mm": 507.99999999999955,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    },
+    "base": {
+      "width_mm": 455.599999999999,
+      "height_mm": 101.6,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "09/12/1979 - 08/03/2020",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 182.069
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "MINNIE SCHMIDT",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 86,
+          "y_px": 151.869
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "FLOYD GOMEZ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -72,
+          "y_px": 152.497
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "HIEU \"CHINO\"",
+        "font": {
+          "family": "Garamond",
+          "size_px": 44
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 30.169
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "IN LOVING MEMORY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -33.747
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "RAMSEY",
+        "font": {
+          "family": "Garamond",
+          "size_px": 56
+        },
+        "position": {
+          "x_px": -1,
+          "y_px": 83.426
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "UNTIL WE MEET AGAIN",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": 241.537
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bdc6c2",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "95045bdb89e75a6228f229720949308938f6d2bbfebf776575a7871fbc60d699",
+    "sourceItemCount": 10,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:48.589Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 325.12,
+        "quantity": 1,
+        "width": 355.599999999999,
+        "height": 507.99999999999955,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 663,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 191,
+        "quantity": 1,
+        "width": 455.599999999999,
+        "height": 101.6,
+        "_length": 1,
+        "init_width": 1200,
+        "init_height": 663,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "path": "../upload/2020/11/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "1605074847721chino32_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 2,
+        "y": -158.15540705411996,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5749202518736367,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "Chino32.jpg",
+        "price": 318.5,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 2.4375,
+        "quantity": 23,
+        "label": "09/12/1979 - 08/03/2020",
+        "font": "24.389394685039385px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 4,
+        "y": 182.06875000001077,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 2.275,
+        "quantity": 9,
+        "label": "IN HEAVEN",
+        "font": "21.208169291338596px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 86,
+        "y": 151.86914062537193,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 2.275,
+        "quantity": 8,
+        "label": "ON EARTH",
+        "font": "21.208169291338596px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -72,
+        "y": 152.49687500009253,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 2.4375,
+        "quantity": 12,
+        "label": "HIEU \"CHINO\"",
+        "font": "46.65797244094491px Garamond",
+        "font_size": 44,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 7,
+        "y": 30.168750000002944,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 2.275,
+        "quantity": 20,
+        "label": "IN LOVING MEMORY",
+        "font": "26.510211614173247px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": -4,
+        "y": -33.746777761401574,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 2.4375,
+        "quantity": 5,
+        "label": "DUONG",
+        "font": "59.38287401574807px Garamond",
+        "font_size": 56,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -1,
+        "y": 83.4257812500204,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 38,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 2.275,
+        "quantity": 25,
+        "label": "UNTIL WE MEET AGAIN",
+        "font": "25.449803149606318px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#bdc6c2",
+        "colorName": "Paint Fill",
+        "x": 3,
+        "y": 241.53684560812547,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 7
+      }
+    ]
+  }
+}

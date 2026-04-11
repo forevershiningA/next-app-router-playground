@@ -327,6 +327,10 @@ export default function CheckPricePanel() {
           className="check-price-panel__modal relative w-full max-w-[58rem] max-h-[90vh] overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10"
           onClick={(e) => e.stopPropagation()}
         >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent"
+          />
           <button
             type="button"
             onClick={handleClose}
@@ -338,27 +342,33 @@ export default function CheckPricePanel() {
             </svg>
           </button>
 
-          <div className="relative border-b border-white/10 px-6 py-5">
-            <h2 className="text-2xl font-serif text-white">
-              Check Price (${totalPrice.toFixed(2)})
+          <div className="relative border-b border-white/10 px-6 py-5 md:px-7 md:py-6">
+            <p className="mb-3 inline-flex items-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f3d48f]">
+              Price Breakdown
+            </p>
+            <h2 className="text-2xl font-serif text-white md:text-[1.75rem]">
+              Your Design Total: <span className="text-[#f3d48f]">${totalPrice.toFixed(2)}</span>
             </h2>
+            <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-white/85">
+              Detailed itemization of every component in your memorial design.
+            </p>
           </div>
 
           {/* Content - Table */}
-          <div className="check-price-panel__table max-h-[calc(90vh-220px)] overflow-y-auto overflow-x-auto bg-[#0d0906]">
+          <div className="check-price-panel__table max-h-[calc(90vh-260px)] overflow-y-auto overflow-x-auto">
             <table className="w-full border-collapse">
               <thead className="sticky top-0">
-              <tr>
-                <th className="text-left px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300">
+              <tr className="bg-[#d4af37]/12">
+                <th className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35">
                   Product
                 </th>
-                <th className="text-center px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300" style={{width: '10%'}}>
+                <th className="text-center px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35" style={{width: '10%'}}>
                   Qty
                 </th>
-                <th className="text-right px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300" style={{width: '15%'}}>
+                <th className="text-right px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35" style={{width: '15%'}}>
                   Price
                 </th>
-                <th className="text-right px-6 py-3 text-sm font-semibold text-gray-700 border-b border-gray-300" style={{width: '15%'}}>
+                <th className="text-right px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35" style={{width: '15%'}}>
                   Item Total
                 </th>
               </tr>
@@ -375,13 +385,13 @@ export default function CheckPricePanel() {
             {activeCatalog && (
             <tbody>
               {/* Headstone */}
-              <tr className="border-b border-gray-200">
+              <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
                 <td className="px-6 py-4">
                   <div className="text-sm">
-                    <p className="font-semibold text-gray-900 mb-1">
+                    <p className="font-semibold text-white/95 mb-1">
                       Product ID: {activeCatalog.product.id} - {activeCatalog.product.name || 'Headstone'}
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-white/60">
                       Shape: {shapeName}
                       <br />
                       Material: {getCheckPriceMaterialName(ledgerMaterialUrl)}
@@ -390,46 +400,46 @@ export default function CheckPricePanel() {
                     </p>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-center text-sm text-gray-900">
+                <td className="px-6 py-4 text-center text-sm text-white/85">
                   1
                 </td>
-                <td className="px-6 py-4 text-right text-sm text-gray-900">
+                <td className="px-6 py-4 text-right text-sm text-white/85">
                   ${headstonePrice.toFixed(2)}
                 </td>
-                <td className="px-6 py-4 text-right text-sm text-gray-900">
+                <td className="px-6 py-4 text-right text-sm text-white/85">
                   ${headstonePrice.toFixed(2)}
                 </td>
               </tr>
 
               {/* Base */}
               {showBase && basePrice > 0 && (
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-900">
+                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
+                  <td className="px-6 py-4 text-sm text-white/85">
                     <p>
-                      <strong>
+                      <strong className="text-white/95">
                         {(() => {
                           const a = activeCatalog.product.additions.find(a => a.type === 'base');
                           return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Base'}`;
                         })()}
                       </strong>
                       <br />
-                      Shape: Rectangle
+                      <span className="text-white/60">Shape: Rectangle</span>
                       <br />
-                      Material: {getCheckPriceMaterialName(baseMaterialUrl)}
+                      <span className="text-white/60">Material: {getCheckPriceMaterialName(baseMaterialUrl)}</span>
                       <br />
-                      Size: {formatDimensionTriplet(
+                      <span className="text-white/60">Size: {formatDimensionTriplet(
                         selectedShape?.stand?.initWidth ?? (widthMm + 100),
                         selectedShape?.stand?.initHeight ?? 100,
                         selectedShape?.stand?.initDepth ?? 250,
                         unitSystem,
-                      )}
+                      )}</span>
                     </p>
                   </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
                     ${basePrice.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
                     ${basePrice.toFixed(2)}
                   </td>
                 </tr>
@@ -437,33 +447,33 @@ export default function CheckPricePanel() {
 
               {/* Ledger (full-monument only) */}
               {isFullMonument && ledgerPrice > 0 && (
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-900">
+                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
+                  <td className="px-6 py-4 text-sm text-white/85">
                     <p>
-                      <strong>
+                      <strong className="text-white/95">
                         {(() => {
                           const a = activeCatalog.product.additions.find(a => a.type === 'ledger');
                           return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Ledger'}`;
                         })()}
                       </strong>
                       <br />
-                      Shape: Rectangle
+                      <span className="text-white/60">Shape: Rectangle</span>
                       <br />
-                      Material: {getCheckPriceMaterialName(kerbsetMaterialUrl)}
+                      <span className="text-white/60">Material: {getCheckPriceMaterialName(kerbsetMaterialUrl)}</span>
                       <br />
-                      Size: {formatDimensionTriplet(
+                      <span className="text-white/60">Size: {formatDimensionTriplet(
                         selectedShape?.lid?.initWidth ?? 0,
                         selectedShape?.lid?.initHeight ?? 0,
                         selectedShape?.lid?.initDepth ?? 0,
                         unitSystem,
-                      )}
+                      )}</span>
                     </p>
                   </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
                     ${ledgerPrice.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
                     ${ledgerPrice.toFixed(2)}
                   </td>
                 </tr>
@@ -471,33 +481,33 @@ export default function CheckPricePanel() {
 
               {/* Kerbset (full-monument only) */}
               {isFullMonument && kerbsetPrice > 0 && (
-                <tr className="border-b border-gray-200 hover:bg-gray-50">
-                  <td className="px-6 py-4 text-sm text-gray-900">
+                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
+                  <td className="px-6 py-4 text-sm text-white/85">
                     <p>
-                      <strong>
+                      <strong className="text-white/95">
                         {(() => {
                           const a = activeCatalog.product.additions.find(a => a.type === 'kerbset');
                           return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Kerbset'}`;
                         })()}
                       </strong>
                       <br />
-                      Shape: Rectangle
+                      <span className="text-white/60">Shape: Rectangle</span>
                       <br />
-                      Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}
+                      <span className="text-white/60">Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}</span>
                       <br />
-                      Size: {formatDimensionTriplet(
+                      <span className="text-white/60">Size: {formatDimensionTriplet(
                         selectedShape?.kerb?.initWidth ?? 0,
                         selectedShape?.kerb?.initHeight ?? 0,
                         selectedShape?.kerb?.initDepth ?? 0,
                         unitSystem,
-                      )}
+                      )}</span>
                     </p>
                   </td>
-                  <td className="px-6 py-4 text-center text-sm text-gray-900">1</td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
                     ${kerbsetPrice.toFixed(2)}
                   </td>
-                  <td className="px-6 py-4 text-right text-sm text-gray-900">
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
                     ${kerbsetPrice.toFixed(2)}
                   </td>
                 </tr>
@@ -506,57 +516,57 @@ export default function CheckPricePanel() {
               {/* Inscriptions */}
               {inscriptionItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200 bg-gray-50/70">
+                  <tr className="border-b border-white/10 bg-white/[0.03]">
                     <td className="px-6 py-4">
                       <button
                         type="button"
                         onClick={() => toggleSection('inscriptions')}
                         aria-expanded={expandedSections.inscriptions}
-                        className="flex w-full items-center gap-3 text-left text-gray-900"
+                        className="flex w-full items-center gap-3 text-left text-white/90 cursor-pointer"
                       >
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
                           {expandedSections.inscriptions ? '−' : '+'}
                         </span>
                         <span>
-                          <span className="block font-semibold">Inscriptions</span>
-                          <span className="block text-xs text-gray-600">
+                          <span className="block font-semibold text-white/95">Inscriptions</span>
+                          <span className="block text-xs text-white/50">
                             {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
                           </span>
                         </span>
                       </button>
                     </td>
-                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                    <td className="px-6 py-4 text-center text-sm text-white/85">
                       {inscriptionItems.length}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm text-white/85">
                       ${(
                         inscriptionItems.length > 0
                           ? inscriptionCost / inscriptionItems.length
                           : 0
                       ).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
                       ${inscriptionCost.toFixed(2)}
                     </td>
                   </tr>
                   {expandedSections.inscriptions && inscriptionItems.map((item) => (
-                    <tr key={`ins-${item.id}`} className="border-b border-gray-100 bg-gray-50">
-                      <td className="px-8 py-3 text-sm text-gray-900">
-                        <p className="font-medium text-gray-900">{item.text || 'Inscription Text'}</p>
-                        <p className="text-xs text-gray-600">Font: {item.font} · Size: {formatLengthFromMm(item.sizeMm, unitSystem)}</p>
-                        <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
+                    <tr key={`ins-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
+                      <td className="px-8 py-3 text-sm text-white/85">
+                        <p className="font-medium text-white/90">{item.text || 'Inscription Text'}</p>
+                        <p className="text-xs text-white/50">Font: {item.font} · Size: {formatLengthFromMm(item.sizeMm, unitSystem)}</p>
+                        <div className="mt-1 flex items-center gap-2 text-xs text-white/50">
                           <span>Color: {item.colorName}</span>
                           <span
-                            className="inline-block h-3 w-3 rounded border border-gray-300"
+                            className="inline-block h-3 w-3 rounded border border-white/20"
                             style={{ backgroundColor: item.color }}
                           />
                         </div>
                       </td>
-                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         ${item.price.toFixed(2)}
                       </td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         ${item.price.toFixed(2)}
                       </td>
                     </tr>
@@ -567,53 +577,53 @@ export default function CheckPricePanel() {
               {/* Decorative Motifs */}
               {motifItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200 bg-gray-50/70">
+                  <tr className="border-b border-white/10 bg-white/[0.03]">
                     <td className="px-6 py-4">
                       <button
                         type="button"
                         onClick={() => toggleSection('motifs')}
                         aria-expanded={expandedSections.motifs}
-                        className="flex w-full items-center gap-3 text-left text-gray-900"
+                        className="flex w-full items-center gap-3 text-left text-white/90 cursor-pointer"
                       >
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
                           {expandedSections.motifs ? '−' : '+'}
                         </span>
                         <span>
-                          <span className="block font-semibold">Decorative Motifs</span>
-                          <span className="block text-xs text-gray-600">
+                          <span className="block font-semibold text-white/95">Decorative Motifs</span>
+                          <span className="block text-xs text-white/50">
                             {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
                           </span>
                         </span>
                       </button>
                     </td>
-                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                    <td className="px-6 py-4 text-center text-sm text-white/85">
                       {motifItems.length}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm text-white/85">
                       ${(motifCost / motifItems.length).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
                       ${motifCost.toFixed(2)}
                     </td>
                   </tr>
                   {expandedSections.motifs && motifItems.map((item) => (
-                    <tr key={`motif-${item.id}`} className="border-b border-gray-100 bg-gray-50">
-                      <td className="px-8 py-3 text-sm text-gray-900">
-                        <p className="font-medium text-gray-900 capitalize">{item.name}</p>
-                        <p className="text-xs text-gray-600">Height: {formatLengthFromMm(item.heightMm, unitSystem)}</p>
-                        <div className="mt-1 flex items-center gap-2 text-xs text-gray-600">
+                    <tr key={`motif-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
+                      <td className="px-8 py-3 text-sm text-white/85">
+                        <p className="font-medium text-white/90 capitalize">{item.name}</p>
+                        <p className="text-xs text-white/50">Height: {formatLengthFromMm(item.heightMm, unitSystem)}</p>
+                        <div className="mt-1 flex items-center gap-2 text-xs text-white/50">
                           <span>{item.colorDisplay}</span>
                           <span
-                            className="inline-block h-3 w-3 rounded border border-gray-300"
+                            className="inline-block h-3 w-3 rounded border border-white/20"
                             style={{ backgroundColor: item.color }}
                           />
                         </div>
                       </td>
-                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         ${item.price.toFixed(2)}
                       </td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         ${item.price.toFixed(2)}
                       </td>
                     </tr>
@@ -624,58 +634,58 @@ export default function CheckPricePanel() {
               {/* Images */}
               {imageItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200 bg-gray-50/70">
+                  <tr className="border-b border-white/10 bg-white/[0.03]">
                     <td className="px-6 py-4">
                       <button
                         type="button"
                         onClick={() => toggleSection('images')}
                         aria-expanded={expandedSections.images}
-                        className="flex w-full items-start justify-between text-left text-gray-900"
+                        className="flex w-full items-start justify-between text-left text-white/90 cursor-pointer"
                       >
                         <span className="flex items-center gap-3">
-                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
                             {expandedSections.images ? '−' : '+'}
                           </span>
                           <span>
-                            <span className="block font-semibold">Ceramic & Photo Images</span>
-                            <span className="block text-xs text-gray-600">
+                            <span className="block font-semibold text-white/95">Ceramic & Photo Images</span>
+                            <span className="block text-xs text-white/50">
                               {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
                             </span>
                           </span>
                         </span>
-                        <span className="text-xs uppercase text-gray-500">Subtotal</span>
+                        <span className="text-xs uppercase text-white/40">Subtotal</span>
                       </button>
                       {imagePricingError && (
-                        <p className="mt-2 text-xs text-red-600" role="status" aria-live="assertive">
+                        <p className="mt-2 text-xs text-red-400" role="status" aria-live="assertive">
                           {imagePricingError}
                         </p>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                    <td className="px-6 py-4 text-center text-sm text-white/85">
                       {imageItems.length}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm text-white/85">
                       {imagePricingData ? `$${(imagePriceTotal / imageItems.length).toFixed(2)}` : '—'}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
                       {imagePricingData ? `$${imagePriceTotal.toFixed(2)}` : '—'}
                     </td>
                   </tr>
                   {expandedSections.images && imageItems.map((item) => (
-                    <tr key={`img-${item.id}`} className="border-b border-gray-100 bg-gray-50">
-                      <td className="px-8 py-3 text-sm text-gray-900">
-                        <p className="font-medium text-gray-900">
+                    <tr key={`img-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
+                      <td className="px-8 py-3 text-sm text-white/85">
+                        <p className="font-medium text-white/90">
                           Product ID: {item.productId} - {item.baseName}
                         </p>
-                        <p className="text-xs text-gray-600">Type: {item.typeName || 'Image'}</p>
-                        <p className="text-xs text-gray-600">Size: {item.sizeLabel}</p>
-                        <p className="text-xs text-gray-600">Color Mode: {item.colorDisplay}</p>
+                        <p className="text-xs text-white/50">Type: {item.typeName || 'Image'}</p>
+                        <p className="text-xs text-white/50">Size: {item.sizeLabel}</p>
+                        <p className="text-xs text-white/50">Color Mode: {item.colorDisplay}</p>
                       </td>
-                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
                       </td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
                       </td>
                     </tr>
@@ -686,47 +696,47 @@ export default function CheckPricePanel() {
               {/* 3D Additions */}
               {additionItems.length > 0 && (
                 <React.Fragment>
-                  <tr className="border-b border-gray-200 bg-gray-50/70">
+                  <tr className="border-b border-white/10 bg-white/[0.03]">
                     <td className="px-6 py-4">
                       <button
                         type="button"
                         onClick={() => toggleSection('additions')}
                         aria-expanded={expandedSections.additions}
-                        className="flex w-full items-center gap-3 text-left text-gray-900"
+                        className="flex w-full items-center gap-3 text-left text-white/90 cursor-pointer"
                       >
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-gray-400 text-sm font-semibold">
+                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
                           {expandedSections.additions ? '−' : '+'}
                         </span>
                         <span>
-                          <span className="block font-semibold">3D Additions</span>
-                          <span className="block text-xs text-gray-600">
+                          <span className="block font-semibold text-white/95">3D Additions</span>
+                          <span className="block text-xs text-white/50">
                             {additionItems.length} addition{additionItems.length !== 1 ? 's' : ''}
                           </span>
                         </span>
                       </button>
                     </td>
-                    <td className="px-6 py-4 text-center text-sm text-gray-900">
+                    <td className="px-6 py-4 text-center text-sm text-white/85">
                       {additionItems.length}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm text-white/85">
                       ${(additionsPrice / additionItems.length).toFixed(2)}
                     </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-gray-900">
+                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
                       ${additionsPrice.toFixed(2)}
                     </td>
                   </tr>
                   {expandedSections.additions && additionItems.map((item) => (
-                    <tr key={`addition-${item.id}`} className="border-b border-gray-100 bg-gray-50">
-                      <td className="px-8 py-3 text-sm text-gray-900">
-                        <p className="font-medium text-gray-900">{item.name}</p>
-                        <p className="text-xs text-gray-600">Type: {item.type}</p>
-                        <p className="text-xs text-gray-500">Reference: {item.baseId}</p>
+                    <tr key={`addition-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
+                      <td className="px-8 py-3 text-sm text-white/85">
+                        <p className="font-medium text-white/90">{item.name}</p>
+                        <p className="text-xs text-white/50">Type: {item.type}</p>
+                        <p className="text-xs text-white/40">Reference: {item.baseId}</p>
                       </td>
-                      <td className="px-6 py-3 text-center text-sm text-gray-900">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         $75.00
                       </td>
-                      <td className="px-6 py-3 text-right text-sm text-gray-900">
+                      <td className="px-6 py-3 text-right text-sm text-white/85">
                         $75.00
                       </td>
                     </tr>
@@ -735,21 +745,21 @@ export default function CheckPricePanel() {
               )}
 
               {/* Total Row */}
-              <tr className="border-t-4 border-[#cfac6c] bg-[#fdf8f0]">
+              <tr className="border-t border-[#d4af37]/50 bg-[#d4af37]/8">
                 <td className="px-6 py-4"></td>
                 <td className="px-6 py-4"></td>
-                <td className="px-6 py-4 text-right text-base font-semibold text-gray-900 uppercase tracking-wide">Total</td>
-                <td className="px-6 py-4 text-right text-base font-bold text-gray-900">${totalPrice.toFixed(2)}</td>
+                <td className="px-6 py-4 text-right text-sm font-semibold uppercase tracking-wider text-[#f3d48f]">Total</td>
+                <td className="px-6 py-4 text-right text-lg font-bold text-white">${totalPrice.toFixed(2)}</td>
               </tr>
             </tbody>
             )}
           </table>
         </div>
 
-          <div className="check-price-panel__actions flex items-center justify-end gap-3 border-t border-white/10 bg-black/20 px-6 py-4">
+          <div className="check-price-panel__actions flex items-center justify-end gap-3 border-t border-white/10 px-6 py-4">
             <button
               onClick={handleClose}
-              className="rounded-full border border-white/25 bg-black/25 px-6 py-2.5 text-sm font-semibold uppercase text-white transition-colors hover:border-white/50 hover:bg-black/40"
+              className="rounded-full border border-[#d4af37]/65 bg-[#d4af37]/10 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#d4af37]/20 cursor-pointer"
             >
               Close
             </button>
@@ -778,59 +788,6 @@ export default function CheckPricePanel() {
             .check-price-panel__actions {
               display: none !important;
             }
-          }
-
-          .check-price-panel__table table {
-            color: #f5eee1;
-            background: #0d0906;
-          }
-
-          .check-price-panel__table thead th {
-            background: rgba(212, 175, 55, 0.12) !important;
-            color: #f3d48f !important;
-            border-bottom-color: rgba(212, 175, 55, 0.35) !important;
-          }
-
-          .check-price-panel__table tbody tr {
-            background: rgba(22, 15, 10, 0.9) !important;
-          }
-
-          .check-price-panel__table tbody tr:nth-child(even) {
-            background: rgba(27, 19, 13, 0.92) !important;
-          }
-
-          .check-price-panel__table tbody tr:hover {
-            background: rgba(42, 30, 20, 0.92) !important;
-          }
-
-          .check-price-panel__table td {
-            border-color: rgba(255, 255, 255, 0.1) !important;
-          }
-
-          .check-price-panel__table .text-gray-900 {
-            color: #f5eee1 !important;
-          }
-
-          .check-price-panel__table .text-gray-700,
-          .check-price-panel__table .text-gray-600,
-          .check-price-panel__table .text-gray-500 {
-            color: #cdbfa4 !important;
-          }
-
-          .check-price-panel__table .border-gray-300,
-          .check-price-panel__table .border-gray-200,
-          .check-price-panel__table .border-gray-100,
-          .check-price-panel__table .border-gray-400 {
-            border-color: rgba(255, 255, 255, 0.15) !important;
-          }
-
-          .check-price-panel__table tbody tr:last-child {
-            background: rgba(18, 12, 8, 0.95) !important;
-          }
-
-          .check-price-panel__table tbody tr:last-child td {
-            color: #f6e3b4 !important;
-            border-top-color: rgba(212, 175, 55, 0.6) !important;
           }
         `}
       </style>

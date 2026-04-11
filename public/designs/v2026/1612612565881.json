@@ -1,0 +1,299 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:49.656Z",
+  "units": "mm",
+  "source": {
+    "id": "1612612565881",
+    "slug": "legacy-1612612565881",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1612612565881.json",
+    "savedAt": "2021-02-06T11:56:05.881Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 523,
+      "height_mm": 768
+    },
+    "viewportPx": {
+      "width": 602,
+      "height": 834,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 602,
+        "height": 834
+      },
+      "bufferPx": {
+        "width": 602,
+        "height": 834
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 523,
+      "height_mm": 768,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 1200,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-4",
+        "text": "BrettoShepz",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 141.11
+        },
+        "position": {
+          "x_px": -174.905,
+          "y_px": 29.78
+        },
+        "rotation": {
+          "z_deg": -90
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Pierre Fisher",
+        "font": {
+          "family": "French Script",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": 55.902,
+          "y_px": -273.724
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "29th December 1980 - 12th March 2020",
+        "font": {
+          "family": "French Script",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 61.891,
+          "y_px": -231.767
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "\"Check Out Time\"",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 74
+        },
+        "position": {
+          "x_px": -7.986,
+          "y_px": 386.269
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "base/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "04e252f7d58b060d6509f0301f3eedf1092eba8fed6f43df21cdfe3a9fc82880",
+    "sourceItemCount": 6,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:49.656Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 2275.81,
+        "quantity": 1,
+        "width": 523,
+        "height": 768,
+        "_length": 1,
+        "init_width": 602,
+        "init_height": 834,
+        "mode": "2d"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 830,
+        "quantity": 1,
+        "width": 1200,
+        "height": 100,
+        "_length": 1,
+        "init_width": 602,
+        "init_height": 834,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "BrettoShepz",
+        "font": "127.02818346383579px Chopin Script",
+        "font_size": 141.11041259765625,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -174.90521149190823,
+        "y": 29.77974002752535,
+        "rotation": -90,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 154,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Brett Evan Patrick Shepherd",
+        "font": "40.50918816438606px French Script",
+        "font_size": 45,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 55.90173957636608,
+        "y": -273.72441160055735,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 42,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "29th December 1980 - 12th March 2020",
+        "font": "22.505104535770034px French Script",
+        "font_size": 25,
+        "font_family": "French Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 61.89123632743525,
+        "y": -231.76670043885792,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "\"Check Out Time\"",
+        "font": "66.6151094258793px Chopin Script",
+        "font_size": 74,
+        "font_family": "Chopin Script",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -7.985978748953983,
+        "y": 386.2686921147251,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 82,
+        "itemID": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:45.144Z",
+  "units": "mm",
+  "source": {
+    "id": "1586566623372",
+    "slug": "legacy-1586566623372",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1586566623372.json",
+    "savedAt": "2020-04-11T00:57:03.372Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 43",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 500,
+      "height_mm": 500
+    },
+    "viewportPx": {
+      "width": 360,
+      "height": 504,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 360,
+        "height": 504
+      },
+      "bufferPx": {
+        "width": 360,
+        "height": 504
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 500,
+      "height_mm": 500,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Forever in my heart",
+        "font": {
+          "family": "French Script",
+          "size_px": 90
+        },
+        "position": {
+          "x_px": 2.748,
+          "y_px": 146.399
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bd83cb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Isabelle Ramirez",
+        "font": {
+          "family": "French Script",
+          "size_px": 55
+        },
+        "position": {
+          "x_px": -3.816,
+          "y_px": -54.708
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bd83cb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "05/11/2017",
+        "font": {
+          "family": "French Script",
+          "size_px": 67
+        },
+        "position": {
+          "x_px": 6.379,
+          "y_px": -25.933
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bd83cb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Fly high my angel",
+        "font": {
+          "family": "French Script",
+          "size_px": 52
+        },
+        "position": {
+          "x_px": 0.018,
+          "y_px": 109.574
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bd83cb",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "188bf30e251c6cd03e24ef3e7e8f0c06052ef03c1860406380d6c74942f68872",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:45.144Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 37",
+        "shape": "Headstone 43",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": "902.50",
+        "quantity": 1,
+        "width": 500,
+        "height": 500,
+        "_length": 1,
+        "init_width": 360,
+        "init_height": 504
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Forever in my heart",
+        "font": "63.17999999999999px French Script",
+        "font_size": 90,
+        "font_family": "French Script",
+        "color": "#bd83cb",
+        "colorName": "Paint Fill",
+        "x": 2.7475823509211965,
+        "y": 146.3986644552568,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 88,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 1,
+        "label": "Nevaeh Skye Blanch",
+        "font": "38.61px French Script",
+        "font_size": 55,
+        "font_family": "French Script",
+        "color": "#bd83cb",
+        "colorName": "Paint Fill",
+        "x": -3.8155502264499734,
+        "y": -54.70766331982614,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 53,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "05/11/2017",
+        "font": "47.034px French Script",
+        "font_size": 67,
+        "font_family": "French Script",
+        "color": "#bd83cb",
+        "colorName": "Paint Fill",
+        "x": 6.379491131544128,
+        "y": -25.932866707706456,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 48,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "Fly high my angel",
+        "font": "36.504px French Script",
+        "font_size": 52,
+        "font_family": "French Script",
+        "color": "#bd83cb",
+        "colorName": "Paint Fill",
+        "x": 0.01826432704924983,
+        "y": 109.57372123718261,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 50,
+        "itemID": 5
+      }
+    ]
+  }
+}

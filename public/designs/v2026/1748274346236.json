@@ -1,0 +1,122 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:21.325Z",
+  "units": "mm",
+  "source": {
+    "id": "1748274346236",
+    "slug": "legacy-1748274346236",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1748274346236.json",
+    "savedAt": "2025-05-26T15:45:46.236Z"
+  },
+  "product": {
+    "id": "7",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Oval (Portrait)",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "80",
+      "height_mm": "100"
+    },
+    "viewportPx": {
+      "width": 320,
+      "height": 570,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 320,
+        "height": 570
+      },
+      "bufferPx": {
+        "width": 480,
+        "height": 855
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "80",
+      "height_mm": "100",
+      "thickness_mm": 100,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "53486e7e6754530589c06c0009b2b71f13cf36d2d9e8624e75114809a17992cd",
+    "sourceItemCount": 1,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:21.325Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 7,
+        "type": "Headstone",
+        "shape": "Oval (Portrait)",
+        "color": "../upload/2025/05/1748274459475psx_20250526_153438_crop.jpg",
+        "fixed": 2,
+        "texture": "src/ceramic/l/01.jpg",
+        "name": "Ceramic Image",
+        "materialImage": 1,
+        "price": 310,
+        "quantity": 1,
+        "width": "80",
+        "height": "100",
+        "_length": 0,
+        "init_width": 320,
+        "init_height": 433,
+        "backgroundOption": "photo",
+        "device": "mobile",
+        "dpr": 1.5,
+        "orientation": "portrait",
+        "version": "1.45",
+        "version_date": 20250220,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 320x570"
+      }
+    ]
+  }
+}

@@ -1,0 +1,780 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:57.870Z",
+  "units": "mm",
+  "source": {
+    "id": "1667830605228",
+    "slug": "legacy-1667830605228",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1667830605228.json",
+    "savedAt": "2022-11-07T14:16:45.228Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/African-Black.jpg",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 340,
+      "height_mm": 341
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 340,
+      "height_mm": 341,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/African-Black.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -200
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Beloved by all who knew them",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 22
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -148.563
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -97.713
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f6303e",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Goodnight and God bless you",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -46.862
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f28b00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Life is not forever – love is",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 2,
+          "y_px": 113.689
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Beloved by all who knew them",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 156.54
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c3d600",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Traditional Engraved Headstone - 11/07/2022",
+        "font": {
+          "family": "Arial",
+          "size_px": 15
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 249.267
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#00c2df",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 289.15
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#bd83cb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Beloved by all who knew them",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 3.988
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Beloved by all who knew them",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 55.839
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fd4f00",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "1_155_16",
+        "position": {
+          "x_px": -355,
+          "y_px": 356.88
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-12",
+        "asset": "1_155_16",
+        "position": {
+          "x_px": -256.866,
+          "y_px": 356.88
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f28b00",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "1_155_16",
+        "position": {
+          "x_px": 364.267,
+          "y_px": 350.88
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-14",
+        "asset": "1_155_16",
+        "position": {
+          "x_px": 259.401,
+          "y_px": 355.88
+        },
+        "height_px": 50,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#f28b00",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-16",
+        "asset": "2_061_12",
+        "position": {
+          "x_px": -351,
+          "y_px": 154
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "2_061_12",
+        "position": {
+          "x_px": 349.635,
+          "y_px": 146
+        },
+        "height_px": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_155_16",
+        "path": "/shapes/motifs/1_155_16.svg"
+      },
+      {
+        "id": "2_061_12",
+        "path": "/shapes/motifs/2_061_12.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f2a25af0f44449b2d0a3caad472146f64a264e04fbf60d6f2ac768f320850100",
+    "sourceItemCount": 18,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:57.870Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/African-Black.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 695.57,
+        "quantity": 1,
+        "width": 340,
+        "height": 341,
+        "_length": 1,
+        "init_width": 1237,
+        "init_height": 873,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20221105,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_16",
+        "item": "1_155_16",
+        "price": 226.9627,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -355,
+        "y": 356.8797653958944,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06720430107526881,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "44.93005865102639px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -200,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 23,
+        "label": "Beloved by all who knew them",
+        "font": "54.91451612903226px Great Vibes",
+        "font_size": 22,
+        "font_family": "Great Vibes",
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": -148.56304985337243,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "In Loving Memory",
+        "font": "82.37177419354839px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#f6303e",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -97.71260997067449,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Goodnight and God bless you",
+        "font": "44.93005865102639px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#f28b00",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": -46.86217008797654,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Life is not forever – love is",
+        "font": "44.93005865102639px Franklin Gothic",
+        "font_size": 18,
+        "font_family": "Franklin Gothic",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 2,
+        "y": 113.68914956011736,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Beloved by all who knew them",
+        "font": "44.93005865102639px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#c3d600",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 156.53958944281524,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 39,
+        "label": "Traditional Engraved Headstone - 11/07/2022",
+        "font": "37.44171554252199px Arial",
+        "font_size": 15,
+        "font_family": "Arial",
+        "color": "#00c2df",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 249.26686217008796,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "44.93005865102639px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#bd83cb",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 289.14956011730203,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_16",
+        "item": "1_155_16",
+        "price": 216.65392499999996,
+        "quantity": 1,
+        "color": "#f28b00",
+        "colorName": "Paint Fill",
+        "x": -256.8664713603254,
+        "y": 356.8797653958944,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06720430107526881,
+        "itemID": 12
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_16",
+        "item": "1_155_16",
+        "price": 226.9627,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 364.26705727934916,
+        "y": 350.8797653958944,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06720430107526881,
+        "itemID": 13
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_155_16",
+        "item": "1_155_16",
+        "price": 216.65392499999996,
+        "quantity": 1,
+        "color": "#f28b00",
+        "colorName": "Paint Fill",
+        "x": 259.4005859190238,
+        "y": 355.8797653958944,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 50,
+        "ratio": 0.06720430107526881,
+        "itemID": 14
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1667830678799,
+        "path": "../upload/2022/11/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1667830678799fdwbht6xeayj1afjfif_crop.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 5,
+        "y": -317,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.34271593173933174,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FdwbHt6XEAYJ1Af.jfif",
+        "price": 190,
+        "quantity": 1,
+        "size": "40 x 60 mm",
+        "itemID": 15
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Beloved by all who knew them",
+        "font": "82.37177419354839px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#ffce00",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 3.9882697947214183,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Beloved by all who knew them",
+        "font": "82.37177419354839px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#fd4f00",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 55.83870967741933,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 6
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_061_12",
+        "item": "2_061_12",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": -351,
+        "y": 154,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05471956224350205,
+        "itemID": 16
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_061_12",
+        "item": "2_061_12",
+        "price": 214.306375,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 349.6347027933454,
+        "y": 146,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.05471956224350205,
+        "itemID": 17
+      }
+    ]
+  }
+}

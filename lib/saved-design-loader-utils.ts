@@ -263,12 +263,50 @@ export const resolveCanonicalLoadPolicy = async (
 type ShapeDirectory = 'headstones' | 'masks';
 
 const CANONICAL_SHAPE_MAP: Record<string, { file: string; directory?: ShapeDirectory }> = {
+  // Plaques
   'bronze plaque': { file: 'landscape.svg', directory: 'headstones' },
+  'stainless steel plaque': { file: 'square.svg', directory: 'headstones' },
+  'full-colour plaque': { file: 'square.svg', directory: 'headstones' },
+  'plaque': { file: 'landscape.svg', directory: 'headstones' },
+
+  // Rectangles
+  'rectangle': { file: 'landscape.svg', directory: 'headstones' },
   'rectangle (landscape)': { file: 'landscape.svg', directory: 'headstones' },
   'rectangle (portrait)': { file: 'portrait.svg', directory: 'headstones' },
+  'rectangle landscape': { file: 'landscape.svg', directory: 'headstones' },
+  'rectangle portrait': { file: 'portrait.svg', directory: 'headstones' },
+  'rectangle 175x125': { file: 'landscape.svg', directory: 'headstones' },
+  'rectangle 300x200': { file: 'landscape.svg', directory: 'headstones' },
+  'rectangle 300x150': { file: 'landscape.svg', directory: 'headstones' },
+  'rectangle 250x200': { file: 'landscape.svg', directory: 'headstones' },
+  'rectangle 125x175': { file: 'portrait.svg', directory: 'headstones' },
+  'rectangle 200x300': { file: 'portrait.svg', directory: 'headstones' },
+
+  // Squares (with dimensions)
+  'square 300x300': { file: 'square.svg', directory: 'headstones' },
+  'square 200x200': { file: 'square.svg', directory: 'headstones' },
+  'square 125x125': { file: 'square.svg', directory: 'headstones' },
+
+  // Ovals
+  'oval': { file: 'oval_horizontal.svg', directory: 'masks' },
   'oval (landscape)': { file: 'oval_horizontal.svg', directory: 'masks' },
   'oval (portrait)': { file: 'oval_vertical.svg', directory: 'masks' },
+  'oval landscape': { file: 'oval_horizontal.svg', directory: 'masks' },
+  'oval portrait': { file: 'oval_vertical.svg', directory: 'masks' },
   circle: { file: 'circle.svg', directory: 'masks' },
+
+  // Pet shapes
+  'bone': { file: 'pet_bone.svg', directory: 'headstones' },
+  'paw': { file: 'pet_paw.svg', directory: 'headstones' },
+  'cat bowl': { file: 'pet_bowl.svg', directory: 'headstones' },
+
+  // Urns
+  'urn heart': { file: 'pet_heart.svg', directory: 'headstones' },
+  'urn rectangle': { file: 'landscape.svg', directory: 'headstones' },
+
+  // Japanese shape names
+  '\u9577\u65b9\u5f62 300x150': { file: 'landscape.svg', directory: 'headstones' },
+  '\u6b63\u65b9\u5f62 300x300': { file: 'square.svg', directory: 'headstones' },
 };
 
 const DEFAULT_SHAPE_FILE = 'serpentine.svg';

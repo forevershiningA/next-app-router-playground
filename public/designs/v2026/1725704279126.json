@@ -1,0 +1,548 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:04.990Z",
+  "units": "mm",
+  "source": {
+    "id": "1725704279126",
+    "slug": "legacy-1725704279126",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1725704279126.json",
+    "savedAt": "2024-09-07T10:17:59.126Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 400,
+      "height_mm": 350
+    },
+    "viewportPx": {
+      "width": 1024,
+      "height": 1366,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1024,
+        "height": 1366
+      },
+      "bufferPx": {
+        "width": 2048,
+        "height": 2732
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 350,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": 600,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory Of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": -4,
+          "y_px": -239
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "‘Born Sleeping’",
+        "font": {
+          "family": "Adorable",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 26
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Leonardo, Violet, Archer, Luca and Rafferty",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": 447
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Daughter of Jasmin & Fabio,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 230
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Beloved Sister Of",
+        "font": {
+          "family": "Garamond",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 348
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "2nd of August, 2021",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 117
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Cleo Pena",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 8,
+          "y_px": -104
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "TILMOUTH / DEMARCO",
+        "font": {
+          "family": "Garamond",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -36,
+          "y_px": 784
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "base/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-4",
+        "asset": "branch_001 [przekonwertowany]",
+        "position": {
+          "x_px": -493,
+          "y_px": 78
+        },
+        "height_px": 57,
+        "rotation": {
+          "z_deg": 76
+        },
+        "color": "#006746",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-6",
+        "asset": "butterfly_005",
+        "position": {
+          "x_px": -2,
+          "y_px": -408
+        },
+        "height_px": 44,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "branch_001 [przekonwertowany]",
+        "path": "/shapes/motifs/branch_001 [przekonwertowany].svg"
+      },
+      {
+        "id": "butterfly_005",
+        "path": "/shapes/motifs/butterfly_005.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "36d7dffeb7fd9fe263bf6a0f606482139e758e54a2f69cd4a0820df6fd5f02a7",
+    "sourceItemCount": 12,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:04.990Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 774.69,
+        "quantity": 1,
+        "width": 400,
+        "height": 350,
+        "_length": 80,
+        "init_width": 1126,
+        "init_height": 853,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240903,
+        "mode": "2d",
+        "navigator": "Safari (desktop), 1024x1366"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": "3",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "price": 534,
+        "quantity": 1,
+        "width": 600,
+        "height": 100,
+        "_length": 130,
+        "init_width": 1126,
+        "init_height": 853,
+        "mode": "2d"
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "branch_001 [przekonwertowany]",
+        "item": "branch_001 [przekonwertowany]",
+        "price": 218.29721,
+        "quantity": 1,
+        "color": "#006746",
+        "colorName": "Watercourse",
+        "colorName2": "undefined",
+        "x": -493,
+        "y": 78,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 76,
+        "height": 57,
+        "ratio": 0.10382513661202186,
+        "itemID": 4
+      },
+      {
+        "productid": 126,
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_005",
+        "item": "butterfly_005",
+        "price": 215.245395,
+        "quantity": 1,
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "colorName2": "undefined",
+        "x": -2,
+        "y": -408,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 44,
+        "ratio": 0.10526315789473684,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "In Loving Memory Of",
+        "font": "110.0685925925926px Adorable",
+        "font_size": 32,
+        "font_family": "Adorable",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -4,
+        "y": -239,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "‘Born Sleeping’",
+        "font": "89.43073148148149px Adorable",
+        "font_size": 26,
+        "font_family": "Adorable",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -12,
+        "y": 26,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 38,
+        "label": "Leonardo, Violet, Archer, Luca and Rafferty",
+        "font": "68.79287037037037px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 8,
+        "y": 447,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 12
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 23,
+        "label": "Daughter of Jasmin & Fabio,",
+        "font": "68.79287037037037px Garamond",
+        "font_size": 20,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 4,
+        "y": 230,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "Beloved Sister Of",
+        "font": "92.870375px Garamond",
+        "font_size": 27,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 4,
+        "y": 348,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "2nd of August, 2021",
+        "font": "61.913583333333335px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 0,
+        "y": 117,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 9,
+        "label": "Olive Jane",
+        "font": "96.31001851851852px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": 8,
+        "y": -104,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "TILMOUTH / DEMARCO",
+        "font": "141.02538425925925px Garamond",
+        "font_size": 41,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -36,
+        "y": 784,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 14
+      }
+    ]
+  }
+}

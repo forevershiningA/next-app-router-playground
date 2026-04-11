@@ -1,0 +1,123 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:56.930Z",
+  "units": "mm",
+  "source": {
+    "id": "1661849013422",
+    "slug": "legacy-1661849013422",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1661849013422.json",
+    "savedAt": "2022-08-30T08:43:33.422Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Heart",
+    "material": {
+      "name": "https://www.forevershining.com.au/design/upload/../upload/2022/08/1661848999490background_10_cropped.jpg",
+      "texture": "https://www.forevershining.com.au/design/upload/../upload/2022/08/1661848999490background_10_cropped.jpg"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 302,
+      "height_mm": 307
+    },
+    "viewportPx": {
+      "width": 1799,
+      "height": 1012,
+      "dpr": 1.9214999675750732
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1799,
+        "height": 1012
+      },
+      "bufferPx": {
+        "width": 3457,
+        "height": 1945
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 302,
+      "height_mm": 307,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "https://www.forevershining.com.au/design/upload/../upload/2022/08/1661848999490background_10_cropped.jpg"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8bed41e8dbf51699584014909e7d434e6b2c64dbeaf440192442447c7fa3915e",
+    "sourceItemCount": 1,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:56.930Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "border": "Border Heart",
+        "shape_url": "shapes/photos/borderheart.svg",
+        "shape": "Heart",
+        "color": "undefined../upload/2022/08/1661848999490background_10_cropped.jpg",
+        "fixed": 2,
+        "texture": "https://www.forevershining.com.au/design/upload/../upload/2022/08/1661848999490background_10_cropped.jpg",
+        "name": "Stainless Steel Vitreous Enamel Inlaid Urn",
+        "price": 2606.62,
+        "quantity": 1,
+        "width": 302,
+        "height": 307,
+        "_length": 1,
+        "init_width": 1759,
+        "init_height": 845.0037727355957,
+        "backgroundOption": "photo",
+        "device": "desktop",
+        "dpr": 1.9214999675750732,
+        "orientation": "landscape",
+        "version": "1.43",
+        "version_date": 20220822,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36, 1799x1012"
+      }
+    ]
+  }
+}

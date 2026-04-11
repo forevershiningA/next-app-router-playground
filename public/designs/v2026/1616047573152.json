@@ -1,0 +1,295 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:50.367Z",
+  "units": "mm",
+  "source": {
+    "id": "1616047573152",
+    "slug": "legacy-1616047573152",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1616047573152.json",
+    "savedAt": "2021-03-18T06:06:13.152Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 5",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 580,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1126,
+      "height": 574,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1126,
+        "height": 574
+      },
+      "bufferPx": {
+        "width": 1126,
+        "height": 574
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 580,
+      "height_mm": 600,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 680,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "forever",
+        "font": {
+          "family": "Arial",
+          "size_px": 139
+        },
+        "position": {
+          "x_px": 62.679,
+          "y_px": 22.564
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "forever",
+        "font": {
+          "family": "Garamond",
+          "size_px": 139
+        },
+        "position": {
+          "x_px": 56.829,
+          "y_px": -59.336
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-6",
+        "asset": "1_002_03",
+        "position": {
+          "x_px": 144.579,
+          "y_px": 157.114
+        },
+        "height_px": 180,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_002_03",
+        "path": "/shapes/motifs/1_002_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "dc47b05934d21c931c93a942143303a0cbc95278cbee06fcdcace016f7cf3fb6",
+    "sourceItemCount": 6,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:50.367Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Guitar 3",
+        "shape": "Headstone 5",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1881.71,
+        "quantity": 1,
+        "width": 580,
+        "height": 600,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 574,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": 132,
+        "version_date": 20210317,
+        "mode": "2d"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 3,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 543,
+        "quantity": 1,
+        "width": 680,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1126,
+        "init_height": 574,
+        "mode": "2d"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "uid": 1616047738456,
+        "path": "../upload/2021/03/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "16160477384563456_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -122.0142857142857,
+        "y": 131.20714285714286,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5836349999999998,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "3456.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 219,
+        "width": "117",
+        "height": "175",
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_002_03",
+        "item": "1_002_03",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 144.57857142857142,
+        "y": 157.1142857142857,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 180,
+        "ratio": 0.282574568288854,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "forever",
+        "font": "111.13049999999997px Arial",
+        "font_size": 139,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 62.67857142857142,
+        "y": 22.564285714285713,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 103,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 7,
+        "label": "forever",
+        "font": "111.13049999999997px Garamond",
+        "font_size": 139,
+        "font_family": "Garamond",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 56.82857142857142,
+        "y": -59.33571428571428,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 100,
+        "itemID": 3
+      }
+    ]
+  }
+}

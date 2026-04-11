@@ -1,0 +1,638 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:44.171Z",
+  "units": "mm",
+  "source": {
+    "id": "1578286822621",
+    "slug": "legacy-1578286822621",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1578286822621.json",
+    "savedAt": "2020-01-06T05:00:22.621Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 32",
+    "material": {
+      "name": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Sandstone-TILE.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 600,
+      "height_mm": 680
+    },
+    "viewportPx": {
+      "width": 1094,
+      "height": 566,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1094,
+        "height": 566
+      },
+      "bufferPx": {
+        "width": 1094,
+        "height": 566
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 600,
+      "height_mm": 680,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Sandstone-TILE.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "ERNEST SMITH",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": -16
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "SYDNEY WHEELER",
+        "font": {
+          "family": "Arial",
+          "size_px": 35
+        },
+        "position": {
+          "x_px": 1,
+          "y_px": 60
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "DECEASED 03/06/2019",
+        "font": {
+          "family": "Arial",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 94
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#643c1f",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-22",
+        "text": "FOREVER IN OUR HEARTS",
+        "font": {
+          "family": "Arial",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 147
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-10",
+        "text": "DECEASED 02/02/2016",
+        "font": {
+          "family": "Arial",
+          "size_px": 31
+        },
+        "position": {
+          "x_px": 7,
+          "y_px": 10
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#643c1f",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "IN LOVING MEMORY OF",
+        "font": {
+          "family": "Arial",
+          "size_px": 40
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -100
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-13",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 28,
+          "y_px": -192
+        },
+        "height_px": 89,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-15",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -28,
+          "y_px": -191
+        },
+        "height_px": 89,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": 212,
+          "y_px": -28
+        },
+        "height_px": 88,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-18",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": -212,
+          "y_px": -32
+        },
+        "height_px": 89,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-23",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": 211,
+          "y_px": 235
+        },
+        "height_px": 102,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-24",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": -210,
+          "y_px": 235
+        },
+        "height_px": 102,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-25",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": 0,
+          "y_px": 227
+        },
+        "height_px": 87,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#643c1f",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "1_208_03",
+        "path": "/shapes/motifs/1_208_03.svg"
+      },
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "35237e15f4f2aa9969c16298248f2d834a11314a923ec62c728fe3c31753996c",
+    "sourceItemCount": 14,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:44.171Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 27",
+        "shape": "Headstone 32",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+        "price": "1396.34",
+        "quantity": 1,
+        "width": 600,
+        "height": 680,
+        "_length": 1,
+        "init_width": 1094,
+        "init_height": 566
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "ADELINO DAS NEVES OLIVEIRA",
+        "font": "26.78095588235294px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": -16,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "MARIA INES OLIVEIRA",
+        "font": "28.404044117647057px Arial",
+        "font_size": 35,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 1,
+        "y": 60,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 12
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 212.08252000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 28,
+        "y": -192,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 89,
+        "ratio": 0.14833333333333334,
+        "itemID": 13
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 212.08252000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -28,
+        "y": -191,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 89,
+        "ratio": 0.14833333333333334,
+        "itemID": 15
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_03",
+        "item": "1_208_03",
+        "price": 211.86204,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 212,
+        "y": -28,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 88,
+        "ratio": 0.14666666666666667,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_03",
+        "item": "1_208_03",
+        "price": 212.08252000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -212,
+        "y": -32,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 89,
+        "ratio": 0.14833333333333334,
+        "itemID": 18
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "DECEASED 03/06/2019",
+        "font": "25.157867647058822px Arial",
+        "font_size": 31,
+        "font_family": "Arial",
+        "color": "#643c1f",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": 94,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 21
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "FOREVER IN OUR HEARTS",
+        "font": "32.46176470588235px Arial",
+        "font_size": 40,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 4,
+        "y": 147,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 22
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_03",
+        "item": "1_208_03",
+        "price": 214.94876000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 211,
+        "y": 235,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 102,
+        "ratio": 0.17,
+        "itemID": 23
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "DECEASED 02/02/2016",
+        "font": "25.157867647058822px Arial",
+        "font_size": 31,
+        "font_family": "Arial",
+        "color": "#643c1f",
+        "colorName": "Paint Fill",
+        "x": 7,
+        "y": 10,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_03",
+        "item": "1_208_03",
+        "price": 214.94876000000002,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": -210,
+        "y": 235,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 102,
+        "ratio": 0.17,
+        "itemID": 24
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 211.64156,
+        "quantity": 1,
+        "color": "#643c1f",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 227,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 87,
+        "ratio": 0.145,
+        "itemID": 25
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 1,
+        "label": "IN LOVING MEMORY OF",
+        "font": "32.46176470588235px Arial",
+        "font_size": 40,
+        "font_family": "Arial",
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 3,
+        "y": -100,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 4
+      }
+    ]
+  }
+}

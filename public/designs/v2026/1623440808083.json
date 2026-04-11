@@ -1,0 +1,386 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:40.042Z",
+  "units": "mm",
+  "source": {
+    "id": "1623440808083",
+    "slug": "legacy-1623440808083",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1623440808083.json",
+    "savedAt": "2021-06-11T19:46:48.083Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Oval Landscape",
+    "material": {
+      "name": "src/bronzes/phoenix/l/11.jpg",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": "300",
+      "height_mm": 207
+    },
+    "viewportPx": {
+      "width": 784,
+      "height": 548,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 784,
+        "height": 548
+      },
+      "bufferPx": {
+        "width": 1568,
+        "height": 1096
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": "300",
+      "height_mm": 207,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/11.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "SOPHIA HAMILTON",
+        "font": {
+          "family": "Garamond",
+          "size_mm": 16
+        },
+        "position": {
+          "x_mm": -1.909,
+          "y_mm": 15.872
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Jan 21, 1946               May 4, 2021",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 13
+        },
+        "position": {
+          "x_mm": -9.231,
+          "y_mm": 213.502
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "beneath my wings",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 12
+        },
+        "position": {
+          "x_mm": -0.503,
+          "y_mm": -131.843
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "You are the wind",
+        "font": {
+          "family": "Great Vibes",
+          "size_mm": 10
+        },
+        "position": {
+          "x_mm": -2.566,
+          "y_mm": -83.855
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-9",
+        "asset": "1_154_13",
+        "position": {
+          "x_mm": 242.391,
+          "y_mm": -117.625
+        },
+        "height_mm": 62,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_154_13",
+        "position": {
+          "x_mm": -245.394,
+          "y_mm": -123.849
+        },
+        "height_mm": 62,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_154_13",
+        "path": "/shapes/motifs/1_154_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9b650ac3da07e15311e42fdd27a4be3e7bbc539b76ef57df98f02c86a76af0e2",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:40.042Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Purple - Lugs with Studs",
+        "border": "Border Oval Landscape",
+        "shape_url": "shapes/photos/borderoval landscape.svg",
+        "fixingSystem": 2,
+        "shape": "Oval Landscape",
+        "color": "#513a68",
+        "fixed": 2,
+        "texture": "src/bronzes/phoenix/l/11.jpg",
+        "price": 760.62,
+        "quantity": 1,
+        "width": "300",
+        "height": 207,
+        "_length": 1,
+        "init_width": 784,
+        "init_height": 548,
+        "backgroundOption": "undefined",
+        "device": "tablet",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": 142,
+        "version_date": 20210610,
+        "mode": "2d",
+        "navigator": "iPad, Apple Computer, Inc., Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) GSA/162.0.375868988 Mobile/15E148 Safari/604.1"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_13",
+        "item": "1_154_13",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 242.39072646045634,
+        "y": 117.62453248347106,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 62,
+        "ratio": 0.06652360515021459,
+        "itemID": 9
+      },
+      {
+        "productid": 200,
+        "id": 200,
+        "name": "undefined",
+        "type": "Emblem",
+        "item": "br145-heart",
+        "color": "#ffb35a",
+        "x": -5.105824082674985,
+        "y": -123.02484605272258,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5456204379562044,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "br145-heart",
+        "price": 99,
+        "quantity": 1,
+        "size": "50 x 50 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_13",
+        "item": "1_154_13",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -245.39367247568043,
+        "y": 123.84926814304708,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 62,
+        "ratio": 0.06652360515021459,
+        "itemID": 8
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 24,
+        "label": "NANCY ELAINE WOODLEY CARTER",
+        "font": "47.839999999999996px Garamond",
+        "font_size": 16,
+        "font_family": "Garamond",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -1.9088636363636624,
+        "y": -15.872409090909116,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 1
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "Jan 21, 1946               May 4, 2021",
+        "font": "38.87px Great Vibes",
+        "font_size": 13,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -9.231328987440179,
+        "y": -213.50198639579156,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "beneath my wings",
+        "font": "35.879999999999995px Great Vibes",
+        "font_size": 12,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -0.5033257231405059,
+        "y": 131.84309664964462,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "You are the wind",
+        "font": "29.9px Great Vibes",
+        "font_size": 10,
+        "font_family": "Great Vibes",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -2.5662414385330976,
+        "y": 83.85541326060581,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 4
+      }
+    ]
+  }
+}

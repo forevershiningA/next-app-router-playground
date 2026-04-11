@@ -1,0 +1,595 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:08.557Z",
+  "units": "mm",
+  "source": {
+    "id": "1685916323478",
+    "slug": "legacy-1685916323478",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1685916323478.json",
+    "savedAt": "2023-06-04T22:05:23.478Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Curved Top",
+    "material": {
+      "name": "src/granites/forever2/l/G633.jpg",
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 1016,
+      "height_mm": 628.65
+    },
+    "viewportPx": {
+      "width": 962,
+      "height": 601,
+      "dpr": 1.1318485736846924
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 962,
+        "height": 601
+      },
+      "bufferPx": {
+        "width": 1089,
+        "height": 680
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 1016,
+      "height_mm": 628.65,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/G633.webp"
+    },
+    "base": {
+      "width_mm": 1116,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/G633.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Pulcini",
+        "font": {
+          "family": "Garamond",
+          "size_px": 183
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -70.787
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#154733",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "The Foundation of Family",
+        "font": {
+          "family": "Garamond",
+          "size_px": 100
+        },
+        "position": {
+          "x_px": -1.998,
+          "y_px": 151.717
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "base/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Cora Wilson",
+        "font": {
+          "family": "Garamond",
+          "size_px": 51
+        },
+        "position": {
+          "x_px": -112.845,
+          "y_px": 10.144
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "6-27-1939",
+        "font": {
+          "family": "Garamond",
+          "size_px": 66
+        },
+        "position": {
+          "x_px": -123.83,
+          "y_px": 46.036
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "12-26-2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 66
+        },
+        "position": {
+          "x_px": -127.825,
+          "y_px": 84.919
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-2",
+        "asset": "1_144_17",
+        "position": {
+          "x_px": 0.999,
+          "y_px": 0
+        },
+        "height_px": 41,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-3",
+        "asset": "1_144_21",
+        "position": {
+          "x_px": 354.514,
+          "y_px": 36.889
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-4",
+        "asset": "2_082_14",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 76,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-5",
+        "asset": "1_184_04",
+        "position": {
+          "x_px": 353.515,
+          "y_px": -84.744
+        },
+        "height_px": 128,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-10",
+        "asset": "1_144_17",
+        "position": {
+          "x_px": 288.605,
+          "y_px": 43.868
+        },
+        "height_px": 95,
+        "rotation": {
+          "z_deg": 46
+        },
+        "color": "#c99d44",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-11",
+        "asset": "1_144_11",
+        "position": {
+          "x_px": 0,
+          "y_px": 67.795
+        },
+        "height_px": 235,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_144_17",
+        "path": "/shapes/motifs/1_144_17.svg"
+      },
+      {
+        "id": "1_144_21",
+        "path": "/shapes/motifs/1_144_21.svg"
+      },
+      {
+        "id": "2_082_14",
+        "path": "/shapes/motifs/2_082_14.svg"
+      },
+      {
+        "id": "1_184_04",
+        "path": "/shapes/motifs/1_184_04.svg"
+      },
+      {
+        "id": "1_144_11",
+        "path": "/shapes/motifs/1_144_11.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8527cfc700515cb7d6364fc11c9a60f6d76c629a2317eb7348f27131c36d96b2",
+    "sourceItemCount": 13,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:08.558Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Curved Top",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2586.32,
+        "quantity": 1,
+        "width": 1016,
+        "height": 628.65,
+        "_length": 80,
+        "init_width": 892,
+        "init_height": 439.0007133483887,
+        "device": "tablet",
+        "dpr": 1.1318485736846924,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230412,
+        "mode": "2d",
+        "navigator": "Chrome (tablet(android)), 962x601"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/G633.jpg",
+        "price": 782,
+        "quantity": 1,
+        "width": 1116,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 892,
+        "init_height": 439.0007133483887,
+        "mode": "2d"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_144_17",
+        "item": "1_144_17",
+        "price": 224.74942000000001,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0.9985534039655022,
+        "y": 0,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 41,
+        "ratio": 0.1151685393258427,
+        "itemID": 2
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_144_21",
+        "item": "1_144_21",
+        "price": 239.2587,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 354.5142823047112,
+        "y": 36.888702737712975,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 100,
+        "ratio": 0.1180637544273908,
+        "itemID": 3
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_082_14",
+        "item": "2_082_14",
+        "price": 233.35662,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 76,
+        "ratio": 0.08025343189017951,
+        "itemID": 4
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_184_04",
+        "item": "1_184_04",
+        "price": 246.14445999999998,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 353.515452733034,
+        "y": -84.7443953800924,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 128,
+        "ratio": 0.1523809523809524,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_144_17",
+        "item": "1_144_17",
+        "price": 238.02910000000003,
+        "quantity": 1,
+        "color": "#c99d44",
+        "colorName": "Gold Gilding",
+        "x": 288.60457949839287,
+        "y": 43.86768377506428,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 46,
+        "height": 95,
+        "ratio": 0.26685393258426965,
+        "itemID": 10
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_144_11",
+        "item": "1_144_11",
+        "price": 272.4579,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0.00013808385591573824,
+        "y": 67.79537493422814,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 235,
+        "ratio": 0.2781065088757396,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 25,
+        "quantity": 7,
+        "label": "Pulcini",
+        "font": "75.11953753315403px Garamond",
+        "font_size": 183,
+        "font_family": "Garamond",
+        "color": "#154733",
+        "colorName": "Sherwood Green",
+        "x": -1.1368683772161603e-13,
+        "y": -70.78657122719048,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 134,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 28,
+        "quantity": 21,
+        "label": "The Foundation of Family",
+        "font": "41.04892761374537px Garamond",
+        "font_size": 100,
+        "font_family": "Garamond",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -1.9975210594986947,
+        "y": 151.71734637065114,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 102,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.15,
+        "quantity": 20,
+        "label": "Richard Joseph Pulcini",
+        "font": "20.93495308301014px Garamond",
+        "font_size": 51,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -112.84523393102165,
+        "y": 10.144341838070773,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 9,
+        "label": "6-27-1939",
+        "font": "27.092292225071947px Garamond",
+        "font_size": 66,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -123.830357003561,
+        "y": 46.0360768394053,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 10,
+        "label": "12-26-2022",
+        "font": "27.092292225071947px Garamond",
+        "font_size": 66,
+        "font_family": "Garamond",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -127.82477774520692,
+        "y": 84.91878401077568,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 9
+      }
+    ]
+  }
+}

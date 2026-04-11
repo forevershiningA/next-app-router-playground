@@ -92,64 +92,9 @@ function toLabel(slug: string): string {
     .join(' ');
 }
 
-/** Design IDs that have 3D screenshots in /screenshots/v2026-3d/ */
-const V2026_3D_IDS = new Set([
-  '1578016189116','1593953642523','1597391120606','1599567914112','1600603072791',
-  '1609829216777','1610531526906','1611192404076','1611460424814','1612437656041',
-  '1614475180886','1614579816424','1614656318865','1615903477262','1620015829734',
-  '1635732996964','1635734851837','1639912469680','1639914219938','1648074537944',
-  '1648732590525','1649205269447','1652253561774','1654574227754','1654579835425',
-  '1654580110812','1656207300157','1656299613915','1656368060739','1662465269387',
-  '1664032749634','1665471249465','1665473699612','1665722173918','1665723350734',
-  '1665908327407','1666840855535','1667730587385','1671094754340','1671243299788',
-  '1672745066094','1672798383274','1674644744699','1677474410099','1678437076976',
-  '1679044149041','1679044964291','1679054715523','1679082412506','1679277674127',
-  '1679319722160','1679560074932','1679560476054','1679647872440','1680098086726',
-  '1680266135598','1680456686045','1680802441075','1682509472979','1682511620120',
-  '1683569134161','1683625180618','1684240424248','1685212403074','1685272822309',
-  '1685465149157','1685468367736','1686324025011','1686555243015','1686596641083',
-  '1686640754749','1687980532355','1688957735638','1690076432958','1690462173223',
-  '1690545173877','1690553081843','1692210041603','1693668939061','1693735069032',
-  '1693960366084','1694014295666','1695819495298','1695820185294','1695825317718',
-  '1695825668633','1695826249266','1695832232637','1696243169205','1696844775564',
-  '1697403225482','1697997293578','1698236658345','1698296187154','1698884967992',
-  '1699112754574','1699670134869','1699740117702','1700567726528','1701228817969',
-  '1705455243849','1705489798602','1706404745805','1707954976852','1707962474202',
-  '1708379403072','1708723212727','1708790342849','1708994697310','1709193320013',
-  '1709614951196','1712205965903','1712843604404','1713537649107','1713916252399',
-  '1714537943445','1717029189438','1717567903283','1719622311289','1719948619521',
-  '1719952121473','1720563323379','1721181794898','1721182015642','1721183987255',
-  '1721188367239','1724501347537','1724667960753','1724932128793','1725041061648',
-  '1725082714979','1725669542865','1725769905504','1725935725686','1725939980006',
-  '1725940170219','1726182269646','1726656261690','1727396115446','1727951154323',
-  '1728443901949','1728445371546','1728856915251','1728932309052','1730109481009',
-  '1730223976633','1730270385046','1730285511435','1730916540854','1730961395029',
-  '1731003563117','1733012214456','1733228554651','1733362944477','1736128067320',
-  '1736613301131','1736614253020','1736668337231','1736671982328','1737339946484',
-  '1737750492453','1737888768739','1738631749624','1739814876717','1739846701263',
-  '1739928149882','1740021447299','1740310348943','1742260123415','1742728346982',
-  '1743152781040','1743481914181','1743490235956','1743572308451','1743996021408',
-  '1744134685375','1744457181421','1745722201796','1745730240655','1746192025545',
-  '1746539901574','1746540096581','1747150840368','1747247908885','1747248749900',
-  '1747249049669','1747249540595','1747502806912','1747809177601','1747810701895',
-  '1747889661821','1747977350191','1747991048421','1748143620961','1748336050237',
-  '1748336434074','1748703038067','1748853166313','1749833740845','1750620858095',
-  '1752608698736','1752754510601','1752934586581','1753657519219','1753848708662',
-  '1754176789014','1754245166175','1754752263779','1754911517897','1756314058415',
-  '1756743214818','1756795446075','1757479665737','1757481836420','1758523657407',
-  '1758526346232','1758686765293','1759825732924','1759830915276','1760709364425',
-  '1761176645500','1761200615487',
-]);
-
-/** Return best available thumbnail src — 3D screenshot if available, else legacy _small. */
+/** Return best available thumbnail src — always try 3D screenshot first. */
 function getPopupPreviewSrc(designId: string, preview?: string): string {
-  if (V2026_3D_IDS.has(designId)) {
-    return `/screenshots/v2026-3d/${designId}_small.jpg`;
-  }
-  if (preview) {
-    return preview.replace(/\.(jpg|jpeg|png)$/i, '_small.jpg');
-  }
-  return '';
+  return `/screenshots/v2026-3d/${designId}_small.jpg`;
 }
 
 /** Legacy ML _small variant (used as fallback). */
@@ -342,15 +287,22 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
   const modalContent = !isOpen
     ? null
     : createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 px-4 py-6">
-          <div className="flex h-[80vh] w-full max-w-4xl flex-col rounded-2xl border border-white/20 bg-[#15100d]/95 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm">
+          <div className="relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent"
+            />
+            <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-7">
               <div>
-                <h2 className="text-xl font-semibold text-white">Load Design</h2>
-                <p className="text-sm text-white/70">
+                <p className="mb-2 inline-flex items-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f3d48f]">
+                  Design Gallery
+                </p>
+                <h2 className="text-2xl font-serif text-white md:text-[1.75rem]">Load Design</h2>
+                <p className="mt-1 text-sm leading-relaxed text-white/70">
                   {totalCount.toLocaleString()} designs available
                   {productId && !search.trim() && !hasMLFilters && filteredDesigns.length > 0 && (
-                    <span className="ml-1 text-amber-400/80">
+                    <span className="ml-1 text-[#f3d48f]">
                       · {filteredDesigns[0].productName}
                     </span>
                   )}
@@ -359,14 +311,14 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
               <button
                 onClick={closeModal}
                 disabled={loading}
-                className="rounded-lg p-2 text-white/70 transition hover:bg-white/10 hover:text-white disabled:opacity-40"
+                className="absolute right-4 top-4 rounded-full border border-white/25 bg-black/25 p-1.5 text-white/70 transition-colors hover:border-white/60 hover:text-white disabled:opacity-40 cursor-pointer"
                 aria-label="Close load design dialog"
               >
-                <XMarkIcon className="h-5 w-5" />
+                <XMarkIcon className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="border-b border-white/10 px-5 py-4">
+            <div className="border-b border-white/10 px-6 py-4 md:px-7">
               <div className="relative flex items-center gap-2">
                 <div className="relative flex-1">
                   <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
@@ -375,15 +327,15 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                     placeholder="Search by title, category, product, tags, or ID..."
-                    className="w-full rounded-xl border border-white/15 bg-black/30 py-3.5 pl-10 pr-3 text-sm text-white placeholder:text-white/40 focus:border-white/40 focus:outline-none"
+                    className="w-full rounded-xl border border-white/15 bg-white/[0.03] py-3.5 pl-10 pr-3 text-sm text-white placeholder:text-white/40 focus:border-[#d4af37]/50 focus:outline-none focus:ring-1 focus:ring-[#d4af37]/25"
                   />
                 </div>
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`shrink-0 rounded-lg border p-2.5 transition ${
+                  className={`shrink-0 rounded-xl border p-2.5 transition ${
                     showFilters || hasMLFilters
-                      ? 'border-amber-500/50 bg-amber-500/20 text-amber-300'
-                      : 'border-white/15 bg-black/30 text-white/50 hover:text-white/80'
+                      ? 'border-[#d4af37]/50 bg-[#d4af37]/15 text-[#f3d48f]'
+                      : 'border-white/15 bg-white/[0.03] text-white/50 hover:text-white/80'
                   }`}
                   title="ML Filters"
                 >
@@ -393,10 +345,10 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
 
               {/* ML Filter dropdowns */}
               {showFilters && (
-                <div className="mt-3 space-y-3 rounded-lg border border-white/10 bg-black/30 p-3">
+                <div className="mt-3 space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                   <div className="flex items-center gap-2 mb-2">
-                    <SparklesIcon className="h-3.5 w-3.5 text-primary" />
-                    <span className="text-xs text-primary/80 uppercase tracking-wider font-medium">ML Category Filters</span>
+                    <SparklesIcon className="h-3.5 w-3.5 text-[#f3d48f]" />
+                    <span className="text-xs text-[#f3d48f]/80 uppercase tracking-wider font-medium">ML Category Filters</span>
                     {hasMLFilters && (
                       <button
                         onClick={() => { setMlType(''); setMlStyle(''); setMlMotif(''); }}
@@ -410,7 +362,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                     <select
                       value={mlType}
                       onChange={(e) => setMlType(e.target.value)}
-                      className={`rounded-md border px-2 py-2 text-xs focus:border-primary/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlType ? 'border-primary/50 bg-primary/10 text-primary' : 'border-white/15 bg-black/40 text-white'}`}
+                      className={`rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlType ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
                     >
                       <option value="">All Types</option>
                       {mlCategories.types.map((t) => (
@@ -420,7 +372,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                     <select
                       value={mlStyle}
                       onChange={(e) => setMlStyle(e.target.value)}
-                      className={`rounded-md border px-2 py-2 text-xs focus:border-primary/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlStyle ? 'border-primary/50 bg-primary/10 text-primary' : 'border-white/15 bg-black/40 text-white'}`}
+                      className={`rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlStyle ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
                     >
                       <option value="">All Styles</option>
                       {mlCategories.styles.map((s) => (
@@ -430,7 +382,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                     <select
                       value={mlMotif}
                       onChange={(e) => setMlMotif(e.target.value)}
-                      className={`rounded-md border px-2 py-2 text-xs focus:border-primary/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlMotif ? 'border-primary/50 bg-primary/10 text-primary' : 'border-white/15 bg-black/40 text-white'}`}
+                      className={`rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlMotif ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
                     >
                       <option value="">All Motifs</option>
                       {mlCategories.motifs.map((m) => (
@@ -442,38 +394,38 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
               )}
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4 md:px-7">
               {error ? <p className="mb-3 text-sm text-red-300">{error}</p> : null}
 
               {/* Popular / Favorites drawer */}
               {favoriteDesigns.length > 0 && !search.trim() && (
-                <div className="mb-3 rounded-xl border border-primary/30 bg-primary/5">
+                <div className="mb-3 rounded-2xl border border-[#d4af37]/30 bg-[#d4af37]/5">
                   <button
                     onClick={() => toggleNode('popular')}
-                    className="flex w-full items-center gap-2 px-4 py-3 text-left text-primary"
+                    className="flex w-full items-center gap-2 px-4 py-3 text-left text-[#f3d48f] cursor-pointer"
                   >
                     {expandedNodes.has('popular') ? (
-                      <ChevronDownIcon className="h-4 w-4 text-primary/70" />
+                      <ChevronDownIcon className="h-4 w-4 text-[#d4af37]/70" />
                     ) : (
-                      <ChevronRightIcon className="h-4 w-4 text-primary/70" />
+                      <ChevronRightIcon className="h-4 w-4 text-[#d4af37]/70" />
                     )}
-                    <StarIconSolid className="h-4 w-4 text-primary" />
+                    <StarIconSolid className="h-4 w-4 text-[#d4af37]" />
                     <span className="flex-1 text-sm font-medium">Popular</span>
-                    <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs text-primary/80">
+                    <span className="rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-2 py-0.5 text-xs text-[#f3d48f]/80">
                       {favoriteDesigns.length}
                     </span>
                   </button>
                   {expandedNodes.has('popular') && (
-                    <div className="space-y-1 border-t border-primary/20 p-2">
+                    <div className="space-y-1 border-t border-[#d4af37]/20 p-2">
                       {favoriteDesigns.map((design) => (
                         <div key={design.id} className="flex items-center gap-1">
                           <button
                             onClick={() => handleLoadDesign(design.id)}
                             disabled={loading}
-                            className="min-w-0 flex-1 rounded-md border border-transparent bg-white/5 px-3 py-2 text-left text-sm text-white/90 transition hover:border-primary/30 hover:bg-white/10 disabled:opacity-50"
+                            className="min-w-0 flex-1 rounded-xl border border-transparent bg-white/[0.03] px-3 py-2 text-left text-sm text-white/90 transition hover:border-[#d4af37]/30 hover:bg-white/[0.06] disabled:opacity-50 cursor-pointer"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-md border border-primary/20 bg-black/30">
+                              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#d4af37]/20 bg-black/30">
                                 {design.metadata.preview ? (
                                   <img
                                     src={getPopupPreviewSrc(design.id, design.metadata.preview)}
@@ -483,7 +435,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                     onError={(e) => {
                                       const img = e.currentTarget;
                                       const stage = parseInt(img.dataset.fallbackStage || '0', 10);
-                                      if (stage === 0 && V2026_3D_IDS.has(design.id)) {
+                                      if (stage === 0) {
                                         img.dataset.fallbackStage = '1';
                                         const legacySmall = getLegacySmallSrc(design.metadata.preview);
                                         if (legacySmall) { img.src = legacySmall; return; }
@@ -515,7 +467,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                 toggleFavorite(design.id);
                               }}
                               title="Remove from favorites"
-                              className="shrink-0 rounded p-1.5 text-primary transition hover:bg-primary/20"
+                              className="shrink-0 rounded-full p-1.5 text-[#d4af37] transition hover:bg-[#d4af37]/20 cursor-pointer"
                             >
                               <StarIconSolid className="h-4 w-4" />
                             </button>
@@ -558,19 +510,19 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                     };
 
                     return (
-                      <div key={categorySlug} className="rounded-xl border border-white/10 bg-white/5">
+                      <div key={categorySlug} className="rounded-2xl border border-white/10 bg-white/[0.03]">
                         {/* Category header */}
                         <button
                           onClick={() => toggleNode(catKey)}
-                          className="flex w-full items-center gap-2 px-4 py-3 text-left text-white"
+                          className="flex w-full items-center gap-2 px-4 py-3 text-left text-white cursor-pointer"
                         >
                           {isCatExpanded ? (
-                            <ChevronDownIcon className="h-4 w-4 text-white/70" />
+                            <ChevronDownIcon className="h-4 w-4 text-[#d4af37]/70" />
                           ) : (
-                            <ChevronRightIcon className="h-4 w-4 text-white/70" />
+                            <ChevronRightIcon className="h-4 w-4 text-white/50" />
                           )}
                           <span className="flex-1 text-sm font-medium">{categoryNode.categoryLabel}</span>
-                          <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-white/80">
+                          <span className="rounded-full border border-white/10 bg-white/[0.05] px-2 py-0.5 text-xs text-white/70">
                             {designs.length}
                           </span>
                         </button>
@@ -582,7 +534,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                               {designs.map((design) => (
                                 <div
                                   key={design.id}
-                                  className="group relative flex flex-col overflow-hidden rounded-xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-white/25 hover:shadow-lg hover:shadow-black/40"
+                                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40"
                                 >
                                   {/* Thumbnail */}
                                   <div className="relative aspect-[4/3] w-full overflow-hidden bg-black">
@@ -595,7 +547,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                         onError={(e) => {
                                           const img = e.currentTarget;
                                           const stage = parseInt(img.dataset.fallbackStage || '0', 10);
-                                          if (stage === 0 && V2026_3D_IDS.has(design.id)) {
+                                          if (stage === 0) {
                                             img.dataset.fallbackStage = '1';
                                             const legacySmall = getLegacySmallSrc(design.metadata.preview);
                                             if (legacySmall) { img.src = legacySmall; return; }
@@ -619,7 +571,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                       <button
                                         onClick={() => handleLoadDesign(design.id)}
                                         disabled={loading}
-                                        className="pointer-events-auto rounded-lg bg-white/90 px-4 py-2 text-xs font-semibold tracking-wide text-slate-900 shadow-lg transition hover:bg-white disabled:opacity-50"
+                                        className="pointer-events-auto rounded-full border border-[#d4af37]/65 bg-[#d4af37]/15 px-4 py-2 text-xs font-semibold tracking-wide text-white shadow-lg backdrop-blur-sm transition hover:bg-[#d4af37]/25 disabled:opacity-50 cursor-pointer"
                                       >
                                         Open Design
                                       </button>
@@ -631,7 +583,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                         <span
                                           role="button"
                                           onClick={(e) => { e.stopPropagation(); toggleFavorite(design.id); }}
-                                          className={`rounded p-1 transition ${favoriteIds.has(design.id) ? 'text-primary' : 'text-white/50 hover:text-primary/70'}`}
+                                          className={`rounded p-1 transition ${favoriteIds.has(design.id) ? 'text-[#d4af37]' : 'text-white/50 hover:text-[#d4af37]/70'}`}
                                         >
                                           {favoriteIds.has(design.id) ? <StarIconSolid className="h-3.5 w-3.5" /> : <StarIcon className="h-3.5 w-3.5" />}
                                         </span>

@@ -1,0 +1,608 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:59.966Z",
+  "units": "mm",
+  "source": {
+    "id": "1678788819159",
+    "slug": "legacy-1678788819159",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1678788819159.json",
+    "savedAt": "2023-03-14T10:13:39.159Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 590,
+      "height_mm": 600
+    },
+    "viewportPx": {
+      "width": 1920,
+      "height": 1080,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "bufferPx": {
+        "width": 1920,
+        "height": 1080
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 590,
+      "height_mm": 600,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    },
+    "base": {
+      "width_mm": 690,
+      "height_mm": 100,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "Love you miss you",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 98,
+          "y_px": -136.167
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Traditional Engraved Headstone - 14/03/2023",
+        "font": {
+          "family": "Arial",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -12,
+          "y_px": 413.833
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "base/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Chrome - desktop",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": 453.167
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "base/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Deep peace of the quiet earth to you",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 117,
+          "y_px": -224.667
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Love is enough",
+        "font": {
+          "family": "French Script",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": 103,
+          "y_px": -177.417
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Death cannot part them",
+        "font": {
+          "family": "Garamond",
+          "size_px": 18
+        },
+        "position": {
+          "x_px": 95,
+          "y_px": -102.917
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Dearly loved",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 30,
+          "y_px": 40.583
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "So loved",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 37,
+          "y_px": 72.333
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "2_155_14",
+        "position": {
+          "x_px": 3,
+          "y_px": 86
+        },
+        "height_px": 210,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#d41568",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-12",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": 201,
+          "y_px": -7
+        },
+        "height_px": 100,
+        "rotation": {
+          "z_deg": 27
+        },
+        "color": "#d41568",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-13",
+        "asset": "2_152_23",
+        "position": {
+          "x_px": -206.441,
+          "y_px": 22
+        },
+        "height_px": 60,
+        "rotation": {
+          "z_deg": -34
+        },
+        "color": "#d41568",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_155_14",
+        "path": "/shapes/motifs/2_155_14.svg"
+      },
+      {
+        "id": "2_152_23",
+        "path": "/shapes/motifs/2_152_23.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "f3a65817fc038fa2a4c6ebbe096c69d284b873152b27022233c4d4b1500f39b6",
+    "sourceItemCount": 14,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:59.966Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 1409.05,
+        "quantity": 1,
+        "width": 590,
+        "height": 600,
+        "_length": 80,
+        "init_width": 1680,
+        "init_height": 865,
+        "device": "desktop",
+        "dpr": 1,
+        "orientation": "landscape",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1920x1080"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "price": 575,
+        "quantity": 1,
+        "width": 690,
+        "height": 100,
+        "_length": 130,
+        "init_width": 1680,
+        "init_height": 865,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Love you miss you",
+        "font": "21.686785714285712px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 98,
+        "y": -136.16666666666663,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 39,
+        "label": "Traditional Engraved Headstone - 14/03/2023",
+        "font": "21.686785714285712px Arial",
+        "font_size": 18,
+        "font_family": "Arial",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": -12,
+        "y": 413.83333333333337,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 14,
+        "label": "Chrome - desktop",
+        "font": "21.686785714285712px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": -3,
+        "y": 453.16666666666663,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 8
+      },
+      {
+        "productid": 2300,
+        "id": 2300,
+        "uid": 1678790115844,
+        "path": "../upload/2023/03/",
+        "name": "Vitreous Enamel",
+        "type": "Photo",
+        "item": "16787901158447_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -168,
+        "y": -159,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5008495546024414,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "7.jpg",
+        "price": 490,
+        "quantity": 1,
+        "size": "130 x 180 mm",
+        "itemID": 10
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 29,
+        "label": "Deep peace of the quiet earth to you",
+        "font": "30.12053571428571px Dobkin",
+        "font_size": 25,
+        "font_family": "Dobkin",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 117,
+        "y": -224.66666666666666,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 12,
+        "label": "Love is enough",
+        "font": "39.75910714285714px French Script",
+        "font_size": 33,
+        "font_family": "French Script",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 103,
+        "y": -177.41666666666666,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 32,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Death cannot part them",
+        "font": "21.686785714285712px Garamond",
+        "font_size": 18,
+        "font_family": "Garamond",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 95,
+        "y": -102.91666666666669,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 4
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_155_14",
+        "item": "2_155_14",
+        "price": 254.21472500000002,
+        "quantity": 1,
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 3,
+        "y": 86,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 210,
+        "ratio": 0.358974358974359,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "Dearly loved",
+        "font": "27.710892857142856px Dobkin",
+        "font_size": 23,
+        "font_family": "Dobkin",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 30,
+        "y": 40.583333333333314,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 7,
+        "label": "So loved",
+        "font": "27.710892857142856px Dobkin",
+        "font_size": 23,
+        "font_family": "Dobkin",
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 37,
+        "y": 72.33333333333331,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 5
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 228.39167500000002,
+        "quantity": 1,
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": 201,
+        "y": -7,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 27,
+        "height": 100,
+        "ratio": 0.13568521031207598,
+        "itemID": 12
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_152_23",
+        "item": "2_152_23",
+        "price": 219.001475,
+        "quantity": 1,
+        "color": "#d41568",
+        "colorName": "Ruby",
+        "x": -206.44129191703814,
+        "y": 22,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -34,
+        "height": 60,
+        "ratio": 0.0814111261872456,
+        "itemID": 13
+      }
+    ]
+  }
+}

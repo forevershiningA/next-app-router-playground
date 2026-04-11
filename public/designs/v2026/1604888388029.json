@@ -1,0 +1,416 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:48.542Z",
+  "units": "mm",
+  "source": {
+    "id": "1604888388029",
+    "slug": "legacy-1604888388029",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1604888388029.json",
+    "savedAt": "2020-11-09T02:19:48.029Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 34",
+    "material": {
+      "name": "src/granites/forever2/l/Imperial-Red-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Imperial-Red-TILE.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 788,
+      "height_mm": 1008
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 546,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1040,
+        "height": 546
+      },
+      "bufferPx": {
+        "width": 1040,
+        "height": 546
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 788,
+      "height_mm": 1008,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Imperial-Red-TILE.webp"
+    },
+    "base": {
+      "width_mm": 888,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Imperial-Red-TILE.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "ADALINE BALDWIN",
+        "font": {
+          "family": "Arial",
+          "size_px": 76
+        },
+        "position": {
+          "x_px": -1.25,
+          "y_px": -42.137
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-13",
+        "text": "Much loved husband and father",
+        "font": {
+          "family": "Adorable",
+          "size_px": 39
+        },
+        "position": {
+          "x_px": -0.969,
+          "y_px": -3.225
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "In Loving Memory",
+        "font": {
+          "family": "Adorable",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": 0.203,
+          "y_px": -119.953
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "of",
+        "font": {
+          "family": "Adorable",
+          "size_px": 38
+        },
+        "position": {
+          "x_px": 0.18,
+          "y_px": -84.871
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Died 16.02.1904",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -4.914,
+          "y_px": 141.109
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-21",
+        "text": "Aged 64 Years",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -1.371,
+          "y_px": 163.163
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "Vesta Richards",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 4.425,
+          "y_px": 189.508
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "8d1550ec2f04b2b3b3eaa35c93259750cac09fcbd88765e3cc85f0c0ad0f62f7",
+    "sourceItemCount": 9,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:48.542Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 34",
+        "shape": "Headstone 34",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Imperial-Red-TILE-900-X-900.jpg",
+        "price": 2532.51,
+        "quantity": 1,
+        "width": 788,
+        "height": 1008,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 546,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Imperial-Red-TILE-900-X-900.jpg",
+        "price": 634,
+        "quantity": 1,
+        "width": 888,
+        "height": 100,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 546,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.5,
+        "quantity": 12,
+        "label": "PHILLIP POST",
+        "font": "36.51498194945848px Arial",
+        "font_size": 76,
+        "font_family": "Arial",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -1.25,
+        "y": -42.13749999999999,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 29,
+        "label": "Much loved husband and father",
+        "font": "18.737951263537905px Adorable",
+        "font_size": 39,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -0.96875,
+        "y": -3.225415039059669,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 13
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 16,
+        "label": "In Loving Memory",
+        "font": "19.698871841155235px Adorable",
+        "font_size": 41,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0.203125,
+        "y": -119.95312499999991,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 40,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 2,
+        "label": "of",
+        "font": "18.25749097472924px Adorable",
+        "font_size": 38,
+        "font_family": "Adorable",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0.1796875,
+        "y": -84.87109374999966,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 35,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 15,
+        "label": "Died 16.02.1904",
+        "font": "16.335649819494584px Franklin Gothic",
+        "font_size": 34,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -4.9140625,
+        "y": 141.10888671875102,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 13,
+        "label": "Aged 64 Years",
+        "font": "15.855189530685921px Franklin Gothic",
+        "font_size": 33,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -1.37109375,
+        "y": 163.1633300781266,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 21
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3,
+        "quantity": 22,
+        "label": "Uralla New South Wales",
+        "font": "16.335649819494584px Franklin Gothic",
+        "font_size": 34,
+        "font_family": "Franklin Gothic",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 4.4248046875,
+        "y": 189.50794677734518,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 11
+      }
+    ]
+  }
+}

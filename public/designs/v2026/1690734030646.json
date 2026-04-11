@@ -1,0 +1,769 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:01.956Z",
+  "units": "mm",
+  "source": {
+    "id": "1690734030646",
+    "slug": "legacy-1690734030646",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1690734030646.json",
+    "savedAt": "2023-07-30T16:20:30.646Z"
+  },
+  "product": {
+    "id": "32",
+    "name": "Full Colour Plaque",
+    "type": "plaque",
+    "slug": "full-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Landscape",
+    "material": {
+      "name": "src/ceramic/l/01.jpg",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 380,
+      "height_mm": 280
+    },
+    "viewportPx": {
+      "width": 384,
+      "height": 857,
+      "dpr": 2.8125
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 384,
+        "height": 857
+      },
+      "bufferPx": {
+        "width": 1080,
+        "height": 2410
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 380,
+      "height_mm": 280,
+      "thickness_mm": 10,
+      "surface": "front",
+      "texture": "/textures/forever/l/01.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "Found his wings too soon",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -283.737,
+          "y_px": -7.211
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#1fcfcb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-12",
+        "text": "Mabel Thomas",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 226.79,
+          "y_px": -183.581
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-14",
+        "text": "Browning",
+        "font": {
+          "family": "Franklin Gothic",
+          "size_px": 43
+        },
+        "position": {
+          "x_px": -0.999,
+          "y_px": -273.334
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-24",
+        "text": "Louie Day",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -260.759,
+          "y_px": -182.5
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-27",
+        "text": "18th August 1957 ~",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -296.725,
+          "y_px": -130.749
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-29",
+        "text": "9th March 1988",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -302.72,
+          "y_px": -67.233
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-31",
+        "text": "7th February 1961 ~",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 14
+        },
+        "position": {
+          "x_px": 195.819,
+          "y_px": -122.217
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-32",
+        "text": "11th December 2022",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 201.813,
+          "y_px": -62.26
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-37",
+        "text": "Was ready to soar",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 17
+        },
+        "position": {
+          "x_px": 215.8,
+          "y_px": -14.391
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#1fcfcb",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-39",
+        "text": "Beloved and",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -35.967,
+          "y_px": 84.43
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-41",
+        "text": "Deeply Missed",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -29.972,
+          "y_px": 151.702
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-43",
+        "text": "Dixie Robertson",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -32.97,
+          "y_px": 223.336
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-45",
+        "text": "Orval Freeman",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -25.976,
+          "y_px": 291.809
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffce00",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-48",
+        "asset": "2_129_01",
+        "position": {
+          "x_px": -352.673,
+          "y_px": -281.233
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-49",
+        "asset": "2_129_01",
+        "position": {
+          "x_px": 346.924,
+          "y_px": -285.279
+        },
+        "height_px": 55,
+        "rotation": {
+          "z_deg": 90
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": true
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_129_01",
+        "path": "/shapes/motifs/2_129_01.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "c66b140d0abe8781ab62a6412cfb611cf54cfc039fef5949b717c34cac5a0556",
+    "sourceItemCount": 18,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:01.956Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 32,
+        "type": "Headstone",
+        "border": "No Border",
+        "shape_url": "shapes/photos/noborder.svg",
+        "shape": "Landscape",
+        "color": "../upload/2023/07/1690734602103background_36_cropped.jpg",
+        "fixed": 0,
+        "texture": "src/ceramic/l/01.jpg",
+        "name": "Full-colour Plaque",
+        "price": 990,
+        "quantity": 1,
+        "width": 380,
+        "height": 280,
+        "_length": 10,
+        "init_width": 384,
+        "init_height": 672,
+        "backgroundOption": "photo",
+        "device": "mobile",
+        "dpr": 2.8125,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20230306,
+        "mode": "2d",
+        "navigator": "Chrome (mobile(android)), 384x857"
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1690734890206,
+        "path": "../upload/2023/07/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1690734890206img_20220309_024922_32_c.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": -349.6762204170227,
+        "y": 173.99999641510377,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8247180451127818,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_20220309_024922_3~2.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 100,
+        "width": "195",
+        "height": "277",
+        "itemID": 2
+      },
+      {
+        "productid": "137",
+        "id": "137",
+        "uid": 1690735504636,
+        "path": "../upload/2023/07/",
+        "name": "Image",
+        "type": "Photo",
+        "item": "1690735504636fb_img_1690735315393_cro.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 322.7012228965759,
+        "y": 175.0118843905897,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.8742011278195487,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FB_IMG_1690735315393.jpg",
+        "price": 0,
+        "quantity": 1,
+        "size": 106,
+        "width": "216",
+        "height": "294",
+        "itemID": 4
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_129_01",
+        "item": "2_129_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -352.6734924316406,
+        "y": -281.23258567718136,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 90,
+        "height": 55,
+        "ratio": 0.05907626208378088,
+        "itemID": 48
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_129_01",
+        "item": "2_129_01",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 346.92433632442464,
+        "y": -285.27900833681406,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 90,
+        "height": 55,
+        "ratio": 0.05907626208378088,
+        "itemID": 49
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Found his wings too soon",
+        "font": "44.33684210526315px Chopin Script",
+        "font_size": 16,
+        "font_family": "Chopin Script",
+        "color": "#1fcfcb",
+        "colorName": "Robins Egg Blue",
+        "x": -283.73713731765747,
+        "y": -7.210579899607933,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 9
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Miriam Antoinet",
+        "font": "44.33684210526315px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 226.7904281616211,
+        "y": -183.58109738393034,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 12
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 8,
+        "label": "Browning",
+        "font": "119.15526315789472px Franklin Gothic",
+        "font_size": 43,
+        "font_family": "Franklin Gothic",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -0.9990477561950684,
+        "y": -273.3338450453529,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 14
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Fredrick James",
+        "font": "44.33684210526315px Lucida Calligraphy",
+        "font_size": 16,
+        "font_family": "Lucida Calligraphy",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -260.75863122940063,
+        "y": -182.50019720779974,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 24
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "18th August 1957 ~",
+        "font": "36.02368421052631px Great Vibes",
+        "font_size": 13,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -296.72529458999634,
+        "y": -130.7488046825456,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 27
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "9th March 1988",
+        "font": "44.33684210526315px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": -302.71970987319946,
+        "y": -67.23295416632574,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 15,
+        "itemID": 29
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "7th February 1961 ~",
+        "font": "38.79473684210526px Great Vibes",
+        "font_size": 14,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 195.8188533782959,
+        "y": -122.21661049596665,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 16,
+        "itemID": 31
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 16,
+        "label": "11th December 2022",
+        "font": "44.33684210526315px Great Vibes",
+        "font_size": 16,
+        "font_family": "Great Vibes",
+        "color": "#000000",
+        "colorName": "Black",
+        "x": 201.8130111694336,
+        "y": -62.25998418794466,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 13,
+        "itemID": 32
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "Was ready to soar",
+        "font": "47.1078947368421px Chopin Script",
+        "font_size": 17,
+        "font_family": "Chopin Script",
+        "color": "#1fcfcb",
+        "colorName": "Robins Egg Blue",
+        "x": 215.8001947402954,
+        "y": -14.391242419598415,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 17,
+        "itemID": 37
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Beloved and",
+        "font": "55.42105263157894px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -35.9666633605957,
+        "y": 84.43047939868299,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 39
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Deeply Missed",
+        "font": "55.42105263157894px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -29.972290992736816,
+        "y": 151.70245308709957,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 41
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "But Finally",
+        "font": "55.42105263157894px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -32.96954154968262,
+        "y": 223.33629038456093,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 43
+      },
+      {
+        "productid": "1701",
+        "name": "Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 13,
+        "label": "Together Again",
+        "font": "55.42105263157894px Chopin Script",
+        "font_size": 20,
+        "font_family": "Chopin Script",
+        "color": "#ffce00",
+        "colorName": "Tangerine yellow",
+        "x": -25.97592830657959,
+        "y": 291.8091039048555,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 45
+      }
+    ]
+  }
+}

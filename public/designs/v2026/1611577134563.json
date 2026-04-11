@@ -1,0 +1,582 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:49.549Z",
+  "units": "mm",
+  "source": {
+    "id": "1611577134563",
+    "slug": "legacy-1611577134563",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1611577134563.json",
+    "savedAt": "2021-01-25T12:18:54.563Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/Imperial-Red-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Imperial-Red-TILE.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 801,
+      "height_mm": 800
+    },
+    "viewportPx": {
+      "width": 1296,
+      "height": 690,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1296,
+        "height": 690
+      },
+      "bufferPx": {
+        "width": 1296,
+        "height": 690
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 801,
+      "height_mm": 800,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Imperial-Red-TILE.webp"
+    },
+    "base": {
+      "width_mm": 1001,
+      "height_mm": 150,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-9",
+        "text": "09/09/1927 - 31/08/2019",
+        "font": {
+          "family": "Arial",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": 2.539,
+          "y_px": -102.59
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Cherie and James",
+        "font": {
+          "family": "Adorable",
+          "size_px": 29
+        },
+        "position": {
+          "x_px": -23.293,
+          "y_px": -29.954
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "Chopin Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 1.313,
+          "y_px": -208.336
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Nan to Jacqui and David",
+        "font": {
+          "family": "Adorable",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -43.487,
+          "y_px": -45.467
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "BARKER",
+        "font": {
+          "family": "Arial",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": -63.034,
+          "y_px": -129.73
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "CARMEN MARCIA EUNICE",
+        "font": {
+          "family": "Arial",
+          "size_px": 33
+        },
+        "position": {
+          "x_px": -1.873,
+          "y_px": -158.129
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "HANDS ACROSS THE SEA",
+        "font": {
+          "family": "Garamond",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 2.645,
+          "y_px": 344.684
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "surface": "base/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-18",
+        "asset": "dove_002",
+        "position": {
+          "x_px": -220.741,
+          "y_px": -150.683
+        },
+        "height_px": 130,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "dove_002",
+        "position": {
+          "x_px": 221.522,
+          "y_px": -164.941
+        },
+        "height_px": 120,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-7",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": 245.788,
+          "y_px": 234.818
+        },
+        "height_px": 110,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": false,
+          "y": true
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-8",
+        "asset": "1_208_03",
+        "position": {
+          "x_px": -250.378,
+          "y_px": 238.141
+        },
+        "height_px": 110,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#fee123",
+        "flip": {
+          "x": true,
+          "y": true
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "dove_002",
+        "path": "/shapes/motifs/dove_002.svg"
+      },
+      {
+        "id": "1_208_03",
+        "path": "/shapes/motifs/1_208_03.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "53ad46ae90087c84209ad6fc3226a012a47919dec37a56a3d3fb862913dd45ff",
+    "sourceItemCount": 13,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:49.549Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Imperial-Red-TILE-900-X-900.jpg",
+        "price": 2103.14,
+        "quantity": 1,
+        "width": 801,
+        "height": 800,
+        "_length": 1,
+        "init_width": 1296,
+        "init_height": 690,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Square",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 1024,
+        "quantity": 1,
+        "width": 1001,
+        "height": 150,
+        "_length": 1,
+        "init_width": 1296,
+        "init_height": 690,
+        "mode": "2d",
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 210.258217,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -220.74096808600268,
+        "y": -150.68257935810493,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 130,
+        "ratio": 0.15081206496519722,
+        "itemID": 18
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "dove_002",
+        "item": "dove_002",
+        "price": 206.44871,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 221.52159401217114,
+        "y": -164.94059237544212,
+        "flipx": "-1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 120,
+        "ratio": 0.13921113689095127,
+        "itemID": 17
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_03",
+        "item": "1_208_03",
+        "price": 201.313242,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 245.78774422312608,
+        "y": 234.81768758703384,
+        "flipx": 1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 110,
+        "ratio": 0.14965986394557823,
+        "itemID": 7
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_208_03",
+        "item": "1_208_03",
+        "price": 201.313242,
+        "quantity": 1,
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -250.37815373496755,
+        "y": 238.14067075309555,
+        "flipx": -1,
+        "flipy": -1,
+        "rotation": 0,
+        "height": 110,
+        "ratio": 0.14965986394557823,
+        "itemID": 8
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 23,
+        "label": "09/09/1927 - 31/08/2019",
+        "font": "18.205320738273834px Arial",
+        "font_size": 25,
+        "font_family": "Arial",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 2.538718905898463,
+        "y": -102.58993790788026,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 18,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 16,
+        "label": "Cherie and James",
+        "font": "21.118172056397647px Adorable",
+        "font_size": 29,
+        "font_family": "Adorable",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -23.29255559870913,
+        "y": -29.95388408608548,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 5,
+        "quantity": 1,
+        "label": "In Loving Memory of",
+        "font": "36.41064147654767px Chopin Script",
+        "font_size": 50,
+        "font_family": "Chopin Script",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 1.3133604426295733,
+        "y": -208.33645292323192,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 56,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Nan to Jacqui and David",
+        "font": "20.389959226866694px Adorable",
+        "font_size": 28,
+        "font_family": "Adorable",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -43.4869243962477,
+        "y": -45.46740542854371,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 27,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "READING",
+        "font": "24.759236204052414px Arial",
+        "font_size": 34,
+        "font_family": "Arial",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -63.034253576119454,
+        "y": -129.7303818541211,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "CARMEN MARCIA EUNICE",
+        "font": "24.03102337452146px Arial",
+        "font_size": 33,
+        "font_family": "Arial",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": -1.8725192142828746,
+        "y": -158.1293881634292,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 20,
+        "label": "HANDS ACROSS THE SEA",
+        "font": "36.41064147654767px Garamond",
+        "font_size": 50,
+        "font_family": "Garamond",
+        "color": "#fee123",
+        "colorName": "Paint Fill",
+        "x": 2.6448211938236454,
+        "y": 344.68402056849305,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 36,
+        "itemID": 5
+      }
+    ]
+  }
+}

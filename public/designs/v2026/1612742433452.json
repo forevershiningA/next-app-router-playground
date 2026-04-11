@@ -1,0 +1,258 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:49.674Z",
+  "units": "mm",
+  "source": {
+    "id": "1612742433452",
+    "slug": "legacy-1612742433452",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1612742433452.json",
+    "savedAt": "2021-02-08T00:00:33.452Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Cropped Peak",
+    "material": {
+      "name": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Sandstone-TILE.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 400,
+      "height_mm": 450
+    },
+    "viewportPx": {
+      "width": 375,
+      "height": 421,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 375,
+        "height": 421
+      },
+      "bufferPx": {
+        "width": 375,
+        "height": 421
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 400,
+      "height_mm": 450,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Sandstone-TILE.webp"
+    },
+    "base": {
+      "width_mm": 500,
+      "height_mm": 100,
+      "depth_mm": 1,
+      "texture": "/textures/forever/l/Glory-Black-1.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "Sallie Hawkins",
+        "font": {
+          "family": "Arial",
+          "size_px": 45
+        },
+        "position": {
+          "x_px": -1.63,
+          "y_px": -119.677
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#643c1f",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "4/5/1938-7/12/2002",
+        "font": {
+          "family": "Arial",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 0.8,
+          "y_px": -43.055
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#643c1f",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Finally ran out of steam.",
+        "font": {
+          "family": "Arial",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": 9.309,
+          "y_px": 62.545
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#643c1f",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d4345c9132c580cf22a9c8c57d96c5783efee547375e0daec934268db37450ec",
+    "sourceItemCount": 5,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:49.674Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Cropped Peak",
+        "shape": "Cropped Peak",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Sandstone-TILE-900-X-900.jpg",
+        "price": 756.25,
+        "quantity": 1,
+        "width": 400,
+        "height": 450,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 421,
+        "mode": "2d"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/17.jpg",
+        "price": 464,
+        "quantity": 1,
+        "width": 500,
+        "height": 100,
+        "_length": 1,
+        "init_width": 375,
+        "init_height": 421,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Peter Woolcock",
+        "font": "59.82954545454547px Arial",
+        "font_size": 45,
+        "font_family": "Arial",
+        "color": "#643c1f",
+        "colorName": "Paint Fill",
+        "x": -1.629968444778342,
+        "y": -119.67717505634857,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "4/5/1938-7/12/2002",
+        "font": "42.545454545454554px Arial",
+        "font_size": 32,
+        "font_family": "Arial",
+        "color": "#643c1f",
+        "colorName": "Paint Fill",
+        "x": 0.8000000000000114,
+        "y": -43.05454545454546,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.5,
+        "quantity": 1,
+        "label": "Finally ran out of steam.",
+        "font": "39.88636363636365px Arial",
+        "font_size": 30,
+        "font_family": "Arial",
+        "color": "#643c1f",
+        "colorName": "Paint Fill",
+        "x": 9.309090909090912,
+        "y": 62.54545454545456,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 5
+      }
+    ]
+  }
+}

@@ -1,0 +1,470 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:53.986Z",
+  "units": "mm",
+  "source": {
+    "id": "1642933651162",
+    "slug": "legacy-1642933651162",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1642933651162.json",
+    "savedAt": "2022-01-23T10:27:31.162Z"
+  },
+  "product": {
+    "id": "30",
+    "name": "Laser-etched Black Granite Colour",
+    "type": "plaque",
+    "slug": "laser-colour-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 940,
+      "height_mm": 440
+    },
+    "viewportPx": {
+      "width": 1280,
+      "height": 800,
+      "dpr": 1.3333333730697632
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1280,
+        "height": 800
+      },
+      "bufferPx": {
+        "width": 1707,
+        "height": 1067
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 940,
+      "height_mm": 440,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "The Payne Sisters",
+        "font": {
+          "family": "Great Vibes",
+          "size_px": 80
+        },
+        "position": {
+          "x_px": -0.993,
+          "y_px": -135.264
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Ball",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": -213.591,
+          "y_px": -29.6
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Cathrine Reynolds",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 30
+        },
+        "position": {
+          "x_px": -217.447,
+          "y_px": -56.869
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Cassie Castro",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 23
+        },
+        "position": {
+          "x_px": 176.26,
+          "y_px": -27.855
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Irma Herrera",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 175.347,
+          "y_px": -51.143
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "27.9.1933 - 29.7.2021",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": -211.878,
+          "y_px": -9.589
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "9.7.1942 - 5.11.1999",
+        "font": {
+          "family": "Lucida Calligraphy",
+          "size_px": 20
+        },
+        "position": {
+          "x_px": 180.827,
+          "y_px": -10.046
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "d84e89a70c8defe53219cef7aade5e2107e2c902ab87f4d4e9f822562188756c",
+    "sourceItemCount": 11,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:53.986Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 30,
+        "type": "Headstone",
+        "name": "Square",
+        "shape": "Square",
+        "color": "undefined#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 1446.71,
+        "quantity": 1,
+        "width": 940,
+        "height": 440,
+        "_length": 1,
+        "init_width": 1672,
+        "init_height": 779.015625,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 1.3333333730697632,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20220122,
+        "mode": "2d",
+        "navigator": "MacIntel, Google Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36, 1280x800"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2022/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1642912991626f5db86cddbac430d83e42172.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -11.994870302873453,
+        "y": -37.463324062757216,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.5000064976141204,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "F5DB86CD-DBAC-430D-83E4-21722D74768B.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "181",
+        "width": "279",
+        "height": "195",
+        "itemID": 8
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2022/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "1642913089047fddd48a5ecfe4584b039be0d.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -339.80089897046713,
+        "y": -124.666594669003,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.35912068889411963,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "FDDD48A5-ECFE-4584-B039-BE0D17D0C615.jpeg",
+        "price": 0,
+        "quantity": 1,
+        "size": "130",
+        "width": "97",
+        "height": "140",
+        "itemID": 10
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2022/01/",
+        "name": "Laser-etched Image",
+        "type": "Photo",
+        "item": "164291305720362882c280fb64c0492b3ba64.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 342.70003172470126,
+        "y": -124.15166827498687,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.35912068889411963,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "62882C28-0FB6-4C04-92B3-BA64C71E21B8.jpeg",
+        "price": 80,
+        "quantity": 1,
+        "size": "130",
+        "width": "97",
+        "height": "140",
+        "itemID": 11
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "The Payne Sisters",
+        "font": "86.18896533458872px Great Vibes",
+        "font_size": 80,
+        "font_family": "Great Vibes",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -0.9929335371404927,
+        "y": -135.264362793395,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 90,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 5,
+        "label": "Hayes",
+        "font": "30.16613786710605px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -213.5914682378838,
+        "y": -29.59952362282056,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 12,
+        "label": "Patricia Mary",
+        "font": "32.32086200047077px Lucida Calligraphy",
+        "font_size": 30,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -217.4466152783667,
+        "y": -56.86924820252673,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "née. Arnold",
+        "font": "24.779327533694254px Lucida Calligraphy",
+        "font_size": 23,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 176.26027623094961,
+        "y": -27.85460323856976,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 20,
+        "itemID": 5
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 10,
+        "label": "Valda Lynch",
+        "font": "30.16613786710605px Lucida Calligraphy",
+        "font_size": 28,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 175.34701055099652,
+        "y": -51.14287807737398,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 33,
+        "itemID": 6
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 19,
+        "label": "27.9.1933 - 29.7.2021",
+        "font": "21.54724133364718px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": -211.8776377491208,
+        "y": -9.589289639507621,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 18,
+        "label": "9.7.1942 - 5.11.1999",
+        "font": "21.54724133364718px Lucida Calligraphy",
+        "font_size": 20,
+        "font_family": "Lucida Calligraphy",
+        "color": "#ffffff",
+        "colorName": "Paint Fill",
+        "x": 180.82660463071514,
+        "y": -10.045922479484174,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      }
+    ]
+  }
+}

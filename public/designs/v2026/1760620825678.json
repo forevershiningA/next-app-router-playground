@@ -1,0 +1,372 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:23.318Z",
+  "units": "mm",
+  "source": {
+    "id": "1760620825678",
+    "slug": "legacy-1760620825678",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1760620825678.json",
+    "savedAt": "2025-10-16T13:20:25.678Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 596.9
+    },
+    "viewportPx": {
+      "width": 1300,
+      "height": 730,
+      "dpr": 1.0507692098617554
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1300,
+        "height": 730
+      },
+      "bufferPx": {
+        "width": 1366,
+        "height": 767
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 609.5999999999999,
+      "height_mm": 596.9,
+      "thickness_mm": 80,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    },
+    "base": {
+      "width_mm": 709.5999999999999,
+      "height_mm": 101.6,
+      "depth_mm": 130,
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "In The loving memory of Ka&apos;Laysha (Lay) Miller",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 27
+        },
+        "position": {
+          "x_px": 4.2,
+          "y_px": -101.922
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Sunrise October 1, 2008",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 58
+        },
+        "position": {
+          "x_px": -9.45,
+          "y_px": 202.727
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Sunset: December 20, 2086",
+        "font": {
+          "family": "Dobkin",
+          "size_px": 62
+        },
+        "position": {
+          "x_px": -24.15,
+          "y_px": 261.742
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "base/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-5",
+        "asset": "butterfly_025",
+        "position": {
+          "x_px": -179.55,
+          "y_px": -151.307
+        },
+        "height_px": 58,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-6",
+        "asset": "butterfly_025",
+        "position": {
+          "x_px": 200.589,
+          "y_px": -153.408
+        },
+        "height_px": 58,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "butterfly_025",
+        "path": "/shapes/motifs/butterfly_025.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "834d192359718365ed63b4e02d62d9f3bc1c8ea9868f079259ca060c2ec48a1c",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:23.318Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "name": "Laser Etched Black Granite Headstone",
+        "price": 2508.7,
+        "quantity": 1,
+        "width": 609.5999999999999,
+        "height": 596.9,
+        "_length": 80,
+        "init_width": 1060,
+        "init_height": 532.0141372680664,
+        "device": "desktop",
+        "dpr": 1.0507692098617554,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20250805,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1300x730"
+      },
+      {
+        "productid": 4,
+        "type": "Base",
+        "name": "Rectangle",
+        "flower_pot_holes": true,
+        "base_flower_pots": 4,
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": 848,
+        "quantity": 1,
+        "width": 709.5999999999999,
+        "height": 101.6,
+        "_length": 130,
+        "init_width": 1060,
+        "init_height": 532.0141372680664,
+        "mode": "2d"
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "In The loving memory of Ka&apos;Laysha (Lay) Miller",
+        "font": "21.140269147677365px Dobkin",
+        "font_size": 27,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 4.200010640873131,
+        "y": -101.92176300550182,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 28,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 20,
+        "label": "Sunrise October 1, 2008",
+        "font": "45.41243002093656px Dobkin",
+        "font_size": 58,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -9.45002394196456,
+        "y": 202.7272498654259,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 49,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Base",
+        "side": "Front",
+        "price": 0,
+        "quantity": 22,
+        "label": "Sunset: December 20, 2086",
+        "font": "48.54432174651839px Dobkin",
+        "font_size": 62,
+        "font_family": "Dobkin",
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -24.150061185020206,
+        "y": 261.74204636140564,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 51,
+        "itemID": 3
+      },
+      {
+        "productid": 7,
+        "id": 7,
+        "uid": 1760621380196,
+        "path": "../upload/2025/10/",
+        "name": "Ceramic Image",
+        "type": "Photo",
+        "item": "1760621380196img_0255_cropped.jpg",
+        "color": 0,
+        "mask": 0,
+        "x": 2.1000053204364804,
+        "y": 50.43551159035141,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.7037958933891757,
+        "shape_url": "shapes/photos/oval_vertical.svg",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "IMG_0255.PNG",
+        "price": 570,
+        "quantity": 1,
+        "size": "180 x 240 mm",
+        "itemID": 4
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_025",
+        "item": "butterfly_025",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": -179.55045489732368,
+        "y": -151.30653477105426,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 58,
+        "ratio": 0.13122171945701358,
+        "itemID": 5
+      },
+      {
+        "productid": "71",
+        "name": "Black Granite Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "butterfly_025",
+        "item": "butterfly_025",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffffff",
+        "colorName": "White",
+        "x": 200.58943962352697,
+        "y": -153.40801442065225,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 58,
+        "ratio": 0.13122171945701358,
+        "itemID": 6
+      }
+    ]
+  }
+}

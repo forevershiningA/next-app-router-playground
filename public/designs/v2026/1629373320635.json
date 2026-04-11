@@ -1,0 +1,412 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:40.135Z",
+  "units": "mm",
+  "source": {
+    "id": "1629373320635",
+    "slug": "legacy-1629373320635",
+    "mlDir": "bronze-plaque",
+    "legacyFile": "/ml/bronze-plaque/saved-designs/json/1629373320635.json",
+    "savedAt": "2021-08-19T11:42:00.635Z"
+  },
+  "product": {
+    "id": "5",
+    "name": "Bronze Plaque",
+    "type": "plaque",
+    "slug": "bronze-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Square",
+    "material": {
+      "name": "src/bronzes/phoenix/l/12.jpg",
+      "texture": "/textures/phoenix/l/12.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 203.19999999999993,
+      "height_mm": 101.6
+    },
+    "viewportPx": {
+      "width": 640,
+      "height": 376,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 640,
+        "height": 376
+      },
+      "bufferPx": {
+        "width": 1280,
+        "height": 752
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 203.19999999999993,
+      "height_mm": 101.6,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/phoenix/l/12.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "LOVED MUM AND WIFE",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 15
+        },
+        "position": {
+          "x_mm": -6.218,
+          "y_mm": 130.111
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "IVA DIAZ",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 15
+        },
+        "position": {
+          "x_mm": -27.311,
+          "y_mm": 67.457
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "AND BUBBLY IN LIFE",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 15
+        },
+        "position": {
+          "x_mm": -12.977,
+          "y_mm": -14.321
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "IN MEMORY OF SUSAN",
+        "font": {
+          "family": "Adorable",
+          "size_mm": 15
+        },
+        "position": {
+          "x_mm": -10.91,
+          "y_mm": 195.062
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-11",
+        "asset": "1_153_12",
+        "position": {
+          "x_mm": -417.437,
+          "y_mm": -378.912
+        },
+        "height_mm": 62,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-18",
+        "asset": "pardalotesolid",
+        "position": {
+          "x_mm": 387.545,
+          "y_mm": -221.863
+        },
+        "height_mm": 102,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-2",
+        "asset": "1_154_13",
+        "position": {
+          "x_mm": -333.112,
+          "y_mm": -128.292
+        },
+        "height_mm": 40,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffb35a",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_153_12",
+        "path": "/shapes/motifs/1_153_12.svg"
+      },
+      {
+        "id": "pardalotesolid",
+        "path": "/shapes/motifs/pardalotesolid.svg"
+      },
+      {
+        "id": "1_154_13",
+        "path": "/shapes/motifs/1_154_13.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "1158675037d417d399f6e9004d1acc2034212a84ea033aa136c3b61dccd9a05b",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:40.135Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 5,
+        "type": "Headstone",
+        "name": "Bronze Plaque - Red - Lugs with Studs",
+        "border": "Border 1",
+        "shape_url": "shapes/photos/border1.svg",
+        "fixingSystem": 2,
+        "shape": "Square",
+        "color": "#c72028",
+        "fixed": 0,
+        "texture": "src/bronzes/phoenix/l/12.jpg",
+        "price": 435.89,
+        "quantity": 1,
+        "width": 203.19999999999993,
+        "height": 101.6,
+        "_length": 1,
+        "init_width": 640,
+        "init_height": 376,
+        "backgroundOption": "undefined",
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210816,
+        "mode": "2d",
+        "navigator": "MacIntel, Apple Computer, Inc., Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91 Version/11.1.1 Safari/605.1.15"
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_153_12",
+        "item": "1_153_12",
+        "price": 0,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -417.437388959391,
+        "y": 378.9124492385788,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 62,
+        "ratio": 0.06623931623931624,
+        "itemID": 11
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "pardalotesolid",
+        "item": "pardalotesolid",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": 387.5450573486334,
+        "y": 221.8630961992335,
+        "flipx": "1",
+        "flipy": "1",
+        "rotation": 0,
+        "height": 102,
+        "ratio": 0.09807692307692308,
+        "itemID": 18
+      },
+      {
+        "productid": "51",
+        "name": "Motif (Bronze)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_154_13",
+        "item": "1_154_13",
+        "price": 66.96000000000001,
+        "quantity": 1,
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -333.11190960859597,
+        "y": 128.29150712463598,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 40,
+        "ratio": 0.06666666666666667,
+        "itemID": 2
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "LOVED MUM AND WIFE",
+        "font": "54.124015748031496px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -6.218429797358759,
+        "y": -130.1113460634146,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 3
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 14,
+        "label": "GARDENER WALKER",
+        "font": "54.124015748031496px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -27.31089938436044,
+        "y": -67.45651327784209,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 6
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "AND BUBBLY IN LIFE",
+        "font": "54.124015748031496px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -12.976521990013742,
+        "y": 14.321133682467835,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 9
+      },
+      {
+        "productid": "78",
+        "name": "Inscription (Bronze)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 15,
+        "label": "IN MEMORY OF SUSAN",
+        "font": "54.124015748031496px Adorable",
+        "font_size": 15,
+        "font_family": "Adorable",
+        "color": "#ffb35a",
+        "colorName": "Paint Fill",
+        "x": -10.909567270295351,
+        "y": -195.06192893401013,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 1
+      }
+    ]
+  }
+}

@@ -1,0 +1,400 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:52.771Z",
+  "units": "mm",
+  "source": {
+    "id": "1631832122828",
+    "slug": "legacy-1631832122828",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1631832122828.json",
+    "savedAt": "2021-09-16T22:42:02.828Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/Multicolour-redTILE-900-X-900.jpg",
+      "texture": "/textures/forever/l/Multicolour-redTILE.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 651,
+      "height_mm": 661
+    },
+    "viewportPx": {
+      "width": 1040,
+      "height": 488,
+      "dpr": 1.5
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1040,
+        "height": 488
+      },
+      "bufferPx": {
+        "width": 1560,
+        "height": 732
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 651,
+      "height_mm": 661,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Multicolour-redTILE.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-3",
+        "text": "To _____________",
+        "font": {
+          "family": "French Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 6,
+          "y_px": 101.978
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Date to Date",
+        "font": {
+          "family": "French Script",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -95.872
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-11",
+        "text": "In Loving Memory of",
+        "font": {
+          "family": "French Script",
+          "size_px": 50
+        },
+        "position": {
+          "x_px": 3,
+          "y_px": -290.187
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Beloved Mother",
+        "font": {
+          "family": "French Script",
+          "size_px": 57
+        },
+        "position": {
+          "x_px": -3,
+          "y_px": -11.993
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Joanna Wagner",
+        "font": {
+          "family": "French Script",
+          "size_px": 80
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -187.787
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#eeeeee",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [
+      {
+        "id": "motif-16",
+        "asset": "2_131_06",
+        "position": {
+          "x_px": -288,
+          "y_px": -26.983
+        },
+        "height_px": 164,
+        "rotation": {
+          "z_deg": -19
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      },
+      {
+        "id": "motif-17",
+        "asset": "2_131_06",
+        "position": {
+          "x_px": 298.262,
+          "y_px": -32.98
+        },
+        "height_px": 164,
+        "rotation": {
+          "z_deg": 21
+        },
+        "color": "#eeeeee",
+        "flip": {
+          "x": true,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "2_131_06",
+        "path": "/shapes/motifs/2_131_06.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "9978cc5a15936240d5d3ff8672d1e4e3a5438be29b138905a025b8d767a4bfaf",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:52.771Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "name": "Headstone 22",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Multicolour-redTILE-900-X-900.jpg",
+        "price": 1642.81,
+        "quantity": 1,
+        "width": 651,
+        "height": 661,
+        "_length": 1,
+        "init_width": 1040,
+        "init_height": 488,
+        "device": "desktop",
+        "dpr": 1.5,
+        "orientation": "landscape",
+        "version": "1.42",
+        "version_date": 20210916,
+        "mode": "2d",
+        "navigator": "Win32, Google Inc., Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 15,
+        "label": "To _____________",
+        "font": "60.29217095310136px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 6,
+        "y": 101.97798165137618,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 10,
+        "label": "Date to Date",
+        "font": "68.73307488653556px French Script",
+        "font_size": 57,
+        "font_family": "French Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -9,
+        "y": -95.87155963302746,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 43,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 16,
+        "label": "In Loving Memory of",
+        "font": "60.29217095310136px French Script",
+        "font_size": 50,
+        "font_family": "French Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 3,
+        "y": -290.1871559633028,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 54,
+        "itemID": 11
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 4.1,
+        "quantity": 13,
+        "label": "Beloved Mother",
+        "font": "68.73307488653556px French Script",
+        "font_size": 57,
+        "font_family": "French Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -3,
+        "y": -11.992660550458766,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 44,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 7.4,
+        "quantity": 16,
+        "label": "First Name Surname",
+        "font": "96.46747352496219px French Script",
+        "font_size": 80,
+        "font_family": "French Script",
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 0,
+        "y": -187.78715596330278,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 60,
+        "itemID": 8
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_06",
+        "item": "2_131_06",
+        "price": 247.3347128,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": -288,
+        "y": -26.983486238532066,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": -19,
+        "height": 164,
+        "ratio": 0.19158878504672897,
+        "itemID": 16
+      },
+      {
+        "productid": "126",
+        "name": "Motif (Traditional Engraved)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "2_131_06",
+        "item": "2_131_06",
+        "price": 247.3347128,
+        "quantity": 1,
+        "color": "#eeeeee",
+        "colorName": "Silver Gilding",
+        "x": 298.2619778337835,
+        "y": -32.97981651376142,
+        "flipx": -1,
+        "flipy": 1,
+        "rotation": 21,
+        "height": 164,
+        "ratio": 0.19158878504672897,
+        "itemID": 17
+      }
+    ]
+  }
+}

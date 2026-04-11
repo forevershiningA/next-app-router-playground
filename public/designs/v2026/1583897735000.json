@@ -1,0 +1,164 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:45.015Z",
+  "units": "mm",
+  "source": {
+    "id": "1583897735000",
+    "slug": "legacy-1583897735000",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1583897735000.json",
+    "savedAt": "2020-03-11T03:35:35.000Z"
+  },
+  "product": {
+    "id": "2350",
+    "name": "Legacy Memorial Design",
+    "type": "headstone",
+    "slug": "legacy-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Teardrop",
+    "material": {
+      "name": "src/backgrounds/colors/l/27.jpg",
+      "texture": "/textures/forever/l/27.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 188,
+      "height_mm": 307
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1680,
+        "height": 873
+      },
+      "bufferPx": {
+        "width": 1680,
+        "height": 873
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 188,
+      "height_mm": 307,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/27.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [],
+    "motifs": [
+      {
+        "id": "motif-1",
+        "asset": "1_132_02",
+        "position": {
+          "x_px": 0,
+          "y_px": 0
+        },
+        "height_px": 92,
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#000000",
+        "flip": {
+          "x": false,
+          "y": false
+        },
+        "surface": "headstone/front"
+      }
+    ],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": [
+      {
+        "id": "1_132_02",
+        "path": "/shapes/motifs/1_132_02.svg"
+      }
+    ]
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "566b0701a39bec454b973479781c9f64b17b4fa1c8ef4720bc2fe710563cd682",
+    "sourceItemCount": 2,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:45.015Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 2350,
+        "type": "Headstone",
+        "name": "Teardrop",
+        "border": "Border Teardrop",
+        "shape_url": "shapes/photos/borderteardrop.svg",
+        "shape": "Teardrop",
+        "color": "#000000",
+        "fixed": 2,
+        "texture": "src/backgrounds/colors/l/27.jpg",
+        "price": "2514.16",
+        "quantity": 1,
+        "width": 188,
+        "height": 307,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "backgroundOption": "color"
+      },
+      {
+        "productid": "1700",
+        "name": "Motif (free)",
+        "type": "Motif",
+        "part": "Headstone",
+        "side": "Front",
+        "src": "1_132_02",
+        "item": "1_132_02",
+        "price": 0,
+        "quantity": 1,
+        "color": "#000000",
+        "colorName": "Paint Fill",
+        "x": 0,
+        "y": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "height": 92,
+        "ratio": 0.15333333333333332,
+        "itemID": 1
+      }
+    ]
+  }
+}

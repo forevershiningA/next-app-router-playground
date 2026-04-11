@@ -1,0 +1,378 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:15:17.691Z",
+  "units": "mm",
+  "source": {
+    "id": "1726876649271",
+    "slug": "legacy-1726876649271",
+    "mlDir": "headstonesdesigner",
+    "legacyFile": "/ml/headstonesdesigner/saved-designs/json/1726876649271.json",
+    "savedAt": "2024-09-20T23:57:29.271Z"
+  },
+  "product": {
+    "id": "124",
+    "name": "Traditional Engraved Headstone",
+    "type": "headstone",
+    "slug": "traditional-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Headstone 27",
+    "material": {
+      "name": "src/granites/forever2/l/Noble-Red.jpg",
+      "texture": "/textures/forever/l/Noble-Red.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 713.3000000000004,
+      "height_mm": 725
+    },
+    "viewportPx": {
+      "width": 1728,
+      "height": 1117,
+      "dpr": 2
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1728,
+        "height": 1117
+      },
+      "bufferPx": {
+        "width": 3456,
+        "height": 2234
+      },
+      "headstonePlacement": "legacy-stage-offset",
+      "flipMode": "invert-legacy-bools"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 713.3000000000004,
+      "height_mm": 725,
+      "thickness_mm": 90,
+      "surface": "front",
+      "texture": "/textures/forever/l/Noble-Red.webp"
+    },
+    "base": {
+      "width_mm": 813.3000000000004,
+      "height_mm": 101.6,
+      "depth_mm": 250,
+      "texture": "/textures/forever/l/Noble-Red.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-1",
+        "text": "SCHWARTZ",
+        "font": {
+          "family": "Garamond",
+          "size_px": 84
+        },
+        "position": {
+          "x_px": 14,
+          "y_px": -318
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Beloved Mother",
+        "font": {
+          "family": "Adorable",
+          "size_px": 34
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -182.291
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "Daughter, Sister and Friend",
+        "font": {
+          "family": "Adorable",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": -136.245
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Coleman Nunez",
+        "font": {
+          "family": "Garamond",
+          "size_px": 32
+        },
+        "position": {
+          "x_px": 4,
+          "y_px": 79.755
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "Feb. 25, 1965",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 12,
+          "y_px": 147.755
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "Xxx. 22, 1111",
+        "font": {
+          "family": "Garamond",
+          "size_px": 28
+        },
+        "position": {
+          "x_px": 0,
+          "y_px": 191.249
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#510b76",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "640358469fc3f3e468322ffc1e5648da05f709f8e19667f84b4b792e48bcdced",
+    "sourceItemCount": 8,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:15:17.692Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 124,
+        "type": "Headstone",
+        "shape": "Headstone 27",
+        "color": "#000000",
+        "fixed": 4,
+        "texture": "src/granites/forever2/l/Noble-Red.jpg",
+        "name": "Traditional Engraved Headstone",
+        "price": 2052,
+        "quantity": 1,
+        "width": 713.3000000000004,
+        "height": 725,
+        "_length": 90,
+        "init_width": 1296,
+        "init_height": 773,
+        "device": "desktop",
+        "dpr": 2,
+        "orientation": "landscape",
+        "version": "1.45",
+        "version_date": 20240903,
+        "mode": "2d",
+        "navigator": "Chrome (desktop), 1728x1117"
+      },
+      {
+        "productid": 124,
+        "type": "Base",
+        "name": "Rectangle",
+        "shape": "Rectangle",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/Noble-Red.jpg",
+        "price": 642,
+        "quantity": 1,
+        "width": 813.3000000000004,
+        "height": 101.6,
+        "_length": 250,
+        "init_width": 1296,
+        "init_height": 773,
+        "mode": "2d"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 16.5,
+        "quantity": 8,
+        "label": "VALLEJOS",
+        "font": "153.1785627873215px Garamond",
+        "font_size": 84,
+        "font_family": "Garamond",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 14,
+        "y": -318,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 74,
+        "itemID": 1
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "Beloved Mother",
+        "font": "62.00084684248728px Adorable",
+        "font_size": 34,
+        "font_family": "Adorable",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 0,
+        "y": -182.2913818359375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 25,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 24,
+        "label": "Daughter, Sister and Friend",
+        "font": "58.35373820469391px Adorable",
+        "font_size": 32,
+        "font_family": "Adorable",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 0,
+        "y": -136.2454833984375,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 31,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "Anne Louise Evans",
+        "font": "58.35373820469391px Garamond",
+        "font_size": 32,
+        "font_family": "Garamond",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 4,
+        "y": 79.7545166015625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "Feb. 25, 1965",
+        "font": "51.05952092910717px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 12,
+        "y": 147.7545166015625,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "Xxx. 22, 1111",
+        "font": "51.05952092910717px Garamond",
+        "font_size": 28,
+        "font_family": "Garamond",
+        "color": "#510b76",
+        "colorName": "Indigo",
+        "x": 0,
+        "y": 191.24911880493164,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 6
+      }
+    ]
+  }
+}

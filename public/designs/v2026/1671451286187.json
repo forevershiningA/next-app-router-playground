@@ -1,0 +1,433 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:58.503Z",
+  "units": "mm",
+  "source": {
+    "id": "1671451286187",
+    "slug": "legacy-1671451286187",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1671451286187.json",
+    "savedAt": "2022-12-19T12:01:26.187Z"
+  },
+  "product": {
+    "id": "34",
+    "name": "Traditional Engraved Plaque",
+    "type": "plaque",
+    "slug": "traditional-plaque",
+    "category": "memorial-plaque",
+    "title": "Legacy Migration",
+    "shape": "Rectangle (Landscape)",
+    "material": {
+      "name": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 300,
+      "height_mm": 300
+    },
+    "viewportPx": {
+      "width": 414,
+      "height": 896,
+      "dpr": 3
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 414,
+        "height": 896
+      },
+      "bufferPx": {
+        "width": 1242,
+        "height": 2688
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 300,
+      "height_mm": 300,
+      "thickness_mm": 15,
+      "surface": "front",
+      "texture": "/textures/forever/l/White-Carrara.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-2",
+        "text": "Terence Afton (Terry)",
+        "font": {
+          "family": "Garamond",
+          "size_px": 24
+        },
+        "position": {
+          "x_px": -33,
+          "y_px": -486
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "18/11/1944 - 3/7/2022",
+        "font": {
+          "family": "Garamond",
+          "size_px": 19
+        },
+        "position": {
+          "x_px": -21,
+          "y_px": -203
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "Into your Hands",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -9,
+          "y_px": -81
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-5",
+        "text": "I commend my Spirit",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": 26
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-6",
+        "text": "- Lord Jesus -",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -45,
+          "y_px": 148
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-7",
+        "text": "Blessed Saviour,",
+        "font": {
+          "family": "Garamond",
+          "size_px": 25
+        },
+        "position": {
+          "x_px": -21,
+          "y_px": 266
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-9",
+        "text": "Redeemer & Friend",
+        "font": {
+          "family": "Garamond",
+          "size_px": 26
+        },
+        "position": {
+          "x_px": -15,
+          "y_px": 392
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-8",
+        "text": "Randall",
+        "font": {
+          "family": "Garamond",
+          "size_px": 41
+        },
+        "position": {
+          "x_px": -24,
+          "y_px": -349
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#4e5859",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "08b812b318d7698dce9f4728082fce6bc279585c40557647e4f7fb8e2ad8cc94",
+    "sourceItemCount": 9,
+    "warnings": [],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:58.503Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 34,
+        "type": "Headstone",
+        "shape": "Rectangle (Landscape)",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/White-Carrara-600-x-600.jpg",
+        "name": "Traditional Engraved Plaque",
+        "price": 281.24,
+        "quantity": 1,
+        "width": 300,
+        "height": 300,
+        "_length": 15,
+        "init_width": 414,
+        "init_height": 663,
+        "device": "mobile",
+        "dpr": 3,
+        "orientation": "portrait",
+        "version": "1.44",
+        "version_date": 20221214,
+        "mode": "2d",
+        "navigator": "Safari (mobile(ios)), 414x896"
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "Terence Afton (Terry)",
+        "font": "96.876px Garamond",
+        "font_size": 24,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -33,
+        "y": -486,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 24,
+        "itemID": 2
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 19,
+        "label": "18/11/1944 - 3/7/2022",
+        "font": "76.6935px Garamond",
+        "font_size": 19,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -21,
+        "y": -203,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 3
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 13,
+        "label": "Into your Hands",
+        "font": "104.94900000000001px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -9,
+        "y": -81,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 4
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 16,
+        "label": "I commend my Spirit",
+        "font": "104.94900000000001px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -24,
+        "y": 26,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 26,
+        "itemID": 5
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 11,
+        "label": "- Lord Jesus -",
+        "font": "100.91250000000001px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -45,
+        "y": 148,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 23,
+        "itemID": 6
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "Blessed Saviour,",
+        "font": "100.91250000000001px Garamond",
+        "font_size": 25,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -21,
+        "y": 266,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 22,
+        "itemID": 7
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 15,
+        "label": "Redeemer & Friend",
+        "font": "104.94900000000001px Garamond",
+        "font_size": 26,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -15,
+        "y": 392,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 19,
+        "itemID": 9
+      },
+      {
+        "productid": "125",
+        "name": "Inscription (Traditional Engraved)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 3.85,
+        "quantity": 7,
+        "label": "Randall",
+        "font": "165.4965px Garamond",
+        "font_size": 41,
+        "font_family": "Garamond",
+        "color": "#4e5859",
+        "colorName": "Paint Fill",
+        "x": -24,
+        "y": -349,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 8
+      }
+    ]
+  }
+}

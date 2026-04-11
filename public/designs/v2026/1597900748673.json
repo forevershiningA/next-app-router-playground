@@ -1,0 +1,491 @@
+{
+  "version": "2026.01",
+  "generatedAt": "2026-04-09T12:14:47.417Z",
+  "units": "mm",
+  "source": {
+    "id": "1597900748673",
+    "slug": "legacy-1597900748673",
+    "mlDir": "forevershining",
+    "legacyFile": "/ml/forevershining/saved-designs/json/1597900748673.json",
+    "savedAt": "2020-08-20T05:19:08.673Z"
+  },
+  "product": {
+    "id": "4",
+    "name": "Laser-etched Black Granite Headstone",
+    "type": "headstone",
+    "slug": "laser-etched-headstone",
+    "category": "memorial",
+    "title": "Legacy Migration",
+    "shape": "Serpentine",
+    "material": {
+      "name": "src/granites/forever2/l/18.jpg",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "scene": {
+    "canvas": {
+      "width_mm": 700,
+      "height_mm": 700
+    },
+    "viewportPx": {
+      "width": 1680,
+      "height": 873,
+      "dpr": 1
+    },
+    "surface": {
+      "origin": [
+        0,
+        0,
+        0
+      ],
+      "normal": [
+        0,
+        0,
+        1
+      ]
+    },
+    "coordinateSystem": {
+      "positionMode": "legacy-stage-px",
+      "coordinateSpace": "css-stage",
+      "stageCssPx": {
+        "width": 1680,
+        "height": 873
+      },
+      "bufferPx": {
+        "width": 1680,
+        "height": 873
+      },
+      "headstonePlacement": "auto-center",
+      "flipMode": "preserve"
+    }
+  },
+  "components": {
+    "headstone": {
+      "width_mm": 700,
+      "height_mm": 700,
+      "thickness_mm": 1,
+      "surface": "front",
+      "texture": "/textures/forever/l/Glory-Black-2.webp"
+    }
+  },
+  "elements": {
+    "inscriptions": [
+      {
+        "id": "insc-7",
+        "text": "CARTER",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 81
+        },
+        "position": {
+          "x_px": 10.367,
+          "y_px": -117.152
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-2",
+        "text": "Emily Horton",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 21
+        },
+        "position": {
+          "x_px": 0.978,
+          "y_px": -350.939
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-15",
+        "text": "A Beautiful Spirit free to roam our ancestral lands",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -10,
+          "y_px": 399
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-4",
+        "text": "1981",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 13
+        },
+        "position": {
+          "x_px": -102.019,
+          "y_px": -115.247
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-3",
+        "text": "2018",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 128.99,
+          "y_px": -110.959
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-1",
+        "text": "Loving you Always, Forgetting You Never",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": 16.726,
+          "y_px": -58.062
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      },
+      {
+        "id": "insc-17",
+        "text": "Loving you Always Dad",
+        "font": {
+          "family": "Xirwena",
+          "size_px": 16
+        },
+        "position": {
+          "x_px": -269,
+          "y_px": 15
+        },
+        "rotation": {
+          "z_deg": 0
+        },
+        "color": "#ffffff",
+        "surface": "headstone/front"
+      }
+    ],
+    "motifs": [],
+    "photos": [],
+    "logos": [],
+    "additions": []
+  },
+  "assets": {
+    "motifs": []
+  },
+  "migration": {
+    "pipeline": "legacy2d-to-canonical3d",
+    "converter": "batch-convert-saved-designs.js",
+    "converterVersion": "2026.01",
+    "sourceHash": "26d72ab7d94083bc0ab2c15d009d3d177e206d57d76945d796c3db8969f8ed80",
+    "sourceItemCount": 12,
+    "warnings": [
+      "missing-device",
+      "missing-dpr"
+    ],
+    "confidence": "high",
+    "migratedAt": "2026-04-09T12:14:47.417Z",
+    "policyVersion": "1",
+    "warningScore": 0
+  },
+  "legacy": {
+    "raw": [
+      {
+        "productid": 4,
+        "type": "Headstone",
+        "name": "Serpentine",
+        "shape": "Serpentine",
+        "color": "#000000",
+        "fixed": 0,
+        "texture": "src/granites/forever2/l/18.jpg",
+        "price": "2662.80",
+        "quantity": 1,
+        "width": 700,
+        "height": 700,
+        "_length": 1,
+        "init_width": 1680,
+        "init_height": 873,
+        "backgroundOption": "undefined"
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1597485716144cjfamily0004_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": -101.5723114956736,
+        "y": -217.52533992583437,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3561634521085322,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "CJ&Family0004.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "128",
+        "width": "106",
+        "height": "156",
+        "itemID": 6
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1597315193628ff763fce1f724f40989ebf98.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": -387.4219764370452,
+        "y": 396.0192646643672,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.13912634847989538,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "ff763fce1f724f40989ebf98e4be1894.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "50",
+        "width": "81",
+        "height": "61",
+        "itemID": 8
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "15973151069310q84gge_cropped.jpg",
+        "color": 1,
+        "mask": 3,
+        "x": 370.2566749456975,
+        "y": 397.1247105539461,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.13912634847989538,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "0Q84GGE.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "50",
+        "width": "108",
+        "height": "61",
+        "itemID": 9
+      },
+      {
+        "productid": 21,
+        "id": 21,
+        "path": "../upload/2020/08/",
+        "name": "Granite Image Direct on Stone - Free",
+        "type": "Photo",
+        "item": "1597485802541cj1_cropped.jpg",
+        "color": 1,
+        "mask": 0,
+        "x": 126.6736711990111,
+        "y": -215.39555006180467,
+        "flipx": 1,
+        "flipy": 1,
+        "rotation": 0,
+        "ratio": 0.3561634521085322,
+        "part": "Headstone",
+        "side": "Front",
+        "src": "CJ1.jpg",
+        "price": 80,
+        "quantity": 1,
+        "size": "128",
+        "width": "97",
+        "height": "156",
+        "itemID": 10
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "-",
+        "font": "98.49310714285713px Xirwena",
+        "font_size": 81,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 10.36711990111246,
+        "y": -117.15203955500618,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 7
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 31,
+        "label": "Christopher James Geoffrey Pitt",
+        "font": "25.535249999999998px Xirwena",
+        "font_size": 21,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 0.9784184482700313,
+        "y": -350.93863338696303,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 39,
+        "itemID": 2
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "A Beautiful Spirit free to roam our ancestral lands",
+        "font": "19.45542857142857px Xirwena",
+        "font_size": 16,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -10,
+        "y": 399,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 15
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "1981",
+        "font": "15.807535714285713px Xirwena",
+        "font_size": 13,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -102.01854140914713,
+        "y": -115.24721878862795,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 12,
+        "itemID": 4
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 4,
+        "label": "2018",
+        "font": "19.45542857142857px Xirwena",
+        "font_size": 16,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 128.99011124845492,
+        "y": -110.95920889987633,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 14,
+        "itemID": 3
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 39,
+        "label": "Loving you Always, Forgetting You Never",
+        "font": "19.45542857142857px Xirwena",
+        "font_size": 16,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": 16.72559162863979,
+        "y": -58.06233680047467,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 30,
+        "itemID": 1
+      },
+      {
+        "productid": "16",
+        "name": "Black Granite Inscription (free)",
+        "type": "Inscription",
+        "part": "Headstone",
+        "side": "Front",
+        "price": 0,
+        "quantity": 1,
+        "label": "Loving you Always Dad",
+        "font": "19.45542857142857px Xirwena",
+        "font_size": 16,
+        "font_family": "Xirwena",
+        "color": "#ffffff",
+        "colorName": "Standard",
+        "x": -269,
+        "y": 15,
+        "rotation": 0,
+        "flipx": 1,
+        "flipy": 1,
+        "height": 29,
+        "itemID": 17
+      }
+    ]
+  }
+}
