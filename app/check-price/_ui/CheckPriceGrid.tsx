@@ -22,7 +22,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
-import { calculatePrice } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
@@ -71,6 +71,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
@@ -159,30 +160,18 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     : 'Not selected';
 
   // Calculate headstone price using catalog
-  let headstoneQuantity = 0;
-  if (catalog?.product?.priceModel) {
-    const qt = catalog.product.priceModel.quantityType;
-    if (qt === 'Width + Height') {
-      headstoneQuantity = widthMm + heightMm;
-    }
-  }
+  const headstoneQuantity = catalog?.product?.priceModel
+    ? computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness })
+    : 0;
   
   const headstonePrice = catalog && headstoneQuantity > 0
     ? calculatePrice(catalog.product.priceModel, headstoneQuantity)
     : 0;
 
   // Calculate base price using catalog
-  let baseQuantity = 0;
-  if (showBase && catalog?.product?.basePriceModel) {
-    const qt = catalog.product.basePriceModel.quantityType;
-    if (qt === 'Width + Height') {
-      baseQuantity = baseWidthMm + baseHeightMm;
-    } else if (qt === 'Width') {
-      baseQuantity = baseWidthMm + baseThickness; // Width + Thickness (depth)
-    } else {
-      baseQuantity = baseWidthMm * baseHeightMm;
-    }
-  }
+  const baseQuantity = showBase && catalog?.product?.basePriceModel
+    ? computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness })
+    : 0;
   
   const basePrice = showBase && catalog?.product?.basePriceModel && baseQuantity > 0
     ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
@@ -417,7 +406,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                     <strong className="text-white">Product ID: {productId} - {productName}</strong><br />
                     Shape: {shapeName}<br />
                     Material: {headstoneMaterialName}<br />
-                    Size: {widthMm}mm × {heightMm}mm
+                    Size: {widthMm}mm × {heightMm}mm × {uprightThickness}mm
                   </p>
                 </div>
                 <div className="text-right">
@@ -434,7 +423,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                     <p className="text-sm text-gray-300 leading-relaxed">
                       <strong className="text-white">Product ID: {productId} - Base</strong><br />
                       Material: {baseMaterialName}<br />
-                      Size: {baseWidthMm}mm × {baseHeightMm}mm
+                      Size: {baseWidthMm}mm × {baseHeightMm}mm × {baseThickness}mm
                     </p>
                   </div>
                   <div className="text-right">

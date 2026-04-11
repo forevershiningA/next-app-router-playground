@@ -22,7 +22,7 @@ import {
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
@@ -1424,22 +1424,12 @@ export default function DesignerNav() {
 
   let quantity = widthMm * heightMm;
   if (catalog) {
-    const qt = catalog.product.priceModel.quantityType;
-    if (qt === 'Width + Height') {
-      quantity = widthMm + heightMm;
-    }
+    quantity = computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness });
   }
 
   let baseQuantity = 0;
   if (showBase && catalog?.product?.basePriceModel) {
-    const qt = catalog.product.basePriceModel.quantityType;
-    if (qt === 'Width + Height') {
-      baseQuantity = baseWidthMm + baseHeightMm;
-    } else if (qt === 'Width') {
-      baseQuantity = baseWidthMm + baseThickness; // Width + Thickness (depth)
-    } else {
-      baseQuantity = baseWidthMm * baseHeightMm;
-    }
+    baseQuantity = computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
   }
 
   const headstonePrice = catalog

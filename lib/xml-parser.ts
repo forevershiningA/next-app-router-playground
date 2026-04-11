@@ -191,6 +191,28 @@ export function calculatePrice(
   return price * applicablePrice.retailMultiplier;
 }
 
+/**
+ * Compute the pricing quantity from dimensions based on the price model's quantityType.
+ * Centralises the mapping so every pricing call site uses the same logic.
+ */
+export function computeQuantity(
+  priceModel: PriceModel,
+  dims: { width: number; height: number; depth: number },
+): number {
+  const qt = (priceModel.quantityType || '').toLowerCase();
+  // In the legacy 3D system most products override to volume-based pricing,
+  // so depth (thickness) always affects the price. We replicate this by
+  // including depth in formulas that originally omitted it.
+  if (qt === 'width + height') return dims.width + dims.height + dims.depth;
+  if (qt === 'width * height' || qt === 'area' || qt.includes('surface')) return dims.width * dims.height;
+  if (qt === 'width') return dims.width + dims.depth;
+  if (qt === 'height') return dims.height;
+  if (qt.includes('perimeter')) return 2 * (dims.width + dims.height);
+  if (qt.includes('units')) return Math.max(dims.width, dims.height);
+  // Default: include all three dimensions
+  return dims.width + dims.height + dims.depth;
+}
+
 export function parsePriceModel(priceModelEl: Element): PriceModel {
   const id = priceModelEl.getAttribute('id') || '';
   const code = priceModelEl.getAttribute('code') || '';

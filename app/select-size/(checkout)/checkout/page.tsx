@@ -3,7 +3,7 @@
 import { Boundary } from '#/ui/boundary';
 import { Tab } from '#/ui/tabs';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
 
 export default function Page() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -11,26 +11,20 @@ export default function Page() {
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
 
-  let quantity = widthMm * heightMm; // default to area
+  let quantity = widthMm * heightMm;
   if (catalog) {
-    const qt = catalog.product.priceModel.quantityType;
-    if (qt === 'Width + Height') {
-      quantity = widthMm + heightMm;
-    }
+    quantity = computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness });
   }
   
   let baseQuantity = 0;
   if (showBase && catalog?.product?.basePriceModel) {
-    const qt = catalog.product.basePriceModel.quantityType;
-    if (qt === 'Width + Height') {
-      baseQuantity = baseWidthMm + baseHeightMm;
-    } else {
-      baseQuantity = baseWidthMm * baseHeightMm;
-    }
+    baseQuantity = computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
   }
 
   const headstonePrice = catalog

@@ -1,7 +1,7 @@
 import 'server-only';
 
 import { cache } from 'react';
-import { calculatePrice, type CatalogData, type PriceModel } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity, type CatalogData, type PriceModel } from '#/lib/xml-parser';
 import { getCatalogData } from './xml-data';
 import { ensureServerDomParser } from './dom-parser-polyfill';
 import type { ProductPriceRange } from '#/lib/types/pricing';

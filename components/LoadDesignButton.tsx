@@ -425,7 +425,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                             className="min-w-0 flex-1 rounded-xl border border-transparent bg-white/[0.03] px-3 py-2 text-left text-sm text-white/90 transition hover:border-[#d4af37]/30 hover:bg-white/[0.06] disabled:opacity-50 cursor-pointer"
                           >
                             <div className="flex items-center gap-3">
-                              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#d4af37]/20 bg-white">
+                              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#d4af37]/20 bg-[#cccccc]">
                                 {design.metadata.preview ? (
                                   <img
                                     src={getPopupPreviewSrc(design.id, design.metadata.preview)}
@@ -537,7 +537,7 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
                                   className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40"
                                 >
                                   {/* Thumbnail */}
-                                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
+                                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#cccccc]">
                                     {design.metadata.preview ? (
                                       <img
                                         src={getPopupPreviewSrc(design.id, design.metadata.preview)}

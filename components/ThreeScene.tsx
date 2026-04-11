@@ -6,7 +6,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice, type CatalogData } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity, type CatalogData } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
@@ -60,6 +60,7 @@ function ProductNameHeader() {
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
@@ -127,26 +128,14 @@ function ProductNameHeader() {
   
   // Calculate quantity based on catalog's quantity type
   const quantity = useMemo(() => {
-    let qty = widthMm * heightMm; // default to area
-    if (activeCatalog) {
-      const qt = activeCatalog.product.priceModel.quantityType;
-      if (qt === 'Width + Height') {
-        qty = widthMm + heightMm;
-      }
-    }
-    return qty;
-  }, [activeCatalog, widthMm, heightMm]);
+    if (!activeCatalog) return widthMm * heightMm;
+    return computeQuantity(activeCatalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness });
+  }, [activeCatalog, widthMm, heightMm, uprightThickness]);
   
-  // Calculate base quantity (usually Area)
+  // Calculate base quantity
   const baseQuantity = useMemo(() => {
     if (!showBase || !activeCatalog?.product?.basePriceModel) return 0;
-    const qt = activeCatalog.product.basePriceModel.quantityType;
-    if (qt === 'Width + Height') {
-      return baseWidthMm + baseHeightMm;
-    } else if (qt === 'Width') {
-      return baseWidthMm + baseThickness; // Width + Thickness (depth)
-    }
-    return baseWidthMm * baseHeightMm; // default to area
+    return computeQuantity(activeCatalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
   }, [activeCatalog, baseWidthMm, baseHeightMm, baseThickness, showBase]);
   
   // Calculate total price including inscriptions and motifs

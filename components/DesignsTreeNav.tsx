@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
 
 interface DesignTreeNode {
@@ -100,26 +100,17 @@ export default function DesignsTreeNav() {
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
 
   let quantity = widthMm * heightMm;
   if (catalog) {
-    const qt = catalog.product.priceModel.quantityType;
-    if (qt === 'Width + Height') {
-      quantity = widthMm + heightMm;
-    }
+    quantity = computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness });
   }
   
   let baseQuantity = 0;
   if (showBase && catalog?.product?.basePriceModel) {
-    const qt = catalog.product.basePriceModel.quantityType;
-    if (qt === 'Width + Height') {
-      baseQuantity = baseWidthMm + baseHeightMm;
-    } else if (qt === 'Width') {
-      baseQuantity = baseWidthMm + baseThickness; // Width + Thickness (depth)
-    } else {
-      baseQuantity = baseWidthMm * baseHeightMm;
-    }
+    baseQuantity = computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
   }
   
   const headstonePrice = catalog ? calculatePrice(catalog.product.priceModel, quantity) : 0;

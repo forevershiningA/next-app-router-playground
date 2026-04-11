@@ -1,7 +1,7 @@
 'use client';
 
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import { useMemo, useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
@@ -17,6 +17,7 @@ export default function MobileHeader() {
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
@@ -47,25 +48,13 @@ export default function MobileHeader() {
   }, []);
 
   const quantity = useMemo(() => {
-    let qty = widthMm * heightMm; // default to area
-    if (catalog) {
-      const qt = catalog.product.priceModel.quantityType;
-      if (qt === 'Width + Height') {
-        qty = widthMm + heightMm;
-      }
-    }
-    return qty;
-  }, [catalog, widthMm, heightMm]);
+    if (!catalog) return widthMm * heightMm;
+    return computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness });
+  }, [catalog, widthMm, heightMm, uprightThickness]);
 
   const baseQuantity = useMemo(() => {
     if (!showBase || !catalog?.product?.basePriceModel) return 0;
-    const qt = catalog.product.basePriceModel.quantityType;
-    if (qt === 'Width + Height') {
-      return baseWidthMm + baseHeightMm;
-    } else if (qt === 'Width') {
-      return baseWidthMm + baseThickness; // Width + Thickness (depth)
-    }
-    return baseWidthMm * baseHeightMm;
+    return computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
   }, [catalog, baseWidthMm, baseHeightMm, baseThickness, showBase]);
 
   const price = useMemo(() => {

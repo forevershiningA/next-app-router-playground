@@ -8,7 +8,7 @@ import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
-import { calculatePrice } from '#/lib/xml-parser';
+import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
 import {
   getCheckPriceMaterialName,
   getShapeNameFromUrl,
@@ -30,6 +30,9 @@ export default function CheckPricePanel() {
   const ledgerMaterialUrl = useHeadstoneStore((s) => s.ledgerMaterialUrl);
   const kerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
@@ -142,25 +145,20 @@ export default function CheckPricePanel() {
   const isFullMonument = activeCatalog?.product.type === 'full-monument';
 
   // Calculate headstone price from catalog price model
-  // Most headstone price models use quantity_type="Width + Height"
   const headstonePrice = useMemo(() => {
     if (!activeCatalog) return 0;
     const pm = activeCatalog.product.priceModel;
-    const quantity = pm.quantityType === 'Width + Height'
-      ? widthMm + heightMm
-      : pm.quantityType === 'Height'
-      ? heightMm
-      : widthMm;
+    const quantity = computeQuantity(pm, { width: widthMm, height: heightMm, depth: uprightThickness });
     return calculatePrice(pm, quantity);
-  }, [activeCatalog, widthMm, heightMm]);
+  }, [activeCatalog, widthMm, heightMm, uprightThickness]);
 
   // Calculate base (stand) price from catalog basePriceModel
   const basePrice = useMemo(() => {
     if (!showBase || !activeCatalog?.product.basePriceModel) return 0;
     const pm = activeCatalog.product.basePriceModel;
-    const quantity = baseWidthMm || selectedShape?.stand?.initWidth || widthMm;
+    const quantity = computeQuantity(pm, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
     return calculatePrice(pm, quantity);
-  }, [showBase, activeCatalog, baseWidthMm, selectedShape, widthMm]);
+  }, [showBase, activeCatalog, baseWidthMm, baseHeightMm, baseThickness]);
 
   // Calculate ledger price (full-monument only)
   const ledgerPrice = useMemo(() => {
@@ -394,9 +392,9 @@ export default function CheckPricePanel() {
                     <p className="text-white/60">
                       Shape: {shapeName}
                       <br />
-                      Material: {getCheckPriceMaterialName(ledgerMaterialUrl)}
+                      Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}
                       <br />
-                      Size: {formatDimensionPair(widthMm, heightMm, unitSystem)}
+                      Size: {formatDimensionTriplet(widthMm, heightMm, uprightThickness, unitSystem)}
                     </p>
                   </div>
                 </td>
@@ -428,9 +426,9 @@ export default function CheckPricePanel() {
                       <span className="text-white/60">Material: {getCheckPriceMaterialName(baseMaterialUrl)}</span>
                       <br />
                       <span className="text-white/60">Size: {formatDimensionTriplet(
-                        selectedShape?.stand?.initWidth ?? (widthMm + 100),
-                        selectedShape?.stand?.initHeight ?? 100,
-                        selectedShape?.stand?.initDepth ?? 250,
+                        baseWidthMm,
+                        baseHeightMm,
+                        baseThickness,
                         unitSystem,
                       )}</span>
                     </p>
