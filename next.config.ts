@@ -36,6 +36,7 @@ const nextConfig = {
       'public/emblems/**/*',       // 33 MB
       'public/hdri/**/*',          // 27 MB HDR files
       'public/saved-designs/**/*', // 20 MB screenshots
+      'public/screenshots/**/*',   // 245 MB 3D screenshots + thumbnails
       'public/textures/**/*',      // 17 MB
       'public/json/firstnames_*.json', // 15 MB
       'public/backgrounds/**/*',   // Large background images
