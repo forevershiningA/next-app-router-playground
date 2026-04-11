@@ -1464,9 +1464,14 @@ export default function DesignerNav() {
       e.preventDefault();
       const keepCanvasVisibleForShape =
         slug === 'select-shape' && isCanvasVisible;
-      openFullscreenPanel(slug);
       if (!keepCanvasVisibleForShape && pathname !== `/${slug}`) {
+        // Navigate first — the route-sync useEffect will open the panel
+        // once the page is on a canvas-visible route. Opening it here
+        // would cause a bounce: the effect clears it (old route isn't
+        // canvas-visible) then re-opens it after the route settles.
         router.push(`/${slug}`);
+      } else {
+        openFullscreenPanel(slug);
       }
       return;
     }
