@@ -1,0 +1,90 @@
+print("=== PARAM FILE: asg_model_pc3.param (2-sigma tightened priors for PolyChord) ===")
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CLASS / external_Pk setup
+# ─────────────────────────────────────────────────────────────────────────────
+data.cosmo_arguments['lensing']      = 'yes'
+data.cosmo_arguments['output']       = 'tCl pCl lCl'
+data.cosmo_arguments['non linear']   = 'halofit'
+data.cosmo_arguments['P_k_ini type'] = 'external_Pk'
+data.cosmo_arguments['modes']        = 's, t'
+data.cosmo_arguments['command']      = 'python /home/polcreation/class_public/python/montepython_public/scripts/rg_spectrum_class.py'
+data.cosmo_arguments['sBBN file']    = '/home/polcreation/class_public/external/bbn/sBBN.dat'
+data.cosmo_arguments['N_ur']   = 2.0328
+data.cosmo_arguments['N_ncdm'] = 1
+data.cosmo_arguments['m_ncdm'] = 0.06
+data.cosmo_arguments['T_ncdm'] = 0.71611
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Likelihoods
+# ─────────────────────────────────────────────────────────────────────────────
+data.experiments = ['ASG_bridge', 'Planck_highl_TTTEEE', 'Planck_lowl_TT', 'Planck_lowl_EE', 'Planck_lensing']
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Cosmological parameters — keep FULL original ranges
+# ─────────────────────────────────────────────────────────────────────────────
+data.parameters['omega_b']     = [2.2383,      2.1475,      2.3205, 0.003, 0.01, 'cosmo']
+data.parameters['omega_cdm']   = [0.1201,      0.1103,      0.1285, 0.0022, 1.00, 'cosmo']
+data.parameters['100*theta_s'] = [1.04109,      1.0385,      1.0455, 0.00058, 1.00, 'cosmo']
+data.parameters['tau_reio']    = [0.0543,      0.0408,      0.0704, 0.0015, 1.00, 'cosmo']
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ASG inflation parameters — keep FULL original ranges (to capture all modes)
+# ─────────────────────────────────────────────────────────────────────────────
+data.parameters['beta']  = [0.039, 0.001, 0.30,  0.0018, 1.0, 'nuisance']
+data.parameters['Delta'] = [1.597, 0.10,  3.00,  0.0426, 1.0, 'nuisance']
+data.parameters['chi0']  = [3.807, 1.50,  9.00,  0.0962, 1.0, 'nuisance']
+data.parameters['mu']    = [2.242, 0.50, 10.00,  0.15,   1.0, 'nuisance']
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Planck nuisance — TIGHTENED to bestfit ± 2σ (covers 99.73% of posterior)
+# σ from covmat diagonal of 126k-row MH chain
+# Physical constraints (≥0, xi_sz_cib≤1, A_sz≤10, ksz≤10) respected
+# ─────────────────────────────────────────────────────────────────────────────
+data.parameters['A_cib_217']         = [47.2,     37.7920,     56.6080, 6.2593, 1, 'nuisance']
+data.parameters['cib_index']         = [    -1.3,  -1.3,  -1.3,          0,     1, 'nuisance']
+data.parameters['xi_sz_cib']         = [0.42,     0.1880,     0.6520, 0.33, 1, 'nuisance']
+data.parameters['A_sz']              = [7.23,     6.1220,     8.3380, 1.4689, 1, 'nuisance']
+data.parameters['ps_A_100_100']      = [251.0,     184.8720,     317.1280, 29.438, 1, 'nuisance']
+data.parameters['ps_A_143_143']      = [47.4,     28.3680,     66.4320, 9.9484, 1, 'nuisance']
+data.parameters['ps_A_143_217']      = [47.3,     33.3160,     61.2840, 11.356, 1, 'nuisance']
+data.parameters['ps_A_217_217']      = [119.8,     107.7280,     131.8720, 10.256, 1, 'nuisance']
+data.parameters['ksz_norm']          = [0.01,     0.0000,     3.0380, 2.7468, 1, 'nuisance']
+data.parameters['gal545_A_100']      = [8.86,     5.6480,     12.0720, 1.8928, 1, 'nuisance']
+data.parameters['gal545_A_143']      = [11.1,     7.5160,     14.6840, 1.8663, 1, 'nuisance']
+data.parameters['gal545_A_143_217']  = [19.8,     14.2560,     25.3440, 3.8796, 1, 'nuisance']
+data.parameters['gal545_A_217']      = [95.1,     79.9400,     110.2600, 6.9759, 1, 'nuisance']
+data.parameters['galf_EE_A_100']     = [   0.055, 0.055, 0.055,          0,     1, 'nuisance']
+data.parameters['galf_EE_A_100_143'] = [   0.040, 0.040, 0.040,          0,     1, 'nuisance']
+data.parameters['galf_EE_A_100_217'] = [   0.094, 0.094, 0.094,          0,     1, 'nuisance']
+data.parameters['galf_EE_A_143']     = [   0.086, 0.086, 0.086,          0,     1, 'nuisance']
+data.parameters['galf_EE_A_143_217'] = [    0.21,  0.21,  0.21,          0,     1, 'nuisance']
+data.parameters['galf_EE_A_217']     = [    0.70,  0.70,  0.70,          0,     1, 'nuisance']
+data.parameters['galf_EE_index']     = [    -2.4,  -2.4,  -2.4,          0,     1, 'nuisance']
+data.parameters['galf_TE_A_100']     = [0.114,     0.0408,     0.1872, 0.038762, 1, 'nuisance']
+data.parameters['galf_TE_A_100_143'] = [0.134,     0.0900,     0.1780, 0.030096, 1, 'nuisance']
+data.parameters['galf_TE_A_100_217'] = [0.482,     0.3392,     0.6248, 0.086185, 1, 'nuisance']
+data.parameters['galf_TE_A_143']     = [0.224,     0.1532,     0.2948, 0.055126, 1, 'nuisance']
+data.parameters['galf_TE_A_143_217'] = [0.664,     0.4992,     0.8288, 0.082349, 1, 'nuisance']
+data.parameters['galf_TE_A_217']     = [2.08,     1.5864,     2.5736, 0.27175, 1, 'nuisance']
+data.parameters['galf_TE_index']     = [    -2.4,  -2.4,  -2.4,          0,     1, 'nuisance']
+data.parameters['calib_100T']        = [999.69,     998.4940,     1000.8860, 0.61251, 0.001, 'nuisance']
+data.parameters['calib_217T']        = [998.16,     996.1120,     1000.2080, 0.63584, 0.001, 'nuisance']
+data.parameters['calib_100P']        = [   1.021, 1.021, 1.021,          0,     1, 'nuisance']
+data.parameters['calib_143P']        = [   0.966, 0.966, 0.966,          0,     1, 'nuisance']
+data.parameters['calib_217P']        = [   1.040, 1.040, 1.040,          0,     1, 'nuisance']
+data.parameters['A_sbpx_100_100_TT'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_143_143_TT'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_143_217_TT'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_217_217_TT'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_100_100_EE'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_100_143_EE'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_100_217_EE'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_143_143_EE'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_143_217_EE'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_sbpx_217_217_EE'] = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_planck']          = [1.00061,     0.9984,     1.0028, 0.0025, 1, 'nuisance']
+data.parameters['A_pol']             = [       1,     1,     1,          0,     1, 'nuisance']
+data.parameters['A_cnoise_e2e_100_100_EE'] = [0.0, 0.0, 0.0, 0.0, 1.0, 'nuisance']
+data.parameters['A_cnoise_e2e_143_143_EE'] = [0.0, 0.0, 0.0, 0.0, 1.0, 'nuisance']
+data.parameters['A_cnoise_e2e_217_217_EE'] = [0.0, 0.0, 0.0, 0.0, 1.0, 'nuisance']
