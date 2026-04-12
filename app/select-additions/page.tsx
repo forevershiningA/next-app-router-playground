@@ -8,7 +8,7 @@ import AdditionSelectionGrid from './_ui/AdditionSelectionGrid';
 export default function Page() {
   const additions = data.additions;
   const pathname = usePathname();
-  const [isDesktop, setIsDesktop] = useState(false); // Always start with false to match SSR
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -20,8 +20,9 @@ export default function Page() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Only show the full grid on mobile/tablet layouts where the sidebar (and canvas) are hidden
-  const showGrid = pathname === '/select-additions' && !isDesktop;
+  // Only show the full grid on mobile/tablet layouts where the sidebar (and canvas) are hidden.
+  // isDesktop starts as null to avoid flashing the grid on desktop before the effect runs.
+  const showGrid = pathname === '/select-additions' && isDesktop === false;
 
   if (!showGrid) {
     return null;

@@ -378,6 +378,11 @@ export default function DesignerNav() {
     setSelectedMotifId,
   });
   const [showConvertPanel, setShowConvertPanel] = React.useState(false);
+
+  const handleBackToMenu = React.useCallback(() => {
+    closeFullscreenPanel();
+    router.push('/design-menu');
+  }, [closeFullscreenPanel, router]);
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
 
@@ -454,16 +459,22 @@ export default function DesignerNav() {
     '/select-additions',
     '/select-images',
     '/select-emblems',
+    '/design-menu',
   ];
   const isCanvasVisible = canvasVisiblePages.some((page) => pathname === page);
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
+
+  const hasActiveAdditionForPanel =
+    !!selectedAdditionId &&
+    !!additionOffsets[selectedAdditionId] &&
+    activePanel === 'addition';
 
   const isAdditionCatalogVisible =
     activeFullscreenPanel === 'select-additions' &&
     (forceAdditionCatalog ||
       panelSource === 'menu' ||
       (panelSource === null && isSelectAdditionsPage)) &&
-    !selectedAdditionId;
+    !hasActiveAdditionForPanel;
 
   const isMotifCatalogVisible =
     activeFullscreenPanel === 'select-motifs' &&
@@ -932,7 +943,7 @@ export default function DesignerNav() {
           </div>
         ) : null}
 
-        {showAdditionCatalog && !selectedAdditionId && (
+        {showAdditionCatalog && !hasActiveAddition && (
           <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
             <div className="h-full overflow-y-auto pr-1">
               <AdditionSelector additions={additionsList} />
@@ -2514,7 +2525,7 @@ export default function DesignerNav() {
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
               <div className="flex flex-col gap-2">
                 <button
-                  onClick={closeFullscreenPanel}
+                  onClick={handleBackToMenu}
                   className="inline-flex items-center gap-3 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
                 >
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">

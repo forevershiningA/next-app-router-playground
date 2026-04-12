@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-11
+**Last Updated:** 2026-04-12
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
 
 ---
@@ -37,7 +37,64 @@
 
 ---
 
-## Current Status (2026-04-11) — Volume-Based Pricing, PNG Thumbnails, Load Design & Nav Fixes
+## Current Status (2026-04-12) — Menu Navigation Fixes, /design-menu Route, Additions Panel Fixes
+
+### ✅ "Back to Menu" Navigation & `/design-menu` Route
+
+Clicking **"Back to Menu"** from any fullscreen panel (e.g., Select Material, Select Size) previously left the URL on the panel's route (e.g., `/select-material`) and kept the corresponding menu item highlighted. Now "Back to Menu" navigates to a new **`/design-menu`** route that shows the full sidebar menu + 3D canvas with no item highlighted.
+
+#### Implementation
+- **New route `app/design-menu/page.tsx`** — minimal page that returns `null` (sidebar + canvas render from layout)
+- **`handleBackToMenu`** callback in `DesignerNav.tsx` (~line 382): calls `closeFullscreenPanel()` + `router.push('/design-menu')`
+- **"Back to Menu" button** wired to `handleBackToMenu` instead of bare `closeFullscreenPanel`
+- **Canvas visibility**: `/design-menu` added to `canvasVisiblePages` in `DesignerNav.tsx` and to canvas-visibility guards in `ConditionalCanvas.tsx`
+- **Sidebar visibility**: `/design-menu` added to `isDesignerRoute` in `ConditionalNav.tsx` so the designer nav renders (not the global nav)
+- **No menu item highlighted**: since `/design-menu` doesn't match any `fullscreenPanelSlug`, the route-sync `useEffect` auto-closes any active panel, and no menu item gets the active/highlighted style
+
+#### Files Changed
+- `app/design-menu/page.tsx` — New file (returns null)
+- `components/DesignerNav.tsx` — `handleBackToMenu`, `canvasVisiblePages` includes `/design-menu`, Back to Menu onClick
+- `components/ConditionalCanvas.tsx` — `isDesignMenuPage` keeps canvas visible
+- `components/ConditionalNav.tsx` — `isDesignerRoute` includes `/design-menu`
+
+### ✅ Additions Panel Bounce-Back Fix
+
+The Select Additions panel showed an empty state when returning to it after previously selecting an addition and navigating away. The additions catalog was invisible because `selectedAdditionId` was stale (still set from the prior session) even though `activePanel !== 'addition'`.
+
+#### Root Cause
+The catalog visibility check used `!selectedAdditionId` — if any addition had ever been selected, the catalog was hidden (even when the user wasn't actively editing). Motifs correctly used `!hasActiveMotif` which checks both selection AND active panel state.
+
+#### Fix
+- Added `hasActiveAdditionForPanel` computed value (~line 467): checks `selectedAdditionId && activePanel === 'addition'`
+- Changed `isAdditionCatalogVisible` and the catalog render guard from `!selectedAdditionId` to `!hasActiveAdditionForPanel`
+- Now follows the same pattern as motifs: catalog shows unless the user is actively editing a specific addition
+
+#### Files Changed
+- `components/DesignerNav.tsx` — `hasActiveAdditionForPanel`, `isAdditionCatalogVisible` fix, catalog render guard fix
+
+### ✅ Additions Grid Desktop Flash Fix
+
+On desktop, the `AdditionSelectionGrid` briefly flashed over the canvas for one frame when navigating to `/select-additions`. The grid is mobile-only but rendered during SSR because `isDesktop` started as `false`.
+
+#### Fix
+- Changed `isDesktop` state from `useState(false)` to `useState<boolean | null>(null)`
+- Changed render guard from `!isDesktop` to `isDesktop === false` (strict equality)
+- Grid only renders after client-side media query confirms mobile — no SSR flash
+
+#### Files Changed
+- `app/select-additions/page.tsx` — `isDesktop` initialization and `showGrid` check
+
+### 📌 Next Steps
+
+1. **Add 6 new failures to KNOWN_FAILURES** — `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+2. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+4. **Visual QA pass** — Compare designs with original screenshots
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+
+---
+
+## Previous Status (2026-04-11) — Volume-Based Pricing, PNG Thumbnails, Load Design & Nav Fixes
 
 ### ✅ Volume-Based Pricing with Thickness (computeQuantity)
 
@@ -3057,6 +3114,7 @@ next-dyo/
 │   │   │           ├── page.tsx            # Server component with metadata
 │   │   │           └── DesignPageClient.tsx  # Full design viewer
 │   ├── inscriptions/       # Inscription selection
+│   ├── design-menu/        # Clean menu view (no panel highlighted, canvas visible)
 │   ├── products/           # Product landing pages
 │   └── select-*/           # Step-by-step designer pages
 ├── components/             # React components
@@ -3481,7 +3539,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - **Select Size** – Shares the exact sliders/toggles documented earlier, but now consumes the entire sidebar height for effortless scrolling.
 - **Select Shape** and **Select Material** – Their grids sit inside `flex-1 overflow-hidden` containers so the selectors stretch to the bottom of the viewport; the previous `max-h-*` caps were removed to avoid double scroll bars.
 - **Inscriptions** – Embeds `InscriptionEditPanel` so editing text or fonts feels identical whether opened from the menu or a canvas selection.
-- **Select Additions** – Provides a split experience: if an addition is selected, the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise a dashed guidance card appears above the catalog. Hidden for plaque products.
+- **Select Additions** – Provides a split experience: if an addition is actively selected (`activePanel === 'addition'`), the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise the full catalog grid is shown. Hidden for plaque products. Catalog visibility uses `hasActiveAdditionForPanel` (not bare `selectedAdditionId`) to avoid stale-selection bugs when returning to the panel.
 - **Select Emblems** – Plaque-only panel. Shows a flat grid of 236 emblem thumbnails with search filter. Clicking adds the emblem to the plaque. When an emblem is selected on canvas, the edit panel shows a size slider (7 fixed steps controlling largest dimension), rotation, flip X/Y, duplicate/delete.
 - **Select Motifs** – Mirrors the additions flow but also surfaces price estimates (non-laser products) plus curated gold/silver buttons and the full color palette.
 - **Convert Design** – Replaces the old 3D Preview link with a fullscreen product picker; it mirrors Select Product but enforces a single column list, so seniors can quickly audition alternate catalogs without leaving the designer.
@@ -3504,15 +3562,17 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 - `fullscreenPanelSlugs` defines which menu items should open over the nav. Current slugs: `select-size`, `select-shape`, `select-material`, `select-border`, `inscriptions`, `select-images`, `select-additions`, `select-emblems`, `select-motifs`.
 - **Navigation from non-canvas routes** (e.g., `/select-product` → `/select-size`): `handleMenuClick` only calls `router.push()` and lets the route-sync `useEffect` open the panel once the page settles on a canvas-visible route. Opening the panel eagerly causes a bounce — the effect clears it (old route isn't canvas-visible) then re-opens after navigation.
 - **Navigation from canvas routes** (e.g., `/inscriptions` → `/select-size`): `handleMenuClick` calls `openFullscreenPanel()` immediately (no route change needed or route already matches).
-- Closing the overlay sets `dismissedPanelSlug` so re-opening the page doesn’t auto-trigger the panel unless the user explicitly clicks again.
+- **/design-menu route for Back to Menu** — `handleBackToMenu` (~line 382) calls `closeFullscreenPanel()` + `router.push('/design-menu')`. This route shows the full menu with no item highlighted and keeps the 3D canvas visible.
+- Closing the overlay sets `dismissedPanelSlug` so re-opening the page doesn't auto-trigger the panel unless the user explicitly clicks again.
 - See `FULLSCREEN_PANEL_SYSTEM.md` for wireframes, state diagrams, and future enhancement ideas (e.g., ESC shortcuts, slide animations).
 
 ### Testing Checklist
 1. Click each fullscreen section → menu hides, overlay appears.
-2. Press **Back to Menu** → overlay closes instantly, menu restores without navigation.
+2. Press **Back to Menu** → overlay closes, navigates to `/design-menu`, menu restores with no item highlighted, canvas remains visible.
 3. Select additions/motifs on the headstone → detail card appears with sliders and duplicate/delete buttons.
 4. Scroll shape/material grids on small laptops → lists fill the column with a single scrollbar.
 5. Switch between headstone/base toggles inside material/size panels → selection state stays synced with the canvas.
+6. Navigate to `/select-additions` on desktop → additions grid should NOT flash over the canvas.
 
 ### Menu Item Enabled States (2026-01-28)
 **Check Price Always Enabled:**
@@ -6022,6 +6082,7 @@ npm start
 - **Design loading**: Check `lib/saved-design-loader-utils.ts` — `fetchCanonicalDesign()`, `convertPositionToMm()`, `resolveFontSizeMm()`
 - **Camera framing**: Check `components/three/FullMonumentFit.tsx` — `computeMeshBox()`, `fitCamera()`
 - **Texture Issues**: Review `TEXTURE_IMPROVEMENTS_SUMMARY.md` for UV mapping limitations
+- **Navigation/sidebar**: Check `components/DesignerNav.tsx` (panel state, handleBackToMenu, route-sync useEffect), `components/ConditionalNav.tsx` (isDesignerRoute), `components/ConditionalCanvas.tsx` (canvas visibility)
 
 ---
 

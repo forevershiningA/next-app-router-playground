@@ -79,9 +79,12 @@ export default function ConditionalCanvas() {
   // Show canvas on inscriptions page
   const isInscriptionsPage = pathname === '/inscriptions';
   
+  // Show canvas on design-menu page (neutral menu view with canvas)
+  const isDesignMenuPage = pathname === '/design-menu';
+  
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage) {
+    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
       hideOverlay();
     }
   }, [
@@ -98,10 +101,11 @@ export default function ConditionalCanvas() {
     isMyAccountPage,
     isSelectSizePage,
     isInscriptionsPage,
+    isDesignMenuPage,
     hideOverlay,
   ]);
   
-  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage) {
+  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
     return null;
   }
 

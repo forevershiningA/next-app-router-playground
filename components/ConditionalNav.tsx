@@ -75,7 +75,8 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const isDesignerRoute = pathname === '/' || 
                          pathname?.startsWith('/select-') || 
                          pathname?.startsWith('/inscriptions') ||
-                         pathname?.startsWith('/check-price');
+                         pathname?.startsWith('/check-price') ||
+                         pathname === '/design-menu';
   
   if (isDesignsRoute) {
     return (
