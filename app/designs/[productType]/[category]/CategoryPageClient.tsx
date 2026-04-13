@@ -287,28 +287,11 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
                     {formatDesignTitle(design)}
                   </h3>
                   
-                  {/* Dimensions and Granite with Thumbnail */}
+                  {/* Dimensions and Granite */}
                   {designSpecs[design.id] && (
-                    <div className="flex items-center gap-2 mb-3">
-                      {designSpecs[design.id].graniteThumb && (
-                        <img 
-                          src={designSpecs[design.id].graniteThumb} 
-                          alt={designSpecs[design.id].graniteName}
-                          className="h-16 rounded object-cover"
-                          onError={(e) => {
-                            // Fallback to path without year/month subdirs
-                            const img = e.currentTarget;
-                            const fallbackPath = `/ml/${design.mlDir}/saved-designs/screenshots/${design.id}_small.jpg`;
-                            if (img.src !== fallbackPath) {
-                              img.src = fallbackPath;
-                            }
-                          }}
-                        />
-                      )}
-                      <p className="text-sm text-slate-600 font-light">
-                        {designSpecs[design.id].width}mm × {designSpecs[design.id].height}mm • {designSpecs[design.id].graniteName}
-                      </p>
-                    </div>
+                    <p className="text-sm text-slate-600 font-light mb-3">
+                      {designSpecs[design.id].width}mm × {designSpecs[design.id].height}mm • {designSpecs[design.id].graniteName}
+                    </p>
                   )}
                   
                   {/* Design Description */}

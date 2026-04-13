@@ -258,7 +258,32 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   const categoryTitle = categoryInfo?.name || category.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   const productTypeDisplay = design.productType.charAt(0).toUpperCase() + design.productType.slice(1);
   const shapeName = designId ? await getDesignShape(designId, design.mlDir) : null;
-  
+
+  // Extract verse/phrase from slug by stripping shape prefix
+  const shapeSlugPrefix = design.shapeName
+    ? design.shapeName.toLowerCase().replace(/\s+/g, '-') + '-'
+    : '';
+  const phraseFromSlug = slug.startsWith(shapeSlugPrefix) && shapeSlugPrefix
+    ? formatSlugForDisplay(slug.slice(shapeSlugPrefix.length))
+    : null;
+
+  // Motif summary for display
+  const motifList = design.motifNames?.length > 0
+    ? design.motifNames.slice(0, 3).join(', ').replace(/,([^,]*)$/, ' and$1')
+    : null;
+
+  // Description for SSR content
+  let description = shapeName
+    ? `${shapeName} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`
+    : `${categoryTitle} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`;
+  if (motifList) description += ` with ${motifList}`;
+  description += '.';
+  if (phraseFromSlug) description += ` '${phraseFromSlug}.'`;
+  description += ' Personalise online with live preview.';
+  if (description.length > 160) {
+    description = description.substring(0, 157) + '...';
+  }
+
   // Build product title for structured data
   const productTitle = `${categoryTitle} – ${shapeName ? `${shapeName}-Shaped ` : ''}${simplifiedProduct} ${productTypeDisplay}`;
   
@@ -512,16 +537,14 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         </div>
 
         <div className="container mx-auto px-4 md:px-8 py-8 max-w-7xl">
-          {design.preview && (
-            <img
-              src={design.preview}
-              alt={`${categoryTitle} ${simplifiedProduct} ${productTypeDisplay} design preview`}
-              width={600}
-              height={400}
-              className="rounded-lg shadow-md mb-8 max-w-full h-auto"
-              loading="eager"
-            />
-          )}
+          <img
+            src={`/screenshots/v2026-3d/${design.id}.png`}
+            alt={`${categoryTitle} ${simplifiedProduct} ${productTypeDisplay} design preview`}
+            width={600}
+            height={400}
+            className="rounded-lg shadow-md mb-8 max-w-full h-auto"
+            loading="eager"
+          />
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-slate-50 rounded-lg p-4">
