@@ -682,6 +682,16 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
 
   return (
     <>
+      {/* Full-screen loading overlay — shown while design is loading after modal closes */}
+      {loading && !isOpen && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
+            <div className="font-mono text-lg text-white">Loading design…</div>
+          </div>
+        </div>,
+        document.body,
+      )}
       <button
         onClick={openModal}
         disabled={loading}

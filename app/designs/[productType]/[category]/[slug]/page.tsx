@@ -212,20 +212,20 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
       siteName: 'Forever Shining',
       locale: 'en_GB',
       type: 'website',
-      images: design.preview ? [
+      images: [
         {
-          url: design.preview,
+          url: `/screenshots/v2026-3d/${design.id}.png`,
           width: 1200,
           height: 630,
           alt: `${categoryTitle} design preview`,
         }
-      ] : undefined,
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: h1Title,
       description,
-      images: design.preview ? [design.preview] : undefined,
+      images: [`/screenshots/v2026-3d/${design.id}.png`],
     },
   };
 }
@@ -330,7 +330,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           ...(design.hasMotifs ? [{ "@type": "PropertyValue", "name": "Motifs", "value": "Available" }] : []),
           ...(design.hasPhoto ? [{ "@type": "PropertyValue", "name": "Photo", "value": "Photo placement available" }] : []),
         ],
-        "image": design.preview ? [design.preview.startsWith('http') ? design.preview : `${baseUrl}${design.preview}`] : [],
+        "image": [`${baseUrl}/screenshots/v2026-3d/${design.id}.png`],
         "sku": sku,
         "mpn": sku,
         "offers": {
@@ -403,17 +403,17 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           }
         ]
       },
-      // ImageObject Schema (if preview exists)
-      ...(design.preview ? [{
+      // ImageObject Schema
+      {
         "@type": "ImageObject",
         "@id": `${canonicalUrl}#image`,
-        "url": design.preview.startsWith('http') ? design.preview : `${baseUrl}${design.preview}`,
-        "contentUrl": design.preview.startsWith('http') ? design.preview : `${baseUrl}${design.preview}`,
+        "url": `${baseUrl}/screenshots/v2026-3d/${design.id}.png`,
+        "contentUrl": `${baseUrl}/screenshots/v2026-3d/${design.id}.png`,
         "name": `${productTitle} Preview`,
         "description": `Preview of ${categoryTitle.toLowerCase()} design`,
         "width": "1200",
         "height": "630"
-      }] : []),
+      },
       // Organization Schema
       {
         "@type": "Organization",
@@ -480,15 +480,13 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   return (
     <>
       {/* Preload hero image for LCP optimization */}
-      {design.preview && (
-        <link
-          rel="preload"
-          as="image"
-          href={design.preview}
-          // @ts-ignore - fetchPriority is valid but not in TS types yet
-          fetchPriority="high"
-        />
-      )}
+      <link
+        rel="preload"
+        as="image"
+        href={`/screenshots/v2026-3d/${design.id}.png`}
+        // @ts-ignore - fetchPriority is valid but not in TS types yet
+        fetchPriority="high"
+      />
       
       {/* Preconnect to asset domains for faster resource loading */}
       <link rel="preconnect" href={process.env.NEXT_PUBLIC_BASE_URL || ''} />

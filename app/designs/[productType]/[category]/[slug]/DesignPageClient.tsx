@@ -2980,6 +2980,16 @@ export default function DesignPageClient({
 
   return (
     <>
+      {/* Full-screen loading overlay — shown while navigating to the 3D editor */}
+      {loadingIntoEditor && (
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
+            <div className="font-mono text-lg text-white">Loading design…</div>
+          </div>
+        </div>
+      )}
+
       <MobileNavToggle>
         <DesignsTreeNav />
       </MobileNavToggle>
@@ -3040,9 +3050,7 @@ export default function DesignPageClient({
       {isLocalhost && (
       <div className="flex gap-2 md:gap-3 py-3 md:py-6 overflow-x-auto">
         <a
-          href={cropBounds?.shouldCrop
-            ? croppedPreviewUrl?.fallbackHref || designMetadata.preview
-            : croppedPreviewUrl?.displayHref || designMetadata.preview}
+          href={`/screenshots/v2026-3d/${designId}.png`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-light text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors border border-blue-200"
@@ -3050,7 +3058,7 @@ export default function DesignPageClient({
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          Screenshot ({cropBounds?.shouldCrop ? 'Original (with crop metadata)' : 'Cropped'})
+          3D Screenshot
         </a>
         <a
           href={`/ml/${designMetadata.mlDir}/saved-designs/json/${designId}.json`}
@@ -3130,6 +3138,7 @@ export default function DesignPageClient({
           <button
             onClick={() => {
               if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
+                setLoadingIntoEditor(true);
                 router.push('/select-size');
               }
             }}
@@ -3194,26 +3203,30 @@ export default function DesignPageClient({
       
       {/* Sticky Mobile CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-40 p-4">
-        <a
-          href={(() => {
-            const mlDir = designMetadata.mlDir || '';
-            let domain = 'headstonesdesigner.com';
-            if (mlDir.includes('forevershining')) {
-              domain = 'forevershining.com.au';
-            } else if (mlDir.includes('bronze-plaque')) {
-              domain = 'bronze-plaque.com';
+        <button
+          onClick={() => {
+            if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
+              setLoadingIntoEditor(true);
+              router.push('/select-size');
             }
-            return `https://${domain}/design/html5/#edit${designId}`;
-          })()}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-center"
+          }}
+          disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
+          className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-          </svg>
-          Use This Template
-        </a>
+          {(loading || canonicalLoadState === 'loading') ? (
+            <>
+              <div className="w-5 h-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+              Loading…
+            </>
+          ) : (
+            <>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              Use This Template
+            </>
+          )}
+        </button>
       </div>
     </div>
     </>

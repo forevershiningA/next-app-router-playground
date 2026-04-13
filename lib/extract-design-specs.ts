@@ -86,8 +86,7 @@ function generateThumbnailPath(designId: string, mlDir: string): string {
   const timestamp = parseInt(designId, 10);
   
   if (isNaN(timestamp)) {
-    // Fallback if design ID is not a timestamp
-    return `/ml/${mlDir}/saved-designs/screenshots/${designId}_small.jpg`;
+    return `/screenshots/v2026-3d/${designId}_small.png`;
   }
   
   // Convert timestamp to date
@@ -95,15 +94,15 @@ function generateThumbnailPath(designId: string, mlDir: string): string {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   
-  // Try path with year/month structure first, fallback is handled in component
-  return `/ml/${mlDir}/saved-designs/screenshots/${year}/${month}/${designId}_small.jpg`;
+  // Use 3D screenshot (with old path as fallback reference)
+  return `/screenshots/v2026-3d/${designId}_small.png`;
 }
 
 /**
- * Get fallback thumbnail path (without year/month subdirs)
+ * Get fallback thumbnail path
  */
 function getFallbackThumbnailPath(designId: string, mlDir: string): string {
-  return `/ml/${mlDir}/saved-designs/screenshots/${designId}_small.jpg`;
+  return `/screenshots/v2026-3d/${designId}_small.png`;
 }
 
 /**
