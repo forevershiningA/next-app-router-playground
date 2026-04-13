@@ -267,6 +267,20 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
                 }}
                 className="group bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-300 hover:shadow-2xl transition-all duration-300 cursor-pointer"
               >
+                {/* 3D Preview Image */}
+                <div className="relative bg-gradient-to-b from-slate-50 to-white overflow-hidden">
+                  <img
+                    src={`/screenshots/v2026-3d/${design.id}_small.png`}
+                    alt={formatDesignTitle(design)}
+                    className="w-full h-56 object-contain p-4"
+                    loading="lazy"
+                    onError={(e) => {
+                      const container = e.currentTarget.parentElement;
+                      if (container) container.style.display = 'none';
+                    }}
+                  />
+                </div>
+
                 {/* Card Content */}
                 <div className="p-6">
                   <h3 className="font-serif font-light text-xl text-slate-900 mb-2 group-hover:text-slate-700 transition-colors">
