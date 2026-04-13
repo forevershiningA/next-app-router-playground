@@ -25,7 +25,7 @@ import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import { logger } from '#/lib/logger';
 
-const FORCE_LEGACY_PARITY_IDS = new Set<string>(['1578016189116']);
+// Legacy parity IDs no longer needed — 2D preview removed, all designs use canonical loader
 
 // Type for layout items (inscriptions and motifs)
 type LayoutItem = {
@@ -1177,10 +1177,7 @@ export default function DesignPageClient({
 
   const { design: designData, loading } = useSavedDesign(designId, designMetadata.mlDir);
   const canonicalDesignUrl = useMemo(() => (designId ? getCanonicalDesignUrl(designId) : null), [designId]);
-  const shouldForceLegacyParity = useMemo(
-    () => Boolean(designId && FORCE_LEGACY_PARITY_IDS.has(designId)),
-    [designId],
-  );
+  const shouldForceLegacyParity = false;
   const croppedPreviewUrl = useMemo(() => {
     if (!designMetadata.preview) return null;
     const croppedCandidate = designMetadata.preview.replace(/\.(jpg|jpeg|png)$/i, '_cropped$&');
@@ -1213,31 +1210,6 @@ export default function DesignPageClient({
     if (!designId) return;
     let cancelled = false;
 
-    if (shouldForceLegacyParity) {
-      if (!designData) return;
-      setCanonicalLoadState('loading');
-      (async () => {
-        try {
-          await loadSavedDesignIntoEditor(designData, designId, { clearExisting: true });
-          if (!cancelled) {
-            legacyLoadedRef.current = true;
-            canonicalStateIdRef.current = designId;
-            setCanonicalLoadState('success');
-          }
-        } catch (error) {
-          if (!cancelled) {
-            canonicalStateIdRef.current = designId;
-            console.warn('Failed to load forced legacy parity design', error);
-            setCanonicalLoadState('failed');
-          }
-        }
-      })();
-
-      return () => {
-        cancelled = true;
-      };
-    }
-
     if (!canonicalDesignUrl) return;
 
     setCanonicalLoadState('loading');
@@ -1266,7 +1238,7 @@ export default function DesignPageClient({
     return () => {
       cancelled = true;
     };
-  }, [designId, canonicalDesignUrl, designData, shouldForceLegacyParity]);
+  }, [designId, canonicalDesignUrl]);
   
   useEffect(() => {
     if (
@@ -3156,13 +3128,27 @@ export default function DesignPageClient({
         </div>
         <div className="flex justify-center mt-6">
           <button
-            onClick={() => router.push('/select-size')}
-            className="inline-flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-lg"
+            onClick={() => {
+              if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
+                router.push('/select-size');
+              }
+            }}
+            disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
+            className="inline-flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            Personalise This Design
+            {(loading || canonicalLoadState === 'loading') ? (
+              <>
+                <div className="w-5 h-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                Loading Design…
+              </>
+            ) : (
+              <>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Personalise This Design
+              </>
+            )}
           </button>
         </div>
       </div>

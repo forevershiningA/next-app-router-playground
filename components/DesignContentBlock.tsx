@@ -412,16 +412,14 @@ export default function DesignContentBlock({
                   href={`/designs/${relatedDesign.productSlug}/${relatedDesign.category}/${relatedDesign.slug}`}
                   className="group block bg-white rounded-lg border border-slate-200 overflow-hidden hover:shadow-lg transition-all"
                 >
-                  {relatedDesign.preview && (
-                    <div className="aspect-[4/3] bg-slate-100 overflow-hidden">
+                  <div className="aspect-[4/3] bg-slate-100 overflow-hidden">
                       <img
-                        src={relatedDesign.preview}
+                        src={`/screenshots/v2026-3d/${relatedDesign.id}_small.png`}
                         alt={relatedDesign.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                       />
                     </div>
-                  )}
                   <div className="p-3">
                     <h3 className="font-light text-sm text-slate-900 group-hover:text-slate-600 transition-colors">
                       {relatedDesign.shapeName 
@@ -454,16 +452,14 @@ export default function DesignContentBlock({
                   href={`/designs/${catDesign.productSlug}/${catDesign.category}/${catDesign.slug}`}
                   className="group block bg-white rounded-lg border border-slate-200 overflow-hidden hover:shadow-lg transition-all"
                 >
-                  {catDesign.preview && (
-                    <div className="aspect-square bg-slate-100 overflow-hidden">
+                  <div className="aspect-square bg-slate-100 overflow-hidden">
                       <img
-                        src={catDesign.preview}
+                        src={`/screenshots/v2026-3d/${catDesign.id}_small.png`}
                         alt={catDesign.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300"
                         loading="lazy"
                       />
                     </div>
-                  )}
                   <div className="p-2">
                     <p className="text-xs text-slate-600 font-light group-hover:text-slate-900 transition-colors line-clamp-2">
                       {catDesign.shapeName 
