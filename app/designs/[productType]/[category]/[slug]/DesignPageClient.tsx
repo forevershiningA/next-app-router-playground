@@ -1192,6 +1192,11 @@ export default function DesignPageClient({
     };
   }, [designMetadata.preview]);
   
+  // Remove SSR fallback content once client hydrates
+  useEffect(() => {
+    document.getElementById('design-ssr-content')?.remove();
+  }, []);
+
   useEffect(() => {
     legacyLoadedRef.current = false;
     canonicalStateIdRef.current = null;
