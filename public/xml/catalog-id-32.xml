@@ -18,8 +18,22 @@ description = "Our full colour plaques are made with kiln-fired porcelain. These
 			  min_width="100" max_width="560" init_width="250" 
 			  min_depth="10" max_depth="10" init_depth="10" 
 			  min_height="60" max_height="400" init_height="200"  
-			  color="src/ceramic/l/01.webp"
-			  color2="src/ceramic/l/01.webp"
+			  color="jpg/metals/l/brushed-ss-swatch.jpg"
+			  color2="jpg/metals/l/high-polished-ss-swatch.jpg"
+			  url_3d="models/forevershining/headstones/square.m3d"  />
+	</shape>
+
+	<shape type="plaque" name="Full-colour Plaque" code="Portrait" double="0" stand="0" url="src/img/headstones/base/portrait.png">
+   		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+        <file type="stand" />
+		<file type="table" 
+			  min_width="60" max_width="400" init_width="200" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="100" max_height="560" init_height="250"  
+			  color="jpg/metals/l/brushed-ss-swatch.jpg"
+			  color2="jpg/metals/l/high-polished-ss-swatch.jpg"
 			  url_3d="models/forevershining/headstones/square.m3d"  />
 	</shape>
 	

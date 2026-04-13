@@ -46,6 +46,7 @@ export default function CheckPricePanel() {
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const productId = useHeadstoneStore((s) => s.productId);
+  const borderName = useHeadstoneStore((s) => s.borderName);
   const unitSystem = useUnitSystem();
   const fallbackProductId = useMemo(
     () => productId ?? data.products[0]?.id ?? null,
@@ -146,11 +147,21 @@ export default function CheckPricePanel() {
 
   // Calculate headstone price from catalog price model
   const headstonePrice = useMemo(() => {
+    // Product 32 (Full Colour Plaque) uses fixed size-based pricing
+    if (productId === '32') {
+      const isLandscape = widthMm > heightMm;
+      const matchW = isLandscape ? heightMm : widthMm;
+      const matchH = isLandscape ? widthMm : heightMm;
+      const match = data.fullColourPlaqueSizes.find(
+        (s) => s.width === matchW && s.height === matchH,
+      );
+      return match?.price ?? 0;
+    }
     if (!activeCatalog) return 0;
     const pm = activeCatalog.product.priceModel;
     const quantity = computeQuantity(pm, { width: widthMm, height: heightMm, depth: uprightThickness });
     return calculatePrice(pm, quantity);
-  }, [activeCatalog, widthMm, heightMm, uprightThickness]);
+  }, [activeCatalog, widthMm, heightMm, uprightThickness, productId]);
 
   // Calculate base (stand) price from catalog basePriceModel
   const basePrice = useMemo(() => {
@@ -241,10 +252,18 @@ export default function CheckPricePanel() {
     return imageItems.reduce((sum, item) => sum + item.price, 0);
   }, [imageItems]);
 
+  // Stainless steel border price (product 32 only, $299 fixed)
+  const ssBorderPrice = useMemo(() => {
+    if (productId === '32' && borderName?.toLowerCase().includes('stainless')) {
+      return 299;
+    }
+    return 0;
+  }, [productId, borderName]);
+
   // Calculate total
   const totalPrice = useMemo(() => {
-    return headstonePrice + basePrice + ledgerPrice + kerbsetPrice + inscriptionCost + motifCost + additionsPrice + imagePriceTotal;
-  }, [headstonePrice, basePrice, ledgerPrice, kerbsetPrice, inscriptionCost, motifCost, additionsPrice, imagePriceTotal]);
+    return headstonePrice + basePrice + ledgerPrice + kerbsetPrice + inscriptionCost + motifCost + additionsPrice + imagePriceTotal + ssBorderPrice;
+  }, [headstonePrice, basePrice, ledgerPrice, kerbsetPrice, inscriptionCost, motifCost, additionsPrice, imagePriceTotal, ssBorderPrice]);
 
   // Get detailed motif items
   const motifItems = useMemo(() => {
@@ -341,9 +360,6 @@ export default function CheckPricePanel() {
           </button>
 
           <div className="relative border-b border-white/10 px-6 py-5 md:px-7 md:py-6">
-            <p className="mb-3 inline-flex items-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f3d48f]">
-              Price Breakdown
-            </p>
             <h2 className="text-2xl font-serif text-white md:text-[1.75rem]">
               Your Design Total: <span className="text-[#f3d48f]">${totalPrice.toFixed(2)}</span>
             </h2>
@@ -408,6 +424,24 @@ export default function CheckPricePanel() {
                   ${headstonePrice.toFixed(2)}
                 </td>
               </tr>
+
+              {/* Stainless Steel Border (product 32) */}
+              {ssBorderPrice > 0 && (
+                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
+                  <td className="px-6 py-4 text-sm text-white/85">
+                    <p>
+                      <strong className="text-white/95">Product ID: 37 - Stainless Steel Border</strong>
+                    </p>
+                  </td>
+                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
+                    ${ssBorderPrice.toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4 text-right text-sm text-white/85">
+                    ${ssBorderPrice.toFixed(2)}
+                  </td>
+                </tr>
+              )}
 
               {/* Base */}
               {showBase && basePrice > 0 && (

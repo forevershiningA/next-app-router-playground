@@ -421,6 +421,37 @@ const borders: Border[] = [
   { id: '10', name: 'Border 10', displayName: 'Square angular', image: 'border10.svg', category: 'bronze' },
 ];
 
+// Full Color Plaque borders (product 32) — "Border 4" rendered as stainless steel
+const fullColourPlaqueBorders: Border[] = [
+  { id: '0', name: 'No Border', displayName: 'No Border', image: 'border0.svg', category: 'fullcolour' },
+  { id: 'ss', name: 'Stainless Steel Border', displayName: 'Border 4', image: 'border4.svg', category: 'fullcolour' },
+];
+
+// Fixed sizes for Full Colour Plaque (product 32) — from sizes.xml product 201
+// Portrait sizes (width × height in mm), each with a mapped price
+export type FixedSize = { id: number; width: number; height: number; price: number };
+const fullColourPlaqueSizes: FixedSize[] = [
+  { id: 1, width: 110, height: 150, price: 350 },
+  { id: 2, width: 122, height: 152, price: 390 },
+  { id: 3, width: 130, height: 180, price: 440 },
+  { id: 4, width: 150, height: 200, price: 500 },
+  { id: 5, width: 180, height: 240, price: 570 },
+  { id: 6, width: 200, height: 250, price: 600 },
+  { id: 7, width: 240, height: 300, price: 700 },
+  { id: 8, width: 216, height: 381, price: 780 },
+  { id: 9, width: 280, height: 380, price: 990 },
+];
+
+// Full Color Plaque background images (product 32) — 40 photographic backgrounds
+const backgrounds = Array.from({ length: 40 }, (_, i) => ({
+  id: `bg-${i + 1}`,
+  name: `Background ${i + 1}`,
+  image: null as string | null,
+  category: 'background',
+  textureUrl: `/jpg/backgrounds/forever/l/${i + 1}.jpg`,
+  thumbnailUrl: `/jpg/backgrounds/forever/m/${i + 1}.jpg`,
+}));
+
 const fonts: Font[] = [
   { id: '1', name: 'Adorable', image: 'Adorable.otf', category: '1' },
   { id: '2', name: 'Arial', image: 'arial.ttf', category: '1' },
@@ -601,6 +632,9 @@ export const data = {
   colors,
   bronzes,
   borders,
+  fullColourPlaqueBorders,
+  fullColourPlaqueSizes,
+  backgrounds,
   fonts,
   motifs,
   additions,

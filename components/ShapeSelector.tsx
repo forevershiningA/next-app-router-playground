@@ -17,8 +17,21 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const hasBorder = useHeadstoneStore((s) => s.catalog?.product?.border === '1');
   const isPlaque = useHeadstoneStore((s) => s.catalog?.product?.type === 'plaque');
+  const isFullColourPlaque = useHeadstoneStore((s) => s.catalog?.product?.id === '32');
   const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
   const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
+
+  // Filter shapes by product type
+  const filteredShapes = React.useMemo(() => {
+    const rectangleShapes = ['landscape.svg', 'portrait.svg'];
+    const allPlaqueShapes = [...rectangleShapes, 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
+    return shapes.filter((shape) => {
+      const img = shape.image ?? '';
+      if (isFullColourPlaque) return rectangleShapes.includes(img);
+      if (isPlaque) return allPlaqueShapes.includes(img);
+      return !allPlaqueShapes.includes(img);
+    });
+  }, [shapes, isPlaque, isFullColourPlaque]);
 
   const getShapeUrl = (shape: ShapeOption) => {
     if (shape.image) {
@@ -82,7 +95,7 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
       <div
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >
-        {shapes.map((shape) => {
+        {filteredShapes.map((shape) => {
           const shapeUrl = getShapeUrl(shape);
           const isSelected = shapeUrl ? currentShapeUrl === shapeUrl : false;
           const coverSrc = shapeUrl ?? '/shapes/headstones/square.svg';

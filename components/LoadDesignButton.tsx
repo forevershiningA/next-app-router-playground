@@ -307,9 +307,6 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
             />
             <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-7">
               <div>
-                <p className="mb-2 inline-flex items-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f3d48f]">
-                  Design Gallery
-                </p>
                 <h2 className="text-2xl font-serif text-white md:text-[1.75rem]">Load Design</h2>
                 <p className="mt-1 text-sm leading-relaxed text-white/70">
                   {totalCount.toLocaleString()} designs available

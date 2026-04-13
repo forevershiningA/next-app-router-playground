@@ -18,6 +18,7 @@ interface BronzeBorderProps {
   frontZ: number;
   color: string;
   depth: number;
+  isStainlessSteel?: boolean;
 }
 
 interface BorderResources {
@@ -340,6 +341,67 @@ function createBronzeTextures(baseHex: string): BronzeTextures | null {
   return { map: mapTexture, roughnessMap };
 }
 
+function createStainlessSteelTextures(): BronzeTextures | null {
+  if (typeof document === 'undefined') return null;
+
+  const mapCanvas = document.createElement('canvas');
+  mapCanvas.width = mapCanvas.height = 512;
+  const mapCtx = mapCanvas.getContext('2d');
+  if (!mapCtx) return null;
+
+  // Bright, uniform silver gradient — much flatter than bronze
+  const gradient = mapCtx.createLinearGradient(0, 0, 0, mapCanvas.height);
+  gradient.addColorStop(0, '#F4F4F4');
+  gradient.addColorStop(0.3, '#E8E8E8');
+  gradient.addColorStop(0.5, '#E0E0E0');
+  gradient.addColorStop(0.7, '#E8E8E8');
+  gradient.addColorStop(1, '#DCDCDC');
+  mapCtx.fillStyle = gradient;
+  mapCtx.fillRect(0, 0, mapCanvas.width, mapCanvas.height);
+
+  // Fine horizontal brushed lines (characteristic of brushed stainless)
+  mapCtx.globalAlpha = 0.04;
+  mapCtx.strokeStyle = 'rgba(255,255,255,0.8)';
+  for (let y = 0; y < mapCanvas.height; y += 1) {
+    mapCtx.beginPath();
+    mapCtx.moveTo(0, y + Math.random() * 0.5);
+    mapCtx.lineTo(mapCanvas.width, y + Math.random() * 0.5);
+    mapCtx.stroke();
+  }
+  mapCtx.globalAlpha = 0.03;
+  mapCtx.strokeStyle = 'rgba(0,0,0,0.2)';
+  for (let y = 0; y < mapCanvas.height; y += 2) {
+    mapCtx.beginPath();
+    mapCtx.moveTo(0, y + Math.random());
+    mapCtx.lineTo(mapCanvas.width, y + Math.random());
+    mapCtx.stroke();
+  }
+
+  const mapTexture = new THREE.CanvasTexture(mapCanvas);
+  mapTexture.wrapS = mapTexture.wrapT = THREE.RepeatWrapping;
+  mapTexture.anisotropy = 8;
+  mapTexture.needsUpdate = true;
+
+  // Lower roughness variation for smoother steel look
+  const roughCanvas = document.createElement('canvas');
+  roughCanvas.width = roughCanvas.height = 256;
+  const roughCtx = roughCanvas.getContext('2d');
+  if (!roughCtx) return { map: mapTexture, roughnessMap: mapTexture.clone() as THREE.CanvasTexture };
+  const roughData = roughCtx.createImageData(roughCanvas.width, roughCanvas.height);
+  for (let i = 0; i < roughData.data.length; i += 4) {
+    const shade = 80 + Math.random() * 40; // lower = smoother
+    roughData.data[i] = roughData.data[i + 1] = roughData.data[i + 2] = shade;
+    roughData.data[i + 3] = 255;
+  }
+  roughCtx.putImageData(roughData, 0, 0);
+  const roughnessMap = new THREE.CanvasTexture(roughCanvas);
+  roughnessMap.wrapS = roughnessMap.wrapT = THREE.RepeatWrapping;
+  roughnessMap.anisotropy = 4;
+  roughnessMap.needsUpdate = true;
+
+  return { map: mapTexture, roughnessMap };
+}
+
 export function BronzeBorder({
   borderName,
   plaqueWidth,
@@ -348,19 +410,28 @@ export function BronzeBorder({
   frontZ,
   color,
   depth,
+  isStainlessSteel = false,
 }: BronzeBorderProps) {
   const unitScale = Math.max(1e-6, Math.abs(unitsPerMeter) || 1);
   const localWidth = Math.max(1e-3, Math.abs(plaqueWidth) * unitScale);
   const localHeight = Math.max(1e-3, Math.abs(plaqueHeight) * unitScale);
 
-  const normalizedName = borderName?.toLowerCase() ?? '';
-  const effectiveName = normalizedName.includes('no border') ? null : borderName;
+  // Stainless Steel Border uses "Border 4" SVG pattern
+  const effectiveBorderName = isStainlessSteel && borderName?.toLowerCase().includes('stainless')
+    ? 'Border 4'
+    : borderName;
+  const normalizedName = effectiveBorderName?.toLowerCase() ?? '';
+  const effectiveName = normalizedName.includes('no border') ? null : effectiveBorderName;
   const slug = effectiveName ? toBorderSlug(effectiveName) : null;
   const resolvedSlug = slug ? `${slug}a` : null;
   const usesIntegratedRails = Boolean(resolvedSlug);
   const shouldRender = Boolean(resolvedSlug && localWidth > 0 && localHeight > 0);
 
-  const bronzeTextures = useMemo(() => createBronzeTextures(color), [color]);
+  const effectiveColor = isStainlessSteel ? '#E8E8E8' : color;
+  const bronzeTextures = useMemo(
+    () => isStainlessSteel ? createStainlessSteelTextures() : createBronzeTextures(effectiveColor),
+    [effectiveColor, isStainlessSteel],
+  );
 
   useEffect(() => {
     return () => {
@@ -380,17 +451,17 @@ export function BronzeBorder({
   const getMaterial = useCallback(() => {
     if (!materialRef.current) {
       materialRef.current = new THREE.MeshPhysicalMaterial({
-        metalness: 0.95,
-        roughness: 0.28,
-        envMapIntensity: 1.5,
-        clearcoat: 0.7,
-        clearcoatRoughness: 0.18,
+        metalness: isStainlessSteel ? 0.98 : 0.95,
+        roughness: isStainlessSteel ? 0.18 : 0.28,
+        envMapIntensity: isStainlessSteel ? 2.0 : 1.5,
+        clearcoat: isStainlessSteel ? 0.9 : 0.7,
+        clearcoatRoughness: isStainlessSteel ? 0.1 : 0.18,
         side: THREE.DoubleSide,
         clippingPlanes: [],
       });
     }
     return materialRef.current;
-  }, []);
+  }, [isStainlessSteel]);
 
   // Debounce state for performance optimization
   const [debouncedDims, setDebouncedDims] = useState({ w: localWidth, h: localHeight });
@@ -406,8 +477,8 @@ export function BronzeBorder({
 
   useEffect(() => {
     const material = getMaterial();
-    material.color.set(color);
-  }, [color, getMaterial]);
+    material.color.set(effectiveColor);
+  }, [effectiveColor, getMaterial]);
 
   useEffect(() => {
     const material = getMaterial();
@@ -422,7 +493,14 @@ export function BronzeBorder({
   }, []);
 
   // Handle Resize Debouncing (Fast Path: scale, Slow Path: rebuild geometry)
+  // Stainless steel borders use fixed physical frame width — skip debounce
+  // so discrete size steps rebuild geometry immediately.
   useEffect(() => {
+    if (isStainlessSteel) {
+      setDebouncedDims({ w: localWidth, h: localHeight });
+      return;
+    }
+
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
     timeoutRef.current = setTimeout(() => {
@@ -432,7 +510,7 @@ export function BronzeBorder({
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [localWidth, localHeight]);
+  }, [localWidth, localHeight, isStainlessSteel]);
 
   useLayoutEffect(() => {
     if (!groupRef.current || !builtState.group) return;
@@ -495,6 +573,7 @@ export function BronzeBorder({
       integratedRails: usesIntegratedRails,
       material,
       borderSlug: resolvedSlug,
+      isStainlessSteel,
     });
 
     if (!built) {
@@ -511,7 +590,7 @@ export function BronzeBorder({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- localWidth/localHeight intentionally
     // excluded: the useLayoutEffect fast-path handles smooth scaling during drag; only debouncedDims
     // should trigger expensive geometry rebuilds.
-  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, unitScale, resolvedSlug]);
+  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, unitScale, resolvedSlug, isStainlessSteel]);
 
   if (!builtState.group) {
     return null;
@@ -545,6 +624,7 @@ function buildBorderGroup(
     integratedRails?: boolean;
     material: THREE.MeshPhysicalMaterial;
     borderSlug?: string | null;
+    isStainlessSteel?: boolean;
   },
 ): {
   group: THREE.Group;
@@ -560,6 +640,7 @@ function buildBorderGroup(
     integratedRails = false,
     material,
     borderSlug,
+    isStainlessSteel: ssBorder = false,
   } = params;
   const safeUnitScale = Math.max(1e-6, unitScale ?? 1);
   const width = Math.max(1e-3, Math.abs(plaqueWidth));
@@ -629,14 +710,23 @@ function buildBorderGroup(
   const borderScaleFactor = BORDER_SCALE * squareScale * sizeCompression;
 
   // Calculate line thickness first so we can match corner size to it (work in mm then convert back)
-  const edgeThicknessMmBase = Math.max(1.5, minDimensionMm * 0.012 * borderScaleFactor);
+  // Stainless steel border uses a fixed physical frame width (~15mm) so it
+  // appears proportionally larger on smaller plaques, matching real product.
+  const SS_FRAME_WIDTH_MM = 15;
+  const edgeThicknessMmBase = ssBorder
+    ? SS_FRAME_WIDTH_MM
+    : Math.max(1.5, minDimensionMm * 0.012 * borderScaleFactor);
   const edgeThickness = Math.max(
     0.0005 * safeUnitScale,
-    (edgeThicknessMmBase / 1000) * safeUnitScale * (BORDER_THICKNESS_SCALE * (0.45 + 0.25 * sizeCompression)),
+    (edgeThicknessMmBase / 1000) * safeUnitScale * (ssBorder ? 1 : BORDER_THICKNESS_SCALE * (0.45 + 0.25 * sizeCompression)),
   );
-  const lineThicknessMm = Math.max(0.9, edgeThicknessMmBase * (0.18 + 0.22 * sizeCompression));
+  const lineThicknessMm = ssBorder
+    ? Math.max(1.2, SS_FRAME_WIDTH_MM * 0.25)
+    : Math.max(0.9, edgeThicknessMmBase * (0.18 + 0.22 * sizeCompression));
   const lineThickness = Math.max(0.00025 * safeUnitScale, (lineThicknessMm / 1000) * safeUnitScale);
-  const lineGapMm = Math.max(0.6, lineThicknessMm * (0.2 + 0.12 * sizeCompression));
+  const lineGapMm = ssBorder
+    ? Math.max(0.8, lineThicknessMm * 0.3)
+    : Math.max(0.6, lineThicknessMm * (0.2 + 0.12 * sizeCompression));
   const lineGap = Math.max(0.00015 * safeUnitScale, (lineGapMm / 1000) * safeUnitScale);
 
   // Scale decorative corner detail. Integrated rail SVGs should stretch to full width/height.
@@ -646,7 +736,15 @@ function buildBorderGroup(
 
   if (integratedRails) {
     let uniformScale = Math.min(width / originalWidth, height / originalHeight);
-    if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
+    if (ssBorder) {
+      // Fixed frame: scale the SVG so border frame stays a constant physical
+      // width regardless of plaque size. Larger plaques get a thinner-looking
+      // border, smaller plaques get a proportionally thicker border.
+      // Reference = median plaque size (200mm) so factor ~1.0 at mid-range.
+      const referenceDimMm = 200;
+      const fixedFrameFactor = referenceDimMm / Math.max(80, minDimensionMm);
+      uniformScale *= fixedFrameFactor;
+    }else if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
       const rawOverride = INTEGRATED_SCALE_OVERRIDES[borderSlug];
       const smallPlaqueFactor = clamp01((minDimensionMm - 320) / 480);
       const lerpedOverride = THREE.MathUtils.lerp(1, rawOverride, smallPlaqueFactor);
@@ -664,7 +762,7 @@ function buildBorderGroup(
   merged.computeBoundingBox();
   let scaledBounds = merged.boundingBox!;
 
-  if (integratedRails && borderSlug !== 'border1a' && width > 0 && height > 0) {
+  if (integratedRails && borderSlug !== 'border1a' && !ssBorder && width > 0 && height > 0) {
     const coverageX = (scaledBounds.max.x - scaledBounds.min.x) / width;
     const coverageY = (scaledBounds.max.y - scaledBounds.min.y) / height;
     const coverageLerp = clamp01((minDimensionMm - 320) / 520);

@@ -48,20 +48,6 @@ export default function DesignContentBlock({
   const region = getRegionFromMlDir(design.mlDir);
   const locale = LOCALIZED_CONTENT[region];
   
-  // Generate edit URL based on mlDir
-  const getEditUrl = () => {
-    const mlDir = design.mlDir || '';
-    let domain = 'headstonesdesigner.com';
-    if (mlDir.includes('forevershining')) {
-      domain = 'forevershining.com.au';
-    } else if (mlDir.includes('bronze-plaque')) {
-      domain = 'bronze-plaque.com';
-    }
-    return `https://${domain}/design/html5/#edit${design.id}`;
-  };
-  
-  const editUrl = getEditUrl();
-  
   // Generate intro paragraph
   const generateIntro = () => {
     const shape = shapeName ? `${shapeName.toLowerCase()}-shaped ` : '';
@@ -550,20 +536,9 @@ export default function DesignContentBlock({
           </div>
         </div>
 
-        {/* Call to Action */}
+        {/* Free proofing tagline */}
         <div className="text-center py-8">
-          <a
-            href={editUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all text-lg font-light uppercase tracking-wider shadow-lg hover:shadow-xl"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-            Customize This Design
-          </a>
-          <p className="text-slate-600 text-sm mt-4 font-light">
+          <p className="text-slate-600 text-sm font-light">
             Free proofing • Fast delivery • 10-year warranty
           </p>
         </div>

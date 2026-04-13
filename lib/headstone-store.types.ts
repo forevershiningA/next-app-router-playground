@@ -9,9 +9,35 @@ import type { CatalogData, PriceModel } from '#/lib/xml-parser';
 export const TEX_BASE = '/textures/forever/l/';
 export const DEFAULT_TEX = 'Imperial-Red.webp';
 
+const KNOWN_TEXTURE_VENDORS = ['forever', 'phoenix', 'three'];
+
+/** Remap legacy src/-prefixed texture paths from catalog XMLs to /textures/ */
+function remapLegacySrcPath(path: string): string {
+  // src/ceramic/l/01.webp → white ceramic surface (Full Color Plaque)
+  if (path.startsWith('src/ceramic/')) {
+    return '/textures/forever/l/White-Carrara.webp';
+  }
+
+  // src/{category}/{vendor}/{size}/{file} → /textures/{vendor}/{size}/{file}
+  const parts = path.split('/');
+  if (parts.length >= 5) {
+    const vendor = parts[2];
+    const rest = parts.slice(3).join('/');
+    if (KNOWN_TEXTURE_VENDORS.includes(vendor)) {
+      return `/textures/${vendor}/${rest}`;
+    }
+    // Unknown vendor (colors, forever2, everlon) → fallback to forever
+    return `/textures/forever/${rest}`;
+  }
+
+  return `/${path}`;
+}
+
 export const normalizeTextureUrl = (url?: string | null) => {
   if (!url) return null;
   if (url.startsWith('http')) return url;
+  if (url.startsWith('src/')) return remapLegacySrcPath(url);
+  if (url.startsWith('/src/')) return remapLegacySrcPath(url.slice(1));
   if (url.startsWith('/')) return url;
   return `/${url.replace(/^\/+/g, '')}`;
 };
@@ -82,6 +108,7 @@ export type ShapeOption = {
 export type BorderOption = {
   id: string;
   name: string;
+  displayName?: string;
   image?: string | null;
   category: string;
   svgUrl?: string | null;

@@ -521,7 +521,13 @@ export default function DesignerNav() {
       activeFullscreenPanel === 'select-shape' &&
       pathname !== '/select-shape'
     ) {
-      return;
+      // If navigating to another panel route (e.g. /select-size after picking
+      // a shape), let the logic below transition to the new panel instead of
+      // keeping the stale select-shape panel open.
+      const currentSlug = pathname.replace('/', '');
+      if (!fullscreenPanelSlugs.has(currentSlug)) {
+        return;
+      }
     }
 
     const currentSlug = pathname.replace('/', '');
@@ -1983,6 +1989,92 @@ export default function DesignerNav() {
           </>
         )}
 
+        {/* Fixed size slider for Full Colour Plaque (product 32) */}
+        {catalog?.product?.id === '32' && editingObject === 'headstone' ? (
+          (() => {
+            const sizes = data.fullColourPlaqueSizes;
+            const maxSize = sizes.length;
+            const isLandscape = widthMm > heightMm;
+            // Find which fixed size index matches current dimensions
+            const selectedIndex = Math.max(1, (() => {
+              const matchW = isLandscape ? heightMm : widthMm;
+              const matchH = isLandscape ? widthMm : heightMm;
+              const idx = sizes.findIndex((s) => s.width === matchW && s.height === matchH);
+              return idx >= 0 ? idx + 1 : 1;
+            })());
+            const activeSize = sizes[selectedIndex - 1] ?? sizes[0];
+            const w = isLandscape ? activeSize.height : activeSize.width;
+            const h = isLandscape ? activeSize.width : activeSize.height;
+            const applySize = (index: number) => {
+              const s = sizes[Math.max(0, Math.min(maxSize - 1, index - 1))];
+              setWidthMm(isLandscape ? s.height : s.width);
+              setHeightMm(isLandscape ? s.width : s.height);
+            };
+            return (
+              <div className="space-y-4">
+                <div className="rounded-xl border border-white/15 bg-white/5 p-4">
+                  <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+                    Plaque Price
+                  </div>
+                  <div className="text-2xl font-semibold text-white">
+                    ${activeSize.price.toFixed(2)}
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <label className="w-20 text-sm font-medium text-gray-200">
+                      Size
+                    </label>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => applySize(selectedIndex - 1)}
+                        disabled={selectedIndex <= 1}
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-label="Smaller size"
+                      >
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                        </svg>
+                      </button>
+                      <span className="min-w-[90px] text-center text-sm text-white">
+                        {w} × {h} mm
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => applySize(selectedIndex + 1)}
+                        disabled={selectedIndex >= maxSize}
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                        aria-label="Larger size"
+                      >
+                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="relative">
+                    <input
+                      type="range"
+                      min={1}
+                      max={maxSize}
+                      step={1}
+                      value={selectedIndex}
+                      onChange={(e) => applySize(parseInt(e.target.value, 10))}
+                      className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                    />
+                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                      <span>{sizes[0].width}×{sizes[0].height}mm</span>
+                      <span>{sizes[maxSize - 1].width}×{sizes[maxSize - 1].height}mm</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })()
+        ) : (
+        <>
         <div
           className={`space-y-1 ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
         >
@@ -2180,6 +2272,8 @@ export default function DesignerNav() {
             </div>
           </div>
         </div>
+        </>
+        )}
 
         {editingObject === 'headstone' && !isPlaque && (
           <div className="space-y-1">
@@ -2568,11 +2662,11 @@ export default function DesignerNav() {
                   Guided Step
                 </p>
                 <h2 className="mt-1 text-2xl font-semibold text-white">
-                  {
-                    menuItems.find(
-                      (item) => item.slug === activeFullscreenPanel,
-                    )?.name
-                  }
+                  {activeFullscreenPanel === 'select-material' && productId === '32'
+                    ? 'Background'
+                    : menuItems.find(
+                        (item) => item.slug === activeFullscreenPanel,
+                      )?.name}
                 </h2>
                 <div className="mt-3 h-px w-24 bg-white/20" />
               </div>
@@ -2602,7 +2696,7 @@ export default function DesignerNav() {
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
                     <p className="text-sm text-white/60">
-                      Loading materials...
+                      {productId === '32' ? 'Loading backgrounds...' : 'Loading materials...'}
                     </p>
                   </div>
                 </div>
@@ -2902,7 +2996,7 @@ export default function DesignerNav() {
                         return null;
                       }
 
-                      if (fullscreenPanelSlugs.has(item.slug)) {
+                      if (fullscreenPanelSlugs.has(item.slug) && item.slug !== 'select-material') {
                         const shouldRenderInlinePanel =
                           item.slug === 'select-size' &&
                           isSelectSizePage &&
@@ -3000,6 +3094,7 @@ export default function DesignerNav() {
 
                       // Special handling for Select Material - show material selector in sidebar when canvas is visible
                       if (item.slug === 'select-material') {
+                        const materialLabel = productId === '32' ? 'Background' : item.name;
                         return (
                           <React.Fragment key={item.slug}>
                             {isCanvasVisible ? (
@@ -3028,7 +3123,7 @@ export default function DesignerNav() {
                                     className="select-none"
                                     style={{ caretColor: 'transparent' }}
                                   >
-                                    {item.name}
+                                    {materialLabel}
                                   </span>
                                 </button>
 
@@ -3058,7 +3153,7 @@ export default function DesignerNav() {
                                 }`}
                               >
                                 <Icon className="h-5 w-5 flex-shrink-0" />
-                                <span>{item.name}</span>
+                                <span>{materialLabel}</span>
                               </Link>
                             )}
                           </React.Fragment>

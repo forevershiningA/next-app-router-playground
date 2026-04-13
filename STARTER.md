@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-12
+**Last Updated:** 2026-04-13
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
 
 ---
@@ -37,7 +37,174 @@
 
 ---
 
-## Current Status (2026-04-12) — Menu Navigation Fixes, /design-menu Route, Additions Panel Fixes
+## Current Status (2026-04-13) — Product 32 (Full Color Plaque) Implementation, Border Scaling Fix, Background Selector
+
+### ✅ Product 32 (Full Color Plaque / Stainless Steel Plaque)
+
+Complete implementation of Product 32, a ceramic full-colour plaque on a stainless steel frame. This product has unique requirements vs. bronze plaques and stone headstones.
+
+#### Product Configuration (`public/xml/catalog-id-32.xml`)
+- **Product ID**: 32, **Type**: `plaque`, **Material type**: `backgrounds`, **materialID**: `17`
+- **Shapes**: Only 2 — Rectangle (Landscape) and Rectangle (Portrait)
+- **Borders**: 2 options — "No Border" and "Stainless Steel Border" (Border 4)
+- **Texture**: `jpg/metals/l/brushed-ss-swatch.jpg` (brushed stainless steel)
+- **Flags**: `border="1"`, `fixed="1"`, `sizes="9"`, `background="1"`, `laser="0"`
+
+#### Fixed Size System (`app/_internal/_data.ts`)
+Product 32 uses 9 preset sizes (not continuous sliders) from `sizes.xml` product 201:
+
+| # | Width × Height (mm) | Price |
+|---|---------------------|-------|
+| 1 | 110 × 150 | $350 |
+| 2 | 122 × 152 | $390 |
+| 3 | 130 × 180 | $440 |
+| 4 | 150 × 200 | $500 |
+| 5 | 180 × 240 | $570 |
+| 6 | 200 × 250 | $600 |
+| 7 | 240 × 300 | $700 |
+| 8 | 216 × 381 | $780 |
+| 9 | 280 × 380 | $990 |
+
+- **UI**: Discrete-step slider (1–9 stops) in `DesignerNav.tsx` `renderSelectSizePanel()`, matching the Additions fixed-size pattern
+- **Pricing**: `CheckPricePanel.tsx` uses price lookup from `fullColourPlaqueSizes` instead of XML formula
+- **Orientation**: Width↔height transposed for landscape shapes
+- **Stainless Steel Border**: Fixed $299 add-on (product ID 37), shown in Check Price when SS border selected
+
+#### Stainless Steel Border (`BronzeBorder.tsx`)
+- Border 4 SVG rendered with stainless steel texture (dedicated `generateStainlessSteelTexture()`)
+- **Fixed physical frame width**: SVG scale uses `fixedFrameFactor = 200 / minDimensionMm` (no clamping) so the border frame appears proportionally thicker on smaller plaques and thinner on larger ones — matching real product photos
+- **Coverage clamping skipped** for SS borders (bronze borders clamp to 97-99% coverage)
+- **Instant rebuild**: Debounce disabled for SS borders since sizes are discrete steps (not continuous dragging)
+- Data: `fullColourPlaqueBorders` in `_data.ts` (2 entries: No Border + SS Border)
+
+#### Background Selector
+- **Nav label**: "Select Material" renamed to "Background" for product 32 (sidebar, fullscreen panel header, and loading text)
+- **`select-material` excluded from generic `fullscreenPanelSlugs` handler** — falls through to its own special-handling block which uses the conditional label
+- **40 backgrounds** (`app/_internal/_data.ts` → `backgrounds` array) with:
+  - Full-size textures: `/jpg/backgrounds/forever/l/{1-40}.jpg` (2474×1365px)
+  - Thumbnails: `/jpg/backgrounds/forever/m/{1-40}.jpg` (resized to 300×165px)
+- **Store**: `headstone-store.ts` `setProductId()` sets `materials` to `data.backgrounds` for product 32
+- **MaterialSelector** works unchanged — `resolveMaterialAssetPath()` passes absolute `/jpg/...` paths through as-is
+
+#### Shape Filtering
+- `ShapeSelector` restricted to 2 shapes for product 32 (Landscape + Portrait)
+- Both shapes added to `catalog-id-32.xml`
+
+#### Sidebar Bounce-Back Fix
+- Fixed `useEffect` guard in `DesignerNav.tsx` that prevented panel-to-panel transitions from shape selector
+- Guard now checks `fullscreenPanelSlugs.has(currentSlug)` — only non-panel routes trigger the early return
+
+#### Files Changed
+- `app/_internal/_data.ts` — `fullColourPlaqueBorders`, `fullColourPlaqueSizes`, `backgrounds`, `FixedSize` type
+- `lib/headstone-store.ts` — Product 32 border setup, material → backgrounds population
+- `components/DesignerNav.tsx` — Fixed size slider, "Background" label, bounce-back fix, `select-material` exclusion from generic handler
+- `components/CheckPricePanel.tsx` — Fixed size price lookup, SS border $299 add-on
+- `components/three/BronzeBorder.tsx` — SS texture, fixed frame width, coverage skip, instant rebuild
+- `components/three/headstone/ShapeSwapper.tsx` — `isStainlessSteel` prop forwarding, shape filtering
+- `public/xml/catalog-id-32.xml` — 2 shapes, border, sizes, background texture config
+- `public/jpg/backgrounds/forever/m/*.jpg` — 40 images resized to 300px thumbnails
+
+### 📌 Next Steps
+
+1. **Add 6 new failures to KNOWN_FAILURES** — `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+2. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+4. **Visual QA pass** — Compare designs with original screenshots
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+
+---
+
+## Previous Status (2026-04-13) — 3D Screenshots Replace 2D Previews, Design Page CTA, Loading Overlay, Build Optimization
+
+### ✅ 3D Screenshots Replace All Legacy 2D Previews
+
+All design pages now use generated 3D screenshots (`/screenshots/v2026-3d/{id}.png`) instead of legacy 2D screenshots from `/ml/*/saved-designs/screenshots/`. This change spans:
+
+#### Category Pages (`/designs/[productType]/[category]`)
+- `CategoryPageClient.tsx` — Removed `graniteThumb` legacy screenshot `<img>` element and `onError` handler from design cards. Kept dimensions + granite name text.
+- Design cards already had 3D screenshots at the top; the old legacy thumbnail in the specs section was the duplicate removed.
+
+#### Individual Design Pages (`/designs/.../[slug]`)
+- **2D preview block removed** — The entire old 2D preview rendering (~509 lines: SVG shape rendering, inscriptions overlay, motifs overlay, draggable elements, inscription editing UI) was removed from `DesignPageClient.tsx`.
+- **Replaced with** a simple `<img>` tag loading `/screenshots/v2026-3d/{designId}.png` with `_small.png` fallback on error.
+- **SSR content** (`page.tsx`) already used 3D screenshot path — confirmed at line ~541.
+
+#### Related Designs Sections
+- `DesignContentBlock.tsx` — "Similar Designs" and "More Memorial Designs" sections updated to use `/screenshots/v2026-3d/{id}_small.png` instead of `relatedDesign.preview` / `catDesign.preview`. Changed `object-cover` to `object-contain p-2` for transparent PNGs.
+- Removed "Customize This Design" CTA button at the bottom of `DesignContentBlock.tsx`. Cleaned up unused `editUrl` / `getEditUrl()` code.
+
+#### SEO Metadata (page.tsx)
+- **OpenGraph images**: Changed from `design.preview` to `/screenshots/v2026-3d/${design.id}.png`
+- **Twitter card images**: Same change
+- **JSON-LD Product schema `image`**: Now uses absolute URL `${baseUrl}/screenshots/v2026-3d/${design.id}.png`
+- **JSON-LD ImageObject**: Unconditionally included (was conditional on `design.preview`)
+- **`<link rel="preload">`**: Points to 3D screenshot (unconditional, was conditional)
+
+#### extract-design-specs.ts
+- `getScreenshotPath()` and `getFallbackThumbnailPath()` now return `/screenshots/v2026-3d/{designId}_small.png` instead of old `/ml/{mlDir}/saved-designs/screenshots/...` paths.
+
+### ✅ "Personalize Design" CTA Button
+
+Added a "Personalize Design" button below the 3D screenshot on individual design pages. Loads the design into the local 3D editor (same flow as My Account → Edit).
+
+#### How It Works
+1. `DesignPageClient.tsx` loads the design into the Zustand store on mount via `useEffect` → `fetchCanonicalDesign()` → `loadCanonicalDesignIntoEditor()`
+2. Button is **disabled** until `canonicalLoadState === 'success'` — shows inline spinner with "Loading Design…" while loading
+3. On click: sets `loadingIntoEditor = true` (triggers full-screen overlay) → `router.push('/select-size')`
+4. **Mobile sticky CTA** at the bottom also updated — was linking to external `headstonesdesigner.com`, now uses same local `router.push('/select-size')` flow
+
+#### FORCE_LEGACY_PARITY_IDS Removed
+- The `FORCE_LEGACY_PARITY_IDS` set (only contained `1578016189116`) forced certain designs through `loadSavedDesignIntoEditor` instead of `loadCanonicalDesignIntoEditor`. This was needed for the old 2D preview rendering but is wrong for the 3D editor.
+- All designs now use the canonical loader path — same path the Load Design popup uses successfully.
+- `shouldForceLegacyParity` hardcoded to `false`, legacy branch removed from the loading `useEffect`.
+
+### ✅ Full-Screen Loading Overlay
+
+Dark overlay with spinner shown during design loading transitions. Matches the existing popup/modal pattern used across the app.
+
+#### Design Pages (`DesignPageClient.tsx`)
+- Overlay shown when user clicks "Personalize Design" button (`loadingIntoEditor` state)
+- `fixed inset-0 z-[99999] bg-black/80 backdrop-blur-sm` with centered white spinner
+- Text: "Loading design…" in `font-mono`
+
+#### Load Design Popup (`LoadDesignButton.tsx`)
+- Overlay shown after modal closes while design is loading (`loading && !isOpen`)
+- Uses `createPortal(…, document.body)` to render above everything
+- Same visual style as design page overlay
+
+#### SSR Content Hiding Fix
+- `document.getElementById('design-ssr-content')?.remove()` caused `NotFoundError: Failed to execute 'removeChild' on 'Node'` when `router.push` triggered React unmounting
+- Fixed to `el.style.display = 'none'` — node stays in DOM for React's cleanup
+
+### ✅ Build Optimization — .vercelignore Excludes Old Screenshots
+
+The old 2D screenshots in `public/ml/*/saved-designs/screenshots/` totalled **4.3 GB across 95,119 files** — the main cause of Vercel build timeouts (45-minute limit exceeded).
+
+#### Changes
+- `.vercelignore` updated: replaced individual JPG exclusion rules with a single `public/ml/**/screenshots/` line that excludes the entire screenshots directories
+- **Before**: Excluded full-size JPGs but kept `_small.jpg` thumbnails (~850 MB)
+- **After**: Excludes everything in screenshots dirs (~4.3 GB saved)
+- The `_cropped.json` metadata files in those dirs are no longer critical — the loading effect has a fallback that derives dimensions from the design JSON
+
+#### Size Impact
+| Directory | Size | Files | Status |
+|-----------|------|-------|--------|
+| `public/ml/bronze-plaque/saved-designs/screenshots/` | 853 MB | 12,634 | **Excluded** |
+| `public/ml/forevershining/saved-designs/screenshots/` | 2,289 MB | 52,727 | **Excluded** |
+| `public/ml/headstonesdesigner/saved-designs/screenshots/` | 1,204 MB | 29,758 | **Excluded** |
+| `public/screenshots/v2026-3d/` | 1,005 MB | 9,124 | **Included** (3D renders) |
+
+### 📌 Next Steps
+
+1. **Add 6 new failures to KNOWN_FAILURES** — `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+2. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+4. **Visual QA pass** — Compare designs with original screenshots
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+
+---
+
+## Previous Status (2026-04-12) — Menu Navigation Fixes, /design-menu Route, Additions Panel Fixes
 
 ### ✅ "Back to Menu" Navigation & `/design-menu` Route
 
@@ -3312,7 +3479,28 @@ const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? 
 const isPlaque = catalog?.product.type === 'plaque';
 ```
 
-### Motif Color Recoloring (2026-01-29)
+### Full Color Plaque (Product 32)
+**Visual Effect:** Photographic background image on a stainless steel frame
+
+**Implementation:**
+- **Ceramic plaque** with full-colour photographic backgrounds (40 options in `/jpg/backgrounds/forever/`)
+- **Stainless steel frame** — not bronze. Uses `generateStainlessSteelTexture()` in `BronzeBorder.tsx`
+- **Fixed sizes only** — 9 preset dimensions (110×150 to 280×380mm) with fixed prices ($350–$990)
+- **2 shapes**: Rectangle Landscape + Rectangle Portrait (width↔height transposed)
+- **2 border options**: No Border, Stainless Steel Border (Border 4, fixed $299 add-on)
+- **Fixed physical frame width**: SS border frame stays ~constant physical width regardless of plaque size (thicker-looking on small plaques, thinner on large). Uses `fixedFrameFactor = 200 / minDimensionMm` with no clamping, and skips coverage clamping that bronze borders use.
+- **Background selector**: "Select Material" renamed to "Background" in nav. Shows 40 background thumbnails (`/jpg/backgrounds/forever/m/`) in the MaterialSelector grid. Selecting one sets it as the plaque face texture.
+- **No Additions, no Emblems**: Simplified workflow — shape → border → background → size → inscriptions
+
+**Detection:**
+```typescript
+const isFullColourPlaque = catalog?.product.id === '32';
+// productId is string|null — use === '32' not === 32
+```
+
+**Config:** `public/xml/catalog-id-32.xml` — `material="backgrounds"`, `materialID="17"`, `border="1"`, `fixed="1"`, `sizes="9"`
+
+### Motif Color Recoloring(2026-01-29)
 **Implementation:** Dynamic color changes on rasterized SVG motifs
 
 **Challenge:** SVGs are rasterized to high-quality bitmaps for sharp rendering. Original colors were baked into the texture, preventing color changes.
@@ -3537,7 +3725,7 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
 
 ### Panels Covered
 - **Select Size** – Shares the exact sliders/toggles documented earlier, but now consumes the entire sidebar height for effortless scrolling.
-- **Select Shape** and **Select Material** – Their grids sit inside `flex-1 overflow-hidden` containers so the selectors stretch to the bottom of the viewport; the previous `max-h-*` caps were removed to avoid double scroll bars.
+- **Select Shape** and **Select Material** – Their grids sit inside `flex-1 overflow-hidden` containers so the selectors stretch to the bottom of the viewport; the previous `max-h-*` caps were removed to avoid double scroll bars. **Note:** For Product 32 (Full Color Plaque), "Select Material" is relabeled "Background" in the sidebar, fullscreen panel header, and loading text. The `select-material` slug is excluded from the generic `fullscreenPanelSlugs` handler so the special-handling block with the conditional label runs instead.
 - **Inscriptions** – Embeds `InscriptionEditPanel` so editing text or fonts feels identical whether opened from the menu or a canvas selection.
 - **Select Additions** – Provides a split experience: if an addition is actively selected (`activePanel === 'addition'`), the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise the full catalog grid is shown. Hidden for plaque products. Catalog visibility uses `hasActiveAdditionForPanel` (not bare `selectedAdditionId`) to avoid stale-selection bugs when returning to the panel.
 - **Select Emblems** – Plaque-only panel. Shows a flat grid of 236 emblem thumbnails with search filter. Clicking adds the emblem to the plaque. When an emblem is selected on canvas, the edit panel shows a size slider (7 fixed steps controlling largest dimension), rotation, flip X/Y, duplicate/delete.
@@ -4351,9 +4539,7 @@ const productMap = {
 **Design Specifications (`lib/extract-design-specs.ts`):**
 - **Dimensions**: Width × Height in mm, rounded up with `Math.ceil()`
 - **Granite Name**: Mapped from texture ID (e.g., "18" → "Glory Gold Spots")
-- **Thumbnail**: 64px height, loads from year/month path with fallback
-  - Primary: `/ml/{mlDir}/saved-designs/screenshots/{year}/{month}/{designId}_small.jpg`
-  - Fallback: `/ml/{mlDir}/saved-designs/screenshots/{designId}_small.jpg`
+- **Thumbnail**: 3D screenshot at `/screenshots/v2026-3d/{designId}_small.png` (300px wide, transparent PNG)
 
 **Price Extraction:**
 - Reads from: `/ml/{mlDir}/saved-designs/html/{designId}-desktop.html`
@@ -4401,12 +4587,12 @@ const productMap = {
 - `app/designs/[productType]/[category]/[slug]/page.tsx` - Server component
 - `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` - Full viewer
 
-**Design Viewer Features:**
-- SVG shape rendering with granite texture injection
-- Inscription positioning with coordinate system conversion
-- Motif rendering with size/rotation handling
-- Base rendering (if design includes base)
+**Design Viewer Features (April 2026):**
+- 3D screenshot display (`/screenshots/v2026-3d/{designId}.png`) — replaced old 2D SVG/inscription preview
+- "Personalize Design" CTA button — loads design into 3D editor (gated on canonical load state)
+- Full-screen loading overlay on navigation (dark bg + spinner)
 - Detailed price quote with expandable sections
+- "Similar Designs" and "More Memorial Designs" sections with 3D thumbnails
 
 ### Design Data Storage
 
@@ -4420,12 +4606,18 @@ public/ml/{mlDir}/saved-designs/
 │   └── {designId}.json              # Design configuration data
 ├── xml/
 │   └── {designId}.xml               # Legacy design format
-└── screenshots/
-    ├── {year}/{month}/              # Year/month subdirectories
-    │   ├── {designId}.jpg           # Full screenshot
-    │   └── {designId}_small.jpg     # Thumbnail (64px height)
-    └── {designId}_small.jpg         # Fallback (no year/month)
+└── screenshots/                     # ⚠️ EXCLUDED from Vercel deploy via .vercelignore
+    ├── {year}/{month}/              # Old 2D screenshots (4.3 GB total)
+    │   ├── {designId}.jpg
+    │   └── {designId}_small.jpg
+    └── {designId}_small.jpg
+
+public/screenshots/v2026-3d/          # NEW 3D screenshots (1 GB, 9,124 files)
+├── {designId}.png                    # Full-size transparent RGBA PNG
+└── {designId}_small.png              # Thumbnail (300px wide, ~19KB avg)
 ```
+
+> **Note (April 2026):** The old 2D screenshots under `public/ml/*/saved-designs/screenshots/` are no longer used by any display code. All design pages, category pages, SEO metadata, and the Load Design popup now use `/screenshots/v2026-3d/` paths. The old directories (~4.3 GB, 95K files) are excluded from Vercel deploys via `.vercelignore` to prevent build timeouts.
 
 **Supported ML Directories:**
 - `forevershining` - Main design collection
@@ -4455,7 +4647,7 @@ interface SavedDesignMetadata {
   productType: 'headstone' | 'plaque';
   productName: string;           // Full product name
   shapeName?: string;            // Shape display name
-  preview: string;               // Screenshot URL (with year/month path)
+  preview: string;               // Legacy screenshot URL (no longer rendered — all display uses /screenshots/v2026-3d/)
   mlDir: string;                 // ML directory (e.g., 'forevershining')
   inscriptionCount: number;      // Number of inscriptions
   hasMotifs: boolean;            // Has motif decorations
@@ -4903,6 +5095,9 @@ Hidden designs are filtered from both the Load Design popup and the `/designs/` 
 
 #### Favorite Designs
 Favorite designs are toggled via `app/api/favorite-designs/route.ts` (GET/POST) and stored in `data/favorite-designs.json`. The favorites list is fetched on all environments (not just localhost) so the Popular drawer works in production.
+
+#### Loading Overlay (April 2026)
+After clicking "Open Design" on a card, the popup modal closes and a full-screen loading overlay appears (`loading && !isOpen` state). Uses `createPortal(…, document.body)` at `z-[99999]` with `bg-black/80 backdrop-blur-sm`, centered white spinner, and "Loading design…" text. Same visual pattern as the design page's Personalize Design overlay and SEO panel overlays.
 
 ### Key Files
 | File | Purpose |

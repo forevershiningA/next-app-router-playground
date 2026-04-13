@@ -99,16 +99,25 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   };
 
   // Filter shapes based on product type
-  // For plaques: ONLY show plaque shapes (landscape, portrait, ovals, circle)
+  // For full-colour plaques (product 32): ONLY landscape and portrait rectangles
+  // For other plaques: landscape, portrait, ovals, circle
   // For headstones: EXCLUDE plaque shapes, show all others
+  const isFullColourPlaque = catalog?.product?.id === '32';
   const uniqueShapes = shapes.reduce((acc, shape) => {
-    const plaqueShapes = ['landscape.svg', 'portrait.svg', 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
+    const rectangleShapes = ['landscape.svg', 'portrait.svg'];
+    const allPlaqueShapes = [...rectangleShapes, 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
     const isDuplicate = acc.some(s => s.image === shape.image);
-    const isPlaqueShape = plaqueShapes.includes(shape.image);
+    const isPlaqueShape = allPlaqueShapes.includes(shape.image);
+    const isRectangleShape = rectangleShapes.includes(shape.image);
     
-    // If this is a plaque product, ONLY include plaque shapes
-    // If this is a headstone product, EXCLUDE plaque shapes
-    const shouldInclude = isPlaque ? isPlaqueShape : !isPlaqueShape;
+    let shouldInclude: boolean;
+    if (isFullColourPlaque) {
+      shouldInclude = isRectangleShape;
+    } else if (isPlaque) {
+      shouldInclude = isPlaqueShape;
+    } else {
+      shouldInclude = !isPlaqueShape;
+    }
     
     if (!isDuplicate && shouldInclude) {
       acc.push(shape);

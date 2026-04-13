@@ -641,16 +641,25 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         isPlaque && (prevSquare610 || !prevProductWasPlaque);
 
       const supportsBorder = isPlaque && catalog.product.border === '1';
+      const isFullColourPlaque = catalog.product.id === '32';
       const currentBorderName = get().borderName;
+      // Set product-specific border options in the store
+      const borderSet = isFullColourPlaque
+        ? data.fullColourPlaqueBorders
+        : data.borders;
       if (supportsBorder) {
+        set({ borders: borderSet });
         if (!currentBorderName || currentBorderName.toLowerCase().includes('no border')) {
-          const defaultBorder = data.borders.find((border) => border.id !== '0');
+          const defaultBorder = borderSet.find((border) => border.id !== '0');
           if (defaultBorder) {
             set({ borderName: defaultBorder.name });
           }
         }
-      } else if (currentBorderName) {
-        set({ borderName: null });
+      } else {
+        set({ borders: [] });
+        if (currentBorderName) {
+          set({ borderName: null });
+        }
       }
 
       // Reset inset contour when switching to plaque
@@ -659,14 +668,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       }
 
       const isBronzePlaqueProduct = catalog.product.id === '5';
-      const materialOptions = isBronzePlaqueProduct
-        ? data.bronzes.map(({ id, name, image, category }) => ({
-            id,
-            name,
-            image,
-            category,
-          }))
-        : data.materials.map((material) => ({ ...material }));
+      const materialOptions = isFullColourPlaque
+        ? data.backgrounds
+        : isBronzePlaqueProduct
+          ? data.bronzes.map(({ id, name, image, category }) => ({
+              id,
+              name,
+              image,
+              category,
+            }))
+          : data.materials.map((material) => ({ ...material }));
       set({ materials: materialOptions });
       if (isPlaque) {
         set({ shapeUrl: '/shapes/headstones/square.svg' });
@@ -789,22 +800,18 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         }
 
         if (shape.table.color) {
-          // Fix texture path - ensure it starts with /
-          const texturePath = shape.table.color.startsWith('/') 
-            ? shape.table.color 
-            : `/${shape.table.color}`;
-          set({ headstoneMaterialUrl: texturePath });
+          const texturePath = normalizeTextureUrl(shape.table.color);
+          if (texturePath) set({ headstoneMaterialUrl: texturePath });
         }
         if (shape.stand.color) {
-          // Fix texture path - ensure it starts with /
-          const baseTexturePath = shape.stand.color.startsWith('/') 
-            ? shape.stand.color 
-            : `/${shape.stand.color}`;
-          set({
-            baseMaterialUrl: baseTexturePath,
-            ledgerMaterialUrl: baseTexturePath,
-            kerbsetMaterialUrl: baseTexturePath,
-          });
+          const baseTexturePath = normalizeTextureUrl(shape.stand.color);
+          if (baseTexturePath) {
+            set({
+              baseMaterialUrl: baseTexturePath,
+              ledgerMaterialUrl: baseTexturePath,
+              kerbsetMaterialUrl: baseTexturePath,
+            });
+          }
         }
 
         const productDefaultColor =

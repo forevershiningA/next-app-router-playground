@@ -229,6 +229,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
+  const isFullColourPlaque = catalog?.product.id === '32';
   const bronzeBorderColor = '#FFDFA3';
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
@@ -670,7 +671,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                  </ErrorBoundary>
                ))}
 
-              {/* Render bronze border if set */}
+              {/* Render border if set */}
               {borderName && isPlaque && (
                 <ErrorBoundary>
                   <React.Suspense fallback={null}>
@@ -682,6 +683,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       frontZ={api.frontZ}
                       color={bronzeBorderColor}
                       depth={headstoneDepth}
+                      isStainlessSteel={isFullColourPlaque}
                     />
                   </React.Suspense>
                 </ErrorBoundary>

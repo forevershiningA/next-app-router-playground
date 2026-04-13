@@ -18,6 +18,7 @@ const FALLBACK_BORDERS: BorderOption[] = [
 ];
 
 const BRONZE_HEX = '#CD7F32';
+const STAINLESS_HEX = '#C0C0C0';
 
 type BorderSelectorProps = {
   borders: BorderOption[];
@@ -34,6 +35,12 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
   const borderOptions = React.useMemo(() => {
     return borders && borders.length > 0 ? borders : FALLBACK_BORDERS;
   }, [borders]);
+
+  // Detect stainless steel (full colour plaque) borders
+  const isStainlessSteel = React.useMemo(() => {
+    return borderOptions.some((b) => b.category === 'fullcolour');
+  }, [borderOptions]);
+  const accentHex = isStainlessSteel ? STAINLESS_HEX : BRONZE_HEX;
 
   const handleBorderSelect = (border: BorderOption) => {
     // Border 0 is "No Border", so treat it as null
@@ -97,7 +104,7 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
           const isSelected = currentBorderName === border.name || 
                            (border.id === '0' && !currentBorderName);
           const baseCardClasses = isSelected
-            ? 'ring-2 ring-offset-2 ring-offset-[#0f0a07] ring-[#CD7F32]'
+            ? `ring-2 ring-offset-2 ring-offset-[#0f0a07]`
             : 'border border-white/10';
           const svgPath = getBorderAsset(border);
           
@@ -106,7 +113,8 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
               key={border.id}
               type="button"
               onClick={() => handleBorderSelect(border)}
-              className={`relative overflow-hidden rounded-xl bg-[#0f0a07] transition-all duration-150 hover:bg-[#1a110b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#CD7F32] ${baseCardClasses} cursor-pointer`}
+              className={`relative overflow-hidden rounded-xl bg-[#0f0a07] transition-all duration-150 hover:bg-[#1a110b] focus-visible:outline-none ${baseCardClasses} cursor-pointer`}
+              style={isSelected ? { '--tw-ring-color': accentHex } as React.CSSProperties : undefined}
               title={border.name}
             >
               {/* Border Preview */}
@@ -116,7 +124,7 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
                     <div
                       className="absolute inset-4"
                       style={{
-                        backgroundColor: BRONZE_HEX,
+                        backgroundColor: accentHex,
                         WebkitMaskImage: `url(${svgPath})`,
                         maskImage: `url(${svgPath})`,
                         WebkitMaskRepeat: 'no-repeat',
@@ -152,9 +160,11 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
               {/* Border Name */}
               <div className="p-2 h-12 flex items-center justify-center bg-[#0f0a07]/80 rounded-b-xl">
                 <div className={`text-xs text-center line-clamp-2 ${
-                  isSelected ? 'text-[#CD7F32] font-semibold' : 'text-slate-200'
-                }`}>
-                  {border.name}
+                  isSelected ? 'font-semibold' : 'text-slate-200'
+                }`}
+                  style={isSelected ? { color: accentHex } : undefined}
+                >
+                  {border.displayName || border.name}
                 </div>
               </div>
             </button>
