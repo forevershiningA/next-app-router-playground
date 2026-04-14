@@ -159,14 +159,17 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       ctx.drawImage(img, cropX, cropY, cropW, cropH, -cropW / 2, -cropH / 2, cropW, cropH);
       ctx.restore();
 
-      // Export as blob URL (blob URLs work reliably with Three.js TextureLoader)
+      // Upload to server to get a regular file URL
       const blob = await new Promise<Blob>((res) =>
         canvas.toBlob((b) => res(b!), 'image/jpeg', 0.92)
       );
-      const blobUrl = URL.createObjectURL(blob);
+      const formData = new FormData();
+      formData.append('image', blob, 'background.jpg');
+      const response = await fetch('/api/upload-background', { method: 'POST', body: formData });
+      const { url } = await response.json();
 
       setIsMaterialChange(true);
-      setHeadstoneMaterialUrl(blobUrl);
+      setHeadstoneMaterialUrl(url);
       setTimeout(() => setIsMaterialChange(false), 100);
 
       // Reset crop state

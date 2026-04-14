@@ -63,3 +63,7 @@ text.txt
 # Database exports (contain sensitive data)
 /database-exports/
 *.sql
+
+# Uploaded backgrounds (user-generated, not committed)
+/public/uploads/*
+!/public/uploads/.gitkeep

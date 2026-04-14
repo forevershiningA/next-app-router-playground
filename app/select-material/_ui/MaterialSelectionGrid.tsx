@@ -231,15 +231,22 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                     type="file"
                     accept="image/jpeg,image/png,image/webp"
                     className="hidden"
-                    onChange={(e) => {
+                    onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file || !file.type.startsWith('image/')) return;
-                      // Use blob URL (works reliably with Three.js TextureLoader)
-                      const blobUrl = URL.createObjectURL(file);
-                      setIsMaterialChangeLocal(true);
-                      setHeadstoneMaterialUrl(blobUrl);
-                      setTimeout(() => setIsMaterialChangeLocal(false), 100);
-                      router.push('/select-size');
+                      // Upload to server to get a regular file URL
+                      const formData = new FormData();
+                      formData.append('image', file, file.name);
+                      try {
+                        const response = await fetch('/api/upload-background', { method: 'POST', body: formData });
+                        const { url } = await response.json();
+                        setIsMaterialChangeLocal(true);
+                        setHeadstoneMaterialUrl(url);
+                        setTimeout(() => setIsMaterialChangeLocal(false), 100);
+                        router.push('/select-size');
+                      } catch (err) {
+                        console.error('Failed to upload background:', err);
+                      }
                       e.target.value = '';
                     }}
                   />
