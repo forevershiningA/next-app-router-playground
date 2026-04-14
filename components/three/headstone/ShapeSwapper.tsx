@@ -370,6 +370,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     return `/${headstoneMaterialUrl.replace(/^\/+/, '')}`;
   }, [headstoneMaterialUrl]);
 
+  const isBlobOrDataTex = requestedTex.startsWith('blob:') || requestedTex.startsWith('data:');
+
   const [visibleUrl, setVisibleUrl] = React.useState<string | null>(null);
   // Re-introduce visibleTex state to decouple loading from display
   const [visibleTex, setVisibleTex] = React.useState<string | null>(null);
@@ -427,12 +429,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   // Handle Texture Updates via Transition
   // When shape is swapping we can update immediately (full-screen loader visible)
   // For material changes, also update immediately to avoid suspense delays
+  // For blob/data URLs, always update immediately (no preloading needed)
   React.useEffect(() => {
-    if ((shapeSwapping || isMaterialChange) && requestedTex !== visibleTex) {
+    if ((shapeSwapping || isMaterialChange || isBlobOrDataTex) && requestedTex !== visibleTex) {
       setVisibleTex(requestedTex);
       invalidate();
     }
-  }, [requestedTex, visibleTex, shapeSwapping, isMaterialChange, invalidate]);
+  }, [requestedTex, visibleTex, shapeSwapping, isMaterialChange, isBlobOrDataTex, invalidate]);
 
   // Trigger fit when switching view modes and assets are ready
   React.useEffect(() => {
@@ -715,7 +718,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         )}
       </group>
 
-      {!shapeSwapping && !isMaterialChange && textureTransitioning && (
+      {!shapeSwapping && !isMaterialChange && !isBlobOrDataTex && textureTransitioning && (
         <React.Suspense fallback={null}>
           <PreloadTexture
             url={requestedTex}
