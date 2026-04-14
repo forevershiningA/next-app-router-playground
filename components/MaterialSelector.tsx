@@ -283,90 +283,144 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     setTimeout(() => setIsMaterialChange(false), 100);
   };
 
+  // Resize helper — keeps center fixed, maintains aspect ratio
+  const resizeCropArea = (newHeight: number) => {
+    setCropArea(prev => {
+      const centerX = prev.x + prev.width / 2;
+      const centerY = prev.y + prev.height / 2;
+      const currentAspectRatio = prev.width / prev.height;
+      const newWidth = newHeight * currentAspectRatio;
+      return {
+        x: centerX - newWidth / 2,
+        y: centerY - newHeight / 2,
+        width: newWidth,
+        height: newHeight,
+      };
+    });
+  };
+
   // When in crop mode, show crop controls instead of material grid
   if (isFullColourPlaque && showCropSection && uploadedImage) {
     return (
       <div className="space-y-4">
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center justify-between mb-4">
           <h4 className="text-white font-medium">Crop Background</h4>
+        </div>
+
+        {/* Position and Resize Crop Area */}
+        <div>
+          <div className="text-sm text-white font-medium mb-3">Position and Resize Crop Area</div>
+
+          {/* Size Slider */}
+          <div className="space-y-2">
+            <div className="text-xs text-white/60">Adjust Size</div>
+            <input
+              type="range"
+              min="20"
+              max="80"
+              value={cropArea.height}
+              onChange={(e) => resizeCropArea(parseInt(e.target.value))}
+              className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
+            />
+            <div className="flex justify-between items-center">
+              <button
+                onClick={() => resizeCropArea(Math.max(20, cropArea.height - 5))}
+                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                </svg>
+                Smaller
+              </button>
+              <button
+                onClick={() => resizeCropArea(Math.min(80, cropArea.height + 5))}
+                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Larger
+              </button>
+            </div>
+          </div>
+
+          {/* Rotation Slider */}
+          <div className="mt-4 space-y-2">
+            <div className="text-sm text-white/80">SELECT ROTATION: {cropRotation}°</div>
+            <input
+              type="range"
+              min="-180"
+              max="180"
+              value={cropRotation}
+              onChange={(e) => setCropRotation(parseInt(e.target.value))}
+              className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
+            />
+            <div className="flex justify-between items-center">
+              <button
+                onClick={() => setCropRotation(Math.max(-180, cropRotation - 5))}
+                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                </svg>
+                Decrease
+              </button>
+              <button
+                onClick={() => setCropRotation(Math.min(180, cropRotation + 5))}
+                className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Increase
+              </button>
+            </div>
+          </div>
+
+          {/* Crop Button */}
+          <button
+            onClick={handleApplyBackground}
+            className="mt-4 w-full rounded-lg bg-[#1F1F1F] border border-white/20 px-4 py-3 text-white font-medium hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            Apply Background
+          </button>
+
+          {/* Flip buttons */}
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setFlipX(!flipX)}
+              className="rounded-lg bg-[#1F1F1F] border border-white/20 px-3 py-2 text-white text-sm hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+              Flip X
+            </button>
+            <button
+              onClick={() => setFlipY(!flipY)}
+              className="rounded-lg bg-[#1F1F1F] border border-white/20 px-3 py-2 text-white text-sm hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+              </svg>
+              Flip Y
+            </button>
+          </div>
+
+          {/* Cancel */}
           <button
             onClick={handleCancelCrop}
-            className="text-xs text-white/60 hover:text-white transition-colors"
+            className="mt-2 w-full rounded-lg border border-red-900/50 bg-red-950/30 px-4 py-2 text-red-400 text-sm font-medium hover:bg-red-950/50 transition-colors flex items-center justify-center gap-2"
           >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
             Cancel
           </button>
         </div>
-
-        {/* Size slider */}
-        <div className="space-y-2">
-          <div className="text-xs text-white/60">Adjust Size</div>
-          <input
-            type="range"
-            min="20"
-            max="80"
-            value={cropArea.height}
-            onChange={(e) => {
-              const newHeight = parseInt(e.target.value);
-              setCropArea(prev => {
-                const centerX = prev.x + prev.width / 2;
-                const centerY = prev.y + prev.height / 2;
-                const currentAspectRatio = prev.width / prev.height;
-                const newWidth = newHeight * currentAspectRatio;
-                return {
-                  x: centerX - newWidth / 2,
-                  y: centerY - newHeight / 2,
-                  width: newWidth,
-                  height: newHeight,
-                };
-              });
-            }}
-            className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
-          />
-        </div>
-
-        {/* Rotation slider */}
-        <div className="space-y-2">
-          <div className="text-xs text-white/60">Rotation: {cropRotation}°</div>
-          <input
-            type="range"
-            min="-180"
-            max="180"
-            value={cropRotation}
-            onChange={(e) => setCropRotation(parseInt(e.target.value))}
-            className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
-          />
-        </div>
-
-        {/* Flip buttons */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => setFlipX(!flipX)}
-            className={`flex-1 rounded-lg border px-3 py-2 text-sm transition-colors ${
-              flipX ? 'border-[#D7B356] bg-[#D7B356]/20 text-white' : 'border-white/20 text-white/60 hover:text-white'
-            }`}
-          >
-            Flip H
-          </button>
-          <button
-            onClick={() => setFlipY(!flipY)}
-            className={`flex-1 rounded-lg border px-3 py-2 text-sm transition-colors ${
-              flipY ? 'border-[#D7B356] bg-[#D7B356]/20 text-white' : 'border-white/20 text-white/60 hover:text-white'
-            }`}
-          >
-            Flip V
-          </button>
-        </div>
-
-        {/* Apply button */}
-        <button
-          onClick={handleApplyBackground}
-          className="w-full rounded-lg bg-[#DEBD68] px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-[#d7b356] transition-colors flex items-center justify-center gap-2"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          Apply Background
-        </button>
       </div>
     );
   }
