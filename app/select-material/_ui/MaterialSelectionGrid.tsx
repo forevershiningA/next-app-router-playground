@@ -234,15 +234,12 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                     onChange={(e) => {
                       const file = e.target.files?.[0];
                       if (!file || !file.type.startsWith('image/')) return;
-                      const reader = new FileReader();
-                      reader.onload = (ev) => {
-                        const imageUrl = ev.target?.result as string;
-                        setIsMaterialChangeLocal(true);
-                        setHeadstoneMaterialUrl(imageUrl);
-                        setTimeout(() => setIsMaterialChangeLocal(false), 100);
-                        router.push('/select-size');
-                      };
-                      reader.readAsDataURL(file);
+                      // Use blob URL (works reliably with Three.js TextureLoader)
+                      const blobUrl = URL.createObjectURL(file);
+                      setIsMaterialChangeLocal(true);
+                      setHeadstoneMaterialUrl(blobUrl);
+                      setTimeout(() => setIsMaterialChangeLocal(false), 100);
+                      router.push('/select-size');
                       e.target.value = '';
                     }}
                   />

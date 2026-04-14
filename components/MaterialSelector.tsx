@@ -159,11 +159,14 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       ctx.drawImage(img, cropX, cropY, cropW, cropH, -cropW / 2, -cropH / 2, cropW, cropH);
       ctx.restore();
 
-      // Export as data URL and set as material
-      const processedImageUrl = canvas.toDataURL('image/jpeg', 0.92);
+      // Export as blob URL (blob URLs work reliably with Three.js TextureLoader)
+      const blob = await new Promise<Blob>((res) =>
+        canvas.toBlob((b) => res(b!), 'image/jpeg', 0.92)
+      );
+      const blobUrl = URL.createObjectURL(blob);
 
       setIsMaterialChange(true);
-      setHeadstoneMaterialUrl(processedImageUrl);
+      setHeadstoneMaterialUrl(blobUrl);
       setTimeout(() => setIsMaterialChange(false), 100);
 
       // Reset crop state
