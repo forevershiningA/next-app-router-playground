@@ -96,6 +96,13 @@ export type Material = {
   thumbnailUrl?: string | null;
 };
 
+export type FixedSize = {
+  id: number;
+  width: number;
+  height: number;
+  price: number;
+};
+
 export type ShapeOption = {
   id: string;
   name: string;
@@ -160,6 +167,9 @@ export type HeadstoneState = {
 
   borders: BorderOption[];
   setBorders: (borders: BorderOption[]) => void;
+
+  fixedSizes: FixedSize[];
+  setFixedSizes: (sizes: FixedSize[]) => void;
 
   motifsCatalog: MotifCatalogItem[];
   setMotifsCatalog: (motifs: MotifCatalogItem[]) => void;

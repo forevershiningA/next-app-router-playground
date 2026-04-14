@@ -147,6 +147,35 @@ export const additions = pgTable('additions', {
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
+// Fixed sizes for products with discrete size options (e.g., Full Colour Plaque)
+export const sizes = pgTable('sizes', {
+  id: serial('id').primaryKey(),
+  productCode: text('product_code').notNull(), // e.g. 'full-colour-plaque'
+  sortOrder: integer('sort_order').notNull(),
+  widthMm: integer('width_mm').notNull(),
+  heightMm: integer('height_mm').notNull(),
+  depthMm: integer('depth_mm').notNull().default(0),
+  priceCents: integer('price_cents').notNull().default(0),
+  attributes: jsonb('attributes').notNull().default({}),
+  isActive: boolean('is_active').notNull().default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+// Photographic backgrounds (e.g., Full Colour Plaque backgrounds)
+export const backgrounds = pgTable('backgrounds', {
+  id: serial('id').primaryKey(),
+  slug: text('slug').notNull().unique(),
+  name: text('name').notNull(),
+  sortOrder: integer('sort_order').notNull().default(0),
+  textureUrl: text('texture_url'),
+  thumbnailUrl: text('thumbnail_url'),
+  attributes: jsonb('attributes').notNull().default({}),
+  isActive: boolean('is_active').notNull().default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
 // Projects / designs
 export const projects = pgTable('projects', {
   id: uuid('id').primaryKey().defaultRandom(),

@@ -345,6 +345,7 @@ export default function DesignerNav() {
     (s) => s.setSelectedAdditionId,
   );
   const setProductId = useHeadstoneStore((s) => s.setProductId);
+  const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
 
   // Check if anything has been added to the headstone
   const hasCustomizations =
@@ -1990,9 +1991,9 @@ export default function DesignerNav() {
         )}
 
         {/* Fixed size slider for Full Colour Plaque (product 32) */}
-        {catalog?.product?.id === '32' && editingObject === 'headstone' ? (
+        {catalog?.product?.id === '32' && editingObject === 'headstone' && fixedSizes.length > 0 ? (
           (() => {
-            const sizes = data.fullColourPlaqueSizes;
+            const sizes = fixedSizes;
             const maxSize = sizes.length;
             const isLandscape = widthMm > heightMm;
             // Find which fixed size index matches current dimensions

@@ -1,7 +1,7 @@
 // Database access layer using Drizzle ORM
 // Replaces mock implementation with real PostgreSQL queries
 
-import { db, materials, shapes, borders, motifs } from '#/lib/db/index';
+import { db, materials, shapes, borders, motifs, sizes, backgrounds } from '#/lib/db/index';
 import { eq, and, sql } from 'drizzle-orm';
 
 // Type exports for catalog items
@@ -9,6 +9,8 @@ export type Material = typeof materials.$inferSelect;
 export type Shape = typeof shapes.$inferSelect;
 export type Border = typeof borders.$inferSelect;
 export type Motif = typeof motifs.$inferSelect;
+export type Size = typeof sizes.$inferSelect;
+export type Background = typeof backgrounds.$inferSelect;
 
 // Query options types
 type MaterialWhere = { id?: number; slug?: string; category?: string; isActive?: boolean };
@@ -23,8 +25,14 @@ type BorderFindOptions = { where?: BorderWhere; limit?: number };
 type MotifWhere = { id?: number; sku?: string; category?: string; isActive?: boolean };
 type MotifFindOptions = { where?: MotifWhere; limit?: number };
 
+type SizeWhere = { id?: number; productCode?: string; isActive?: boolean };
+type SizeFindOptions = { where?: SizeWhere; limit?: number };
+
+type BackgroundWhere = { id?: number; slug?: string; isActive?: boolean };
+type BackgroundFindOptions = { where?: BackgroundWhere; limit?: number };
+
 // Database query functions
-const catalog = {
+export const catalog = {
   materials: {
     // Find single material
     find: async (options: MaterialFindOptions): Promise<Material | null> => {
@@ -293,10 +301,67 @@ const catalog = {
       return await baseQuery;
     },
   },
-};
 
-// Export catalog API
-export { catalog };
+  sizes: {
+    findMany: async (options: SizeFindOptions = {}): Promise<Size[]> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return [];
+      }
+
+      const conditions = [];
+
+      if (options.where?.productCode !== undefined) {
+        conditions.push(eq(sizes.productCode, options.where.productCode));
+      }
+      if (options.where?.isActive !== undefined) {
+        conditions.push(eq(sizes.isActive, options.where.isActive));
+      }
+
+      const baseQuery = db
+        .select()
+        .from(sizes)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(sizes.sortOrder);
+
+      if (options.limit) {
+        return await baseQuery.limit(options.limit);
+      }
+
+      return await baseQuery;
+    },
+  },
+
+  backgrounds: {
+    findMany: async (options: BackgroundFindOptions = {}): Promise<Background[]> => {
+      if (!db) {
+        console.error('Failed to load catalog data, using empty fallbacks');
+        return [];
+      }
+
+      const conditions = [];
+
+      if (options.where?.slug !== undefined) {
+        conditions.push(eq(backgrounds.slug, options.where.slug));
+      }
+      if (options.where?.isActive !== undefined) {
+        conditions.push(eq(backgrounds.isActive, options.where.isActive));
+      }
+
+      const baseQuery = db
+        .select()
+        .from(backgrounds)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(backgrounds.sortOrder);
+
+      if (options.limit) {
+        return await baseQuery.limit(options.limit);
+      }
+
+      return await baseQuery;
+    },
+  },
+};
 
 // Re-export database instance for advanced queries
 export { db } from '#/lib/db/index';

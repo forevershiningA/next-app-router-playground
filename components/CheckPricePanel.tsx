@@ -47,6 +47,7 @@ export default function CheckPricePanel() {
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const productId = useHeadstoneStore((s) => s.productId);
   const borderName = useHeadstoneStore((s) => s.borderName);
+  const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
   const unitSystem = useUnitSystem();
   const fallbackProductId = useMemo(
     () => productId ?? data.products[0]?.id ?? null,
@@ -148,11 +149,11 @@ export default function CheckPricePanel() {
   // Calculate headstone price from catalog price model
   const headstonePrice = useMemo(() => {
     // Product 32 (Full Colour Plaque) uses fixed size-based pricing
-    if (productId === '32') {
+    if (productId === '32' && fixedSizes.length > 0) {
       const isLandscape = widthMm > heightMm;
       const matchW = isLandscape ? heightMm : widthMm;
       const matchH = isLandscape ? widthMm : heightMm;
-      const match = data.fullColourPlaqueSizes.find(
+      const match = fixedSizes.find(
         (s) => s.width === matchW && s.height === matchH,
       );
       return match?.price ?? 0;
@@ -161,7 +162,7 @@ export default function CheckPricePanel() {
     const pm = activeCatalog.product.priceModel;
     const quantity = computeQuantity(pm, { width: widthMm, height: heightMm, depth: uprightThickness });
     return calculatePrice(pm, quantity);
-  }, [activeCatalog, widthMm, heightMm, uprightThickness, productId]);
+  }, [activeCatalog, widthMm, heightMm, uprightThickness, productId, fixedSizes]);
 
   // Calculate base (stand) price from catalog basePriceModel
   const basePrice = useMemo(() => {

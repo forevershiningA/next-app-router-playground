@@ -42,6 +42,7 @@ import {
   clampThickness,
   normalizeTextureUrl,
   type AdditionKind,
+  type FixedSize,
   type HeadstoneState,
   type Line,
   type LinePatch,
@@ -182,6 +183,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   borders: [],
   setBorders(borders) {
     set({ borders });
+  },
+
+  fixedSizes: [],
+  setFixedSizes(fixedSizes) {
+    set({ fixedSizes });
   },
 
   motifsCatalog: [],
@@ -668,9 +674,25 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       }
 
       const isBronzePlaqueProduct = catalog.product.id === '5';
-      const materialOptions = isFullColourPlaque
-        ? data.backgrounds
-        : isBronzePlaqueProduct
+      let materialOptions: typeof data.materials;
+      if (isFullColourPlaque) {
+        // Fetch backgrounds from DB via API
+        try {
+          const bgRes = await fetch('/api/catalog/backgrounds');
+          materialOptions = bgRes.ok ? await bgRes.json() : [];
+        } catch {
+          materialOptions = [];
+        }
+        // Fetch fixed sizes from DB via API
+        try {
+          const szRes = await fetch('/api/catalog/sizes?productCode=full-colour-plaque');
+          const fixedSizes: FixedSize[] = szRes.ok ? await szRes.json() : [];
+          set({ fixedSizes });
+        } catch {
+          set({ fixedSizes: [] });
+        }
+      } else {
+        materialOptions = isBronzePlaqueProduct
           ? data.bronzes.map(({ id, name, image, category }) => ({
               id,
               name,
@@ -678,6 +700,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
               category,
             }))
           : data.materials.map((material) => ({ ...material }));
+        set({ fixedSizes: [] });
+      }
       set({ materials: materialOptions });
       if (isPlaque) {
         set({ shapeUrl: '/shapes/headstones/square.svg' });

@@ -26,7 +26,9 @@
     "db:import": "node scripts/import-to-neon.js",
     "db:sync": "node scripts/sync-to-neon.js",
     "db:seed-materials": "tsx scripts/seed-materials.ts",
-    "db:seed-shapes": "tsx scripts/seed-shapes.ts"
+    "db:seed-shapes": "tsx scripts/seed-shapes.ts",
+    "db:seed-sizes": "tsx scripts/seed-sizes.ts",
+    "db:seed-backgrounds": "tsx scripts/seed-backgrounds.ts"
   },
   "dependencies": {
     "@heroicons/react": "2.2.0",
