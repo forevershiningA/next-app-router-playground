@@ -30,7 +30,7 @@ type Props = {
   depth: number;
   scale?: number;
   faceTexture: string;
-  sideTexture?: string;
+  sideTexture?: string | null;
   autoRepeat?: boolean;
   tileSize?: number;
   sideTileSize?: number;
@@ -174,17 +174,20 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   
   // 1. Load SVG and Textures
   const svgData = useLoader(SVGLoader, url);
+  const hasSideTexture = sideTexture !== null;
+  const sideTextureSrc = sideTexture ?? faceTexture;
   const textures = useTexture({
     face: faceTexture,
-    side: sideTexture ?? faceTexture
+    ...(hasSideTexture ? { side: sideTextureSrc } : {}),
   });
 
   // 2. Clone Textures (FIX: Enable Mipmaps and correct Filtering)
   const [clonedFaceMap, clonedSideMap] = useMemo(() => {
     const f = textures.face.clone();
-    const s = textures.side.clone();
+    const s = 'side' in textures ? textures.side.clone() : null;
     
     [f, s].forEach(t => {
+      if (!t) return;
       t.wrapS = t.wrapT = THREE.RepeatWrapping;
       // LinearMipmapLinearFilter is essential for removing aliasing/noise at distance
       t.minFilter = THREE.LinearMipmapLinearFilter; 
@@ -194,14 +197,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       t.needsUpdate = true;
     });
     
-    return [f, s];
-  }, [textures.face, textures.side]);
+    return [f, s] as const;
+  }, [textures.face, 'side' in textures ? textures.side : null]);
 
   // 2a. Dispose cloned textures on cleanup
   React.useEffect(() => {
     return () => {
       clonedFaceMap.dispose();
-      clonedSideMap.dispose();
+      clonedSideMap?.dispose();
     };
   }, [clonedFaceMap, clonedSideMap]);
 
@@ -1011,10 +1014,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const repSideY = usePhysical ? Math.max(1, dims.worldDepth / sideTile) : (sideRepeatY ?? 1);
 
     clonedFaceMap.repeat.set(repFaceX, repFaceY);
-    clonedSideMap.repeat.set(repSideX, repSideY);
-    
     clonedFaceMap.needsUpdate = true;
-    clonedSideMap.needsUpdate = true;
+
+    if (clonedSideMap) {
+      clonedSideMap.repeat.set(repSideX, repSideY);
+      clonedSideMap.needsUpdate = true;
+    }
     
     if (headstoneStyle === 'slant' && rockNormalTexture) {
       rockNormalTexture.repeat.set(1, 1);
@@ -1034,53 +1039,45 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
       envMapIntensity: isSlant ? 2.0 : 0.78,
     };
-    
-    // For slant headstones, apply rock pitch normal map to side material
-    if (isSlant && rockNormalTexture) {
-      return [
-        new THREE.MeshPhysicalMaterial({ 
-          ...common, 
-          map: clonedFaceMap,
-          clearcoat: 1.0, // Full clearcoat for polish layer
-          clearcoatRoughness: 0.05, // Shiny polish finish
-          polygonOffset: true,
-          polygonOffsetFactor: 1,
-          polygonOffsetUnits: 1,
-        }),
-        new THREE.MeshPhysicalMaterial({ 
+
+    const faceMat = new THREE.MeshPhysicalMaterial({ 
+      ...common, 
+      map: clonedFaceMap,
+      clearcoat: 1.0,
+      clearcoatRoughness: isSlant ? 0.05 : 0.18,
+      polygonOffset: true,
+      polygonOffsetFactor: 1,
+      polygonOffsetUnits: 1,
+    });
+
+    // Side material: use side texture if available, otherwise plain white
+    const sideMat = clonedSideMap
+      ? new THREE.MeshPhysicalMaterial({ 
           ...common, 
           map: clonedSideMap,
-          normalMap: rockNormalTexture,
-          normalScale: new THREE.Vector2(2.5, 2.5), // Enhanced for crystalline detail (was 2.0)
-          clearcoat: 1.0, // Full clearcoat for polish layer
-          clearcoatRoughness: 0.05, // Shiny polish finish
+          ...(isSlant && rockNormalTexture ? {
+            normalMap: rockNormalTexture,
+            normalScale: new THREE.Vector2(2.5, 2.5),
+          } : {}),
+          clearcoat: 1.0,
+          clearcoatRoughness: isSlant ? 0.05 : 0.18,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
         })
-      ];
-    }
-    
-    return [
-        new THREE.MeshPhysicalMaterial({ 
-          ...common, 
-          map: clonedFaceMap,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.18,
+      : new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(0xeeeeee),
+          roughness: 0.4,
+          metalness: 0.0,
+          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+          clearcoat: 0.3,
+          clearcoatRoughness: 0.3,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
-        }),
-        new THREE.MeshPhysicalMaterial({ 
-          ...common, 
-          map: clonedSideMap,
-          clearcoat: 1.0,
-          clearcoatRoughness: 0.18,
-          polygonOffset: true,
-          polygonOffsetFactor: 1,
-          polygonOffsetUnits: 1,
-        })
-    ];
+        });
+
+    return [faceMat, sideMat];
   }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture]);
 
   // 5a. Dispose geometries and materials on cleanup
