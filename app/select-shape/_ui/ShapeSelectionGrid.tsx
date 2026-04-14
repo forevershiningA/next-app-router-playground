@@ -43,15 +43,16 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   
   // Check if current product is a plaque
   const isPlaque = catalog?.product.type === 'plaque';
+  const isFullColourPlaque = catalog?.product?.id === '32';
   const hasBorder = catalog?.product?.border === '1';
   const fallbackProduct = data.products.find((p) => p.id === productId);
   const productName = catalog?.product?.name ?? fallbackProduct?.name;
 
-  const openBorderPanel = () => {
+  const openPanel = (panel: string) => {
     if (typeof window !== 'undefined') {
       window.dispatchEvent(
         new CustomEvent('openFullscreenPanel', {
-          detail: { panel: 'select-border' },
+          detail: { panel },
         }),
       );
     }
@@ -65,9 +66,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       ? `/shapes/masks/${shape.image}` 
       : `/shapes/headstones/${shape.image}`;
     setShapeUrl(shapeUrl);
-    if (hasBorder) {
+    if (isFullColourPlaque) {
+      router.push('/select-material');
+      openPanel('select-material');
+    } else if (hasBorder) {
       router.push('/select-border');
-      openBorderPanel();
+      openPanel('select-border');
     } else {
       router.push('/select-size');
     }
@@ -85,9 +89,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         const svgDataUrl = e.target?.result as string;
         setUploadedSvg(svgDataUrl);
         setShapeUrl(svgDataUrl);
-        if (hasBorder) {
+        if (isFullColourPlaque) {
+          router.push('/select-material');
+          openPanel('select-material');
+        } else if (hasBorder) {
           router.push('/select-border');
-          openBorderPanel();
+          openPanel('select-border');
         } else {
           router.push('/select-size');
         }
@@ -102,7 +109,6 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   // For full-colour plaques (product 32): ONLY landscape and portrait rectangles
   // For other plaques: landscape, portrait, ovals, circle
   // For headstones: EXCLUDE plaque shapes, show all others
-  const isFullColourPlaque = catalog?.product?.id === '32';
   const uniqueShapes = shapes.reduce((acc, shape) => {
     const rectangleShapes = ['landscape.svg', 'portrait.svg'];
     const allPlaqueShapes = [...rectangleShapes, 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];

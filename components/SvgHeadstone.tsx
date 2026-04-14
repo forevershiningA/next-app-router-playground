@@ -877,10 +877,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       const i0 = t * 3, i1 = i0 + 1, i2 = i0 + 2;
       // Check if all three vertices are at front or back
       const z0 = pos.getZ(i0), z1 = pos.getZ(i1), z2 = pos.getZ(i2);
-      const cap = (Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol && Math.abs(z2 - zFront) <= zTol) || 
-                  (Math.abs(z0 - zBack) <= zTol && Math.abs(z1 - zBack) <= zTol && Math.abs(z2 - zBack) <= zTol);
+      const isFront = Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol && Math.abs(z2 - zFront) <= zTol;
       
-      const matIndex = cap ? 0 : 1;
+      // Material 0 = front face only, Material 1 = back + sides
+      const matIndex = isFront ? 0 : 1;
       if (currentMat === -1) currentMat = matIndex;
       if (matIndex !== currentMat) { flush(); currentMat = matIndex; }
       count += 3;

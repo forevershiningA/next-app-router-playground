@@ -48,7 +48,17 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
       return;
     }
     setShapeUrl(shapeUrl);
-    if (hasBorder) {
+    if (isFullColourPlaque) {
+      // Full Colour Plaque: go to background selection after shape
+      router.push('/select-material');
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('openFullscreenPanel', {
+            detail: { panel: 'select-material' },
+          }),
+        );
+      }
+    } else if (hasBorder) {
       router.push('/select-border');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
