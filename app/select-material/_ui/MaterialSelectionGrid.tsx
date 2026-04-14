@@ -228,12 +228,12 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                 <button
                   onClick={() => {
                     setIsMaterialChangeLocal(true);
-                    setHeadstoneMaterialUrl('/textures/forever/l/Imperial-Red.webp');
+                    setHeadstoneMaterialUrl('/jpg/metals/l/brushed-ss-swatch.jpg');
                     setTimeout(() => setIsMaterialChangeLocal(false), 100);
                     router.push('/select-size');
                   }}
                   className={`group relative overflow-hidden rounded-2xl p-6 text-center transition-all hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
-                    currentHeadstoneMaterialUrl === '/textures/forever/l/Imperial-Red.webp' || !currentHeadstoneMaterialUrl
+                    currentHeadstoneMaterialUrl === '/jpg/metals/l/brushed-ss-swatch.jpg' || !currentHeadstoneMaterialUrl
                       ? 'border-2 border-[#cfac6c] ring-2 ring-[#cfac6c]/30'
                       : 'border border-white/10 hover:border-[#cfac6c]/50'
                   }`}
