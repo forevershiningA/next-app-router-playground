@@ -2,7 +2,7 @@
 'use client';
 
 import * as React from 'react';
-import { useMemo, useLayoutEffect, useImperativeHandle, useRef, useState } from 'react';
+import { useMemo, useLayoutEffect, useImperativeHandle, useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useLoader } from '@react-three/fiber';
 import type { ThreeElements } from '@react-three/fiber';
@@ -10,6 +10,45 @@ import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { Edges, useTexture } from '@react-three/drei';
 import { Line } from '#/lib/headstone-store';
+
+const DEFAULT_FACE_FALLBACK = '/textures/forever/l/Imperial-Red.webp';
+
+/**
+ * Manually load a texture from a blob: or data: URL,
+ * bypassing drei/R3F useTexture which can corrupt these URLs.
+ */
+function useBlobTexture(url: string | null): THREE.Texture | null {
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+
+  useEffect(() => {
+    if (!url) {
+      setTexture(null);
+      return;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+      const tex = new THREE.Texture(img);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.needsUpdate = true;
+      setTexture(tex);
+    };
+    img.onerror = () => {
+      console.error('[useBlobTexture] Failed to load:', url.slice(0, 60));
+    };
+    img.src = url;
+
+    return () => {
+      // Dispose on cleanup
+      setTexture((prev) => {
+        prev?.dispose();
+        return null;
+      });
+    };
+  }, [url]);
+
+  return texture;
+}
 
 export type HeadstoneAPI = {
   group: React.RefObject<THREE.Group>;
@@ -178,29 +217,36 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   const svgData = useLoader(SVGLoader, url);
   const hasSideTexture = sideTexture !== null;
   const sideTextureSrc = sideTexture ?? faceTexture;
+
+  // Detect blob:/data: face textures — bypass drei's useTexture pipeline
+  const isBlobFace = faceTexture.startsWith('blob:') || faceTexture.startsWith('data:');
+  const blobFaceTexture = useBlobTexture(isBlobFace ? faceTexture : null);
+  const safeFaceTexture = isBlobFace ? DEFAULT_FACE_FALLBACK : faceTexture;
+  const safeSideTexture = isBlobFace ? DEFAULT_FACE_FALLBACK : sideTextureSrc;
+
   const textures = useTexture({
-    face: faceTexture,
-    ...(hasSideTexture ? { side: sideTextureSrc } : {}),
+    face: safeFaceTexture,
+    ...(hasSideTexture ? { side: safeSideTexture } : {}),
   });
 
   // 2. Clone Textures (FIX: Enable Mipmaps and correct Filtering)
+  const activeFace = blobFaceTexture ?? textures.face;
   const [clonedFaceMap, clonedSideMap] = useMemo(() => {
-    const f = textures.face.clone();
+    const f = activeFace.clone();
     const s = 'side' in textures ? textures.side.clone() : null;
     
     [f, s].forEach(t => {
       if (!t) return;
       t.wrapS = t.wrapT = THREE.RepeatWrapping;
-      // LinearMipmapLinearFilter is essential for removing aliasing/noise at distance
       t.minFilter = THREE.LinearMipmapLinearFilter; 
       t.magFilter = THREE.LinearFilter;
       (t as any).anisotropy = 16;
-      t.generateMipmaps = true; // Must be true for anisotropic filtering to work
+      t.generateMipmaps = true;
       t.needsUpdate = true;
     });
     
     return [f, s] as const;
-  }, [textures.face, 'side' in textures ? textures.side : null]);
+  }, [activeFace, 'side' in textures ? textures.side : null]);
 
   // 2a. Dispose cloned textures on cleanup
   React.useEffect(() => {
