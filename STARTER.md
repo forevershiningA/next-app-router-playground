@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-13
+**Last Updated:** 2026-04-14
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
 
 ---
@@ -37,21 +37,106 @@
 
 ---
 
-## Current Status (2026-04-13) — Product 32 (Full Color Plaque) Implementation, Border Scaling Fix, Background Selector
+## Current Status (2026-04-14) — Product 32 Data Migration to DB/XML, Background/Color Toggle, Upload Image, No Background
 
-### ✅ Product 32 (Full Color Plaque / Stainless Steel Plaque)
+### ✅ Product 32 Data Migrated from Hardcoded TypeScript to Database & XML
 
-Complete implementation of Product 32, a ceramic full-colour plaque on a stainless steel frame. This product has unique requirements vs. bronze plaques and stone headstones.
+All product 32 (Full Color Plaque) configuration data has been moved out of `app/_internal/_data.ts` into PostgreSQL tables and XML catalog files, following the principle that product config should never be hardcoded in TypeScript.
+
+#### Sizes → Database (`sizes` table)
+- **9 fixed sizes** migrated from hardcoded `fullColourPlaqueSizes` array to `sizes` table
+- **Source XML**: `public/xml/au_EN/sizes.xml` (product 201)
+- **Seed script**: `scripts/seed-sizes.ts` — parses XML, inserts rows with `widthMm`, `heightMm`, `priceCents`
+- **API**: `GET /api/catalog/sizes/?productType=full-colour-plaque` returns sizes with dollars/mm
+- **Store**: `headstone-store.ts` `setProductId()` fetches from API → `setFixedSizes()`
+- **Consumers**: `DesignerNav.tsx`, `CheckPricePanel.tsx`, `ThreeScene.tsx` all use `fixedSizes` from store
+
+#### Backgrounds → Database (`backgrounds` table)
+- **40 backgrounds** migrated from hardcoded `backgrounds` array to `backgrounds` table (category: `background`)
+- **35 color textures** discovered from `public/jpg/backgrounds/colors/s/*.jpg` and seeded (category: `color`)
+- **Source XML**: `public/xml/au_EN/backgrounds.xml` — names updated to generic "Background 1" through "Background 40"
+- **Seed script**: `scripts/seed-backgrounds.ts` — parses XML + filesystem discovery for colors
+- **API**: `GET /api/catalog/backgrounds/` returns all backgrounds with `category` field
+- **Schema**: `lib/db/schema.ts` `backgrounds` table has `category` column (`background` | `color`)
+- **DB totals**: 77 rows (40 active backgrounds + 2 inactive + 35 colors)
+
+#### Removed from `_data.ts`
+- `fullColourPlaqueSizes` array and `FixedSize` type → now in DB + `lib/headstone-store.types.ts`
+- `backgrounds` array → now in DB
+- `fullColourPlaqueBorders` remains in `_data.ts` (not yet migrated)
+
+### ✅ Background/Color Toggle (SegmentedControl)
+
+Product 32 material selector shows a toggle switch to filter between Backgrounds and Color Textures.
+
+- **UI component**: `SegmentedControl` (from `ui/SegmentedControl.tsx`)
+- **Sidebar**: `MaterialSelector.tsx` — toggle above the grid, filters `displayMaterials` by `bgTab` state
+- **Fullscreen**: `MaterialSelectionGrid.tsx` — same toggle with consistent styling
+- **Background textures**: `/jpg/backgrounds/forever/l/{1-40}.jpg` (2474×1365px), thumbnails in `/m/`
+- **Color textures**: `/jpg/backgrounds/colors/l/{01-35}.jpg`, thumbnails in `/s/` (zero-padded filenames)
+
+### ✅ No Background Option
+
+First position in Background tab. Resets plaque to default brushed stainless steel texture.
+
+- **Default texture**: `jpg/metals/l/brushed-ss-swatch.jpg` — sourced from `catalog-id-32.xml` `<file type="table" color="...">`, not hardcoded
+- **Store sets this on shape load**: `headstone-store.ts` line ~826 reads `shape.table.color` from parsed XML catalog
+- **Selected-state highlighting**: Gold border/ring when active (matches current `headstoneMaterialUrl`)
+- **Both sidebar and fullscreen**: Consistent icon (circle-slash) + "None" label
+
+### ✅ Upload Image as Background
+
+Second position in Background tab. Allows uploading a custom photo as the plaque background.
+
+#### How It Works
+1. **Sidebar** (`MaterialSelector.tsx`): Click "Upload Image" → file picker → image goes to existing `CropCanvas` (via `useImageCropState` hook + `setCropCanvasData`)
+2. Inline crop controls shown: size slider (Smaller/Larger), rotation slider (Decrease/Increase), Flip X/Y, Apply/Cancel — styled to match `ImageSelector.tsx`
+3. **Apply Background** → crop processed on canvas → uploaded via `POST /api/upload-background` → saved to `public/uploads/bg-{timestamp}.jpg` → standard file URL set as `headstoneMaterialUrl`
+4. **Fullscreen** (`MaterialSelectionGrid.tsx`): Simpler flow — file picker → direct upload to API → set URL → navigate to next step
+
+#### Server-Side Upload API (`app/api/upload-background/route.ts`)
+- `POST /api/upload-background` — accepts `FormData` with image file
+- Saves to `public/uploads/bg-{timestamp}.jpg`
+- Returns `{ url: '/uploads/bg-xxx.jpg' }`
+- `public/uploads/` excluded from git via `.gitignore`
+
+#### Why Server-Side Upload (not blob/data URLs)
+drei's `useTexture` pipeline (R3F's memoized `TextureLoader` singleton → Three.js `ImageLoader.load()`) corrupts blob: and data: URLs by prepending `/`. This causes `Could not load /blob:http://...` errors. Standard file paths bypass this entirely.
+
+**Defense-in-depth guards remain:**
+- `SvgHeadstone.tsx`: `useBlobTexture` hook (lines ~20-51) — loads blob/data URLs via native `THREE.TextureLoader().loadAsync()`, bypassing drei
+- `ShapeSwapper.tsx`: `isBlobOrDataTex` flag skips `PreloadTexture` component for blob/data URLs
+- `ShapeSwapper.tsx`: `requestedTex` useMemo has blob/data passthrough checks
+
+### ✅ Background Only on Front Face
+
+For product 32, background textures only apply to the front face of the plaque. Back and sides show plain grey material.
+
+- `SvgHeadstone.tsx`: `stretchFace` prop forces `repFaceX=1, repFaceY=1` (no texture tiling)
+- `SvgHeadstone.tsx`: `sideTexture={null}` creates plain grey `MeshPhysicalMaterial` for back+sides
+- `ShapeSwapper.tsx`: passes `stretchFace={true}` and `sideTexture={null}` when `isFullColourPlaque`
+- Front-face material group assignment ensures only front triangles get the background texture
+
+### ✅ Workflow Routing for Product 32
+
+After Select Shape, product 32 goes to Background selection (not Select Border like other products).
+
+- `ShapeSelector.tsx` and `ShapeSelectionGrid.tsx`: route to `/select-material` for product 32
+- The `/select-material` page shows "Background" label instead of "Select Material"
+
+### ✅ Product 32 (Full Color Plaque / Stainless Steel Plaque) — Base Configuration
+
+Complete implementation of Product 32, a ceramic full-colour plaque on a stainless steel frame.
 
 #### Product Configuration (`public/xml/catalog-id-32.xml`)
 - **Product ID**: 32, **Type**: `plaque`, **Material type**: `backgrounds`, **materialID**: `17`
 - **Shapes**: Only 2 — Rectangle (Landscape) and Rectangle (Portrait)
 - **Borders**: 2 options — "No Border" and "Stainless Steel Border" (Border 4)
-- **Texture**: `jpg/metals/l/brushed-ss-swatch.jpg` (brushed stainless steel)
+- **Default texture**: `jpg/metals/l/brushed-ss-swatch.jpg` (brushed stainless steel) — set via `<file type="table" color="...">`
 - **Flags**: `border="1"`, `fixed="1"`, `sizes="9"`, `background="1"`, `laser="0"`
 
-#### Fixed Size System (`app/_internal/_data.ts`)
-Product 32 uses 9 preset sizes (not continuous sliders) from `sizes.xml` product 201:
+#### Fixed Size System (Database)
+Product 32 uses 9 preset sizes (not continuous sliders), now served from the `sizes` database table:
 
 | # | Width × Height (mm) | Price |
 |---|---------------------|-------|
@@ -65,44 +150,30 @@ Product 32 uses 9 preset sizes (not continuous sliders) from `sizes.xml` product
 | 8 | 216 × 381 | $780 |
 | 9 | 280 × 380 | $990 |
 
-- **UI**: Discrete-step slider (1–9 stops) in `DesignerNav.tsx` `renderSelectSizePanel()`, matching the Additions fixed-size pattern
-- **Pricing**: `CheckPricePanel.tsx` uses price lookup from `fullColourPlaqueSizes` instead of XML formula
+- **UI**: Discrete-step slider (1–9 stops) in `DesignerNav.tsx` `renderSelectSizePanel()`
+- **Pricing**: `CheckPricePanel.tsx` uses price lookup from `fixedSizes` store state
 - **Orientation**: Width↔height transposed for landscape shapes
 - **Stainless Steel Border**: Fixed $299 add-on (product ID 37), shown in Check Price when SS border selected
 
 #### Stainless Steel Border (`BronzeBorder.tsx`)
 - Border 4 SVG rendered with stainless steel texture (dedicated `generateStainlessSteelTexture()`)
-- **Fixed physical frame width**: SVG scale uses `fixedFrameFactor = 200 / minDimensionMm` (no clamping) so the border frame appears proportionally thicker on smaller plaques and thinner on larger ones — matching real product photos
+- **Fixed physical frame width**: SVG scale uses `fixedFrameFactor = 200 / minDimensionMm` (no clamping)
 - **Coverage clamping skipped** for SS borders (bronze borders clamp to 97-99% coverage)
-- **Instant rebuild**: Debounce disabled for SS borders since sizes are discrete steps (not continuous dragging)
+- **Instant rebuild**: Debounce disabled for SS borders since sizes are discrete steps
 - Data: `fullColourPlaqueBorders` in `_data.ts` (2 entries: No Border + SS Border)
 
-#### Background Selector
-- **Nav label**: "Select Material" renamed to "Background" for product 32 (sidebar, fullscreen panel header, and loading text)
-- **`select-material` excluded from generic `fullscreenPanelSlugs` handler** — falls through to its own special-handling block which uses the conditional label
-- **40 backgrounds** (`app/_internal/_data.ts` → `backgrounds` array) with:
-  - Full-size textures: `/jpg/backgrounds/forever/l/{1-40}.jpg` (2474×1365px)
-  - Thumbnails: `/jpg/backgrounds/forever/m/{1-40}.jpg` (resized to 300×165px)
-- **Store**: `headstone-store.ts` `setProductId()` sets `materials` to `data.backgrounds` for product 32
-- **MaterialSelector** works unchanged — `resolveMaterialAssetPath()` passes absolute `/jpg/...` paths through as-is
-
-#### Shape Filtering
-- `ShapeSelector` restricted to 2 shapes for product 32 (Landscape + Portrait)
-- Both shapes added to `catalog-id-32.xml`
-
-#### Sidebar Bounce-Back Fix
-- Fixed `useEffect` guard in `DesignerNav.tsx` that prevented panel-to-panel transitions from shape selector
-- Guard now checks `fullscreenPanelSlugs.has(currentSlug)` — only non-panel routes trigger the early return
-
-#### Files Changed
-- `app/_internal/_data.ts` — `fullColourPlaqueBorders`, `fullColourPlaqueSizes`, `backgrounds`, `FixedSize` type
-- `lib/headstone-store.ts` — Product 32 border setup, material → backgrounds population
-- `components/DesignerNav.tsx` — Fixed size slider, "Background" label, bounce-back fix, `select-material` exclusion from generic handler
-- `components/CheckPricePanel.tsx` — Fixed size price lookup, SS border $299 add-on
-- `components/three/BronzeBorder.tsx` — SS texture, fixed frame width, coverage skip, instant rebuild
-- `components/three/headstone/ShapeSwapper.tsx` — `isStainlessSteel` prop forwarding, shape filtering
-- `public/xml/catalog-id-32.xml` — 2 shapes, border, sizes, background texture config
-- `public/jpg/backgrounds/forever/m/*.jpg` — 40 images resized to 300px thumbnails
+#### Key Files
+- `components/MaterialSelector.tsx` — Background/Color toggle, No Background, Upload Image, crop controls
+- `app/select-material/_ui/MaterialSelectionGrid.tsx` — Fullscreen version of same
+- `components/SvgHeadstone.tsx` — `stretchFace`, `sideTexture`, `useBlobTexture` hook
+- `components/three/headstone/ShapeSwapper.tsx` — Product 32 prop forwarding, blob/data guards
+- `app/api/upload-background/route.ts` — Server-side image upload endpoint
+- `app/api/catalog/sizes/route.ts` — Sizes API
+- `app/api/catalog/backgrounds/route.ts` — Backgrounds API (with category)
+- `lib/db/schema.ts` — `sizes` and `backgrounds` tables
+- `scripts/seed-sizes.ts` — Sizes seeder from XML
+- `scripts/seed-backgrounds.ts` — Backgrounds + color textures seeder
+- `components/ConditionalCanvas.tsx` — `{cropCanvasData ? <CropCanvas /> : <ThreeScene />}` swap
 
 ### 📌 Next Steps
 
@@ -111,6 +182,7 @@ Product 32 uses 9 preset sizes (not continuous sliders) from `sizes.xml` product
 3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
 4. **Visual QA pass** — Compare designs with original screenshots
 5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+6. **Migrate `fullColourPlaqueBorders`** from `_data.ts` to database
 
 ---
 
@@ -4867,6 +4939,8 @@ shapes { id, slug, name, section, maskKey, previewUrl, attributes }
 borders { id, slug, name, category, svgUrl, attributes }
 motifs { id, sku, name, category, tags, priceCents, previewUrl, svgUrl }
 additions { id, name, type, categoryId, thumbnailUrl, model3dUrl, sizes }
+sizes { id, productType, widthMm, heightMm, priceCents, sortOrder, isActive }
+backgrounds { id, name, slug, category, textureUrl, thumbnailUrl, sortOrder, isActive }
 
 // Design Data
 projects { id, accountId, name, designState, screenshotPath, totalPriceCents }
@@ -4909,6 +4983,26 @@ npm run db:seed-additions
 - Includes size variants with dimensions and pricing
 - Script: `scripts/seed-additions.ts`
 - Documentation: `ADDITIONS_MIGRATION_COMPLETE.md`
+
+**Sizes Seeding:**
+```bash
+npm run db:seed-sizes
+```
+- Seeds 9 fixed sizes for product 32 (Full Color Plaque)
+- Source: `public/xml/au_EN/sizes.xml` (product 201)
+- Dimensions in mm, prices in cents
+- Script: `scripts/seed-sizes.ts`
+
+**Backgrounds Seeding:**
+```bash
+npm run db:seed-backgrounds
+```
+- Seeds 40 background textures from `public/xml/au_EN/backgrounds.xml` (category: `background`)
+- Seeds 35 color textures discovered from `public/jpg/backgrounds/colors/s/*.jpg` (category: `color`)
+- Full-size textures: `/jpg/backgrounds/forever/l/{1-40}.jpg`, `/jpg/backgrounds/colors/l/{01-35}.jpg`
+- Thumbnails: `/jpg/backgrounds/forever/m/`, `/jpg/backgrounds/colors/s/`
+- Script: `scripts/seed-backgrounds.ts`
+- DB totals: 77 rows (40 active backgrounds + 2 inactive + 35 colors)
 
 ### Catalog Mappers
 
@@ -7328,37 +7422,44 @@ For questions or issues:
 
 ---
 
-## Database Seeding Reference (March 2026)
+## Database Seeding Reference (March–April 2026)
 
 ### Quick Reference
 
 | Command | What it does | Count | Status |
 |---------|-------------|-------|--------|
-| `npm run db:seed-materials` | Seeds granite materials | 29 | ✅ Complete |
-| `npm run db:seed-shapes` | Seeds headstone shapes | 55 | ✅ Complete |
-| `npm run db:seed-additions` | Seeds additions (vases, statues) | 82 | ✅ Complete |
+| 
+pm run db:seed-materials | Seeds granite materials | 29 | ✅ Complete |
+| 
+pm run db:seed-shapes | Seeds headstone shapes | 55 | ✅ Complete |
+| 
+pm run db:seed-additions | Seeds additions (vases, statues) | 82 | ✅ Complete |
+| 
+pm run db:seed-sizes | Seeds fixed sizes (product 32) | 9 | ✅ Complete |
+| 
+pm run db:seed-backgrounds | Seeds backgrounds + color textures | 77 | ✅ Complete |
 
 ### Materials (29 total)
-- **Source**: `app/_internal/_data.ts`
-- **Path**: `/textures/forever/l/*.webp`
-- **Script**: `scripts/seed-materials.ts`
-- **Docs**: `MATERIALS_DATABASE_FIX.md`
+- **Source**: pp/_internal/_data.ts
+- **Path**: /textures/forever/l/*.webp
+- **Script**: scripts/seed-materials.ts
+- **Docs**: MATERIALS_DATABASE_FIX.md
 - **Categories**: All granite, polished finish
 - **Examples**: African Black, Blue Pearl, Imperial Red, Noble Black, Paradiso
 
 ### Shapes (55 total)
-- **Source**: `app/_internal/_data.ts`
-- **Path**: `/shapes/headstones/*.svg`
-- **Script**: `scripts/seed-shapes.ts`
-- **Docs**: `SHAPES_DATABASE_FIX.md`
+- **Source**: pp/_internal/_data.ts
+- **Path**: /shapes/headstones/*.svg
+- **Script**: scripts/seed-shapes.ts
+- **Docs**: SHAPES_DATABASE_FIX.md
 - **Traditional (11)**: Cropped Peak, Curved Gable, Curved Peak, Curved Top, Half Round, Gable, Left Wave, Peak, Right Wave, Serpentine, Square
 - **Modern (44)**: Headstone 1-39, Guitar 1-5
 
 ### Additions (82 total)
-- **Source**: `public/xml/en_EN/motifs-biondan.xml`
-- **Path**: `/models/*.glb`, `/images/*.webp`
-- **Script**: `scripts/seed-additions.ts`
-- **Docs**: `ADDITIONS_MIGRATION_COMPLETE.md`
+- **Source**: public/xml/en_EN/motifs-biondan.xml
+- **Path**: /models/*.glb, /images/*.webp
+- **Script**: scripts/seed-additions.ts
+- **Docs**: ADDITIONS_MIGRATION_COMPLETE.md
 - **Categories**: 
   - Biondan Bronze (24)
   - Crosses (13)
@@ -7367,9 +7468,25 @@ For questions or issues:
   - Vases (10)
 - **Size Variants**: 60 single-size (73%), 22 multi-size (27%)
 
+### Sizes (9 total)
+- **Source**: public/xml/au_EN/sizes.xml (product 201)
+- **Product**: Full Color Plaque (product 32)
+- **Script**: scripts/seed-sizes.ts
+- **Fields**: productType, widthMm, heightMm, priceCents, sortOrder
+- **API**: GET /api/catalog/sizes/?productType=full-colour-plaque
+
+### Backgrounds (77 total)
+- **Source**: public/xml/au_EN/backgrounds.xml + filesystem discovery
+- **Script**: scripts/seed-backgrounds.ts
+- **Categories**:
+  - Background (40 active, 2 inactive): /jpg/backgrounds/forever/l/{1-40}.jpg
+  - Color (35): /jpg/backgrounds/colors/l/{01-35}.jpg (zero-padded filenames)
+- **Thumbnails**: /jpg/backgrounds/forever/m/ (backgrounds), /jpg/backgrounds/colors/s/ (colors)
+- **API**: GET /api/catalog/backgrounds/ (returns category field)
+
 ### Database Commands
 
-`ash
+```bash
 # Development
 npm run db:push              # Push schema to database
 npm run db:studio            # Open Drizzle Studio (GUI)
@@ -7378,21 +7495,23 @@ npm run db:studio            # Open Drizzle Studio (GUI)
 npm run db:seed-materials    # Replace all materials
 npm run db:seed-shapes       # Replace all shapes  
 npm run db:seed-additions    # Replace all additions
+npm run db:seed-sizes        # Replace all sizes
+npm run db:seed-backgrounds  # Replace all backgrounds + colors
 
 # Production deployment
 npm run db:migrate           # Run migrations on production
-`
+npm run db:sync              # Sync local DB to remote (home.pl)
+```
 
 ### Environment Setup
 
-`ash
+```bash
 # .env.local
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
-`
+```
 
-**Note**: All seeding scripts use dotenv to read `.env.local` automatically.
+**Note**: All seeding scripts use dotenv to read .env.local automatically.
 
 ---
 
-*End of STARTER.md - Last updated: April 4, 2026*
-
+*End of STARTER.md - Last updated: April 14, 2026*
