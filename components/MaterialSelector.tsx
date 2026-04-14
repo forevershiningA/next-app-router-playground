@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
+import BackgroundUploadCrop from './BackgroundUploadCrop';
 
 type MaterialSelectorProps = {
   materials: MaterialOption[];
@@ -36,6 +37,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const isFullColourPlaque = productId === '32';
   const isFullMonument = catalog?.product.type === 'full-monument';
   const [bgTab, setBgTab] = React.useState<'background' | 'color'>('background');
+  const [showCrop, setShowCrop] = useState(false);
 
   const buildTextureUrl = (material: MaterialOption) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
@@ -158,7 +160,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       )}
 
       {isFullColourPlaque && (
-        <div className="mb-2">
+        <div className="mb-4">
           <SegmentedControl
             value={bgTab}
             onChange={(value) => setBgTab(value as 'background' | 'color')}
@@ -173,6 +175,27 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       <div
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >
+        {/* Upload Image button — first position in Background tab */}
+        {isFullColourPlaque && bgTab === 'background' && (
+          <button
+            onClick={() => setShowCrop(true)}
+            className="relative overflow-hidden cursor-pointer"
+            title="Upload Image"
+          >
+            <div className="relative aspect-square overflow-hidden border-2 border-dashed border-white/20 flex items-center justify-center hover:border-[#D7B356]/50 transition-colors">
+              <div className="flex flex-col items-center gap-1">
+                <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+                <span className="text-[10px] text-gray-400">Upload</span>
+              </div>
+            </div>
+            <div className="p-2 h-12 flex items-center justify-center">
+              <div className="text-xs text-center text-slate-200">Upload Image</div>
+            </div>
+          </button>
+        )}
+
         {displayMaterials.map((material) => {
           const textureUrl = buildTextureUrl(material);
           const thumbnailUrl = buildThumbnailUrl(material, textureUrl);
@@ -208,6 +231,9 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           );
         })}
       </div>
+
+      {/* Background Upload + Crop modal */}
+      {showCrop && <BackgroundUploadCrop onClose={() => setShowCrop(false)} />}
     </div>
   );
 }
