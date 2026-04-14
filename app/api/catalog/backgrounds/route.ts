@@ -11,7 +11,7 @@ export async function GET() {
       id: r.slug,
       name: r.name,
       image: null,
-      category: 'background',
+      category: r.category ?? 'background',
       textureUrl: r.textureUrl,
       thumbnailUrl: r.thumbnailUrl,
     }));

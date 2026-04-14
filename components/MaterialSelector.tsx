@@ -33,7 +33,9 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const showKerbset = useHeadstoneStore((s) => s.showKerbset);
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
+  const isFullColourPlaque = productId === '32';
   const isFullMonument = catalog?.product.type === 'full-monument';
+  const [bgTab, setBgTab] = React.useState<'background' | 'color'>('background');
 
   const buildTextureUrl = (material: MaterialOption) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
@@ -55,7 +57,6 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
   const displayMaterials = useMemo(() => {
     if (isBronzePlaque) {
-      // Convert bronzes to Material format
       return bronzes.map(b => ({
         id: b.id,
         name: b.name,
@@ -63,8 +64,11 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         category: 'bronze'
       }));
     }
+    if (isFullColourPlaque) {
+      return materials.filter(m => m.category === bgTab);
+    }
     return materials;
-  }, [isBronzePlaque, materials]);
+  }, [isBronzePlaque, isFullColourPlaque, materials, bgTab]);
 
   // Ensure canvas selection matches editingObject when component mounts
   useEffect(() => {
@@ -149,6 +153,19 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
               setSelected(nextTarget);
             }}
             options={targetOptions}
+          />
+        </div>
+      )}
+
+      {isFullColourPlaque && (
+        <div className="mb-2">
+          <SegmentedControl
+            value={bgTab}
+            onChange={(value) => setBgTab(value as 'background' | 'color')}
+            options={[
+              { label: 'Background', value: 'background' },
+              { label: 'Color', value: 'color' },
+            ]}
           />
         </div>
       )}

@@ -167,6 +167,7 @@ export const backgrounds = pgTable('backgrounds', {
   id: serial('id').primaryKey(),
   slug: text('slug').notNull().unique(),
   name: text('name').notNull(),
+  category: text('category').notNull().default('background'),
   sortOrder: integer('sort_order').notNull().default(0),
   textureUrl: text('texture_url'),
   thumbnailUrl: text('thumbnail_url'),

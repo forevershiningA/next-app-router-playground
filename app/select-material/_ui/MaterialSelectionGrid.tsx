@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
+import SegmentedControl from '#/components/ui/SegmentedControl';
 
 type MaterialCategory = {
   id: string;
@@ -56,6 +57,8 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
 
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
+  const isFullColourPlaque = productId === '32';
+  const [bgTab, setBgTab] = useState<'background' | 'color'>('background');
 
   const buildTextureUrl = (material: MaterialOption) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
@@ -86,7 +89,6 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   // Use bronze materials for Bronze Plaque (id 5), otherwise use regular materials
   const displayMaterials = useMemo(() => {
     if (isBronzePlaque) {
-      // Convert bronzes to Material format
       return bronzes.map(b => ({
         id: b.id,
         name: b.name,
@@ -94,8 +96,12 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
         category: 'bronze'
       }));
     }
-    return storeMaterials.length > 0 ? storeMaterials : materials;
-  }, [isBronzePlaque, storeMaterials, materials]);
+    const source = storeMaterials.length > 0 ? storeMaterials : materials;
+    if (isFullColourPlaque) {
+      return source.filter(m => m.category === bgTab);
+    }
+    return source;
+  }, [isBronzePlaque, isFullColourPlaque, storeMaterials, materials, bgTab]);
 
   // Check if user has already selected shape (canvas should be visible)
   // If shape is selected, the sidebar MaterialSelector will be shown instead
@@ -131,11 +137,11 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     router.push('/select-size');
   };
 
-  const filteredMaterials = displayMaterials.filter((material) => {
-    const matchesCategory =
-      selectedCategory === 'all' || material.category === selectedCategory;
-    return matchesCategory;
-  });
+  const filteredMaterials = isFullColourPlaque
+    ? displayMaterials
+    : displayMaterials.filter((material) => {
+        return selectedCategory === 'all' || material.category === selectedCategory;
+      });
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -144,16 +150,32 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
-              Select Your Material
+              {isFullColourPlaque ? 'Select Background' : 'Select Your Material'}
             </h1>
             <p className="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">
-              Choose from premium granite and marble in various colours and finishes. Each stone is selected for its durability, weather resistance, and lasting beauty. Consider typical cemetery regulations and care requirements when making your selection.
+              {isFullColourPlaque
+                ? 'Choose a background image or solid color for your plaque.'
+                : 'Choose from premium granite and marble in various colours and finishes. Each stone is selected for its durability, weather resistance, and lasting beauty. Consider typical cemetery regulations and care requirements when making your selection.'}
             </p>
           </div>
         </div>
       </div>
 
       {/* Category Filter */}
+      {isFullColourPlaque ? (
+        <div className="border-b border-gray-800">
+          <div className="mx-auto max-w-md px-6 py-6 lg:px-8">
+            <SegmentedControl
+              value={bgTab}
+              onChange={(value) => setBgTab(value as 'background' | 'color')}
+              options={[
+                { label: 'Background', value: 'background' },
+                { label: 'Color', value: 'color' },
+              ]}
+            />
+          </div>
+        </div>
+      ) : (
       <div className="border-b border-gray-800">
         <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
           <div className="flex flex-wrap justify-center gap-3">
@@ -183,6 +205,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
           </div>
         </div>
       </div>
+      )}
 
       {/* Materials Grid */}
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
@@ -267,7 +290,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
       </div>
 
       {/* Category Info Cards (when category is selected) */}
-      {selectedCategory !== 'all' && (
+      {!isFullColourPlaque && selectedCategory !== 'all' && (
         <div className="border-t border-gray-800">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
             {materialCategories
