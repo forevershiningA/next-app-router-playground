@@ -65,15 +65,17 @@ async function seedBackgrounds() {
 
     const inserted = [];
     for (const bg of bgData) {
-      const slug = `bg-${bg.id}`;
+      // Strip leading zeros from XML IDs to match actual filenames (1.jpg not 01.jpg)
+      const numericId = String(parseInt(bg.id, 10));
+      const slug = `bg-${numericId}`;
       const result = await db
         .insert(backgrounds)
         .values({
           slug,
           name: bg.name,
           sortOrder: bg.sortOrder,
-          textureUrl: `/jpg/backgrounds/forever/l/${bg.id}.jpg`,
-          thumbnailUrl: `/jpg/backgrounds/forever/m/${bg.id}.jpg`,
+          textureUrl: `/jpg/backgrounds/forever/l/${numericId}.jpg`,
+          thumbnailUrl: `/jpg/backgrounds/forever/m/${numericId}.jpg`,
         })
         .returning();
       inserted.push(result[0]);
