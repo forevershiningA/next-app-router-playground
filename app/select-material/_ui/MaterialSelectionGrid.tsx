@@ -223,7 +223,34 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
               Showing {filteredMaterials.length} material{filteredMaterials.length !== 1 ? 's' : ''}
             </div>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-              {/* Upload Image button — first position in Background tab */}
+              {/* No Background button — first position in Background tab */}
+              {isFullColourPlaque && bgTab === 'background' && (
+                <button
+                  onClick={() => {
+                    setIsMaterialChangeLocal(true);
+                    setHeadstoneMaterialUrl('/textures/forever/l/Imperial-Red.webp');
+                    setTimeout(() => setIsMaterialChangeLocal(false), 100);
+                    router.push('/select-size');
+                  }}
+                  className={`group relative overflow-hidden rounded-2xl p-6 text-center transition-all hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
+                    currentHeadstoneMaterialUrl === '/textures/forever/l/Imperial-Red.webp' || !currentHeadstoneMaterialUrl
+                      ? 'border-2 border-[#cfac6c] ring-2 ring-[#cfac6c]/30'
+                      : 'border border-white/10 hover:border-[#cfac6c]/50'
+                  }`}
+                >
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 ring-1 ring-white/10 flex items-center justify-center">
+                    <div className="flex flex-col items-center gap-2">
+                      <svg className="h-10 w-10 text-gray-400 group-hover:text-[#cfac6c] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                      </svg>
+                      <span className="text-sm text-gray-400 group-hover:text-[#cfac6c] transition-colors">None</span>
+                    </div>
+                  </div>
+                  <h3 className="text-base font-semibold text-white text-center mb-3 tracking-wide">No Background</h3>
+                </button>
+              )}
+
+              {/* Upload Image button — second position in Background tab */}
               {isFullColourPlaque && bgTab === 'background' && (
                 <>
                   <input
