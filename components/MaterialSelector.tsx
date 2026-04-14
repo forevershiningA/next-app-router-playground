@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
-import BackgroundUploadCrop from './BackgroundUploadCrop';
+import { useImageCropState } from './useImageCropState';
+import type { MaskShape } from '#/lib/image-mask';
 
 type MaterialSelectorProps = {
   materials: MaterialOption[];
@@ -32,12 +33,151 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const showBase = useHeadstoneStore((s) => s.showBase);
   const showLedger = useHeadstoneStore((s) => s.showLedger);
   const showKerbset = useHeadstoneStore((s) => s.showKerbset);
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
+  const heightMm = useHeadstoneStore((s) => s.heightMm);
+  const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
   const isFullMonument = catalog?.product.type === 'full-monument';
   const [bgTab, setBgTab] = React.useState<'background' | 'color'>('background');
-  const [showCrop, setShowCrop] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Background crop state using the existing crop system
+  const {
+    uploadedImage,
+    showCropSection,
+    setShowCropSection,
+    selectedMask,
+    setSelectedMask,
+    cropScale,
+    setCropScale,
+    cropRotation,
+    setCropRotation,
+    flipX,
+    setFlipX,
+    flipY,
+    setFlipY,
+    maskMetrics,
+    cropArea,
+    setCropArea,
+    hasFixedSizes,
+    allowFreeformHandles,
+    resetCropState,
+    openUploadForImage,
+  } = useImageCropState();
+
+  // Set mask to rectangle matching plaque orientation
+  const isLandscape = widthMm > heightMm;
+  useEffect(() => {
+    if (showCropSection) {
+      const mask: MaskShape = isLandscape ? 'rectangle' : 'square';
+      setSelectedMask(mask);
+    }
+  }, [showCropSection, isLandscape, setSelectedMask]);
+
+  // Update crop canvas data in store when crop state changes
+  const updateCropAreaCallback = useCallback((newCropArea: typeof cropArea) => {
+    setCropArea(newCropArea);
+  }, [setCropArea]);
+
+  useEffect(() => {
+    if (showCropSection && uploadedImage) {
+      setCropCanvasData({
+        uploadedImage,
+        selectedMask,
+        cropColorMode: 'full',
+        cropScale,
+        cropRotation,
+        flipX,
+        flipY,
+        cropArea,
+        hasFixedSizes,
+        allowFreeformHandles,
+        maskMetrics,
+        updateCropArea: updateCropAreaCallback,
+      });
+    }
+    // Don't clear on unmount — let handleApplyBackground or handleCancelCrop clear it
+  }, [showCropSection, uploadedImage, selectedMask, cropScale, cropRotation, flipX, flipY, cropArea, hasFixedSizes, allowFreeformHandles, maskMetrics, setCropCanvasData, updateCropAreaCallback]);
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return;
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Image size must be less than 10 MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageUrl = e.target?.result as string;
+      const img = new window.Image();
+      img.onload = () => {
+        openUploadForImage(imageUrl, { width: img.width, height: img.height });
+      };
+      img.src = imageUrl;
+    };
+    reader.readAsDataURL(file);
+    // Reset input so re-selecting the same file works
+    event.target.value = '';
+  };
+
+  const handleApplyBackground = async () => {
+    if (!uploadedImage) return;
+
+    try {
+      // Create canvas for processing
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const img = new window.Image();
+      img.crossOrigin = 'anonymous';
+      img.src = uploadedImage;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      // Calculate crop area in pixels
+      const cropX = (cropArea.x / 100) * img.width;
+      const cropY = (cropArea.y / 100) * img.height;
+      const cropW = (cropArea.width / 100) * img.width;
+      const cropH = (cropArea.height / 100) * img.height;
+
+      canvas.width = cropW;
+      canvas.height = cropH;
+
+      // Apply transforms
+      ctx.save();
+      ctx.translate(cropW / 2, cropH / 2);
+      ctx.rotate((cropRotation * Math.PI) / 180);
+      ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+      ctx.scale(cropScale / 100, cropScale / 100);
+      ctx.drawImage(img, cropX, cropY, cropW, cropH, -cropW / 2, -cropH / 2, cropW, cropH);
+      ctx.restore();
+
+      // Export as data URL and set as material
+      const processedImageUrl = canvas.toDataURL('image/jpeg', 0.92);
+
+      setIsMaterialChange(true);
+      setHeadstoneMaterialUrl(processedImageUrl);
+      setTimeout(() => setIsMaterialChange(false), 100);
+
+      // Reset crop state
+      setCropCanvasData(null);
+      resetCropState();
+    } catch (error) {
+      console.error('Failed to process background image:', error);
+    }
+  };
+
+  const handleCancelCrop = () => {
+    setCropCanvasData(null);
+    resetCropState();
+  };
 
   const buildTextureUrl = (material: MaterialOption) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
@@ -143,6 +283,94 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     setTimeout(() => setIsMaterialChange(false), 100);
   };
 
+  // When in crop mode, show crop controls instead of material grid
+  if (isFullColourPlaque && showCropSection && uploadedImage) {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between mb-2">
+          <h4 className="text-white font-medium">Crop Background</h4>
+          <button
+            onClick={handleCancelCrop}
+            className="text-xs text-white/60 hover:text-white transition-colors"
+          >
+            Cancel
+          </button>
+        </div>
+
+        {/* Size slider */}
+        <div className="space-y-2">
+          <div className="text-xs text-white/60">Adjust Size</div>
+          <input
+            type="range"
+            min="20"
+            max="80"
+            value={cropArea.height}
+            onChange={(e) => {
+              const newHeight = parseInt(e.target.value);
+              setCropArea(prev => {
+                const centerX = prev.x + prev.width / 2;
+                const centerY = prev.y + prev.height / 2;
+                const currentAspectRatio = prev.width / prev.height;
+                const newWidth = newHeight * currentAspectRatio;
+                return {
+                  x: centerX - newWidth / 2,
+                  y: centerY - newHeight / 2,
+                  width: newWidth,
+                  height: newHeight,
+                };
+              });
+            }}
+            className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
+          />
+        </div>
+
+        {/* Rotation slider */}
+        <div className="space-y-2">
+          <div className="text-xs text-white/60">Rotation: {cropRotation}°</div>
+          <input
+            type="range"
+            min="-180"
+            max="180"
+            value={cropRotation}
+            onChange={(e) => setCropRotation(parseInt(e.target.value))}
+            className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
+          />
+        </div>
+
+        {/* Flip buttons */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => setFlipX(!flipX)}
+            className={`flex-1 rounded-lg border px-3 py-2 text-sm transition-colors ${
+              flipX ? 'border-[#D7B356] bg-[#D7B356]/20 text-white' : 'border-white/20 text-white/60 hover:text-white'
+            }`}
+          >
+            Flip H
+          </button>
+          <button
+            onClick={() => setFlipY(!flipY)}
+            className={`flex-1 rounded-lg border px-3 py-2 text-sm transition-colors ${
+              flipY ? 'border-[#D7B356] bg-[#D7B356]/20 text-white' : 'border-white/20 text-white/60 hover:text-white'
+            }`}
+          >
+            Flip V
+          </button>
+        </div>
+
+        {/* Apply button */}
+        <button
+          onClick={handleApplyBackground}
+          className="w-full rounded-lg bg-[#DEBD68] px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-[#d7b356] transition-colors flex items-center justify-center gap-2"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          Apply Background
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       {!isPlaque && (
@@ -171,6 +399,15 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           />
         </div>
       )}
+
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/jpeg,image/png,image/webp"
+        className="hidden"
+        onChange={handleFileUpload}
+      />
       
       <div
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
@@ -178,7 +415,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         {/* Upload Image button — first position in Background tab */}
         {isFullColourPlaque && bgTab === 'background' && (
           <button
-            onClick={() => setShowCrop(true)}
+            onClick={() => fileInputRef.current?.click()}
             className="relative overflow-hidden cursor-pointer"
             title="Upload Image"
           >
@@ -231,9 +468,6 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           );
         })}
       </div>
-
-      {/* Background Upload + Crop modal */}
-      {showCrop && <BackgroundUploadCrop onClose={() => setShowCrop(false)} />}
     </div>
   );
 }

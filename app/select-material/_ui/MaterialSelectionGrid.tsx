@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -8,7 +8,6 @@ import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headst
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
 import SegmentedControl from '#/components/ui/SegmentedControl';
-import BackgroundUploadCrop from '#/components/BackgroundUploadCrop';
 
 type MaterialCategory = {
   id: string;
@@ -60,7 +59,8 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
   const [bgTab, setBgTab] = useState<'background' | 'color'>('background');
-  const [showCrop, setShowCrop] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const setIsMaterialChangeLocal = useHeadstoneStore((s) => s.setIsMaterialChange);
 
   const buildTextureUrl = (material: MaterialOption) => {
     const basePath = isBronzePlaque ? '/textures/phoenix/l/' : '/textures/forever/l/';
@@ -225,23 +225,45 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {/* Upload Image button — first position in Background tab */}
               {isFullColourPlaque && bgTab === 'background' && (
-                <button
-                  onClick={() => setShowCrop(true)}
-                  className="group relative overflow-hidden rounded-2xl border border-dashed border-white/20 p-6 text-center transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/10"
-                >
-                  <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 ring-1 ring-white/10 flex items-center justify-center">
-                    <div className="flex flex-col items-center gap-2">
-                      <svg className="h-10 w-10 text-gray-400 group-hover:text-[#cfac6c] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                      </svg>
-                      <span className="text-sm text-gray-400 group-hover:text-[#cfac6c] transition-colors">Upload</span>
+                <>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (!file || !file.type.startsWith('image/')) return;
+                      const reader = new FileReader();
+                      reader.onload = (ev) => {
+                        const imageUrl = ev.target?.result as string;
+                        setIsMaterialChangeLocal(true);
+                        setHeadstoneMaterialUrl(imageUrl);
+                        setTimeout(() => setIsMaterialChangeLocal(false), 100);
+                        router.push('/select-size');
+                      };
+                      reader.readAsDataURL(file);
+                      e.target.value = '';
+                    }}
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    className="group relative overflow-hidden rounded-2xl border border-dashed border-white/20 p-6 text-center transition-all hover:border-[#cfac6c]/50 hover:shadow-2xl hover:shadow-[#cfac6c]/10"
+                  >
+                    <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 ring-1 ring-white/10 flex items-center justify-center">
+                      <div className="flex flex-col items-center gap-2">
+                        <svg className="h-10 w-10 text-gray-400 group-hover:text-[#cfac6c] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                        </svg>
+                        <span className="text-sm text-gray-400 group-hover:text-[#cfac6c] transition-colors">Upload</span>
+                      </div>
                     </div>
-                  </div>
-                  <h3 className="text-base font-semibold text-white text-center mb-3 tracking-wide">Upload Image</h3>
-                  <div className="flex items-center justify-center gap-2 text-sm font-medium text-[#cfac6c]/80 group-hover:text-[#cfac6c] transition-colors">
-                    <span>Choose Photo</span>
-                  </div>
-                </button>
+                    <h3 className="text-base font-semibold text-white text-center mb-3 tracking-wide">Upload Image</h3>
+                    <div className="flex items-center justify-center gap-2 text-sm font-medium text-[#cfac6c]/80 group-hover:text-[#cfac6c] transition-colors">
+                      <span>Choose Photo</span>
+                    </div>
+                  </button>
+                </>
               )}
 
               {filteredMaterials.map((material) => {
@@ -333,8 +355,6 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
         </div>
       )}
 
-      {/* Background Upload + Crop modal */}
-      {showCrop && <BackgroundUploadCrop onClose={() => setShowCrop(false)} />}
     </div>
   );
 }
