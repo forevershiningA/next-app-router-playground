@@ -361,7 +361,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     if (!headstoneMaterialUrl) {
       return `${TEX_BASE}${DEFAULT_TEX}`;
     }
-    if (headstoneMaterialUrl.startsWith('http')) {
+    if (headstoneMaterialUrl.startsWith('http') || headstoneMaterialUrl.startsWith('data:')) {
       return headstoneMaterialUrl;
     }
     if (headstoneMaterialUrl.startsWith('/')) {
