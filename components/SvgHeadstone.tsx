@@ -37,6 +37,7 @@ type Props = {
   topTileSize?: number;
   faceRepeatX?: number;
   faceRepeatY?: number;
+  stretchFace?: boolean;
   sideRepeatX?: number;
   sideRepeatY?: number;
   targetHeight?: number;
@@ -157,6 +158,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   sideTileSize,
   faceRepeatX = 6,
   faceRepeatY = 6,
+  stretchFace = false,
   sideRepeatX = 8,
   sideRepeatY = 1,
   targetHeight,
@@ -1005,8 +1007,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const faceTile = Math.max(0.001, tileSize ?? 0.1);
     const sideTile = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
 
-    const repFaceX = usePhysical ? Math.max(1, dims.worldW / faceTile) : (faceRepeatX ?? 6);
-    const repFaceY = usePhysical ? Math.max(1, dims.worldH / faceTile) : (faceRepeatY ?? 6);
+    const repFaceX = stretchFace ? 1 : (usePhysical ? Math.max(1, dims.worldW / faceTile) : (faceRepeatX ?? 6));
+    const repFaceY = stretchFace ? 1 : (usePhysical ? Math.max(1, dims.worldH / faceTile) : (faceRepeatY ?? 6));
 
     const repSideX = usePhysical 
       ? Math.max(1, (headstoneStyle === 'slant' ? dims.worldW : dims.worldPerim) / sideTile) 
@@ -1025,7 +1027,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       rockNormalTexture.repeat.set(1, 1);
       rockNormalTexture.needsUpdate = true;
     }
-  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, headstoneStyle, rockNormalTexture]);
+  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, headstoneStyle, rockNormalTexture]);
 
   // 5. Create Materials (FIX: Return data from useMemo, not JSX)
   const materials = useMemo(() => {

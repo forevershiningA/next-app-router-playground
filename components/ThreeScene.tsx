@@ -67,6 +67,7 @@ function ProductNameHeader() {
   const imageCost = useHeadstoneStore((s) => s.imageCost);
   const additionCost = useHeadstoneStore((s) => s.additionCost);
   const emblemCost = useHeadstoneStore((s) => s.emblemCost);
+  const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const unitSystem = useUnitSystem();
   const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(null);
@@ -140,9 +141,19 @@ function ProductNameHeader() {
   
   // Calculate total price including inscriptions and motifs
   const totalPrice = useMemo(() => {
-    const headstonePrice = activeCatalog 
-      ? calculatePrice(activeCatalog.product.priceModel, quantity) 
-      : 0;
+    let headstonePrice = 0;
+    // Product 32 (Full Colour Plaque) uses fixed size-based pricing
+    if (productId === '32' && fixedSizes.length > 0) {
+      const isLandscape = widthMm > heightMm;
+      const matchW = isLandscape ? heightMm : widthMm;
+      const matchH = isLandscape ? widthMm : heightMm;
+      const match = fixedSizes.find(
+        (s) => s.width === matchW && s.height === matchH,
+      );
+      headstonePrice = match?.price ?? 0;
+    } else if (activeCatalog) {
+      headstonePrice = calculatePrice(activeCatalog.product.priceModel, quantity);
+    }
     const basePrice = showBase && activeCatalog?.product?.basePriceModel
       ? calculatePrice(activeCatalog.product.basePriceModel, baseQuantity)
       : 0;
@@ -175,6 +186,8 @@ function ProductNameHeader() {
     );
   }, [
     activeCatalog,
+    productId,
+    fixedSizes,
     quantity,
     baseQuantity,
     inscriptionCost,
@@ -185,6 +198,7 @@ function ProductNameHeader() {
     showBase,
     selectedShape,
     widthMm,
+    heightMm,
   ]);
 
   const sizeLabel = useMemo(

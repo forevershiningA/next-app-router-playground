@@ -1450,9 +1450,18 @@ export default function DesignerNav() {
     baseQuantity = computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
   }
 
-  const headstonePrice = catalog
-    ? calculatePrice(catalog.product.priceModel, quantity)
-    : 0;
+  let headstonePrice = 0;
+  if (productId === '32' && fixedSizes.length > 0) {
+    const isLandscape = widthMm > heightMm;
+    const matchW = isLandscape ? heightMm : widthMm;
+    const matchH = isLandscape ? widthMm : heightMm;
+    const match = fixedSizes.find(
+      (s) => s.width === matchW && s.height === matchH,
+    );
+    headstonePrice = match?.price ?? 0;
+  } else if (catalog) {
+    headstonePrice = calculatePrice(catalog.product.priceModel, quantity);
+  }
   const basePrice =
     showBase && catalog?.product?.basePriceModel
       ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
@@ -1525,9 +1534,18 @@ export default function DesignerNav() {
       const state = useHeadstoneStore.getState();
 
       // Calculate current price
-      const headstonePrice = catalog
-        ? calculatePrice(catalog.product.priceModel, quantity)
-        : 0;
+      let headstonePrice = 0;
+      if (productId === '32' && fixedSizes.length > 0) {
+        const isLandscape = state.widthMm > state.heightMm;
+        const matchW = isLandscape ? state.heightMm : state.widthMm;
+        const matchH = isLandscape ? state.widthMm : state.heightMm;
+        const match = fixedSizes.find(
+          (s) => s.width === matchW && s.height === matchH,
+        );
+        headstonePrice = match?.price ?? 0;
+      } else if (catalog) {
+        headstonePrice = calculatePrice(catalog.product.priceModel, quantity);
+      }
       const basePrice =
         state.showBase && catalog?.product?.basePriceModel
           ? calculatePrice(catalog.product.basePriceModel, baseQuantity)
