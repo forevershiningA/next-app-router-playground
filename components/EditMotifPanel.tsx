@@ -34,6 +34,7 @@ export default function EditMotifPanel() {
   // Determine motif size limits based on product type
   const isLaser = catalog?.product.laser === '1';
   const isBronze = catalog?.product.type === 'bronze_plaque';
+  const isEngraved = catalog?.product.formula === 'Engraved';
   
   let minHeight = 40;
   let maxHeight = 1000;
@@ -165,6 +166,7 @@ export default function EditMotifPanel() {
               <label className="mb-2 block text-sm font-medium text-white">
                 Select Color
               </label>
+              {isEngraved && (
               <div className="grid grid-cols-2 gap-1 mb-2">
                 <div
                   className="flex cursor-pointer flex-col items-center gap-1.5 border border-white/20 p-2 transition-colors hover:bg-white/10"
@@ -187,6 +189,7 @@ export default function EditMotifPanel() {
                   <span className="text-xs">Silver Gilding</span>
                 </div>
               </div>
+              )}
               
               <div className="grid grid-cols-7 gap-1">
                 {data.colors.map((color) => (

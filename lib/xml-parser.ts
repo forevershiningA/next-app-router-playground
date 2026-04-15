@@ -70,6 +70,7 @@ export interface CatalogData {
     name: string;
     type: string;
     laser: string;
+    formula?: string; // "Engraved" | "Laser" | "Enamel" | "Bronze" etc.
     border?: string;
     color?: string; // "0" = no color selection, "1" = allow color selection
     defaultColor?: string; // Default color for inscriptions/motifs (e.g., "#ffb35a")
@@ -355,6 +356,7 @@ export async function parseCatalogXML(
   const name = productElement.getAttribute('name') || '';
   const type = productElement.getAttribute('type') || '';
   const laser = productElement.getAttribute('laser') || '0';
+  const formula = productElement.getAttribute('formula') || undefined;
   const border = productElement.getAttribute('border') || '0';
   const color = productElement.getAttribute('color') || undefined;
   const defaultColor = productElement.getAttribute('default-color') || undefined;
@@ -496,7 +498,7 @@ export async function parseCatalogXML(
     if (el) kerbsetPriceModel = parsePriceModel(el);
   }
 
-  const catalogData = { product: { id, name, type, laser, border, color, defaultColor, shapes, additions, priceModel, basePriceModel, ledgerPriceModel, kerbsetPriceModel } };
+  const catalogData = { product: { id, name, type, laser, formula, border, color, defaultColor, shapes, additions, priceModel, basePriceModel, ledgerPriceModel, kerbsetPriceModel } };
   catalogCache.set(productId, catalogData);
   return catalogData;
 }

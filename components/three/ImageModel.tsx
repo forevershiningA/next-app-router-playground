@@ -496,8 +496,9 @@ export default function ImageModel({
   const stackOffset = (index ?? 0) * 0.2; // Slight Z lift per image to prevent z-fighting when overlapping
   const groupZ = frontZ + stackOffset * mmToLocalUnits;
   
-  // Determine if this image needs a ceramic/enamel base (all except Granite Image ID 21)
-  const needsCeramicBase = typeId !== 21 && typeId !== 135; // Granite Image (21) and YAG Laser (135) are flat
+  // Determine if this image needs a ceramic/enamel base
+  // Granite Image (21), YAG Laser (135), and Free Image (137) are flat — no ceramic base
+  const needsCeramicBase = typeId !== 21 && typeId !== 135 && typeId !== 137;
   
   // Ceramic base parameters
   const ceramicDepthMm = 1; // Very thin ceramic layer - just 1mm depth
@@ -588,7 +589,7 @@ export default function ImageModel({
         onClick={(e) => {
           e.stopPropagation();
         }}
-        position={[0, 0, actualCeramicDepthInUnits + 0.1 * mmToLocalUnits]}
+        position={[0, 0, needsCeramicBase ? actualCeramicDepthInUnits + 0.1 * mmToLocalUnits : 0.05 * mmToLocalUnits]}
         geometry={ceramicBaseData?.flatGeometry ?? planeGeometry}
         scale={
           ceramicBaseData?.flatGeometry
@@ -611,7 +612,7 @@ export default function ImageModel({
       {selected && (
         <SelectionBox
           objectId={id}
-          position={new THREE.Vector3(0, 0, actualCeramicDepthInUnits + 0.5 * mmToLocalUnits)}
+          position={new THREE.Vector3(0, 0, needsCeramicBase ? actualCeramicDepthInUnits + 0.5 * mmToLocalUnits : 0.1 * mmToLocalUnits)}
           bounds={{ width, height }}
           rotation={isLedgerSurface ? 0 : rotationZ}
           unitsPerMeter={headstone?.unitsPerMeter ?? 1}

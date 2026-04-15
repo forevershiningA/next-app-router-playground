@@ -73,7 +73,7 @@ const menuGroups = [
         slug: 'select-emblems',
         name: 'Select Emblems',
         icon: ShieldCheckIcon,
-        requiresPlaque: true,
+        requiresBronzePlaque: true,
       },
       { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
       { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
@@ -379,6 +379,27 @@ export default function DesignerNav() {
     setSelectedMotifId,
   });
   const [showConvertPanel, setShowConvertPanel] = React.useState(false);
+  const [hasCanvasBeenShown, setHasCanvasBeenShown] = React.useState(false);
+
+  // Accordion section groups — only one open at a time
+  const activeGroupIndex = React.useMemo(() => {
+    const slug = pathname.replace('/', '');
+    const idx = menuGroups.findIndex((g) =>
+      g.items.some((item) => item.slug === slug),
+    );
+    return idx >= 0 ? idx : 0;
+  }, [pathname]);
+
+  const [openGroup, setOpenGroup] = React.useState<number>(0);
+
+  // Auto-open the group containing the current route
+  React.useEffect(() => {
+    setOpenGroup(activeGroupIndex);
+  }, [activeGroupIndex]);
+
+  const toggleGroup = React.useCallback((groupIndex: number) => {
+    setOpenGroup((prev) => (prev === groupIndex ? -1 : groupIndex));
+  }, []);
 
   const handleBackToMenu = React.useCallback(() => {
     closeFullscreenPanel();
@@ -463,6 +484,14 @@ export default function DesignerNav() {
     '/design-menu',
   ];
   const isCanvasVisible = canvasVisiblePages.some((page) => pathname === page);
+
+  // Track if the 3D canvas has ever been shown during this session
+  useEffect(() => {
+    if (isCanvasVisible && !hasCanvasBeenShown) {
+      setHasCanvasBeenShown(true);
+    }
+  }, [isCanvasVisible, hasCanvasBeenShown]);
+
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel);
 
   const hasActiveAdditionForPanel =
@@ -975,6 +1004,7 @@ export default function DesignerNav() {
 
     const isLaser = catalog?.product?.laser === '1';
     const isBronze = catalog?.product?.type === 'bronze_plaque';
+    const isEngraved = catalog?.product?.formula === 'Engraved';
 
     let minHeight = 40;
     let maxHeight = 1000;
@@ -1305,6 +1335,7 @@ export default function DesignerNav() {
                   <label className="mb-2 block text-sm font-medium text-white">
                     Select Color
                   </label>
+                  {isEngraved && (
                   <div className="mb-3 grid grid-cols-2 gap-2">
                     <button
                       type="button"
@@ -1339,6 +1370,7 @@ export default function DesignerNav() {
                       </span>
                     </button>
                   </div>
+                  )}
                   <div className="grid grid-cols-7 gap-1">
                     {data.colors.map((color) => (
                       <button
@@ -2677,10 +2709,10 @@ export default function DesignerNav() {
                 )}
               </div>
               <div className="text-left md:text-right">
-                <p className="text-xs tracking-[0.35em] text-white/50 uppercase">
+                <p className="font-playfair-display text-xs tracking-[0.35em] text-primary/60 italic">
                   Guided Step
                 </p>
-                <h2 className="mt-1 text-2xl font-semibold text-white">
+                <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">
                   {activeFullscreenPanel === 'select-material' && productId === '32'
                     ? 'Background'
                     : menuItems.find(
@@ -2814,9 +2846,9 @@ export default function DesignerNav() {
           </div>
 
           {/* Mobile Header */}
-          <div className="border-b border-white/5 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
+          <div className="border-b border-primary/10 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
             <div className="flex items-center justify-between gap-4">
-              <p className="text-[10px] tracking-[0.45em] text-white/50 uppercase">
+              <p className="font-playfair-display text-[10px] tracking-[0.45em] text-primary/50 italic">
                 Guided Studio
               </p>
               <Link href="/" className="transition-opacity hover:opacity-80">
@@ -2843,7 +2875,7 @@ export default function DesignerNav() {
                     <span>New Design</span>
                   </button>
                 )}
-                {productId && (
+                {productId && (isCanvasVisible || hasCanvasBeenShown) && (
                   <button
                     onClick={handleToggleConvertPanel}
                     className={`inline-flex flex-1 items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all ${
@@ -2931,24 +2963,46 @@ export default function DesignerNav() {
               {menuGroups.map((group, groupIndex) => (
                 <div
                   key={group.label}
-                  className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm"
+                  className="relative"
                 >
-                  <div className="mb-3 flex items-center justify-between rounded-xl border border-white/5 bg-white/5 px-3 py-1.5">
-                    <div className="flex items-center gap-2.5">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-[#0f0a07]/60 text-xs font-semibold text-white/80">
-                        {String(groupIndex + 1).padStart(2, '0')}
-                      </span>
-                      <p className="text-lg font-normal tracking-tight text-white">
+                  {/* Golden thread connector between sections */}
+                  {groupIndex > 0 && (
+                    <div className="absolute -top-1 left-[22px] z-10 h-1 w-px bg-gradient-to-b from-primary/10 to-primary/30" />
+                  )}
+
+                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+                  <button
+                    onClick={() => toggleGroup(groupIndex)}
+                    className={`flex w-full cursor-pointer items-center gap-3 px-3 py-1.5 transition-colors duration-200 hover:bg-white/5 rounded-lg ${
+                      openGroup === groupIndex ? 'mb-3' : 'mb-0'
+                    }`}
+                  >
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/40 font-playfair-display text-[13px] font-normal tracking-wide text-primary">
+                      {['I', 'II', 'III'][groupIndex]}
+                    </span>
+                    <div className="flex flex-1 items-baseline justify-between">
+                      <p className="font-playfair-display text-[19px] font-normal tracking-wide text-white/90">
                         {group.label}
                       </p>
+                      <span className="font-playfair-display text-[10px] tracking-[0.3em] text-primary/50 italic">
+                        Step {groupIndex + 1}
+                      </span>
                     </div>
-                    <span className="text-[9px] tracking-[0.4em] text-white/45 uppercase">
-                      Step {groupIndex + 1}
-                    </span>
-                  </div>
+                    <ChevronDownIcon
+                      className={`h-4 w-4 text-white/40 transition-transform duration-300 ${
+                        openGroup !== groupIndex ? '-rotate-90' : 'rotate-0'
+                      }`}
+                    />
+                  </button>
 
-                  {/* Group Items */}
-                  <div className="flex flex-col gap-2">
+                  {/* Group Items — collapsible */}
+                  <div
+                    className={`flex flex-col gap-2 overflow-hidden transition-all duration-300 ease-in-out ${
+                      openGroup !== groupIndex
+                        ? 'max-h-0 opacity-0'
+                        : 'max-h-[2000px] opacity-100'
+                    }`}
+                  >
                     {group.items.map((item, index) => {
                       const Icon = item.icon;
                       const isRouteActive = pathname === `/${item.slug}`;
@@ -2991,10 +3045,10 @@ export default function DesignerNav() {
                         return null;
                       }
 
-                      // Hide "Select Emblems" for non-plaque products
+                      // Hide "Select Emblems" for non-bronze-plaque products
                       if (
-                        (item as { requiresPlaque?: boolean }).requiresPlaque &&
-                        !isPlaque
+                        (item as { requiresBronzePlaque?: boolean }).requiresBronzePlaque &&
+                        productId !== '5'
                       ) {
                         return null;
                       }
@@ -3249,6 +3303,7 @@ export default function DesignerNav() {
                       );
                     })}
                   </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -3256,9 +3311,9 @@ export default function DesignerNav() {
             {/* Browse Designs CTA */}
             <Link
               href="/designs"
-              className="flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/30 bg-white/15 px-4 py-3 text-base font-light text-white shadow-lg backdrop-blur-sm transition-all hover:bg-white/20"
+              className="mt-5 flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-primary/40 bg-white/5 px-4 py-3 font-playfair-display text-base font-normal text-primary-100 shadow-lg backdrop-blur-sm transition-all hover:border-primary/60 hover:bg-primary/10"
             >
-              <SparklesIcon className="h-5 w-5 flex-shrink-0" />
+              <SparklesIcon className="h-5 w-5 flex-shrink-0 text-primary" />
               <span>Browse Designs</span>
             </Link>
           </div>

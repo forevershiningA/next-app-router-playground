@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-14
+**Last Updated:** 2026-04-15
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
 
 ---
@@ -37,7 +37,102 @@
 
 ---
 
-## Current Status (2026-04-14) — Product 32 Data Migration to DB/XML, Background/Color Toggle, Upload Image, No Background
+## Current Status (2026-04-15) — Nav Redesign, Accordion Menu, Gilding Filter, Product 32 Image Fixes
+
+### ✅ Sidebar Navigation Redesign — Elegant Memorial Brand Identity
+
+The sidebar navigation section headers (Setup / Design / Account) have been completely redesigned to match the "Forever Shining" memorial brand identity, moving from a generic app look to a dignified, inviting experience.
+
+#### Design Approach: Classic Serif + Golden Thread (Options 1 + 2)
+- **Typography**: Section titles ("Setup", "Design", "Account") use **Playfair Display** serif font (already loaded in `app/layout.tsx`), replacing the default sans-serif
+- **Roman Numerals**: Step numbers changed from "01"/"02"/"03" to Roman numerals I / II / III in thin gold-stroked circles (`border-[#DEBD68]`, `text-[#DEBD68]`)
+- **Italic Step Labels**: "Step I" / "Step II" / "Step III" rendered in serif italic for a softer, human touch
+- **Golden Thread Connector**: A thin vertical gold line (`w-px bg-gradient-to-b from-[#DEBD68]/40 via-[#DEBD68]/20 to-transparent`) connects sections visually
+- **Browse Designs CTA**: Styled with gold border (`border-[#DEBD68]/30`), Playfair Display font, and sparkle icon to match brand
+
+#### Accordion Behavior (Collapsible Sections)
+- Only **one section open at a time** — clicking a section closes the others
+- State: `openGroup` (single number index, `-1` = all collapsed)
+- `toggleGroup(index)` — opens clicked group, closes others; re-clicking closes it
+- **Auto-expand**: Section containing the active route auto-opens on navigation
+- **Smooth animation**: Uses `max-h-0 opacity-0` → `max-h-[2000px] opacity-100` with 300ms CSS transition
+- **Chevron indicator**: Rotates on open/close (`transition-transform duration-300`)
+- Header row is a clickable `<button>` with hover feedback (`hover:bg-white/5`)
+- Collapsed cards have equal top/bottom padding around the circle indicator
+
+#### Updated Headers
+- **Mobile header** (~line 2826): Matches serif + Roman numeral styling
+- **Fullscreen panel header** (~line 2689): Same serif treatment
+- **Spacing**: `gap-5` (20px) between section cards, `mt-5` above Browse Designs
+
+#### Key Files
+- `components/DesignerNav.tsx` — Section headers at ~lines 2964-3005, accordion state at ~lines 381-408
+
+### ✅ Select Emblems — Bronze Plaque Only
+
+The "Select Emblems" menu item now only appears for Bronze Plaque products (product ID 5).
+
+- Changed `requiresPlaque` flag to `requiresBronzePlaque` in menu item definition
+- Filter: `productId !== '5'` hides the item for all other products
+- Previously showed for all plaque types including Full Color Plaque (product 32) which doesn't support emblems
+
+### ✅ Product 32 (Full Color Plaque) — Free Image Auto-Selection
+
+For Full Color Plaque (product 32), the image workflow is simplified:
+- **Auto-selects Free Image** (type ID 137) on mount — skips the image type selection grid
+- **Hides "Back to image types" button** — no need to go back since there's only one relevant type
+- **No ceramic mesh**: Free Image (type 137) excluded from `needsCeramicBase` in `ImageModel.tsx`
+- **No mask selection**: Oval/rectangle/heart mask UI hidden for product 32; `maskShape` set to `''`
+- **Flat on plaque surface**: Photo mesh at `0.05mm` offset (not ceramic depth ~1mm+), SelectionBox at `0.1mm`
+- These images will be printed directly on the plaque, not applied as ceramic overlays
+
+#### Key Files
+- `components/ImageSelector.tsx` — Auto-select logic, hidden back button, hidden mask UI
+- `components/three/ImageModel.tsx` — Ceramic base exclusion, flat z-positioning
+
+### ✅ Gold/Silver Gilding — Traditional Engraved Products Only
+
+Gold Gilding and Silver Gilding color options now only appear for products with `formula="Engraved"` (Traditional Engraved Headstone, Traditional Engraved Plaque, Traditional Engraved Full Monument).
+
+#### Implementation
+- **Added `formula` field** to `CatalogData.product` interface in `lib/xml-parser.ts`
+- **Parsed from XML**: `productElement.getAttribute('formula')` — values: `"Engraved"`, `"Laser"`, `"Enamel"`, `"Bronze"`
+- **Filter condition**: `const isEngraved = catalog?.product.formula === 'Engraved'`
+- **Applied in 3 files**:
+  1. `components/EditMotifPanel.tsx` — Gilding grid wrapped in `{isEngraved && ...}`
+  2. `components/InscriptionEditPanel.tsx` — Added `catalog` from store, gilding wrapped in `{isEngraved && ...}`
+  3. `components/DesignerNav.tsx` — Gilding section in sidebar motif color picker wrapped in `{isEngraved && ...}`
+- The "Select Color" label and regular color palette grid remain visible for all products that support color — only the Gold/Silver Gilding shortcuts are hidden
+
+#### Product Formula Values (from XML catalogs)
+| Formula | Products | Gilding |
+|---------|----------|---------|
+| `Engraved` | Traditional Engraved Headstone (124), Plaque (34), Full Monument (101) | ✅ Yes |
+| `Laser` | Laser Etched products (8, 22, 30, 51, 100) | ❌ No (entire color section hidden by `isLaser`) |
+| `Enamel` | Full Color Plaque (32), Vitreous Enamel products (11, 50, 2350) | ❌ No |
+| `Bronze` | Bronze products (5, 53) | ❌ No |
+
+### ✅ Motif Preview Color Consistency
+
+Motif category thumbnails in the sidebar now use the product's `defaultColor` from the catalog instead of a hardcoded bronze color.
+
+- **Before**: `BRONZE_HEX = '#CD7F32'` (hardcoded copper/bronze) — didn't match the actual motif color on the headstone
+- **After**: `catalog?.product?.defaultColor || '#c99d44'` — matches the color the motif actually renders with in the 3D scene
+- **Applies to**: Both category grid thumbnails and individual motif thumbnails in `MotifSelectorPanel.tsx`
+- For Traditional Engraved products, this is `#c99d44` (Gold Gilding); other products use their own `default-color` from XML
+
+### 📌 Next Steps
+
+1. **Add 6 new failures to KNOWN_FAILURES** — `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+2. **Fix plaque inscription positioning** — Design 1636593295668 inscriptions start above plaque top
+3. **Batch re-anonymize designs** — 18k designs potentially affected by sanitizer regex bug
+4. **Visual QA pass** — Compare designs with original screenshots
+5. **Update PRODUCT_STATS** — Pets count still shows 254, should be 111
+6. **Migrate `fullColourPlaqueBorders`** from `_data.ts` to database
+
+---
+
+## Previous Status (2026-04-14) — Product 32 Data Migration to DB/XML, Background/Color Toggle, Upload Image, No Background
 
 ### ✅ Product 32 Data Migrated from Hardcoded TypeScript to Database & XML
 
@@ -3563,6 +3658,8 @@ const isPlaque = catalog?.product.type === 'plaque';
 - **Fixed physical frame width**: SS border frame stays ~constant physical width regardless of plaque size (thicker-looking on small plaques, thinner on large). Uses `fixedFrameFactor = 200 / minDimensionMm` with no clamping, and skips coverage clamping that bronze borders use.
 - **Background selector**: "Select Material" renamed to "Background" in nav. Shows 40 background thumbnails (`/jpg/backgrounds/forever/m/`) in the MaterialSelector grid. Selecting one sets it as the plaque face texture.
 - **No Additions, no Emblems**: Simplified workflow — shape → border → background → size → inscriptions
+- **Free Image auto-selection**: Only Free Image (type 137) is relevant. Auto-selected on mount, skipping the image type grid. No ceramic mesh — image is printed flat on plaque surface at `0.05mm` z-offset. No mask shape selection (oval/rectangle/heart hidden).
+- **No Gold/Silver Gilding**: Product uses `formula="Enamel"`, so gilding color shortcuts are hidden (only regular color palette shown)
 
 **Detection:**
 ```typescript
@@ -3795,13 +3892,24 @@ const TARGET_HEIGHTS = {
 ### Overview
 The designer sidebar now doubles as a modal-style workspace: clicking any "deep" section (Select Size, Shape, Material, Inscriptions, Additions, Motifs) hides the grouped menu and opens a full-height overlay with a warm gradient background, "Guided Step" label, and a prominent **Back&nbsp;to&nbsp;Menu** pill button. This keeps seniors focused on one task at a time, mirrors the calm tone used across the site, and prevents menu scroll fatigue on smaller displays. The overlay is powered by `activeFullscreenPanel`/`dismissedPanelSlug` state inside `components/DesignerNav.tsx`, and it preserves the current URL instead of using modals or query params.
 
+### Section Headers — Elegant Memorial Brand (2026-04-15)
+The three grouped sections (Setup / Design / Account) are styled to match the "Forever Shining" brand identity:
+- **Playfair Display serif font** for section titles and step labels
+- **Roman numerals** (I, II, III) in thin gold-stroked circles (`border-[#DEBD68]`)
+- **Italic step labels**: "Step I", "Step II", "Step III" in serif italic
+- **Golden thread**: A thin vertical gold gradient line connects sections visually
+- **Accordion behavior**: Only one section open at a time. State: `openGroup` (number, `-1` = all closed). `toggleGroup(index)` opens clicked section, closes others. Auto-opens section matching active route.
+- **Collapse animation**: `max-h-0 opacity-0` → `max-h-[2000px] opacity-100` with 300ms transition
+- **Browse Designs CTA**: Gold border, Playfair Display font, sparkle icon
+- **Select Emblems**: Only visible for Bronze Plaque (product ID 5) — uses `requiresBronzePlaque` filter
+
 ### Panels Covered
 - **Select Size** – Shares the exact sliders/toggles documented earlier, but now consumes the entire sidebar height for effortless scrolling.
 - **Select Shape** and **Select Material** – Their grids sit inside `flex-1 overflow-hidden` containers so the selectors stretch to the bottom of the viewport; the previous `max-h-*` caps were removed to avoid double scroll bars. **Note:** For Product 32 (Full Color Plaque), "Select Material" is relabeled "Background" in the sidebar, fullscreen panel header, and loading text. The `select-material` slug is excluded from the generic `fullscreenPanelSlugs` handler so the special-handling block with the conditional label runs instead.
 - **Inscriptions** – Embeds `InscriptionEditPanel` so editing text or fonts feels identical whether opened from the menu or a canvas selection.
 - **Select Additions** – Provides a split experience: if an addition is actively selected (`activePanel === 'addition'`), the top card reveals size, rotation, duplicate/delete controls, and context text; otherwise the full catalog grid is shown. Hidden for plaque products. Catalog visibility uses `hasActiveAdditionForPanel` (not bare `selectedAdditionId`) to avoid stale-selection bugs when returning to the panel.
-- **Select Emblems** – Plaque-only panel. Shows a flat grid of 236 emblem thumbnails with search filter. Clicking adds the emblem to the plaque. When an emblem is selected on canvas, the edit panel shows a size slider (7 fixed steps controlling largest dimension), rotation, flip X/Y, duplicate/delete.
-- **Select Motifs** – Mirrors the additions flow but also surfaces price estimates (non-laser products) plus curated gold/silver buttons and the full color palette.
+- **Select Emblems** – Bronze plaque only (product ID 5). Shows a flat grid of 236 emblem thumbnails with search filter. Clicking adds the emblem to the plaque. When an emblem is selected on canvas, the edit panel shows a size slider (7 fixed steps controlling largest dimension), rotation, flip X/Y, duplicate/delete.
+- **Select Motifs** – Mirrors the additions flow but also surfaces price estimates (non-laser products) plus the full color palette. Gold/Silver Gilding shortcuts only shown for Traditional Engraved products (`formula="Engraved"`). Motif preview thumbnails use the product's `defaultColor` from catalog for consistent coloring.
 - **Convert Design** – Replaces the old 3D Preview link with a fullscreen product picker; it mirrors Select Product but enforces a single column list, so seniors can quickly audition alternate catalogs without leaving the designer.
 
 ### Layout & UX Notes
@@ -3891,7 +3999,9 @@ The designer sidebar now doubles as a modal-style workspace: clicking any "deep"
   loading: boolean;
   
   // Catalog
-  catalog: CatalogData | null;     // Parsed XML
+  catalog: CatalogData | null;     // Parsed XML (see lib/xml-parser.ts)
+  // CatalogData.product fields: id, name, type, laser, formula, border, color, defaultColor, shapes, additions, priceModel
+  // formula values: "Engraved" | "Laser" | "Enamel" | "Bronze" (used for gilding filter, product behavior)
   inscriptionPriceModel: PriceModel | null;
   motifPriceModel: MotifProductData | null;
 }

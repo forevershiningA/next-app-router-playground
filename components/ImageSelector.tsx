@@ -80,6 +80,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const [feedbackTone, setFeedbackTone] = useState<'error' | 'info'>('error');
   
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
   const addImage = useHeadstoneStore((s) => s.addImage);
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
 
@@ -121,6 +122,15 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     if (!catalog?.product?.additions) return [];
     return catalog.product.additions.filter((addition) => addition.type === 'image');
   }, [catalog]);
+
+  // Full Color Plaque (product 32): auto-select "Free Image" (id 137) to skip type selection
+  useEffect(() => {
+    if (productId === '32' && !selectedType && imageTypes.length > 0) {
+      const freeImage = imageTypes.find((t) => t.id === '137') ?? imageTypes[0];
+      handleImageTypeSelect(freeImage);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [productId, imageTypes, selectedType]);
 
   const handleImageTypeSelect = (imageType: AdditionData) => {
     setFeedbackMessage(null);
@@ -383,7 +393,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         'teardrop': 'teardrop',
         'triangle': 'triangle',
       };
-      const maskShapeFilename = maskShapeMap[selectedMask] || 'oval_vertical';
+      const maskShapeFilename = productId === '32' ? '' : (maskShapeMap[selectedMask] || 'oval_vertical');
 
       addImage({
         id: `img-${Date.now()}`,
@@ -948,17 +958,19 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         </>
       ) : (
         <>
-          <div className="flex items-center justify-between">
-            <button
-              onClick={handleBackToImageTypes}
-              className="flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to image types
-            </button>
-          </div>
+          {productId !== '32' && (
+            <div className="flex items-center justify-between">
+              <button
+                onClick={handleBackToImageTypes}
+                className="flex items-center gap-2 text-sm text-white/80 hover:text-white transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to image types
+              </button>
+            </div>
+          )}
 
           <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
             <div className="space-y-4">
@@ -1025,7 +1037,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     </button>
                   </div>
 
-                  {/* Step 1: Select Mask */}
+                  {/* Step 1: Select Mask — hidden for Full Color Plaque (printed directly) */}
+                  {productId !== '32' && (
                   <div>
                     <div className="text-xs text-white/60 mb-2">Step 1</div>
                     <div className="text-sm text-white font-medium mb-3">SELECT MASK</div>
@@ -1054,6 +1067,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       ))}
                     </div>
                   </div>
+                  )}
 
                   {/* Step 2: Color Mode */}
                   <div>

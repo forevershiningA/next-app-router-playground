@@ -21,6 +21,8 @@ export default function InscriptionEditPanel() {
   const setActiveInscriptionText = useHeadstoneStore((s) => s.setActiveInscriptionText);
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
   const inscriptionPriceModel = useHeadstoneStore((s) => s.inscriptionPriceModel);
+  const catalog = useHeadstoneStore((s) => s.catalog);
+  const isEngraved = catalog?.product.formula === 'Engraved';
 
   const active = lines.find((l) => l.id === selectedInscriptionId) ?? null;
   const [selectedFont, setSelectedFont] = React.useState(active?.font || 'Franklin Gothic');
@@ -351,6 +353,7 @@ export default function InscriptionEditPanel() {
       {/* Color Selection */}
       {showInscriptionColor && activeTab === 'color' && active && (
         <div>
+          {isEngraved && (
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div
               className="flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-950 p-3 transition-colors hover:border-[#D7B356]"
@@ -373,6 +376,7 @@ export default function InscriptionEditPanel() {
               <span className="text-xs text-slate-200">Silver Gilding</span>
             </div>
           </div>
+          )}
 
           <div className="grid grid-cols-7 gap-1">
             {data.colors.map((color) => (

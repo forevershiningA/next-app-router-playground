@@ -16,8 +16,6 @@ interface MotifSelectorPanelProps {
   motifs: MotifCatalogItem[];
 }
 
-const BRONZE_HEX = '#CD7F32';
-
 export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
 
@@ -58,6 +56,8 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
   
   // Check if product allows color (color="1")
   const allowsColor = catalog?.product?.color === '1';
+  // Use catalog's default color for motif thumbnails so they match the 3D scene
+  const motifPreviewColor = catalog?.product?.defaultColor || '#c99d44';
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategoryId(categoryId);
@@ -106,7 +106,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                         <div
                           className="absolute inset-4"
                           style={{
-                            backgroundColor: BRONZE_HEX,
+                            backgroundColor: motifPreviewColor,
                             WebkitMaskImage: `url(${categoryImgSrc})`,
                             maskImage: `url(${categoryImgSrc})`,
                             WebkitMaskRepeat: 'no-repeat',
@@ -187,7 +187,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                             <div
                               className="absolute inset-4"
                               style={{
-                                backgroundColor: BRONZE_HEX,
+                                backgroundColor: motifPreviewColor,
                                 WebkitMaskImage: `url(${coverSrc})`,
                                 maskImage: `url(${coverSrc})`,
                                 WebkitMaskRepeat: 'no-repeat',
