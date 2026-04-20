@@ -83,16 +83,36 @@ Email sending silently failed on `forevershining.org` because no SMTP env vars w
   ```
   and returns `{ success: false, error: 'SMTP not configured' }` instead of throwing a generic network error.
 
-#### SMTP Setup (home.pl)
-Since the project already uses `home.pl` for PostgreSQL, the home.pl SMTP is a natural fit:
-```bash
-# Vercel env vars for forevershining.org
-SMTP_HOST=poczta.home.pl
-SMTP_PORT=465                    # SSL
-SMTP_USER=biuro@wiecznapamiec.pl # full email address
-SMTP_PASS=<mailbox-password>
+#### SMTP Setup (home.pl / wiecznapamiec)
+The legacy `dyo5.php` uses a single home.pl mailbox for **PL / EU / UK** routes (AU uses office365):
+```php
+// case "pl": case "eu": case "co.uk": case "uk":
+Host     = 'wiecznapamiec.home.pl'
+Port     = 587          // STARTTLS
+Username = 'biuro@wiecznapamiec.pl'
+Password = <mailbox password>   // legacy value available in dyo5.php
+SMTPSecure = 'tls'
+From / ReplyTo = 'biuro@wiecznapamiec.pl'
+BCC: biuro@wiecznapamiec.pl, polcreation@gmail.com
 ```
-Note: home.pl requires the full email address as the SMTP username. Port 465 (SSL) is preferred; 587 (STARTTLS) also supported.
+
+On Vercel, set these env vars (use the generic fallback so all countries route through this mailbox for now, or use the PL prefix to restrict to PL only):
+```bash
+# Generic fallback — used by every country that has no country-specific override
+SMTP_HOST=wiecznapamiec.home.pl
+SMTP_PORT=587
+SMTP_USER=biuro@wiecznapamiec.pl
+SMTP_PASS=<mailbox password — do NOT commit>
+
+# Optional: pin PL specifically (same mailbox, explicit)
+SMTP_PL_HOST=wiecznapamiec.home.pl
+SMTP_PL_PORT=587
+SMTP_PL_USER=biuro@wiecznapamiec.pl
+SMTP_PL_PASS=<mailbox password>
+```
+`lib/email/transport.ts` tries `SMTP_{COUNTRY}_*` first, then falls back to `SMTP_*`. Port 587 with STARTTLS is handled automatically (secure: false when port !== 465).
+
+Note: `forevershining.org` is the AU site — its legacy `countryCode: 'au'` routes via office365 in `dyo5.php`, but without AU-specific SMTP env vars set, it will fall back to the wiecznapamiec mailbox above, which is fine for testing.
 
 ---
 

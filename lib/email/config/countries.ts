@@ -42,6 +42,18 @@ const BCC_MAP: Record<string, CountryEmailConfig['bcc']> = {
     admin: 'biuro@wiecznapamiec.pl',
     always: 'polcreation@gmail.com',
   },
+  uk: {
+    savedDesigns: 'biuro@wiecznapamiec.pl',
+    orders: 'biuro@wiecznapamiec.pl',
+    admin: 'biuro@wiecznapamiec.pl',
+    always: 'polcreation@gmail.com',
+  },
+  eu: {
+    savedDesigns: 'biuro@wiecznapamiec.pl',
+    orders: 'biuro@wiecznapamiec.pl',
+    admin: 'biuro@wiecznapamiec.pl',
+    always: 'polcreation@gmail.com',
+  },
 };
 
 const DEFAULT_BCC: CountryEmailConfig['bcc'] = {
