@@ -999,16 +999,16 @@ function AdditionModelInner({
   );
 
   const handlePointerOver = React.useCallback(() => {
-    if (document.body) {
-      document.body.style.cursor = 'grab';
+    if (gl?.domElement) {
+      gl.domElement.style.cursor = 'grab';
     }
-  }, []);
+  }, [gl]);
 
   const handlePointerOut = React.useCallback(() => {
-    if (document.body && !dragging) {
-      document.body.style.cursor = 'auto';
+    if (gl?.domElement && !dragging) {
+      gl.domElement.style.cursor = 'auto';
     }
-  }, [dragging]);
+  }, [dragging, gl]);
 
   const convertMeshLocalPointToParentSpace = React.useCallback(
     (mesh: THREE.Mesh, point: THREE.Vector3) => {
@@ -1075,7 +1075,7 @@ function AdditionModelInner({
       setDragging(false);
       dragDeltaRef.current = null;
       if (controls) (controls as any).enabled = true;
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
     };
@@ -1083,14 +1083,14 @@ function AdditionModelInner({
     if (controls) (controls as any).enabled = false;
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
-    document.body.style.cursor = 'grabbing';
+    gl.domElement.style.cursor = 'grabbing';
 
     return () => {
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
       dragDeltaRef.current = null;
       if (controls) (controls as any).enabled = true;
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
     };
   }, [dragging, gl, controls, placeFromClientXY]);
 

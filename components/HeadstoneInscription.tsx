@@ -416,7 +416,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         
         setDragging(false);
         if (controls) controls.enabled = true;
-        document.body.style.cursor = 'auto';
+        gl.domElement.style.cursor = 'auto';
         const target = e.target as Element;
         if (target && 'releasePointerCapture' in target) {
           (target as HTMLElement).releasePointerCapture?.(e.pointerId);
@@ -426,7 +426,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       if (controls) controls.enabled = false;
       canvas.addEventListener('pointermove', onMove, { passive: false });
       window.addEventListener('pointerup', onUp);
-      document.body.style.cursor = 'grabbing';
+      gl.domElement.style.cursor = 'grabbing';
 
       return () => {
         if (rafId !== null) {
@@ -435,7 +435,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         canvas.removeEventListener('pointermove', onMove);
         window.removeEventListener('pointerup', onUp);
         if (controls) controls.enabled = true;
-        document.body.style.cursor = 'auto';
+        gl.domElement.style.cursor = 'auto';
       };
     }, [dragging, gl, controls, placeFromClientXY]);
 
@@ -603,13 +603,13 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             setDragging(true);
           }}
           onPointerOver={() => {
-            if (editable && document.body) {
-              document.body.style.cursor = 'grab';
+            if (editable && gl?.domElement) {
+              gl.domElement.style.cursor = 'grab';
             }
           }}
           onPointerOut={() => {
-            if (editable && !dragging && document.body) {
-              document.body.style.cursor = 'auto';
+            if (editable && !dragging && gl?.domElement) {
+              gl.domElement.style.cursor = 'auto';
             }
           }}
         >

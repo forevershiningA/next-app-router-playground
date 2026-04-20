@@ -131,7 +131,7 @@ export default function InscriptionBoxSelection({
         rotate: 'grabbing',
       };
       
-      document.body.style.cursor = cursorMap[handleType] || 'grab';
+      gl.domElement.style.cursor = cursorMap[handleType] || 'grab';
     },
     [bounds, gl, currentSizeMm, controls]
   );
@@ -145,15 +145,15 @@ export default function InscriptionBoxSelection({
       bottomRight: 'nwse-resize',
       rotate: 'grab',
     };
-    document.body.style.cursor = cursorMap[handle] || 'auto';
-  }, []);
+    gl.domElement.style.cursor = cursorMap[handle] || 'auto';
+  }, [gl]);
 
   const handlePointerLeave = React.useCallback(() => {
     if (!isDragging) {
       setHoveredHandle(null);
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
     }
-  }, [isDragging]);
+  }, [isDragging, gl]);
 
   // Handle pointer move
   React.useEffect(() => {
@@ -253,7 +253,7 @@ export default function InscriptionBoxSelection({
       setDragHandle(null);
       // KEEP selection visible - don't reset any visibility state
       setKeepVisible(true); // Ensure it stays visible
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       
       // RE-ENABLE orbit controls - try multiple methods
       if (controls) {

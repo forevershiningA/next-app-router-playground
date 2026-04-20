@@ -213,7 +213,7 @@ export default function EmblemModel({
       const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
       const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
       placeOnSurface(clientX, clientY);
-      document.body.style.cursor = 'grabbing';
+      gl.domElement.style.cursor = 'grabbing';
     },
     [gl, headstone, id, placeOnSurface, setActivePanel, setSelected, setSelectedEmblemId],
   );
@@ -235,7 +235,7 @@ export default function EmblemModel({
       }
       dragPositionRef.current = null;
       setDragging(false);
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       if (controls) (controls as any).enabled = true;
 
       if (pointerCaptureTargetRef.current && event.pointerId !== undefined) {
@@ -252,7 +252,7 @@ export default function EmblemModel({
       window.removeEventListener('pointermove', onMove);
       window.removeEventListener('pointerup', onUp);
       if (controls) (controls as any).enabled = true;
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       pointerCaptureTargetRef.current = null;
     };
   }, [controls, dragging, placeOnSurface]);
@@ -315,6 +315,14 @@ export default function EmblemModel({
       {/* Emblem texture plane */}
       <mesh
         onPointerDown={handlePointerDown}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          gl.domElement.style.cursor = 'grab';
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          if (!dragging) gl.domElement.style.cursor = 'auto';
+        }}
         onClick={(e) => e.stopPropagation()}
         geometry={planeGeometry}
         scale={[widthUnits * flipScaleX, heightUnits * flipScaleY, 1]}

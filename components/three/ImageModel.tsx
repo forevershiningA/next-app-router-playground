@@ -420,7 +420,7 @@ export default function ImageModel({
       const clientX = e.clientX ?? e.touches?.[0]?.clientX ?? 0;
       const clientY = e.clientY ?? e.touches?.[0]?.clientY ?? 0;
       placeFromClientXY(clientX, clientY);
-      document.body.style.cursor = 'grabbing';
+      gl.domElement.style.cursor = 'grabbing';
     },
     [
       gl,
@@ -451,7 +451,7 @@ export default function ImageModel({
 
       dragPositionRef.current = null;
       setDragging(false);
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       if (controls) {
         (controls as any).enabled = true;
       }
@@ -474,7 +474,7 @@ export default function ImageModel({
       if (controls) {
         (controls as any).enabled = true;
       }
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       pointerCaptureTargetRef.current = null;
     };
   }, [controls, dragging, placeFromClientXY]);
@@ -586,6 +586,14 @@ export default function ImageModel({
       {/* Photo texture — masked to SVG shape when available, else rectangular plane */}
       <mesh
         onPointerDown={handlePointerDown}
+        onPointerOver={(e) => {
+          e.stopPropagation();
+          gl.domElement.style.cursor = 'grab';
+        }}
+        onPointerOut={(e) => {
+          e.stopPropagation();
+          if (!dragging) gl.domElement.style.cursor = 'auto';
+        }}
         onClick={(e) => {
           e.stopPropagation();
         }}

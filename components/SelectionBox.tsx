@@ -257,7 +257,7 @@ export default function SelectionBox({
             rotate: 'grabbing',
           };
       
-      document.body.style.cursor = cursorMap[handleType] || 'grab';
+      gl.domElement.style.cursor = cursorMap[handleType] || 'grab';
     },
     [bounds, gl, currentSizeMm, controls, objectType]
   );
@@ -280,15 +280,15 @@ export default function SelectionBox({
           bottomRight: 'nwse-resize',
           rotate: 'grab',
         };
-    document.body.style.cursor = cursorMap[handle] || 'auto';
-  }, [objectType]);
+    gl.domElement.style.cursor = cursorMap[handle] || 'auto';
+  }, [objectType, gl]);
 
   const handlePointerLeave = React.useCallback(() => {
     if (!isDragging) {
       setHoveredHandle(null);
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
     }
-  }, [isDragging]);
+  }, [isDragging, gl]);
 
   // Handle pointer move
   React.useEffect(() => {
@@ -390,7 +390,7 @@ export default function SelectionBox({
       
       setIsDragging(false);
       setDragHandle(null);
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       
       // Re-enable orbit controls
       if (controls) {

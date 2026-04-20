@@ -416,16 +416,16 @@ export default function MotifModel({
   }, []);
 
   const handlePointerOver = React.useCallback(() => {
-    if (document.body) {
-      document.body.style.cursor = 'grab';
+    if (gl?.domElement) {
+      gl.domElement.style.cursor = 'grab';
     }
-  }, []);
+  }, [gl]);
 
   const handlePointerOut = React.useCallback(() => {
-    if (document.body && !dragging) {
-      document.body.style.cursor = 'auto';
+    if (gl?.domElement && !dragging) {
+      gl.domElement.style.cursor = 'auto';
     }
-  }, [dragging]);
+  }, [dragging, gl]);
 
   React.useEffect(() => {
     setMotifRef(id, ref);
@@ -477,7 +477,7 @@ export default function MotifModel({
       
       setDragging(false);
       if (controls) (controls as any).enabled = true;
-      document.body.style.cursor = 'auto';
+      gl.domElement.style.cursor = 'auto';
       if (pointerCaptureTargetRef.current && e.pointerId !== undefined) {
         pointerCaptureTargetRef.current.releasePointerCapture?.(e.pointerId);
         pointerCaptureTargetRef.current = null;
@@ -487,7 +487,7 @@ export default function MotifModel({
     if (controls) (controls as any).enabled = false;
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp, { once: true });
-    document.body.style.cursor = 'grabbing';
+    gl.domElement.style.cursor = 'grabbing';
 
     return () => {
       window.removeEventListener('pointermove', onMove);
