@@ -93,7 +93,7 @@ export default function HeadstoneAssembly() {
 
   return (
     <group ref={monumentGroupRef} position={[0, 0, zGroupOffset]}>
-      <group ref={assemblyRef} position={[0, baseHeightMeters, 0]}>
+      <group ref={assemblyRef} position={[0, showBase ? baseHeightMeters : 0, 0]}>
         <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
         {/* Elegant Selection Indicators - Viewfinder Corners */}
