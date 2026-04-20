@@ -1,7 +1,7 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-15
-**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Playwright (dev screenshots)
+**Last Updated:** 2026-04-20
+**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
 
@@ -23,21 +23,155 @@
 15. [Save Design Feature](#save-design-feature)
 16. [My Account System](#my-account-system)
 17. [Authentication System](#authentication-system)
-18. [File Storage System](#file-storage-system)
-19. [Database & Catalog System](#database--catalog-system)
-20. [ML Smart Search](#ml-smart-search)
-21. [Load Design Popup](#load-design-popup)
-22. [P3D Format & Converter](#p3d-format--converter)
-23. [Performance Considerations](#performance-considerations)
-24. [Memory Management](#memory-management)
-25. [Common Issues & Solutions](#common-issues--solutions)
-26. [UI Theming & Primary Color](#ui-theming--primary-color)
-27. [Design Management Scripts](#design-management-scripts)
-28. [Development Workflow](#development-workflow)
+18. [Email System](#email-system)
+19. [File Storage System](#file-storage-system)
+20. [Database & Catalog System](#database--catalog-system)
+21. [ML Smart Search](#ml-smart-search)
+22. [Load Design Popup](#load-design-popup)
+23. [P3D Format & Converter](#p3d-format--converter)
+24. [Performance Considerations](#performance-considerations)
+25. [Memory Management](#memory-management)
+26. [Common Issues & Solutions](#common-issues--solutions)
+27. [UI Theming & Primary Color](#ui-theming--primary-color)
+28. [Design Management Scripts](#design-management-scripts)
+29. [Development Workflow](#development-workflow)
 
 ---
 
-## Current Status (2026-04-15) — Nav Redesign, Accordion Menu, Gilding Filter, Product 32 Image Fixes
+## Current Status (2026-04-20) — Email System, Grab Cursor, No-Base Fix, Price Popup Fix, Menu Drawer Memory
+
+### ✅ Email System — Nodemailer + React Email + PDF Attachments
+
+Complete email system migrated from legacy PHP/PHPMailer to modern Next.js stack.
+
+#### Architecture
+- **Transport**: Nodemailer with per-country SMTP configuration from environment variables
+- **Templates**: React Email JSX components (type-safe, server-rendered to HTML)
+- **Translations**: Parsed from existing `public/xml/languages24.xml` (~300+ keys per language)
+- **Country Config**: Parsed from existing `public/xml/countries24.xml` (AU, US, UK, PL, EU, PG, NZ, CA)
+- **PDF Attachments**: Server-side generation using jsPDF for saved-design and order emails
+
+#### Email Types (Discriminated Union on `type` field)
+| Type | Template | PDF | Trigger Point |
+|------|----------|-----|---------------|
+| `saved-design` | `SavedDesignEmail.tsx` | ✅ Quote PDF | `POST /api/projects` after successful save |
+| `order` | `OrderInvoiceEmail.tsx` | ✅ Invoice PDF | Buy page via `POST /api/email` |
+| `enquiry` | `EnquiryEmail.tsx` | ❌ | `POST /api/share/email` (replaced 501 stub) |
+| `registration` | `RegistrationEmail.tsx` | ❌ | `POST /api/auth/register` after account creation |
+| `password-reset` | `PasswordResetEmail.tsx` | ❌ | `POST /api/auth/forgot-password` |
+
+#### Key Files
+| File | Purpose |
+|------|---------|
+| `lib/email/types.ts` | TypeScript types (EmailData union, CountryEmailConfig, QuoteLineItem, SendEmailResult) |
+| `lib/email/index.ts` | Main `sendEmail()` orchestrator — renders template, generates PDF, sends via SMTP |
+| `lib/email/transport.ts` | Nodemailer SMTP transport factory with per-country config caching |
+| `lib/email/config/countries.ts` | Parses `countries24.xml` → `Map<string, CountryEmailConfig>`, BCC routing |
+| `lib/email/config/translations.ts` | Parses `languages24.xml` → `TranslationsByLocale`, `t(locale, key)` helper |
+| `lib/email/helpers.ts` | `breakdownToQuoteItems()` converts PricingBreakdown → QuoteLineItem[], `countryToCode()` |
+| `lib/email/pdf-email.ts` | Server-side PDF generation using jsPDF, returns Buffer for attachment |
+| `lib/email/templates/components/` | Shared: `EmailLayout.tsx`, `DesignPreview.tsx`, `QuoteTable.tsx`, `ContactInfo.tsx` |
+| `app/api/email/route.ts` | `POST /api/email` endpoint with auth check (password-reset skips auth) |
+
+#### SMTP Configuration (Environment Variables)
+```bash
+# Generic fallback
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=user@example.com
+SMTP_PASS=password
+
+# Per-country overrides (optional)
+SMTP_AU_HOST=smtp.au.example.com
+SMTP_AU_PORT=587
+SMTP_AU_USER=au@example.com
+SMTP_AU_PASS=password
+```
+
+#### BCC Routing (from legacy dyo5.php)
+Each country has BCC addresses for `savedDesigns`, `orders`, `admin`, and `always` — configured in `lib/email/config/countries.ts`.
+
+#### Email Branding
+- Gold theme: `#DEBD68` for headers and links
+- Dark header: `#060709` background
+- Footer: Country-specific contact info from `countries24.xml`
+- Logo: Per-country logo URL from config
+
+#### Dependencies Added
+- `nodemailer@8.0.5` — SMTP transport
+- `@react-email/components@1.0.12` — JSX email templates
+- `@types/nodemailer@8.0.0` — TypeScript types
+
+### ✅ Password Reset Flow (New)
+
+Complete forgot-password / reset-password flow using the existing `password_resets` DB table.
+
+#### API Routes
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/auth/forgot-password` | POST | Generates secure random token (SHA-256 hashed), stores in DB, sends reset email. Always returns success to prevent email enumeration. |
+| `/api/auth/reset-password` | POST | Validates token (unconsumed + not expired), updates password hash, marks token consumed. 24-hour expiry. |
+
+#### Security
+- Token: `crypto.randomBytes(32)` → hex string in URL, SHA-256 hash stored in DB
+- Anti-enumeration: Same success response regardless of whether email exists
+- Token consumed in same transaction as password update
+- 24-hour expiry on reset links
+
+### ✅ Grab Cursor for Draggable 3D Items
+
+All draggable items (inscriptions, motifs, images, additions, emblems) now show a grab/grabbing cursor on hover/drag.
+
+#### Root Cause
+`styles/globals.css` has a wildcard CSS rule `*:not(input)... { cursor: default; }` that overrides `document.body.style.cursor`. The fix uses `gl.domElement.style.cursor` (inline styles override non-`!important` CSS).
+
+#### Files Modified (7 files)
+- `components/HeadstoneInscription.tsx` — inscription drag cursor
+- `components/three/MotifModel.tsx` — motif drag cursor
+- `components/three/ImageModel.tsx` — image drag cursor
+- `components/three/EmblemModel.tsx` — emblem drag cursor
+- `components/three/AdditionModel.tsx` — addition drag cursor
+- `components/SelectionBox.tsx` — selection box drag cursor
+- `components/InscriptionBoxSelection.tsx` — inscription box drag cursor
+
+### ✅ Menu Drawer Memory
+
+When clicking "Back to Menu" from a sub-page (e.g., Inscriptions), the sidebar now reopens the last-used accordion section (Setup/Design/Account) instead of always defaulting to Setup.
+
+#### Implementation
+- `DesignerNav.tsx`: Tracks `lastManualGroup` ref that updates on manual accordion clicks
+- "Back to Menu" handler restores `lastManualGroup` instead of resetting to index 0
+
+### ✅ Headstone Sits on Ground When No Base Selected
+
+When the base is set to "No Base" in Select Size, the headstone was floating in the air because the assembly group always offset Y by `baseHeightMeters`.
+
+#### Fix
+- `HeadstoneAssembly.tsx` line 96: Changed `position={[0, baseHeightMeters, 0]}` → `position={[0, showBase ? baseHeightMeters : 0, 0]}`
+- Now only applies Y offset when `showBase` is true; headstone rests at ground level (y=0) without a base
+
+### ✅ Price Popup Table Header Scroll Fix
+
+The sticky table header (PRODUCT / QTY / PRICE / ITEM TOTAL) in the Check Price popup had a semi-transparent background (`bg-[#d4af37]/12`), causing scrolled content to show through.
+
+#### Fix
+- `CheckPricePanel.tsx`: Changed to solid `bg-[#1a1508]` with `z-10` and bottom shadow
+- Content no longer overlaps header when scrolling the quote table
+
+### ✅ Full Color Plaque — Free Inscriptions & Motifs
+
+Product 32 (Full Color Plaque) inscriptions and motifs are now free, matching the XML catalog config:
+```xml
+<addition id="1701" type="inscription" name="Inscription" />
+<addition id="1700" type="motif" name="Motif" formula="Enamel" />
+```
+
+#### Implementation
+- `lib/headstone-store.ts`: Early returns in `recalculateInscriptionPrices()` and `recalculateMotifPrices()` for product 32
+- `lib/motif-pricing.ts`: Early return for product 32 motifs
+- Sidebar inscription/motif panels no longer show prices for product 32
+
+## Previous Status (2026-04-15) — Nav Redesign, Accordion Menu, Gilding Filter, Product 32 Image, Image Update Feature
 
 ### ✅ Sidebar Navigation Redesign — Elegant Memorial Brand Identity
 
@@ -120,6 +254,53 @@ Motif category thumbnails in the sidebar now use the product's `defaultColor` fr
 - **After**: `catalog?.product?.defaultColor || '#c99d44'` — matches the color the motif actually renders with in the 3D scene
 - **Applies to**: Both category grid thumbnails and individual motif thumbnails in `MotifSelectorPanel.tsx`
 - For Traditional Engraved products, this is `#c99d44` (Gold Gilding); other products use their own `default-color` from XML
+
+### ✅ New Design — Styled Confirm Modal & Base Reset
+
+The "New Design" button now uses a styled confirmation modal instead of `window.confirm()`, and properly resets all dimensions including base.
+
+#### Styled Confirm Modal
+- **Created `components/ConfirmModal.tsx`** — Reusable portal-based modal (`createPortal` to `document.body`, z-[9999])
+- **Styling**: Dark gradient background, gold confirm button (`bg-[#D7B356]`), rounded card — matches `SaveDesignModal` design
+- **Props**: `title`, `message`, `confirmLabel`, `cancelLabel`, `onConfirm`, `onCancel`
+- **Replaces** browser `confirm()` in `DesignerNav.tsx` New Design handler
+
+#### Base Dimension Reset
+- `resetDesign()` in `lib/headstone-store.ts` now resets:
+  - `baseWidthMm: 1260` (900 × 1.4 ratio)
+  - `baseHeightMm: 100`
+  - `baseThickness: 250`
+  - `baseFinish: 'default'`
+  - `uprightThickness: 150`
+  - `slantThickness: 150`
+- Previously only reset headstone width/height, leaving base at the old design's dimensions
+
+### ✅ Image Update (Replace Photo) Feature
+
+Selected images now have an **"Update"** button alongside Duplicate and Delete, allowing users to replace the photo while preserving position, size, mask, type, and rotation.
+
+#### How It Works
+1. **User selects an image** on the headstone → sidebar shows editing panel with Update / Duplicate / Delete
+2. **Click "Update"** → file picker opens (hidden `<input type="file">` triggered via ref)
+3. **User selects new photo** → crop screen shows with the new image, sidebar switches from editing panel to crop controls
+4. **Crop button says "Update Photo"** instead of "Crop Image" to indicate update mode
+5. **After cropping** → `updateImageData(id, imageUrl, croppedAspectRatio, colorMode)` replaces only the photo data on the existing image
+6. **Preserved properties**: `xPos`, `yPos`, `widthMm`, `heightMm`, `rotationZ`, `maskShape`, `typeId`, `typeName`, `sizeVariant`, `target`
+
+#### Implementation
+- **Store action** (`lib/headstone-store.ts`): `updateImageData(id, imageUrl, croppedAspectRatio, colorMode)` — maps over `selectedImages`, replaces only photo-related fields, clears `cropCanvasData`
+- **Type** (`lib/headstone-store.types.ts`): Added `updateImageData` to `HeadstoneState` interface
+- **UI** (`components/ImageSelector.tsx`):
+  - `updatingImageId` state tracks which image is being updated
+  - `updateFileInputRef` — hidden file input inside the editing panel's early-return block (must be co-located since the component returns early when an image is selected)
+  - `handleUpdateUpload` — reads file, auto-sets `selectedType` from existing image's `typeId`, opens crop UI
+  - Condition `!(showCropSection && updatingImageId)` on the editing panel early-return — allows the crop controls to render during update flow
+  - Cleanup: `updatingImageId` cleared on Cancel, Back, crop error, and successful crop
+
+#### Key Files
+- `lib/headstone-store.ts` — `updateImageData` action (after `duplicateImage`)
+- `lib/headstone-store.types.ts` — Type definition
+- `components/ImageSelector.tsx` — Update button, file input, crop flow branching
 
 ### 📌 Next Steps
 
@@ -6134,6 +6315,9 @@ SESSION_SECRET=<random-64-char-string>   # required in .env.local
 | `/api/auth/login` | POST | Verify credentials, set JWT cookie |
 | `/api/auth/logout` | POST | Clear session cookie |
 | `/api/auth/session` | GET | Return `{ session }` or 401 |
+| `/api/auth/register` | POST | Create account, set JWT cookie, send welcome email |
+| `/api/auth/forgot-password` | POST | Generate reset token, send reset email (anti-enumeration) |
+| `/api/auth/reset-password` | POST | Validate token, update password hash, consume token |
 
 ### Auth Flow
 1. User visits `/my-account` — page fetches `/api/auth/session` on mount
@@ -6173,6 +6357,77 @@ When connecting to Neon via the pooler (`*-pooler.*.neon.tech`), always run:
 SET search_path TO public;
 ```
 before any DML. Otherwise tables appear in `information_schema` but fail on direct access. This does NOT affect the app at runtime because Drizzle/postgres.js handle it automatically.
+
+---
+
+## Email System
+
+### Overview
+Complete transactional email system migrated from legacy PHP/PHPMailer to modern Next.js. Uses Nodemailer for SMTP transport, React Email for type-safe JSX templates, and parsed XML translations from existing `countries24.xml` and `languages24.xml`.
+
+### Architecture
+```
+lib/email/
+├── types.ts                          # TypeScript types (EmailData union, configs)
+├── index.ts                          # sendEmail() orchestrator
+├── transport.ts                      # Nodemailer SMTP factory (per-country, cached)
+├── helpers.ts                        # breakdownToQuoteItems(), countryToCode()
+├── pdf-email.ts                      # Server-side PDF generation (jsPDF → Buffer)
+├── config/
+│   ├── countries.ts                  # Parses countries24.xml → Map<string, CountryEmailConfig>
+│   └── translations.ts              # Parses languages24.xml → TranslationsByLocale
+└── templates/
+    ├── components/
+    │   ├── EmailLayout.tsx           # Shared layout (dark header, gold title, footer)
+    │   ├── DesignPreview.tsx         # Screenshot + design name
+    │   ├── QuoteTable.tsx            # Pricing breakdown table
+    │   └── ContactInfo.tsx           # Country-specific contact info
+    ├── SavedDesignEmail.tsx          # Design saved confirmation + quote PDF
+    ├── OrderInvoiceEmail.tsx         # Order/invoice confirmation + invoice PDF
+    ├── EnquiryEmail.tsx              # Design enquiry (sent to admin)
+    ├── RegistrationEmail.tsx         # Welcome email
+    └── PasswordResetEmail.tsx        # Reset link email
+```
+
+### Email Types
+Five email types as a discriminated union on `type` field in `lib/email/types.ts`:
+
+| Type | Required Fields | PDF | Triggered By |
+|------|----------------|-----|-------------|
+| `saved-design` | designId, designName, quoteItems, totalCents, currency | ✅ | `POST /api/projects` |
+| `order` | orderId, invoiceNumber, designName, quoteItems, subtotalCents, taxCents, totalCents, currency | ✅ | Buy page → `POST /api/email` |
+| `enquiry` | designName, message | ❌ | `POST /api/share/email` |
+| `registration` | (none beyond base) | ❌ | `POST /api/auth/register` |
+| `password-reset` | resetUrl | ❌ | `POST /api/auth/forgot-password` |
+
+### SMTP Configuration
+```bash
+# Generic fallback (required)
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=user@example.com
+SMTP_PASS=password
+
+# Per-country overrides (optional — pattern: SMTP_{COUNTRY}_*)
+SMTP_AU_HOST=smtp.au.example.com
+SMTP_AU_PORT=587
+SMTP_AU_USER=au@forevershining.com.au
+SMTP_AU_PASS=password
+```
+
+### Integration Points
+All email triggers are fire-and-forget (`.catch()` logged, don't block the response):
+- **Save Design**: `app/api/projects/route.ts` — after `saveProjectRecord()` completes
+- **Registration**: `app/api/auth/register/route.ts` — after account + profile transaction
+- **Enquiry**: `app/api/share/email/route.ts` — sends to admin email from country config
+- **Order**: `app/my-account/designs/[id]/buy/page.tsx` — client-side call to `/api/email`
+- **Password Reset**: `app/api/auth/forgot-password/route.ts` — after token generation
+
+### Dependencies
+- `nodemailer@8.0.5` — SMTP transport
+- `@react-email/components@1.0.12` — JSX email templates (deprecated but functional)
+- `@types/nodemailer@8.0.0` — TypeScript types
+- `@xmldom/xmldom@0.8.11` — XML parsing (already existed)
 
 ---
 
@@ -6575,6 +6830,14 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2026-04-20**: Email System, Grab Cursor, No-Base Fix, Price Popup Fix, Menu Drawer Memory
+  - **Email System** (`lib/email/`): Complete Nodemailer + React Email implementation with 5 templates, PDF attachments, per-country SMTP, XML-based translations. Wired into save, order, enquiry, registration, and password reset flows.
+  - **Password Reset Flow** (`app/api/auth/forgot-password/`, `app/api/auth/reset-password/`): Token-based reset with SHA-256 hashing, 24h expiry, anti-enumeration.
+  - **Grab Cursor** (7 files): All draggable 3D items show grab/grabbing cursor via `gl.domElement.style.cursor` (bypasses CSS wildcard override).
+  - **No-Base Fix** (`HeadstoneAssembly.tsx`): Headstone sits on ground (y=0) when "No Base" selected instead of floating.
+  - **Price Popup Fix** (`CheckPricePanel.tsx`): Sticky table header uses solid background to prevent scroll overlap.
+  - **Free Pricing** (`headstone-store.ts`, `motif-pricing.ts`): Product 32 inscriptions/motifs free per XML catalog.
+  - **Menu Drawer Memory** (`DesignerNav.tsx`): "Back to Menu" restores last-used accordion section.
 - **2026-04-09**: Popup Restyling (HomeSplash Dark Luxury Theme), Mass Design Conversion & Screenshots
   - **Check Price Popup Restyle** (`components/CheckPricePanel.tsx`):
     - Restyled to match HomeSplash modal: `rounded-3xl` gold-bordered container, gold gradient glow, eyebrow pill badge, serif title
