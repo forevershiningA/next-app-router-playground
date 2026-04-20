@@ -290,7 +290,8 @@ export default function CheckPricePanel() {
       const isLaser = activeCatalog?.product.laser === '1';
       let individualPrice = 0;
       
-      if (!isLaser && motifPriceModel) {
+      // Full Colour Plaque (product 32): motifs are free
+      if (productId !== '32' && !isLaser && motifPriceModel) {
         individualPrice = calculateMotifPrice(
           heightMm,
           motif.color,
@@ -372,8 +373,8 @@ export default function CheckPricePanel() {
           {/* Content - Table */}
           <div className="check-price-panel__table max-h-[calc(90vh-260px)] overflow-y-auto overflow-x-auto">
             <table className="w-full border-collapse">
-              <thead className="sticky top-0">
-              <tr className="bg-[#d4af37]/12">
+              <thead className="sticky top-0 z-10">
+              <tr className="bg-[#1a1508] shadow-[0_1px_0_rgba(212,175,55,0.35)]">
                 <th className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35">
                   Product
                 </th>
