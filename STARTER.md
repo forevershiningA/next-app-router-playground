@@ -114,6 +114,29 @@ SMTP_PL_PASS=<mailbox password>
 
 Note: `forevershining.org` is the AU site — its legacy `countryCode: 'au'` routes via office365 in `dyo5.php`, but without AU-specific SMTP env vars set, it will fall back to the wiecznapamiec mailbox above, which is fine for testing.
 
+#### Vercel Setup Checklist (forevershining.org — **current sole test target**)
+
+Only the forevershining.org Vercel project is being tested right now. Configure the generic `SMTP_*` fallback there and every country will route through wiecznapamiec:
+
+1. Vercel dashboard → `forevershining.org` project → **Settings → Environment Variables** (Production scope).
+2. Add the four vars exactly as shown:
+   ```
+   SMTP_HOST = wiecznapamiec.home.pl
+   SMTP_PORT = 587
+   SMTP_USER = biuro@wiecznapamiec.pl
+   SMTP_PASS = <mailbox password — from legacy dyo5.php>
+   ```
+3. Redeploy (any trivial commit or "Redeploy" button on the latest deployment).
+4. Save a design while logged in → expect:
+   - `polcreation@gmail.com` receives a BCC copy (AU country config `always` recipient).
+   - `biuro@wiecznapamiec.pl` receives the From/Reply-To copy via SMTP auth.
+5. Check **Vercel → Runtime Logs** for one of:
+   - ✅ `[Email] Sent: saved-design → …`
+   - ⚠️ `[Email] Skipping send … no SMTP host configured.` → env var not set in right scope.
+   - ❌ nodemailer `EAUTH` / `535` → password wrong.
+
+Other country SMTPs (`SMTP_AU_*`, `SMTP_US_*`, `SMTP_PL_*`, etc.) are **not** needed while only forevershining.org is live. Add them per country later when individual region deployments come online.
+
 ---
 
 ## Current Status (2026-04-20) — Email System, Grab Cursor, No-Base Fix, Price Popup Fix, Menu Drawer Memory
@@ -6908,11 +6931,13 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
-- **2026-04-20 (Part 2)**: Screenshot fix, Login→Save flow, SMTP guard
+- **2026-04-20 (Part 2)**: Screenshot fix, Login→Save flow, SMTP guard, forevershining.org SMTP setup
   - **Blank Thumbnail Fix** (`Scene.tsx`, `DesignerNav.tsx`): Saved designs produced white thumbnails. Fixed by exposing `window.__r3fCamera`, force-rendering via `gl.render(scene, camera)` before capture, and always compositing WebGL canvas onto solid `#1a1a1a` background.
   - **Login→Save Flow** (`DesignerNav.tsx`, `my-account/page.tsx`): Unauthenticated "Save Design" click now redirects to `/my-account?returnTo=...?action=save-design`; after login, the save modal auto-opens on the original page. Uses `window.location.search` to avoid `useSearchParams()` SSG bailout.
   - **SMTP Guard** (`lib/email/index.ts`): Clear warning log and graceful skip when `SMTP_HOST` / `SMTP_{COUNTRY}_HOST` is not set, instead of generic "Email send failed" errors.
-  - **home.pl SMTP docs**: Added Vercel env-var template using `poczta.home.pl:465` to reuse the home.pl mailbox already hosting the PostgreSQL DB.
+  - **Legacy SMTP documented** (STARTER.md): Correct host is `wiecznapamiec.home.pl:587` TLS (matches legacy PHP `case "pl": case "eu": case "co.uk": case "uk":`) with `biuro@wiecznapamiec.pl`. Vercel env var template provided; password kept out of repo.
+  - **uk/eu BCC added** (`lib/email/config/countries.ts`): Mirror PL BCC so legacy country grouping is preserved.
+  - **Test scope**: forevershining.org is the sole active Vercel test target for now — generic `SMTP_*` fallback covers all countries via wiecznapamiec.
 - **2026-04-20**: Email System, Grab Cursor, No-Base Fix, Price Popup Fix, Menu Drawer Memory
   - **Email System** (`lib/email/`): Complete Nodemailer + React Email implementation with 5 templates, PDF attachments, per-country SMTP, XML-based translations. Wired into save, order, enquiry, registration, and password reset flows.
   - **Password Reset Flow** (`app/api/auth/forgot-password/`, `app/api/auth/reset-password/`): Token-based reset with SHA-256 hashing, 24h expiry, anti-enumeration.
