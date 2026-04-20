@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/lib/projects-db';
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
 import { getServerSession } from '#/lib/auth/session';
+import { sendEmail } from '#/lib/email';
+import { breakdownToQuoteItems, countryToCode } from '#/lib/email/helpers';
 
 export const runtime = 'nodejs';
 
@@ -179,6 +181,19 @@ export async function POST(request: NextRequest) {
       designState: cleanedDesignState,
       pricingBreakdown: body.pricingBreakdown ?? null,
     });
+
+    // Fire-and-forget: send saved-design email
+    sendEmail({
+      type: 'saved-design',
+      recipientEmail: session.email,
+      countryCode: 'au',
+      designId: summary.id,
+      designName: summary.title,
+      screenshotUrl: summary.screenshotPath ?? undefined,
+      quoteItems: breakdownToQuoteItems(body.pricingBreakdown),
+      totalCents: summary.totalPriceCents ?? 0,
+      currency: summary.currency,
+    }).catch((err) => console.error('[api/projects] Email send failed:', err));
 
     return NextResponse.json({ project: summary });
   } catch (error) {

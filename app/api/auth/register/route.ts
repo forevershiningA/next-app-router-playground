@@ -4,6 +4,7 @@ import { db } from '#/lib/db/index';
 import { accounts, profiles } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { createSessionToken, setSessionCookie } from '#/lib/auth/session';
+import { sendEmail } from '#/lib/email';
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -70,6 +71,14 @@ export async function POST(request: NextRequest) {
       role: createdAccount.role,
     });
     setSessionCookie(response, token);
+
+    // Fire-and-forget: send welcome email
+    sendEmail({
+      type: 'registration',
+      recipientEmail: createdAccount.email,
+      countryCode: 'au',
+    }).catch((err) => console.error('[auth/register] Email send failed:', err));
+
     return response;
   } catch (error) {
     console.error('Register error:', error);

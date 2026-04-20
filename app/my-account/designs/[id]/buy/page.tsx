@@ -106,6 +106,31 @@ export default function BuyDesignPage() {
     try {
       // Placeholder — wire up to a real orders API when ready
       await new Promise((r) => setTimeout(r, 900));
+
+      // Fire-and-forget: send order confirmation email
+      fetch('/api/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'order',
+          recipientEmail: form.email,
+          recipientName: form.fullName,
+          countryCode: 'au',
+          orderId: id,
+          invoiceNumber: `INV-${id.slice(0, 8).toUpperCase()}`,
+          designName: project?.title ?? 'Untitled Design',
+          screenshotUrl: project?.screenshotPath ?? undefined,
+          quoteItems: [],
+          subtotalCents: project?.totalPriceCents ?? 0,
+          taxCents: Math.round((project?.totalPriceCents ?? 0) * 0.1),
+          totalCents: Math.round((project?.totalPriceCents ?? 0) * 1.1),
+          currency: 'AUD',
+          customerAddress: [form.address, form.city, form.state, form.postcode, form.country]
+            .filter(Boolean)
+            .join(', '),
+        }),
+      }).catch((err) => console.error('Order email failed:', err));
+
       setPlaced(true);
     } catch {
       setError('Something went wrong. Please try again.');
