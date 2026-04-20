@@ -3344,6 +3344,25 @@ export default function DesignerNav() {
 }
 
 function captureBestCanvasScreenshot(): string | null {
+  // Preferred path: use Three.js renderer directly for a reliable screenshot.
+  // This avoids blank-frame issues caused by timing and alpha transparency.
+  const win = window as unknown as Record<string, unknown>;
+  const gl = win.__r3fGL as { render: (s: unknown, c: unknown) => void; domElement: HTMLCanvasElement } | undefined;
+  const scene = win.__r3fScene;
+  const camera = win.__r3fCamera;
+
+  if (gl && scene && camera) {
+    try {
+      // Force render to ensure the drawing buffer has the latest frame
+      gl.render(scene, camera);
+      // encodeCanvasForUpload composites onto a solid background (handles alpha)
+      return encodeCanvasForUpload(gl.domElement);
+    } catch (err) {
+      console.warn('R3F screenshot failed, falling back to DOM canvas:', err);
+    }
+  }
+
+  // Fallback: find canvases in the DOM
   const canvases = Array.from(document.querySelectorAll('canvas'));
   if (!canvases.length) return null;
 
@@ -3351,25 +3370,21 @@ function captureBestCanvasScreenshot(): string | null {
     .map((canvas) => {
       const width = canvas.width || canvas.clientWidth || 0;
       const height = canvas.height || canvas.clientHeight || 0;
-      const area = width * height;
-      return { canvas, area };
+      return { canvas, area: width * height };
     })
     .filter((entry) => entry.area > 0)
     .sort((a, b) => b.area - a.area);
 
-  const first = ranked[0]?.canvas ?? null;
-
   for (const { canvas } of ranked) {
     try {
-      if (isLikelyBlankCanvas(canvas)) {
-        continue;
-      }
+      if (isLikelyBlankCanvas(canvas)) continue;
       return encodeCanvasForUpload(canvas);
     } catch {
       // Try next canvas
     }
   }
 
+  const first = ranked[0]?.canvas ?? null;
   if (!first) return null;
   try {
     return encodeCanvasForUpload(first);
@@ -3385,22 +3400,23 @@ function encodeCanvasForUpload(source: HTMLCanvasElement): string {
   const sourceHeight = source.height || source.clientHeight || 1;
   const scale = Math.min(1, maxWidth / sourceWidth, maxHeight / sourceHeight);
 
-  let exportCanvas = source;
-  if (scale < 1) {
-    const resized = document.createElement('canvas');
-    resized.width = Math.max(1, Math.round(sourceWidth * scale));
-    resized.height = Math.max(1, Math.round(sourceHeight * scale));
-    const ctx = resized.getContext('2d');
-    if (ctx) {
-      // Use a white background to avoid alpha artifacts in JPEG exports.
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, resized.width, resized.height);
-      ctx.drawImage(source, 0, 0, resized.width, resized.height);
-      exportCanvas = resized;
-    }
+  // Always composite onto a 2D canvas with a solid background.
+  // WebGL canvases with alpha produce transparent areas that JPEG
+  // renders unpredictably (white or black depending on browser).
+  const outW = Math.max(1, Math.round(sourceWidth * scale));
+  const outH = Math.max(1, Math.round(sourceHeight * scale));
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = outW;
+  exportCanvas.height = outH;
+  const ctx = exportCanvas.getContext('2d');
+  if (ctx) {
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, outW, outH);
+    ctx.drawImage(source, 0, 0, outW, outH);
+    return exportCanvas.toDataURL('image/jpeg', 0.86);
   }
 
-  return exportCanvas.toDataURL('image/jpeg', 0.86);
+  return source.toDataURL('image/jpeg', 0.86);
 }
 
 function isLikelyBlankCanvas(canvas: HTMLCanvasElement): boolean {
@@ -3413,24 +3429,23 @@ function isLikelyBlankCanvas(canvas: HTMLCanvasElement): boolean {
   try {
     ctx.drawImage(canvas, 0, 0, probe.width, probe.height);
     const pixels = ctx.getImageData(0, 0, probe.width, probe.height).data;
-    let opaque = 0;
-    let nonWhite = 0;
+    let total = 0;
+    let nonTrivial = 0;
 
     for (let i = 0; i < pixels.length; i += 4) {
       const r = pixels[i];
       const g = pixels[i + 1];
       const b = pixels[i + 2];
       const a = pixels[i + 3];
-      if (a > 10) {
-        opaque += 1;
-        if (!(r > 245 && g > 245 && b > 245)) {
-          nonWhite += 1;
-        }
+      total += 1;
+      // Count pixels that are neither transparent nor near-white
+      if (a > 10 && !(r > 245 && g > 245 && b > 245)) {
+        nonTrivial += 1;
       }
     }
 
-    if (opaque === 0) return true;
-    return nonWhite / opaque < 0.01;
+    if (total === 0) return true;
+    return nonTrivial / total < 0.01;
   } catch {
     return false;
   }

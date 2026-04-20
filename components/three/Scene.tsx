@@ -161,19 +161,21 @@ export default function Scene({
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const readySignaledRef = useRef(false);
-  const { scene, gl } = useThree();
+  const { scene, gl, camera } = useThree();
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
 
-  // Expose scene & renderer for external tools (batch screenshot script)
+  // Expose scene, renderer & camera for external tools (batch screenshot, save thumbnail)
   useEffect(() => {
     (window as unknown as Record<string, unknown>).__r3fScene = scene;
     (window as unknown as Record<string, unknown>).__r3fGL = gl;
+    (window as unknown as Record<string, unknown>).__r3fCamera = camera;
     return () => {
       delete (window as unknown as Record<string, unknown>).__r3fScene;
       delete (window as unknown as Record<string, unknown>).__r3fGL;
+      delete (window as unknown as Record<string, unknown>).__r3fCamera;
     };
-  }, [scene, gl]);
+  }, [scene, gl, camera]);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const loading = useHeadstoneStore((s) => s.loading);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
