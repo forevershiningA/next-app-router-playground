@@ -38,6 +38,7 @@ import EmblemOverlayPanel from './EmblemOverlayPanel';
 import EmblemSelectionGrid from '#/app/select-emblems/_ui/EmblemSelectionGrid';
 import ImageSelector from './ImageSelector';
 import SaveDesignModal from './SaveDesignModal';
+import ConfirmModal from './ConfirmModal';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 
@@ -387,14 +388,16 @@ export default function DesignerNav() {
     const idx = menuGroups.findIndex((g) =>
       g.items.some((item) => item.slug === slug),
     );
-    return idx >= 0 ? idx : 0;
+    return idx >= 0 ? idx : -1;
   }, [pathname]);
 
   const [openGroup, setOpenGroup] = React.useState<number>(0);
 
-  // Auto-open the group containing the current route
+  // Auto-open the group containing the current route (keep last group if route has no match)
   React.useEffect(() => {
-    setOpenGroup(activeGroupIndex);
+    if (activeGroupIndex >= 0) {
+      setOpenGroup(activeGroupIndex);
+    }
   }, [activeGroupIndex]);
 
   const toggleGroup = React.useCallback((groupIndex: number) => {
@@ -406,6 +409,7 @@ export default function DesignerNav() {
     router.push('/design-menu');
   }, [closeFullscreenPanel, router]);
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
+  const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
 
   useEffect(() => {
@@ -1027,7 +1031,7 @@ export default function DesignerNav() {
       activePanel === 'motif';
     const rotationDegrees = ((activeOffset?.rotationZ ?? 0) * 180) / Math.PI;
     const motifPriceValue =
-      hasActiveMotif && motifPriceModel && !isLaser
+      hasActiveMotif && motifPriceModel && !isLaser && productId !== '32'
         ? calculateMotifPrice(
             activeOffset?.heightMm ?? initHeight,
             activeMotif?.color ?? '#c99d44',
@@ -1600,8 +1604,9 @@ export default function DesignerNav() {
       }
 
       // Calculate motif prices (same pricing model used by Check Price)
+      // Full Colour Plaque (product 32): motifs are free
       let motifsPrice = 0;
-      if (state.selectedMotifs && state.selectedMotifs.length > 0) {
+      if (state.productId !== '32' && state.selectedMotifs && state.selectedMotifs.length > 0) {
         const isLaser = catalog?.product.laser === '1';
         motifsPrice = state.selectedMotifs.reduce((total, motif) => {
           const offset = state.motifOffsets?.[motif.id];
@@ -1626,7 +1631,8 @@ export default function DesignerNav() {
         line.text?.trim(),
       );
       let inscriptionPrice = 0;
-      if (state.inscriptionPriceModel && validInscriptions.length > 0) {
+      // Full Colour Plaque (product 32): inscriptions are free
+      if (state.productId !== '32' && state.inscriptionPriceModel && validInscriptions.length > 0) {
         inscriptionPrice = validInscriptions.reduce((total, line) => {
           const qty = line.sizeMm;
           const colorName = data.colors.find((c: { hex: string; name: string }) => c.hex === line.color)?.name;
@@ -1786,14 +1792,11 @@ export default function DesignerNav() {
 
   const handleNewDesign = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (
-      confirm(
-        'Are you sure you want to start a new design? This will remove all inscriptions, additions, and motifs.',
-      )
-    ) {
-      resetDesign();
-      // Don't navigate, just reset the design and stay on current page
-    }
+    setShowNewDesignConfirm(true);
+  };
+
+  const handleConfirmNewDesign = () => {
+    resetDesign();
   };
 
   const handleToggleConvertPanel = (e: React.MouseEvent) => {
@@ -3326,6 +3329,15 @@ export default function DesignerNav() {
         onClose={() => setShowSaveDesignModal(false)}
         onSave={handleSaveDesign}
         isSaving={isSavingDesign}
+      />
+      <ConfirmModal
+        isOpen={showNewDesignConfirm}
+        onClose={() => setShowNewDesignConfirm(false)}
+        onConfirm={handleConfirmNewDesign}
+        title="Start New Design"
+        message="Are you sure you want to start a new design? This will remove all inscriptions, additions, motifs, and reset dimensions to defaults."
+        confirmLabel="Start New"
+        cancelLabel="Keep Current"
       />
     </nav>
   );
