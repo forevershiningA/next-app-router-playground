@@ -76,12 +76,15 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const [dragHandle, setDragHandle] = useState<'move' | 'nw' | 'ne' | 'sw' | 'se' | null>(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const previewRef = useRef<HTMLDivElement>(null);
+  const updateFileInputRef = useRef<HTMLInputElement>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [feedbackTone, setFeedbackTone] = useState<'error' | 'info'>('error');
+  const [updatingImageId, setUpdatingImageId] = useState<string | null>(null);
   
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   const addImage = useHeadstoneStore((s) => s.addImage);
+  const updateImageData = useHeadstoneStore((s) => s.updateImageData);
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
 
   // Image pricing state
@@ -164,6 +167,42 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       // Load image to get dimensions
       const img = new window.Image();
       img.onload = () => {
+        openUploadForImage(imageUrl, { width: img.width, height: img.height });
+      };
+      img.src = imageUrl;
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleUpdateUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    // Reset the input so the same file can be re-selected
+    event.target.value = '';
+
+    if (!file.type.startsWith('image/')) {
+      setFeedbackTone('error');
+      setFeedbackMessage('Please upload an image file.');
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setFeedbackTone('error');
+      setFeedbackMessage('Image size must be less than 5MB.');
+      return;
+    }
+    setFeedbackMessage(null);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageUrl = e.target?.result as string;
+      const img = new window.Image();
+      img.onload = () => {
+        // Use the existing image's type so the crop flow works
+        const existingImg = selectedImages.find((i) => i.id === updatingImageId);
+        if (existingImg && !selectedType) {
+          const matchingType = imageTypes.find((t) => t.id === String(existingImg.typeId));
+          if (matchingType) setSelectedType(matchingType);
+        }
         openUploadForImage(imageUrl, { width: img.width, height: img.height });
       };
       img.src = imageUrl;
@@ -395,21 +434,27 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       };
       const maskShapeFilename = productId === '32' ? '' : (maskShapeMap[selectedMask] || 'oval_vertical');
 
-      addImage({
-        id: `img-${Date.now()}`,
-        typeId: parseInt(selectedType.id),
-        typeName: selectedType.name,
-        imageUrl: processedImageUrl,
-        widthMm: targetWidthMm,
-        heightMm: targetHeightMm,
-        xPos: 0,
-        yPos: 100, // Start higher up on the headstone
-        rotationZ: 0,
-        sizeVariant: sizeVariantValue ?? 1,
-        croppedAspectRatio: canonicalAspectRatio,
-        maskShape: maskShapeFilename, // Pass the SVG filename (e.g., 'rectangle_horizontal')
-        colorMode: cropColorMode,
-      });
+      if (updatingImageId) {
+        // Update existing image: replace photo data, keep position/size/mask
+        updateImageData(updatingImageId, processedImageUrl, canonicalAspectRatio, cropColorMode);
+        setUpdatingImageId(null);
+      } else {
+        addImage({
+          id: `img-${Date.now()}`,
+          typeId: parseInt(selectedType.id),
+          typeName: selectedType.name,
+          imageUrl: processedImageUrl,
+          widthMm: targetWidthMm,
+          heightMm: targetHeightMm,
+          xPos: 0,
+          yPos: 100,
+          rotationZ: 0,
+          sizeVariant: sizeVariantValue ?? 1,
+          croppedAspectRatio: canonicalAspectRatio,
+          maskShape: maskShapeFilename,
+          colorMode: cropColorMode,
+        });
+      }
 
 
       // 12. Reset and close crop UI
@@ -423,6 +468,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       console.error('[handleCropImage] Error processing image:', error);
       setFeedbackTone('error');
       setFeedbackMessage('Failed to process image. Please try again.');
+      setUpdatingImageId(null);
     }
   };
 
@@ -511,6 +557,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     setFeedbackMessage(null);
     clearSelectedType();
     setSelectedImageId(null);
+    setUpdatingImageId(null);
   };
 
   // Get selected image data
@@ -542,8 +589,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   }
 
   // If an image is selected, show editing controls
-  // This works both in fullscreen mode and sidebar mode
-  if (selectedImageId && selectedImage) {
+  // Skip when in update-crop mode so the crop UI renders instead
+  if (selectedImageId && selectedImage && !(showCropSection && updatingImageId)) {
     const imageRotationDeg = selectedImage.rotationZ || 0;
     
     // Get size configuration for this image type
@@ -577,6 +624,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     
     return (
       <div className="space-y-5 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-6 shadow-xl backdrop-blur-sm">
+        {/* Hidden file input for image update flow */}
+        <input
+          ref={updateFileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleUpdateUpload}
+          className="hidden"
+        />
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-300">
             Selected: <span className="font-semibold text-white">{selectedImageId}</span>
@@ -612,6 +667,16 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         })()}
         
         <div className="flex gap-2">
+          <button
+            type="button"
+            className="flex-1 rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors"
+            onClick={() => {
+              setUpdatingImageId(selectedImageId);
+              updateFileInputRef.current?.click();
+            }}
+          >
+            Update
+          </button>
           <button
             type="button"
             className="flex-1 rounded-lg bg-violet-600 px-3 py-2 text-sm font-medium text-white hover:bg-violet-700 transition-colors"
@@ -903,6 +968,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
   return (
     <div className="flex h-full flex-col gap-4">
+      {/* Hidden file input for image update flow */}
+      <input
+        ref={updateFileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleUpdateUpload}
+        className="hidden"
+      />
       {feedbackMessage && (
         <div
           className={`rounded-lg border px-3 py-2 text-sm ${
@@ -1256,7 +1329,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      Crop Image
+                      {updatingImageId ? 'Update Photo' : 'Crop Image'}
                     </button>
 
                     {/* Action Buttons */}
@@ -1300,6 +1373,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       <button
                         onClick={() => {
                           resetCropState();
+                          setUpdatingImageId(null);
                         }}
                         className="rounded-lg bg-red-900/20 border border-red-500/30 px-3 py-2 text-red-400 text-sm hover:bg-red-900/30 transition-colors flex items-center justify-center gap-2"
                       >

@@ -37,7 +37,7 @@ export type MotifProductData = {
  * Parse motif XML and extract pricing information
  */
 export async function fetchAndParseMotifPricing(
-  productType: 'engraved' | 'laser' | 'bronze'
+  productType: 'engraved' | 'laser' | 'bronze' | 'enamel'
 ): Promise<MotifProductData | null> {
   try {
     const xmlPath = productType === 'bronze' 

@@ -22,6 +22,7 @@ export default function InscriptionEditPanel() {
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
   const inscriptionPriceModel = useHeadstoneStore((s) => s.inscriptionPriceModel);
   const catalog = useHeadstoneStore((s) => s.catalog);
+  const productId = useHeadstoneStore((s) => s.productId);
   const isEngraved = catalog?.product.formula === 'Engraved';
 
   const active = lines.find((l) => l.id === selectedInscriptionId) ?? null;
@@ -88,7 +89,7 @@ export default function InscriptionEditPanel() {
           </div>
           <div className="text-2xl font-semibold text-white">
             {(() => {
-              if (!inscriptionPriceModel || !showInscriptionColor) return 'Free';
+              if (productId === '32' || !inscriptionPriceModel || !showInscriptionColor) return 'Free';
               const quantity = active.sizeMm;
               const colorName = data.colors.find((c) => c.hex === active.color)?.name;
               let mappedNote = colorName;

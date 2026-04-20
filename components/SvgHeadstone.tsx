@@ -85,6 +85,7 @@ type Props = {
   bevel?: boolean;
   doubleSided?: boolean;
   showEdges?: boolean;
+  isFullColourPlaque?: boolean;
   headstoneStyle?: 'upright' | 'slant';
   slantThickness?: number; // Absolute thickness in mm (100-300mm)
   meshProps?: ThreeElements['mesh'];
@@ -206,6 +207,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   bevel = false,
   doubleSided = false,
   showEdges = false,
+  isFullColourPlaque = false,
   headstoneStyle = 'upright',
   slantThickness = 150, // Default 150mm
   meshProps,
@@ -1079,6 +1081,35 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   const materials = useMemo(() => {
     const isSlant = headstoneStyle === 'slant';
 
+    // Full Colour Plaque: unlit face so the background image renders without
+    // lighting influence. The color multiplier tames brightness so highlights
+    // don't wash out to white.
+    if (isFullColourPlaque) {
+      const faceMat = new THREE.MeshBasicMaterial({
+        map: clonedFaceMap,
+        color: new THREE.Color(0.82, 0.82, 0.82),
+        toneMapped: false,
+        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        polygonOffset: true,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1,
+      });
+
+      const sideMat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0xeeeeee),
+        roughness: 0.4,
+        metalness: 0.0,
+        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        clearcoat: 0.3,
+        clearcoatRoughness: 0.3,
+        polygonOffset: true,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1,
+      });
+
+      return [faceMat, sideMat];
+    }
+
     // Match the calibrated polished granite response used across the monument parts.
     const common = {
       color: new THREE.Color(isSlant ? 0x444444 : 0xa6a6a6),
@@ -1126,7 +1157,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         });
 
     return [faceMat, sideMat];
-  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture]);
+  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque]);
 
   // 5a. Dispose geometries and materials on cleanup
   React.useEffect(() => {

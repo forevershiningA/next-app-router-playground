@@ -524,6 +524,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             faceTexture={resolvedTex}
             sideTexture={isFullColourPlaque ? null : resolvedTex}
             stretchFace={isFullColourPlaque}
+            isFullColourPlaque={isFullColourPlaque}
             tileSize={0.35}
             sideTileSize={0.35}
             topTileSize={0.35}

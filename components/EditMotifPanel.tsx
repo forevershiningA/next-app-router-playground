@@ -55,8 +55,9 @@ export default function EditMotifPanel() {
     initHeight = 100;
   }
 
-  // Calculate individual motif price (free for laser products)
-  const motifPrice = motifPriceModel
+  // Calculate individual motif price (free for laser products and Full Colour Plaque)
+  const productId = useHeadstoneStore((s) => s.productId);
+  const motifPrice = motifPriceModel && productId !== '32'
     ? calculateMotifPrice(
         activeOffset?.heightMm ?? 100,
         activeMotif?.color ?? '#c99d44',

@@ -259,6 +259,7 @@ export type HeadstoneState = {
   }) => void;
   removeImage: (id: string) => void;
   duplicateImage: (id: string) => void;
+  updateImageData: (id: string, imageUrl: string, croppedAspectRatio: number, colorMode?: 'full' | 'bw' | 'sepia') => void;
   updateImagePosition: (id: string, xPos: number, yPos: number) => void;
   updateImageSize: (id: string, widthMm: number, heightMm: number) => void;
   updateImageSizeVariant: (id: string, sizeVariant: number) => void;

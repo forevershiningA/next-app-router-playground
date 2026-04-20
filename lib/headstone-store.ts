@@ -541,6 +541,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     });
     setTimeout(() => get().calculateImageCost(), 0);
   },
+  updateImageData: (id, imageUrl, croppedAspectRatio, colorMode) => {
+    set((s) => ({
+      selectedImages: s.selectedImages.map((img) =>
+        img.id === id ? { ...img, imageUrl, croppedAspectRatio, colorMode } : img
+      ),
+      cropCanvasData: null,
+    }));
+  },
   updateImagePosition: (id, xPos, yPos) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
@@ -959,7 +967,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Load motif pricing based on product type
       const isBronze = catalog.product.type === 'bronze_plaque';
       const isLaser = catalog.product.laser === '1';
-      const motifType = isBronze ? 'bronze' : isLaser ? 'laser' : 'engraved';
+      const motifAddition = catalog.product.additions.find((a) => a.type === 'motif');
+      const isEnamel = motifAddition?.formula?.toLowerCase() === 'enamel';
+      const motifType = isBronze ? 'bronze' : isEnamel ? 'enamel' : isLaser ? 'laser' : 'engraved';
       
       const motifPricing = await fetchAndParseMotifPricing(motifType);
       if (motifPricing) {
@@ -1755,8 +1765,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   calculateInscriptionCost: () => {
-    const { inscriptions, inscriptionPriceModel, showInscriptionColor } = get();
-    if (!inscriptionPriceModel || !showInscriptionColor) {
+    const { inscriptions, inscriptionPriceModel, showInscriptionColor, productId } = get();
+    // Full Colour Plaque (product 32): inscriptions are free
+    if (productId === '32' || !inscriptionPriceModel || !showInscriptionColor) {
       set({ inscriptionCost: 0 });
       return;
     }
@@ -1794,8 +1805,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   calculateMotifCost: () => {
-    const { selectedMotifs, motifOffsets, motifPriceModel, catalog } = get();
-    if (!motifPriceModel) {
+    const { selectedMotifs, motifOffsets, motifPriceModel, catalog, productId } = get();
+    // Full Colour Plaque (product 32): motifs are free
+    if (productId === '32' || !motifPriceModel) {
       set({ motifCost: 0 });
       return;
     }
@@ -1957,9 +1969,15 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       showInscriptionColor: true,
       currentProjectId: null,
       currentProjectTitle: null,
-      // Reset to default dimensions
+      // Reset to default dimensions (headstone + base)
       widthMm: 900,
       heightMm: 900,
+      baseWidthMm: 1260,
+      baseHeightMm: 100,
+      baseThickness: 250,
+      baseFinish: 'default',
+      uprightThickness: 150,
+      slantThickness: 150,
     });
   },
 }));
