@@ -38,6 +38,64 @@
 
 ---
 
+## Current Status (2026-04-20, Part 2) — Screenshot Fix, Login→Save Flow, SMTP Guard
+
+Follow-up session on 2026-04-20 after initial email system deployment.
+
+### ✅ Blank/White Thumbnail Fix on Saved Designs
+
+Designs saved after the email-system deployment produced blank/white thumbnails instead of proper 3D screenshots.
+
+#### Root Cause
+Two combined issues:
+1. **Timing** — `canvas.toDataURL()` could return a blank frame if the WebGL drawing buffer was stale (no render between last frame and capture).
+2. **Alpha transparency** — The Three.js canvas has `alpha: true`, so transparent areas rendered as white in JPEG exports (previous compositor only added a background when resizing).
+
+#### Fix
+- `components/three/Scene.tsx`: Expose `window.__r3fCamera` alongside existing `__r3fGL` / `__r3fScene` so external capture code has access to the camera.
+- `components/DesignerNav.tsx` (`captureBestCanvasScreenshot`):
+  - Preferred path calls `gl.render(scene, camera)` directly to force a fresh frame before reading the drawing buffer.
+  - `encodeCanvasForUpload` now **always** composites onto a solid `#1a1a1a` background (removed the "only composite when resizing" branch).
+  - DOM canvas search is now only a fallback if the R3F globals aren't present.
+- Saved designs now consistently produce proper thumbnails matching the on-screen 3D preview.
+
+### ✅ Auto-Open Save Design Modal After Login
+
+When an unauthenticated user clicked "Save Design", the flow redirected to `/my-account` for login but did not return them to the save action.
+
+#### Fix
+- `components/DesignerNav.tsx`:
+  - On "Save Design" click while unauthenticated, redirects to `/my-account?returnTo=/current-path?action=save-design`.
+  - On mount, checks `window.location.search` for `?action=save-design`; if present, cleans up the URL via `history.replaceState` and opens the Save Design modal.
+- `app/my-account/page.tsx`:
+  - `onLogin` callback in `AuthGate` reads `returnTo` from `window.location.search` and routes back if present; otherwise shows the My Account page as before.
+- Uses `window.location.search` instead of `useSearchParams()` to avoid SSG bailout requiring Suspense boundaries (was breaking `/select-size/[section]/[category]` prerender).
+
+### ✅ SMTP Configuration Guard & Clearer Logs
+
+Email sending silently failed on `forevershining.org` because no SMTP env vars were set on Vercel.
+
+#### Fix
+- `lib/email/index.ts`: `sendEmail()` now checks for `SMTP_{COUNTRY}_HOST` / `SMTP_HOST` before attempting to send. If neither is configured, logs a single clear warning:
+  ```
+  [Email] Skipping send (type=..., to=...): no SMTP host configured.
+  Set SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS (or SMTP_AU_HOST etc.) in environment variables.
+  ```
+  and returns `{ success: false, error: 'SMTP not configured' }` instead of throwing a generic network error.
+
+#### SMTP Setup (home.pl)
+Since the project already uses `home.pl` for PostgreSQL, the home.pl SMTP is a natural fit:
+```bash
+# Vercel env vars for forevershining.org
+SMTP_HOST=poczta.home.pl
+SMTP_PORT=465                    # SSL
+SMTP_USER=biuro@wiecznapamiec.pl # full email address
+SMTP_PASS=<mailbox-password>
+```
+Note: home.pl requires the full email address as the SMTP username. Port 465 (SSL) is preferred; 587 (STARTTLS) also supported.
+
+---
+
 ## Current Status (2026-04-20) — Email System, Grab Cursor, No-Base Fix, Price Popup Fix, Menu Drawer Memory
 
 ### ✅ Email System — Nodemailer + React Email + PDF Attachments
@@ -6830,6 +6888,11 @@ git log --oneline -10   # Recent commits
 
 ## Version History
 
+- **2026-04-20 (Part 2)**: Screenshot fix, Login→Save flow, SMTP guard
+  - **Blank Thumbnail Fix** (`Scene.tsx`, `DesignerNav.tsx`): Saved designs produced white thumbnails. Fixed by exposing `window.__r3fCamera`, force-rendering via `gl.render(scene, camera)` before capture, and always compositing WebGL canvas onto solid `#1a1a1a` background.
+  - **Login→Save Flow** (`DesignerNav.tsx`, `my-account/page.tsx`): Unauthenticated "Save Design" click now redirects to `/my-account?returnTo=...?action=save-design`; after login, the save modal auto-opens on the original page. Uses `window.location.search` to avoid `useSearchParams()` SSG bailout.
+  - **SMTP Guard** (`lib/email/index.ts`): Clear warning log and graceful skip when `SMTP_HOST` / `SMTP_{COUNTRY}_HOST` is not set, instead of generic "Email send failed" errors.
+  - **home.pl SMTP docs**: Added Vercel env-var template using `poczta.home.pl:465` to reuse the home.pl mailbox already hosting the PostgreSQL DB.
 - **2026-04-20**: Email System, Grab Cursor, No-Base Fix, Price Popup Fix, Menu Drawer Memory
   - **Email System** (`lib/email/`): Complete Nodemailer + React Email implementation with 5 templates, PDF attachments, per-country SMTP, XML-based translations. Wired into save, order, enquiry, registration, and password reset flows.
   - **Password Reset Flow** (`app/api/auth/forgot-password/`, `app/api/auth/reset-password/`): Token-based reset with SHA-256 hashing, 24h expiry, anti-enumeration.

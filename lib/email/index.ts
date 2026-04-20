@@ -180,6 +180,20 @@ function generateAttachment(
  */
 export async function sendEmail(data: EmailData): Promise<SendEmailResult> {
   try {
+    // Early guard: if SMTP host is not configured, skip gracefully.
+    // This is common on localhost or when env vars haven't been set yet.
+    const countryPrefix = `SMTP_${data.countryCode.toUpperCase()}_HOST`;
+    const hasHost =
+      Boolean(process.env[countryPrefix]) || Boolean(process.env.SMTP_HOST);
+    if (!hasHost) {
+      console.warn(
+        `[Email] Skipping send (type=${data.type}, to=${data.recipientEmail}): ` +
+          `no SMTP host configured. Set SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS ` +
+          `(or ${countryPrefix} etc.) in environment variables.`,
+      );
+      return { success: false, error: 'SMTP not configured' };
+    }
+
     const config = getCountryConfig(data.countryCode);
     const locale = data.locale ?? config.language;
     const translations = getTranslationMap(locale);
