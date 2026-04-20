@@ -412,6 +412,17 @@ export default function DesignerNav() {
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
 
+  // Auto-open save modal when returning from login with ?action=save-design
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('action') === 'save-design') {
+      params.delete('action');
+      const qs = params.toString();
+      window.history.replaceState({}, '', pathname + (qs ? `?${qs}` : ''));
+      setShowSaveDesignModal(true);
+    }
+  }, [pathname]);
+
   useEffect(() => {
     if (!productId && showConvertPanel) {
       setShowConvertPanel(false);
@@ -1548,7 +1559,9 @@ export default function DesignerNav() {
       e.preventDefault();
       const res = await fetch('/api/auth/session');
       if (!res.ok) {
-        router.push('/my-account');
+        // Redirect to login with return path so save modal opens after auth
+        const returnTo = encodeURIComponent(pathname + '?action=save-design');
+        router.push(`/my-account?returnTo=${returnTo}`);
         return;
       }
       setShowSaveDesignModal(true);

@@ -275,7 +275,19 @@ export default function MyAccountPage() {
 
   // Not logged in — show login/register gate
   if (session === null) {
-    return <AuthGate onLogin={(email) => setSession({ email })} />;
+    return (
+      <AuthGate
+        onLogin={(email) => {
+          const params = new URLSearchParams(window.location.search);
+          const returnTo = params.get('returnTo');
+          if (returnTo) {
+            router.push(returnTo);
+          } else {
+            setSession({ email });
+          }
+        }}
+      />
+    );
   }
 
   return (
