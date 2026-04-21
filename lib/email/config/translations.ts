@@ -5,10 +5,9 @@
  * that resolves a translation key for a given locale, falling back to 'au_EN'.
  */
 
-import { readFileSync } from 'fs';
-import { join } from 'path';
 import { DOMParser } from '@xmldom/xmldom';
 import type { TranslationsByLocale } from '../types';
+import { languagesXml } from './data/languages24';
 
 function parseLanguageElement(el: Element): Record<string, string> {
   const map: Record<string, string> = {};
@@ -36,9 +35,7 @@ let cachedTranslations: TranslationsByLocale | null = null;
 export function getTranslations(): TranslationsByLocale {
   if (cachedTranslations) return cachedTranslations;
 
-  const xmlPath = join(__dirname, 'data', 'languages24.xml');
-  const xmlContent = readFileSync(xmlPath, 'utf-8');
-  const doc = new DOMParser().parseFromString(xmlContent, 'text/xml');
+  const doc = new DOMParser().parseFromString(languagesXml, 'text/xml');
   const langElements = doc.getElementsByTagName('language');
 
   const translations: TranslationsByLocale = {};
