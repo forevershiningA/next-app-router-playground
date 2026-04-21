@@ -38,9 +38,28 @@
 
 ---
 
-## Current Status (2026-04-21) — Production Email Delivery Fix + .vercelignore Trim
+## Current Status (2026-04-21) — Production Email Delivery Fix + .vercelignore Trim + Inline Screenshot CID
 
 Session focused on fixing broken save-design confirmation emails on `forevershining.org` (Vercel production) and reducing deploy upload size.
+
+### ✅ Fixed: Broken Email Body (Screenshot Data URI Leaking as Raw Text)
+
+First production email arrived but with the design screenshot rendered as raw text (`<img alt="test email10" src="data:image/jpeg;base64,…"` literally visible in the body).
+
+#### Root Cause
+The screenshot was embedded as a `data:image/jpeg;base64,…` URI inside `<img src>`. Problems:
+- Gmail clips messages >102 KB; a 100–300 KB base64 data URI alone blows past that.
+- Gmail sanitizes/strips `data:` URIs in `<img>` tags in many flows → after clipping/sanitization, remaining markup shows as text.
+- Large single-line base64 in an HTML attribute interacts poorly with SMTP encoding.
+
+#### Fix — CID Inline Attachment
+`lib/email/index.ts`:
+- Added `dataUriToInlineImage()` helper that parses `data:image/...;base64,...` and returns a nodemailer-ready attachment (`filename`, `content: Buffer`, `contentType`, `cid`).
+- In `sendEmail()`: before rendering the template, if `data.screenshotUrl` is a data URI, convert it once, build a copy of the payload with `screenshotUrl: 'cid:design-screenshot'`, and pass THAT copy to `renderTemplate()` and `getSubject()`.
+- Append the inline attachment to `mailOptions.attachments` (alongside the PDF if present) with `contentDisposition: 'inline'`.
+- **PDF generation still receives the original `data` (with the real data URI)** so `jsPDF.addImage()` keeps working — only the HTML body uses the CID reference.
+
+Result: HTML body stays tiny (~few KB), Gmail/Outlook/Apple Mail all render the inline image reliably via `cid:design-screenshot`.
 
 ### ✅ Fixed: `ENOENT` on `public/xml/countries24.xml` in Serverless Runtime
 

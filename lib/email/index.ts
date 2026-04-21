@@ -21,6 +21,51 @@ import type {
   RegistrationEmailData,
   PasswordResetEmailData,
 } from './types';
+
+// ---------------------------------------------------------------------------
+// Inline image (CID) handling
+// ---------------------------------------------------------------------------
+//
+// Gmail clips messages >102 KB and strips `data:` URIs from <img src> in many
+// cases. Embedding a 100–300 KB base64 screenshot directly in the HTML body
+// breaks delivery (recipient sees the raw `<img src="data:…">` as text).
+//
+// The standard fix is a CID inline attachment:
+//   html: `<img src="cid:design-screenshot">`
+//   attachments: [{ filename, content: Buffer, cid: 'design-screenshot', ... }]
+// Gmail, Outlook, Apple Mail, Thunderbird, and all major clients render this.
+
+const SCREENSHOT_CID = 'design-screenshot';
+
+interface InlineImage {
+  filename: string;
+  content: Buffer;
+  contentType: string;
+  cid: string;
+}
+
+function dataUriToInlineImage(
+  dataUri: string | undefined,
+): InlineImage | null {
+  if (!dataUri) return null;
+  const match = dataUri.match(
+    /^data:(image\/[a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=]+)$/,
+  );
+  if (!match) return null;
+  const contentType = match[1];
+  const b64 = match[2];
+  const ext = contentType.includes('png')
+    ? 'png'
+    : contentType.includes('webp')
+      ? 'webp'
+      : 'jpg';
+  return {
+    filename: `design-screenshot.${ext}`,
+    content: Buffer.from(b64, 'base64'),
+    contentType,
+    cid: SCREENSHOT_CID,
+  };
+}
 import { SavedDesignEmail } from './templates/SavedDesignEmail';
 import { OrderInvoiceEmail } from './templates/OrderInvoiceEmail';
 import { EnquiryEmail } from './templates/EnquiryEmail';
@@ -198,9 +243,30 @@ export async function sendEmail(data: EmailData): Promise<SendEmailResult> {
     const locale = data.locale ?? config.language;
     const translations = await getTranslationMap(locale);
 
+    // If the payload carries a base64 data-URI screenshot, convert it to a
+    // CID inline attachment and rewrite the template's screenshotUrl to
+    // `cid:design-screenshot`. Large data URIs inside <img src> break Gmail
+    // (clip threshold, data: URI stripping).
+    let renderData: EmailData = data;
+    let inlineScreenshot: InlineImage | null = null;
+    if (
+      (data.type === 'saved-design' ||
+        data.type === 'order' ||
+        data.type === 'enquiry') &&
+      data.screenshotUrl?.startsWith('data:image/')
+    ) {
+      inlineScreenshot = dataUriToInlineImage(data.screenshotUrl);
+      if (inlineScreenshot) {
+        renderData = {
+          ...data,
+          screenshotUrl: `cid:${SCREENSHOT_CID}`,
+        } as EmailData;
+      }
+    }
+
     // Render template
-    const { html, text } = await renderTemplate(data, config, translations);
-    const subject = getSubject(data, translations);
+    const { html, text } = await renderTemplate(renderData, config, translations);
+    const subject = getSubject(renderData, translations);
 
     // Build mail options.
     //
@@ -237,6 +303,20 @@ export async function sendEmail(data: EmailData): Promise<SendEmailResult> {
           filename: attachment.filename,
           content: attachment.content,
           contentType: 'application/pdf',
+        },
+      ];
+    }
+
+    if (inlineScreenshot) {
+      const existing = (mailOptions.attachments as unknown[] | undefined) ?? [];
+      mailOptions.attachments = [
+        ...existing,
+        {
+          filename: inlineScreenshot.filename,
+          content: inlineScreenshot.content,
+          contentType: inlineScreenshot.contentType,
+          cid: inlineScreenshot.cid,
+          contentDisposition: 'inline',
         },
       ];
     }
