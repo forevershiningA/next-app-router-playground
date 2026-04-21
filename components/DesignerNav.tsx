@@ -3324,14 +3324,7 @@ export default function DesignerNav() {
               ))}
             </div>
 
-            {/* Browse Designs CTA */}
-            <Link
-              href="/designs"
-              className="mt-5 flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-primary/40 bg-white/5 px-4 py-3 font-playfair-display text-base font-normal text-primary-100 shadow-lg backdrop-blur-sm transition-all hover:border-primary/60 hover:bg-primary/10"
-            >
-              <SparklesIcon className="h-5 w-5 flex-shrink-0 text-primary" />
-              <span>Browse Designs</span>
-            </Link>
+            {/* Browse Designs CTA removed */}
           </div>
         </>
       )}

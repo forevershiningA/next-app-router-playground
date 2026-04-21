@@ -112,7 +112,7 @@ let cachedCountries: Map<string, CountryEmailConfig> | null = null;
 export function getCountryConfigs(): Map<string, CountryEmailConfig> {
   if (cachedCountries) return cachedCountries;
 
-  const xmlPath = join(process.cwd(), 'public', 'xml', 'countries24.xml');
+  const xmlPath = join(__dirname, 'data', 'countries24.xml');
   const xmlContent = readFileSync(xmlPath, 'utf-8');
   const doc = new DOMParser().parseFromString(xmlContent, 'text/xml');
   const countryElements = doc.getElementsByTagName('country');

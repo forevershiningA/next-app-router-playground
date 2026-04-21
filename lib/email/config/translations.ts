@@ -36,7 +36,7 @@ let cachedTranslations: TranslationsByLocale | null = null;
 export function getTranslations(): TranslationsByLocale {
   if (cachedTranslations) return cachedTranslations;
 
-  const xmlPath = join(process.cwd(), 'public', 'xml', 'languages24.xml');
+  const xmlPath = join(__dirname, 'data', 'languages24.xml');
   const xmlContent = readFileSync(xmlPath, 'utf-8');
   const doc = new DOMParser().parseFromString(xmlContent, 'text/xml');
   const langElements = doc.getElementsByTagName('language');
