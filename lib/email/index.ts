@@ -202,8 +202,22 @@ export async function sendEmail(data: EmailData): Promise<SendEmailResult> {
     const { html, text } = await renderTemplate(data, config, translations);
     const subject = getSubject(data, translations);
 
-    // Build mail options
-    const from = `${config.company} <${config.email}>`;
+    // Build mail options.
+    //
+    // The envelope MAIL FROM must match the authenticated SMTP account
+    // (many providers, e.g. home.pl, reject cross-domain From headers with
+    // "553 5.7.1 Sender address rejected: not owned by user"). We therefore
+    // use the authenticated mailbox as the From address and put the
+    // country-specific admin email in Reply-To so replies still reach the
+    // right inbox.
+    const countryPrefixUpper = `SMTP_${data.countryCode.toUpperCase()}`;
+    const senderAddress =
+      process.env[`${countryPrefixUpper}_FROM`] ??
+      process.env.SMTP_FROM ??
+      process.env[`${countryPrefixUpper}_USER`] ??
+      process.env.SMTP_USER ??
+      config.email;
+    const from = `${config.company} <${senderAddress}>`;
     const bcc = getBcc(data, config);
     const attachment = generateAttachment(data, config);
 
