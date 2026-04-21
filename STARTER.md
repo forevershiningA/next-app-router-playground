@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-20
+**Last Updated:** 2026-04-21
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,88 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-04-21) — Production Email Delivery Fix + .vercelignore Trim
+
+Session focused on fixing broken save-design confirmation emails on `forevershining.org` (Vercel production) and reducing deploy upload size.
+
+### ✅ Fixed: `ENOENT` on `public/xml/countries24.xml` in Serverless Runtime
+
+Emails failed on live site because `lib/email/config/countries.ts` and `translations.ts` did `readFileSync('public/xml/...')` at runtime, but `next.config.ts` `outputFileTracingExcludes` strips `public/xml/**/*` from serverless bundles.
+
+#### Approach (after two failed attempts)
+
+Attempt 1 — `outputFileTracingIncludes` for `/api/projects` + `/api/email`: unreliable, the include trace didn't consistently override the wildcard exclude.
+
+Attempt 2 — Copy XMLs into `lib/email/config/data/` and read via `__dirname`: Next.js bundled the code into `.next/server/chunks/` without tracing the XML files → new `ENOENT`.
+
+Attempt 3 — Embed XMLs as escaped TS string literals: worked, but the 663 KB `languages24.ts` string triggered heavy webpack/SWC minification → build time regressed from 23 → 35 min.
+
+**Final solution (Option A):** Pre-parse XML → JSON at build time, lazy dynamic import at runtime.
+
+#### Changes
+
+Files created:
+- `scripts/embed-email-xml.mjs` — build-time parser. Reads `public/xml/countries24.xml` + `languages24.xml` via `@xmldom/xmldom`, writes pre-shaped JSON.
+- `lib/email/config/data/countries24.json` (17 KB, 8 countries)
+- `lib/email/config/data/languages24.json` (490 KB, 8 locales)
+
+Files rewritten:
+- `lib/email/config/countries.ts` — removed `fs`/`path`/`DOMParser`. Static `import countries24 from './data/countries24.json'`. `getCountryConfig(code)` remains sync. `BCC_MAP` / `DEFAULT_BCC` retained and attached at runtime (emails not stored in JSON).
+- `lib/email/config/translations.ts` — lazy `import('./data/languages24.json')` with promise cache (`inflight`). `getTranslationMap(locale)` and `t(locale, key)` are now **async**.
+
+Files edited:
+- `lib/email/index.ts` — added `await` before `getTranslationMap(locale)` (~line 199).
+- `next.config.ts` — removed the previously-added `outputFileTracingIncludes` block (back to original).
+
+Files deleted:
+- `lib/email/config/data/countries24.xml`, `languages24.xml` (intermediate copies)
+- `lib/email/config/data/countries24.ts`, `languages24.ts` (string-literal wrappers from Attempt 3)
+
+### ✅ Removed "Browse Designs" Sidebar CTA
+
+- `components/DesignerNav.tsx` — removed `<Link href="/designs">…Browse Designs…</Link>` block (was around lines 3327–3334).
+
+### ✅ `.vercelignore` Rewritten (~1 GB Trim)
+
+Measured top-level dir sizes: `q/` 496 MB, `haxe/` 154 MB, `discountheadstones/` 95 MB, `database-exports/` 76 MB, `archive/` 41 MB, `sql/` 18 MB, `createJS/` 1.6 MB + root debug files (`screen.jpg` 9 MB, `tsconfig.tsbuildinfo` 964 KB, `build1.txt`/`build2.txt`, `logs.csv`, `motifs_data.js`, `temp-response.json`, `test-*`, `rename-package_Version2.sh`).
+
+Rewrote `.vercelignore` to exclude: `legacy/`, `docs/`, `archive/`, `haxe/`, `createJS/`, `discountheadstones/`, `q/`, `database-exports/`, `sql/`, `drizzle/`, `drizzle.config.ts`, `package-lock.json`, and the root debug files.
+
+`public/` (9.3 GB) left untouched — must upload for CDN. Biggest subdirs: `ml/` 5.3 GB, `designs/` 1.2 GB, `screenshots/` 1 GB, `shapes/` 617 MB.
+
+### ✅ Diagnosed: DNS `EBUSY` on `'wiecznapamiec.home.pl'`
+
+Vercel env var value had a literal leading apostrophe — Vercel does **not** strip shell-style quotes. User must remove stray `'` / `"` from `SMTP_HOST` (and other `SMTP_*` values) in Vercel dashboard → Settings → Environment Variables → Production, then redeploy.
+
+### ✅ Diagnosed: 45-Minute Build (from `build1.txt`)
+
+Cold-cache build ≈ 24 min total: 4:51 clone, 2 min vercelignore processing, 30 s pnpm install, 6:20 `next build`, 3 min trace/functions/static, 7:04 deploy upload, 45 s cache. "Ready 23m 50s" matches. 45 min wall-clock includes queueing + upload. `.vercelignore` trim should shave clone + vercelignore + upload time.
+
+### ⏳ Work Not Yet Validated / Pending
+
+- [ ] Full `pnpm build` on refactored email module (only targeted `tsc --noEmit` was run)
+- [ ] `.vercelignore` safety check — grep verification that `drizzle/`, `sql/`, `archive/`, `haxe/`, `createJS/`, `discountheadstones/`, `q/`, `database-exports/` aren't imported from `app/`, `lib/`, `components/` (earlier grep timed out)
+- [ ] Commit & push the batch:
+  ```
+  git add lib/email scripts/embed-email-xml.mjs next.config.ts .vercelignore components/DesignerNav.tsx
+  git commit -m "perf(email): pre-parse XMLs to JSON + lazy-load; trim .vercelignore; remove Browse Designs CTA"
+  git push
+  ```
+- [ ] **User action:** strip quotes from `SMTP_HOST` (and all `SMTP_*`) in Vercel Production env vars, redeploy
+- [ ] **Optional follow-up:** replace fire-and-forget `sendEmail(...)` in `app/api/projects/route.ts:186–196` with Next 15's `after()` or explicit `await` — otherwise serverless freeze can kill in-flight SMTP
+- [ ] **Optional:** un-hardcode `countryCode: 'au'` at `app/api/projects/route.ts:189` if per-user country routing is desired
+
+### Key Technical Notes
+
+- **Vercel tracing quirk:** `outputFileTracingIncludes` does NOT reliably win over wildcard `outputFileTracingExcludes`. Avoid runtime filesystem reads — bundle data as JS/JSON imports.
+- **`__dirname` after bundling** points into `.next/server/chunks/`, so relative reads fail unless Next traces the file (it doesn't for dynamic paths).
+- **JSON vs TS string literal:** Webpack/SWC skip minification for JSON asset modules. A 663 KB escaped-string `.ts` file triggers heavy minification → caused the 23 → 35 min build regression.
+- **`tsconfig.json` has `resolveJsonModule: true`** — JSON imports work natively.
+- **Fire-and-forget on serverless:** Vercel functions may be frozen/terminated immediately after `NextResponse.json(...)` returns, killing unfinished `.then()` callbacks. Recommended fix: `after()` from Next 15 or explicit `await`.
+- **Country hardcoded:** `countryCode: 'au'` in `app/api/projects/route.ts:189` — all save-design emails currently route through `au` → PL mailbox fallback regardless of user country.
 
 ---
 
