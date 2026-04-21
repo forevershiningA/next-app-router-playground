@@ -24,6 +24,18 @@ const nextConfig = {
     }
     return config;
   },
+  // Force-include XML files required at runtime by API routes (e.g. email flow).
+  // These would otherwise be dropped by the `public/xml/**/*` exclusion below.
+  outputFileTracingIncludes: {
+    '/api/projects': [
+      'public/xml/countries24.xml',
+      'public/xml/languages24.xml',
+    ],
+    '/api/email': [
+      'public/xml/countries24.xml',
+      'public/xml/languages24.xml',
+    ],
+  },
   // Exclude large static assets from serverless functions
   // NOTE: These files are still publicly accessible, just not bundled with serverless functions
   outputFileTracingExcludes: {
