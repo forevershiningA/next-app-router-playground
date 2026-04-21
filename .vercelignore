@@ -7,14 +7,46 @@
 *.md
 !readme.md
 
-# Legacy/unused
+# Legacy / archived source trees (not imported by the Next.js app)
 legacy/
 docs/
+archive/
+haxe/
+createJS/
+discountheadstones/
+
+# Research / scratch data (unused by the app)
+q/
+
+# Database dumps and migrations (runtime uses Drizzle client only)
+database-exports/
+sql/
+drizzle/
+drizzle.config.ts
 
 # ML directory optimization
 # Keep: JSON (design data), HTML (price quotes), XML, upload (photos/assets)
 # Exclude: All old 2D screenshots — replaced by 3D renders in /screenshots/v2026-3d/
 public/ml/**/screenshots/
+
+# Root-level screenshots / debug artifacts not referenced by the app
+screen.jpg
+screen.png
+screen2.png
+debug-output.log
+logs.csv
+motifs_data.js
+build1.txt
+build2.txt
+temp-response.json
+test-api.js
+test-coordinate-approach.html
+test-curved-top-design.html
+tsconfig.tsbuildinfo
+rename-package_Version2.sh
+
+# Use pnpm lockfile only
+package-lock.json
 
 # Logs and temp files
 *.log

@@ -196,7 +196,7 @@ export async function sendEmail(data: EmailData): Promise<SendEmailResult> {
 
     const config = getCountryConfig(data.countryCode);
     const locale = data.locale ?? config.language;
-    const translations = getTranslationMap(locale);
+    const translations = await getTranslationMap(locale);
 
     // Render template
     const { html, text } = await renderTemplate(data, config, translations);

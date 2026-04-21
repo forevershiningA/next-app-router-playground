@@ -1,54 +1,30 @@
 /**
- * Email translations parsed from languages24.xml.
+ * Email translations.
  *
- * Parses the full XML once and caches results. Provides a `t()` helper
- * that resolves a translation key for a given locale, falling back to 'au_EN'.
+ * Source of truth: `public/xml/languages24.xml`.
+ * At build time, `scripts/embed-email-xml.mjs` pre-parses that XML into
+ * `./data/languages24.json`. The JSON is loaded lazily via dynamic import
+ * so this sizeable payload is only pulled into the function that actually
+ * sends an email, keeping cold-start/build time down.
  */
 
-import { DOMParser } from '@xmldom/xmldom';
 import type { TranslationsByLocale } from '../types';
-import { languagesXml } from './data/languages24';
-
-function parseLanguageElement(el: Element): Record<string, string> {
-  const map: Record<string, string> = {};
-  const children = el.childNodes;
-  for (let i = 0; i < children.length; i++) {
-    const node = children[i];
-    if (node.nodeType === 1) {
-      // Element node
-      const key = (node as Element).tagName;
-      const value = node.textContent?.trim() ?? '';
-      if (key && value) {
-        map[key] = value;
-      }
-    }
-  }
-  return map;
-}
 
 let cachedTranslations: TranslationsByLocale | null = null;
+let inflight: Promise<TranslationsByLocale> | null = null;
 
-/**
- * Load and parse all translations from languages24.xml.
- * Result is cached after first call.
- */
-export function getTranslations(): TranslationsByLocale {
+async function loadTranslations(): Promise<TranslationsByLocale> {
   if (cachedTranslations) return cachedTranslations;
+  if (inflight) return inflight;
 
-  const doc = new DOMParser().parseFromString(languagesXml, 'text/xml');
-  const langElements = doc.getElementsByTagName('language');
+  inflight = import('./data/languages24.json').then((mod) => {
+    const data = (mod.default ?? mod) as TranslationsByLocale;
+    cachedTranslations = data;
+    inflight = null;
+    return data;
+  });
 
-  const translations: TranslationsByLocale = {};
-  for (let i = 0; i < langElements.length; i++) {
-    const el = langElements[i] as Element;
-    const code = el.getAttribute('code');
-    if (code) {
-      translations[code] = parseLanguageElement(el);
-    }
-  }
-
-  cachedTranslations = translations;
-  return translations;
+  return inflight;
 }
 
 /**
@@ -56,8 +32,8 @@ export function getTranslations(): TranslationsByLocale {
  * Falls back to 'au_EN' if the key is missing in the requested locale.
  * Returns the key itself if not found in any locale.
  */
-export function t(locale: string, key: string): string {
-  const translations = getTranslations();
+export async function t(locale: string, key: string): Promise<string> {
+  const translations = await loadTranslations();
   return translations[locale]?.[key] ?? translations['au_EN']?.[key] ?? key;
 }
 
@@ -65,9 +41,9 @@ export function t(locale: string, key: string): string {
  * Get the full translation map for a locale.
  * Falls back to 'au_EN' if locale not found.
  */
-export function getTranslationMap(
+export async function getTranslationMap(
   locale: string,
-): Record<string, string> {
-  const translations = getTranslations();
+): Promise<Record<string, string>> {
+  const translations = await loadTranslations();
   return translations[locale] ?? translations['au_EN'] ?? {};
 }

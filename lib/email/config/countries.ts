@@ -1,19 +1,17 @@
 /**
- * Country email configuration parsed from countries24.xml at build/startup time.
+ * Country email configuration.
  *
- * We parse the XML once and cache the result. Each country entry provides
- * branding, SMTP routing, contact info, and BCC addresses for email dispatch.
+ * Source of truth: `public/xml/countries24.xml`.
+ * At build time, `scripts/embed-email-xml.mjs` pre-parses that XML into
+ * `./data/countries24.json` (the JSON import below) so the email runtime
+ * never needs filesystem access or an XML parser. Regenerate the JSON after
+ * editing the source XML:
+ *
+ *   node scripts/embed-email-xml.mjs
  */
 
-import { DOMParser } from '@xmldom/xmldom';
 import type { CountryEmailConfig } from '../types';
-import { countriesXml } from './data/countries24';
-
-function getTextContent(parent: Element, tagName: string): string {
-  const el = parent.getElementsByTagName(tagName)[0];
-  if (!el) return '';
-  return el.textContent?.trim() ?? '';
-}
+import countriesData from './data/countries24.json';
 
 /** BCC addresses per country — from legacy dyo5.php send() */
 const BCC_MAP: Record<string, CountryEmailConfig['bcc']> = {
@@ -62,62 +60,21 @@ const DEFAULT_BCC: CountryEmailConfig['bcc'] = {
   always: 'polcreation@gmail.com',
 };
 
-function parseCountryElement(el: Element): CountryEmailConfig {
-  const code = el.getAttribute('code') ?? '';
-  return {
-    code,
-    name: el.getAttribute('name') ?? '',
-    language: getTextContent(el, 'language'),
-    currency: getTextContent(el, 'currency'),
-    currencySymbol: getTextContent(el, 'currency_symbol'),
-    currencyCode: getTextContent(el, 'currency_code'),
-    currencySide: parseInt(getTextContent(el, 'currency_side') || '0', 10),
-    company: getTextContent(el, 'company'),
-    businessName: getTextContent(el, 'business_name'),
-    businessRegisterNumber: getTextContent(el, 'business_register_number'),
-    accountInfo: getTextContent(el, 'account'),
-    email: getTextContent(el, 'email'),
-    logo: getTextContent(el, 'logo'),
-    link: getTextContent(el, 'link'),
-    privacy: getTextContent(el, 'privacy'),
-    pdfName: getTextContent(el, 'pdf_name'),
-    pdfTitle: getTextContent(el, 'pdf_title'),
-    pdfCreated: getTextContent(el, 'pdf_created'),
-    pdfPowered: getTextContent(el, 'pdf_powered'),
-    pdfCopyAddress: getTextContent(el, 'pdf_copy_address'),
-    pdfCopyAddress2: getTextContent(el, 'pdf_copy_address_2'),
-    pdfCopyAddress3: getTextContent(el, 'pdf_copy_address_3'),
-    pdfCopyAddress4: getTextContent(el, 'pdf_copy_address_4'),
-    pdfContact: getTextContent(el, 'pdf_contact'),
-    pdfContact2: getTextContent(el, 'pdf_contact_2'),
-    pdfContact3: getTextContent(el, 'pdf_contact_3'),
-    pdfPayment: getTextContent(el, 'pdf_payment'),
-    pdfReference: getTextContent(el, 'pdf_reference'),
-    pdfCallUsCreditCard: getTextContent(el, 'pdf_call_us_credit_card'),
-    pdfPaymentLogos: getTextContent(el, 'pdf_payment_logos'),
-    pdfSidenote: getTextContent(el, 'pdf_sidenote'),
-    pdfHeader: getTextContent(el, 'pdf_header'),
-    pdfHeader2: getTextContent(el, 'pdf_header_2'),
-    bcc: BCC_MAP[code] ?? DEFAULT_BCC,
-  };
-}
-
 let cachedCountries: Map<string, CountryEmailConfig> | null = null;
 
 /**
- * Load and parse all country configs from countries24.xml.
- * Result is cached after first call.
+ * Load country configs from the embedded JSON (cached).
  */
 export function getCountryConfigs(): Map<string, CountryEmailConfig> {
   if (cachedCountries) return cachedCountries;
 
-  const doc = new DOMParser().parseFromString(countriesXml, 'text/xml');
-  const countryElements = doc.getElementsByTagName('country');
-
   const map = new Map<string, CountryEmailConfig>();
-  for (let i = 0; i < countryElements.length; i++) {
-    const config = parseCountryElement(countryElements[i] as Element);
-    map.set(config.code, config);
+  for (const entry of countriesData as Omit<CountryEmailConfig, 'bcc'>[]) {
+    const config: CountryEmailConfig = {
+      ...entry,
+      bcc: BCC_MAP[entry.code] ?? DEFAULT_BCC,
+    };
+    map.set(entry.code, config);
   }
 
   cachedCountries = map;
