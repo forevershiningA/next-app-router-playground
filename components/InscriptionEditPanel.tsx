@@ -3,7 +3,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
-import { calculatePrice } from '#/lib/xml-parser';
 
 const FONTS = data.fonts;
 
@@ -20,14 +19,67 @@ export default function InscriptionEditPanel() {
   const activeInscriptionText = useHeadstoneStore((s) => s.activeInscriptionText);
   const setActiveInscriptionText = useHeadstoneStore((s) => s.setActiveInscriptionText);
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
-  const inscriptionPriceModel = useHeadstoneStore((s) => s.inscriptionPriceModel);
   const catalog = useHeadstoneStore((s) => s.catalog);
-  const productId = useHeadstoneStore((s) => s.productId);
   const isEngraved = catalog?.product.formula === 'Engraved';
 
   const active = lines.find((l) => l.id === selectedInscriptionId) ?? null;
   const [selectedFont, setSelectedFont] = React.useState(active?.font || 'Franklin Gothic');
   const [activeTab, setActiveTab] = React.useState<'font' | 'color'>('font');
+  const [inputMode, setInputMode] = React.useState<'single' | 'multi'>('single');
+  const [multiText, setMultiText] = React.useState('');
+  const [pendingTextAlign, setPendingTextAlign] = React.useState<'left' | 'center' | 'right'>('center');
+
+  const currentAlign: 'left' | 'center' | 'right' = active?.textAlign ?? pendingTextAlign;
+  const setAlign = useCallback(
+    (value: 'left' | 'center' | 'right') => {
+      if (active) {
+        updateLineStore(active.id, { textAlign: value });
+      }
+      setPendingTextAlign(value);
+    },
+    [active, updateLineStore],
+  );
+
+  const AlignControls = (
+    <div>
+      <span className="mb-1.5 block text-sm font-medium text-slate-200">
+        Align
+      </span>
+      <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
+        {(
+          [
+            { value: 'left', label: 'Left', glyph: '⟵' },
+            { value: 'center', label: 'Center', glyph: '⇔' },
+            { value: 'right', label: 'Right', glyph: '⟶' },
+          ] as const
+        ).map((opt) => {
+          const isActive = currentAlign === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setAlign(opt.value)}
+              className={`flex-1 cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all ${
+                isActive
+                  ? 'bg-[#D7B356] text-slate-900 shadow-md'
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              }`}
+            >
+              <span className="mr-1">{opt.glyph}</span>
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const textAlignClass =
+    currentAlign === 'left'
+      ? 'text-left'
+      : currentAlign === 'right'
+        ? 'text-right'
+        : 'text-center';
 
   React.useEffect(() => {
     if (active?.font) {
@@ -38,6 +90,8 @@ export default function InscriptionEditPanel() {
   React.useEffect(() => {
     if (!active) {
       setActiveInscriptionText('');
+    } else if (active.textAlign) {
+      setPendingTextAlign(active.textAlign);
     }
   }, [active, setActiveInscriptionText]);
 
@@ -51,97 +105,129 @@ export default function InscriptionEditPanel() {
   const handleAddNewLine = useCallback(() => {
     const text = activeInscriptionText.trim() || 'New line';
     if (!active) {
-      addInscriptionLine({ text, font: selectedFont, yPos: 0 });
+      addInscriptionLine({ text, font: selectedFont, yPos: 0, textAlign: pendingTextAlign });
       return;
     }
 
     const newY = active.yPos + (active.sizeMm / 10 + 5);
-    addInscriptionLine({ text, font: selectedFont, yPos: newY });
-  }, [active, addInscriptionLine, activeInscriptionText, selectedFont]);
+    addInscriptionLine({ text, font: selectedFont, yPos: newY, textAlign: pendingTextAlign });
+  }, [active, addInscriptionLine, activeInscriptionText, selectedFont, pendingTextAlign]);
+
+  const handleAddMultipleLines = useCallback(() => {
+    // Keep line breaks so drei <Text> renders as stacked multi-line
+    // text within a single inscription record.
+    const normalized = multiText.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n');
+    const text = normalized.trim();
+    if (!text) return;
+
+    if (active) {
+      updateLine(active.id, { text });
+      setActiveInscriptionText(text);
+    } else {
+      const id = addInscriptionLine({ text, font: selectedFont, yPos: 0, textAlign: pendingTextAlign });
+      setSelectedInscriptionId(id);
+      setActiveInscriptionText(text);
+    }
+  }, [
+    active,
+    addInscriptionLine,
+    multiText,
+    selectedFont,
+    setSelectedInscriptionId,
+    setActiveInscriptionText,
+    updateLine,
+    pendingTextAlign,
+  ]);
+
+  // When user switches into multi mode, seed the textarea from the active line
+  React.useEffect(() => {
+    if (inputMode === 'multi') {
+      setMultiText(active?.text ?? '');
+    }
+  }, [inputMode, active?.id, active?.text]);
+
+  // Live-sync textarea edits back to the active inscription in multi mode
+  React.useEffect(() => {
+    if (inputMode !== 'multi' || !active) return;
+    const normalized = multiText.replace(/\r\n/g, '\n');
+    if (normalized === active.text) return;
+    updateLine(active.id, { text: normalized });
+    setActiveInscriptionText(normalized);
+  }, [multiText, inputMode, active, updateLine, setActiveInscriptionText]);
 
   return (
     <div className="space-y-4">
-      <div>
-        <label
-          htmlFor="inscriptionTextInput"
-          className="mb-2 block text-sm font-medium text-slate-200"
+      {/* Input mode toggle */}
+      <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
+        <button
+          type="button"
+          className={`flex-1 cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all ${
+            inputMode === 'single'
+              ? 'bg-[#D7B356] text-slate-900 shadow-md'
+              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+          }`}
+          onClick={() => setInputMode('single')}
         >
-          Inscription Text
-        </label>
-        <input
-          id="inscriptionTextInput"
-          className="w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356]"
-          value={activeInscriptionText ?? ''}
-          onChange={(e) => {
-            setActiveInscriptionText(e.target.value);
-            if (active) {
-              updateLine(active.id, { text: e.target.value });
-            }
-          }}
-          placeholder="Type here…"
-        />
+          Single Line
+        </button>
+        <button
+          type="button"
+          className={`flex-1 cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all ${
+            inputMode === 'multi'
+              ? 'bg-[#D7B356] text-slate-900 shadow-md'
+              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+          }`}
+          onClick={() => setInputMode('multi')}
+        >
+          Multiple Lines
+        </button>
       </div>
 
-      {active && (
-        <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-          <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
-            Inscription Price
+      {inputMode === 'single' ? (
+        <div className="space-y-3">
+          {AlignControls}
+          <div>
+            <label
+              htmlFor="inscriptionTextInput"
+              className="mb-2 block text-sm font-medium text-slate-200"
+            >
+              Inscription Text
+            </label>
+            <input
+              id="inscriptionTextInput"
+              className={`w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] ${textAlignClass}`}
+              value={activeInscriptionText ?? ''}
+              onChange={(e) => {
+                setActiveInscriptionText(e.target.value);
+                if (active) {
+                  updateLine(active.id, { text: e.target.value });
+                }
+              }}
+              placeholder="Type here…"
+            />
           </div>
-          <div className="text-2xl font-semibold text-white">
-            {(() => {
-              if (productId === '32' || !inscriptionPriceModel || !showInscriptionColor) return 'Free';
-              const quantity = active.sizeMm;
-              const colorName = data.colors.find((c) => c.hex === active.color)?.name;
-              let mappedNote = colorName;
-              if (colorName && !['Gold Gilding', 'Silver Gilding'].includes(colorName)) {
-                mappedNote = 'Paint Fill';
-              }
-              const tier = inscriptionPriceModel.prices.find(
-                (p) => quantity >= p.startQuantity && quantity <= p.endQuantity && p.note === mappedNote,
-              ) ?? inscriptionPriceModel.prices.find(
-                (p) => quantity >= p.startQuantity && quantity <= p.endQuantity,
-              );
-              if (!tier) return 'Free';
-              const price = calculatePrice({ ...inscriptionPriceModel, prices: [tier] }, quantity);
-              return price > 0 ? `$${price.toFixed(2)}` : 'Free';
-            })()}
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {AlignControls}
+          <div>
+            <label
+              htmlFor="inscriptionMultilineInput"
+              className="mb-2 block text-sm font-medium text-slate-200"
+            >
+              Inscription Text (multi-line)
+            </label>
+            <textarea
+              id="inscriptionMultilineInput"
+              rows={5}
+              className={`w-full resize-y rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] ${textAlignClass}`}
+              value={multiText}
+              onChange={(e) => setMultiText(e.target.value)}
+              placeholder={'In loving memory of\nJohn Smith\n1940 – 2020'}
+            />
           </div>
         </div>
       )}
-
-      <div className="flex space-x-2">
-        {active ? (
-          <>
-            <button
-              className="flex-1 cursor-pointer rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors shadow-md"
-              onClick={() => {
-                if (active) {
-                  duplicateInscription(active.id);
-                }
-              }}
-            >
-              Duplicate
-            </button>
-            <button
-              className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors shadow-md"
-              onClick={() => {
-                if (active) {
-                  deleteInscription(active.id);
-                }
-              }}
-            >
-              Delete
-            </button>
-          </>
-        ) : (
-          <button
-            className="flex-1 cursor-pointer rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors shadow-md"
-            onClick={handleAddNewLine}
-          >
-            Add New Line
-          </button>
-        )}
-      </div>
 
       {/* Tabs for font and color (only show tabs if color is available) */}
       {showInscriptionColor && (
@@ -201,154 +287,156 @@ export default function InscriptionEditPanel() {
             </span>
           </div>
 
-          {active && (
-            <>
-              {/* Size Slider */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <label className="text-sm font-medium text-gray-200 w-20">Size</label>
-                  <div className="flex items-center gap-2 justify-end">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newVal = Math.max(inscriptionMinHeight, (active.sizeMm ?? 30) - 1);
-                        updateLine(active.id, { sizeMm: newVal });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Decrease size by 1mm"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </button>
-                    <input
-                      type="number"
-                      min={inscriptionMinHeight}
-                      max={inscriptionMaxHeight}
-                      step={1}
-                      value={active.sizeMm ?? 30}
-                      onChange={(e) => updateLine(active.id, { sizeMm: Number(e.target.value) })}
-                      onBlur={(e) => {
-                        const val = Number(e.target.value);
-                        if (val < inscriptionMinHeight) {
-                          updateLine(active.id, { sizeMm: inscriptionMinHeight });
-                        } else if (val > inscriptionMaxHeight) {
-                          updateLine(active.id, { sizeMm: inscriptionMaxHeight });
-                        }
-                      }}
-                      className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
-                        (active.sizeMm ?? 30) < inscriptionMinHeight || (active.sizeMm ?? 30) > inscriptionMaxHeight
-                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newVal = Math.min(inscriptionMaxHeight, (active.sizeMm ?? 30) + 1);
-                        updateLine(active.id, { sizeMm: newVal });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Increase size by 1mm"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
-                    <span className="text-sm font-medium text-gray-300">mm</span>
-                  </div>
-                </div>
-                <div className="relative">
-                  <input
-                    type="range"
-                    min={inscriptionMinHeight}
-                    max={inscriptionMaxHeight}
-                    step={1}
-                    value={active.sizeMm ?? 30}
-                    onChange={(e) => updateLine(active.id, { sizeMm: Number(e.target.value) })}
-                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                    <span>{inscriptionMinHeight}mm</span>
-                    <span>{inscriptionMaxHeight}mm</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Rotation Slider */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
-                  <div className="flex items-center gap-2 justify-end">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newVal = Math.max(-180, (active.rotationDeg ?? 0) - 1);
-                        updateLine(active.id, { rotationDeg: newVal });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Decrease rotation by 1 degree"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                      </svg>
-                    </button>
-                    <input
-                      type="number"
-                      min={-180}
-                      max={180}
-                      step={1}
-                      value={active.rotationDeg ?? 0}
-                      onChange={(e) => updateLine(active.id, { rotationDeg: Number(e.target.value) })}
-                      onBlur={(e) => {
-                        const val = Number(e.target.value);
-                        if (val < -180) {
-                          updateLine(active.id, { rotationDeg: -180 });
-                        } else if (val > 180) {
-                          updateLine(active.id, { rotationDeg: 180 });
-                        }
-                      }}
-                      className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
-                        (active.rotationDeg ?? 0) < -180 || (active.rotationDeg ?? 0) > 180
-                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
-                      }`}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const newVal = Math.min(180, (active.rotationDeg ?? 0) + 1);
-                        updateLine(active.id, { rotationDeg: newVal });
-                      }}
-                      className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
-                      aria-label="Increase rotation by 1 degree"
-                    >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                    </button>
-                    <span className="text-sm font-medium text-gray-300">°</span>
-                  </div>
-                </div>
-                <div className="relative">
-                  <input
-                    type="range"
-                    min={-180}
-                    max={180}
-                    step={1}
-                    value={active.rotationDeg ?? 0}
-                    onChange={(e) => updateLine(active.id, { rotationDeg: Number(e.target.value) })}
-                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
-                    <span>-180°</span>
-                    <span>180°</span>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
         </div>
+      )}
+
+      {/* Size + Rotation — always visible when active */}
+      {active && (
+        <>
+          {/* Size Slider */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between gap-2">
+              <label className="text-sm font-medium text-gray-200 w-20">Size</label>
+              <div className="flex items-center gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newVal = Math.max(inscriptionMinHeight, (active.sizeMm ?? 30) - 1);
+                    updateLine(active.id, { sizeMm: newVal });
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Decrease size by 1mm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  min={inscriptionMinHeight}
+                  max={inscriptionMaxHeight}
+                  step={1}
+                  value={active.sizeMm ?? 30}
+                  onChange={(e) => updateLine(active.id, { sizeMm: Number(e.target.value) })}
+                  onBlur={(e) => {
+                    const val = Number(e.target.value);
+                    if (val < inscriptionMinHeight) {
+                      updateLine(active.id, { sizeMm: inscriptionMinHeight });
+                    } else if (val > inscriptionMaxHeight) {
+                      updateLine(active.id, { sizeMm: inscriptionMaxHeight });
+                    }
+                  }}
+                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                    (active.sizeMm ?? 30) < inscriptionMinHeight || (active.sizeMm ?? 30) > inscriptionMaxHeight
+                      ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newVal = Math.min(inscriptionMaxHeight, (active.sizeMm ?? 30) + 1);
+                    updateLine(active.id, { sizeMm: newVal });
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Increase size by 1mm"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+                <span className="text-sm font-medium text-gray-300">mm</span>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min={inscriptionMinHeight}
+                max={inscriptionMaxHeight}
+                step={1}
+                value={active.sizeMm ?? 30}
+                onChange={(e) => updateLine(active.id, { sizeMm: Number(e.target.value) })}
+                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                <span>{inscriptionMinHeight}mm</span>
+                <span>{inscriptionMaxHeight}mm</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Rotation Slider */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between gap-2">
+              <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
+              <div className="flex items-center gap-2 justify-end">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newVal = Math.max(-180, (active.rotationDeg ?? 0) - 1);
+                    updateLine(active.id, { rotationDeg: newVal });
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Decrease rotation by 1 degree"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  </svg>
+                </button>
+                <input
+                  type="number"
+                  min={-180}
+                  max={180}
+                  step={1}
+                  value={active.rotationDeg ?? 0}
+                  onChange={(e) => updateLine(active.id, { rotationDeg: Number(e.target.value) })}
+                  onBlur={(e) => {
+                    const val = Number(e.target.value);
+                    if (val < -180) {
+                      updateLine(active.id, { rotationDeg: -180 });
+                    } else if (val > 180) {
+                      updateLine(active.id, { rotationDeg: 180 });
+                    }
+                  }}
+                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                    (active.rotationDeg ?? 0) < -180 || (active.rotationDeg ?? 0) > 180
+                      ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                  }`}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newVal = Math.min(180, (active.rotationDeg ?? 0) + 1);
+                    updateLine(active.id, { rotationDeg: newVal });
+                  }}
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  aria-label="Increase rotation by 1 degree"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </button>
+                <span className="text-sm font-medium text-gray-300">°</span>
+              </div>
+            </div>
+            <div className="relative">
+              <input
+                type="range"
+                min={-180}
+                max={180}
+                step={1}
+                value={active.rotationDeg ?? 0}
+                onChange={(e) => updateLine(active.id, { rotationDeg: Number(e.target.value) })}
+                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)] [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)]"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-0.5 w-full">
+                <span>-180°</span>
+                <span>180°</span>
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Color Selection */}
@@ -392,6 +480,41 @@ export default function InscriptionEditPanel() {
           </div>
         </div>
       )}
+
+      {/* Action buttons — placed last */}
+      <div className="flex flex-wrap gap-2 pt-2">
+        {active ? (
+          <>
+            <button
+              className="flex-1 cursor-pointer rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors shadow-md"
+              onClick={() => duplicateInscription(active.id)}
+            >
+              Duplicate
+            </button>
+            <button
+              className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors shadow-md"
+              onClick={() => deleteInscription(active.id)}
+            >
+              Delete
+            </button>
+          </>
+        ) : inputMode === 'multi' ? (
+          <button
+            className="flex-1 cursor-pointer rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleAddMultipleLines}
+            disabled={multiText.trim().length === 0}
+          >
+            Add Inscription
+          </button>
+        ) : (
+          <button
+            className="flex-1 cursor-pointer rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors shadow-md"
+            onClick={handleAddNewLine}
+          >
+            Add New Line
+          </button>
+        )}
+      </div>
     </div>
   );
 }

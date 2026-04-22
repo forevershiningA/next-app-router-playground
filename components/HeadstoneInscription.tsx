@@ -35,6 +35,7 @@ type Props = {
   surface?: 'headstone' | 'base' | 'ledger';
   /** When 'mm-center', xPos/yPos are mm offsets from headstone center (Y-up). */
   coordinateSpace?: 'mm-center';
+  textAlign?: 'left' | 'center' | 'right';
 };
 
 /* ------------------------------------------------------------------ */
@@ -60,6 +61,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       zBump = 0,
       surface = 'headstone',
       coordinateSpace,
+      textAlign = 'center',
     },
     ref,
   ) => {
@@ -541,6 +543,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           color={color}
           anchorX="center"
           anchorY="middle"
+          textAlign={textAlign}
           fontSize={fontSizeUnits}
           outlineWidth={isTraditionalEngraved || isPlaque ? 0 : 0.002 * units}
           outlineColor={isTraditionalEngraved || isPlaque ? color : "black"}

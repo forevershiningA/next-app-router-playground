@@ -539,6 +539,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                   rotationDeg={line.rotationDeg}
                   height={line.sizeMm}
                   text={line.text}
+                  textAlign={line.textAlign}
                   zBump={zBump}
                 />
               </Suspense>

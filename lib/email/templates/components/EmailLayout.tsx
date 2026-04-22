@@ -38,8 +38,7 @@ export function EmailLayout({
               <Img
                 src={config.logo}
                 alt={config.company}
-                width={200}
-                height={50}
+                width={160}
                 style={logo}
               />
             )}
@@ -124,6 +123,8 @@ const header: React.CSSProperties = {
 
 const logo: React.CSSProperties = {
   margin: '0 auto',
+  height: 'auto',
+  display: 'block',
 };
 
 const headerTitle: React.CSSProperties = {

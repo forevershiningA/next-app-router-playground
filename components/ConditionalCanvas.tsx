@@ -72,6 +72,9 @@ export default function ConditionalCanvas() {
   
   // Hide canvas on my-account page and all sub-pages
   const isMyAccountPage = pathname === '/my-account' || pathname?.startsWith('/my-account/');
+
+  // Hide canvas on orders page (account-area page, same treatment as my-account)
+  const isOrdersPage = pathname === '/orders' || pathname?.startsWith('/orders/');
   
   // Show canvas on select-size page
   const isSelectSizePage = pathname === '/select-size';
@@ -84,7 +87,7 @@ export default function ConditionalCanvas() {
   
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
+    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
       hideOverlay();
     }
   }, [
@@ -99,13 +102,14 @@ export default function ConditionalCanvas() {
     isSelectBorderPage,
     isCheckPricePage,
     isMyAccountPage,
+    isOrdersPage,
     isSelectSizePage,
     isInscriptionsPage,
     isDesignMenuPage,
     hideOverlay,
   ]);
   
-  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
+  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
     return null;
   }
 

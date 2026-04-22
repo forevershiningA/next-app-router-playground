@@ -1398,6 +1398,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       yPos,
       color,
       target,
+      textAlign: patch.textAlign ?? 'center',
       ref: React.createRef<Group>(),
     };
     const normalizedLine = withLineSurfaceDimensions(newLine, target, state, true);

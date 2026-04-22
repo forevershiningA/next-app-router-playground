@@ -116,17 +116,19 @@ Cold-cache build ≈ 24 min total: 4:51 clone, 2 min vercelignore processing, 30
 
 ### ⏳ Work Not Yet Validated / Pending
 
-- [ ] Full `pnpm build` on refactored email module (only targeted `tsc --noEmit` was run)
+- [ ] Full `pnpm build` on refactored email module (only targeted `tsc --noEmit` was run; type-check on `lib/email/` is clean)
 - [ ] `.vercelignore` safety check — grep verification that `drizzle/`, `sql/`, `archive/`, `haxe/`, `createJS/`, `discountheadstones/`, `q/`, `database-exports/` aren't imported from `app/`, `lib/`, `components/` (earlier grep timed out)
 - [ ] Commit & push the batch:
   ```
   git add lib/email scripts/embed-email-xml.mjs next.config.ts .vercelignore components/DesignerNav.tsx
-  git commit -m "perf(email): pre-parse XMLs to JSON + lazy-load; trim .vercelignore; remove Browse Designs CTA"
+  git commit -m "fix(email): pre-parse XMLs to JSON + lazy-load; send screenshot as CID inline attachment; trim .vercelignore"
   git push
   ```
 - [ ] **User action:** strip quotes from `SMTP_HOST` (and all `SMTP_*`) in Vercel Production env vars, redeploy
+- [ ] **Verify on next save** after redeploy: email body shows the rendered 3D screenshot (via `cid:design-screenshot`), no raw `<img>` text, no "Message clipped" in Gmail
 - [ ] **Optional follow-up:** replace fire-and-forget `sendEmail(...)` in `app/api/projects/route.ts:186–196` with Next 15's `after()` or explicit `await` — otherwise serverless freeze can kill in-flight SMTP
 - [ ] **Optional:** un-hardcode `countryCode: 'au'` at `app/api/projects/route.ts:189` if per-user country routing is desired
+- [ ] **Optional cosmetic:** header logo `https://www.forevershining.com.au/design/logo.webp` is WebP — spotty support in older Outlook / Windows Mail clients. Gmail also requires user to click "show images" for external URLs. Consider a PNG fallback.
 
 ### Key Technical Notes
 
@@ -136,6 +138,8 @@ Cold-cache build ≈ 24 min total: 4:51 clone, 2 min vercelignore processing, 30
 - **`tsconfig.json` has `resolveJsonModule: true`** — JSON imports work natively.
 - **Fire-and-forget on serverless:** Vercel functions may be frozen/terminated immediately after `NextResponse.json(...)` returns, killing unfinished `.then()` callbacks. Recommended fix: `after()` from Next 15 or explicit `await`.
 - **Country hardcoded:** `countryCode: 'au'` in `app/api/projects/route.ts:189` — all save-design emails currently route through `au` → PL mailbox fallback regardless of user country.
+- **Never embed large data URIs in email `<img src>`.** Gmail clips messages >102 KB and strips/sanitizes `data:` URIs. Always use nodemailer CID inline attachments (`cid:some-id` + `attachments: [{ cid, content, contentDisposition: 'inline' }]`). Data URIs remain fine for PDF generation via `jsPDF.addImage()` because that path doesn't go through an SMTP body.
+- **Data flow after this fix:** `app/api/projects/route.ts` stores screenshot as data URL (`screenshotPath`) on Vercel (ephemeral FS). `sendEmail()` now converts that data URI once — PDF attachment still gets the raw data URI, while the HTML body gets `cid:design-screenshot` and the binary is attached inline.
 
 ---
 

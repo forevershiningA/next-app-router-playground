@@ -3,7 +3,7 @@ import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
 import { getServerSession } from '#/lib/auth/session';
 import { sendEmail } from '#/lib/email';
-import { breakdownToQuoteItems, countryToCode } from '#/lib/email/helpers';
+import { countryToCode, detailedQuoteItems } from '#/lib/email/helpers';
 
 export const runtime = 'nodejs';
 
@@ -190,7 +190,12 @@ export async function POST(request: NextRequest) {
       designId: summary.id,
       designName: summary.title,
       screenshotUrl: summary.screenshotPath ?? undefined,
-      quoteItems: breakdownToQuoteItems(body.pricingBreakdown),
+      quoteItems: detailedQuoteItems({
+        breakdown: body.pricingBreakdown,
+        designState: cleanedDesignState,
+        totalCents: summary.totalPriceCents,
+        currency: summary.currency,
+      }),
       totalCents: summary.totalPriceCents ?? 0,
       currency: summary.currency,
     }).catch((err) => console.error('[api/projects] Email send failed:', err));

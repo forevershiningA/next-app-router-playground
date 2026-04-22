@@ -81,6 +81,8 @@ export type Line = {
   target?: 'headstone' | 'base' | 'ledger';
   baseWidthMm?: number;
   baseHeightMm?: number;
+  /** Horizontal alignment for multi-line inscriptions. Defaults to 'center'. */
+  textAlign?: 'left' | 'center' | 'right';
   /** When 'mm-center', xPos/yPos are mm offsets from headstone center (Y-up). */
   coordinateSpace?: 'mm-center';
   ref: React.RefObject<Group | null>;
@@ -151,7 +153,7 @@ type NavFn = (href: string, opts?: { replace?: boolean }) => void;
 export type LinePatch = Partial<
   Pick<
     Line,
-    'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos' | 'color'
+    'text' | 'font' | 'sizeMm' | 'rotationDeg' | 'xPos' | 'yPos' | 'color' | 'textAlign'
   >
 >;
 

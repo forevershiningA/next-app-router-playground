@@ -147,6 +147,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
                 rotationDeg={line.rotationDeg}
                 height={line.sizeMm}
                 text={line.text}
+                textAlign={line.textAlign}
                 zBump={zBump}
               />
             </React.Suspense>

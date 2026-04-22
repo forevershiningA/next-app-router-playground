@@ -605,6 +605,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       rotationDeg={line.rotationDeg}
                       height={line.sizeMm}
                       text={line.text}
+                      textAlign={line.textAlign}
                       zBump={zBump}
                     />
                   </React.Suspense>
