@@ -62,7 +62,7 @@ const menuGroups = [
   {
     label: 'Design',
     items: [
-      { slug: 'inscriptions', name: 'Inscriptions', icon: DocumentTextIcon },
+      { slug: 'inscriptions', name: 'Add Your Inscriptions', icon: DocumentTextIcon },
       { slug: 'select-images', name: 'Add Your Image', icon: PhotoIcon },
       {
         slug: 'select-additions',
