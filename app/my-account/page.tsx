@@ -9,6 +9,7 @@ import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
+import ConfirmModal from '#/components/ConfirmModal';
 
 type DesignStatus = 'awaiting-approval' | 'ready-to-order' | 'in-production' | 'completed' | 'draft';
 
@@ -292,6 +293,8 @@ export default function MyAccountPage() {
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [loadingEditId, setLoadingEditId] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   async function handleEdit(cardId: string) {
     setLoadingEditId(cardId);
@@ -366,13 +369,29 @@ export default function MyAccountPage() {
     else if (session === null) setIsLoading(false);
   }, [session]);
 
-  const handleDeleteCard= async (cardId: string) => {
-    if (!confirm('Delete this design? This cannot be undone.')) return;
+  const handleDeleteCard = async (cardId: string) => {
+    setPendingDeleteId(cardId);
+    setDeleteModalOpen(true);
+    setOpenMenuId(null);
+  };
+
+  const performDelete = async () => {
+    const cardId = pendingDeleteId;
+    if (!cardId) return;
     try {
       const res = await fetch(`/api/projects?id=${cardId}`, { method: 'DELETE' });
-      if (res.ok) setSavedProjects((prev) => prev.filter((p) => p.id !== cardId));
-    } catch { alert('Failed to delete. Please try again.'); }
-    setOpenMenuId(null);
+      if (res.ok) {
+        setSavedProjects((prev) => prev.filter((p) => p.id !== cardId));
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data?.error || 'Failed to delete. Please try again.');
+      }
+    } catch {
+      alert('Failed to delete. Please try again.');
+    } finally {
+      setPendingDeleteId(null);
+      setDeleteModalOpen(false);
+    }
   };
 
   // Convert API projects to design cards
@@ -613,6 +632,16 @@ export default function MyAccountPage() {
           </div>
 
         </section>
+
+        <ConfirmModal
+          open={deleteModalOpen}
+          onClose={() => { setDeleteModalOpen(false); setPendingDeleteId(null); }}
+          onConfirm={performDelete}
+          confirmLabel="Yes, delete"
+          cancelLabel="No, keep"
+        >
+          Delete this design? This cannot be undone.
+        </ConfirmModal>
       </div>
     </div>
   );
