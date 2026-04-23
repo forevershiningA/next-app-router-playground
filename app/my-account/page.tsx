@@ -634,14 +634,14 @@ export default function MyAccountPage() {
         </section>
 
         <ConfirmModal
-          open={deleteModalOpen}
+          isOpen={deleteModalOpen}
           onClose={() => { setDeleteModalOpen(false); setPendingDeleteId(null); }}
           onConfirm={performDelete}
+          title="Delete design?"
+          message="Delete this design? This cannot be undone."
           confirmLabel="Yes, delete"
           cancelLabel="No, keep"
-        >
-          Delete this design? This cannot be undone.
-        </ConfirmModal>
+        />
       </div>
     </div>
   );
