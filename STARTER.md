@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-21
+**Last Updated:** 2026-04-22
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -39,6 +39,20 @@
 ---
 
 ## Current Status (2026-04-21) — Production Email Delivery Fix + .vercelignore Trim + Inline Screenshot CID
+
+## Current Status (2026-04-22) — Multiple Line Inscriptions
+
+- Added support for multiple inscription lines: users can add, duplicate, edit, and position multiple lines independently.
+- UI updates: Inscription editor overlay and edit panel now support per-line selection and an "Add New Line" flow (app/inscriptions/InscriptionOverlayPanel.tsx, components/InscriptionEditPanel.tsx).
+- Rendering updates: components/HeadstoneInscription.tsx and LedgerSurfaceContent.tsx fixed positioning and z-ordering for stacked lines and ledger-targeted text.
+- State updates: lib/headstone-store.ts: manage inscriptions as an ordered array, addInscriptionLine, duplicateInscription, updateInscription, and cost calculation adjustments.
+- Minor related changes: ShapeSwapper and ConditionalCanvas tweaks for consistent layout; small UI fixes on login/my-account/orders; email helper/template cleanup (lib/email/*).
+
+Files changed in the commit: STARTER.md, app/api/projects/route.ts, app/login/page.tsx, app/my-account/page.tsx, app/orders/page.tsx, components/ConditionalCanvas.tsx, components/HeadstoneInscription.tsx, components/InscriptionEditPanel.tsx, components/three/headstone/HeadstoneBaseAuto.tsx, components/three/headstone/LedgerSurfaceContent.tsx, components/three/headstone/ShapeSwapper.tsx, lib/email/helpers.ts, lib/email/templates/components/EmailLayout.tsx, lib/headstone-store.ts, lib/headstone-store.types.ts, screen.png
+
+Notes:
+- QA: Verify inscription spacing on narrow plaques and ledger surfaces; run a quick visual QA for dates and multi-line wrapping.
+- Follow-up: Consider adding an explicit "line order" UI (up/down) if users expect reordering frequently.
 
 Session focused on fixing broken save-design confirmation emails on `forevershining.org` (Vercel production) and reducing deploy upload size.
 
