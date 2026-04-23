@@ -10,6 +10,8 @@ import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import ConfirmModal from '#/components/ConfirmModal';
+import dynamic from 'next/dynamic';
+const EmailShareModal = dynamic(() => import('#/components/EmailShareModal'));
 
 type DesignStatus = 'awaiting-approval' | 'ready-to-order' | 'in-production' | 'completed' | 'draft';
 
@@ -295,6 +297,9 @@ export default function MyAccountPage() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
+  const [shareProjectId, setShareProjectId] = useState<string | null>(null);
+  const [shareProjectTitle, setShareProjectTitle] = useState<string | undefined>(undefined);
 
   async function handleEdit(cardId: string) {
     setLoadingEditId(cardId);
@@ -551,7 +556,7 @@ export default function MyAccountPage() {
                           <button
                             type="button"
                             className="w-full text-left px-4 py-2.5 text-xs text-white hover:bg-white/10 transition"
-                            onClick={() => { setOpenMenuId(null); alert('Email share coming soon'); }}
+                            onClick={() => { setOpenMenuId(null); setShareProjectId(card.id); setShareProjectTitle(card.title); setShareModalOpen(true); }}
                           >
                             ✉️ Email
                           </button>
@@ -642,6 +647,19 @@ export default function MyAccountPage() {
           confirmLabel="Yes, delete"
           cancelLabel="No, keep"
         />
+
+        {/* Email share modal */}
+        {shareProjectId && (
+          <React.Suspense fallback={null}>
+            <EmailShareModal
+              isOpen={shareModalOpen}
+              onClose={() => { setShareModalOpen(false); setShareProjectId(null); setShareProjectTitle(undefined); }}
+              projectId={shareProjectId}
+              projectTitle={shareProjectTitle}
+              senderEmail={session?.email ?? null}
+            />
+          </React.Suspense>
+        )}
       </div>
     </div>
   );
