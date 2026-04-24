@@ -155,6 +155,14 @@ Cold-cache build ≈ 24 min total: 4:51 clone, 2 min vercelignore processing, 30
 - **Never embed large data URIs in email `<img src>`.** Gmail clips messages >102 KB and strips/sanitizes `data:` URIs. Always use nodemailer CID inline attachments (`cid:some-id` + `attachments: [{ cid, content, contentDisposition: 'inline' }]`). Data URIs remain fine for PDF generation via `jsPDF.addImage()` because that path doesn't go through an SMTP body.
 - **Data flow after this fix:** `app/api/projects/route.ts` stores screenshot as data URL (`screenshotPath`) on Vercel (ephemeral FS). `sendEmail()` now converts that data URI once — PDF attachment still gets the raw data URI, while the HTML body gets `cid:design-screenshot` and the binary is attached inline.
 
+## Current Status (2026-04-24) — STARTER extraction; Bronze Plaque border fixes & store reset
+
+- Created `starter-short.md`: extracted dated "Status (YYYY-MM-DD) — Title" entries from STARTER.md into concise 1–2 sentence summaries (includes older dates). File created at `starter-short.md`.
+- Fixed New Design behavior for Bronze Plaque: `lib/headstone-store.ts` (`resetDesign`) updated to preserve product-specific defaults (plaque dimensions and visibility) when a catalog/product is loaded so "New Design" no longer resets Bronze Plaque to headstone defaults (900×900) or adds a granite Base.
+- Investigated and updated Bronze border sizing (`components/three/BronzeBorder.tsx`): switched to prefer width-based scaling, removed a global multiplier that caused sudden size jumps at ~400mm, added conservative clamping for extreme dimensions, and (per user request) applied a 3× scale multiplier to integrated and non-integrated border geometry to increase visual thickness.
+- Build validated: `pnpm run build` completed successfully after these edits.
+- Next steps: Visual QA on plaque sizes (300×200, 560×200, 560×400). If border still needs tuning, will implement legacy ratio-based behavior from `createJS/dyo/Monument.getRatio()` to match historical visuals precisely.
+
 ---
 
 ## Current Status (2026-04-20, Part 2) — Screenshot Fix, Login→Save Flow, SMTP Guard

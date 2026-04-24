@@ -1950,35 +1950,35 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   resetDesign: () => {
-    set({
-      inscriptions: [],
-      selectedAdditions: [],
-      selectedMotifs: [],
-      selectedEmblems: [],
-      selectedImages: [],
-      selectedInscriptionId: null,
-      selectedAdditionId: null,
-      selectedMotifId: null,
-      selectedEmblemId: null,
-      selectedImageId: null,
-      cropCanvasData: null,
-      activePanel: null,
-      editingObject: 'headstone',
-      showBase: true,
-      showLedger: false,
-      showKerbset: false,
-      showInscriptionColor: true,
-      currentProjectId: null,
-      currentProjectTitle: null,
-      // Reset to default dimensions (headstone + base)
-      widthMm: 900,
-      heightMm: 900,
-      baseWidthMm: 1260,
-      baseHeightMm: 100,
-      baseThickness: 250,
-      baseFinish: 'default',
-      uprightThickness: 150,
-      slantThickness: 150,
+    // Clear editable design data but preserve product-specific defaults when available.
+    set((s) => {
+      const catalog = s.catalog;
+      const productType = catalog?.product?.type;
+      const defaultVisibility = {
+        showBase: productType === 'headstone' || productType === 'mini-headstone' || productType === 'monument' || productType === 'full-monument',
+        showLedger: productType === 'full-monument',
+        showKerbset: productType === 'full-monument',
+      };
+      return {
+        inscriptions: [],
+        selectedAdditions: [],
+        selectedMotifs: [],
+        selectedEmblems: [],
+        selectedImages: [],
+        selectedInscriptionId: null,
+        selectedAdditionId: null,
+        selectedMotifId: null,
+        selectedEmblemId: null,
+        selectedImageId: null,
+        cropCanvasData: null,
+        activePanel: null,
+        editingObject: 'headstone',
+        showInscriptionColor: true,
+        currentProjectId: null,
+        currentProjectTitle: null,
+        // Preserve product-specific dimensions and base visibility when possible.
+        ...defaultVisibility,
+      };
     });
   },
 }));

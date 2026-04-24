@@ -706,7 +706,12 @@ function buildBorderGroup(
   else if (aspectRatio >= 0.9) squareScale = 0.5;
   else if (aspectRatio >= 0.8) squareScale = 0.7;
 
-  const sizeCompression = Math.min(1, minDimensionMm / 500);
+  // Prefer width-based scaling to keep border thickness consistent when plaque height changes.
+  const CLAMP_BORDER_SCALE_MM = 400; // Threshold to cap scale growth
+  const plaqueWidthMm = Math.max(1, (width / safeUnitScale) * 1000);
+  const effectiveWidthMm = Math.min(plaqueWidthMm, CLAMP_BORDER_SCALE_MM);
+
+  const sizeCompression = Math.min(1, effectiveWidthMm / 500);
   const borderScaleFactor = BORDER_SCALE * squareScale * sizeCompression;
 
   // Calculate line thickness first so we can match corner size to it (work in mm then convert back)
@@ -715,7 +720,7 @@ function buildBorderGroup(
   const SS_FRAME_WIDTH_MM = 15;
   const edgeThicknessMmBase = ssBorder
     ? SS_FRAME_WIDTH_MM
-    : Math.max(1.5, minDimensionMm * 0.012 * borderScaleFactor);
+    : Math.max(1.5, effectiveWidthMm * 0.012 * borderScaleFactor);
   const edgeThickness = Math.max(
     0.0005 * safeUnitScale,
     (edgeThicknessMmBase / 1000) * safeUnitScale * (ssBorder ? 1 : BORDER_THICKNESS_SCALE * (0.45 + 0.25 * sizeCompression)),
@@ -735,6 +740,7 @@ function buildBorderGroup(
   };
 
   if (integratedRails) {
+    // Prefer conservative scaling: use the smaller axis factor to avoid sudden growth
     let uniformScale = Math.min(width / originalWidth, height / originalHeight);
     if (ssBorder) {
       // Fixed frame: scale the SVG so border frame stays a constant physical
@@ -744,19 +750,19 @@ function buildBorderGroup(
       const referenceDimMm = 200;
       const fixedFrameFactor = referenceDimMm / Math.max(80, minDimensionMm);
       uniformScale *= fixedFrameFactor;
-    }else if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
+    } else if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
       const rawOverride = INTEGRATED_SCALE_OVERRIDES[borderSlug];
-      const smallPlaqueFactor = clamp01((minDimensionMm - 320) / 480);
+      const smallPlaqueFactor = clamp01((effectiveWidthMm - 320) / 480);
       const lerpedOverride = THREE.MathUtils.lerp(1, rawOverride, smallPlaqueFactor);
       uniformScale *= lerpedOverride;
     }
-    uniformScale *= 5.0;
-    merged.scale(uniformScale, uniformScale, 1);
+    // Keep integrated SVG scale conservative — avoid legacy global multipliers that cause jumps.
+    merged.scale(uniformScale * 3.0, uniformScale * 3.0, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
     const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
     const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.65;
-    merged.scale(baseScale, baseScale, 1);
+    merged.scale(baseScale * 3.0, baseScale * 3.0, 1);
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
