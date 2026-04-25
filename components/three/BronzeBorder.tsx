@@ -760,12 +760,12 @@ function buildBorderGroup(
       uniformScale *= lerpedOverride;
     }
     // Keep integrated SVG scale conservative — avoid legacy global multipliers that cause jumps.
-    merged.scale(uniformScale * GLOBAL_VISUAL_SCALE * extraScale, uniformScale * GLOBAL_VISUAL_SCALE * extraScale, 1);
+    merged.scale(uniformScale * extraScale, uniformScale * extraScale, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
     const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
     const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.65;
-    merged.scale(baseScale * GLOBAL_VISUAL_SCALE * extraScale, baseScale * GLOBAL_VISUAL_SCALE * extraScale, 1);
+    merged.scale(baseScale * extraScale, baseScale * extraScale, 1);
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
@@ -782,7 +782,7 @@ function buildBorderGroup(
 
     if (dominantCoverage > targetCoverage) {
       const shrink = Math.max(0.25, targetCoverage / Math.max(1e-6, dominantCoverage));
-      merged.scale(shrink * GLOBAL_VISUAL_SCALE * extraScale, shrink * GLOBAL_VISUAL_SCALE * extraScale, 1);
+      merged.scale(shrink * extraScale, shrink * extraScale, 1);
       merged.computeBoundingBox();
       scaledBounds = merged.boundingBox!;
     }
