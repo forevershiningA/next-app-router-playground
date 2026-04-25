@@ -519,7 +519,7 @@ export function BronzeBorder({
     const { w, h } = builtState.dims;
     const safeW = w || 1;
     const safeH = h || 1;
-    groupRef.current.scale.set((localWidth / safeW) * GLOBAL_VISUAL_SCALE, (localHeight / safeH) * GLOBAL_VISUAL_SCALE, 1);
+    groupRef.current.scale.set((localWidth / safeW), (localHeight / safeH), 1);
   }, [localWidth, localHeight, builtState]);
 
   useEffect(() => {
