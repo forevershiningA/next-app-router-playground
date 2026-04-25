@@ -69,6 +69,8 @@ const OVERLAP_BUFFER = 1.0; // Overlap slice by 1mm to prevent visual gaps
 const CURVE_SEGMENTS = 6; // Was 24. 6 is enough for textured metal (~75% fewer triangles)
 const BEVEL_SEGMENTS = 1; // Keep minimal bevel
 const UNIT_BOX_GEOMETRY = new THREE.BoxGeometry(1, 1, 1);
+const GLOBAL_VISUAL_SCALE = 3.0;
+const NON_BAR_EXTRA_SCALE = 1.0;
 
 function buildScaledBoxGeometry(width: number, height: number, depth: number) {
   const geom = UNIT_BOX_GEOMETRY.clone();
@@ -517,7 +519,7 @@ export function BronzeBorder({
     const { w, h } = builtState.dims;
     const safeW = w || 1;
     const safeH = h || 1;
-    groupRef.current.scale.set(localWidth / safeW, localHeight / safeH, 1);
+    groupRef.current.scale.set((localWidth / safeW) * GLOBAL_VISUAL_SCALE, (localHeight / safeH) * GLOBAL_VISUAL_SCALE, 1);
   }, [localWidth, localHeight, builtState]);
 
   useEffect(() => {
@@ -738,6 +740,7 @@ function buildBorderGroup(
   const INTEGRATED_SCALE_OVERRIDES: Record<string, number> = {
     border1a: 4,
   };
+  const extraScale = borderSlug !== 'border1a' ? NON_BAR_EXTRA_SCALE : 1;
 
   if (integratedRails) {
     // Prefer conservative scaling: use the smaller axis factor to avoid sudden growth
@@ -757,12 +760,12 @@ function buildBorderGroup(
       uniformScale *= lerpedOverride;
     }
     // Keep integrated SVG scale conservative — avoid legacy global multipliers that cause jumps.
-    merged.scale(uniformScale * 3.0, uniformScale * 3.0, 1);
+    merged.scale(uniformScale * GLOBAL_VISUAL_SCALE * extraScale, uniformScale * GLOBAL_VISUAL_SCALE * extraScale, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
     const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
     const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.65;
-    merged.scale(baseScale * 3.0, baseScale * 3.0, 1);
+    merged.scale(baseScale * GLOBAL_VISUAL_SCALE * extraScale, baseScale * GLOBAL_VISUAL_SCALE * extraScale, 1);
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
@@ -779,7 +782,7 @@ function buildBorderGroup(
 
     if (dominantCoverage > targetCoverage) {
       const shrink = Math.max(0.25, targetCoverage / Math.max(1e-6, dominantCoverage));
-      merged.scale(shrink, shrink, 1);
+      merged.scale(shrink * GLOBAL_VISUAL_SCALE * extraScale, shrink * GLOBAL_VISUAL_SCALE * extraScale, 1);
       merged.computeBoundingBox();
       scaledBounds = merged.boundingBox!;
     }
