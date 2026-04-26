@@ -742,8 +742,35 @@ function buildBorderGroup(
   };
   const extraScale = borderSlug !== 'border1a' ? NON_BAR_EXTRA_SCALE : 1;
 
-  // Visual multiplier to boost perceived border size for non-SS bronze plaques
-  const visualMultiplier = ssBorder ? 1 : 2;
+  // Make border frame match reference physical thickness (reference plaque: 560x400mm)
+  // This ensures borders appear the same size on small plaques (300x200) as they currently do on 560x400,
+  // and become proportionally smaller on larger plaques.
+  let referenceScaleFactor = 1;
+  if (!ssBorder) {
+    try {
+      const refWidthMm = 560;
+      const refHeightMm = 400;
+      const refMinDimensionMm = Math.max(1, Math.min(refWidthMm, refHeightMm));
+      const refMaxDimensionMm = Math.max(refMinDimensionMm, Math.max(refWidthMm, refHeightMm));
+      const refAspectRatio = refMinDimensionMm / Math.max(1, refMaxDimensionMm);
+      let refSquareScale = 1;
+      if (refAspectRatio >= 0.95) refSquareScale = 0.35;
+      else if (refAspectRatio >= 0.9) refSquareScale = 0.5;
+      else if (refAspectRatio >= 0.8) refSquareScale = 0.7;
+
+      const refEffectiveWidthMm = Math.min(refWidthMm, CLAMP_BORDER_SCALE_MM);
+      const refSizeCompression = Math.min(1, refEffectiveWidthMm / 500);
+      const refBorderScaleFactor = BORDER_SCALE * refSquareScale * refSizeCompression;
+      const refEdgeThicknessMmBase = Math.max(1.5, refEffectiveWidthMm * 0.012 * refBorderScaleFactor);
+
+      // Use the current computed edgeThicknessMmBase for this plaque size (from above)
+      if (edgeThicknessMmBase > 0) {
+        referenceScaleFactor = refEdgeThicknessMmBase / edgeThicknessMmBase;
+      }
+    } catch (e) {
+      referenceScaleFactor = 1;
+    }
+  }
 
   if (integratedRails) {
     // Prefer conservative scaling: use the smaller axis factor to avoid sudden growth
@@ -762,13 +789,13 @@ function buildBorderGroup(
       const lerpedOverride = THREE.MathUtils.lerp(1, rawOverride, smallPlaqueFactor);
       uniformScale *= lerpedOverride;
     }
-    // Keep integrated SVG scale conservative — avoid legacy global multipliers that cause jumps.
-    merged.scale(uniformScale * extraScale * visualMultiplier, uniformScale * extraScale * visualMultiplier, 1);
+    // Apply reference scale factor for consistent physical frame thickness
+    merged.scale(uniformScale * extraScale * referenceScaleFactor, uniformScale * extraScale * referenceScaleFactor, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
     const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
     const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.65;
-    merged.scale(baseScale * extraScale * visualMultiplier, baseScale * extraScale * visualMultiplier, 1);
+    merged.scale(baseScale * extraScale * referenceScaleFactor, baseScale * extraScale * referenceScaleFactor, 1);
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
