@@ -767,6 +767,12 @@ function buildBorderGroup(
       if (edgeThicknessMmBase > 0) {
         referenceScaleFactor = refEdgeThicknessMmBase / edgeThicknessMmBase;
       }
+
+      // If plaque is small (300x200mm or smaller), keep the border visually larger (2x)
+      const plaqueHeightMm = Math.max(1, (height / safeUnitScale) * 1000);
+      if (plaqueWidthMm <= 300 && plaqueHeightMm <= 200) {
+        referenceScaleFactor *= 2;
+      }
     } catch (e) {
       referenceScaleFactor = 1;
     }
