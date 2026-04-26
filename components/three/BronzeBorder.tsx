@@ -60,7 +60,7 @@ const BORDER_SLUG_ALIASES: Record<string, string> = {
 };
 
 
-const BORDER_SCALE = 0.75; // Smaller decorative border for compact plaques
+const BORDER_SCALE = 1.5; // Increased decorative border scale (2x) for bronze plaques
 const BORDER_THICKNESS_SCALE = 1.5; // Border thickness increased to 150%
 const BORDER_RELIEF_SCALE = 0.33; // Border relief depth reduced to 33%
 const OVERLAP_BUFFER = 1.0; // Overlap slice by 1mm to prevent visual gaps
