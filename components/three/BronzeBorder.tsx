@@ -742,6 +742,9 @@ function buildBorderGroup(
   };
   const extraScale = borderSlug !== 'border1a' ? NON_BAR_EXTRA_SCALE : 1;
 
+  // Visual multiplier to boost perceived border size for non-SS bronze plaques
+  const visualMultiplier = ssBorder ? 1 : 2;
+
   if (integratedRails) {
     // Prefer conservative scaling: use the smaller axis factor to avoid sudden growth
     let uniformScale = Math.min(width / originalWidth, height / originalHeight);
@@ -760,12 +763,12 @@ function buildBorderGroup(
       uniformScale *= lerpedOverride;
     }
     // Keep integrated SVG scale conservative — avoid legacy global multipliers that cause jumps.
-    merged.scale(uniformScale * extraScale, uniformScale * extraScale, 1);
+    merged.scale(uniformScale * extraScale * visualMultiplier, uniformScale * extraScale * visualMultiplier, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
     const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
     const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.65;
-    merged.scale(baseScale * extraScale, baseScale * extraScale, 1);
+    merged.scale(baseScale * extraScale * visualMultiplier, baseScale * extraScale * visualMultiplier, 1);
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
