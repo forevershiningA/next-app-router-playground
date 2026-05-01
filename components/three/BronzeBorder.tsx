@@ -60,7 +60,7 @@ const BORDER_SLUG_ALIASES: Record<string, string> = {
 };
 
 
-const BORDER_SCALE = 1.5; // Increased decorative border scale (2x) for bronze plaques
+const BORDER_SCALE = 0.75; // Smaller decorative border for compact plaques
 const BORDER_THICKNESS_SCALE = 1.5; // Border thickness increased to 150%
 const BORDER_RELIEF_SCALE = 0.33; // Border relief depth reduced to 33%
 const OVERLAP_BUFFER = 1.0; // Overlap slice by 1mm to prevent visual gaps
@@ -69,8 +69,6 @@ const OVERLAP_BUFFER = 1.0; // Overlap slice by 1mm to prevent visual gaps
 const CURVE_SEGMENTS = 6; // Was 24. 6 is enough for textured metal (~75% fewer triangles)
 const BEVEL_SEGMENTS = 1; // Keep minimal bevel
 const UNIT_BOX_GEOMETRY = new THREE.BoxGeometry(1, 1, 1);
-const GLOBAL_VISUAL_SCALE = 3.0;
-const NON_BAR_EXTRA_SCALE = 1.0;
 
 function buildScaledBoxGeometry(width: number, height: number, depth: number) {
   const geom = UNIT_BOX_GEOMETRY.clone();
@@ -519,7 +517,7 @@ export function BronzeBorder({
     const { w, h } = builtState.dims;
     const safeW = w || 1;
     const safeH = h || 1;
-    groupRef.current.scale.set((localWidth / safeW), (localHeight / safeH), 1);
+    groupRef.current.scale.set(localWidth / safeW, localHeight / safeH, 1);
   }, [localWidth, localHeight, builtState]);
 
   useEffect(() => {
@@ -708,12 +706,7 @@ function buildBorderGroup(
   else if (aspectRatio >= 0.9) squareScale = 0.5;
   else if (aspectRatio >= 0.8) squareScale = 0.7;
 
-  // Prefer width-based scaling to keep border thickness consistent when plaque height changes.
-  const CLAMP_BORDER_SCALE_MM = 400; // Threshold to cap scale growth
-  const plaqueWidthMm = Math.max(1, (width / safeUnitScale) * 1000);
-  const effectiveWidthMm = Math.min(plaqueWidthMm, CLAMP_BORDER_SCALE_MM);
-
-  const sizeCompression = Math.min(1, effectiveWidthMm / 500);
+  const sizeCompression = Math.min(1, minDimensionMm / 500);
   const borderScaleFactor = BORDER_SCALE * squareScale * sizeCompression;
 
   // Calculate line thickness first so we can match corner size to it (work in mm then convert back)
@@ -722,7 +715,7 @@ function buildBorderGroup(
   const SS_FRAME_WIDTH_MM = 15;
   const edgeThicknessMmBase = ssBorder
     ? SS_FRAME_WIDTH_MM
-    : Math.max(1.5, effectiveWidthMm * 0.012 * borderScaleFactor);
+    : Math.max(1.5, minDimensionMm * 0.012 * borderScaleFactor);
   const edgeThickness = Math.max(
     0.0005 * safeUnitScale,
     (edgeThicknessMmBase / 1000) * safeUnitScale * (ssBorder ? 1 : BORDER_THICKNESS_SCALE * (0.45 + 0.25 * sizeCompression)),
@@ -740,46 +733,8 @@ function buildBorderGroup(
   const INTEGRATED_SCALE_OVERRIDES: Record<string, number> = {
     border1a: 4,
   };
-  const extraScale = borderSlug !== 'border1a' ? NON_BAR_EXTRA_SCALE : 1;
-
-  // Make border frame match reference physical thickness (reference plaque: 560x400mm)
-  // This ensures borders appear the same size on small plaques (300x200) as they currently do on 560x400,
-  // and become proportionally smaller on larger plaques.
-  let referenceScaleFactor = 1;
-  if (!ssBorder) {
-    try {
-      const refWidthMm = 560;
-      const refHeightMm = 400;
-      const refMinDimensionMm = Math.max(1, Math.min(refWidthMm, refHeightMm));
-      const refMaxDimensionMm = Math.max(refMinDimensionMm, Math.max(refWidthMm, refHeightMm));
-      const refAspectRatio = refMinDimensionMm / Math.max(1, refMaxDimensionMm);
-      let refSquareScale = 1;
-      if (refAspectRatio >= 0.95) refSquareScale = 0.35;
-      else if (refAspectRatio >= 0.9) refSquareScale = 0.5;
-      else if (refAspectRatio >= 0.8) refSquareScale = 0.7;
-
-      const refEffectiveWidthMm = Math.min(refWidthMm, CLAMP_BORDER_SCALE_MM);
-      const refSizeCompression = Math.min(1, refEffectiveWidthMm / 500);
-      const refBorderScaleFactor = BORDER_SCALE * refSquareScale * refSizeCompression;
-      const refEdgeThicknessMmBase = Math.max(1.5, refEffectiveWidthMm * 0.012 * refBorderScaleFactor);
-
-      // Use the current computed edgeThicknessMmBase for this plaque size (from above)
-      if (edgeThicknessMmBase > 0) {
-        referenceScaleFactor = refEdgeThicknessMmBase / edgeThicknessMmBase;
-      }
-
-      // If plaque is small (300x200mm or smaller), keep the border visually larger (2x)
-      const plaqueHeightMm = Math.max(1, (height / safeUnitScale) * 1000);
-      if (plaqueWidthMm <= 300 && plaqueHeightMm <= 200) {
-        referenceScaleFactor *= 2;
-      }
-    } catch (e) {
-      referenceScaleFactor = 1;
-    }
-  }
 
   if (integratedRails) {
-    // Prefer conservative scaling: use the smaller axis factor to avoid sudden growth
     let uniformScale = Math.min(width / originalWidth, height / originalHeight);
     if (ssBorder) {
       // Fixed frame: scale the SVG so border frame stays a constant physical
@@ -789,36 +744,36 @@ function buildBorderGroup(
       const referenceDimMm = 200;
       const fixedFrameFactor = referenceDimMm / Math.max(80, minDimensionMm);
       uniformScale *= fixedFrameFactor;
-    } else if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
+    }else if (borderSlug && INTEGRATED_SCALE_OVERRIDES[borderSlug]) {
       const rawOverride = INTEGRATED_SCALE_OVERRIDES[borderSlug];
-      const smallPlaqueFactor = clamp01((effectiveWidthMm - 320) / 480);
+      const smallPlaqueFactor = clamp01((minDimensionMm - 320) / 480);
       const lerpedOverride = THREE.MathUtils.lerp(1, rawOverride, smallPlaqueFactor);
       uniformScale *= lerpedOverride;
     }
-    // Apply reference scale factor for consistent physical frame thickness
-    merged.scale(uniformScale * extraScale * referenceScaleFactor, uniformScale * extraScale * referenceScaleFactor, 1);
+    uniformScale *= 5.0;
+    merged.scale(uniformScale, uniformScale, 1);
   } else {
     const targetCornerSpanMm = Math.max(lineThicknessMm * 4, minDimensionMm * 0.16 * borderScaleFactor);
     const targetCornerSpan = (targetCornerSpanMm / 1000) * safeUnitScale;
     const baseScale = (targetCornerSpan / Math.max(originalWidth, originalHeight)) * 0.65;
-    merged.scale(baseScale * extraScale * referenceScaleFactor, baseScale * extraScale * referenceScaleFactor, 1);
+    merged.scale(baseScale, baseScale, 1);
   }
   merged.computeVertexNormals();
   merged.computeBoundingBox();
   let scaledBounds = merged.boundingBox!;
 
-  if (integratedRails && borderSlug !== 'border1a' && !ssBorder && width > 0 && height > 0) {
+  if (integratedRails && !ssBorder && width > 0 && height > 0) {
     const coverageX = (scaledBounds.max.x - scaledBounds.min.x) / width;
     const coverageY = (scaledBounds.max.y - scaledBounds.min.y) / height;
-    const coverageLerp = clamp01((minDimensionMm - 320) / 520);
-    const minTargetCoverage = 0.97;
-    const maxTargetCoverage = 0.99;
-    const targetCoverage = THREE.MathUtils.lerp(minTargetCoverage, maxTargetCoverage, coverageLerp);
+    // Target coverage > 1.0 means the border geometry intentionally extends beyond the
+    // plaque boundary; createCornerMesh slices each quadrant so it renders correctly.
+    // This keeps frame elements visually thick enough to be seen on the plaque.
+    const targetCoverage = 2.0;
     const dominantCoverage = Math.max(coverageX, coverageY);
 
     if (dominantCoverage > targetCoverage) {
       const shrink = Math.max(0.25, targetCoverage / Math.max(1e-6, dominantCoverage));
-      merged.scale(shrink * extraScale, shrink * extraScale, 1);
+      merged.scale(shrink, shrink, 1);
       merged.computeBoundingBox();
       scaledBounds = merged.boundingBox!;
     }
