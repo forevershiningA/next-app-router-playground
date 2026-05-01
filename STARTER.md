@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-04-23
+**Last Updated:** 2026-05-01
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -38,7 +38,36 @@
 
 ---
 
-## Current Status (2026-04-21) — Production Email Delivery Fix + .vercelignore Trim + Inline Screenshot CID
+## Current Status (2026-05-01) — Bronze Plaque UI & Border Fixes
+
+### ✅ Fixed: Bronze Plaque Shape-Select Panel Flicker
+
+Clicking a shape in **Select Shape** for Bronze Plaque caused a half-second flash of the Select Border panel before navigating correctly.
+
+**Root cause:** `handleShapeSelect` in `app/select-shape/_ui/ShapeSelectionGrid.tsx` called both `router.push('/select-border')` AND `openPanel('select-border')`. The `openPanel` custom event fired synchronously before navigation completed, briefly rendering the border panel on the wrong route. `DesignerNav` already has a `useEffect` (lines 620–640) that auto-opens the border panel when `pathname === '/select-border'`, making the explicit `openPanel` call redundant and harmful.
+
+**Fix:** Removed `openPanel('select-border')` from both `handleShapeSelect` and `handleFileChange` in `ShapeSelectionGrid.tsx`. The `openPanel('select-material')` call for Full Colour Plaque was intentionally kept (no auto-open exists for that case).
+
+### ✅ Fixed: Bronze Border Sizing (Bar 2× Too Big, Others 2× Too Small)
+
+All bronze plaque borders use the `integratedRails` path (SVG geometry with rails spanning the full 4800px viewBox). The sizing had two bugs:
+
+1. **Bar border (border1a) excluded from coverage shrink** — kept its initial `uniformScale × 7.5` (no shrink), producing a ~46mm thick frame on a 560×400mm plaque.
+2. **Coverage target too low (0.97–0.99)** — other borders were shrunk until bounding box ≈ 97–99% of plaque width, leaving frame elements only ~6mm thick.
+
+**Fix in `components/three/BronzeBorder.tsx`:**
+- Removed `&& borderSlug !== 'border1a'` exclusion — bar now gets coverage shrink like all others.
+- Changed `targetCoverage` from `lerp(0.97, 0.99, ...)` to a constant **`3.0`** (1.5× increase from the initial 2.0 baseline).
+
+`targetCoverage > 1.0` is intentional: `createCornerMesh` slices each quadrant, so geometry extending beyond the plaque renders cleanly. The higher coverage makes frame elements physically thicker:
+- Simple borders: ~18mm frame on a 560×400mm plaque
+- Bar border: ~25mm frame (naturally thicker due to SVG bar-element widths)
+
+Note: `components/three/BronzeBorde_gpt5.tsx` is an **unused backup** — do not edit it; all active border logic lives in `BronzeBorder.tsx`.
+
+---
+
+
 
 ## Current Status (2026-04-22) — Multiple Line Inscriptions
 
