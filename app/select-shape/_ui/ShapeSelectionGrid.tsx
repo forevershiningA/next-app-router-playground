@@ -71,7 +71,6 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       openPanel('select-material');
     } else if (hasBorder) {
       router.push('/select-border');
-      openPanel('select-border');
     } else {
       router.push('/select-size');
     }
@@ -94,7 +93,6 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
           openPanel('select-material');
         } else if (hasBorder) {
           router.push('/select-border');
-          openPanel('select-border');
         } else {
           router.push('/select-size');
         }
