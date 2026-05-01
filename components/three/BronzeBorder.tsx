@@ -768,7 +768,7 @@ function buildBorderGroup(
     // Target coverage > 1.0 means the border geometry intentionally extends beyond the
     // plaque boundary; createCornerMesh slices each quadrant so it renders correctly.
     // This keeps frame elements visually thick enough to be seen on the plaque.
-    const targetCoverage = 2.0;
+    const targetCoverage = 3.0;
     const dominantCoverage = Math.max(coverageX, coverageY);
 
     if (dominantCoverage > targetCoverage) {
