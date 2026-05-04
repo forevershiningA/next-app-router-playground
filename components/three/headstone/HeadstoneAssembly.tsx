@@ -6,6 +6,7 @@ import * as THREE from 'three';
 
 import ShapeSwapper from './ShapeSwapper';
 import HeadstoneBaseAuto from './HeadstoneBaseAuto';
+import UrnOvalBase from './UrnOvalBase';
 import LedgerSlab from './LedgerSlab';
 import KerbsetBorder from './KerbsetBorder';
 import RotatingBoxOutline from '../RotatingBoxOutline';
@@ -30,9 +31,14 @@ export default function HeadstoneAssembly() {
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const borderName = useHeadstoneStore((s) => s.borderName);
   const isPlaque = productType === 'plaque';
   const isFullMonument = productType === 'full-monument';
+  const isUrn = productType === 'urn';
+  // Only oval and heart urn shapes get the landscape oval base disc
+  const urnShapeCode = shapeUrl?.split('/').pop()?.replace('.svg', '') ?? '';
+  const urnHasOvalBase = isUrn && (urnShapeCode === 'oval' || urnShapeCode === 'heart');
   const hasBorder =
     isPlaque && borderName ? !borderName.toLowerCase().includes('no border') : false;
   const headstoneOutlinePad = isPlaque ? 0.0012 : 0.006;
@@ -93,7 +99,7 @@ export default function HeadstoneAssembly() {
 
   return (
     <group ref={monumentGroupRef} position={[0, 0, zGroupOffset]}>
-      <group ref={assemblyRef} position={[0, showBase ? baseHeightMeters : 0, 0]}>
+      <group ref={assemblyRef} position={[0, showBase ? (urnHasOvalBase ? 0.01 : isUrn ? 0 : baseHeightMeters) : 0, 0]}>
         <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
         {/* Elegant Selection Indicators - Viewfinder Corners */}
@@ -124,21 +130,36 @@ export default function HeadstoneAssembly() {
           animationDuration={520}
         />
 
-        {showBase && (
-          <HeadstoneBaseAuto
-            ref={baseRef}
-            headstoneObject={tabletRef}
-            wrapper={assemblyRef}
-            name="base"
-            height={baseHeightMeters}
-            onClick={(e) => {
-              e.stopPropagation();
-              setEditingObject('base');
-              setSelected('base');
-            }}
-          />
+        {showBase && !isUrn && (
+            <HeadstoneBaseAuto
+              ref={baseRef}
+              headstoneObject={tabletRef}
+              wrapper={assemblyRef}
+              name="base"
+              height={baseHeightMeters}
+              onClick={(e) => {
+                e.stopPropagation();
+                setEditingObject('base');
+                setSelected('base');
+              }}
+            />
         )}
       </group>
+
+      {/* Urn oval base sits at ground level, outside the elevated assembly group */}
+      {showBase && urnHasOvalBase && (
+        <UrnOvalBase
+          ref={baseRef}
+          name="base"
+          height={0.01}
+          onClick={(e) => {
+            e.stopPropagation();
+            // Treat the oval base as part of the urn body — select headstone
+            setEditingObject('headstone');
+            setSelected('headstone');
+          }}
+        />
+      )}
 
       {/* Ledger and kerbset sit at ground level; their Z is offset forward past the base */}
       <group>

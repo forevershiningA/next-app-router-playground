@@ -136,6 +136,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());
     const [textBounds, setTextBounds] = React.useState({ width: 0, height: 0 });
     const textMeshRef = React.useRef<THREE.Mesh | null>(null);
+    // Prevents double-fire when transferring surface mid-drag (component unmounts asynchronously)
+    const transferringRef = React.useRef(false);
 
     /* ---------------- position on current mesh bbox once available ---------------- */
     React.useEffect(() => {
@@ -250,6 +252,19 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           nextZ -= dragOffset.z ?? 0;
         }
 
+        // — Surface transfer — drag past back edge of ledger → move inscription to headstone
+        if (!transferringRef.current && nextZ < minZ) {
+          transferringRef.current = true;
+          const state = useHeadstoneStore.getState();
+          updateLineStore(id, {
+            target: 'headstone',
+            xPos: 0,
+            yPos: -(state.heightMm * 0.3),
+            coordinateSpace: 'mm-center',
+          });
+          return;
+        }
+
         nextX = Math.max(minX, Math.min(maxX, nextX));
         nextZ = Math.max(minZ, Math.min(maxZ, nextZ));
 
@@ -297,13 +312,25 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
 
         raycaster.setFromCamera(mouse, camera);
         const hits = raycaster.intersectObject(stone, true);
-        if (!hits.length) return;
 
-        const hit =
-          hits.find((h) => h.face?.normal?.z && h.face.normal.z > 0.2) ?? hits[0];
-        if (!hit) return;
+        // Get the hit point in mesh-local space.
+        // When the pointer is off the mesh (e.g. hovering over the base while dragging
+        // a headstone inscription downward), fall back to projecting onto the front-face
+        // plane so we still get a y-coordinate for transfer detection.
+        let local: THREE.Vector3 | null = null;
+        if (hits.length) {
+          const hit = hits.find((h) => h.face?.normal?.z && h.face.normal.z > 0.2) ?? hits[0];
+          if (hit) local = stone.worldToLocal(hit.point.clone());
+        }
+        if (!local) {
+          // Build a plane at the mesh's front face in world space and project onto it.
+          const frontNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(stone.quaternion);
+          const frontPoint = stone.localToWorld(new THREE.Vector3(0, 0, headstone.frontZ));
+          const frontPlane = new THREE.Plane().setFromNormalAndCoplanarPoint(frontNormal, frontPoint);
+          if (!raycaster.ray.intersectPlane(frontPlane, fallbackIntersection)) return;
+          local = stone.worldToLocal(fallbackIntersection.clone());
+        }
 
-        const local = stone.worldToLocal(hit.point.clone());
         local.z = headstone.frontZ + liftLocal;
 
         const next = local.add(dragOffset);
@@ -315,10 +342,54 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         const minY = surfaceBounds.minY + inset + 0.04 * spanY;
         const maxY = surfaceBounds.maxY - inset;
 
+        const state = useHeadstoneStore.getState();
+
+        // — Surface transfer — drag below headstone bottom → move inscription to base or ledger
+        if (!isBaseSurface && !isLedgerSurface && !transferringRef.current && next.y < surfaceBounds.minY) {
+          const isFullMonument = state.catalog?.product.type === 'full-monument';
+          if (isFullMonument && state.showLedger) {
+            transferringRef.current = true;
+            updateLineStore(id, {
+              target: 'ledger',
+              xPos: 0,
+              yPos: 0,
+              coordinateSpace: undefined,
+            });
+            return;
+          }
+          if (!isFullMonument && state.showBase) {
+            transferringRef.current = true;
+            updateLineStore(id, {
+              target: 'base',
+              xPos: 0,
+              yPos: 0,
+              coordinateSpace: 'mm-center',
+            });
+            return;
+          }
+        }
+
+        // — Surface transfer — drag above base top → move inscription to headstone
+        if (isBaseSurface && !transferringRef.current && next.y > surfaceBounds.maxY) {
+          transferringRef.current = true;
+          updateLineStore(id, {
+            target: 'headstone',
+            xPos: 0,
+            yPos: -(state.heightMm * 0.3), // lower portion of headstone
+            coordinateSpace: 'mm-center',
+          });
+          return;
+        }
+
+        // After a surface transfer has been initiated, stop updating position.
+        // Subsequent pointermove events would pass headstone-local coords that
+        // are misinterpreted as mm-center offsets on the new surface, placing
+        // the inscription underground or off-screen.
+        if (transferringRef.current) return;
+
         const clampedX = Math.max(minX, Math.min(maxX, next.x));
         const clampedY = Math.max(minY, Math.min(maxY, next.y));
 
-        const state = useHeadstoneStore.getState();
         const targetSurface = isBaseSurface ? 'base' : 'headstone';
         const baseWidth =
           targetSurface === 'base'
@@ -356,6 +427,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       [
         camera,
         dragOffset,
+        fallbackIntersection,
         gl,
         headstone.frontZ,
         headstone.mesh,
@@ -516,16 +588,19 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       ? [-Math.PI / 2, rotationRad, 0]
       : [0, 0, rotationRad];
 
-    // Base inscriptions: useFrame tracks the base mesh position imperatively
-    // because the mesh position is set by HeadstoneBaseAuto's useFrame (not
-    // React state), so it's (0,0,0) at first render. This mirrors the pattern
-    // used by HeadstoneBaseAuto itself.
+    // Base inscriptions with mm-center: imperatively position each frame so we
+    // always use the *current* mesh position/scale (set by HeadstoneBaseAuto's
+    // useFrame). We read headstone.mesh.current directly instead of the closure-
+    // captured `baseMesh`, because on first render refs are not yet committed and
+    // the stale null would prevent the inscription from ever appearing.
     useFrame(() => {
-      if (!isBaseSurface || coordinateSpace !== 'mm-center' || !baseMesh || !groupRef.current) return;
+      if (!isBaseSurface || coordinateSpace !== 'mm-center' || !groupRef.current) return;
+      const bm = headstone.mesh.current as THREE.Mesh | null;
+      if (!bm) return;
       groupRef.current.position.set(
-        baseMesh.position.x + (xPos ?? 0) * mmToLocalUnits,
-        baseMesh.position.y + (yPos ?? 0) * mmToLocalUnits,
-        baseMesh.position.z + baseMesh.scale.z / 2 + liftLocal + zBump,
+        bm.position.x + (xPos ?? 0) * mmToLocalUnits,
+        bm.position.y + (yPos ?? 0) * mmToLocalUnits,
+        bm.position.z + bm.scale.z / 2 + liftLocal + zBump,
       );
       groupRef.current.visible = true;
     });

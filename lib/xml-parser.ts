@@ -8,7 +8,7 @@ export interface ShapeData {
   name: string;
   code?: string;  // Shape code from XML (e.g., "Oval Landscape", "Portrait")
   url?: string;   // Shape URL from XML
-  stand: {
+  stand?: {
     minDepth: number;
     maxDepth: number;
     initDepth: number;
@@ -361,10 +361,10 @@ export async function parseCatalogXML(
   const color = productElement.getAttribute('color') || undefined;
   const defaultColor = productElement.getAttribute('default-color') || undefined;
 
-  // Parse shapes (headstone, plaque, and full-monument types)
+  // Parse shapes (headstone, plaque, full-monument, and urn types)
   const shapes: ShapeData[] = [];
   const shapeElements = xmlDoc.querySelectorAll(
-    'shape[type="headstone"], shape[type="plaque"], shape[type="full-monument"]',
+    'shape[type="headstone"], shape[type="plaque"], shape[type="full-monument"], shape[type="urn"]',
   );
   shapeElements.forEach((shapeEl) => {
     const name = shapeEl.getAttribute('name') || '';
@@ -375,8 +375,9 @@ export async function parseCatalogXML(
     const kerbEl = shapeEl.querySelector('file[type="kerb"]');
     const lidEl = shapeEl.querySelector('file[type="lid"]');
 
-    if (standEl && tableEl) {
-      const stand = {
+    // Urns have an empty <file type="stand"> element (no attributes) — allow tableEl-only shapes
+    if (tableEl) {
+      const stand = standEl ? {
         minDepth: parseInt(standEl.getAttribute('min_depth') || '0'),
         maxDepth: parseInt(standEl.getAttribute('max_depth') || '0'),
         initDepth: parseInt(standEl.getAttribute('init_depth') || '0'),
@@ -387,7 +388,7 @@ export async function parseCatalogXML(
         maxHeight: parseInt(standEl.getAttribute('max_height') || '0'),
         initHeight: parseInt(standEl.getAttribute('init_height') || '0'),
         color: standEl.getAttribute('color') || undefined,
-      };
+      } : undefined;
 
       const table = {
         minWidth: parseInt(tableEl.getAttribute('min_width') || '0'),

@@ -52,6 +52,7 @@ export default function MotifModel({
   const [dragging, setDragging] = React.useState(false);
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
+  const transferringRef = React.useRef(false);
   const baseOffsetDefaults = React.useMemo(
     () => ({
       xPos: 0,
@@ -237,6 +238,30 @@ export default function MotifModel({
       const minY = bbox.min.y + inset + 0.04 * spanY;
       const maxY = bbox.max.y - inset;
 
+      // Transfer headstone → base / ledger when motif dragged below stone
+      if (!isBaseSurface && !isLedgerSurface && !transferringRef.current && localPt.y < minY) {
+        transferringRef.current = true;
+        const state = useHeadstoneStore.getState();
+        const isFullMonument = state.catalog?.product.type === 'full-monument';
+        if (isFullMonument && state.showLedger) {
+          setMotifOffset(id, { ...(motifOffsets[id] ?? baseOffsetDefaults), target: 'ledger', xPos: 0, yPos: 0, coordinateSpace: 'offset' });
+        } else if (!isFullMonument && state.showBase) {
+          setMotifOffset(id, { ...(motifOffsets[id] ?? baseOffsetDefaults), target: 'base', xPos: 0, yPos: 0, coordinateSpace: 'mm-center' });
+        }
+        return;
+      }
+
+      // Transfer base → headstone when motif dragged above base top
+      if (isBaseSurface && !transferringRef.current && localPt.y > maxY) {
+        transferringRef.current = true;
+        setMotifOffset(id, { ...(motifOffsets[id] ?? baseOffsetDefaults), target: 'headstone', xPos: 0, yPos: 0, coordinateSpace: 'offset' });
+        return;
+      }
+
+      // Guard: stop position updates after a transfer is in flight to prevent
+      // stale pointermove events from overwriting the store with wrong coordinates.
+      if (transferringRef.current) return;
+
       localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
       localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
 
@@ -288,6 +313,7 @@ export default function MotifModel({
       gl,
       headstone,
       id,
+      isBaseSurface,
       isLedgerSurface,
       mouse,
       motifOffsets,
@@ -336,6 +362,16 @@ export default function MotifModel({
       const maxX = bbox.max.x - insetX;
       const minZ = bbox.min.z + insetZ;
       const maxZ = bbox.max.z - insetZ;
+
+      // Transfer ledger → headstone when motif dragged past the back edge
+      if (!transferringRef.current && localPt.z < minZ) {
+        transferringRef.current = true;
+        setMotifOffset(id, { ...(motifOffsets[id] ?? baseOffsetDefaults), target: 'headstone', xPos: 0, yPos: 0, coordinateSpace: 'offset' });
+        return;
+      }
+
+      // Guard: stop position updates after a transfer is in flight
+      if (transferringRef.current) return;
 
       localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
       localPt.z = Math.max(minZ, Math.min(maxZ, localPt.z));
@@ -448,7 +484,13 @@ export default function MotifModel({
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
-      
+
+      // If a surface transfer was initiated, discard the stale drag position
+      if (transferringRef.current) {
+        transferringRef.current = false;
+        dragPositionRef.current = null;
+      }
+
       // Final update with drag position
       if (dragPositionRef.current) {
         const currentOffset = motifOffsets[id] ?? baseOffsetDefaults;

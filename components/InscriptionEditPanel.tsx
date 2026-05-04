@@ -93,7 +93,8 @@ export default function InscriptionEditPanel() {
     } else if (active.textAlign) {
       setPendingTextAlign(active.textAlign);
     }
-  }, [active, setActiveInscriptionText]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active?.id, active?.textAlign, setActiveInscriptionText]);
 
   const updateLine = useCallback(
     (id: string, patch: Partial<NonNullable<typeof active>>) => {
@@ -139,21 +140,22 @@ export default function InscriptionEditPanel() {
     pendingTextAlign,
   ]);
 
-  // When user switches into multi mode, seed the textarea from the active line
+  // When a different inscription is selected, auto-switch to the correct tab and seed.
+  React.useEffect(() => {
+    const text = active?.text ?? '';
+    const isMulti = text.includes('\n');
+    setInputMode(isMulti ? 'multi' : 'single');
+    if (isMulti) setMultiText(text);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active?.id]);
+
+  // Seed textarea when manually switching to multi mode.
   React.useEffect(() => {
     if (inputMode === 'multi') {
       setMultiText(active?.text ?? '');
     }
-  }, [inputMode, active?.id, active?.text]);
-
-  // Live-sync textarea edits back to the active inscription in multi mode
-  React.useEffect(() => {
-    if (inputMode !== 'multi' || !active) return;
-    const normalized = multiText.replace(/\r\n/g, '\n');
-    if (normalized === active.text) return;
-    updateLine(active.id, { text: normalized });
-    setActiveInscriptionText(normalized);
-  }, [multiText, inputMode, active, updateLine, setActiveInscriptionText]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inputMode]);
 
   return (
     <div className="space-y-4">
@@ -185,7 +187,6 @@ export default function InscriptionEditPanel() {
 
       {inputMode === 'single' ? (
         <div className="space-y-3">
-          {AlignControls}
           <div>
             <label
               htmlFor="inscriptionTextInput"
@@ -222,7 +223,15 @@ export default function InscriptionEditPanel() {
               rows={5}
               className={`w-full resize-y rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] ${textAlignClass}`}
               value={multiText}
-              onChange={(e) => setMultiText(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setMultiText(val);
+                if (active) {
+                  const normalized = val.replace(/\r\n/g, '\n');
+                  updateLine(active.id, { text: normalized });
+                  setActiveInscriptionText(normalized);
+                }
+              }}
               placeholder={'In loving memory of\nJohn Smith\n1940 – 2020'}
             />
           </div>

@@ -15,8 +15,15 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import MotifModel from '../MotifModel';
+import ImageModel from '../ImageModel';
 import AdditionModel from '../AdditionModel';
 import type { HeadstoneAPI } from '../../SvgHeadstone';
+import { data } from '#/app/_internal/_data';
+
+const FONT_MAP: Record<string, string> = data.fonts.reduce(
+  (map, font) => { map[font.name] = `/fonts/${font.image}`; return map; },
+  {} as Record<string, string>,
+);
 import {
   TEX_BASE,
   DEFAULT_TEX,
@@ -350,6 +357,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const inscriptions = useHeadstoneStore((s) => s.inscriptions);
     const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
     const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
+    const selectedImages = useHeadstoneStore((s) => s.selectedImages);
     const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
     const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
     
@@ -519,7 +527,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                   id={line.id}
                   headstone={baseAPI}
                   surface="base"
-                  font={`/fonts/${line.font}.woff2`}
+                  font={FONT_MAP[line.font] || `/fonts/${line.font}.woff2`}
                   editable
                   selected={selectedInscriptionId === line.id}
                   onSelectInscription={() => {
@@ -561,6 +569,29 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                 headstone={baseAPI}
                 surface="base"
                 index={i}
+              />
+            </Suspense>
+          ))}
+
+        {/* Render images that belong to the base */}
+        {selectedImages
+          .filter((image) => (image.target ?? 'headstone') === 'base')
+          .map((image, i) => (
+            <Suspense key={`${image.id}-${i}`} fallback={null}>
+              <ImageModel
+                id={image.id}
+                imageUrl={image.imageUrl}
+                widthMm={image.widthMm}
+                heightMm={image.heightMm}
+                xPos={image.xPos}
+                yPos={image.yPos}
+                rotationZ={image.rotationZ}
+                typeId={image.typeId}
+                maskShape={image.maskShape}
+                headstone={baseAPI}
+                surface="base"
+                index={i}
+                coordinateSpace={image.coordinateSpace}
               />
             </Suspense>
           ))}

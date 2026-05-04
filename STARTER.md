@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-01
+**Last Updated:** 2026-05-03
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,151 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-05-04) — Product 2350 Urn Vitreous Enamel Inlay (IN PROGRESS)
+
+### Context
+Product 2350 is the **Stainless Steel Vitreous Enamel Inlaid Urn** (`catalog-id-2350.xml`, `type="urn"`, `background="1"`).
+Shapes: Heart, Oval, Rectangle, Triangle.
+Only Heart and Oval get the landscape oval base stand. Rectangle and Triangle do NOT.
+
+### Architecture
+- **Urn body**: `MeshPhysicalMaterial` metalness=0.98, roughness=0.18 → brushed stainless steel. No texture on body.
+- **Vitreous enamel inlay**: separate `<UrnEnamelInlay>` mesh rendered inside `SvgHeadstone` children callback.
+- **Background panel**: same as Full Colour Plaque. Opens automatically on first shape select. No Headstone/Base tab.
+
+### UrnEnamelInlay — current working approach
+
+File: `components/three/headstone/UrnEnamelInlay.tsx`
+
+```
+ShapeGeometry (urn outline scaled inward by BORDER_MM=20mm on all sides)
+  + THREE.TextureLoader (NOT canvas, NOT drei useTexture)
+  + MeshBasicMaterial (unlit, like Full Colour Plaque face)
+  + flipY=true (THREE.js default) — correct for ShapeGeometry UV mapping
+  + position [0, cy, 0.5] where cy=outH/2 centres inlay on urn face
+```
+
+Only renders when texture is loaded (`if (!geomData || !tex) return null`).
+
+### Coordinate system — critical facts
+
+- `outlinePoints` are in the children wrapper coordinate space (pre-meshScale).
+  `outlinePoints.y = bottomTarget_SV - p.y` (Y-inverted from raw geometry).
+- The **Y RANGE** `outH = maxY - minY` equals the true mesh height.
+- `cy = outH / 2` centres the inlay. Do NOT use `api.worldHeight` — it is wrong for urns (`preserveTop=false`).
+- `api.unitsPerMeter = 1 / (scale × sCore)` — use to convert mm → pre-meshScale units.
+- `borderPU = BORDER_MM × unitsPerMeter / 1000`
+- `scaleX = (outW - 2×borderPU) / outW`, `scaleY = (outH - 2×borderPU) / outH`
+
+### What FAILED (do not retry)
+
+| Approach | Failure reason |
+|---|---|
+| Polygon inset (miter-join insetPolygon) | Self-intersections at heart notch and triangle tip → earcut glitches |
+| `canvas + ctx.drawImage + CanvasTexture` | Texture never appeared on mesh; only reflective clearcoat (blue sky reflection) showed |
+| `MeshPhysicalMaterial transparent:true + alphaTest:0.01` | When tex=null, rendered as blue-sky reflective surface instead of nothing |
+| `flipY = false` | Image appeared upside-down on shape |
+| Legacy "contain" scale `ch/max(imgW,imgH)` on canvas | Still didn't fix canvas not appearing |
+
+### What WORKS
+
+- `THREE.TextureLoader` direct load (same pattern as `ImageModel.tsx`)
+- `MeshBasicMaterial` (unlit) → same as Full Colour Plaque face material
+- `flipY = true` (THREE.js default)
+- Return `null` until texture loads (clean, no placeholder artifact)
+- XY scale-factor border (not polygon inset) → stable triangulation
+
+### Background URL
+
+Store: `headstoneMaterialUrl` holds the selected background URL.
+Format: `/jpg/backgrounds/forever/l/{id}.jpg`
+Passed via `resolvedTex` in ShapeSwapper → `textureUrl` prop of UrnEnamelInlay.
+
+---
+
+## Current Status (2026-05-03) — Inscription Multiple Lines & Drag-to-Transfer (IN PROGRESS)
+
+### ✅ Fixed: Align Controls Hidden on Single Line Tab
+
+`Align Left / Center / Right` buttons in `InscriptionEditPanel.tsx` are now only rendered when the **Multiple Lines** tab is active — they were incorrectly showing on the Single Line tab.
+
+**Fix:** Wrapped `<AlignControls>` (or equivalent) in a conditional `activeTab === 'multi'` check in `components/InscriptionEditPanel.tsx`.
+
+---
+
+### ✅ Fixed: Infinite Loop — `setPendingTextAlign` (line 94)
+
+`useEffect` at line 94 of `InscriptionEditPanel.tsx` was calling `setPendingTextAlign` with the selected inscription's `textAlign`, but `pendingTextAlign` was also listed in the dependency array. When the effect ran, it updated state → re-render → effect ran again → infinite loop.
+
+**Fix:** Removed `pendingTextAlign` from the `useEffect` dependency array (or restructured to only fire on inscription selection change).
+
+---
+
+### ✅ Fixed: Infinite Loop — `setMultiText` (line 146)
+
+`useEffect` at line 146 was syncing `multiText` state from the selected inscription's text. The effect deps included the derived `multiText` itself, or the effect was triggered by the store update it caused, creating a feedback loop.
+
+**Fix:** Architectural refactor — separated seed logic (runs once on inscription select) from live-sync logic. Used a ref (`seededRef`) to track whether initial seed has fired, preventing re-entry on subsequent re-renders.
+
+---
+
+### ✅ Fixed: Auto-Switch to Correct Tab for Multi-Line Inscriptions
+
+When a user selected an existing **Multiple Lines** inscription from the 3D canvas, the panel was opening on the **Single Line** tab instead of the **Multiple Lines** tab.
+
+**Fix:** Added detection logic in `InscriptionEditPanel.tsx` — when the selected inscription's text contains `\n` (newline), auto-switch `activeTab` to `'multi'` on mount/selection-change.
+
+---
+
+### 🔴 NOT WORKING: Inscription Drag-to-Transfer (Headstone ↔ Base)
+
+**Goal:** When dragging an inscription below the bottom edge of the headstone (with base visible), it should appear on the base front face. Dragging it back above the top edge of the base should return it to the headstone.
+
+**What happens:** Inscription disappears from the headstone correctly (transfer detection fires, `updateInscription` called with `target: 'base'`) but **never appears on the base** — it's invisible.
+
+#### Root Causes Diagnosed
+
+1. **Stale `null` closure in `useFrame`** — `const baseMesh = headstone.mesh.current` captured `null` during the render phase (before React commits the ref). The `useFrame` callback closed over this `null`, so its `!baseMesh` guard fired every frame and returned early, never positioning or showing the inscription.
+   - **Fix applied:** `useFrame` now reads `headstone.mesh.current` directly inside the callback (`const bm = headstone.mesh.current`). Refs are committed before R3F's RAF loop runs, so `bm` is always non-null after commit.
+
+2. **Wrong `yPos` on transfer** — the store's `withLineSurfaceDimensions` was using `baseHeightMm * 0.3` as the initial `yPos`, but `baseHeightMm` could fall back to the headstone height (900mm), placing the inscription 270mm above base center — outside the base mesh entirely.
+   - **Fix applied:** `yPos: 0` (base center) is now used unconditionally.
+
+3. **`trySetup` guard edge case** — `if (isBaseSurface && Math.abs(stone.scale.y - 1) < 0.01)` meant that if `baseHeightMm === 1000mm` exactly, `stone.scale.y ≈ 1.0` and `setSurfaceBounds` would never be called. The `useFrame` fix bypasses needing `surfaceBounds` for positioning, but React's `visible` prop still depends on `!!surfaceBounds`.
+
+4. **`groupPosition` z-offset** — `surfaceBounds.centerY = 0` (unit cube geometry center at origin) but the actual base mesh center in assembly-space is at `baseMesh.position.y = -baseHeightMeters/2`. `useFrame` override should correct this, but only after `surfaceBounds` is set.
+
+#### Current State (as of 2026-05-03)
+
+Both fixes (#1 + #2) applied and build passes cleanly. **User reports the transfer still does not work** — inscription disappears from headstone but does not appear on base.
+
+#### Next Debug Steps
+
+1. Add `console.log` inside `HeadstoneInscription.tsx` `useFrame` (base-surface path) to confirm:
+   - `bm` (base mesh ref) is non-null when inscription is on base
+   - `surfaceBounds` is set (not null)
+   - `visible` is being set to `true`
+2. Check that `state.showBase` is `true` at time of drag — if base is not shown, transfer shouldn't fire at all.
+3. Verify `HeadstoneBaseAuto` is actually rendering a `<HeadstoneInscription surface="base">` for the transferred line (check `line.target === 'base'` condition in `HeadstoneBaseAuto.tsx`).
+4. Check whether `surfaceBounds` is ever set for the base surface — the `trySetup` effect may be firing too early (before `baseRef.current` is available) or hitting the `Math.abs(scale.y - 1) < 0.01` guard.
+5. Consider removing the scale guard entirely and instead checking `hasTx.current` flag on the base mesh (set once geometry is first positioned in `HeadstoneBaseAuto`'s own `useFrame`).
+
+#### Key Architecture Notes
+
+- `ShapeSwapper` renders inscriptions where `line.target ?? 'headstone' === 'headstone'`
+- `HeadstoneBaseAuto` renders inscriptions where `line.target === 'base'` — changing `target` unmounts old component, mounts new one
+- Base mesh: unit cube ±0.5, scaled to `(baseWTotal, baseHeightMeters, baseDTotal)`, positioned at `y = -baseHeightMeters/2` in assembly group space
+- Assembly group lifted by `position.y = showBase ? baseHeightMeters : 0`
+- `coordinateSpace: 'mm-center'` + `isBaseSurface`: `useFrame` computes `bm.position.x + xPos * 0.001`, `bm.position.y + yPos * 0.001`, z from `bm.position.z + bm.scale.z / 2`
+
+---
+
+**Files Modified (2026-05-03):**
+- `components/HeadstoneInscription.tsx` — `useFrame` null-closure fix (reads `headstone.mesh.current` inside callback); `yPos: 0` on headstone→base transfer
+- `components/InscriptionEditPanel.tsx` — align controls hidden on single tab; infinite loop fixes; auto-tab-switch on multi-line inscription selection
 
 ---
 
@@ -8151,4 +8296,4 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
-*End of STARTER.md - Last updated: April 14, 2026*
+*End of STARTER.md - Last updated: May 3, 2026*

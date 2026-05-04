@@ -18,6 +18,7 @@ const PRODUCT_DESCRIPTION_TAGS: Record<string, string> = {
   '100': 'laser_etched_black_granite_full_monument_description',
   '101': 'traditional_engraved_full_monument_description',
   '124': 'traditional_engraved_headstone_description',
+  '2350': 'stainless_steel_vitreous_urn_description',
 };
 
 function summarizeDescription(raw: string) {

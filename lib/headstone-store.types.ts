@@ -263,6 +263,7 @@ export type HeadstoneState = {
   duplicateImage: (id: string) => void;
   updateImageData: (id: string, imageUrl: string, croppedAspectRatio: number, colorMode?: 'full' | 'bw' | 'sepia') => void;
   updateImagePosition: (id: string, xPos: number, yPos: number) => void;
+  updateImageTarget: (id: string, target: 'headstone' | 'base' | 'ledger', xPos: number, yPos: number, coordinateSpace?: 'mm-center') => void;
   updateImageSize: (id: string, widthMm: number, heightMm: number) => void;
   updateImageSizeVariant: (id: string, sizeVariant: number) => void;
   updateImageRotation: (id: string, rotationZ: number) => void;

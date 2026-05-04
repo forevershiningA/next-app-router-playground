@@ -556,6 +556,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       ),
     }));
   },
+  updateImageTarget: (id, target, xPos, yPos, coordinateSpace) => {
+    set((s) => ({
+      selectedImages: s.selectedImages.map((img) =>
+        img.id === id ? { ...img, target, xPos, yPos, coordinateSpace: coordinateSpace ?? undefined } : img
+      ),
+    }));
+    setTimeout(() => get().calculateImageCost(), 0);
+  },
   updateImageSize: (id, widthMm, heightMm) => {
     set((s) => ({
       selectedImages: s.selectedImages.map((img) =>
@@ -628,7 +636,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const isPlaque = productType === 'plaque';
       const isHeadstoneLike =
         productType === 'headstone' || productType === 'mini-headstone';
-      const showBase = isHeadstoneLike || productType === 'monument' || productType === 'full-monument';
+      const showBase = isHeadstoneLike || productType === 'monument' || productType === 'full-monument' || productType === 'urn';
       const isFullMonument = productType === 'full-monument';
       const showInscriptionColor = catalog.product.laser !== '1' && catalog.product.color !== '0';
       set((s) => {
@@ -682,8 +690,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       }
 
       const isBronzePlaqueProduct = catalog.product.id === '5';
+      const isUrnProduct = catalog.product.type === 'urn';
       let materialOptions: typeof data.materials;
-      if (isFullColourPlaque) {
+      if (isFullColourPlaque || isUrnProduct) {
         // Fetch backgrounds from DB via API
         try {
           const bgRes = await fetch('/api/catalog/backgrounds');
@@ -691,12 +700,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         } catch {
           materialOptions = [];
         }
-        // Fetch fixed sizes from DB via API
-        try {
-          const szRes = await fetch('/api/catalog/sizes?productCode=full-colour-plaque');
-          const fixedSizes: FixedSize[] = szRes.ok ? await szRes.json() : [];
-          set({ fixedSizes });
-        } catch {
+        if (isFullColourPlaque) {
+          // Fetch fixed sizes from DB via API (only for Full Colour Plaque)
+          try {
+            const szRes = await fetch('/api/catalog/sizes?productCode=full-colour-plaque');
+            const fixedSizes: FixedSize[] = szRes.ok ? await szRes.json() : [];
+            set({ fixedSizes });
+          } catch {
+            set({ fixedSizes: [] });
+          }
+        } else {
           set({ fixedSizes: [] });
         }
       } else {
@@ -761,12 +774,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         const widthMax = shape.table.maxWidth || MAX_HEADSTONE_DIM;
         const heightMin = shape.table.minHeight || MIN_HEADSTONE_DIM;
         const heightMax = shape.table.maxHeight || MAX_HEADSTONE_DIM;
-        const baseWidthMin = shape.stand.minWidth || widthMin;
-        const baseWidthMax = shape.stand.maxWidth || Math.max(baseWidthMin, MAX_HEADSTONE_DIM * 1.5);
-        const baseHeightMin = shape.stand.minHeight || 50;
-        const baseHeightMax = shape.stand.maxHeight || 200;
-        const thicknessMin = Math.min(shape.table.minDepth || 40, shape.stand.minDepth || 40);
-        const thicknessMax = Math.max(shape.table.maxDepth || 300, shape.stand.maxDepth || 300);
+        const baseWidthMin = shape.stand?.minWidth || widthMin;
+        const baseWidthMax = shape.stand?.maxWidth || Math.max(baseWidthMin, MAX_HEADSTONE_DIM * 1.5);
+        const baseHeightMin = shape.stand?.minHeight || 50;
+        const baseHeightMax = shape.stand?.maxHeight || 200;
+        const thicknessMin = Math.min(shape.table.minDepth || 40, shape.stand?.minDepth || 40);
+        const thicknessMax = Math.max(shape.table.maxDepth || 300, shape.stand?.maxDepth || 300);
 
         set({
           minWidthMm: widthMin,
@@ -793,9 +806,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           targetWidth = Math.max(widthMin, Math.min(maxAllowedWidth, desiredWidth));
           targetHeight = Math.max(heightMin, Math.min(maxAllowedHeight, desiredHeight));
         }
-        const clampedStandWidth = Math.max(targetWidth, Math.min(Math.max(baseWidthMin, baseWidthMax), shape.stand.initWidth || currentState.baseWidthMm));
-        const clampedStandHeight = Math.max(baseHeightMin, Math.min(Math.max(baseHeightMin, baseHeightMax), shape.stand.initHeight || currentState.baseHeightMm));
-        const clampedStandDepth = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.stand.initDepth || currentState.baseThickness));
+        const clampedStandWidth = Math.max(targetWidth, Math.min(Math.max(baseWidthMin, baseWidthMax), shape.stand?.initWidth || currentState.baseWidthMm));
+        const clampedStandHeight = Math.max(baseHeightMin, Math.min(Math.max(baseHeightMin, baseHeightMax), shape.stand?.initHeight || currentState.baseHeightMm));
+        const clampedStandDepth = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.stand?.initDepth || currentState.baseThickness));
         const clampedTabletThickness = Math.max(thicknessMin, Math.min(Math.max(thicknessMin, thicknessMax), shape.table.initDepth || currentState.uprightThickness));
         const effectiveStandHeight = hasBase ? clampedStandHeight : 0;
 
@@ -835,7 +848,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           const texturePath = normalizeTextureUrl(shape.table.color);
           if (texturePath) set({ headstoneMaterialUrl: texturePath });
         }
-        if (shape.stand.color) {
+        if (shape.stand?.color) {
           const baseTexturePath = normalizeTextureUrl(shape.stand.color);
           if (baseTexturePath) {
             set({
@@ -1955,7 +1968,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const catalog = s.catalog;
       const productType = catalog?.product?.type;
       const defaultVisibility = {
-        showBase: productType === 'headstone' || productType === 'mini-headstone' || productType === 'monument' || productType === 'full-monument',
+        showBase: productType === 'headstone' || productType === 'mini-headstone' || productType === 'monument' || productType === 'full-monument' || productType === 'urn',
         showLedger: productType === 'full-monument',
         showKerbset: productType === 'full-monument',
       };

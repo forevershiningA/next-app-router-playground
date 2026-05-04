@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Shape } from '#/lib/db';
 import { data } from '#/app/_internal/_data';
+import type { ShapeData } from '#/lib/xml-parser';
 
 type ShapeCategory = {
   id: string;
@@ -37,15 +38,19 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
+  const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
+  const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   
-  // Check if current product is a plaque
+  // Check product type — use fallbackProduct.category as a safety net while
+  // the catalog XML is still loading asynchronously.
+  const fallbackProduct = data.products.find((p) => p.id === productId);
   const isPlaque = catalog?.product.type === 'plaque';
+  const isUrn = catalog?.product.type === 'urn' || (catalog === null && fallbackProduct?.category === 'urns');
   const isFullColourPlaque = catalog?.product?.id === '32';
   const hasBorder = catalog?.product?.border === '1';
-  const fallbackProduct = data.products.find((p) => p.id === productId);
   const productName = catalog?.product?.name ?? fallbackProduct?.name;
 
   const openPanel = (panel: string) => {
@@ -56,6 +61,16 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         }),
       );
     }
+  };
+
+  // Handle urn shape selection — applies fixed dimensions from catalog
+  const handleUrnShapeSelect = (catalogShape: ShapeData) => {
+    const svgPath = `/shapes/urns/${(catalogShape.code ?? catalogShape.name).toLowerCase()}.svg`;
+    setShapeUrl(svgPath);
+    setWidthMm(catalogShape.table.initWidth);
+    setHeightMm(catalogShape.table.initHeight);
+    router.push('/select-material');
+    openPanel('select-material');
   };
 
   const handleShapeSelect = (shape: Shape) => {
@@ -102,6 +117,99 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       alert('Please upload a valid SVG file');
     }
   };
+
+  // Urn shape grid — shapes come from catalog XML, not the static DB list
+  if (isUrn) {
+    const catalogShapes = catalog?.product.shapes ?? [];
+    const isLoadingCatalog = catalog === null;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+        {/* Header Section */}
+        <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
+          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
+            <div className="text-center">
+              <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Select Your Shape
+              </h1>
+              {productName && (
+                <p className="mt-3 text-base font-medium uppercase tracking-[0.3em] text-[#cfac6c]">
+                  {productName}
+                </p>
+              )}
+              <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+                Choose the shape for your urn. Each shape has its own dimensions and unique character.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Urn Shapes Grid */}
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+          {isLoadingCatalog ? (
+            <div className="py-20 text-center">
+              <div className="animate-spin text-4xl mb-4">⟳</div>
+              <p className="text-gray-400">Loading urn shapes…</p>
+            </div>
+          ) : catalogShapes.length === 0 ? (
+            <div className="py-20 text-center">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-medium text-white">No shapes found</h3>
+              <p className="mt-2 text-gray-400">No urn shapes available in catalog</p>
+            </div>
+          ) : (
+            <>
+              <div className="mb-6 text-sm text-gray-400">
+                Showing {catalogShapes.length} shape{catalogShapes.length !== 1 ? 's' : ''}
+              </div>
+              <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {catalogShapes.map((catalogShape) => {
+                  const svgPath = `/shapes/urns/${(catalogShape.code ?? catalogShape.name).toLowerCase()}.svg`;
+                  const isSelected = currentShapeUrl === svgPath;
+                  return (
+                    <button
+                      key={catalogShape.code ?? catalogShape.name}
+                      onClick={() => handleUrnShapeSelect(catalogShape)}
+                      className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all ${
+                        isSelected
+                          ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
+                          : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10'
+                      }`}
+                    >
+                      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30 cursor-pointer">
+                        <div className="absolute inset-0 flex items-center justify-center p-8">
+                          <Image
+                            src={svgPath}
+                            alt={catalogShape.name}
+                            width={200}
+                            height={200}
+                            className="object-contain transition-transform group-hover:scale-105 cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                      <div className="p-4 flex flex-col">
+                        <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-1">
+                          {catalogShape.name}
+                        </h3>
+                        <p className="text-xs text-gray-500 text-center mb-2">
+                          {catalogShape.table.initWidth} × {catalogShape.table.initHeight} mm
+                        </p>
+                        <div className="h-5 mt-auto">
+                          <span className="text-sm font-semibold text-[#cfac6c] opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            Select →
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   // Filter shapes based on product type
   // For full-colour plaques (product 32): ONLY landscape and portrait rectangles

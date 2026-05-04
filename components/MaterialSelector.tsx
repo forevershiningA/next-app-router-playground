@@ -39,6 +39,8 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
+  const isUrn = catalog?.product.type === 'urn';
+  const usesBackgrounds = isFullColourPlaque || isUrn;
   const isFullMonument = catalog?.product.type === 'full-monument';
   const [bgTab, setBgTab] = React.useState<'background' | 'color'>('background');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -212,11 +214,11 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         category: 'bronze'
       }));
     }
-    if (isFullColourPlaque) {
+    if (usesBackgrounds) {
       return materials.filter(m => m.category === bgTab);
     }
     return materials;
-  }, [isBronzePlaque, isFullColourPlaque, materials, bgTab]);
+  }, [isBronzePlaque, usesBackgrounds, materials, bgTab]);
 
   // Ensure canvas selection matches editingObject when component mounts
   useEffect(() => {
@@ -306,7 +308,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   };
 
   // When in crop mode, show crop controls instead of material grid
-  if (isFullColourPlaque && showCropSection && uploadedImage) {
+  if (usesBackgrounds && showCropSection && uploadedImage) {
     return (
       <div className="space-y-4">
         <div className="flex items-center justify-between mb-4">
@@ -433,7 +435,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
   return (
     <div className="space-y-3">
-      {!isPlaque && (
+      {!isPlaque && !isUrn && (
         <div className="mb-4">
           <SegmentedControl
             value={editingObject}
@@ -447,7 +449,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         </div>
       )}
 
-      {isFullColourPlaque && (
+      {usesBackgrounds && (
         <div className="mb-4">
           <SegmentedControl
             value={bgTab}
@@ -473,7 +475,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >
         {/* No Background button — first position in Background tab */}
-        {isFullColourPlaque && bgTab === 'background' && (
+        {usesBackgrounds && bgTab === 'background' && (
           <button
             onClick={() => {
               setIsMaterialChange(true);
@@ -502,7 +504,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         )}
 
         {/* Upload Image button — second position in Background tab */}
-        {isFullColourPlaque && bgTab === 'background' && (
+        {usesBackgrounds && bgTab === 'background' && (
           <button
             onClick={() => fileInputRef.current?.click()}
             className="relative overflow-hidden cursor-pointer"

@@ -86,6 +86,7 @@ type Props = {
   doubleSided?: boolean;
   showEdges?: boolean;
   isFullColourPlaque?: boolean;
+  isUrn?: boolean;
   headstoneStyle?: 'upright' | 'slant';
   slantThickness?: number; // Absolute thickness in mm (100-300mm)
   meshProps?: ThreeElements['mesh'];
@@ -208,6 +209,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   doubleSided = false,
   showEdges = false,
   isFullColourPlaque = false,
+  isUrn = false,
   headstoneStyle = 'upright',
   slantThickness = 150, // Default 150mm
   meshProps,
@@ -235,7 +237,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   const activeFace = blobFaceTexture ?? textures.face;
   const [clonedFaceMap, clonedSideMap] = useMemo(() => {
     const f = activeFace.clone();
-    const s = 'side' in textures ? textures.side.clone() : null;
+    const s = ('side' in textures) ? (textures as { face: THREE.Texture; side: THREE.Texture }).side.clone() : null;
     
     [f, s].forEach(t => {
       if (!t) return;
@@ -1110,6 +1112,26 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       return [faceMat, sideMat];
     }
 
+    // Urn: entire body (face + sides) is brushed stainless steel.
+    // The vitreous enamel inlay (with background texture) is rendered as a
+    // separate UrnEnamelInlay mesh slightly in front of this surface.
+    if (isUrn) {
+      const steelMat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0xe8e8e8),
+        roughness: 0.18,
+        metalness: 0.98,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.1,
+        envMapIntensity: 2.0,
+        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        polygonOffset: true,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1,
+      });
+
+      return [steelMat, steelMat];
+    }
+
     // Match the calibrated polished granite response used across the monument parts.
     const common = {
       color: new THREE.Color(isSlant ? 0x444444 : 0xa6a6a6),
@@ -1157,7 +1179,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         });
 
     return [faceMat, sideMat];
-  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque]);
+  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn]);
 
   // 5a. Dispose geometries and materials on cleanup
   React.useEffect(() => {

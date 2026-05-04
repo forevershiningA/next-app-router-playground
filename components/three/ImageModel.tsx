@@ -50,6 +50,7 @@ export default function ImageModel({
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const updateImagePosition = useHeadstoneStore((s) => s.updateImagePosition);
+  const updateImageTarget = useHeadstoneStore((s) => s.updateImageTarget);
   const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
   const updateImageRotation = useHeadstoneStore((s) => s.updateImageRotation);
   const removeImage = useHeadstoneStore((s) => s.removeImage);
@@ -61,6 +62,7 @@ export default function ImageModel({
   const selected = selectedImageId === id;
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
   const animationFrameRef = React.useRef<number | null>(null);
+  const transferringRef = React.useRef(false);
   const pointerCaptureTargetRef = React.useRef<HTMLElement | null>(null);
   
   const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
@@ -80,6 +82,7 @@ export default function ImageModel({
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
   const isLedgerSurface = surface === 'ledger';
+  const isBaseSurface = surface === 'base';
 
   // Load image texture
   React.useEffect(() => {
@@ -272,6 +275,39 @@ export default function ImageModel({
       const minY = bbox.min.y + inset + 0.04 * spanY;
       const maxY = bbox.max.y - inset;
 
+      // Transfer headstone → base / ledger when image dragged below stone bottom
+      if (!isBaseSurface && !isLedgerSurface && !transferringRef.current && localPt.y < minY) {
+        transferringRef.current = true;
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+        const state = useHeadstoneStore.getState();
+        const isFullMonument = state.catalog?.product.type === 'full-monument';
+        if (isFullMonument && state.showLedger) {
+          updateImageTarget(id, 'ledger', 0, 0);
+        } else if (!isFullMonument && state.showBase) {
+          updateImageTarget(id, 'base', 0, 0);
+        }
+        return;
+      }
+
+      // Transfer base → headstone when image dragged above base top
+      if (isBaseSurface && !transferringRef.current && localPt.y > maxY) {
+        transferringRef.current = true;
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+        updateImageTarget(id, 'headstone', 0, 0, 'mm-center');
+        return;
+      }
+
+      // After a surface transfer has been initiated, stop all position updates.
+      // Subsequent pointermove events on the old surface would overwrite the store
+      // with stale coords, clearing coordinateSpace and placing the image off-screen.
+      if (transferringRef.current) return;
+
       localPt.x = Math.max(minX, Math.min(maxX, localPt.x));
       localPt.y = Math.max(minY, Math.min(maxY, localPt.y));
 
@@ -293,9 +329,12 @@ export default function ImageModel({
       gl,
       headstone,
       id,
+      isBaseSurface,
+      isLedgerSurface,
       mouse,
       raycaster,
       updateImagePosition,
+      updateImageTarget,
     ],
   );
 
@@ -346,6 +385,20 @@ export default function ImageModel({
       const minZ = centerZ - halfDepth;
       const maxZ = centerZ + halfDepth;
 
+      // Transfer ledger → headstone when image dragged past the back edge (toward headstone)
+      if (!transferringRef.current && localPt.z < minZ) {
+        transferringRef.current = true;
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+        updateImageTarget(id, 'headstone', 0, 0, 'mm-center');
+        return;
+      }
+
+      // Guard: stop position updates after a transfer is in flight
+      if (transferringRef.current) return;
+
       const clampedX = Math.max(minX, Math.min(maxX, localPt.x));
       const clampedZ = Math.max(minZ, Math.min(maxZ, localPt.z));
 
@@ -376,6 +429,7 @@ export default function ImageModel({
       mouse,
       raycaster,
       updateImagePosition,
+      updateImageTarget,
     ],
   );
 
@@ -447,6 +501,12 @@ export default function ImageModel({
       if (animationFrameRef.current !== null) {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
+      }
+
+      // If a surface transfer was initiated, reset flag and discard stale position
+      if (transferringRef.current) {
+        transferringRef.current = false;
+        dragPositionRef.current = null;
       }
 
       dragPositionRef.current = null;
@@ -551,6 +611,14 @@ export default function ImageModel({
     const ledgerLift = 0.001 + (index ?? 0) * 0.001;
     groupPosition = [displayX, ledgerTopY + ledgerLift, displayZ];
     groupRotation = [-Math.PI / 2, rotationZ || 0, 0];
+  } else if (isBaseSurface) {
+    // Base mesh is a unit cube at stone.position scaled in meters.
+    // xPos/yPos are raw local unit-cube coords from worldToLocal (±0.5 range).
+    const absX = stone.position.x + safeX * stone.scale.x;
+    const absY = stone.position.y + safeY * stone.scale.y;
+    const baseFrontZ = stone.position.z + stone.scale.z / 2;
+    groupPosition = [absX, absY, baseFrontZ + (index ?? 0) * 0.001];
+    groupRotation = [0, 0, rotationZ];
   } else if (coordinateSpace === 'mm-center') {
     // Loaded design: mm offsets from center, positive Y = above center
     const displayX = centerX + safeX * mmToLocalUnits;

@@ -14,14 +14,67 @@ type ShapeSelectorProps = {
 export default function ShapeSelector({ shapes, disableInternalScroll = false }: ShapeSelectorProps) {
   const router = useRouter();
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
+  const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
+  const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
   const currentShapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const hasBorder = useHeadstoneStore((s) => s.catalog?.product?.border === '1');
   const isPlaque = useHeadstoneStore((s) => s.catalog?.product?.type === 'plaque');
+  const isUrn = useHeadstoneStore((s) => s.catalog?.product?.type === 'urn');
   const isFullColourPlaque = useHeadstoneStore((s) => s.catalog?.product?.id === '32');
+  const catalogShapes = useHeadstoneStore((s) => s.catalog?.product.shapes ?? []);
   const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
   const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
 
-  // Filter shapes by product type
+  // Urn: use catalog shapes from XML, not the static DB list
+  if (isUrn) {
+    const openPanel = (panel: string) => {
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel } }));
+      }
+    };
+    return (
+      <div className="space-y-3">
+        <div className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}>
+          {catalogShapes.map((catalogShape) => {
+            const svgPath = `/shapes/urns/${(catalogShape.code ?? catalogShape.name).toLowerCase()}.svg`;
+            const isSelected = currentShapeUrl === svgPath;
+            return (
+              <button
+                key={catalogShape.code ?? catalogShape.name}
+                onClick={() => {
+                  setShapeUrl(svgPath);
+                  setWidthMm(catalogShape.table.initWidth);
+                  setHeightMm(catalogShape.table.initHeight);
+                  openPanel('select-material');
+                }}
+                className="group relative cursor-pointer"
+                title={catalogShape.name}
+              >
+                <div className={`relative aspect-square transition-all ${
+                  isSelected ? 'border-2 border-[#D7B356]' : 'border-2 border-transparent group-hover:border-[#D7B356]'
+                }`}>
+                  <Image
+                    src={svgPath}
+                    alt={catalogShape.name}
+                    fill
+                    className="object-contain"
+                    sizes="100px"
+                  />
+                </div>
+                <div className="p-2 h-12 flex items-center justify-center">
+                  <div className={`text-xs text-center line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}>
+                    {catalogShape.name}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Filter shapes based on product type
   const filteredShapes = React.useMemo(() => {
     const rectangleShapes = ['landscape.svg', 'portrait.svg'];
     const allPlaqueShapes = [...rectangleShapes, 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
@@ -49,7 +102,6 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
     }
     setShapeUrl(shapeUrl);
     if (isFullColourPlaque) {
-      // Full Colour Plaque: go to background selection after shape
       router.push('/select-material');
       if (typeof window !== 'undefined') {
         window.dispatchEvent(

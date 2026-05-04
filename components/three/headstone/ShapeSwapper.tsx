@@ -16,6 +16,7 @@ import SvgHeadstone, { HeadstoneAPI } from '../../SvgHeadstone';
 import HeadstoneInscription from '../../HeadstoneInscription';
 import { BronzeBorder } from '../BronzeBorder';
 import InsetContourLine, { isContourSupported } from '../InsetContourLine';
+import UrnEnamelInlay from './UrnEnamelInlay';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
@@ -230,6 +231,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
   const isFullColourPlaque = catalog?.product.id === '32';
+  const isUrn = catalog?.product.type === 'urn';
   const bronzeBorderColor = '#FFDFA3';
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
@@ -398,7 +400,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     if (builtinPedestalShapes.has(currentShapeSlug)) return true;
     return currentShapeSlug.includes('headstone_');
   }, [currentShapeSlug, builtinPedestalShapes]);
-  const preserveTopForShape = !isFixedHeadstoneAsset;
+  const preserveTopForShape = !isFixedHeadstoneAsset && !isUrn;
   const targetHeightForShape = heightM;
   const targetWidthForShape = widthM;
   const headstoneDepth = isPlaque ? 0.5 : uprightThickness / 10;
@@ -522,9 +524,10 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             depth={headstoneDepth}
             scale={0.01}
             faceTexture={resolvedTex}
-            sideTexture={isFullColourPlaque ? null : resolvedTex}
+            sideTexture={isFullColourPlaque || isUrn ? null : resolvedTex}
             stretchFace={isFullColourPlaque}
             isFullColourPlaque={isFullColourPlaque}
+            isUrn={isUrn}
             tileSize={0.35}
             sideTileSize={0.35}
             topTileSize={0.35}
@@ -693,6 +696,11 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                     />
                   </React.Suspense>
                 </ErrorBoundary>
+              )}
+
+              {/* Urn stainless steel border effect: vitreous enamel inlay in front of urn body */}
+              {isUrn && (
+                <UrnEnamelInlay api={api} textureUrl={resolvedTex ?? null} />
               )}
 
               {/* Render inset contour line for headstones */}

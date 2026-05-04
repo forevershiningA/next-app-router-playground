@@ -193,6 +193,12 @@ const products: Product[] = [
     image: 'APP_ID_101-medium.webp',
     category: 'monuments',
   },
+  {
+    id: '2350',
+    name: 'Stainless Steel Vitreous Enamel Inlaid Urn',
+    image: 'APP_ID_2350-medium.webp',
+    category: 'urns',
+  },
 ];
 
 const shapes: Shape[] = [

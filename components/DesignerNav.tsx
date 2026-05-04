@@ -288,6 +288,7 @@ export default function DesignerNav() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   const isPlaque = catalog?.product.type === 'plaque';
+  const isUrn = catalog?.product.type === 'urn';
   const hasBorder = catalog?.product?.border === '1';
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
@@ -2729,7 +2730,7 @@ export default function DesignerNav() {
                   Guided Step
                 </p>
                 <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">
-                  {activeFullscreenPanel === 'select-material' && productId === '32'
+                  {activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
                     ? 'Background'
                     : menuItems.find(
                         (item) => item.slug === activeFullscreenPanel,
@@ -2763,7 +2764,7 @@ export default function DesignerNav() {
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
                     <p className="text-sm text-white/60">
-                      {productId === '32' ? 'Loading backgrounds...' : 'Loading materials...'}
+                      {productId === '32' || isUrn ? 'Loading backgrounds...' : 'Loading materials...'}
                     </p>
                   </div>
                 </div>
@@ -3183,7 +3184,7 @@ export default function DesignerNav() {
 
                       // Special handling for Select Material - show material selector in sidebar when canvas is visible
                       if (item.slug === 'select-material') {
-                        const materialLabel = productId === '32' ? 'Background' : item.name;
+                        const materialLabel = productId === '32' || isUrn ? 'Background' : item.name;
                         return (
                           <React.Fragment key={item.slug}>
                             {isCanvasVisible ? (

@@ -58,6 +58,8 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
+  const isUrn = catalog?.product.type === 'urn';
+  const usesBackgrounds = isFullColourPlaque || isUrn;
   const [bgTab, setBgTab] = useState<'background' | 'color'>('background');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const setIsMaterialChangeLocal = useHeadstoneStore((s) => s.setIsMaterialChange);
@@ -99,11 +101,11 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
       }));
     }
     const source = storeMaterials.length > 0 ? storeMaterials : materials;
-    if (isFullColourPlaque) {
+    if (usesBackgrounds) {
       return source.filter(m => m.category === bgTab);
     }
     return source;
-  }, [isBronzePlaque, isFullColourPlaque, storeMaterials, materials, bgTab]);
+  }, [isBronzePlaque, usesBackgrounds, storeMaterials, materials, bgTab]);
 
   // Check if user has already selected shape (canvas should be visible)
   // If shape is selected, the sidebar MaterialSelector will be shown instead
@@ -139,7 +141,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     router.push('/select-size');
   };
 
-  const filteredMaterials = isFullColourPlaque
+  const filteredMaterials = usesBackgrounds
     ? displayMaterials
     : displayMaterials.filter((material) => {
         return selectedCategory === 'all' || material.category === selectedCategory;
@@ -152,11 +154,11 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {isFullColourPlaque ? 'Select Background' : 'Select Your Material'}
+              {usesBackgrounds ? 'Select Background' : 'Select Your Material'}
             </h1>
             <p className="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">
-              {isFullColourPlaque
-                ? 'Choose a background image or solid color for your plaque.'
+              {usesBackgrounds
+                ? 'Choose a background image or solid color.'
                 : 'Choose from premium granite and marble in various colours and finishes. Each stone is selected for its durability, weather resistance, and lasting beauty. Consider typical cemetery regulations and care requirements when making your selection.'}
             </p>
           </div>
@@ -164,7 +166,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
       </div>
 
       {/* Category Filter */}
-      {isFullColourPlaque ? (
+      {usesBackgrounds ? (
         <div className="border-b border-gray-800">
           <div className="mx-auto max-w-md px-6 py-6 lg:px-8">
             <SegmentedControl
@@ -224,7 +226,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
             </div>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
               {/* No Background button — first position in Background tab */}
-              {isFullColourPlaque && bgTab === 'background' && (
+              {usesBackgrounds && bgTab === 'background' && (
                 <button
                   onClick={() => {
                     setIsMaterialChangeLocal(true);
@@ -251,7 +253,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
               )}
 
               {/* Upload Image button — second position in Background tab */}
-              {isFullColourPlaque && bgTab === 'background' && (
+              {usesBackgrounds && bgTab === 'background' && (
                 <>
                   <input
                     ref={fileInputRef}
@@ -366,7 +368,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
       </div>
 
       {/* Category Info Cards (when category is selected) */}
-      {!isFullColourPlaque && selectedCategory !== 'all' && (
+      {!usesBackgrounds && selectedCategory !== 'all' && (
         <div className="border-t border-gray-800">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
             {materialCategories
