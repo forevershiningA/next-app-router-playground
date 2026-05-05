@@ -38,6 +38,56 @@
 
 ---
 
+## Current Status (2026-05-05) — Urn Border Glitches (Deferred) & Pricing
+
+### Work Done Today
+
+#### 1. Urn Inlay Border — `removeLoops` symmetry improvement
+**File**: `components/three/headstone/UrnEnamelInlay.tsx`
+
+Changed `removeLoops()` from picking the **first** crossing found to picking the crossing whose intersection point is **closest to X=0** (the heart's axis of symmetry). This makes the top-cleft joint collapse symmetrically.
+
+Three glitches remain (deferred):
+- Top cleft: V-joint still slightly asymmetric
+- Top-right lobe: small gray blob outside heart boundary
+- These are earcut triangulation artifacts from the self-intersecting inset polygon at the concave cleft
+
+#### 2. Urn Pricing — `lib/xml-parser.ts` + `CheckPriceGrid.tsx`
+
+**Bug 1 — `end_quantity="0"` treated as max 0 (never matched)**
+- `calculatePrice()` condition was `quantity <= p.endQuantity` → `1 <= 0` = false → returned $0
+- Fix: `endQuantity === 0` is now the legacy sentinel for "unlimited" (no upper bound)
+
+**Bug 2 — `computeQuantity` for "Units" returned `max(width, height) = 307`**
+- Formula `2016.88+2016.88($q-1)` with q=307 → ~$800,231 (wrong!)
+- Fix: `"Units"` quantity type now returns `1` (number of items ordered)
+
+**Bug 3 — `isUrnProduct` needed fallback**
+- `catalog` loads async; during load `catalog = null` so `type` check fails
+- Fix: `isUrnProduct = catalog?.product?.type === 'urn' || productId === '2350'`
+
+**Correct urn prices** (quantity=1, matched by `note` field in price model):
+| Shape     | Base price | × 1.2924  | Final     |
+|-----------|------------|-----------|-----------|
+| Heart     | $2,016.88  | ×1.2924   | $2,606.14 |
+| Oval      | $1,937.67  | ×1.2924   | $2,503.89 |
+| Rectangle | $1,915.52  | ×1.2924   | $2,475.29 |
+| Triangle  | $1,741.32  | ×1.2924   | $2,250.26 |
+
+**Files Modified**:
+- `lib/xml-parser.ts` — `calculatePrice()` now accepts optional `noteFilter?: string`; `computeQuantity()` "Units" → returns 1
+- `app/check-price/_ui/CheckPriceGrid.tsx` — urn detection, `quantity=1`, `urnShapeCode` as noteFilter, display "Background" instead of "Material/Size"
+
+#### 3. Pre-existing type errors (14 total, unchanged)
+| File | Count | Error |
+|------|-------|-------|
+| `app/api/share/email/route.ts:54` | 1 | TS2322 type mismatch |
+| `discountheadstones/vite.config.ts:3` | 1 | TS2307 missing @tailwindcss/vite types |
+| `lib/ml-search-service.ts` | 8 | TS2802 Set/Map iterator downlevelIteration |
+| `scripts/dedup-designs.ts` | 4 | TS2802 Set/Map iterator downlevelIteration |
+
+---
+
 ## Current Status (2026-05-04) — Product 2350 Urn Vitreous Enamel Inlay (IN PROGRESS)
 
 ### Context
@@ -8297,56 +8347,6 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 ---
 
 
-
----
-
-## Current Status (2026-05-05) — Urn Border Glitches (Deferred) & Pricing
-
-### Work Done Today
-
-#### 1. Urn Inlay Border — `removeLoops` symmetry improvement
-**File**: `components/three/headstone/UrnEnamelInlay.tsx`
-
-Changed `removeLoops()` from picking the **first** crossing found to picking the crossing whose intersection point is **closest to X=0** (the heart's axis of symmetry). This makes the top-cleft joint collapse symmetrically.
-
-Three glitches remain (deferred):
-- Top cleft: V-joint still slightly asymmetric
-- Top-right lobe: small gray blob outside heart boundary
-- These are earcut triangulation artifacts from the self-intersecting inset polygon at the concave cleft
-
-#### 2. Urn Pricing — `lib/xml-parser.ts` + `CheckPriceGrid.tsx`
-
-**Bug 1 — `end_quantity="0"` treated as max 0 (never matched)**
-- `calculatePrice()` condition was `quantity <= p.endQuantity` → `1 <= 0` = false → returned $0
-- Fix: `endQuantity === 0` is now the legacy sentinel for "unlimited" (no upper bound)
-
-**Bug 2 — `computeQuantity` for "Units" returned `max(width, height) = 307`**
-- Formula `2016.88+2016.88($q-1)` with q=307 → ~$800,231 (wrong!)
-- Fix: `"Units"` quantity type now returns `1` (number of items ordered)
-
-**Bug 3 — `isUrnProduct` needed fallback**
-- `catalog` loads async; during load `catalog = null` so `type` check fails
-- Fix: `isUrnProduct = catalog?.product?.type === 'urn' || productId === '2350'`
-
-**Correct urn prices** (quantity=1, matched by `note` field in price model):
-| Shape     | Base price | × 1.2924  | Final     |
-|-----------|------------|-----------|-----------|
-| Heart     | $2,016.88  | ×1.2924   | $2,606.14 |
-| Oval      | $1,937.67  | ×1.2924   | $2,503.89 |
-| Rectangle | $1,915.52  | ×1.2924   | $2,475.29 |
-| Triangle  | $1,741.32  | ×1.2924   | $2,250.26 |
-
-**Files Modified**:
-- `lib/xml-parser.ts` — `calculatePrice()` now accepts optional `noteFilter?: string`; `computeQuantity()` "Units" → returns 1
-- `app/check-price/_ui/CheckPriceGrid.tsx` — urn detection, `quantity=1`, `urnShapeCode` as noteFilter, display "Background" instead of "Material/Size"
-
-#### 3. Pre-existing type errors (14 total, unchanged)
-| File | Count | Error |
-|------|-------|-------|
-| `app/api/share/email/route.ts:54` | 1 | TS2322 type mismatch |
-| `discountheadstones/vite.config.ts:3` | 1 | TS2307 missing @tailwindcss/vite types |
-| `lib/ml-search-service.ts` | 8 | TS2802 Set/Map iterator downlevelIteration |
-| `scripts/dedup-designs.ts` | 4 | TS2802 Set/Map iterator downlevelIteration |
 
 ---
 
