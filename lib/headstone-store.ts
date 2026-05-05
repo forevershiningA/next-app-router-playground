@@ -847,6 +847,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         if (shape.table.color) {
           const texturePath = normalizeTextureUrl(shape.table.color);
           if (texturePath) set({ headstoneMaterialUrl: texturePath });
+        } else if (isUrnProduct) {
+          // Urn with no catalog default color → bare stainless steel (no inlay)
+          set({ headstoneMaterialUrl: '/jpg/metals/l/brushed-ss-swatch.jpg' });
         }
         if (shape.stand?.color) {
           const baseTexturePath = normalizeTextureUrl(shape.stand.color);

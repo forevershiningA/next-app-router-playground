@@ -165,10 +165,19 @@ function getInscriptionFallback(): InscriptionDetails {
 export function calculatePrice(
   priceModel: PriceModel,
   quantity: number,
+  noteFilter?: string,
 ): number {
-  const applicablePrice = priceModel.prices.find(
-    (p) => quantity >= p.startQuantity && quantity <= p.endQuantity,
-  );
+  // endQuantity === 0 is the legacy sentinel for "no upper limit".
+  const applicablePrice = priceModel.prices.find((p) => {
+    const inRange =
+      quantity >= p.startQuantity && (p.endQuantity === 0 || quantity <= p.endQuantity);
+    if (!inRange) return false;
+    if (noteFilter) {
+      const note = (p.note ?? '').toLowerCase();
+      return note.includes(noteFilter.toLowerCase());
+    }
+    return true;
+  });
 
   if (!applicablePrice) return 0;
 
@@ -209,7 +218,8 @@ export function computeQuantity(
   if (qt === 'width') return dims.width + dims.depth;
   if (qt === 'height') return dims.height;
   if (qt.includes('perimeter')) return 2 * (dims.width + dims.height);
-  if (qt.includes('units')) return Math.max(dims.width, dims.height);
+  // "Units" means number of items ordered — always 1 for a single memorial.
+  if (qt.includes('units')) return 1;
   // Default: include all three dimensions
   return dims.width + dims.height + dims.depth;
 }

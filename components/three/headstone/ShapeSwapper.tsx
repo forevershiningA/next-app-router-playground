@@ -386,6 +386,16 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const shapeSwapping = requestedUrl !== visibleUrl;
   const isPending = false;
 
+  // For urns, only show enamel inlay for actual background/color/upload URLs.
+  // Filter out the default granite fallback and the "No Background" sentinel.
+  const urnInlayTexUrl = React.useMemo(() => {
+    if (!isUrn) return null;
+    if (!headstoneMaterialUrl) return null;
+    if (headstoneMaterialUrl === '/jpg/metals/l/brushed-ss-swatch.jpg') return null;
+    if (headstoneMaterialUrl.startsWith('/textures/')) return null;
+    return resolvedTex;
+  }, [isUrn, headstoneMaterialUrl, resolvedTex]);
+
   const builtinPedestalShapes = React.useMemo(
     () => new Set(['headstone_3.svg', 'headstone_5.svg']),
     []
@@ -700,7 +710,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
               {/* Urn stainless steel border effect: vitreous enamel inlay in front of urn body */}
               {isUrn && (
-                <UrnEnamelInlay api={api} textureUrl={resolvedTex ?? null} />
+                <UrnEnamelInlay api={api} textureUrl={urnInlayTexUrl} />
               )}
 
               {/* Render inset contour line for headstones */}

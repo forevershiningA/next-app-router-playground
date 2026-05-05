@@ -131,6 +131,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
  
   // Get product name from catalog
   const productName = catalog?.product?.name || 'Not selected';
+  const isUrnProduct = catalog?.product?.type === 'urn' || productId === '2350';
   
   // Get motif and inscription details from catalog additions
   const motifAddition = catalog?.product?.additions?.find(a => a.type === 'motif');
@@ -149,6 +150,11 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const shapeName = shapeUrl 
     ? shapeUrl.split('/').pop()?.replace('.svg', '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
     : 'Not selected';
+
+  // For urns the shape code drives price selection (e.g. "heart", "oval", "rectangle", "triangle")
+  const urnShapeCode = isUrnProduct && shapeUrl
+    ? shapeUrl.split('/').pop()?.replace('.svg', '') ?? null
+    : null;
   
   // Get material name from URL
   const headstoneMaterialName = headstoneMaterialUrl
@@ -159,13 +165,17 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     ? baseMaterialUrl.split('/').pop()?.replace('.webp', '').replace(/-/g, ' ')
     : 'Not selected';
 
-  // Calculate headstone price using catalog
-  const headstoneQuantity = catalog?.product?.priceModel
-    ? computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness })
-    : 0;
+  // Calculate headstone price using catalog.
+  // Urns: quantity = 1 unit; price entry is matched by urnShapeCode (note field).
+  // Other products: derive quantity from dimensions and quantity_type.
+  const headstoneQuantity = isUrnProduct
+    ? 1
+    : (catalog?.product?.priceModel
+        ? computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness })
+        : 0);
   
   const headstonePrice = catalog && headstoneQuantity > 0
-    ? calculatePrice(catalog.product.priceModel, headstoneQuantity)
+    ? calculatePrice(catalog.product.priceModel, headstoneQuantity, urnShapeCode ?? undefined)
     : 0;
 
   // Calculate base price using catalog
@@ -405,8 +415,14 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                   <p className="text-sm text-gray-300 leading-relaxed">
                     <strong className="text-white">Product ID: {productId} - {productName}</strong><br />
                     Shape: {shapeName}<br />
-                    Material: {headstoneMaterialName}<br />
-                    Size: {widthMm}mm × {heightMm}mm × {uprightThickness}mm
+                    {isUrnProduct ? (
+                      <>Background: {headstoneMaterialName}</>
+                    ) : (
+                      <>
+                        Material: {headstoneMaterialName}<br />
+                        Size: {widthMm}mm × {heightMm}mm × {uprightThickness}mm
+                      </>
+                    )}
                   </p>
                 </div>
                 <div className="text-right">
