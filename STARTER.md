@@ -8297,88 +8297,56 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 ---
 
 
+
 ---
 
-## Product 2350 — Stainless Steel Vitreous Enamel Inlaid Urn (May 2026)
+## Current Status (2026-05-05) — Urn Border Glitches (Deferred) & Pricing
 
-### Overview
-Product 2350 is a stainless steel urn with a vitreous enamel inlay panel. Families select a shape (Heart, Oval, Rectangle, Triangle), a background photo/color for the inlay, and optional inscriptions/motifs/images. The inlay panel is rendered in 3D using a custom polygon inset algorithm.
+### Work Done Today
 
-### Shapes
-Defined in `public/xml/catalog-id-2350.xml` under `<shapes>`. Each shape has a `<file type="table">` with fixed `init_width` × `init_height` × `init_depth` (mm). Shapes are selected in `app/select-shape` and stored as `/shapes/urns/{code.toLowerCase()}.svg` in the `shapeUrl` store field.
+#### 1. Urn Inlay Border — `removeLoops` symmetry improvement
+**File**: `components/three/headstone/UrnEnamelInlay.tsx`
 
-| Shape     | initWidth | initHeight | initDepth |
-|-----------|-----------|------------|-----------|
-| Heart     | 302       | 307        | 50        |
-| Oval      | 206       | 285        | 50        |
-| Rectangle | 200       | 270        | 50        |
-| Triangle  | 242       | 211        | 50        |
+Changed `removeLoops()` from picking the **first** crossing found to picking the crossing whose intersection point is **closest to X=0** (the heart's axis of symmetry). This makes the top-cleft joint collapse symmetrically.
 
-Shape selection handler: `app/select-shape/_ui/ShapeSelectionGrid.tsx → handleUrnShapeSelect()`. Sets `shapeUrl = /shapes/urns/{code}.svg` and calls `setWidthMm` / `setHeightMm` from table init dims.
+Three glitches remain (deferred):
+- Top cleft: V-joint still slightly asymmetric
+- Top-right lobe: small gray blob outside heart boundary
+- These are earcut triangulation artifacts from the self-intersecting inset polygon at the concave cleft
 
-### Background / Material System
-- Urns use **backgrounds** (photos/colors) instead of granite materials
-- Material options loaded from DB via `/api/catalog/backgrounds` (same as Product 32)
-- "No Background" = brushed stainless steel texture (`/jpg/metals/l/brushed-ss-swatch.jpg`) — set as default in `lib/headstone-store.ts` ~line 850 when `isUrnProduct` and no catalog color is set
-- `headstoneMaterialUrl` holds the selected background URL
+#### 2. Urn Pricing — `lib/xml-parser.ts` + `CheckPriceGrid.tsx`
 
-**`ShapeSwapper.tsx` — `urnInlayTexUrl` memo** (~line 391):
-- Returns `null` if URL is the brushed-steel default → no inlay rendered
-- Returns `null` if URL starts with `/textures/` (granite) → no inlay rendered
-- Otherwise returns the resolved texture URL → inlay rendered with that background
+**Bug 1 — `end_quantity="0"` treated as max 0 (never matched)**
+- `calculatePrice()` condition was `quantity <= p.endQuantity` → `1 <= 0` = false → returned $0
+- Fix: `endQuantity === 0` is now the legacy sentinel for "unlimited" (no upper bound)
 
-### 3D Inlay Component: `UrnEnamelInlay.tsx`
-Located at `components/three/headstone/UrnEnamelInlay.tsx`. Renders the enamel inlay panel (background photo inside the heart/shape outline with a stainless steel border around it).
+**Bug 2 — `computeQuantity` for "Units" returned `max(width, height) = 307`**
+- Formula `2016.88+2016.88($q-1)` with q=307 → ~$800,231 (wrong!)
+- Fix: `"Units"` quantity type now returns `1` (number of items ordered)
 
-**Algorithm pipeline:**
-1. Sample `api.outlinePoints` (SVG path → polygon vertices)
-2. `insetPolygon(sampled, borderPU)` — per-vertex miter/bevel inset with centroid fallback for hairpin vertices (`sl < 0.1`)
-3. `removeLoops(insetPts)` — removes self-intersections by finding crossing edges; picks crossing closest to X=0 for symmetric heart cleft
-4. `THREE.ShapeGeometry` for outer shape, `THREE.ShapeGeometry` for inner (inset) shape
-5. UV normalization after geometry creation (bbox remap to [0,1]) — critical because `ShapeGeometry` r180 sets UV = raw XY coords, not [0,1]
+**Bug 3 — `isUrnProduct` needed fallback**
+- `catalog` loads async; during load `catalog = null` so `type` check fails
+- Fix: `isUrnProduct = catalog?.product?.type === 'urn' || productId === '2350'`
 
-**Known remaining glitches** (deferred):
-- Top-right lobe: small blob artifact
-- Top cleft: slight asymmetry at the V-joint
-These are earcut triangulation artifacts from the self-intersecting inset polygon at the heart's concave cleft. `removeLoops` mitigates but doesn't fully eliminate them.
+**Correct urn prices** (quantity=1, matched by `note` field in price model):
+| Shape     | Base price | × 1.2924  | Final     |
+|-----------|------------|-----------|-----------|
+| Heart     | $2,016.88  | ×1.2924   | $2,606.14 |
+| Oval      | $1,937.67  | ×1.2924   | $2,503.89 |
+| Rectangle | $1,915.52  | ×1.2924   | $2,475.29 |
+| Triangle  | $1,741.32  | ×1.2924   | $2,250.26 |
 
-**Texture loading**: uses `THREE.TextureLoader` directly (not drei's `useTexture`) because `useTexture` prepends `/` to blob: and data: URLs.
+**Files Modified**:
+- `lib/xml-parser.ts` — `calculatePrice()` now accepts optional `noteFilter?: string`; `computeQuantity()` "Units" → returns 1
+- `app/check-price/_ui/CheckPriceGrid.tsx` — urn detection, `quantity=1`, `urnShapeCode` as noteFilter, display "Background" instead of "Material/Size"
 
-### Pricing (`catalog-id-2350.xml`)
-Price model has one entry per shape, matched by the `note` field:
-
-```xml
-<price_model id="2350" quantity_type="Units" currency="Dollars">
-  <price model="2016.88+2016.88($q-1)" retail_multiplier="1.2924" note="Heart" />
-  <price model="1937.67+1937.67($q-1)" retail_multiplier="1.2924" note="Oval" />
-  <price model="1915.52+1915.52($q-1)" retail_multiplier="1.2924" note="Rectangle" />
-  <price model="1741.32+1741.32($q-1)" retail_multiplier="1.2924" note="Triangle" />
-</price_model>
-```
-
-**Formula**: `base + base×($q-1)` where `$q = 1` (one unit). So price = `base × retail_multiplier`.
-
-- Heart: 2016.88 × 1.2924 = **$2,606.14**
-- Oval: 1937.67 × 1.2924 = **$2,503.89**
-- Rectangle: 1915.52 × 1.2924 = **$2,475.29**
-- Triangle: 1741.32 × 1.2924 = **$2,250.26**
-
-**Pricing fixes applied** (May 2026):
-
-1. **`lib/xml-parser.ts` — `calculatePrice`**: Added optional `noteFilter` param. `end_quantity="0"` is now treated as unlimited (legacy sentinel — previously returned $0 for all urn prices).
-
-2. **`lib/xml-parser.ts` — `computeQuantity`**: `"Units"` quantity type now returns `1` (was `Math.max(width, height) = 307`, causing ~$800k price).
-
-3. **`app/check-price/_ui/CheckPriceGrid.tsx`**: Detects urn product via `catalog?.product?.type === 'urn' || productId === '2350'`. Uses `quantity=1` and passes `urnShapeCode` (e.g. `"heart"`) as `noteFilter` to select the correct price entry.
-
-### Additions (from catalog XML)
-```xml
-<additions>
-  <addition id="1701" type="inscription" name="Vitreous Enamel Inscription" />
-  <addition id="1700" type="motif" name="Motif" formula="Enamel" />
-  <addition id="137"  type="image"   name="Free Image" />
-</additions>
-```
+#### 3. Pre-existing type errors (14 total, unchanged)
+| File | Count | Error |
+|------|-------|-------|
+| `app/api/share/email/route.ts:54` | 1 | TS2322 type mismatch |
+| `discountheadstones/vite.config.ts:3` | 1 | TS2307 missing @tailwindcss/vite types |
+| `lib/ml-search-service.ts` | 8 | TS2802 Set/Map iterator downlevelIteration |
+| `scripts/dedup-designs.ts` | 4 | TS2802 Set/Map iterator downlevelIteration |
 
 ---
 
