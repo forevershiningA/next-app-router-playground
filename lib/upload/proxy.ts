@@ -1,18 +1,43 @@
+import { writeFile, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
+import path from 'path';
+import { randomBytes } from 'crypto';
 import { NextResponse } from 'next/server';
 
 export type UploadSubdir = 'backgrounds' | 'images' | 'screenshots' | 'pdfs';
 
+const EXT_MAP: Record<string, string> = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/webp': 'webp',
+  'application/pdf': 'pdf',
+};
+
 /**
- * Forwards a file to the unified upload.php endpoint on wiecznapamiec.pl.
- * All server-side file storage goes through this single function.
+ * In development: save file to public/uploads/{subdir}/ and return a local URL.
+ * No remote server needed — files are served by Next.js as static assets.
+ */
+async function saveLocally(file: File, subdir: UploadSubdir): Promise<NextResponse> {
+  const bytes = await file.arrayBuffer();
+  const ext = EXT_MAP[file.type] ?? 'bin';
+  const filename = randomBytes(16).toString('hex') + '.' + ext;
+  const uploadDir = path.join(process.cwd(), 'public', 'uploads', subdir);
+
+  if (!existsSync(uploadDir)) await mkdir(uploadDir, { recursive: true });
+  await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
+
+  return NextResponse.json({ url: `/uploads/${subdir}/${filename}` });
+}
+
+/**
+ * In production: forward the file to upload.php on wiecznapamiec.pl.
+ * Keeps UPLOAD_REMOTE_SECRET out of the browser.
  *
  * Required env vars:
- *   UPLOAD_REMOTE_URL    — https://www.wiecznapamiec.pl/upload.php
+ *   UPLOAD_REMOTE_URL    — https://www.wiecznapamiec.pl/forevershining/upload.php
  *   UPLOAD_REMOTE_SECRET — shared secret matching upload.php $secret
- *
- * Returns a NextResponse with { url: string } on success.
  */
-export async function proxyUpload(file: File, subdir: UploadSubdir): Promise<NextResponse> {
+async function saveRemotely(file: File, subdir: UploadSubdir): Promise<NextResponse> {
   const uploadUrl = process.env.UPLOAD_REMOTE_URL;
   const uploadSecret = process.env.UPLOAD_REMOTE_SECRET;
 
@@ -47,6 +72,17 @@ export async function proxyUpload(file: File, subdir: UploadSubdir): Promise<Nex
 
   const result = await phpResponse.json();
   return NextResponse.json(result);
+}
+
+/**
+ * Forwards a file to the correct storage backend based on environment.
+ * Development → local public/uploads/   Production → wiecznapamiec.pl
+ */
+export async function proxyUpload(file: File, subdir: UploadSubdir): Promise<NextResponse> {
+  if (process.env.NODE_ENV === 'development') {
+    return saveLocally(file, subdir);
+  }
+  return saveRemotely(file, subdir);
 }
 
 /** Parse multipart form data and extract the 'file' field. */

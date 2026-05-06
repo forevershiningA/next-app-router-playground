@@ -120,5 +120,5 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $destPath)) {
     exit;
 }
 
-$publicUrl = 'https://www.wiecznapamiec.pl/uploads/' . $subdir . '/' . $filename;
+$publicUrl = 'https://www.wiecznapamiec.pl/forevershining/uploads/' . $subdir . '/' . $filename;
 echo json_encode(['url' => $publicUrl]);

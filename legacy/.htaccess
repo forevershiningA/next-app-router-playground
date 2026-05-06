@@ -1,0 +1,12 @@
+# Place this file as: public_html/forevershining/uploads/.htaccess
+# It adds CORS headers so Three.js (WebGL) can load images from this directory.
+# Without these headers, cross-origin texture loading will be blocked by the browser.
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(png|jpg|jpeg|webp|gif)">
+        Header set Access-Control-Allow-Origin "https://forevershining.org"
+        Header append Access-Control-Allow-Origin "https://www.forevershining.org"
+        Header set Access-Control-Allow-Methods "GET"
+        Header set Vary "Origin"
+    </FilesMatch>
+</IfModule>
