@@ -134,6 +134,16 @@ function segIntersect(
   return null;
 }
 
+/** Return twice the absolute area of a polygon (avoids a divide by 2). */
+function polygonArea2(p: THREE.Vector2[]): number {
+  let a = 0;
+  for (let i = 0; i < p.length; i++) {
+    const ai = p[i], bi = p[(i + 1) % p.length];
+    a += ai.x * bi.y - bi.x * ai.y;
+  }
+  return Math.abs(a);
+}
+
 /**
  * Remove self-intersecting loops from a polygon.
  *
@@ -144,8 +154,15 @@ function segIntersect(
  * At each iteration we collect ALL crossings and pick the one whose intersection
  * point is closest to X=0 (the shape's axis of symmetry), so the cleft joint
  * collapses symmetrically at the center rather than drifting to one side.
- * We then replace the inner loop with just that intersection point and repeat
- * until no crossings remain (max 20 passes).
+ * We then keep whichever of the two sub-polygons (outer or inner loop) has the
+ * larger area.  This ensures:
+ *   - Heart/oval: the main lobe body (outer, large) is kept over the tiny
+ *     cleft artifact (inner, small).  Same behaviour as before.
+ *   - Triangle: the inset-edge paths for the left and right sides cross each
+ *     other just below the apex, splitting the polygon into the small "shoulder"
+ *     wedge above the crossing (outer, tiny) and the correct triangle body
+ *     below it (inner, large).  Keeping the larger portion fixes the invisible
+ *     inlay without touching the inset algorithm itself.
  */
 function removeLoops(pts: THREE.Vector2[]): THREE.Vector2[] {
   let cur = pts.slice();
@@ -178,9 +195,10 @@ function removeLoops(pts: THREE.Vector2[]): THREE.Vector2[] {
 
     if (bestI < 0 || !bestIx) break;
 
-    // Remove the inner loop: keep everything up to index bestI, insert the
-    // crossing point, then continue from bestJ+1 onward.
-    cur = [...cur.slice(0, bestI + 1), bestIx, ...cur.slice(bestJ + 1)];
+    // Split at the crossing into outer and inner sub-polygons, keep the larger.
+    const outer = [...cur.slice(0, bestI + 1), bestIx, ...cur.slice(bestJ + 1)];
+    const inner = [...cur.slice(bestI + 1, bestJ + 1), bestIx];
+    cur = polygonArea2(outer) >= polygonArea2(inner) ? outer : inner;
   }
   return cur;
 }
@@ -218,10 +236,26 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
 
     const borderPU = BORDER_MM * api.unitsPerMeter / 1000; // mm → pre-meshScale units
 
-    // Downsample to ~256 points for earcut performance, centred at (0,0)
-    const step = Math.max(1, Math.floor(pts.length / 256));
+    // Strip trailing seam-duplicate(s) before downsampling.
+    //
+    // getSpacedPoints(N) returns N+1 points where pts[0] === pts[N] (the seam).
+    // SVGLoader also sets autoClose = true on every closed path (those ending with Z),
+    // causing getSpacedPoints to push pts[0] again → N+2 total.
+    //
+    // For linear-closed shapes (rectangle, triangle) the closing LineCurve evaluates
+    // its endpoint exactly via floating-point arithmetic, so pts[N] === pts[0] with
+    // zero distance. For bezier-closed shapes (oval, heart) floating-point
+    // rounding gives ~1e-8 distance. We strip any trailing point within 0.1 SVG
+    // units of pts[0]; the nearest real perimeter neighbour is always ≥ 4 units away.
+    let unique = pts.length;
+    while (unique > 3) {
+      const dx = pts[unique - 1].x - pts[0].x, dy = pts[unique - 1].y - pts[0].y;
+      if (dx * dx + dy * dy > 0.01) break; // > 0.1 SVG units → not a seam duplicate
+      unique--;
+    }
+    const step = Math.max(1, Math.floor(unique / 256));
     const sampled: THREE.Vector2[] = [];
-    for (let i = 0; i < pts.length; i += step) {
+    for (let i = 0; i < unique; i += step) {
       sampled.push(new THREE.Vector2(
         pts[i].x,
         pts[i].y - minY - cy, // centre Y at 0
@@ -313,7 +347,7 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
     <mesh
       geometry={geomData.geom}
       material={material}
-      position={[0, geomData.cy, 0.5]}
+      position={[0, geomData.cy, api.frontZ]}
       renderOrder={5}
     />
   );

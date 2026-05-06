@@ -78,7 +78,31 @@ Three glitches remain (deferred):
 - `lib/xml-parser.ts` — `calculatePrice()` now accepts optional `noteFilter?: string`; `computeQuantity()` "Units" → returns 1
 - `app/check-price/_ui/CheckPriceGrid.tsx` — urn detection, `quantity=1`, `urnShapeCode` as noteFilter, display "Background" instead of "Material/Size"
 
-#### 3. Pre-existing type errors (14 total, unchanged)
+#### 3. Rectangle & Triangle Inlay — Seam-Duplicate Root Cause + Fix
+**File**: `components/three/headstone/UrnEnamelInlay.tsx`
+
+**Root cause — THREE.js `getSpacedPoints` + SVGLoader `autoClose` interaction:**
+- `CurvePath.getSpacedPoints(N)` returns `N+1` base points **plus** an extra `pts[0]` when `autoClose = true` → **N+2 total**
+- SVGLoader sets `autoClose = true` on any path that ends with `Z`/`z` (all urn SVGs do)
+- So `getSpacedPoints(4096)` returns **4098** points, not 4097
+- The old fix `i < pts.length - 1 = 4097` still sampled `pts[4096]` — the seam duplicate
+
+**Why linear-closed shapes (Rectangle, Triangle) broke:**
+- Rectangle SVG ends with `L 50 30` → `LineCurve.getPointAt(1)` = P3 **exactly** → `pts[4096]` is a **zero-distance duplicate** of `pts[0]`
+- Zero-length edge triggers fallback normal `(1, 0)` in `insetPolygon` → catastrophically wrong inset
+- Triangle has the same issue: ends with `L 198.9 50.7`
+
+**Why Oval/Heart appeared fine:**
+- They end with cubic bezier curves → `getPointAt(1)` has ~1e-8 floating-point error → near-duplicate, not exact → tiny miter error (~3e-8 units = invisible)
+
+**Fix implemented** (lines 221-245, `geomData` useMemo):
+- Strip all trailing points within **0.1 SVG units** of `pts[0]` before sampling
+- Safe epsilon: nearest real perimeter neighbour is always ≥ 4 SVG units away (segment spacing ≈ 0.25–0.39 SVG units)
+- Handles exact linear duplicates (0 distance), bezier near-duplicates (~1e-8), and the autoClose extra point
+
+**Status**: Fix implemented, pending browser verification
+
+#### 4. Pre-existing type errors (14 total, unchanged)
 | File | Count | Error |
 |------|-------|-------|
 | `app/api/share/email/route.ts:54` | 1 | TS2322 type mismatch |
