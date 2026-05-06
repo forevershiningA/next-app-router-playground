@@ -287,14 +287,14 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
     }
     uvAttr.needsUpdate = true;
 
-    return { geom, cy };
+    return { geom, cy, bbW, bbH };
   }, [api.outlinePoints, api.unitsPerMeter]);
 
   // Load background texture with TextureLoader (not canvas).
-  // flipY=true (default THREE.js): correct for ShapeGeometry where V=0 at bottom.
-  // Image stretches to fill the inlay shape, same as Full Color Plaque.
+  // After loading, apply "cover" repeat/offset so the texture fills the inlay
+  // without stretching — maintains the image's natural aspect ratio.
   React.useEffect(() => {
-    if (!textureUrl) {
+    if (!textureUrl || !geomData) {
       setTex(null);
       return;
     }
@@ -306,6 +306,30 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
       (loaded) => {
         if (cancelled) { loaded.dispose(); return; }
         loaded.colorSpace = THREE.SRGBColorSpace;
+
+        // Aspect-ratio correction: CSS "cover" semantics.
+        // UV is normalised to the inlay bounding box (bbW × bbH).
+        // Without correction the texture is stretched to fill whatever
+        // aspect ratio the inlay has.  We scale the repeat axis that
+        // would be over-stretched so both axes stay proportional.
+        const imgW: number = loaded.image.width;
+        const imgH: number = loaded.image.height;
+        if (imgW > 0 && imgH > 0) {
+          const texAspect = imgW / imgH;
+          const inlayAspect = geomData.bbW / geomData.bbH;
+          if (texAspect > inlayAspect) {
+            // Texture is wider than the inlay — crop sides, fill height.
+            const rx = inlayAspect / texAspect;
+            loaded.repeat.set(rx, 1);
+            loaded.offset.set((1 - rx) / 2, 0);
+          } else {
+            // Texture is taller than the inlay — crop top/bottom, fill width.
+            const ry = texAspect / inlayAspect;
+            loaded.repeat.set(1, ry);
+            loaded.offset.set(0, (1 - ry) / 2);
+          }
+        }
+
         setTex(prev => { prev?.dispose(); return loaded; });
       },
       undefined,
@@ -313,7 +337,7 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
     );
 
     return () => { cancelled = true; };
-  }, [textureUrl]);
+  }, [textureUrl, geomData]);
 
   const material = React.useMemo(
     () =>
