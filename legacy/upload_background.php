@@ -1,12 +1,13 @@
 <?php
 /**
- * Upload Background Image
+ * Upload Asset (background or portrait image)
  *
  * Deploy this file to wiecznapamiec.pl (e.g. public_html/upload-background.php).
  * Set the $secret variable to match UPLOAD_REMOTE_SECRET in your Vercel env vars.
  *
- * Creates uploaded files at: public_html/uploads/backgrounds/
- * Serves them at:            https://www.wiecznapamiec.pl/uploads/backgrounds/{uuid}.jpg
+ * Accepts optional form field: subdir (default: "backgrounds", also allows "images")
+ * Creates uploaded files at: public_html/uploads/{subdir}/
+ * Serves them at:            https://www.wiecznapamiec.pl/uploads/{subdir}/{uuid}.ext
  */
 
 header('Content-Type: application/json');
@@ -65,8 +66,15 @@ if ($_FILES['file']['size'] > 10 * 1024 * 1024) {
     exit;
 }
 
+// --- Subdir (whitelist) ---
+$allowedSubdirs = ['backgrounds', 'images'];
+$subdir = $_POST['subdir'] ?? 'backgrounds';
+if (!in_array($subdir, $allowedSubdirs, true)) {
+    $subdir = 'backgrounds';
+}
+
 // --- Save file ---
-$uploadDir = __DIR__ . '/uploads/backgrounds/';
+$uploadDir = __DIR__ . '/uploads/' . $subdir . '/';
 if (!is_dir($uploadDir)) {
     if (!mkdir($uploadDir, 0755, true)) {
         http_response_code(500);
@@ -90,5 +98,5 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $destPath)) {
     exit;
 }
 
-$publicUrl = 'https://www.wiecznapamiec.pl/uploads/backgrounds/' . $filename;
+$publicUrl = 'https://www.wiecznapamiec.pl/uploads/' . $subdir . '/' . $filename;
 echo json_encode(['url' => $publicUrl]);

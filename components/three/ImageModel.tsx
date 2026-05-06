@@ -92,6 +92,7 @@ export default function ImageModel({
     async function loadTexture() {
       try {
         const loader = new THREE.TextureLoader();
+        loader.crossOrigin = 'anonymous';
         const PLACEHOLDER_IMAGE = '/jpg/photos/vitreous-enamel-image.png';
         const candidates = Array.from(new Set([
           imageUrl,

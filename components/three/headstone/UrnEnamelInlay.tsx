@@ -301,6 +301,7 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
 
     let cancelled = false;
     const loader = new THREE.TextureLoader();
+    loader.crossOrigin = 'anonymous';
     loader.load(
       textureUrl,
       (loaded) => {

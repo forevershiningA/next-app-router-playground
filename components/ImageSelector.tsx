@@ -387,9 +387,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         finalCtx.globalCompositeOperation = 'source-over';
       }
 
-      // 9. Export as data URL
-      const processedImageUrl = finalCanvas.toDataURL('image/png');
-      console.log('[handleCropImage] Canvas exported:', {
+      // 9. Upload processed PNG to wiecznapamiec.pl — avoids storing large base64 in DB
+      const blob = await new Promise<Blob | null>((res) =>
+        finalCanvas.toBlob(res, 'image/png'),
+      );
+      if (!blob) throw new Error('finalCanvas.toBlob returned null');
+
+      const form = new FormData();
+      form.append('file', new File([blob], 'portrait.png', { type: 'image/png' }));
+
+      const uploadResponse = await fetch('/api/upload-image', { method: 'POST', body: form });
+      if (!uploadResponse.ok) throw new Error(`Image upload failed: ${uploadResponse.status}`);
+      const { url: processedImageUrl } = (await uploadResponse.json()) as { url: string };
+
+      console.log('[handleCropImage] Canvas uploaded:', {
         canvasWidth: finalCanvas.width,
         canvasHeight: finalCanvas.height,
         canvasAspect: finalCanvas.width / finalCanvas.height,
