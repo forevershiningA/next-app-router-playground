@@ -161,12 +161,21 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       ctx.drawImage(img, cropX, cropY, cropW, cropH, -cropW / 2, -cropH / 2, cropW, cropH);
       ctx.restore();
 
-      // Use data URL directly — avoids filesystem writes that fail on Vercel.
-      // THREE.TextureLoader handles data: URLs correctly.
-      const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+      // Upload the cropped JPEG to wiecznapamiec.pl via the proxy API route.
+      const blob = await new Promise<Blob | null>((res) =>
+        canvas.toBlob(res, 'image/jpeg', 0.92),
+      );
+      if (!blob) throw new Error('canvas.toBlob returned null');
+
+      const form = new FormData();
+      form.append('file', new File([blob], 'background.jpg', { type: 'image/jpeg' }));
+
+      const response = await fetch('/api/upload-background', { method: 'POST', body: form });
+      if (!response.ok) throw new Error(`Upload failed: ${response.status}`);
+      const { url } = (await response.json()) as { url: string };
 
       setIsMaterialChange(true);
-      setHeadstoneMaterialUrl(dataUrl);
+      setHeadstoneMaterialUrl(url);
       setTimeout(() => setIsMaterialChange(false), 100);
 
       // Reset crop state
