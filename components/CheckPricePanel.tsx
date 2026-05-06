@@ -146,6 +146,11 @@ export default function CheckPricePanel() {
   // Whether this is a full-monument product (has ledger + kerbset components)
   const isFullMonument = activeCatalog?.product.type === 'full-monument';
 
+  const isUrnProduct = activeCatalog?.product.type === 'urn' || productId === '2350';
+  const urnShapeCode = isUrnProduct && shapeUrl
+    ? shapeUrl.split('/').pop()?.replace('.svg', '') ?? null
+    : null;
+
   // Calculate headstone price from catalog price model
   const headstonePrice = useMemo(() => {
     // Product 32 (Full Colour Plaque) uses fixed size-based pricing
@@ -160,9 +165,13 @@ export default function CheckPricePanel() {
     }
     if (!activeCatalog) return 0;
     const pm = activeCatalog.product.priceModel;
+    // Urns: quantity is always 1 unit, price entry matched by shape code note
+    if (isUrnProduct) {
+      return calculatePrice(pm, 1, urnShapeCode ?? undefined);
+    }
     const quantity = computeQuantity(pm, { width: widthMm, height: heightMm, depth: uprightThickness });
     return calculatePrice(pm, quantity);
-  }, [activeCatalog, widthMm, heightMm, uprightThickness, productId, fixedSizes]);
+  }, [activeCatalog, widthMm, heightMm, uprightThickness, productId, fixedSizes, isUrnProduct, urnShapeCode]);
 
   // Calculate base (stand) price from catalog basePriceModel
   const basePrice = useMemo(() => {
