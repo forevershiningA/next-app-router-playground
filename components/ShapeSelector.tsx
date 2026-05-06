@@ -27,11 +27,6 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
 
   // Urn: use catalog shapes from XML, not the static DB list
   if (isUrn) {
-    const openPanel = (panel: string) => {
-      if (typeof window !== 'undefined') {
-        window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel } }));
-      }
-    };
     return (
       <div className="space-y-3">
         <div className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}>
@@ -45,7 +40,14 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
                   setShapeUrl(svgPath);
                   setWidthMm(catalogShape.table.initWidth);
                   setHeightMm(catalogShape.table.initHeight);
-                  openPanel('select-material');
+                  // Navigate to select-material so the canvas is visible when the
+                  // background panel opens. Without this, arriving from /select-shape
+                  // (which is NOT in canvasVisiblePages) causes the panel to be
+                  // immediately closed by the isCanvasVisible guard in DesignerNav.
+                  router.push('/select-material');
+                  if (typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-material' } }));
+                  }
                 }}
                 className="group relative cursor-pointer"
                 title={catalogShape.name}
