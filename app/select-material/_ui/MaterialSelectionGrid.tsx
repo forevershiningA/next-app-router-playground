@@ -263,19 +263,17 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                     onChange={async (e) => {
                       const file = e.target.files?.[0];
                       if (!file || !file.type.startsWith('image/')) return;
-                      // Upload to server to get a regular file URL
-                      const formData = new FormData();
-                      formData.append('image', file, file.name);
-                      try {
-                        const response = await fetch('/api/upload-background', { method: 'POST', body: formData });
-                        const { url } = await response.json();
+                      // Convert to data URL — avoids filesystem writes that fail on Vercel.
+                      const reader = new FileReader();
+                      reader.onload = (evt) => {
+                        const dataUrl = evt.target?.result as string;
+                        if (!dataUrl) return;
                         setIsMaterialChangeLocal(true);
-                        setHeadstoneMaterialUrl(url);
+                        setHeadstoneMaterialUrl(dataUrl);
                         setTimeout(() => setIsMaterialChangeLocal(false), 100);
                         router.push('/select-size');
-                      } catch (err) {
-                        console.error('Failed to upload background:', err);
-                      }
+                      };
+                      reader.readAsDataURL(file);
                       e.target.value = '';
                     }}
                   />
