@@ -691,6 +691,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
 
       const isBronzePlaqueProduct = catalog.product.id === '5';
       const isUrnProduct = catalog.product.type === 'urn';
+
+      // Set default shape URL synchronously BEFORE any async operations,
+      // so user shape selections made while backgrounds are loading are not overwritten.
+      if (isPlaque) {
+        set({ shapeUrl: '/shapes/headstones/square.svg' });
+      }
+      if (isUrnProduct && catalog.product.shapes.length > 0) {
+        // Only set the default if the user hasn't already selected a urn shape.
+        const currentShapeUrl = get().shapeUrl;
+        if (!currentShapeUrl?.startsWith('/shapes/urns/')) {
+          const firstShape = catalog.product.shapes[0];
+          const code = firstShape.code ?? firstShape.name;
+          set({ shapeUrl: `/shapes/urns/${code.toLowerCase()}.svg` });
+        }
+      }
+
       let materialOptions: typeof data.materials;
       if (isFullColourPlaque || isUrnProduct) {
         // Fetch backgrounds from DB via API
@@ -724,9 +740,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         set({ fixedSizes: [] });
       }
       set({ materials: materialOptions });
-      if (isPlaque) {
-        set({ shapeUrl: '/shapes/headstones/square.svg' });
-      }
       if (!showInscriptionColor) {
         set((s) => ({
           inscriptions: s.inscriptions.map((line) => ({
@@ -844,12 +857,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           });
         }
 
-        if (shape.table.color) {
+        if (isUrnProduct) {
+          // Urns always default to white inlay (color #34 = white)
+          set({ headstoneMaterialUrl: '/jpg/backgrounds/colors/l/34.jpg' });
+        } else if (shape.table.color) {
           const texturePath = normalizeTextureUrl(shape.table.color);
           if (texturePath) set({ headstoneMaterialUrl: texturePath });
-        } else if (isUrnProduct) {
-          // Urn with no catalog default color → bare stainless steel (no inlay)
-          set({ headstoneMaterialUrl: '/jpg/metals/l/brushed-ss-swatch.jpg' });
         }
         if (shape.stand?.color) {
           const baseTexturePath = normalizeTextureUrl(shape.stand.color);

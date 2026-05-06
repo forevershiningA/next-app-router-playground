@@ -348,6 +348,10 @@ export default function DesignerNav() {
   );
   const setProductId = useHeadstoneStore((s) => s.setProductId);
   const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const urnShapeCode = isUrn && shapeUrl
+    ? shapeUrl.split('/').pop()?.replace('.svg', '') ?? null
+    : null;
 
   // Check if anything has been added to the headstone
   const hasCustomizations =
@@ -1508,7 +1512,7 @@ export default function DesignerNav() {
     );
     headstonePrice = match?.price ?? 0;
   } else if (catalog) {
-    headstonePrice = calculatePrice(catalog.product.priceModel, quantity);
+    headstonePrice = calculatePrice(catalog.product.priceModel, quantity, urnShapeCode ?? undefined);
   }
   const basePrice =
     showBase && catalog?.product?.basePriceModel
@@ -1594,7 +1598,7 @@ export default function DesignerNav() {
         );
         headstonePrice = match?.price ?? 0;
       } else if (catalog) {
-        headstonePrice = calculatePrice(catalog.product.priceModel, quantity);
+        headstonePrice = calculatePrice(catalog.product.priceModel, quantity, urnShapeCode ?? undefined);
       }
       const basePrice =
         state.showBase && catalog?.product?.basePriceModel
