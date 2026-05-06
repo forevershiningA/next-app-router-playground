@@ -139,6 +139,11 @@ function ProductNameHeader() {
     return computeQuantity(activeCatalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
   }, [activeCatalog, baseWidthMm, baseHeightMm, baseThickness, showBase]);
   
+  const isUrnProduct = activeCatalog?.product.type === 'urn' || productId === '2350';
+  const urnShapeCode = isUrnProduct && shapeUrl
+    ? shapeUrl.split('/').pop()?.replace('.svg', '') ?? null
+    : null;
+
   // Calculate total price including inscriptions and motifs
   const totalPrice = useMemo(() => {
     let headstonePrice = 0;
@@ -152,7 +157,12 @@ function ProductNameHeader() {
       );
       headstonePrice = match?.price ?? 0;
     } else if (activeCatalog) {
-      headstonePrice = calculatePrice(activeCatalog.product.priceModel, quantity);
+      // Urns: quantity is always 1, price matched by shape code note
+      if (isUrnProduct) {
+        headstonePrice = calculatePrice(activeCatalog.product.priceModel, 1, urnShapeCode ?? undefined);
+      } else {
+        headstonePrice = calculatePrice(activeCatalog.product.priceModel, quantity);
+      }
     }
     const basePrice = showBase && activeCatalog?.product?.basePriceModel
       ? calculatePrice(activeCatalog.product.basePriceModel, baseQuantity)
@@ -199,6 +209,8 @@ function ProductNameHeader() {
     selectedShape,
     widthMm,
     heightMm,
+    isUrnProduct,
+    urnShapeCode,
   ]);
 
   const sizeLabel = useMemo(
