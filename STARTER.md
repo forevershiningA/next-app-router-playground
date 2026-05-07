@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-03
+**Last Updated:** 2026-05-06
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,111 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-05-06) — Urn Background Inlay Polish & Unified Upload Architecture
+
+### Urn Background Inlay — Final Fixes
+
+#### Default White Inlay
+All urn shapes now default to **white** background inlay (instead of transparent/none).
+- `lib/headstone-store.ts` — initial state for `urnBackgroundColor` set to `'#ffffff'`
+- `components/three/headstone/UrnEnamelInlay.tsx` — `defaultColor` fallback is `'#ffffff'`
+
+#### Background Thumbnails Disappear After Shape Change
+**Bug**: Selecting a background, then changing the urn shape, cleared all background thumbnails from the panel.
+**Root cause**: Shape change reset the `headstoneMaterial` store slice, which `MaterialSelectionGrid` relied on for its local list.
+**Fix**: `app/select-material/_ui/MaterialSelectionGrid.tsx` — persists the loaded backgrounds list in `useRef` so re-renders triggered by shape changes don't empty the thumbnail grid.
+
+---
+
+### Unified File Upload Architecture
+
+All binary file uploads (background images, portrait photos, screenshots, PDFs) are now stored as real files on the wiecznapamiec.pl server instead of being embedded as base64 data URLs in the PostgreSQL `designState` column.
+
+#### Problem
+- **Vercel filesystem is read-only** at runtime — `writeFile` to `public/` in a serverless function silently fails or throws.
+- Old `/api/upload-background` route wrote to `public/uploads/` → worked on localhost, failed on Vercel.
+- Portrait images and background uploads were stored as 1–5 MB base64 strings in Zustand → saved into PostgreSQL `designState` jsonb column.
+- `cleanDesignState()` only stripped `metadata.screenshot` and `selectedImages.data`; the actual `imageUrl` fields were never cleaned.
+
+#### Architecture
+
+```
+Client (browser)
+    │
+    ▼
+/api/upload-background  (Next.js route, 7 lines)
+/api/upload-image       (Next.js route, 7 lines)
+    │
+    ▼
+lib/upload/proxy.ts     (shared helper)
+    ├── NODE_ENV === 'development'
+    │       └── saveLocally() → public/uploads/{subdir}/{uuid}.ext
+    │           returns /uploads/{subdir}/{uuid}.ext
+    └── production
+            └── saveRemotely() → POST to UPLOAD_REMOTE_URL (PHP endpoint)
+                returns https://www.wiecznapamiec.pl/forevershining/uploads/{subdir}/{uuid}.ext
+```
+
+#### PHP Endpoint (`legacy/upload.php`)
+Single unified endpoint — deploy to `public_html/forevershining/upload.php`:
+- Accepts `multipart/form-data` with `file` + `subdir` fields
+- Subdir whitelist: `backgrounds`, `images`, `screenshots`, `pdfs`
+- Per-subdir MIME validation and file-size limits
+- Auth: `Authorization: Bearer {UPLOAD_REMOTE_SECRET}` header
+- Returns JSON `{ url: "https://www.wiecznapamiec.pl/forevershining/uploads/{subdir}/{uuid}.ext" }`
+- Uses `__DIR__` for filesystem path, hardcoded public URL `https://www.wiecznapamiec.pl/forevershining/uploads/`
+
+#### Apache CORS (`legacy/.htaccess`)
+Deploy to `public_html/forevershining/uploads/.htaccess`:
+```apache
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, OPTIONS"
+```
+Required so browsers can load images from wiecznapamiec.pl into WebGL canvases (Three.js taints the canvas without CORS headers).
+
+#### Next.js Proxy Helper (`lib/upload/proxy.ts`)
+```typescript
+export type UploadSubdir = 'backgrounds' | 'images' | 'screenshots' | 'pdfs';
+export async function proxyUpload(file: File | Blob, subdir: UploadSubdir): Promise<string>
+export async function extractFile(request: NextRequest): Promise<File | Blob>
+```
+- Dev: saves to `public/uploads/{subdir}/` using `fs.writeFile`
+- Prod: POSTs to `UPLOAD_REMOTE_URL` with `UPLOAD_REMOTE_SECRET` header
+
+#### Vercel Environment Variables (Production)
+```bash
+UPLOAD_REMOTE_URL=https://www.wiecznapamiec.pl/forevershining/upload.php
+UPLOAD_REMOTE_SECRET=<strong random secret — must match $secret in upload.php>
+```
+
+#### crossOrigin Fix for WebGL
+Loading cross-origin URLs into WebGL requires `loader.crossOrigin = 'anonymous'` AND CORS headers from the server.
+- `components/three/ImageModel.tsx` — added `loader.crossOrigin = 'anonymous'`
+- `components/three/headstone/UrnEnamelInlay.tsx` — added `loader.crossOrigin = 'anonymous'`
+
+#### Server Deployment Checklist
+1. Upload `legacy/upload.php` → `public_html/forevershining/upload.php`
+2. Edit `$secret` in `upload.php` to match `UPLOAD_REMOTE_SECRET` Vercel env var
+3. Upload `legacy/.htaccess` → `public_html/forevershining/uploads/.htaccess`
+4. Ensure `public_html/forevershining/uploads/` exists and is writable by PHP (`chmod 755`)
+5. Set `UPLOAD_REMOTE_URL` and `UPLOAD_REMOTE_SECRET` in Vercel → Settings → Environment Variables
+
+#### Adding a New Upload Type
+1. Add subdir to PHP whitelist in `upload.php`
+2. Create new Next.js route:
+   ```typescript
+   export async function POST(request: NextRequest) {
+     const file = await extractFile(request);
+     const url = await proxyUpload(file, 'new-subdir');
+     return NextResponse.json({ url });
+   }
+   ```
+
+#### Design State Stays in PostgreSQL
+Only binary files go to the file server. Design state JSON (shape, material, inscriptions, motifs, etc.) continues to be stored in the `designState` jsonb column in PostgreSQL — it's structured, queryable, and needed for listing, reloading, and email generation.
 
 ---
 
@@ -843,17 +948,17 @@ Second position in Background tab. Allows uploading a custom photo as the plaque
 #### How It Works
 1. **Sidebar** (`MaterialSelector.tsx`): Click "Upload Image" → file picker → image goes to existing `CropCanvas` (via `useImageCropState` hook + `setCropCanvasData`)
 2. Inline crop controls shown: size slider (Smaller/Larger), rotation slider (Decrease/Increase), Flip X/Y, Apply/Cancel — styled to match `ImageSelector.tsx`
-3. **Apply Background** → crop processed on canvas → uploaded via `POST /api/upload-background` → saved to `public/uploads/bg-{timestamp}.jpg` → standard file URL set as `headstoneMaterialUrl`
-4. **Fullscreen** (`MaterialSelectionGrid.tsx`): Simpler flow — file picker → direct upload to API → set URL → navigate to next step
+3. **Apply Background** → crop processed on canvas → `canvas.toBlob()` → `POST /api/upload-background` → returns server URL → set as `headstoneMaterialUrl`
+4. **Fullscreen** (`MaterialSelectionGrid.tsx`): Simpler flow — file picker → FormData POST to `/api/upload-background` → set URL → navigate to next step
 
 #### Server-Side Upload API (`app/api/upload-background/route.ts`)
-- `POST /api/upload-background` — accepts `FormData` with image file
-- Saves to `public/uploads/bg-{timestamp}.jpg`
-- Returns `{ url: '/uploads/bg-xxx.jpg' }`
-- `public/uploads/` excluded from git via `.gitignore`
+- `POST /api/upload-background` — thin proxy using `lib/upload/proxy.ts`
+- Dev: saves to `public/uploads/backgrounds/{uuid}.jpg`, returns `/uploads/backgrounds/{uuid}.jpg`
+- Production: proxies to `https://www.wiecznapamiec.pl/forevershining/upload.php`, returns full `https://www.wiecznapamiec.pl/forevershining/uploads/backgrounds/{uuid}.jpg`
+- See **File Storage System** section for full architecture
 
 #### Why Server-Side Upload (not blob/data URLs)
-drei's `useTexture` pipeline (R3F's memoized `TextureLoader` singleton → Three.js `ImageLoader.load()`) corrupts blob: and data: URLs by prepending `/`. This causes `Could not load /blob:http://...` errors. Standard file paths bypass this entirely.
+drei's `useTexture` pipeline (R3F's memoized `TextureLoader` singleton → Three.js `ImageLoader.load()`) corrupts blob: and data: URLs by prepending `/`. This causes `Could not load /blob:http://...` errors. Standard file paths (and cross-origin HTTPS URLs with CORS headers) bypass this entirely.
 
 **Defense-in-depth guards remain:**
 - `SvgHeadstone.tsx`: `useBlobTexture` hook (lines ~20-51) — loads blob/data URLs via native `THREE.TextureLoader().loadAsync()`, bypassing drei
@@ -6904,6 +7009,60 @@ All email triggers are fire-and-forget (`.catch()` logged, don't block the respo
 - `@react-email/components@1.0.12` — JSX email templates (deprecated but functional)
 - `@types/nodemailer@8.0.0` — TypeScript types
 - `@xmldom/xmldom@0.8.11` — XML parsing (already existed)
+
+---
+
+## File Storage System
+
+### Overview
+All binary file uploads (background images, portrait photos, screenshots, PDFs) are stored as physical files on the external wiecznapamiec.pl server. Design state (JSON) stays in PostgreSQL. This keeps the database lean and ensures files persist beyond Vercel's ephemeral filesystem.
+
+### Architecture
+
+```
+Client  →  Next.js API route  →  lib/upload/proxy.ts  →  PHP / local FS
+```
+
+| Environment | Storage Target | URL Pattern |
+|-------------|---------------|-------------|
+| Development (`NODE_ENV=development`) | `public/uploads/{subdir}/` | `/uploads/{subdir}/{uuid}.ext` |
+| Production (Vercel) | wiecznapamiec.pl via PHP | `https://www.wiecznapamiec.pl/forevershining/uploads/{subdir}/{uuid}.ext` |
+
+### Subdirectories
+| Subdir | File Types | Max Size | Used For |
+|--------|-----------|----------|----------|
+| `backgrounds` | JPEG, PNG, WebP, GIF | 10 MB | Uploaded background images for product 32 / urns |
+| `images` | JPEG, PNG, WebP, GIF | 10 MB | Portrait photos (Add Your Image) |
+| `screenshots` | JPEG, PNG | 5 MB | Design thumbnails on save |
+| `pdfs` | PDF | 20 MB | Quote / invoice PDFs |
+
+### Key Files
+| File | Purpose |
+|------|---------|
+| `lib/upload/proxy.ts` | Shared helper: `proxyUpload(file, subdir)`, `extractFile(request)` |
+| `legacy/upload.php` | PHP endpoint on wiecznapamiec.pl — deploy to `public_html/forevershining/upload.php` |
+| `legacy/.htaccess` | Apache CORS headers — deploy to `public_html/forevershining/uploads/.htaccess` |
+| `app/api/upload-background/route.ts` | 7-line proxy for `subdir=backgrounds` |
+| `app/api/upload-image/route.ts` | 7-line proxy for `subdir=images` |
+
+### Vercel Environment Variables
+```bash
+UPLOAD_REMOTE_URL=https://www.wiecznapamiec.pl/forevershining/upload.php
+UPLOAD_REMOTE_SECRET=<strong random secret — must match $secret in upload.php>
+```
+
+### crossOrigin Requirement for WebGL
+Uploading an image to wiecznapamiec.pl and then loading it as a Three.js texture requires:
+1. The server's `.htaccess` to return `Access-Control-Allow-Origin: *` on `uploads/`
+2. `loader.crossOrigin = 'anonymous'` on the `THREE.TextureLoader` instance
+
+Both conditions are already in place: `ImageModel.tsx` and `UrnEnamelInlay.tsx` have `crossOrigin` set.
+
+### Why Not data: URLs
+Large base64 data URLs (1–5 MB per image) would be embedded in the `designState` jsonb column, bloating PostgreSQL and making `cleanDesignState()` mandatory for every save. With real server URLs, the DB stores a short string reference and the binary lives separately on the file server.
+
+### Design State (PostgreSQL)
+`app/api/projects/route.ts` stores the complete design state JSON in the `projects.designState` jsonb column. `cleanDesignState()` strips `metadata.screenshot` (ephemeral Vercel path) and resets `selectedImages[].data` before saving. All other fields (shape, material, inscriptions, motifs, etc.) are preserved.
 
 ---
 

@@ -2,7 +2,7 @@
 /**
  * Unified File Upload Endpoint — DYO Headstone Designer
  *
- * Deploy this file to: public_html/upload.php
+ * Deploy this file to: public_html/forevershining/upload.php
  * Update Vercel env var UPLOAD_REMOTE_URL to point here.
  * Set $secret below to match UPLOAD_REMOTE_SECRET in Vercel.
  *
@@ -11,6 +11,7 @@
  *   images       — portrait/ceramic photos           (image/jpeg, png, webp)
  *   screenshots  — saved design thumbnails           (image/jpeg, png, webp)
  *   pdfs         — generated quote / order PDFs      (application/pdf)
+ *   designs      — saved design JSON files           (application/json)
  *
  * All files saved to: public_html/uploads/{subdir}/{uuid}.ext
  * All files served at: https://www.wiecznapamiec.pl/uploads/{subdir}/{uuid}.ext
@@ -53,7 +54,7 @@ if ($authHeader !== 'Bearer ' . $secret) {
 }
 
 // ─── Subdir whitelist ────────────────────────────────────────────────────────
-$allowedSubdirs = ['backgrounds', 'images', 'screenshots', 'pdfs'];
+$allowedSubdirs = ['backgrounds', 'images', 'screenshots', 'pdfs', 'designs'];
 $subdir = trim($_POST['subdir'] ?? 'backgrounds');
 if (!in_array($subdir, $allowedSubdirs, true)) {
     http_response_code(400);
@@ -67,6 +68,7 @@ $mimeRules = [
     'images'      => ['image/jpeg', 'image/png', 'image/webp'],
     'screenshots' => ['image/jpeg', 'image/png', 'image/webp'],
     'pdfs'        => ['application/pdf'],
+    'designs'     => ['application/json'],
 ];
 $allowedMimes = $mimeRules[$subdir];
 
@@ -85,7 +87,7 @@ if (!in_array($mimeType, $allowedMimes, true)) {
     exit;
 }
 
-$maxBytes = $subdir === 'pdfs' ? 20 * 1024 * 1024 : 10 * 1024 * 1024; // 20 MB for PDFs, 10 MB for images
+$maxBytes = $subdir === 'pdfs' ? 20 * 1024 * 1024 : ($subdir === 'designs' ? 5 * 1024 * 1024 : 10 * 1024 * 1024);
 if ($_FILES['file']['size'] > $maxBytes) {
     http_response_code(413);
     echo json_encode(['error' => 'File too large (max ' . ($maxBytes / 1024 / 1024) . ' MB)']);
@@ -98,6 +100,7 @@ $extMap = [
     'image/png'       => 'png',
     'image/webp'      => 'webp',
     'application/pdf' => 'pdf',
+    'application/json' => 'json',
 ];
 $ext = $extMap[$mimeType] ?? 'bin';
 

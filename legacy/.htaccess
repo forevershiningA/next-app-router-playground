@@ -4,8 +4,8 @@
 
 <IfModule mod_headers.c>
     <FilesMatch "\.(png|jpg|jpeg|webp|gif)">
-        Header set Access-Control-Allow-Origin "https://forevershining.org"
-        Header append Access-Control-Allow-Origin "https://www.forevershining.org"
+        SetEnvIf Origin "^https://(www\.)?forevershining\.org$" CORS_ORIGIN=$0
+        Header set Access-Control-Allow-Origin "%{CORS_ORIGIN}e" env=CORS_ORIGIN
         Header set Access-Control-Allow-Methods "GET"
         Header set Vary "Origin"
     </FilesMatch>

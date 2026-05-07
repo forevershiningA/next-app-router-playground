@@ -4,20 +4,17 @@ import path from 'path';
 import { randomBytes } from 'crypto';
 import { NextResponse } from 'next/server';
 
-export type UploadSubdir = 'backgrounds' | 'images' | 'screenshots' | 'pdfs';
+export type UploadSubdir = 'backgrounds' | 'images' | 'screenshots' | 'pdfs' | 'designs';
 
 const EXT_MAP: Record<string, string> = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
   'image/webp': 'webp',
   'application/pdf': 'pdf',
+  'application/json': 'json',
 };
 
-/**
- * In development: save file to public/uploads/{subdir}/ and return a local URL.
- * No remote server needed — files are served by Next.js as static assets.
- */
-async function saveLocally(file: File, subdir: UploadSubdir): Promise<NextResponse> {
+async function saveLocallyGetUrl(file: File, subdir: UploadSubdir): Promise<string> {
   const bytes = await file.arrayBuffer();
   const ext = EXT_MAP[file.type] ?? 'bin';
   const filename = randomBytes(16).toString('hex') + '.' + ext;
@@ -26,7 +23,7 @@ async function saveLocally(file: File, subdir: UploadSubdir): Promise<NextRespon
   if (!existsSync(uploadDir)) await mkdir(uploadDir, { recursive: true });
   await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
 
-  return NextResponse.json({ url: `/uploads/${subdir}/${filename}` });
+  return `/uploads/${subdir}/${filename}`;
 }
 
 /**
@@ -37,15 +34,12 @@ async function saveLocally(file: File, subdir: UploadSubdir): Promise<NextRespon
  *   UPLOAD_REMOTE_URL    — https://www.wiecznapamiec.pl/forevershining/upload.php
  *   UPLOAD_REMOTE_SECRET — shared secret matching upload.php $secret
  */
-async function saveRemotely(file: File, subdir: UploadSubdir): Promise<NextResponse> {
+async function saveRemotelyGetUrl(file: File, subdir: UploadSubdir): Promise<string> {
   const uploadUrl = process.env.UPLOAD_REMOTE_URL;
   const uploadSecret = process.env.UPLOAD_REMOTE_SECRET;
 
   if (!uploadUrl || !uploadSecret) {
-    return NextResponse.json(
-      { error: 'Upload server not configured (missing UPLOAD_REMOTE_URL or UPLOAD_REMOTE_SECRET)' },
-      { status: 500 },
-    );
+    throw new Error('Upload server not configured (missing UPLOAD_REMOTE_URL or UPLOAD_REMOTE_SECRET)');
   }
 
   const outForm = new FormData();
@@ -60,29 +54,43 @@ async function saveRemotely(file: File, subdir: UploadSubdir): Promise<NextRespo
       body: outForm,
     });
   } catch (err) {
-    console.error(`[upload/${subdir}] Fetch to remote failed:`, err);
-    return NextResponse.json({ error: 'Could not reach upload server' }, { status: 502 });
+    throw new Error(`Could not reach upload server: ${err}`);
   }
 
   if (!phpResponse.ok) {
     const text = await phpResponse.text().catch(() => '');
-    console.error(`[upload/${subdir}] Remote error:`, phpResponse.status, text);
-    return NextResponse.json({ error: 'Upload server returned an error' }, { status: 502 });
+    throw new Error(`Upload server returned ${phpResponse.status}: ${text}`);
   }
 
   const result = await phpResponse.json();
-  return NextResponse.json(result);
+  if (!result.url) throw new Error('Upload server returned no URL');
+  return result.url as string;
 }
 
 /**
- * Forwards a file to the correct storage backend based on environment.
- * Development → local public/uploads/   Production → wiecznapamiec.pl
+ * Upload a file to storage and return the resulting URL string.
+ * Development → local /uploads/{subdir}/   Production → https://www.wiecznapamiec.pl/forevershining/uploads/{subdir}/
+ */
+export async function uploadToStorage(file: File, subdir: UploadSubdir): Promise<string> {
+  if (process.env.NODE_ENV === 'development') {
+    return saveLocallyGetUrl(file, subdir);
+  }
+  return saveRemotelyGetUrl(file, subdir);
+}
+
+/**
+ * Forwards a file to the correct storage backend and returns a JSON response.
+ * Used by API route handlers that accept multipart uploads from the browser.
  */
 export async function proxyUpload(file: File, subdir: UploadSubdir): Promise<NextResponse> {
-  if (process.env.NODE_ENV === 'development') {
-    return saveLocally(file, subdir);
+  try {
+    const url = await uploadToStorage(file, subdir);
+    return NextResponse.json({ url });
+  } catch (err) {
+    console.error(`[upload/${subdir}] Upload failed:`, err);
+    const isConfig = err instanceof Error && err.message.includes('not configured');
+    return NextResponse.json({ error: String(err) }, { status: isConfig ? 500 : 502 });
   }
-  return saveRemotely(file, subdir);
 }
 
 /** Parse multipart form data and extract the 'file' field. */

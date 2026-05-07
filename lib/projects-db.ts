@@ -20,6 +20,7 @@ const toSummary = (record: typeof projects.$inferSelect): ProjectSummary => ({
   currency: record.currency ?? 'AUD',
   screenshotPath: normalizePublicPath(record.screenshotPath),
   thumbnailPath: normalizePublicPath(record.thumbnailPath),
+  jsonPath: normalizePublicPath(record.jsonPath),
   updatedAt: record.updatedAt.toISOString(),
   createdAt: record.createdAt.toISOString(),
 });
@@ -45,6 +46,7 @@ type SaveProjectInput = {
   borderId?: number | null;
   screenshotPath?: string | null;
   thumbnailPath?: string | null;
+  jsonPath?: string | null;
   designState: DesignerSnapshot;
   pricingBreakdown?: PricingBreakdown | null;
 };
@@ -72,8 +74,8 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
         borderId: input.borderId ?? null,
         screenshotPath: normalizePublicPath(input.screenshotPath),
         thumbnailPath: normalizePublicPath(input.thumbnailPath),
+        jsonPath: normalizePublicPath(input.jsonPath),
         designState: input.designState,
-        pricingBreakdown,
         updatedAt: new Date(),
       })
       .where(and(eq(projects.id, input.projectId), eq(projects.accountId, accountId)))
@@ -99,6 +101,7 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
       borderId: input.borderId ?? null,
       screenshotPath: normalizePublicPath(input.screenshotPath),
       thumbnailPath: normalizePublicPath(input.thumbnailPath),
+      jsonPath: normalizePublicPath(input.jsonPath),
       designState: input.designState,
       pricingBreakdown,
     })
@@ -118,6 +121,7 @@ export async function listProjectSummaries(accountId: string, limit = 20): Promi
       currency: projects.currency,
       screenshotPath: projects.screenshotPath,
       thumbnailPath: projects.thumbnailPath,
+      jsonPath: projects.jsonPath,
       updatedAt: projects.updatedAt,
       createdAt: projects.createdAt,
     })
@@ -134,6 +138,7 @@ export async function listProjectSummaries(accountId: string, limit = 20): Promi
     currency: row.currency ?? 'AUD',
     screenshotPath: normalizePublicPath(row.screenshotPath),
     thumbnailPath: normalizePublicPath(row.thumbnailPath),
+    jsonPath: normalizePublicPath(row.jsonPath),
     updatedAt: row.updatedAt.toISOString(),
     createdAt: row.createdAt.toISOString(),
   }));

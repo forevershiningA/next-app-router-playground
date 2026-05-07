@@ -145,6 +145,7 @@ export type ProjectSummary = {
   currency: string;
   screenshotPath: string | null;
   thumbnailPath: string | null;
+  jsonPath: string | null;
   updatedAt: string;
   createdAt: string;
 };

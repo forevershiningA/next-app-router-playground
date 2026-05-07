@@ -192,6 +192,7 @@ export const projects = pgTable('projects', {
   currency: text('currency').notNull().default('AUD'),
   screenshotPath: text('screenshot_path'),
   thumbnailPath: text('thumbnail_path'),
+  jsonPath: text('json_path'),
   designState: jsonb('design_state').notNull().default({}),
   pricingBreakdown: jsonb('pricing_breakdown').notNull().default({}),
   submittedAt: timestamp('submitted_at', { withTimezone: true }),

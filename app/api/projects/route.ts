@@ -3,7 +3,8 @@ import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
 import { getServerSession } from '#/lib/auth/session';
 import { sendEmail } from '#/lib/email';
-import { countryToCode, detailedQuoteItems } from '#/lib/email/helpers';
+import { detailedQuoteItems } from '#/lib/email/helpers';
+import { uploadToStorage } from '#/lib/upload/proxy';
 
 export const runtime = 'nodejs';
 
@@ -98,6 +99,7 @@ export async function POST(request: NextRequest) {
     // Save design files first to get the screenshot and thumbnail paths
     let screenshotPath: string | null = null;
     let thumbnailPath: string | null = null;
+    let jsonPath: string | null = null;
     let tempSummary: any = null;
     
     try {
@@ -119,45 +121,43 @@ export async function POST(request: NextRequest) {
         pricingBreakdown: body.pricingBreakdown ?? null,
       });
 
-      if (process.env.VERCEL !== '1') {
-        const { saveDesignFiles, designToXML, designToP3D, generatePriceQuoteHTML } = await import('#/lib/fileStorage');
-
-        const designData = {
-          id: tempSummary.id,
-          name: tempSummary.title,
-          productId: body.designState.productId,
-          price: totalPriceCents ? totalPriceCents / 100 : 0,
-          quote: `Design "${tempSummary.title}" - ${new Date().toLocaleDateString()}`,
-          createdAt: tempSummary.createdAt,
-          data: cleanedDesignState,
-          screenshot: screenshotDataUrl || '',
-        };
-
-        const xmlData = designToXML(designData);
-        const htmlData = generatePriceQuoteHTML(designData);
-        const p3dData = designToP3D(designData);
-
-        const filePaths = await saveDesignFiles(
-          tempSummary.id,
-          screenshotBuffer,
-          cleanedDesignState,
-          xmlData,
-          htmlData,
-          p3dData
+      if (screenshotBuffer.length > 0) {
+        // Upload full screenshot
+        const screenshotFile = new File(
+          [new Uint8Array(screenshotBuffer)],
+          `design_${tempSummary.id}.jpg`,
+          { type: 'image/jpeg' },
         );
+        screenshotPath = await uploadToStorage(screenshotFile, 'screenshots');
 
-        screenshotPath = filePaths.screenshot;
-        thumbnailPath = filePaths.thumbnail;
-      } else if (screenshotDataUrl?.startsWith('data:image/')) {
-        // Vercel serverless filesystem is ephemeral/read-only for this flow.
-        // Persist screenshot previews as data URLs so My Account cards render correctly.
-        screenshotPath = screenshotDataUrl;
-        thumbnailPath = screenshotDataUrl;
+        // Generate and upload thumbnail (300×200 cover crop)
+        try {
+          const sharp = (await import('sharp')).default;
+          const thumbBuffer = await sharp(screenshotBuffer)
+            .resize(300, 200, { fit: 'cover' })
+            .jpeg({ quality: 80 })
+            .toBuffer();
+          const thumbFile = new File(
+            [new Uint8Array(thumbBuffer)],
+            `thumb_${tempSummary.id}.jpg`,
+            { type: 'image/jpeg' },
+          );
+          thumbnailPath = await uploadToStorage(thumbFile, 'screenshots');
+        } catch {
+          thumbnailPath = screenshotPath;
+        }
       }
+
+      // Upload design JSON as a backup file
+      const jsonBuffer = Buffer.from(JSON.stringify(cleanedDesignState, null, 2));
+      const jsonFile = new File(
+        [jsonBuffer],
+        `design_${tempSummary.id}.json`,
+        { type: 'application/json' },
+      );
+      jsonPath = await uploadToStorage(jsonFile, 'designs');
     } catch (fileError) {
-      console.error('[api/projects] Failed to save design files:', fileError);
-      console.error('[api/projects] Error details:', fileError instanceof Error ? fileError.message : fileError);
-      console.error('[api/projects] Stack:', fileError instanceof Error ? fileError.stack : 'No stack trace');
+      console.error('[api/projects] Failed to upload design files:', fileError);
     }
 
     // Ensure we have a tempSummary
@@ -178,6 +178,7 @@ export async function POST(request: NextRequest) {
       borderId: body.borderId ?? null,
       screenshotPath,
       thumbnailPath,
+      jsonPath,
       designState: cleanedDesignState,
       pricingBreakdown: body.pricingBreakdown ?? null,
     });
