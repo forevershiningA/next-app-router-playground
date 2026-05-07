@@ -17,13 +17,16 @@ const EXT_MAP: Record<string, string> = {
 async function saveLocallyGetUrl(file: File, subdir: UploadSubdir): Promise<string> {
   const bytes = await file.arrayBuffer();
   const ext = EXT_MAP[file.type] ?? 'bin';
+  const now = new Date();
+  const year = now.getFullYear().toString();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
   const filename = randomBytes(16).toString('hex') + '.' + ext;
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', subdir);
+  const uploadDir = path.join(process.cwd(), 'public', 'uploads', subdir, year, month);
 
   if (!existsSync(uploadDir)) await mkdir(uploadDir, { recursive: true });
   await writeFile(path.join(uploadDir, filename), Buffer.from(bytes));
 
-  return `/uploads/${subdir}/${filename}`;
+  return `/uploads/${subdir}/${year}/${month}/${filename}`;
 }
 
 /**

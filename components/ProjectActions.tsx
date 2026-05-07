@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { captureDesignSnapshot, applyDesignSnapshot } from '#/lib/project-serializer';
 import type { PricingBreakdown, ProjectSummary, ProjectRecordWithState } from '#/lib/project-schemas';
@@ -169,8 +170,22 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
 
   const projectList = useMemo(() => projects.slice(0, 5), [projects]);
 
+  const savingOverlay = isSaving && typeof document !== 'undefined'
+    ? createPortal(
+        <div className="pointer-events-none fixed inset-0 z-[10000] flex items-center justify-center bg-black/80">
+          <div className="flex flex-col items-center gap-4 text-white">
+            <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
+            <div className="font-mono text-sm opacity-90">Saving design…</div>
+          </div>
+        </div>,
+        document.body
+      )
+    : null;
+
   return (
-    <div className="space-y-4">
+    <>
+      {savingOverlay}
+      <div className="space-y-4">
       <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
         <div className="mb-3">
           <label className="text-xs uppercase tracking-wide text-gray-400">Project Title</label>
@@ -260,6 +275,7 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
           })}
         </ul>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

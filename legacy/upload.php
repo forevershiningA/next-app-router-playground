@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // ─── Auth ────────────────────────────────────────────────────────────────────
 // Must match UPLOAD_REMOTE_SECRET in your Vercel environment variables.
 // Generate with: openssl rand -hex 32
-$secret = 'CHANGE_ME_TO_A_STRONG_SECRET';
+$secret = 'Q25^ECDjl3!1';
 
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 if ($authHeader !== 'Bearer ' . $secret) {
@@ -105,7 +105,9 @@ $extMap = [
 $ext = $extMap[$mimeType] ?? 'bin';
 
 // ─── Save ────────────────────────────────────────────────────────────────────
-$uploadDir = __DIR__ . '/uploads/' . $subdir . '/';
+$year  = date('Y');
+$month = date('m');
+$uploadDir = __DIR__ . '/uploads/' . $subdir . '/' . $year . '/' . $month . '/';
 if (!is_dir($uploadDir)) {
     if (!mkdir($uploadDir, 0755, true)) {
         http_response_code(500);
@@ -123,5 +125,5 @@ if (!move_uploaded_file($_FILES['file']['tmp_name'], $destPath)) {
     exit;
 }
 
-$publicUrl = 'https://www.wiecznapamiec.pl/forevershining/uploads/' . $subdir . '/' . $filename;
+$publicUrl = 'https://www.wiecznapamiec.pl/forevershining/uploads/' . $subdir . '/' . $year . '/' . $month . '/' . $filename;
 echo json_encode(['url' => $publicUrl]);
