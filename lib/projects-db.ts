@@ -12,7 +12,13 @@ function ensureDb() {
   return db;
 }
 
-const toSummary = (record: typeof projects.$inferSelect): ProjectSummary => ({
+/** Returns true if the error indicates json_path column doesn't exist yet in production DB. */
+function isJsonPathColumnMissing(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err);
+  return msg.includes('json_path') || (err as any)?.code === '42703';
+}
+
+const toSummary = (record: typeof projects.$inferSelect, skipJsonPath = false): ProjectSummary => ({
   id: record.id,
   title: record.title,
   status: record.status,
@@ -20,7 +26,7 @@ const toSummary = (record: typeof projects.$inferSelect): ProjectSummary => ({
   currency: record.currency ?? 'AUD',
   screenshotPath: normalizePublicPath(record.screenshotPath),
   thumbnailPath: normalizePublicPath(record.thumbnailPath),
-  jsonPath: normalizePublicPath(record.jsonPath),
+  jsonPath: skipJsonPath ? null : normalizePublicPath(record.jsonPath),
   updatedAt: record.updatedAt.toISOString(),
   createdAt: record.createdAt.toISOString(),
 });
@@ -60,88 +66,121 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
   const pricingBreakdown = input.pricingBreakdown ?? {};
   const totalPriceCents = typeof input.totalPriceCents === 'number' ? input.totalPriceCents : null;
 
+  // Shared column values used in both INSERT and UPDATE
+  const baseValues = {
+    accountId,
+    title,
+    status,
+    totalPriceCents,
+    currency,
+    materialId: input.materialId ?? null,
+    shapeId: input.shapeId ?? null,
+    borderId: input.borderId ?? null,
+    screenshotPath: normalizePublicPath(input.screenshotPath),
+    thumbnailPath: normalizePublicPath(input.thumbnailPath),
+    designState: input.designState,
+  };
+
+  const withJsonPath = { ...baseValues, jsonPath: normalizePublicPath(input.jsonPath) };
+
   if (input.projectId) {
-    const [updated] = await database
-      .update(projects)
-      .set({
-        accountId,
-        title,
-        status,
-        totalPriceCents,
-        currency,
-        materialId: input.materialId ?? null,
-        shapeId: input.shapeId ?? null,
-        borderId: input.borderId ?? null,
-        screenshotPath: normalizePublicPath(input.screenshotPath),
-        thumbnailPath: normalizePublicPath(input.thumbnailPath),
-        jsonPath: normalizePublicPath(input.jsonPath),
-        designState: input.designState,
-        updatedAt: new Date(),
-      })
-      .where(and(eq(projects.id, input.projectId), eq(projects.accountId, accountId)))
-      .returning();
-
-    if (!updated) {
-      throw new Error('PROJECT_NOT_FOUND');
+    // UPDATE existing project — try with jsonPath, fall back without if column missing
+    try {
+      const [updated] = await database
+        .update(projects)
+        .set({ ...withJsonPath, updatedAt: new Date() })
+        .where(and(eq(projects.id, input.projectId), eq(projects.accountId, accountId)))
+        .returning();
+      if (!updated) throw new Error('PROJECT_NOT_FOUND');
+      return toSummary(updated);
+    } catch (err) {
+      if (!isJsonPathColumnMissing(err)) throw err;
+      console.warn('[projects-db] json_path column missing in production DB. Run: ALTER TABLE "projects" ADD COLUMN "json_path" text;');
+      const [updated] = await database
+        .update(projects)
+        .set({ ...baseValues, updatedAt: new Date() })
+        .where(and(eq(projects.id, input.projectId), eq(projects.accountId, accountId)))
+        .returning();
+      if (!updated) throw new Error('PROJECT_NOT_FOUND');
+      return toSummary(updated, true);
     }
-
-    return toSummary(updated);
   }
 
-  const [created] = await database
-    .insert(projects)
-    .values({
-      accountId,
-      title,
-      status,
-      totalPriceCents,
-      currency,
-      materialId: input.materialId ?? null,
-      shapeId: input.shapeId ?? null,
-      borderId: input.borderId ?? null,
-      screenshotPath: normalizePublicPath(input.screenshotPath),
-      thumbnailPath: normalizePublicPath(input.thumbnailPath),
-      jsonPath: normalizePublicPath(input.jsonPath),
-      designState: input.designState,
-      pricingBreakdown,
-    })
-    .returning();
-
-  return toSummary(created);
+  // INSERT new project — try with jsonPath, fall back without if column missing
+  try {
+    const [created] = await database
+      .insert(projects)
+      .values({ ...withJsonPath, pricingBreakdown })
+      .returning();
+    return toSummary(created);
+  } catch (err) {
+    if (!isJsonPathColumnMissing(err)) throw err;
+    console.warn('[projects-db] json_path column missing in production DB. Run: ALTER TABLE "projects" ADD COLUMN "json_path" text;');
+    const [created] = await database
+      .insert(projects)
+      .values({ ...baseValues, pricingBreakdown })
+      .returning();
+    return toSummary(created, true);
+  }
 }
 
 export async function listProjectSummaries(accountId: string, limit = 20): Promise<ProjectSummary[]> {
   const database = ensureDb();
-  const results = await database
-    .select({
-      id: projects.id,
-      title: projects.title,
-      status: projects.status,
-      totalPriceCents: projects.totalPriceCents,
-      currency: projects.currency,
-      screenshotPath: projects.screenshotPath,
-      thumbnailPath: projects.thumbnailPath,
-      jsonPath: projects.jsonPath,
-      updatedAt: projects.updatedAt,
-      createdAt: projects.createdAt,
-    })
-    .from(projects)
-    .where(eq(projects.accountId, accountId))
-    .orderBy(desc(projects.updatedAt))
-    .limit(limit);
 
-  return results.map((row) => ({
-    id: row.id,
-    title: row.title,
-    status: row.status,
-    totalPriceCents: row.totalPriceCents ?? null,
-    currency: row.currency ?? 'AUD',
-    screenshotPath: normalizePublicPath(row.screenshotPath),
-    thumbnailPath: normalizePublicPath(row.thumbnailPath),
-    jsonPath: normalizePublicPath(row.jsonPath),
-    updatedAt: row.updatedAt.toISOString(),
-    createdAt: row.createdAt.toISOString(),
-  }));
+  const mapRows = (rows: { id: string; title: string; status: string; totalPriceCents: number | null; currency: string | null; screenshotPath: string | null; thumbnailPath: string | null; jsonPath?: string | null; updatedAt: Date; createdAt: Date }[]): ProjectSummary[] =>
+    rows.map((row) => ({
+      id: row.id,
+      title: row.title,
+      status: row.status,
+      totalPriceCents: row.totalPriceCents ?? null,
+      currency: row.currency ?? 'AUD',
+      screenshotPath: normalizePublicPath(row.screenshotPath),
+      thumbnailPath: normalizePublicPath(row.thumbnailPath),
+      jsonPath: normalizePublicPath(row.jsonPath ?? null),
+      updatedAt: row.updatedAt.toISOString(),
+      createdAt: row.createdAt.toISOString(),
+    }));
+
+  try {
+    const results = await database
+      .select({
+        id: projects.id,
+        title: projects.title,
+        status: projects.status,
+        totalPriceCents: projects.totalPriceCents,
+        currency: projects.currency,
+        screenshotPath: projects.screenshotPath,
+        thumbnailPath: projects.thumbnailPath,
+        jsonPath: projects.jsonPath,
+        updatedAt: projects.updatedAt,
+        createdAt: projects.createdAt,
+      })
+      .from(projects)
+      .where(eq(projects.accountId, accountId))
+      .orderBy(desc(projects.updatedAt))
+      .limit(limit);
+    return mapRows(results);
+  } catch (err) {
+    if (!isJsonPathColumnMissing(err)) throw err;
+    console.warn('[projects-db] json_path column missing, listing without it.');
+    const results = await database
+      .select({
+        id: projects.id,
+        title: projects.title,
+        status: projects.status,
+        totalPriceCents: projects.totalPriceCents,
+        currency: projects.currency,
+        screenshotPath: projects.screenshotPath,
+        thumbnailPath: projects.thumbnailPath,
+        updatedAt: projects.updatedAt,
+        createdAt: projects.createdAt,
+      })
+      .from(projects)
+      .where(eq(projects.accountId, accountId))
+      .orderBy(desc(projects.updatedAt))
+      .limit(limit);
+    return mapRows(results.map((r) => ({ ...r, jsonPath: null })));
+  }
 }
 
 export async function getProjectRecord(projectId: string, accountId: string): Promise<ProjectRecordWithState | null> {

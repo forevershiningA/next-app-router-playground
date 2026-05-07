@@ -208,7 +208,10 @@ export async function POST(request: NextRequest) {
     }
 
     console.error('[api/projects] Failed to save project', error);
-    return NextResponse.json({ message: 'Unable to save project' }, { status: 500 });
+    return NextResponse.json({
+      message: 'Unable to save project',
+      detail: error instanceof Error ? error.message : String(error),
+    }, { status: 500 });
   }
 }
 
