@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, after } from 'next/server';
 import { listProjectSummaries, saveProjectRecord, deleteProjectRecord } from '#/lib/projects-db';
 import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
 import { getServerSession } from '#/lib/auth/session';
@@ -96,79 +96,10 @@ export async function POST(request: NextRequest) {
       : null;
     const cleanedDesignState = cleanDesignState(body.designState);
 
-    // Save design files first to get the screenshot and thumbnail paths
-    let screenshotPath: string | null = null;
-    let thumbnailPath: string | null = null;
-    let jsonPath: string | null = null;
-    let tempSummary: any = null;
-    
-    try {
-      const screenshotDataUrl = body.designState.metadata?.screenshot ?? undefined;
-      const screenshotBuffer = decodeScreenshotDataUrl(screenshotDataUrl);
-
-      // Create temporary project to get ID
-      tempSummary = await saveProjectRecord({
-        accountId: session.accountId,
-        projectId: body.projectId,
-        title: body.title ?? 'Untitled Design',
-        status: body.status ?? 'draft',
-        totalPriceCents,
-        currency: body.currency ?? 'AUD',
-        materialId: body.materialId ?? null,
-        shapeId: body.shapeId ?? null,
-        borderId: body.borderId ?? null,
-        designState: cleanedDesignState,
-        pricingBreakdown: body.pricingBreakdown ?? null,
-      });
-
-      if (screenshotBuffer.length > 0) {
-        // Upload full screenshot
-        const screenshotFile = new File(
-          [new Uint8Array(screenshotBuffer)],
-          `design_${tempSummary.id}.jpg`,
-          { type: 'image/jpeg' },
-        );
-        screenshotPath = await uploadToStorage(screenshotFile, 'screenshots');
-
-        // Generate and upload thumbnail (300×200 cover crop)
-        try {
-          const sharp = (await import('sharp')).default;
-          const thumbBuffer = await sharp(screenshotBuffer)
-            .resize(300, 200, { fit: 'cover' })
-            .jpeg({ quality: 80 })
-            .toBuffer();
-          const thumbFile = new File(
-            [new Uint8Array(thumbBuffer)],
-            `thumb_${tempSummary.id}.jpg`,
-            { type: 'image/jpeg' },
-          );
-          thumbnailPath = await uploadToStorage(thumbFile, 'screenshots');
-        } catch {
-          thumbnailPath = screenshotPath;
-        }
-      }
-
-      // Upload design JSON as a backup file
-      const jsonBuffer = Buffer.from(JSON.stringify(cleanedDesignState, null, 2));
-      const jsonFile = new File(
-        [jsonBuffer],
-        `design_${tempSummary.id}.json`,
-        { type: 'application/json' },
-      );
-      jsonPath = await uploadToStorage(jsonFile, 'designs');
-    } catch (fileError) {
-      console.error('[api/projects] Failed to upload design files:', fileError);
-    }
-
-    // Ensure we have a tempSummary
-    if (!tempSummary) {
-      throw new Error('Failed to create project record');
-    }
-
-    // Now update with screenshot and thumbnail paths
+    // Save to DB immediately — fast path, no uploads
     const summary = await saveProjectRecord({
       accountId: session.accountId,
-      projectId: tempSummary.id, // Use the temp project ID to update it
+      projectId: body.projectId,
       title: body.title ?? 'Untitled Design',
       status: body.status ?? 'draft',
       totalPriceCents,
@@ -176,11 +107,67 @@ export async function POST(request: NextRequest) {
       materialId: body.materialId ?? null,
       shapeId: body.shapeId ?? null,
       borderId: body.borderId ?? null,
-      screenshotPath,
-      thumbnailPath,
-      jsonPath,
       designState: cleanedDesignState,
       pricingBreakdown: body.pricingBreakdown ?? null,
+    });
+
+    // Upload screenshot, thumbnail and JSON AFTER the response is sent.
+    // Uses Next.js 15 after() so Vercel function timeout doesn't block the client.
+    const screenshotDataUrl = body.designState.metadata?.screenshot ?? undefined;
+    const screenshotBuffer = decodeScreenshotDataUrl(screenshotDataUrl);
+    const savedProjectId = summary.id;
+    const savedAccountId = session.accountId;
+
+    after(async () => {
+      try {
+        let screenshotPath: string | null = null;
+        let thumbnailPath: string | null = null;
+        let jsonPath: string | null = null;
+
+        if (screenshotBuffer.length > 0) {
+          screenshotPath = await uploadToStorage(
+            new File([new Uint8Array(screenshotBuffer)], `design_${savedProjectId}.jpg`, { type: 'image/jpeg' }),
+            'screenshots',
+          );
+          try {
+            const sharp = (await import('sharp')).default;
+            const thumbBuffer = await sharp(screenshotBuffer)
+              .resize(300, 200, { fit: 'cover' })
+              .jpeg({ quality: 80 })
+              .toBuffer();
+            thumbnailPath = await uploadToStorage(
+              new File([new Uint8Array(thumbBuffer)], `thumb_${savedProjectId}.jpg`, { type: 'image/jpeg' }),
+              'screenshots',
+            );
+          } catch {
+            thumbnailPath = screenshotPath;
+          }
+        }
+
+        const jsonBuffer = Buffer.from(JSON.stringify(cleanedDesignState, null, 2));
+        jsonPath = await uploadToStorage(
+          new File([jsonBuffer], `design_${savedProjectId}.json`, { type: 'application/json' }),
+          'designs',
+        );
+
+        if (screenshotPath || jsonPath) {
+          await saveProjectRecord({
+            accountId: savedAccountId,
+            projectId: savedProjectId,
+            title: summary.title,
+            status: summary.status,
+            totalPriceCents: summary.totalPriceCents,
+            currency: summary.currency,
+            screenshotPath,
+            thumbnailPath,
+            jsonPath,
+            designState: cleanedDesignState,
+            pricingBreakdown: body.pricingBreakdown ?? null,
+          });
+        }
+      } catch (uploadErr) {
+        console.error('[api/projects] Background upload failed:', uploadErr);
+      }
     });
 
     // Fire-and-forget: send saved-design email
@@ -190,7 +177,7 @@ export async function POST(request: NextRequest) {
       countryCode: 'au',
       designId: summary.id,
       designName: summary.title,
-      screenshotUrl: summary.screenshotPath ?? undefined,
+      screenshotUrl: undefined, // not yet uploaded; paths update in background
       quoteItems: detailedQuoteItems({
         breakdown: body.pricingBreakdown,
         designState: cleanedDesignState,
