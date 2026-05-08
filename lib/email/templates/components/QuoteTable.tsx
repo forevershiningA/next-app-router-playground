@@ -34,25 +34,20 @@ export function QuoteTable({
 
   return (
     <Section style={wrapper}>
+      <Text style={sectionHeading}>Price Breakdown</Text>
       <table style={table} cellPadding={0} cellSpacing={0}>
         <thead>
-          <tr>
-            <th style={th} align="left">
-              Item
-            </th>
-            <th style={{ ...th, width: '60px' }} align="center">
-              Qty
-            </th>
-            <th style={{ ...th, width: '100px' }} align="right">
-              Price
-            </th>
+          <tr style={theadRow}>
+            <th style={th} align="left">Item</th>
+            <th style={{ ...th, width: '50px' }} align="center">Qty</th>
+            <th style={{ ...th, width: '110px' }} align="right">Price</th>
           </tr>
         </thead>
         <tbody>
           {items.map((item, i) => (
-            <tr key={i}>
+            <tr key={i} style={i % 2 === 0 ? tdRowEven : tdRowOdd}>
               <td style={td}>{item.description}</td>
-              <td style={{ ...td, textAlign: 'center' }}>
+              <td style={{ ...td, textAlign: 'center', color: '#8a7e70' }}>
                 {item.quantity ?? 1}
               </td>
               <td style={{ ...td, textAlign: 'right' }}>
@@ -64,9 +59,7 @@ export function QuoteTable({
         <tfoot>
           {subtotalCents != null && (
             <tr>
-              <td colSpan={2} style={subtotalTd}>
-                Subtotal
-              </td>
+              <td colSpan={2} style={subtotalTd}>Subtotal</td>
               <td style={{ ...subtotalTd, textAlign: 'right' }}>
                 {formatCurrency(subtotalCents, currencySymbol)}
               </td>
@@ -74,18 +67,14 @@ export function QuoteTable({
           )}
           {taxCents != null && taxCents > 0 && (
             <tr>
-              <td colSpan={2} style={subtotalTd}>
-                Tax
-              </td>
+              <td colSpan={2} style={subtotalTd}>Tax</td>
               <td style={{ ...subtotalTd, textAlign: 'right' }}>
                 {formatCurrency(taxCents, currencySymbol)}
               </td>
             </tr>
           )}
-          <tr>
-            <td colSpan={2} style={totalTd}>
-              {totalLabel}
-            </td>
+          <tr style={totalRow}>
+            <td colSpan={2} style={totalTd}>{totalLabel}</td>
             <td style={{ ...totalTd, textAlign: 'right' }}>
               {formatCurrency(totalCents, currencySymbol)}
             </td>
@@ -98,48 +87,77 @@ export function QuoteTable({
 }
 
 const wrapper: React.CSSProperties = {
-  margin: '24px 0',
+  margin: '32px 0',
+};
+
+const sectionHeading: React.CSSProperties = {
+  color: '#060709',
+  fontSize: '11px',
+  fontWeight: 700,
+  letterSpacing: '2px',
+  textTransform: 'uppercase',
+  margin: '0 0 12px',
+  borderLeft: '3px solid #DEBD68',
+  paddingLeft: '10px',
 };
 
 const table: React.CSSProperties = {
   width: '100%',
   borderCollapse: 'collapse',
+  border: '1px solid #e8e0d5',
+};
+
+const theadRow: React.CSSProperties = {
+  backgroundColor: '#060709',
 };
 
 const th: React.CSSProperties = {
-  padding: '8px 12px',
-  fontSize: '12px',
+  padding: '10px 14px',
+  fontSize: '11px',
   fontWeight: 600,
-  color: '#666',
+  color: '#DEBD68',
   textTransform: 'uppercase',
-  borderBottom: '2px solid #060709',
+  letterSpacing: '1px',
+};
+
+const tdRowEven: React.CSSProperties = {
+  backgroundColor: '#ffffff',
+};
+
+const tdRowOdd: React.CSSProperties = {
+  backgroundColor: '#faf7f3',
 };
 
 const td: React.CSSProperties = {
-  padding: '10px 12px',
-  fontSize: '14px',
-  color: '#333',
-  borderBottom: '1px solid #e6ebf1',
+  padding: '11px 14px',
+  fontSize: '13px',
+  color: '#2a2420',
+  borderBottom: '1px solid #ede5da',
 };
 
 const subtotalTd: React.CSSProperties = {
-  padding: '8px 12px',
-  fontSize: '14px',
-  color: '#666',
-  borderBottom: '1px solid #e6ebf1',
+  padding: '9px 14px',
+  fontSize: '13px',
+  color: '#6a5e55',
+  borderBottom: '1px solid #ede5da',
+};
+
+const totalRow: React.CSSProperties = {
+  backgroundColor: '#060709',
 };
 
 const totalTd: React.CSSProperties = {
-  padding: '10px 12px',
-  fontSize: '16px',
+  padding: '13px 14px',
+  fontSize: '15px',
   fontWeight: 700,
-  color: '#060709',
-  borderTop: '2px solid #060709',
+  color: '#DEBD68',
+  letterSpacing: '0.5px',
 };
 
 const disclaimer: React.CSSProperties = {
-  color: '#999',
+  color: '#a09288',
   fontSize: '11px',
   margin: '8px 0 0',
   textAlign: 'right',
+  fontStyle: 'italic',
 };
