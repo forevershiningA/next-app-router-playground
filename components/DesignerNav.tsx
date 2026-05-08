@@ -3010,7 +3010,7 @@ export default function DesignerNav() {
                       </span>
                     </div>
                     <ChevronDownIcon
-                      className={`h-4 w-4 text-white/40 transition-transform duration-300 ${
+                      className={`h-4 w-4 text-white/40 ${
                         openGroup !== groupIndex ? '-rotate-90' : 'rotate-0'
                       }`}
                     />
@@ -3018,7 +3018,7 @@ export default function DesignerNav() {
 
                   {/* Group Items — collapsible */}
                   <div
-                    className={`flex flex-col gap-2 overflow-hidden transition-all duration-300 ease-in-out ${
+                    className={`flex flex-col gap-2 overflow-hidden ${
                       openGroup !== groupIndex
                         ? 'max-h-0 opacity-0'
                         : 'max-h-[2000px] opacity-100'
