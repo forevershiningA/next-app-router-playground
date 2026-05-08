@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-06
+**Last Updated:** 2026-05-07
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -38,7 +38,92 @@
 
 ---
 
-## Current Status (2026-05-06) — Urn Background Inlay Polish & Unified Upload Architecture
+## Current Status (2026-05-07) — Save Design 500 Fix, CORS Fix, Saving Overlay
+
+### ✅ Fixed: Save Design 500 Error on Live Vercel (Timeout)
+
+Saving a design on the live site (forevershining.org) returned HTTP 500 / "Unable to save project".
+
+#### Root Cause
+`app/api/projects/route.ts` (POST handler) was doing **3 sequential HTTP uploads** to wiecznapamiec.pl (screenshot → thumbnail → JSON) before returning a response. Vercel Hobby plan enforces a **10-second function timeout**; the combined upload time exceeded this limit and Vercel killed the function.
+
+#### Fix — Next.js 15 `after()`
+Used `after()` from `next/server` (Next.js 15 stable) to run all file uploads **after the response has been sent** to the client:
+
+1. **Fast path** (synchronous): Write design state to PostgreSQL → return `{ project: summary }` immediately (typically <1 second)
+2. **Background** (via `after()`): Upload screenshot + generate thumbnail + upload JSON to wiecznapamiec.pl → update DB record with file paths
+
+The client now sees an instant save success. File paths (`screenshotPath`, `thumbnailPath`, `jsonPath`) are populated in the DB record a few seconds later once the background uploads complete.
+
+```typescript
+// app/api/projects/route.ts
+import { NextRequest, NextResponse, after } from 'next/server';
+
+// ...inside POST handler:
+const summary = await saveProjectRecord({ ...baseFields });
+
+after(async () => {
+  // upload screenshot, thumbnail, JSON → update DB record
+});
+
+return NextResponse.json({ project: summary }); // returns immediately
+```
+
+**Commit:** `b9b10c47d1`
+
+---
+
+### ✅ Fixed: CORS Error for Uploaded Images in WebGL
+
+Three.js reported `Could not load https://www.wiecznapamiec.pl/forevershining/uploads/backgrounds/…jpg: undefined` because the `Access-Control-Allow-Origin` response header had value `"e"` (a literal character) instead of a real origin or `"*"`.
+
+#### Root Cause
+`legacy/.htaccess` used Apache's `SetEnvIf` + `%{CORS_ORIGIN}e` pattern. When the environment variable is unset (or unsupported by the server's Apache version), `%{CORS_ORIGIN}e` expands to just the letter `e` — resulting in `Access-Control-Allow-Origin: e`.
+
+#### Fix
+Replaced the conditional env-var pattern with a simple unconditional wildcard in `legacy/.htaccess`:
+```apache
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, OPTIONS"
+```
+This file must be deployed to `public_html/forevershining/uploads/.htaccess` on wiecznapamiec.pl.
+
+---
+
+### ✅ Added: Save Loading Overlay in ProjectActions
+
+`components/ProjectActions.tsx` now shows a full-screen spinner overlay (matching `LoadingOverlay.tsx` styling) while `isSaving === true`. Uses `createPortal` to render above everything.
+
+---
+
+### ✅ DB: `json_path` Column Added to Production
+
+`drizzle/0003_mute_carnage.sql` (`ALTER TABLE "projects" ADD COLUMN "json_path" text;`) was run on the production database. `lib/projects-db.ts` was rewritten with a resilient fallback — all INSERT/UPDATE/SELECT operations catch `42703` ("undefined column") errors and retry without `jsonPath`, so the app remains backward-compatible with DB schemas that haven't been migrated yet.
+
+---
+
+### ✅ Upload Year/Month Subfolder Structure
+
+`legacy/upload.php` creates `YEAR/MONTH/` subdirectories inside each upload type folder so uploads are organized chronologically:
+```
+uploads/
+  backgrounds/2026/05/{uuid}.jpg
+  images/2026/05/{uuid}.jpg
+  screenshots/2026/05/{uuid}.jpg
+  designs/2026/05/{uuid}.json
+```
+
+---
+
+### 📌 Pending / Next Steps
+
+- [ ] **Visual verify save on live**: after Vercel redeploys from `b9b10c47d1`, confirm a design saves without 500 and thumbnails appear in My Designs (may need to wait a few seconds for background upload to complete)
+- [ ] **Email screenshot URL**: `screenshotUrl: undefined` is currently passed to the save-design email since the screenshot isn't uploaded yet at the time the email is sent. Consider sending a follow-up email or delaying the email send inside `after()` once the upload is done.
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+
+---
+
+
 
 ### Urn Background Inlay — Final Fixes
 
