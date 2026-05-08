@@ -486,8 +486,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
   const handleFlipX = () => setFlipX(!flipX);
   const handleFlipY = () => setFlipY(!flipY);
-  const handleRotateLeft = () => setCropRotation(cropRotation - 90);
-  const handleRotateRight = () => setCropRotation(cropRotation + 90);
+  const handleRotateLeft = () => setCropRotation(((cropRotation - 90) % 360 + 360) % 360);
+  const handleRotateRight = () => setCropRotation((cropRotation + 90) % 360);
 
   const handleMouseDown = (e: React.MouseEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
     e.preventDefault();
@@ -1058,24 +1058,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
           <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
             <div className="space-y-4">
-              {/* Selected Type Info */}
-              <div className="p-4">
-                <div className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-20 h-20 bg-gray-800 rounded-lg overflow-hidden relative">
-                    <Image
-                      src={IMAGE_THUMBNAILS[selectedType.id] || '/jpg/photos/m.jpg'}
-                      alt={selectedType.name}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-white font-medium mb-1">{selectedType.name}</h4>
-                    <p className="text-xs text-white/60">Selected image type</p>
-                  </div>
-                </div>
-              </div>
+
 
               {/* Upload Section */}
               {!showCropSection && (
@@ -1112,37 +1095,36 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               {/* Crop Section - Controls only in sidebar */}
               {showCropSection && uploadedImage && (
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-white font-medium">Crop Section</h4>
-                    <button className="text-white/60 hover:text-white">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </button>
+                  <div className="flex items-center justify-between mb-2">
+                    <h4 className="text-white text-sm font-medium">{selectedType.name}</h4>
                   </div>
 
                   {/* Step 1: Select Mask — hidden for Full Color Plaque (printed directly) */}
                   {productId !== '32' && (
                   <div>
-                    <div className="text-xs text-white/60 mb-2">Step 1</div>
-                    <div className="text-sm text-white font-medium mb-3">SELECT MASK</div>
-                    <div className="grid grid-cols-4 gap-2">
-                      {MASK_OPTIONS.map((mask) => (
+                    <div className="text-xs text-white/60 mb-1">Step 1 — SELECT MASK</div>
+                    <div className="grid grid-cols-5 gap-1.5">
+                      {MASK_OPTIONS.filter((mask) =>
+                        isGraniteImage
+                          ? true
+                          : ['oval', 'horizontal-oval', 'square', 'rectangle'].includes(mask.id)
+                      ).map((mask) => (
                         <button
                           key={mask.id}
                           onClick={() => setSelectedMask(mask.id)}
-                          className={`aspect-square rounded-lg border-2 transition-all ${
+                          title={mask.label}
+                          className={`aspect-square rounded-md border-2 transition-all ${
                             selectedMask === mask.id
                               ? 'border-[#D7B356] bg-[#D7B356]/20'
                               : 'border-white/20 bg-white/5 hover:border-white/40'
                           }`}
                         >
-                          <div className="flex items-center justify-center h-full p-2">
+                          <div className="flex items-center justify-center h-full p-1">
                             <Image
                               src={mask.svg}
                               alt={mask.label}
-                              width={40}
-                              height={40}
+                              width={28}
+                              height={28}
                               className="w-full h-full object-contain opacity-80"
                               unoptimized
                             />
@@ -1300,19 +1282,19 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     </div>
 
                     {/* Rotation (always available) */}
-                    <div className="mt-4 space-y-2">
+                     <div className="mt-4 space-y-2">
                       <div className="text-sm text-white/80">SELECT ROTATION: {cropRotation}°</div>
                       <input
                         type="range"
-                        min="-180"
-                        max="180"
+                        min="0"
+                        max="360"
                         value={cropRotation}
                         onChange={(e) => setCropRotation(parseInt(e.target.value))}
                         className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
                       />
                       <div className="flex justify-between items-center">
                         <button
-                          onClick={() => setCropRotation(Math.max(-180, cropRotation - 5))}
+                          onClick={() => setCropRotation(((cropRotation - 5) % 360 + 360) % 360)}
                           className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
                         >
                           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1321,7 +1303,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           Decrease
                         </button>
                         <button
-                          onClick={() => setCropRotation(Math.min(180, cropRotation + 5))}
+                          onClick={() => setCropRotation((cropRotation + 5) % 360)}
                           className="flex flex-col items-center gap-1 text-white/60 hover:text-white text-xs"
                         >
                           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1335,7 +1317,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     {/* Crop Button */}
                     <button
                       onClick={handleCropImage}
-                      className="mt-4 w-full rounded-lg bg-[#1F1F1F] border border-white/20 px-4 py-3 text-white font-medium hover:bg-[#2A2A2A] transition-colors flex items-center justify-center gap-2"
+                      className="mt-4 w-full rounded-lg bg-[#D7B356] border border-[#D7B356] px-4 py-3 text-black font-medium hover:bg-[#E4C778] transition-colors flex items-center justify-center gap-2"
                     >
                       <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
