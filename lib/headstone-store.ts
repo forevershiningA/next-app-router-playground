@@ -507,6 +507,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         },
       ],
       cropCanvasData: null,
+      selectedImageId: image.id, // Auto-select the newly added image
+      activePanel: 'image',      // Open the edit panel
     }));
     setTimeout(() => get().calculateImageCost(), 0);
   },
