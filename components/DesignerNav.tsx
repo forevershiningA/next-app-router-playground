@@ -78,13 +78,13 @@ const menuGroups = [
       },
       { slug: 'select-motifs', name: 'Select Motifs', icon: SparklesIcon },
       { slug: 'check-price', name: 'Check Price', icon: CurrencyDollarIcon },
+      { slug: 'save-design', name: 'Save Design', icon: CloudArrowUpIcon },
     ],
   },
   {
     label: 'Account',
     items: [
       { slug: 'my-account', name: 'My Account', icon: UserCircleIcon },
-      { slug: 'save-design', name: 'Save Design', icon: CloudArrowUpIcon },
     ],
   },
 ];
