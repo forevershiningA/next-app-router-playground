@@ -1669,7 +1669,7 @@ export default function DesignerNav() {
           return total + price;
         }, 0);
       }
-      const imagePrice = 0; // Image pricing is computed on Check Price save path
+      const imagePrice = state.imageCost ?? 0;
       const subtotal =
         headstonePrice +
         basePrice +

@@ -125,11 +125,11 @@ export function detailedQuoteItems(args: {
   }
 
   const imagesLine = quote.items.find((i) => i.label === 'Images');
-  if (imagesLine && imagesLine.amount > 0) {
+  if (imagesLine) {
     items.push({
       description: 'Images',
       quantity: imagesLine.quantity,
-      unitPriceCents: toCents(imagesLine.amount / Math.max(1, imagesLine.quantity)),
+      unitPriceCents: toCents(imagesLine.amount / Math.max(1, imagesLine.quantity ?? 1)),
       totalCents: toCents(imagesLine.amount),
     });
   }
