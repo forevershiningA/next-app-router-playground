@@ -3,6 +3,7 @@
 
 import React from 'react';
 import { useHeadstoneStore } from './headstone-store';
+import { logger } from '#/lib/logger';
 
 export type MLDesign = {
   id: string;
@@ -120,24 +121,24 @@ export function getDefaultFont(design: MLDesign): string {
 export function loadMLDesignToCanvas(design: MLDesign) {
   const store = useHeadstoneStore.getState();
   
-  console.log('📐 Loading ML design into canvas:', design.designName);
+  logger.log('📐 Loading ML design into canvas:', design.designName);
   
   // 1. Set shape
   const shapeSVG = mapShapeToSVG(design.shape);
   store.setShapeUrl(`/shapes/headstones/${shapeSVG}`);
-  console.log('  Shape:', shapeSVG);
+  logger.log('  Shape:', shapeSVG);
   
   // 2. Set texture/material
   const textureFile = mapTextureToFile(design.texture);
   store.setHeadstoneMaterialUrl(textureFile);
-  console.log('  Texture:', textureFile);
+  logger.log('  Texture:', textureFile);
   
   // 3. Set size
   const width = design.width || 600;
   const height = design.height || 600;
   store.setWidthMm(width);
   store.setHeightMm(height);
-  console.log('  Size:', `${width}×${height}mm`);
+  logger.log('  Size:', `${width}×${height}mm`);
   
   // 4. Parse and set inscriptions
   const inscriptions = parseInscriptions(design.tags);
@@ -160,12 +161,12 @@ export function loadMLDesignToCanvas(design: MLDesign) {
       });
     }
   });
-  console.log('  Inscriptions:', inscriptions.length, 'lines loaded');
+  logger.log('  Inscriptions:', inscriptions.length, 'lines loaded');
   
   // 5. Store design metadata for reference
   // Metadata storage removed - not currently supported by store
   
-  console.log('✅ ML design loaded successfully!');
+  logger.log('✅ ML design loaded successfully!');
   
   return true;
 }

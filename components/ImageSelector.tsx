@@ -9,6 +9,7 @@ import { getFlexibleImageBounds, getImageSizeOptions, getImageSizeOption } from 
 import { MASK_OPTIONS, getMaskAspectRatio, getMaskUrl } from '#/lib/image-mask';
 import { useImageCropState } from './useImageCropState';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
+import { logger } from '#/lib/logger';
 
 interface ImageSelectorProps {
   onImageSelect?: (imageType: AdditionData) => void;
@@ -400,7 +401,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       if (!uploadResponse.ok) throw new Error(`Image upload failed: ${uploadResponse.status}`);
       const { url: processedImageUrl } = (await uploadResponse.json()) as { url: string };
 
-      console.log('[handleCropImage] Canvas uploaded:', {
+      logger.log('[handleCropImage] Canvas uploaded:', {
         canvasWidth: finalCanvas.width,
         canvasHeight: finalCanvas.height,
         canvasAspect: finalCanvas.width / finalCanvas.height,
@@ -576,7 +577,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
   // Debug logging
   useEffect(() => {
-    console.log('[ImageSelector] State:', { 
+    logger.log('[ImageSelector] State:', { 
       selectedImageId, 
       activePanel, 
       hasSelectedImage: !!selectedImage,

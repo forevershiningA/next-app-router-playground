@@ -6,6 +6,7 @@ import {
   fetchCanonicalDesign,
   type CanonicalDesignData,
 } from '#/lib/saved-design-loader-utils';
+import { logger } from '#/lib/logger';
 const isDevEnvironment = process.env.NODE_ENV !== 'production';
 const DEFAULT_DESIGN_ID = '1725769905504';
 
@@ -22,7 +23,7 @@ export default function DefaultDesignLoader() {
 export async function loadDesignById(designId: string) {
   try {
     if (isDevEnvironment) {
-      console.log(`[loadDesignById] Loading canonical design: ${designId}`);
+      logger.log(`[loadDesignById] Loading canonical design: ${designId}`);
     }
 
     const canonicalData = await fetchCanonicalDesign(designId);
@@ -36,7 +37,7 @@ export async function loadDesignById(designId: string) {
     await loadCanonicalDesignIntoEditor(canonicalData, { clearExisting: true });
 
     if (isDevEnvironment) {
-      console.log(`[loadDesignById] Successfully loaded canonical design ${designId}`);
+      logger.log(`[loadDesignById] Successfully loaded canonical design ${designId}`);
     }
     return { success: true, message: 'Design loaded successfully' };
   } catch (error) {

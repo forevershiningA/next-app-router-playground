@@ -2,6 +2,7 @@
  * Auto-crop screenshot utility
  * Analyzes screenshots for excessive white space and calculates optimal crop bounds
  */
+import { logger } from '#/lib/logger';
 
 export interface CropBounds {
   left: number;
@@ -136,7 +137,7 @@ export async function analyzeImageForCrop(
       const croppedWidth = right - left;
       const croppedHeight = bottom - top;
       
-      console.log('Screenshot analysis (edge-based):', {
+      logger.log('Screenshot analysis (edge-based):', {
         original: { width: canvas.width, height: canvas.height },
         edgeAnalysis: {
           leftEdgeWhite: leftEdgeWhitePercentage.toFixed(2) + '%',

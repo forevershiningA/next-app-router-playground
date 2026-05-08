@@ -48,6 +48,7 @@ import {
   type LinePatch,
 } from '#/lib/headstone-store.types';
 import { normalizeAdditionBaseId } from '#/lib/addition-utils';
+import { logger } from '#/lib/logger';
 
 export type {
   AdditionKind,
@@ -627,7 +628,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       set({ catalog, productId: id });
       
       if (process.env.NODE_ENV !== 'production') {
-        console.log('[Store] Catalog set for product', id, ':', {
+        logger.log('[Store] Catalog set for product', id, ':', {
           catalogName: catalog.product.name,
           catalogId: catalog.product.id,
           catalogType: catalog.product.type

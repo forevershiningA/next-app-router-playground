@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import ConfirmModal from '#/components/ConfirmModal';
 import dynamic from 'next/dynamic';
+import { logger } from '#/lib/logger';
 const EmailShareModal = dynamic(() => import('#/components/EmailShareModal'));
 
 type DesignStatus = 'awaiting-approval' | 'ready-to-order' | 'in-production' | 'completed' | 'draft';
@@ -675,12 +676,12 @@ function buildProjectCard(project: any): AccountDesignCard {
   
   // Get product name from productId
   const productId = project.designState?.productId;
-  console.log('Full designState:', project.designState);
-  console.log('Product lookup:', { productId, hasProducts: !!data.products, productsCount: data.products?.length });
+  logger.log('Full designState:', project.designState);
+  logger.log('Product lookup:', { productId, hasProducts: !!data.products, productsCount: data.products?.length });
   const product = productId ? data.products.find(p => p.id === productId) : null;
-  console.log('Found product:', product);
+  logger.log('Found product:', product);
   const productName = product?.name || 'Custom memorial design';
-  console.log('Final productName:', productName);
+  logger.log('Final productName:', productName);
   
   return {
     id: project.id,

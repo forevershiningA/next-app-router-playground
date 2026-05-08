@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import Image from 'next/image';
+import { logger } from '#/lib/logger';
 
 const defaultBorders: { id: string; name: string; displayName?: string; image: string | null }[] = [
   { id: 'border1', name: 'Border 1', image: 'border1a.svg' },
@@ -39,7 +40,7 @@ export default function BorderSelectionGrid() {
 
   const handleBorderSelect = (border: typeof borders[0]) => {
     const nameToSet = border.id === 'no-border' ? null : border.name;
-    console.log('Border selected:', { id: border.id, name: border.name, setting: nameToSet });
+    logger.log('Border selected:', { id: border.id, name: border.name, setting: nameToSet });
     setBorderName(nameToSet);
   };
 

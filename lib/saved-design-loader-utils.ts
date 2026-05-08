@@ -7,6 +7,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { SavedDesignData } from '#/components/SavedDesignLoader';
 import type { Line } from '#/lib/headstone-store';
 import type { Group } from 'three';
+import { logger } from '#/lib/logger';
 
 export interface LoadDesignOptions {
   clearExisting?: boolean; // Whether to clear existing inscriptions first
@@ -1889,7 +1890,7 @@ export async function loadCanonicalDesignIntoEditor(
     }
     console.warn('[loadCanonicalDesignIntoEditor] Legacy fallback unavailable; proceeding with canonical data');
   } else {
-    console.log(`[loadCanonicalDesignIntoEditor] Using canonical coordinates (${loadPolicy.reason})`);
+    logger.log(`[loadCanonicalDesignIntoEditor] Using canonical coordinates (${loadPolicy.reason})`);
   }
 
   type PendingMotifData = {

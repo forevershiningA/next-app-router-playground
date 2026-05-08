@@ -26,6 +26,7 @@ import {
   CAMERA_NEAR,
   CAMERA_FAR,
 } from '#/lib/headstone-constants';
+import { logger } from '#/lib/logger';
 
 function CameraController() {
   const { controls, camera } = useThree();
@@ -107,7 +108,7 @@ function ProductNameHeader() {
   }, [catalog, fallbackProductId]);
   
   const displayProductName = useMemo(() => {
-    console.log('[ThreeScene] Product name calc:', {
+    logger.log('[ThreeScene] Product name calc:', {
       catalogName: catalog?.product?.name,
       catalogId: catalog?.product?.id,
       productId,

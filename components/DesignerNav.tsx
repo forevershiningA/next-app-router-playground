@@ -41,6 +41,7 @@ import SaveDesignModal from './SaveDesignModal';
 import ConfirmModal from './ConfirmModal';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
+import { logger } from '#/lib/logger';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -1790,7 +1791,7 @@ export default function DesignerNav() {
         throw new Error(message);
       }
 
-      console.log('Design saved successfully:', result);
+      logger.log('Design saved successfully:', result);
 
       // Success - close modal and redirect to My Account
       setShowSaveDesignModal(false);

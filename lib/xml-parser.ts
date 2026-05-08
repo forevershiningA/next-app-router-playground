@@ -1,3 +1,5 @@
+import { logger } from '#/lib/logger';
+
 export interface ShapeDims {
   initWidth: number;
   initHeight: number;
@@ -477,18 +479,18 @@ export async function parseCatalogXML(
   let basePriceModel: PriceModel | undefined = undefined;
   
   if (isDev) {
-    console.log('Parsing catalog XML - found stand/base product:', !!standProductEl);
+    logger.log('Parsing catalog XML - found stand/base product:', !!standProductEl);
   }
   
   if (standProductEl) {
     const standPriceModelEl = standProductEl.querySelector('price_model');
     if (isDev) {
-      console.log('Stand/base product has price_model:', !!standPriceModelEl);
+      logger.log('Stand/base product has price_model:', !!standPriceModelEl);
     }
     if (standPriceModelEl) {
       basePriceModel = parsePriceModel(standPriceModelEl);
       if (isDev) {
-        console.log('Base price model parsed:', basePriceModel);
+        logger.log('Base price model parsed:', basePriceModel);
       }
     }
   }

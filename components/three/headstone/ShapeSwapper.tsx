@@ -23,6 +23,7 @@ import { data } from '#/app/_internal/_data';
 import { AdditionData } from '#/lib/xml-parser';
 import { usePathname, useRouter } from 'next/navigation';
 import type { Component, ReactNode } from 'react';
+import { logger } from '#/lib/logger';
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
@@ -551,13 +552,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             meshProps={{
               name: 'headstone',
               onClick: (e) => {
-                console.log('[ShapeSwapper] Headstone onClick, event object:', e.object.name);
+                logger.log('[ShapeSwapper] Headstone onClick, event object:', e.object.name);
                 e.stopPropagation();
                 
                 // Don't select headstone if clicking on an image
                 // Images have renderOrder 999, headstone has lower/default
                 if (e.object.renderOrder === 999) {
-                  console.log('[ShapeSwapper] Ignoring click - it was on an image');
+                  logger.log('[ShapeSwapper] Ignoring click - it was on an image');
                   return;
                 }
 
