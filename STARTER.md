@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-07
+**Last Updated:** 2026-05-08
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,78 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-05-08) — Thumbnail Fix, Image Auto-Select, Nav & Crop UI Refactor
+
+### ✅ Fixed: Thumbnails Showing `/screen.png` on Live Site
+
+After saving a design on the live site, `<img src="/screen.png">` appeared instead of a real thumbnail.
+
+#### Root Cause
+`UPLOAD_REMOTE_URL` / `UPLOAD_REMOTE_SECRET` env vars may not be set → `after()` upload silently fails → `screenshotPath`/`thumbnailPath` remain `null` in DB → UI falls back to `/screen.png`.
+
+#### Fix (`app/api/projects/route.ts`)
+Store the raw screenshot data URL directly into `screenshotPath` and `thumbnailPath` in the **fast-path DB write** (before `after()` fires). The `after()` callback still runs and overwrites with real file URLs if the upload to wiecznapamiec.pl succeeds. On Vercel without upload env vars, the data URL is shown as-is — always a real thumbnail. **Commit:** `63fb58a144`
+
+---
+
+### ✅ Fixed: Save Design 500 Error on Localhost (Missing `json_path` Column)
+
+#### Root Cause
+`ALTER TABLE "projects" ADD COLUMN "json_path" text` had been applied to the remote DB via Drizzle schema but **not** run locally. The fallback `isJsonPathColumnMissing()` was present in `lib/projects-db.ts` but not triggering reliably.
+
+#### Fix
+Ran `pnpm db:push` locally (confirmed via interactive prompt). Column added. **Commit:** `d4e50aa774`
+
+---
+
+### ✅ Auto-Select Image + Show Edit Panel After Adding
+
+When "Add Your Image" was placed on the headstone the image wasn't selected and no edit panel appeared — the user had to manually click it.
+
+#### Fix (`lib/headstone-store.ts` — `addImage()`)
+Added `selectedImageId: image.id` and `activePanel: 'image'` to the `set()` call, mirroring the pattern used by `addMotif()`. **Commit:** `57ec1d0755`
+
+---
+
+### ✅ Moved "Save Design" to Design Nav Section
+
+Save Design was buried under the Account accordion. Moved it to the last position of the **Design** group in `components/DesignerNav.tsx` — it still triggers the account gate when unauthenticated. **Commit:** `b419d41fc5`
+
+---
+
+### ✅ Crop Section UI Refactor (`components/ImageSelector.tsx`)
+
+Multiple improvements to reduce vertical space and improve usability:
+
+| Change | Detail |
+|--------|--------|
+| Removed type-info header | Large image thumbnail + "Ceramic Photo" + "Selected image type" block removed from above crop section |
+| Compacted title | "Crop Section" header + info button replaced with a small `selectedType.name` label |
+| Mask filtering | Ceramic / Vitreous Enamel / Plana → only show oval, horizontal-oval, square, rectangle (4 masks); Granite/laser-etched → all 7 masks |
+| Smaller mask grid | `grid-cols-5`, 28px thumbnails, `p-1` padding, `rounded-md` |
+| Gold "Crop Image" button | Background `#D7B356`, text black — matches slider gold theme |
+| Rotation range 0–360 | Slider changed from `-180/180` to `0/360`; Decrease/Increase ±5 buttons wrap with modulo |
+| Rotate ↺/↻ wrapping | `handleRotateLeft` / `handleRotateRight` (±90) now use `((deg % 360) + 360) % 360` — no longer escape 0–360 range |
+
+**Commit:** `7bab619cde`
+
+---
+
+### ✅ Removed Accordion Animation in Left Sidebar
+
+Accordion sections (Setup / Design / Account) now open/close instantly — `transition-all duration-300 ease-in-out` removed from the collapsible content div, and `transition-transform duration-300` removed from the chevron icon. **Commit:** `debd74eac1`
+
+---
+
+### 📌 Pending / Next Steps (2026-05-08)
+
+- [ ] **db:sync to remote**: Run `pnpm db:sync` (type `SYNC` to confirm) to ensure remote home.pl DB has the `json_path` column in sync with local schema.
+- [ ] **Visual QA on crop section**: Verify mask filtering works correctly for each image type (Ceramic 7, Vitreous Enamel 2300, Plana 2400 vs Granite 21/135). Confirm Crop Image button is gold.
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+- [ ] **Email screenshot URL**: `screenshotUrl: undefined` is passed to save-design email since upload hasn't completed yet at send time. Consider moving `sendEmail()` call inside `after()` after upload completes so the email includes the real screenshot URL.
 
 ---
 
@@ -115,10 +187,10 @@ uploads/
 
 ---
 
-### 📌 Pending / Next Steps
+### 📌 Pending / Next Steps (superseded by 2026-05-08 section above)
 
-- [ ] **Visual verify save on live**: after Vercel redeploys from `b9b10c47d1`, confirm a design saves without 500 and thumbnails appear in My Designs (may need to wait a few seconds for background upload to complete)
-- [ ] **Email screenshot URL**: `screenshotUrl: undefined` is currently passed to the save-design email since the screenshot isn't uploaded yet at the time the email is sent. Consider sending a follow-up email or delaying the email send inside `after()` once the upload is done.
+- [x] **Visual verify save on live**: fixed — thumbnails now store data URL immediately in DB (`63fb58a144`).
+- [x] **Thumbnail fix**: `screenshotPath`/`thumbnailPath` now populated with data URL on initial save; upgraded to file URL by `after()` if upload succeeds.
 - [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
 
 ---
