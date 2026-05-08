@@ -96,7 +96,14 @@ export async function POST(request: NextRequest) {
       : null;
     const cleanedDesignState = cleanDesignState(body.designState);
 
-    // Save to DB immediately — fast path, no uploads
+    // Capture screenshot data URL before it's stripped from the design state.
+    // Store it directly in screenshotPath/thumbnailPath so the thumbnail is
+    // immediately visible even if the background file upload never runs.
+    const screenshotDataUrl = body.designState.metadata?.screenshot ?? undefined;
+    const screenshotBuffer = decodeScreenshotDataUrl(screenshotDataUrl);
+    const initialScreenshotPath = screenshotDataUrl || null;
+
+    // Save to DB immediately — fast path, screenshot stored as data URL fallback
     const summary = await saveProjectRecord({
       accountId: session.accountId,
       projectId: body.projectId,
@@ -107,14 +114,15 @@ export async function POST(request: NextRequest) {
       materialId: body.materialId ?? null,
       shapeId: body.shapeId ?? null,
       borderId: body.borderId ?? null,
+      screenshotPath: initialScreenshotPath,
+      thumbnailPath: initialScreenshotPath,
       designState: cleanedDesignState,
       pricingBreakdown: body.pricingBreakdown ?? null,
     });
 
     // Upload screenshot, thumbnail and JSON AFTER the response is sent.
     // Uses Next.js 15 after() so Vercel function timeout doesn't block the client.
-    const screenshotDataUrl = body.designState.metadata?.screenshot ?? undefined;
-    const screenshotBuffer = decodeScreenshotDataUrl(screenshotDataUrl);
+    // If upload succeeds, overwrites the data URL with a proper file path.
     const savedProjectId = summary.id;
     const savedAccountId = session.accountId;
 
