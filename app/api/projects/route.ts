@@ -182,10 +182,11 @@ export async function POST(request: NextRequest) {
     sendEmail({
       type: 'saved-design',
       recipientEmail: session.email,
+      recipientName: session.email, // name not in session; template extracts local-part before @
       countryCode: 'au',
       designId: summary.id,
       designName: summary.title,
-      screenshotUrl: undefined, // not yet uploaded; paths update in background
+      screenshotUrl: screenshotDataUrl, // base64 data URI — sendEmail converts it to CID inline attachment
       quoteItems: detailedQuoteItems({
         breakdown: body.pricingBreakdown,
         designState: cleanedDesignState,

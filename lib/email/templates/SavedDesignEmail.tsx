@@ -21,7 +21,11 @@ export function SavedDesignEmail({
   const title = t('your_design_have_been_saved') + data.designName;
   const previewText = `Your memorial design "${data.designName}" has been saved — view your quote inside.`;
 
-  const firstName = data.recipientName?.split(' ')[0] ?? t('customer');
+  const firstName = (() => {
+    const n = data.recipientName ?? data.recipientEmail;
+    if (n.includes('@')) return n.split('@')[0]; // extract local-part of email
+    return n.split(' ')[0]; // take first word of full name
+  })();
 
   const totalFormatted =
     config.currencySide === 0
