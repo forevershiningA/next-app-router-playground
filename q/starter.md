@@ -4,22 +4,24 @@ This repository is the Windows-side control room for the ASG (Active Screen Grav
 
 ## 1. Mission Snapshot
 
-- **Goal:** Demonstrate that RG-threshold running of the Planck mass generates the attractor plateau, confront it with Planck 2018 TT,TE,EE+lowE+lensing+BAO, and deliver a PRD/JCAP-ready manuscript (now maintained as `asg_inflation_v2.tex`).
-- **Latest chains:** `l7/chains/asg_chain_mar09_11/*` (ASG posterior used in the paper) and `l7/chains/alpha_chain_mar09_10/*` (α-attractor control). Legacy `l1/` chunks remain for archival comparison.
-- **Primary artifacts:** `asg_inflation_v2.tex` + figures in `figures/`, Markdown mirrors (`ASG_scientific_report_en.md` and `l1/` copy), processed diagnostics (`asg_background_summary.json`, `ns_r_summary.json`), and exported DOCX/PDF snapshots (`ASG_scientific_report_en_vXX.*`).
+- **Goal:** Demonstrate that RG-threshold running of the Planck mass generates the attractor plateau, confront it with Planck 2018 TT,TE,EE+lowE+lensing+BAO, and deliver a PRD/JCAP-ready manuscript.
+- **Active manuscript (English):** `o6/asg_inflation_v4.tex` — fully updated with v15 PolyChord results; compiled PDF at `o6/asg_inflation_v4.pdf`.
+- **Active manuscript (Polish):** `o5-theory/asg_inflation_v2_pl.tex` — synced with v15 on 2026-05-09; compiled PDF at `o5-theory/asg_inflation_v2_pl.pdf`.
+- **Latest chains:** `o6/chains/asg_polychord_v15/` — PolyChord v1.22.3, nlive=200, ε=0.04, completed 2026-05-09. Legacy MH chains in `l7/chains/` retained for archival comparison.
+- **Primary artifacts:** `o6/asg_inflation_v4.tex` + figures in `q/figures/` (junction `o6/figures` → `q/figures`), figure generation script `o6/scripts/generate_figures_v15.py`.
 
 ## 2. Directory Map
 
 | Path | Purpose |
 | --- | --- |
-| `l7/chains/` | Most recent MontePython chains (Mar 09–11); copy from the cluster before processing. |
-| `l1/chains/` | Older ASG/α benchmark chains (keep for reference, do not overwrite). |
-| `chains/processed_*` & `asg_chain/` | CSV/JSON summaries emitted by `scripts/process_chain.py`. |
-| `scripts/` | Python utilities (`process_chain.py`, `asg_background_diagnostics.py`, `ns_r_plane.py`, etc.). |
-| `figures/` | Final plots (phase portrait, \(n_s\)–\(r\), cutoff ratio, α-attractor comparison). |
-| `ASG_scientific_report_en.md` & `l1/ASG_scientific_report_en.md` | Markdown mirrors of the manuscript. |
-| `asg_inflation_v2.tex` | Canonical TeX source (mirrored in `l1/` when needed); compile via `pdflatex`. |
-| `ASG_scientific_report_en_vXX.docx/pdf` | Versioned exports; increment suffix when regenerating. |
+| `o6/chains/asg_polychord_v15/` | **Current:** PolyChord v15 nested sampling (nlive=200, ε=0.04, 2026-05-09). |
+| `o6/asg_inflation_v4.tex` | **Current English manuscript** — v15 posteriors, SO added, author Robert Szymański. |
+| `o5-theory/asg_inflation_v2_pl.tex` | **Current Polish manuscript** — synced with v15 on 2026-05-09. |
+| `o6/scripts/generate_figures_v15.py` | Figure generation (run from `q/`): physics cut |α_s|<5×10⁻³, ylim fixed. |
+| `q/figures/` | All current figures (PDF + PNG). Junction `o6/figures` → `q/figures` required for pdflatex. |
+| `l7/chains/` | Legacy MH chains (Mar 09–11); archival reference only. |
+| `l1/chains/` | Older ASG/α benchmark chains; do not overwrite. |
+| `scripts/` | Legacy Python utilities (`process_chain.py`, `asg_background_diagnostics.py`, `ns_r_plane.py`). |
 | `l1/starter.md` | Linux-side ops log (includes MontePython restart recipes). |
 
 ## 3. Environment Checklist
@@ -27,7 +29,7 @@ This repository is the Windows-side control room for the ASG (Active Screen Grav
 ### Windows workstation (this repo)
 
 - **Shell:** PowerShell 7+ recommended.
-- **Tooling:** `pandoc` (for DOCX), `tectonic.exe` (for pandoc-based PDFs), and MiKTeX/`pdflatex` for `asg_inflation_v2.tex`.
+- **Tooling:** `pandoc` (for DOCX), `tectonic.exe` (for pandoc-based PDFs), and MiKTeX/`pdflatex` for `o6/asg_inflation_v4.tex` and `o5-theory/asg_inflation_v2_pl.tex`.
 - **Python:** Run diagnostics via `python scripts/...`; no dedicated venv required.
 - **Figures:** Confirm every `\includegraphics{figures/...}` file exists before compiling TeX/Markdown exports.
 
@@ -39,35 +41,31 @@ This repository is the Windows-side control room for the ASG (Active Screen Grav
 
 ## 4. Chain Workflow Cheatsheet
 
-1. **Sync latest chains** (`scp`/`rsync`) into `l7/chains/`, preserving timestamps.
-2. **Process statistics** with `python scripts/process_chain.py --chain <path> --out <dest_dir>`, which now coercively casts numeric columns and writes CSV/JSON summaries.
-3. **Run diagnostics**: `python scripts/asg_background_diagnostics.py` (slow-roll, phase portrait, cutoff) and `python scripts/ns_r_plane.py` (Planck contours, α-band, Starobinsky marker).
-4. **Document updates:** Primary text lives in `asg_inflation_v2.tex`; mirror high-level edits back into the Markdown files if they must stay aligned.
+1. **Regenerate figures** from PolyChord v15 chain: `python o6/scripts/generate_figures_v15.py` (run from `q/`).
+2. **Compile English PDF:** `cd q/o6 && pdflatex -interaction=nonstopmode asg_inflation_v4.tex` (repeat 2× for cross-refs).
+3. **Compile Polish PDF:** `cd q/o5-theory && pdflatex -interaction=nonstopmode asg_inflation_v2_pl.tex`.
+4. **Junction check:** `o6/figures` and `o5-theory/figures` must both be directory junctions pointing to `q/figures/`. Re-create with `cmd /c "mklink /J <abs_target> <abs_source>"`.
 5. **Track work:** Use session `plan.md` + SQL todos for day-to-day status.
 
 ## 5. Exporting the Manuscript
 
-### TeX pipeline (preferred for arXiv/PRD draft)
+### English manuscript (arXiv/PRD draft)
 
 ```powershell
-cd q
-pdflatex -interaction=nonstopmode asg_inflation_v2.tex
-bibtex asg_inflation_v2   # optional; no-op while using manual bibliography
-pdflatex -interaction=nonstopmode asg_inflation_v2.tex
-pdflatex -interaction=nonstopmode asg_inflation_v2.tex
+cd q/o6
+pdflatex -interaction=nonstopmode asg_inflation_v4.tex
+pdflatex -interaction=nonstopmode asg_inflation_v4.tex
+```
+
+### Polish manuscript
+
+```powershell
+cd q/o5-theory
+pdflatex -interaction=nonstopmode asg_inflation_v2_pl.tex
+pdflatex -interaction=nonstopmode asg_inflation_v2_pl.tex
 ```
 
 Resolve any missing figures or undefined references before archiving.
-
-### Markdown → DOCX/PDF (legacy exports)
-
-```powershell
-cd q/l1
-pandoc ASG_scientific_report_en.md --resource-path=.;.. -o ASG_scientific_report_en_vXX.docx
-pandoc ASG_scientific_report_en.md --resource-path=.;.. `
-  --pdf-engine "$env:LOCALAPPDATA\\tectonic\\tectonic.exe" `
-  -o ASG_scientific_report_en_vXX.pdf
-```
 
 ## 6. Cross-Platform Tips
 
@@ -78,10 +76,10 @@ pandoc ASG_scientific_report_en.md --resource-path=.;.. `
 
 ## 7. Next Steps Checklist
 
-- Keep `asg_inflation_v2.tex` and Markdown mirrors aligned when making conceptual edits.
-- When new chains arrive, process them via the scripted pipeline and refresh `figures/` (phase portrait, \(n_s\)–\(r\), cutoff ratio).
-- Before arXiv submission: rerun the full TeX build, verify figure availability, and update the Zenodo package with the latest chains/scripts.
-- Maintain endorsement outreach notes separately; once endorsement is confirmed, package `asg_threshold_inflation.tex`, figures, and ancillary files for upload.
+- **arXiv submission:** Compile both `o6/asg_inflation_v4.tex` and `o5-theory/asg_inflation_v2_pl.tex` cleanly; verify all `figures/` files present; update Zenodo package.
+- **Next experiment to watch:** Simons Observatory (2027) — first realistic chance at α_s detection (σ~6×10⁻⁴, S/N~2.5 for ASG median).
+- **Future theoretical work:** Identify UV completion linking the F(χ) Gaussian threshold to SM particle spectrum (top quark / Higgs sector connection).
+- **If new chains arrive:** Regenerate all 4 figures with `generate_figures_v15.py` (update script paths/parameters first), then recompile both PDFs.
 
 ---
 
@@ -114,11 +112,13 @@ Bardzo mocna, spójna fizycznie i inspirująca wizja. Jeśli CMB koduje pochodne
 
 ---
 
-## 9. Następna analiza — PolyChord / MH 200k (zaplanowana)
+## 9. PolyChord v15 — Wyniki (ukończone 2026-05-09)
 
-- **Sampler:** PolyChord nested sampling + Metropolis-Hastings 200k rows w MontePython
-- **Cel:** Rozstrzygnięcie multimodalności w $(\beta, \Delta)$ — PolyChord naturalnie eksploruje multi-modalne posteriory (w przeciwieństwie do MH, który może utknąć w jednym modzie)
-- **Oczekiwane wyniki:** Potwierdzenie lub odrzucenie trójmodalnej struktury ($\bar\beta = 0.02, 0.04, 0.06$), precyzyjniejsze Bayesian evidence, porównanie z dotychczasowymi łańcuchami MH
-- **Status:** Do uruchomienia na klastrze Linux
+- **Sampler:** PolyChord v1.22.3, nlive=200, ε=0.04, grade_frac=[2,8], klastrowanie włączone
+- **Wyniki:** ln(Z)=-1409.95±0.26, 4876 martwych punktów, ~357k ewaluacji, 1175 równoważonych próbek
+- **Klastry:** Dominujący ln(Z₂)=-1409.95±0.26 (μ>3 M_Pl, 99.3% wagi) + drugi ln(Z₁)=-1419.58±0.65 (μ≈2.24, 0.7%)
+- **Parametry ASG:** β=0.191±0.017, Δ=0.682±0.157 M_Pl, χ₀=5.887±0.389 M_Pl, μ=5.082±0.905 M_Pl
+- **Kara Ockhama:** -20.3 natów; H=14.1 natów; σ=√(H/nlive)=0.266 (spójne z raportowanym ±0.26)
+- **ln B:** ≈-10 do -14 vs ΛCDM (silna dyskryminacja na skali Jeffreysa), zgodne z ΔAIC≈13
 
-_Last updated: 2026‑04‑09. Keep this starter concise—expand only with actionable items relevant to onboarding or recurring operations._
+_Last updated: 2026-05-09. Keep this starter concise—expand only with actionable items relevant to onboarding or recurring operations._
