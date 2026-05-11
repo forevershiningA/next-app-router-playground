@@ -49,7 +49,7 @@ const accountLinks = [
   },
   {
     label: 'Back to Designer',
-    href: '/select-product',
+    href: '/design-menu',
     icon: ArrowLeftIcon,
     description: 'Return to the design studio',
   },

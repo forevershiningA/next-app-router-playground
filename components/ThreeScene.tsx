@@ -258,6 +258,8 @@ export default function ThreeScene() {
   const is2DMode = useHeadstoneStore ((s) => s.is2DMode);
   const loading = useHeadstoneStore((s) => s.loading);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const hideScenery = useHeadstoneStore((s) => s.hideScenery);
+  const solidBgColor = useHeadstoneStore((s) => s.solidBgColor);
   const pathname = usePathname();
   const isDesignsPage = pathname?.startsWith('/designs/');
   
@@ -402,7 +404,11 @@ export default function ThreeScene() {
 
       
       {isVisible && (
-        <div ref={containerRef} className="relative w-full h-screen">
+        <div
+          ref={containerRef}
+          className="relative w-full h-screen"
+          style={hideScenery ? { backgroundColor: solidBgColor } : undefined}
+        >
           {/* Product Name Overlay (above canvas) */}
           <ProductNameHeader />
           

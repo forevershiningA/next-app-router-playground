@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-08
+**Last Updated:** 2026-05-11
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,152 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-05-11) — Scenery Toggle, Load Design UX, Screenshot Mode, Email & Grass Fixes
+
+### ✅ Email: Logo Full Size (290×180 px)
+
+Increased the Forever Shining logo in `lib/email/templates/components/EmailLayout.tsx` to `width={290}` `height={180}` (was ~120×74).
+
+---
+
+### ✅ Email: BCC Addresses (biuro@wiecznapamiec.pl + polcreation@gmail.com)
+
+Both BCC recipients were already configured in `lib/email/config/countries.ts` via the `BCC_MAP` / `always` field — no new Vercel env vars (`SMTP_BCC_1`, `SMTP_BCC_2`) were needed.
+
+---
+
+### ✅ Email: "MEMORIAL DESIGN SAVED" Heading Styled in Dark Grey
+
+First line of the saved-design email template changed from a lighter placeholder colour to the same dark grey (`#2d2d2d` or equivalent) used for the customer name, giving the email a consistent, premium look.
+
+---
+
+### ✅ Grass Texture Improvements
+
+Replaced the flat repeating grass texture with a multi-layered approach in `components/three/headstone/GrassFloor.tsx` (and `Scene.tsx` fog/lighting tweaks):
+- Reduced repeat tiling to eliminate obvious pattern repetition
+- Added subtle colour variation and dirt-blend overlay texture
+- Tuned fog near/far values so grass fades naturally without pixelation near the base
+- Final result: realistic lawn appearance without visible repeat artefacts
+
+---
+
+### ✅ Crop Screen: Immediate Loading Indicator
+
+When the **Crop** button is clicked, a spinner overlay now appears immediately before the cropped canvas is computed. Previously there was a 1–2 s blank pause. Fix in `components/ImageSelector.tsx` — set a local `isCropping` state to `true` on button click and render `<LoadingOverlay>` (or inline spinner) while it is `true`; reset to `false` after the crop promise resolves.
+
+---
+
+### ✅ My Account Saved Designs — Consistent Thumbnail Style
+
+Saved design thumbnails in the My Account page now use the same transparent/neutral-background style as the Design Gallery cards. Previously they showed the grass/sky scenery which looked inconsistent.
+
+Implementation: `DesignerNav.tsx` `handleSaveDesign` now:
+1. Calls `setScreenshotMode(true)` to enter clean capture mode.
+2. Waits 2 × `requestAnimationFrame` so R3F re-renders.
+3. Captures the canvas (background fill `#e8e4dc` warm neutral via `encodeCanvasForUpload`).
+4. Calls `setScreenshotMode(false)` in `finally`.
+
+`Scene.tsx` gates all scenery behind `!screenshotMode` (and `!hideScenery`), producing a clean headstone-on-neutral background.
+
+New store fields in `lib/headstone-store.types.ts` + `lib/headstone-store.ts`:
+- `screenshotMode: boolean` / `setScreenshotMode(v)`
+
+---
+
+### ✅ "Back to Designer" → `/design-menu`
+
+`components/AccountNav.tsx`: changed the "Back to Designer" link from `href: '/select-product'` to `href: '/design-menu'`.
+
+---
+
+### ✅ Load Design Popup — Clear Selection + Navigate to `/design-menu`
+
+**Bug:** loading a design with an image auto-selected it and caused the sidebar to flash between Select Size and Add Your Image panels.
+
+**Root cause:** `store.addImage()` and `store.addMotif()` set `activePanel`, `selectedImageId`, and `selectedMotifId` as side-effects during design loading.
+
+**Fix** (`components/LoadDesignButton.tsx`):
+After a successful load, imperatively clear:
+```tsx
+useHeadstoneStore.getState().setActivePanel(null);
+useHeadstoneStore.getState().setSelectedMotifId(null);
+useHeadstoneStore.getState().setSelectedImageId(null);
+```
+Then `router.push('/design-menu')` so nothing is selected and the URL is clean.
+
+---
+
+### ✅ SceneryToggleButton — Bottom-Right Background Toggle
+
+New component `components/SceneryToggleButton.tsx` (mounted in `ConditionalCanvas.tsx`):
+- Fixed `bottom-6 right-4` floating button
+- Opens a popover with a **Scenery** option + 6 colour swatches: Warm white `#e8e4dc`, Light grey `#efefef`, Stone `#d0c9bc`, Dark slate `#2d3748`, Charcoal `#1e2228`, Navy `#1a2035`
+- Persisted to `localStorage` key `fs_scene_bg` as `{ hideScenery, color }`
+- Restored on mount
+
+New store fields:
+- `hideScenery: boolean` / `setHideScenery(v)`
+- `solidBgColor: string` / `setSolidBgColor(color)`
+
+---
+
+### ✅ Fixed: Scenery Toggle Not Replacing Background (Hybrid CSS + Imperative Approach)
+
+**Bug:** selecting a colour replaced the button indicator but the 3D background (grass, sky gradient) remained visible.
+
+**Root cause:** R3F reconciler timing — `<color attach="background">` JSX and conditional rendering of `GradientBackground` / `GrassFloor` weren't guaranteed to take effect immediately when `hideScenery` flipped.
+
+**Three-layer fix:**
+
+1. **CSS background on canvas container** (`components/ThreeScene.tsx`):
+   ```tsx
+   const hideScenery = useHeadstoneStore((s) => s.hideScenery);
+   const solidBgColor = useHeadstoneStore((s) => s.solidBgColor);
+   // ...
+   <div
+     ref={containerRef}
+     className="relative w-full h-screen"
+     style={hideScenery ? { backgroundColor: solidBgColor } : undefined}
+   >
+   ```
+   Since the Canvas has `alpha: true` + `style={{ background: 'transparent' }}`, transparent WebGL pixels show the CSS background through.
+
+2. **Imperative `useEffect`** (`components/three/Scene.tsx`):
+   ```tsx
+   useEffect(() => {
+     if (hideScenery) {
+       scene.background = null; // let CSS show through
+       scene.fog = null;
+     }
+   }, [hideScenery, scene]);
+   ```
+   Bypasses R3F reconciler timing by directly clearing `scene.background` and `scene.fog`.
+
+3. **`visible` prop on scenery groups** instead of conditional rendering:
+   ```tsx
+   <group visible={!noScenery}>         {/* GrassFloor */}
+   <group visible={!is2DMode && !noScenery}> {/* Sparkles + AtmosphericSky + GradientBackground */}
+   ```
+   Setting `THREE.Group.visible = false` is a direct THREE.js property update — more reliable than unmounting in R3F for visibility toggling.
+
+**`<color attach="background">` logic** after fix:
+```tsx
+{screenshotMode && <color attach="background" args={['#e8e4dc']} />}  {/* screenshot: warm neutral */}
+{!is2DMode && !noScenery && <color attach="background" args={['#A8C9E6']} />}  {/* normal: sky blue */}
+{/* hideScenery: no <color> — CSS backgroundColor on container handles it */}
+```
+
+---
+
+### 📌 Pending / Next Steps (2026-05-11)
+
+- [ ] **db:sync to remote**: Run `pnpm db:sync` (type `SYNC` to confirm) to ensure remote home.pl DB has `json_path` column.
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+- [ ] **Email screenshot URL**: `screenshotUrl: undefined` passed to save-design email since upload hasn't completed at send time. Consider moving `sendEmail()` inside `after()` after upload completes.
 
 ---
 

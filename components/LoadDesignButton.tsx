@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
 import {
   ArrowTopRightOnSquareIcon,
@@ -156,6 +157,7 @@ function sortCategoryEntries(entries: [string, CategoryTree[string]][]): [string
 }
 
 export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignButtonProps) {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -278,6 +280,15 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
       const result = await loadDesignById(designId);
       if (!result.success) {
         setError(result.message);
+      } else {
+        // Clear any auto-selected items that were set during loading
+        // (addMotif/addImage set activePanel/selectedXxxId as a side-effect)
+        const { setActivePanel, setSelectedMotifId, setSelectedImageId } =
+          useHeadstoneStore.getState();
+        setActivePanel(null);
+        setSelectedMotifId(null);
+        setSelectedImageId(null);
+        router.push('/design-menu');
       }
     } finally {
       setLoading(false);

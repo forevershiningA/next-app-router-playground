@@ -1933,6 +1933,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set((s) => ({ is2DMode: !s.is2DMode }));
   },
 
+  /* clean screenshot mode — hides scenery for thumbnail capture */
+  screenshotMode: false,
+  setScreenshotMode: (v) => set({ screenshotMode: v }),
+
+  /* user-facing scenery toggle — persisted in localStorage via SceneryToggleButton */
+  hideScenery: false,
+  setHideScenery: (v) => set({ hideScenery: v }),
+  solidBgColor: '#e8e4dc',
+  setSolidBgColor: (color) => set({ solidBgColor: color }),
+
   /* loading */
   loading: true,
   setLoading: (loading) => set({ loading }),

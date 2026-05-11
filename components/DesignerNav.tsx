@@ -1577,12 +1577,24 @@ export default function DesignerNav() {
   const handleSaveDesign = async (designName: string) => {
     setIsSavingDesign(true);
     try {
+      // Switch to clean screenshot mode — hides grass/sky/sun rays for a neutral thumbnail
+      const { setScreenshotMode } = useHeadstoneStore.getState();
+      setScreenshotMode(true);
+
+      // Wait two animation frames: first for React to re-render the scene,
+      // second for Three.js to draw the new frame into the WebGL buffer.
+      await new Promise<void>((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+      );
+
       // Capture screenshot from the 3D canvas
       let screenshotDataUrl: string | null = null;
       try {
         screenshotDataUrl = captureBestCanvasScreenshot();
       } catch (error) {
         console.warn('Failed to capture canvas screenshot:', error);
+      } finally {
+        setScreenshotMode(false);
       }
 
       // Get all state from store
@@ -3422,7 +3434,7 @@ function encodeCanvasForUpload(source: HTMLCanvasElement): string {
   exportCanvas.height = outH;
   const ctx = exportCanvas.getContext('2d');
   if (ctx) {
-    ctx.fillStyle = '#1a1a1a';
+    ctx.fillStyle = '#e8e4dc';
     ctx.fillRect(0, 0, outW, outH);
     ctx.drawImage(source, 0, 0, outW, outH);
     return exportCanvas.toDataURL('image/jpeg', 0.86);

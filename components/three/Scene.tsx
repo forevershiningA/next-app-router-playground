@@ -163,7 +163,12 @@ export default function Scene({
   const readySignaledRef = useRef(false);
   const { scene, gl, camera } = useThree();
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
+  const screenshotMode = useHeadstoneStore((s) => s.screenshotMode);
+  const hideScenery = useHeadstoneStore((s) => s.hideScenery);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
+
+  // Any mode that suppresses the outdoor scene (screenshot capture or user toggle)
+  const noScenery = screenshotMode || hideScenery;
 
   // Expose scene, renderer & camera for external tools (batch screenshot, save thumbnail)
   useEffect(() => {
@@ -176,6 +181,15 @@ export default function Scene({
       delete (window as unknown as Record<string, unknown>).__r3fCamera;
     };
   }, [scene, gl, camera]);
+
+  // Imperatively clear fog and background when hideScenery is active.
+  // This guarantees THREE.js state is cleared regardless of R3F reconciler timing.
+  useEffect(() => {
+    if (hideScenery) {
+      scene.background = null; // Let CSS backgroundColor on the canvas container show through
+      scene.fog = null;
+    }
+  }, [hideScenery, scene]);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const loading = useHeadstoneStore((s) => s.loading);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
@@ -265,21 +279,24 @@ export default function Scene({
     }
   };
 
-  const showSunRays = !is2DMode && !loading && !baseSwapping;
+  const showSunRays = !is2DMode && !noScenery && !loading && !baseSwapping;
 
   return (
     <>
       {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
       <AdaptiveDpr pixelated />
 
-      {!is2DMode && <color attach="background" args={['#A8C9E6']} />}
+      {/* Background: screenshot uses fixed warm white; normal scenery uses sky blue;
+          hideScenery mode clears background (CSS on container div provides the colour) */}
+      {screenshotMode && <color attach="background" args={['#e8e4dc']} />}
+      {!is2DMode && !noScenery && <color attach="background" args={['#A8C9E6']} />}
       
       {/* 
         UPDATED FOG SETTINGS:
         Desktop keeps a tight falloff (1 → 4) while mobile/tablet pushes the fog farther out (9 → 24)
         so the headstone stays clear when viewed on smaller screens.
       */}
-      {!is2DMode && <fog attach="fog" args={[FOG_COLOR_2, fogSettings.near, fogSettings.far]} />}
+      {!is2DMode && !noScenery && <fog attach="fog" args={[FOG_COLOR_2, fogSettings.near, fogSettings.far]} />}
       
       <mesh
         position={[0, 0, 0]}
@@ -301,24 +318,31 @@ export default function Scene({
         {/* Headstone content manages its own suspense boundaries internally */}
         <HeadstoneAssembly />
         
-        {/* TEXTURED FLOOR with fallback for slow connections */}
-        <Suspense fallback={<SimpleGrassFloor />}>
-          <GrassFloor />
-        </Suspense>
+        {/* TEXTURED FLOOR — hidden in no-scenery modes via visible prop (more reliable than
+            conditional rendering in R3F, avoids reconciler timing issues) */}
+        <group visible={!noScenery}>
+          <Suspense fallback={<SimpleGrassFloor />}>
+            <GrassFloor />
+          </Suspense>
+        </group>
       </group>
 
-      {/* Dust particles */}
-      {!is2DMode && (
-         <Sparkles
-           count={30}
-           scale={12}
-           size={3}
-           speed={0.3}
-           opacity={0.4}
-           color="#fffee0"
-           position={[0, 1, 0]}
-         />
-      )}
+      {/* Dust particles + sky — toggle visibility directly on the group */}
+      <group visible={!is2DMode && !noScenery}>
+        <Sparkles
+          count={30}
+          scale={12}
+          size={3}
+          speed={0.3}
+          opacity={0.4}
+          color="#fffee0"
+          position={[0, 1, 0]}
+        />
+        <Suspense fallback={null}>
+          <AtmosphericSky showDome={false} />
+        </Suspense>
+        <GradientBackground />
+      </group>
       
       {/* --- LIGHTING (Studio Setup) --- */}
       
@@ -371,13 +395,6 @@ export default function Scene({
       
       <Environment files="/hdri/spring.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
       
-      {!is2DMode && (
-        <Suspense fallback={null}>
-          <AtmosphericSky showDome={false} />
-        </Suspense>
-      )}
-      {!is2DMode && <GradientBackground />}
-
       {/* REMOVED EffectComposer/DepthOfField to restore sharpness */}
 
       <OrbitControls

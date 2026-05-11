@@ -483,6 +483,15 @@ export type HeadstoneState = {
   is2DMode: boolean;
   toggleViewMode: () => void;
 
+  screenshotMode: boolean;
+  setScreenshotMode: (v: boolean) => void;
+
+  /** Hides grass/sky/fog and shows a solid background colour instead */
+  hideScenery: boolean;
+  setHideScenery: (v: boolean) => void;
+  solidBgColor: string;
+  setSolidBgColor: (color: string) => void;
+
   loading: boolean;
   setLoading: (loading: boolean) => void;
 
