@@ -158,7 +158,7 @@ const hero: React.CSSProperties = {
 };
 
 const heroEyebrow: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#4a4035',
   fontSize: '11px',
   fontWeight: 400,
   letterSpacing: '3px',

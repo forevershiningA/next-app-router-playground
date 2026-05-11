@@ -11,7 +11,7 @@ import { useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { useRef, Suspense, useEffect } from 'react';
 
 // --- CONFIGURATION ---
-const GRASS_COLOR = '#5a7f3c'; 
+const GRASS_COLOR = '#4a6e28'; // warm spring green — bright & uplifting, not neon
 
 // UPDATED: Pale atmospheric blue (matches the horizon, not white)
 const FOG_COLOR = '#dcebf5';
@@ -76,26 +76,27 @@ function GrassFloor() {
     aoMap: '/textures/three/grass/grass_ao.webp',
   });
 
-  // --- TEXTURE FIXES ---
-  // UPDATED: Reduced to 40 for better performance while maintaining quality
-  const REPEAT_SCALE = 80;
+  // Lower repeat = bigger tiles = far less visible tiling pattern
+  // 28 balances close-up sharpness with reduced far-distance repetition (fog hides the rest)
+  const REPEAT_SCALE = 28;
 
   useEffect(() => {
-    // OPTIMIZATION: Cap anisotropy at 8 instead of max (16)
-    // Going to 16 is expensive and rarely noticeable on grass
     const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 16);
 
     [props.map, props.normalMap, props.aoMap].forEach((tex) => {
       if (tex) {
-        tex.wrapS = tex.wrapT = THREE.RepeatWrapping; // Changed from Mirrored for organic textures
+        // MirroredRepeatWrapping flips adjacent tiles — breaks the obvious grid pattern
+        tex.wrapS = tex.wrapT = THREE.MirroredRepeatWrapping;
         tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
-        tex.colorSpace = THREE.SRGBColorSpace;
-        
-        // CRITICAL: Anisotropy fixes blur when looking at ground from an angle
         tex.anisotropy = anisotropy;
         tex.needsUpdate = true;
       }
     });
+
+    // Diffuse map must be sRGB; normal + AO maps must be linear
+    if (props.map) props.map.colorSpace = THREE.SRGBColorSpace;
+    if (props.normalMap) props.normalMap.colorSpace = THREE.NoColorSpace;
+    if (props.aoMap) props.aoMap.colorSpace = THREE.NoColorSpace;
   }, [props, gl]);
 
   return (
@@ -108,11 +109,10 @@ function GrassFloor() {
           aoMap={props.aoMap}
           color={GRASS_COLOR}
           roughness={1}
-          normalScale={new THREE.Vector2(0.5, 0.5)}
+          normalScale={new THREE.Vector2(1.2, 1.2)}
           metalness={0}
           envMapIntensity={0}
-          // Important: Floor accepts fog to fade into distance
-          fog={false}
+          fog={true}
         />
       </mesh>
       
@@ -200,8 +200,8 @@ export default function Scene({
   const viewportWidth = useThree((state) => state.size.width);
   const isMobileViewport = viewportWidth < 1024;
   const fogSettings = isMobileViewport
-    ? { near: 9, far: 24 }
-    : { near: 9, far: 48 };
+    ? { near: 7, far: 22 }
+    : { near: 7, far: 38 };
 
   // Call onReady after the scene finishes loading/swapping
   useEffect(() => {
