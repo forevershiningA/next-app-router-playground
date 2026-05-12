@@ -88,7 +88,7 @@ export default function ConditionalCanvas() {
   
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
+    if (!pathname || ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage)) {
       hideOverlay();
     }
   }, [
@@ -110,7 +110,8 @@ export default function ConditionalCanvas() {
     hideOverlay,
   ]);
   
-  if ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage) {
+  // Also hide when pathname is null (e.g. SSR edge case before router context is ready)
+  if (!pathname || ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage)) {
     return null;
   }
 

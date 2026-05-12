@@ -433,10 +433,6 @@ export default function MyAccountPage() {
 
   return (
     <div className="relative min-h-screen bg-[#050301] text-white">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)]"
-        aria-hidden
-      />
       <div className="relative mx-auto w-full max-w-7xl px-10 py-10">
         <section
           className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
