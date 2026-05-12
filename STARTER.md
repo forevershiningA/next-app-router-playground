@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-12
+**Last Updated:** 2026-05-12 (evening)
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,99 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-05-12 evening) — Legacy Texture Mapping, Email Logo, Product Name Chip, SEO/Schema Fixes
+
+### ✅ Legacy Numbered Material ID → Named Texture Mapping
+
+`lib/saved-design-loader-utils.ts`: Added `NUMBERED_MATERIAL_TEXTURES` lookup table (materials 01–31) built from `public/xml/en_EN/stones.xml`. Previously, old saved designs storing `material: "01"` would fall through to the 2KB placeholder `01.webp` instead of the correct named texture.
+
+`mapTexture()` now checks numbered patterns **first** (before all other named-string fallbacks):
+- `01` → `Sandstone.webp`
+- `02` → `White-Carrara.webp`
+- `08` → `G654.webp`
+- `29` → `Blue-Pearl.webp`
+- …all 31 entries, with best-effort fallbacks for renamed materials (e.g., `04` Kashmire White → `White-Carrara`, `12` Noble Grey → `Noble-Black`)
+
+Also expanded `MATERIAL_TEXTURES` with all named granite variants that were previously missing.
+
+> **Key rule:** Numbered textures `01.webp`–`35.webp` in `/textures/forever/l/` are ~2KB placeholder files. Real textures are named `.webp` files (Sandstone.webp, Blue-Pearl.webp, etc.). `mapTexture()` must resolve numbered IDs to named filenames.
+
+Commit: `547e67319a`
+
+---
+
+### ✅ Email Logo Updated to forever-transparent-logo.png
+
+`lib/email/config/data/countries24.json`: Updated `logo` field for AU, UK, EU, PG, JP to `https://forevershining.org/ico/forever-transparent-logo.png` (400×246 px PNG).
+
+`lib/email/templates/components/EmailLayout.tsx`: `<Img>` dimensions set to `width={200} height={123}` (2× retina-ready display size).
+
+Countries NOT changed: `us`/`ca` keep their bronze-plaque.com logo; `pl` keeps wiecznapamiec.pl logo.
+
+> **Important:** `countries24.json` is pre-parsed from XML at build time. Do NOT re-run `scripts/embed-email-xml.mjs` — it would overwrite the JSON from source XML and lose these logo changes.
+
+Commit: `f87e3c69b1`
+
+---
+
+### ✅ Product Name — Modernized Frosted-Glass Chip UI
+
+`components/ThreeScene.tsx`: Product name display redesigned from a plain `<h1 className="text-shadow-hero">` to a frosted-glass pill chip matching the price indicator aesthetic:
+
+- `bg-black/55 backdrop-blur-md border border-white/10 rounded-full shadow-lg`
+- Gold accent dot `#DEBD68` (1.5px circle) on the left
+- `text-white/90 text-sm font-medium tracking-wide` text
+
+Positioned top-left `absolute top-4 left-4` inside the canvas overlay.
+
+Commit: `1a0767b21b`
+
+---
+
+### ✅ Design Page SSR — Removed Redundant HTTP Self-Call
+
+`app/designs/[productType]/[category]/[slug]/page.tsx`: Removed `getDesignShape()` function (~50 lines) that made an outbound HTTP fetch to `/ml/{dir}/saved-designs/json/{id}.json` on every SSR render. This was adding 200–2000ms TTFB on every Googlebot crawl (circular Vercel function → Vercel function cold-start cascade).
+
+`design.shapeName` is already available in `SavedDesignMetadata` — replaced with a synchronous `formatShapeName()` helper (17 lines).
+
+Commit: `02df115653`
+
+---
+
+### ✅ Product Schema (JSON-LD) — Fixed GSC Rich Result Errors
+
+`app/designs/[productType]/[category]/[slug]/page.tsx`: Fixed two "enhancement" errors shown in Google Search Console:
+
+**1. Missing `price` (Opisy produktów / Product descriptions error)**
+- Switched `"@type": "Offer"` → `"@type": "AggregateOffer"` with `lowPrice` per product type:
+  - Granite headstone: AUD 695
+  - Stainless steel: AUD 795
+  - Bronze: AUD 895
+  - Full monument: AUD 2495
+- `priceCurrency` changed to `"AUD"` (primary market)
+
+**2. Missing `hasMerchantReturnPolicy` + `shippingRate` (Informacje o sprzedawcy / Seller info error)**
+- Added `hasMerchantReturnPolicy`: `MerchantReturnNotPermitted` for AU/GB/US/CA (custom memorial products cannot be returned)
+- Added `shippingRate`: `MonetaryAmount { value: "0", currency: "AUD" }` (free delivery)
+- Added `transitTime` to `ShippingDeliveryTime` (1–2 weeks, was only `handlingTime`)
+- Added `seller.url` to `Organization`
+
+To verify: paste any `/designs/…` URL into [Google's Rich Results Test](https://search.google.com/test/rich-results).
+
+Commits: `c6355c7a8c`, `b553bacf41`
+
+---
+
+### 📌 Remaining SEO / GSC Actions
+
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
+- [ ] **Request indexing for key pages**: GSC → URL Inspection → "Poproś o zindeksowanie"
+- [ ] **`generateStaticParams`** for top ~200 design pages to ensure instant Googlebot response (currently all 3100 pages are ISR, generated on first hit)
+- [ ] **FAQ content uniqueness**: All 3100 design pages have identical FAQ answers — Google treats as thin content. Vary by product type/category
+- [ ] **`#design-ssr-content` visibility**: Both SSR HTML and 3D editor show simultaneously after hydration — add `useEffect` in `DesignPageClient.tsx` to hide the SSR div after mount if intentional behaviour has changed
 
 ---
 
