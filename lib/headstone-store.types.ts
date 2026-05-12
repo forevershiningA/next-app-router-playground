@@ -492,6 +492,10 @@ export type HeadstoneState = {
   solidBgColor: string;
   setSolidBgColor: (color: string) => void;
 
+  /** Which outdoor scenery preset to use when hideScenery is false */
+  sceneryVariant: 'day' | 'outback';
+  setSceneryVariant: (v: 'day' | 'outback') => void;
+
   loading: boolean;
   setLoading: (loading: boolean) => void;
 

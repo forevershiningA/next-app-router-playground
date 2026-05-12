@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { PhotoIcon } from '@heroicons/react/24/outline';
+import { PhotoIcon, SunIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 const LS_KEY = 'fs_scene_bg';
@@ -9,22 +9,42 @@ const LS_KEY = 'fs_scene_bg';
 interface StoredPref {
   hideScenery: boolean;
   color: string;
+  sceneryVariant?: 'day' | 'outback';
 }
 
 const COLORS = [
-  { label: 'Warm white',  value: '#e8e4dc' },
-  { label: 'Light grey',  value: '#efefef' },
-  { label: 'Stone',       value: '#d0c9bc' },
-  { label: 'Dark slate',  value: '#2d3748' },
-  { label: 'Charcoal',    value: '#1e2228' },
-  { label: 'Navy',        value: '#1a2035' },
+  { label: 'Pure White',    value: '#f8f8f8' },
+  { label: 'Light Gray',    value: '#d8d8d8' },
+  { label: 'Warm Beige',    value: '#d4c5a9' },
+  { label: 'Medium Gray',   value: '#787878' },
+  { label: 'Dark Charcoal', value: '#2c2c2c' },
+  { label: 'Deep Navy',     value: '#0d1b2a' },
+] as const;
+
+const SCENERY_OPTIONS = [
+  {
+    key: 'day' as const,
+    label: 'Meadow',
+    title: 'Green meadow',
+    gradient: 'from-[#A8C9E6] to-[#4a6e28]',
+    Icon: PhotoIcon,
+  },
+  {
+    key: 'outback' as const,
+    label: 'Outback',
+    title: 'Australian outback',
+    gradient: 'from-[#4a8cc8] via-[#c8a060] to-[#c07838]',
+    Icon: SunIcon,
+  },
 ] as const;
 
 export default function SceneryToggleButton() {
-  const hideScenery   = useHeadstoneStore((s) => s.hideScenery);
-  const solidBgColor  = useHeadstoneStore((s) => s.solidBgColor);
-  const setHideScenery  = useHeadstoneStore((s) => s.setHideScenery);
-  const setSolidBgColor = useHeadstoneStore((s) => s.setSolidBgColor);
+  const hideScenery       = useHeadstoneStore((s) => s.hideScenery);
+  const solidBgColor      = useHeadstoneStore((s) => s.solidBgColor);
+  const sceneryVariant    = useHeadstoneStore((s) => s.sceneryVariant);
+  const setHideScenery    = useHeadstoneStore((s) => s.setHideScenery);
+  const setSolidBgColor   = useHeadstoneStore((s) => s.setSolidBgColor);
+  const setSceneryVariant = useHeadstoneStore((s) => s.setSceneryVariant);
 
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -37,6 +57,7 @@ export default function SceneryToggleButton() {
         const pref: StoredPref = JSON.parse(raw);
         if (typeof pref.color === 'string') setSolidBgColor(pref.color);
         if (typeof pref.hideScenery === 'boolean') setHideScenery(pref.hideScenery);
+        if (pref.sceneryVariant === 'day' || pref.sceneryVariant === 'outback') setSceneryVariant(pref.sceneryVariant);
       }
     } catch {
       // ignore malformed data
@@ -44,14 +65,14 @@ export default function SceneryToggleButton() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Persist to localStorage whenever the preference changes
+  // Persist to localStorage whenever preferences change
   useEffect(() => {
     try {
-      localStorage.setItem(LS_KEY, JSON.stringify({ hideScenery, color: solidBgColor }));
+      localStorage.setItem(LS_KEY, JSON.stringify({ hideScenery, color: solidBgColor, sceneryVariant }));
     } catch {
       // ignore (private browsing, storage quota)
     }
-  }, [hideScenery, solidBgColor]);
+  }, [hideScenery, solidBgColor, sceneryVariant]);
 
   // Close popover when clicking outside
   useEffect(() => {
@@ -65,16 +86,20 @@ export default function SceneryToggleButton() {
     return () => document.removeEventListener('mousedown', handler);
   }, [open]);
 
+  const selectScenery = (variant: 'day' | 'outback') => {
+    setSceneryVariant(variant);
+    setHideScenery(false);
+    setOpen(false);
+  };
+
   const selectColor = (color: string) => {
     setSolidBgColor(color);
     setHideScenery(true);
     setOpen(false);
   };
 
-  const selectScenery = () => {
-    setHideScenery(false);
-    setOpen(false);
-  };
+  // Icon for the toggle button
+  const activeScenery = SCENERY_OPTIONS.find((o) => o.key === sceneryVariant)!;
 
   return (
     <div
@@ -88,23 +113,30 @@ export default function SceneryToggleButton() {
             Background
           </p>
 
-          {/* Scenery option */}
-          <button
-            onClick={selectScenery}
-            title="Show scenery"
-            className={`mb-2 flex w-full items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-left text-xs transition-colors ${
-              !hideScenery
-                ? 'bg-white/15 text-white'
-                : 'text-white/60 hover:bg-white/8 hover:text-white'
-            }`}
-          >
-            {/* Mini scenery swatch */}
-            <span className="flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-b from-[#A8C9E6] to-[#4a6e28]">
-              <PhotoIcon className="h-3.5 w-3.5 text-white drop-shadow" />
-            </span>
-            Scenery
-            {!hideScenery && <span className="ml-auto text-[#d4af37]">✓</span>}
-          </button>
+          {/* Scenery options */}
+          <div className="mb-2 flex flex-col gap-1">
+            {SCENERY_OPTIONS.map(({ key, label, title, gradient, Icon }) => {
+              const isActive = !hideScenery && sceneryVariant === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => selectScenery(key)}
+                  title={title}
+                  className={`flex w-full items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-left text-xs transition-colors ${
+                    isActive
+                      ? 'bg-white/15 text-white'
+                      : 'text-white/60 hover:bg-white/8 hover:text-white'
+                  }`}
+                >
+                  <span className={`flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-gradient-to-b ${gradient}`}>
+                    <Icon className="h-3.5 w-3.5 text-white drop-shadow" />
+                  </span>
+                  {label}
+                  {isActive && <span className="ml-auto text-[#d4af37]">✓</span>}
+                </button>
+              );
+            })}
+          </div>
 
           {/* Solid colour swatches */}
           <div className="flex gap-1.5">
@@ -133,13 +165,12 @@ export default function SceneryToggleButton() {
         style={hideScenery ? { boxShadow: `0 0 0 2px ${solidBgColor}40` } : {}}
       >
         {hideScenery ? (
-          /* Show current colour dot when scenery is hidden */
           <span
             className="h-4 w-4 rounded-full border border-white/30"
             style={{ backgroundColor: solidBgColor }}
           />
         ) : (
-          <PhotoIcon className="h-4.5 w-4.5 text-white/70" />
+          <activeScenery.Icon className="h-4.5 w-4.5 text-white/70" />
         )}
       </button>
     </div>

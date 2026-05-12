@@ -8,29 +8,84 @@ import AtmosphericSky from './AtmosphericSky';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 import { useFrame, useThree, ThreeEvent } from '@react-three/fiber';
-import { useRef, Suspense, useEffect } from 'react';
+import { useRef, Suspense, useEffect, useMemo } from 'react';
 
-// --- CONFIGURATION ---
-const GRASS_COLOR = '#4a6e28'; // warm spring green — bright & uplifting, not neon
+// Deterministic LCG so bush positions are stable across renders
+function lcg(seed: number) {
+  let s = seed;
+  return () => {
+    s = (Math.imul(1664525, s) + 1013904223) >>> 0;
+    return s / 4294967296;
+  };
+}
 
-// UPDATED: Pale atmospheric blue (matches the horizon, not white)
-const FOG_COLOR = '#dcebf5';
-const FOG_COLOR_2 = '#ADCCE7'
+// --- SCENERY CONFIGS ---
+const SCENERY = {
+  day: {
+    grassColor:       '#4a6e28',
+    fogColor:         '#dcebf5',
+    fogColor2:        '#ADCCE7',
+    bgSky:            '#A8C9E6',
+    gradientTop:      '#5ca0e5',
+    gradientBottom:   '#dcebf5',
+    sparklesColor:    '#fffee0',
+    sparklesCount:    30,
+    sparklesScale:    12,
+    sparklesSize:     3,
+    sparklesSpeed:    0.3,
+    sparklesOpacity:  0.4,
+    sparklesPosition: [0, 1, 0] as [number, number, number],
+    cloudColor:       '#ffffff',
+    ambientColor:     '#ffffff',
+    ambientIntensity: 0.6,
+    hemiSky:          '#fff8e7',
+    hemiGround:       '#dcdcdc',
+    hemiIntensity:    0.8,
+    sunColor:         '#fffce6',
+    sunIntensity:     2.5,
+    rimColor:         '#ffffff',
+    rimIntensity:     2,
+  },
+  outback: {
+    grassColor:       '#e0a870',   // lighter sandy-orange (was too dark/saturated red)
+    fogColor:         '#ccdde8',   // pale atmospheric blue (distant haze)
+    fogColor2:        '#d5e5f0',   // very pale blue near-fog
+    bgSky:            '#b8d4e8',   // pale washed-out sky blue
+    gradientTop:      '#5fa8d3',   // moderate Australian blue at zenith
+    gradientBottom:   '#daeaf6',   // almost white/pale near horizon
+    sparklesColor:    '#e8c870',   // golden dust motes
+    sparklesCount:    0,           // no sparkles in outback — clear air
+    sparklesScale:    14,
+    sparklesSize:     2.5,
+    sparklesSpeed:    0.15,
+    sparklesOpacity:  0,
+    sparklesPosition: [0, 1.5, 0] as [number, number, number],
+    cloudColor:       '#ffffff',   // clean white clouds
+    ambientColor:     '#fffde8',   // warm bright ambient
+    ambientIntensity: 0.8,
+    hemiSky:          '#b0cfe8',   // pale blue sky bounce
+    hemiGround:       '#c86030',   // red earth bounce
+    hemiIntensity:    0.9,
+    sunColor:         '#fff8e0',   // bright warm sun
+    sunIntensity:     3.0,
+    rimColor:         '#e8f0ff',   // cool sky rim
+    rimIntensity:     1.2,
+  },
+} as const;
 
 // --- COMPONENTS ---
 
-// New: Custom Gradient Sky Sphere
-// Replaces the realistic atmosphere with a stylized gradient background
-const GradientBackground = () => {
+// Gradient sky sphere — colours driven by active scenery config
+const GradientBackground = ({ top, bottom }: { top: string; bottom: string }) => {
   return (
     <mesh scale={[100, 100, 100]} position={[0, -10, 0]} renderOrder={-1}>
       <sphereGeometry args={[1, 64, 64]} />
       <shaderMaterial
         side={THREE.BackSide}
-        depthWrite={false} // Draw behind everything
+        depthWrite={false}
         uniforms={{
-          colorTop: { value: new THREE.Color('#5ca0e5') }, // Richer Sky Blue
-          colorBottom: { value: new THREE.Color(FOG_COLOR) }, // Matches Fog perfectly
+          colorTop:    { value: new THREE.Color(top) },
+          colorBottom: { value: new THREE.Color(bottom) },
         }}
         vertexShader={`
           varying vec2 vUv;
@@ -44,10 +99,6 @@ const GradientBackground = () => {
           uniform vec3 colorBottom;
           varying vec2 vUv;
           void main() {
-            // Gradient Logic:
-            // 0.0 - 0.45: Solid Horizon Color (Fog Color)
-            // 0.45 - 1.0: Fades to Sky Blue
-            // This ensures the point where grass meets sky is invisible
             float h = smoothstep(0.45, 1.0, vUv.y);
             gl_FragColor = vec4(mix(colorBottom, colorTop, h), 1.0);
           }
@@ -57,7 +108,7 @@ const GradientBackground = () => {
   );
 };
 
-function GrassFloor() {
+function GrassFloor({ color }: { color: string }) {
   const gl = useThree((state) => state.gl);
   
   // Load grass textures from local public folder
@@ -102,12 +153,12 @@ function GrassFloor() {
   return (
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[105, 105]} />
+        <planeGeometry args={[300, 300]} />
         <meshStandardMaterial 
           map={props.map}
           normalMap={props.normalMap}
           aoMap={props.aoMap}
-          color={GRASS_COLOR}
+          color={color}
           roughness={1}
           normalScale={new THREE.Vector2(1.2, 1.2)}
           metalness={0}
@@ -133,13 +184,13 @@ function GrassFloor() {
 }
 
 // Fallback if internet is slow/textures fail
-function SimpleGrassFloor() {
+function SimpleGroundFloor({ color }: { color: string }) {
   return (
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
-        <planeGeometry args={[105, 105]} />
+        <planeGeometry args={[300, 300]} />
         <meshStandardMaterial 
-          color="#355c18"
+          color={color}
           roughness={1}
           metalness={0}
           envMapIntensity={0}
@@ -147,6 +198,131 @@ function SimpleGrassFloor() {
       </mesh>
       <ContactShadows position={[0, 0.02, 0]} scale={15} blur={2.5} opacity={0.6} far={1.5} color="#001100" resolution={256} frames={1} />
     </group>
+  );
+}
+
+// Red sand outback ground — CC0 texture from Poly Haven (red_sand)
+function OutbackFloor({ color }: { color: string }) {
+  const gl = useThree((state) => state.gl);
+
+  const props = useTexture({
+    map: '/textures/three/outback/red_sand_diff_2k.jpg',
+    normalMap: '/textures/three/outback/red_sand_nor_gl_2k.jpg',
+  });
+
+  const REPEAT_SCALE = 12; // bigger tiles = less visible tiling at close range
+
+  useEffect(() => {
+    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 16);
+    [props.map, props.normalMap].forEach((tex) => {
+      if (tex) {
+        tex.wrapS = tex.wrapT = THREE.MirroredRepeatWrapping;
+        tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
+        tex.anisotropy = anisotropy;
+        tex.needsUpdate = true;
+      }
+    });
+    if (props.map) props.map.colorSpace = THREE.SRGBColorSpace;
+    if (props.normalMap) props.normalMap.colorSpace = THREE.NoColorSpace;
+  }, [props, gl]);
+
+  return (
+    <group position={[0, -0.01, 0]}>
+      <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+        {/* Bigger plane so sand stretches to the horizon treeline */}
+        <planeGeometry args={[180, 180]} />
+        <meshStandardMaterial
+          map={props.map}
+          normalMap={props.normalMap}
+          color={color}
+          roughness={1}
+          normalScale={new THREE.Vector2(0.4, 0.4)}
+          metalness={0}
+          envMapIntensity={0}
+          fog={true}
+        />
+      </mesh>
+      <ContactShadows
+        position={[0, 0.02, 0]}
+        scale={15}
+        blur={2.5}
+        opacity={0.5}
+        far={1.5}
+        color="#1a0800"
+        resolution={256}
+        frames={1}
+      />
+    </group>
+  );
+}
+
+// Ring of sparse low scrub bushes mimicking the outback horizon treeline
+function OutbackTreeline() {
+  const SCRUB_COUNT = 160;
+  const SHRUB_COUNT = 40;
+  const scrubRef = useRef<THREE.InstancedMesh>(null);
+  const shrubRef = useRef<THREE.InstancedMesh>(null);
+
+  const scrubMatrices = useMemo(() => {
+    const rng = lcg(42);
+    const dummy = new THREE.Object3D();
+    const result: THREE.Matrix4[] = [];
+    for (let i = 0; i < SCRUB_COUNT; i++) {
+      const angle = (i / SCRUB_COUNT) * Math.PI * 2 + rng() * 0.08;
+      const radius = 48 + rng() * 14;  // much further — thin strip at horizon
+      const sx = 0.9 + rng() * 1.4;
+      const sy = 0.18 + rng() * 0.28;  // keep very flat/low
+      const sz = 0.9 + rng() * 1.2;
+      dummy.position.set(Math.cos(angle) * radius, sy * 0.5, Math.sin(angle) * radius);
+      dummy.scale.set(sx, sy, sz);
+      dummy.rotation.y = rng() * Math.PI * 2;
+      dummy.updateMatrix();
+      result.push(dummy.matrix.clone());
+    }
+    return result;
+  }, []);
+
+  const shrubMatrices = useMemo(() => {
+    const rng = lcg(77);
+    const dummy = new THREE.Object3D();
+    const result: THREE.Matrix4[] = [];
+    for (let i = 0; i < SHRUB_COUNT; i++) {
+      const angle = (i / SHRUB_COUNT) * Math.PI * 2 + rng() * 0.15;
+      const radius = 50 + rng() * 12;  // same far distance
+      const sy = 0.4 + rng() * 0.6;
+      dummy.position.set(Math.cos(angle) * radius, sy * 0.4, Math.sin(angle) * radius);
+      dummy.scale.set(0.4 + rng() * 0.5, sy, 0.4 + rng() * 0.5);
+      dummy.rotation.y = rng() * Math.PI * 2;
+      dummy.updateMatrix();
+      result.push(dummy.matrix.clone());
+    }
+    return result;
+  }, []);
+
+  useEffect(() => {
+    if (scrubRef.current) {
+      scrubMatrices.forEach((mat, i) => scrubRef.current!.setMatrixAt(i, mat));
+      scrubRef.current.instanceMatrix.needsUpdate = true;
+    }
+    if (shrubRef.current) {
+      shrubMatrices.forEach((mat, i) => shrubRef.current!.setMatrixAt(i, mat));
+      shrubRef.current.instanceMatrix.needsUpdate = true;
+    }
+  }, [scrubMatrices, shrubMatrices]);
+
+  return (
+    <>
+      {/* Low wide scrubs */}
+      <instancedMesh ref={scrubRef} args={[undefined, undefined, SCRUB_COUNT]}>
+        <sphereGeometry args={[1, 10, 7]} />
+        <meshStandardMaterial color="#3d5428" roughness={1} metalness={0} envMapIntensity={0} fog={true} />
+      </instancedMesh>
+      {/* Occasional taller shrubs for depth variation */}
+      <instancedMesh ref={shrubRef} args={[undefined, undefined, SHRUB_COUNT]}>
+        <sphereGeometry args={[1, 8, 6]} />
+        <meshStandardMaterial color="#2e4020" roughness={1} metalness={0} envMapIntensity={0} fog={true} />
+      </instancedMesh>
+    </>
   );
 }
 
@@ -166,6 +342,9 @@ export default function Scene({
   const screenshotMode = useHeadstoneStore((s) => s.screenshotMode);
   const hideScenery = useHeadstoneStore((s) => s.hideScenery);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
+  const sceneryVariant = useHeadstoneStore((s) => s.sceneryVariant);
+
+  const cfg = SCENERY[sceneryVariant];
 
   // Any mode that suppresses the outdoor scene (screenshot capture or user toggle)
   const noScenery = screenshotMode || hideScenery;
@@ -213,9 +392,10 @@ export default function Scene({
       : [0, 3.8, 0];
   const viewportWidth = useThree((state) => state.size.width);
   const isMobileViewport = viewportWidth < 1024;
-  const fogSettings = isMobileViewport
-    ? { near: 7, far: 22 }
-    : { near: 7, far: 38 };
+  // Outback needs fog pushed further so the red dirt stretches to the treeline
+  const fogSettings = sceneryVariant === 'outback'
+    ? (isMobileViewport ? { near: 22, far: 60 } : { near: 25, far: 80 })
+    : (isMobileViewport ? { near: 7, far: 22 } : { near: 7, far: 38 });
 
   // Call onReady after the scene finishes loading/swapping
   useEffect(() => {
@@ -279,24 +459,23 @@ export default function Scene({
     }
   };
 
-  const showSunRays = !is2DMode && !noScenery && !loading && !baseSwapping;
+  // SunRays look natural for day scenery; outback daylight is direct — no shafts needed
+  const showSunRays = !is2DMode && !noScenery && !loading && !baseSwapping && sceneryVariant !== 'outback';
 
   return (
     <>
       {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
       <AdaptiveDpr pixelated />
 
-      {/* Background: screenshot uses fixed warm white; normal scenery uses sky blue;
+      {/* Background: screenshot uses fixed warm white; normal scenery uses sky colour from config;
           hideScenery mode clears background (CSS on container div provides the colour) */}
       {screenshotMode && <color attach="background" args={['#e8e4dc']} />}
-      {!is2DMode && !noScenery && <color attach="background" args={['#A8C9E6']} />}
+      {!is2DMode && !noScenery && <color attach="background" args={[cfg.bgSky]} />}
       
-      {/* 
-        UPDATED FOG SETTINGS:
-        Desktop keeps a tight falloff (1 → 4) while mobile/tablet pushes the fog farther out (9 → 24)
-        so the headstone stays clear when viewed on smaller screens.
-      */}
-      {!is2DMode && !noScenery && <fog attach="fog" args={[FOG_COLOR_2, fogSettings.near, fogSettings.far]} />}
+      {/* Fog: outback only — meadow has a clear open sky with no distance haze */}
+      {!is2DMode && !noScenery && sceneryVariant === 'outback' && (
+        <fog attach="fog" args={[cfg.fogColor2, fogSettings.near, fogSettings.far]} />
+      )}
       
       <mesh
         position={[0, 0, 0]}
@@ -318,58 +497,48 @@ export default function Scene({
         {/* Headstone content manages its own suspense boundaries internally */}
         <HeadstoneAssembly />
         
-        {/* TEXTURED FLOOR — hidden in no-scenery modes via visible prop (more reliable than
-            conditional rendering in R3F, avoids reconciler timing issues) */}
+        {/* TEXTURED FLOOR — hidden in no-scenery modes via visible prop */}
         <group visible={!noScenery}>
-          <Suspense fallback={<SimpleGrassFloor />}>
-            <GrassFloor />
-          </Suspense>
+          {sceneryVariant === 'outback' ? (
+            <Suspense fallback={<SimpleGroundFloor color={cfg.grassColor} />}>
+              <OutbackFloor color={cfg.grassColor} />
+            </Suspense>
+          ) : (
+            <Suspense fallback={<SimpleGroundFloor color={cfg.grassColor} />}>
+              <GrassFloor color={cfg.grassColor} />
+            </Suspense>
+          )}
+          {/* Horizon treeline — outback only */}
+          {sceneryVariant === 'outback' && <OutbackTreeline />}
         </group>
       </group>
 
-      {/* Dust particles + sky — toggle visibility directly on the group */}
+      {/* Sparkles / clouds / sky gradient — toggle visibility directly on the group */}
       <group visible={!is2DMode && !noScenery}>
         <Sparkles
-          count={30}
-          scale={12}
-          size={3}
-          speed={0.3}
-          opacity={0.4}
-          color="#fffee0"
-          position={[0, 1, 0]}
+          count={cfg.sparklesCount}
+          scale={cfg.sparklesScale}
+          size={cfg.sparklesSize}
+          speed={cfg.sparklesSpeed}
+          opacity={cfg.sparklesOpacity}
+          color={cfg.sparklesColor}
+          position={cfg.sparklesPosition}
         />
-        <Suspense fallback={null}>
-          <AtmosphericSky showDome={false} />
-        </Suspense>
-        <GradientBackground />
+        {/* Outback has a clear open sky — no cartoon clouds */}
+        {sceneryVariant !== 'outback' && (
+          <Suspense fallback={null}>
+            <AtmosphericSky showDome={false} cloudColor={cfg.cloudColor} />
+          </Suspense>
+        )}
+        <GradientBackground top={cfg.gradientTop} bottom={cfg.gradientBottom} />
       </group>
       
-      {/* --- LIGHTING (Studio Setup) --- */}
-      
-      {/* 
-         1. AMBIENT: High intensity (1.0).
-         This ensures the dark granite is visible everywhere, with NO highlights. 
-      */}
-      <ambientLight intensity={0.6} color="#ffffff" />
-      
-      {/* 
-         2. HEMISPHERE: Strong bounce.
-         Reflects light from the "ground" up onto the vertical face.
-      */}
-      <hemisphereLight
-        args={['#fff8e7', '#dcdcdc']}
-        intensity={0.8}
-      />
-      
-      {/* 
-         3. KEY LIGHT (Sun):
-         Moved Higher (Y=12) and Left (X=-10).
-         This moves the specular reflection ("The Glow") to the top-left corner,
-         keeping the main text area clear.
-      */}
+      {/* --- LIGHTING — tinted per scenery variant --- */}
+      <ambientLight intensity={cfg.ambientIntensity} color={cfg.ambientColor} />
+      <hemisphereLight args={[cfg.hemiSky, cfg.hemiGround]} intensity={cfg.hemiIntensity} />
       <spotLight 
-        color="#fffce6"
-        intensity={2.5}
+        color={cfg.sunColor}
+        intensity={cfg.sunIntensity}
         angle={0.6}
         penumbra={1}
         position={[-10, 12, 12]}
@@ -377,25 +546,10 @@ export default function Scene({
         shadow-bias={-0.0001}
         shadow-mapSize={[1024, 1024]}
       />
-
-      {/* 
-         REMOVED: DirectionalLight (Face Fill).
-         This was causing the "Big Light Glow" in the center.
-         We rely on Ambient+Hemisphere for fill now.
-      */}
-
       {/* Rim light (Back Right) - Separates stone from background */}
-      <spotLight color="#ffffff" intensity={2} position={[5, 5, -5]} distance={30} />
+      <spotLight color={cfg.rimColor} intensity={cfg.rimIntensity} position={[5, 5, -5]} distance={30} />
 
-      {/* 
-        ENVIRONMENT: Removed to fix Vercel build timeout
-        The forest HDRI preset was causing build to hang (downloads large file)
-        Ambient + Hemisphere + Spot lights provide sufficient lighting
-      */}
-      
       <Environment files="/hdri/spring.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
-      
-      {/* REMOVED EffectComposer/DepthOfField to restore sharpness */}
 
       <OrbitControls
         makeDefault

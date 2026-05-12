@@ -3050,6 +3050,12 @@ export default function DesignerNav() {
                       const itemStatus = getItemStatus(item.slug);
                       const itemCount = getItemCount(item.slug);
 
+                      // "Select Size & Base" for upright headstones; "Select Size" everywhere else
+                      const displayName =
+                        item.slug === 'select-size' && catalog?.product.type === 'headstone'
+                          ? 'Select Size & Base'
+                          : item.name;
+
                       // Status-based styling
                       const statusClasses =
                         itemStatus === 'complete'
@@ -3133,7 +3139,7 @@ export default function DesignerNav() {
                                 className="select-none"
                                 style={{ caretColor: 'transparent' }}
                               >
-                                {item.name}
+                                {displayName}
                               </span>
                             </button>
 
@@ -3169,7 +3175,7 @@ export default function DesignerNav() {
                                   }`}
                                 >
                                   <Icon className="h-5 w-5 flex-shrink-0" />
-                                  <span>{item.name}</span>
+                                  <span>{displayName}</span>
                                 </button>
 
                                 {isActive &&
@@ -3192,7 +3198,7 @@ export default function DesignerNav() {
                                 }`}
                               >
                                 <Icon className="h-5 w-5 flex-shrink-0" />
-                                <span>{item.name}</span>
+                                <span>{displayName}</span>
                               </Link>
                             )}
                           </React.Fragment>
@@ -3276,7 +3282,7 @@ export default function DesignerNav() {
                               className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 px-4 py-3 text-left text-base font-light text-gray-200 transition-all hover:border-white/20 hover:bg-white/10"
                             >
                               <Icon className="h-5 w-5 flex-shrink-0" />
-                              <span>{item.name}</span>
+                              <span>{displayName}</span>
                             </button>
                           </React.Fragment>
                         );
@@ -3296,7 +3302,7 @@ export default function DesignerNav() {
                               title="Please select a product first"
                             >
                               <Icon className="h-5 w-5 flex-shrink-0 text-gray-500" />
-                              <span className="text-gray-500">{item.name}</span>
+                              <span className="text-gray-500">{displayName}</span>
                             </div>
                           ) : (
                             <Link
@@ -3310,10 +3316,9 @@ export default function DesignerNav() {
                             >
                               <div className="flex items-center gap-3">
                                 <Icon className="h-5 w-5 flex-shrink-0" />
-                                <span>{item.name}</span>
+                                <span>{displayName}</span>
                               </div>
 
-                              {/* Count Badge */}
                               {itemCount && itemCount > 0 && (
                                 <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-400">
                                   {itemCount}

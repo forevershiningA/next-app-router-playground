@@ -1942,6 +1942,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   setHideScenery: (v) => set({ hideScenery: v }),
   solidBgColor: '#e8e4dc',
   setSolidBgColor: (color) => set({ solidBgColor: color }),
+  sceneryVariant: 'day',
+  setSceneryVariant: (v) => set({ sceneryVariant: v }),
 
   /* loading */
   loading: true,
