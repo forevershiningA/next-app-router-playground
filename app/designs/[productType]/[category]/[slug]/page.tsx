@@ -317,6 +317,12 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
             "name": "Forever Shining",
             "url": baseUrl
           },
+          "hasMerchantReturnPolicy": {
+            "@type": "MerchantReturnPolicy",
+            "applicableCountry": ["AU", "GB", "US", "CA"],
+            "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
+            "merchantReturnDays": 0
+          },
           "shippingDetails": {
             "@type": "OfferShippingDetails",
             "shippingRate": {
