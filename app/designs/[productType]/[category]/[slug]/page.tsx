@@ -24,55 +24,22 @@ function formatSlugForDisplay(slug: string): string {
 /**
  * Extract shape name from design data
  */
-async function getDesignShape(designId: string, mlDir: string): Promise<string | null> {
-  try {
-    // Use absolute URL for server-side fetches in production
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.org';
-    const response = await fetch(`${baseUrl}/ml/${mlDir}/saved-designs/json/${designId}.json`);
-    if (!response.ok) return null;
-    
-    const data = await response.json();
-    const headstoneItem = data.find((item: any) => item.type === 'Headstone' || item.type === 'Plaque');
-    
-    if (headstoneItem?.shape) {
-      let extractedShape = headstoneItem.shape;
-      
-      // Remove "Headstone" or "Plaque" prefix and numbers
-      extractedShape = extractedShape
-        .replace(/^(headstone|plaque)\s+\d+$/i, '')
-        .replace(/^(headstone|plaque)_\d+$/i, '')
-        .trim();
-      
-      // If we have a named shape, use it
-      if (extractedShape && extractedShape.length > 0 && !/^\d+$/.test(extractedShape)) {
-        const formattedShape = extractedShape
-          .replace(/_/g, ' ')
-          .split(' ')
-          .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
-          .join(' ');
-        return formattedShape;
-      } else {
-        // Map common numbered shapes
-        const shapeFile = headstoneItem.shape.toLowerCase().replace(/\s+/g, '_');
-        const shapeMap: Record<string, string> = {
-          'headstone_27': 'Heart',
-          'pet_heart': 'Heart',
-          'serpentine': 'Serpentine',
-          'gable': 'Gable',
-          'peak': 'Peak',
-          'curved_peak': 'Curved Peak',
-          'square': 'Square',
-          'landscape': 'Landscape',
-          'portrait': 'Portrait',
-        };
-        return shapeMap[shapeFile] || null;
-      }
-    }
-    
-    return null;
-  } catch {
-    return null;
-  }
+/**
+ * Format a raw shape name (from metadata) into Title Case for display.
+ * e.g. "curved gable" → "Curved Gable", "headstone_27" → null
+ */
+function formatShapeName(raw: string | undefined): string | null {
+  if (!raw) return null;
+  // Discard pure-number or generic "headstone_N" / "plaque_N" entries
+  const cleaned = raw
+    .replace(/^(headstone|plaque)[_\s]\d+$/i, '')
+    .replace(/_/g, ' ')
+    .trim();
+  if (!cleaned || /^\d+$/.test(cleaned)) return null;
+  return cleaned
+    .split(' ')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 }
 
 /**
@@ -257,7 +224,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   const categoryInfo = DESIGN_CATEGORIES[design.category];
   const categoryTitle = categoryInfo?.name || category.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   const productTypeDisplay = design.productType.charAt(0).toUpperCase() + design.productType.slice(1);
-  const shapeName = designId ? await getDesignShape(designId, design.mlDir) : null;
+  const shapeName = formatShapeName(design.shapeName);
 
   // Extract verse/phrase from slug by stripping shape prefix
   const shapeSlugPrefix = design.shapeName
