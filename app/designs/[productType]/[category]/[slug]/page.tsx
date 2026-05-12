@@ -268,6 +268,11 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   
   // Generate SKU
   const sku = `FS-${design.productType.toUpperCase()}-${shapeName ? shapeName.toUpperCase().replace(/\s+/g, '-') : 'STANDARD'}-${simplifiedProduct.toUpperCase().replace(/\s+/g, '-')}-${category.toUpperCase()}`;
+
+  // Starting price by product type (AUD) — used for AggregateOffer lowPrice
+  const lowPriceAud = simplifiedProduct.toLowerCase().includes('bronze') ? '895' :
+                      simplifiedProduct.toLowerCase().includes('stainless') ? '795' :
+                      design.productType === 'monument' ? '2495' : '695';
   
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
@@ -301,19 +306,27 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         "sku": sku,
         "mpn": sku,
         "offers": {
-          "@type": "Offer",
-          "priceCurrency": "GBP",
+          "@type": "AggregateOffer",
+          "priceCurrency": "AUD",
+          "lowPrice": lowPriceAud,
+          "offerCount": "1",
           "availability": "https://schema.org/InStock",
           "url": canonicalUrl,
           "seller": {
             "@type": "Organization",
-            "name": "Forever Shining"
+            "name": "Forever Shining",
+            "url": baseUrl
           },
           "shippingDetails": {
             "@type": "OfferShippingDetails",
+            "shippingRate": {
+              "@type": "MonetaryAmount",
+              "value": "0",
+              "currency": "AUD"
+            },
             "shippingDestination": {
               "@type": "DefinedRegion",
-              "addressCountry": ["GB", "US", "AU", "CA"]
+              "addressCountry": ["AU", "GB", "US", "CA"]
             },
             "deliveryTime": {
               "@type": "ShippingDeliveryTime",
@@ -321,6 +334,12 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
                 "@type": "QuantitativeValue",
                 "minValue": 2,
                 "maxValue": 3,
+                "unitCode": "WEE"
+              },
+              "transitTime": {
+                "@type": "QuantitativeValue",
+                "minValue": 1,
+                "maxValue": 2,
                 "unitCode": "WEE"
               }
             }
