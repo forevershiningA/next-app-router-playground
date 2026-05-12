@@ -3439,7 +3439,7 @@ function encodeCanvasForUpload(source: HTMLCanvasElement): string {
   exportCanvas.height = outH;
   const ctx = exportCanvas.getContext('2d');
   if (ctx) {
-    ctx.fillStyle = '#e8e4dc';
+    ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, outW, outH);
     ctx.drawImage(source, 0, 0, outW, outH);
     return exportCanvas.toDataURL('image/jpeg', 0.86);

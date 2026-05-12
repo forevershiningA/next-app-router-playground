@@ -467,9 +467,9 @@ export default function Scene({
       {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
       <AdaptiveDpr pixelated />
 
-      {/* Background: screenshot uses fixed warm white; normal scenery uses sky colour from config;
+      {/* Background: screenshot uses pure white; normal scenery uses sky colour from config;
           hideScenery mode clears background (CSS on container div provides the colour) */}
-      {screenshotMode && <color attach="background" args={['#e8e4dc']} />}
+      {screenshotMode && <color attach="background" args={['#ffffff']} />}
       {!is2DMode && !noScenery && <color attach="background" args={[cfg.bgSky]} />}
       
       {/* Fog: outback only — meadow has a clear open sky with no distance haze */}
