@@ -222,13 +222,13 @@ function ProductNameHeader() {
 
   return (
     <>
-      {/* Title Floating Top Left */}
+      {/* Product name chip — top left */}
       {displayProductName && (
-        <div className="absolute top-10 left-10 z-10 pointer-events-none hidden lg:block">
-          {/* Elegant Serif Font */}
-          <h1 className="text-shadow-hero text-white text-[1rem] sm:text-2xl !p-0 !m-0">
+        <div className="absolute top-6 left-6 z-10 pointer-events-none hidden lg:flex items-center gap-2 bg-black/55 backdrop-blur-md border border-white/10 rounded-full pl-2.5 pr-3.5 py-1.5 shadow-lg">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#DEBD68] shrink-0" />
+          <span className="text-white/90 text-sm font-medium tracking-wide leading-none whitespace-nowrap">
             {displayProductName}
-          </h1>
+          </span>
         </div>
       )}
 
