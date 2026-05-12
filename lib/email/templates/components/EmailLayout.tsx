@@ -38,8 +38,8 @@ export function EmailLayout({
               <Img
                 src={config.logo}
                 alt={config.company}
-                width={290}
-                height={180}
+                width={200}
+                height={123}
                 style={logo}
               />
             ) : (
