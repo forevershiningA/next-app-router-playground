@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-11
+**Last Updated:** 2026-05-12
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,90 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-05-12) — Outback Scenery, Meadow Rename, Nav Label, My Account Fix, White Screenshot
+
+### ✅ Outback Scenery Variant
+
+Added a second scenery option **"Outback"** alongside the existing scenery in `components/three/Scene.tsx`:
+
+- **Sky**: warm amber top (`#d4895a`) + horizon haze, no animated clouds
+- **Ground**: CC0 texture `red_sand_diff_2k.jpg` + normal map `red_sand_nor_gl_2k.jpg` (downloaded from Poly Haven), tiled at repeat 12, ground colour `#e0a870`; plane 180×180
+- **Treeline**: two-layer `InstancedMesh` — 160 low scrubs (radius 48–62, colour `#3d5428`) + 40 taller shrubs (colour `#2e4020`); deterministic LCG seeds; pushed to horizon
+- **Fog**: outback-only (`near=25, far=80` desktop). `GrassFloor` and `SimpleGroundFloor` expanded to 300×300 so the Meadow scene edge is never visible without fog
+- **No `AtmosphericSky`** component for outback (clear open sky)
+
+New `SCENERY` config object in `Scene.tsx` keyed by `'day' | 'outback'`; `sceneryVariant` state in the store (`lib/headstone-store.ts` + types).
+
+Textures stored in `public/textures/three/outback/`:
+- `red_sand_diff_2k.jpg` (2.2 MB) — active diffuse
+- `red_sand_nor_gl_2k.jpg` (4.4 MB) — active normal map
+- `outback_diff_2k.jpg` / `outback_nor_gl_2k.jpg` — unused originals (can be deleted to save ~9 MB)
+
+---
+
+### ✅ Renamed "Day" → "Meadow"
+
+`components/SceneryToggleButton.tsx`: label changed from `"Day"` / `"Spring day"` to **`"Meadow"`** / `"Green meadow"`. Store key `'day'` unchanged (no type/state breaking changes).
+
+---
+
+### ✅ Fog Removed from Meadow Scenery
+
+`Scene.tsx`: fog element now gated by `sceneryVariant === 'outback'` — Meadow scene has no fog/haze. Ground planes expanded to 300×300 to prevent visible edge.
+
+---
+
+### ✅ Updated Scenery Color Swatches
+
+`components/SceneryToggleButton.tsx`: six background colour swatches updated to:
+
+| Label | Hex |
+|-------|-----|
+| Pure White (Light) | `#ffffff` |
+| Light Gray (Light/Neutral) | `#efefef` |
+| Warm Beige (Light/Warm) | `#e8e4dc` |
+| Medium Gray (Mid-tone) | `#9ca3af` |
+| Dark Charcoal (Dark) | `#1e2228` |
+| Deep Navy (Dark/Cool) | `#1a2035` |
+
+---
+
+### ✅ "Select Size & Base" Nav Label for Headstones
+
+`components/DesignerNav.tsx`: sidebar nav item "Select Size" now shows **"Select Size & Base"** when `catalog?.product.type === 'headstone'`. Implemented via `displayName` computed variable in the map callback (mirrors the `materialLabel` pattern). All 5 render paths (button, border selector, disabled, link, save-design button) use `displayName`.
+
+---
+
+### ✅ My Account Page — Canvas Bleed-Through Fix
+
+Two fixes in the same commit:
+
+1. **Removed scenery-like gradient** from `app/my-account/page.tsx` — the `radial-gradient` overlay (`rgba(244,160,80,0.18)` warm amber top + `rgba(88,144,255,0.18)` blue bottom) looked identical to the outback scenery colours and was causing the page background to appear as "scenery". Removed the gradient div entirely; page background is now pure `bg-[#050301]`.
+
+2. **`!pathname` guard in `ConditionalCanvas.tsx`** — when `usePathname()` returns `null` (SSR edge case on Vercel before router context is ready), the canvas now hides by default instead of rendering. Both the early return and the `useEffect` guard were updated.
+
+---
+
+### ✅ White Background for Saved Design Screenshots/Email
+
+Changed screenshot capture background from warm beige `#e8e4dc` to pure white `#ffffff` in two places:
+
+- `components/three/Scene.tsx` line ~472: `<color attach="background" args={['#ffffff']} />` during `screenshotMode`
+- `components/DesignerNav.tsx` `encodeCanvasForUpload()`: `ctx.fillStyle = '#ffffff'` before compositing
+
+Saved design email and My Account thumbnails now show the headstone on a clean white background (no scenery, no warm tint).
+
+---
+
+### 📌 Pending / Next Steps (2026-05-12)
+
+- [ ] **Delete unused outback textures**: `public/textures/three/outback/outback_diff_2k.jpg` + `outback_nor_gl_2k.jpg` (~9 MB)
+- [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+- [ ] **Email screenshot URL**: `screenshotUrl` passed to save-design email is the data URL from the fast-path DB write. Consider moving `sendEmail()` inside `after()` so the email is sent after upload completes and includes a real file URL
 
 ---
 
