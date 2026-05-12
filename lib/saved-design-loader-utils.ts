@@ -691,8 +691,67 @@ const MATERIAL_TEXTURES: Record<string, string> = {
 
   // Other common materials
   'african-black': '/textures/forever/l/African-Black.webp',
+  'african-red': '/textures/forever/l/African-Red.webp',
   'noble-black': '/textures/forever/l/Noble-Black.webp',
-  'g654': '/textures/forever/l/01.webp', // Fallback to numbered texture
+  'noble-red': '/textures/forever/l/Noble-Red.webp',
+  'balmoral-red': '/textures/forever/l/Balmoral-Red.webp',
+  'balmoral-green': '/textures/forever/l/Balmoral-Green.webp',
+  'imperial-red': '/textures/forever/l/Imperial-Red.webp',
+  'emerald-pearl': '/textures/forever/l/Emerald-Pearl.webp',
+  'vizage-blue': '/textures/forever/l/Vizage-Blue.webp',
+  'chinese-calca': '/textures/forever/l/Chinese-Calca.webp',
+  'english-brown': '/textures/forever/l/English-Brown.webp',
+  'paradiso': '/textures/forever/l/Paradiso.webp',
+  'sandstone': '/textures/forever/l/Sandstone.webp',
+  'saphire-brown': '/textures/forever/l/Saphire-Brown.webp',
+  'sapphire-brown': '/textures/forever/l/Saphire-Brown.webp',
+  'g633': '/textures/forever/l/G633.webp',
+  'g439': '/textures/forever/l/G439.webp',
+  'g623': '/textures/forever/l/G623.webp',
+  'g654': '/textures/forever/l/G654.webp',
+  'g788': '/textures/forever/l/G788.webp',
+  'g942': '/textures/forever/l/G9426.webp',
+  'multicolour-red': '/textures/forever/l/Multicolour-red.webp',
+  'multi-red': '/textures/forever/l/Multicolour-red.webp',
+  'darwin-brown': '/textures/forever/l/Darwin-Brown.webp',
+  'marron-brown': '/textures/forever/l/Marron-Brown.webp',
+  'australian-grandee': '/textures/forever/l/Australian-Grandee.webp',
+  'australian-calca': '/textures/forever/l/Australian-Calca.webp',
+};
+
+/**
+ * Maps legacy numbered material IDs (from stones.xml, catalog-id-*.xml) to named texture paths.
+ * Source: public/xml/en_EN/stones.xml — <materials path="src/granites/forever/" start="01" end="32">
+ * Numbers without a corresponding named .webp fall back to their numbered placeholder.
+ */
+const NUMBERED_MATERIAL_TEXTURES: Record<string, string> = {
+  '01': '/textures/forever/l/Sandstone.webp',
+  '02': '/textures/forever/l/White-Carrara.webp',
+  '03': '/textures/forever/l/G633.webp',
+  '04': '/textures/forever/l/White-Carrara.webp',   // Kashmire White — no exact file; White Carrara closest
+  '05': '/textures/forever/l/G439.webp',
+  '06': '/textures/forever/l/G623.webp',
+  '08': '/textures/forever/l/G654.webp',
+  '10': '/textures/forever/l/G788.webp',
+  '11': '/textures/forever/l/G9426.webp',            // G942
+  '12': '/textures/forever/l/Noble-Black.webp',      // Noble Grey — no grey file; Noble Black closest
+  '13': '/textures/forever/l/Australian-Grandee.webp',
+  '14': '/textures/forever/l/African-Black.webp',
+  '17': '/textures/forever/l/Glory-Gold-Spots.webp',
+  '18': '/textures/forever/l/Glory-Black-2.webp',    // Glory Black
+  '19': '/textures/forever/l/Saphire-Brown.webp',    // Sapphire Brown
+  '20': '/textures/forever/l/African-Red.webp',
+  '21': '/textures/forever/l/Balmoral-Red.webp',
+  '22': '/textures/forever/l/Imperial-Red.webp',
+  '23': '/textures/forever/l/Balmoral-Red.webp',     // Rose Red — no exact file
+  '24': '/textures/forever/l/Multicolour-red.webp',
+  '25': '/textures/forever/l/Noble-Red.webp',
+  '26': '/textures/forever/l/Chinese-Calca.webp',
+  '27': '/textures/forever/l/English-Brown.webp',
+  '28': '/textures/forever/l/Paradiso.webp',
+  '29': '/textures/forever/l/Blue-Pearl.webp',
+  '30': '/textures/forever/l/Vizage-Blue.webp',
+  '31': '/textures/forever/l/Emerald-Pearl.webp',
 };
 
 /**
@@ -725,6 +784,17 @@ function mapTexture(texturePath: string, productId: string): string {
   }
   
   // For headstones, map numbered forevershining textures to named materials
+  // First: resolve the number from any legacy path format (e.g. "01", "src/granites/forever/01.jpg",
+  // "/textures/forever/l/01.webp") before any other checks so we never serve a 2KB placeholder.
+  const numberedMatch = texturePath.match(/(?:^|[\/\\])(\d{2})\.(jpg|webp)$/) ??
+                        texturePath.match(/^(\d{2})$/);
+  if (numberedMatch) {
+    const num = numberedMatch[1];
+    if (NUMBERED_MATERIAL_TEXTURES[num]) {
+      return NUMBERED_MATERIAL_TEXTURES[num];
+    }
+  }
+
   if (texturePath.includes('/17.') || texturePath.includes('/17"') ||
       texturePath.endsWith('17.jpg') || texturePath.endsWith('17.webp')) {
     return MATERIAL_TEXTURES['glory-gold-spots'];
