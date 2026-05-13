@@ -108,7 +108,7 @@ const GradientBackground = ({ top, bottom }: { top: string; bottom: string }) =>
   );
 };
 
-function GrassFloor({ color }: { color: string }) {
+function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) {
   const gl = useThree((state) => state.gl);
   
   // Load grass textures from local public folder
@@ -127,10 +127,6 @@ function GrassFloor({ color }: { color: string }) {
     aoMap: '/textures/three/grass/grass_ao.webp',
   });
 
-  // Lower repeat = bigger tiles = far less visible tiling pattern
-  // 28 balances close-up sharpness with reduced far-distance repetition (fog hides the rest)
-  const REPEAT_SCALE = 28;
-
   useEffect(() => {
     const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 16);
 
@@ -138,7 +134,7 @@ function GrassFloor({ color }: { color: string }) {
       if (tex) {
         // MirroredRepeatWrapping flips adjacent tiles — breaks the obvious grid pattern
         tex.wrapS = tex.wrapT = THREE.MirroredRepeatWrapping;
-        tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
+        tex.repeat.set(repeat, repeat);
         tex.anisotropy = anisotropy;
         tex.needsUpdate = true;
       }
@@ -148,7 +144,7 @@ function GrassFloor({ color }: { color: string }) {
     if (props.map) props.map.colorSpace = THREE.SRGBColorSpace;
     if (props.normalMap) props.normalMap.colorSpace = THREE.NoColorSpace;
     if (props.aoMap) props.aoMap.colorSpace = THREE.NoColorSpace;
-  }, [props, gl]);
+  }, [props, gl, repeat]);
 
   return (
     <group position={[0, -0.01, 0]}>
@@ -343,6 +339,10 @@ export default function Scene({
   const hideScenery = useHeadstoneStore((s) => s.hideScenery);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const sceneryVariant = useHeadstoneStore((s) => s.sceneryVariant);
+  const productId = useHeadstoneStore((s) => s.productId);
+  // SS plaque is tiny (300×200mm) — camera auto-fits very close so we use finer
+  // grass tiles (2m vs 10.7m default) to avoid pixelation at close camera distance.
+  const grassRepeat = productId === '52' ? 150 : 28;
 
   const cfg = SCENERY[sceneryVariant];
 
@@ -505,7 +505,7 @@ export default function Scene({
             </Suspense>
           ) : (
             <Suspense fallback={<SimpleGroundFloor color={cfg.grassColor} />}>
-              <GrassFloor color={cfg.grassColor} />
+              <GrassFloor color={cfg.grassColor} repeat={grassRepeat} />
             </Suspense>
           )}
           {/* Horizon treeline — outback only */}
@@ -549,7 +549,7 @@ export default function Scene({
       {/* Rim light (Back Right) - Separates stone from background */}
       <spotLight color={cfg.rimColor} intensity={cfg.rimIntensity} position={[5, 5, -5]} distance={30} />
 
-      <Environment files="/hdri/spring.hdr" background={false} blur={1.0} resolution={256} environmentIntensity={0.5} />
+      <Environment files="/hdri/spring.hdr" background={false} resolution={2048} environmentIntensity={0.5} />
 
       <OrbitControls
         makeDefault

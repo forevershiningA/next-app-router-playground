@@ -1163,6 +1163,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ borderName: name });
   },
 
+  ssCorners: 'straight',
+  setSsCorners(v) {
+    set({ ssCorners: v });
+  },
+
   showInsetContour: false,
   setShowInsetContour(show) {
     set({ showInsetContour: show });

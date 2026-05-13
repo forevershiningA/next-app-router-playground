@@ -87,6 +87,9 @@ type Props = {
   showEdges?: boolean;
   isFullColourPlaque?: boolean;
   isUrn?: boolean;
+  isStainlessSteel?: boolean;
+  ssFinish?: 'brushed' | 'polished';
+  cornerRadius?: number;
   headstoneStyle?: 'upright' | 'slant';
   slantThickness?: number; // Absolute thickness in mm (100-300mm)
   meshProps?: ThreeElements['mesh'];
@@ -95,6 +98,21 @@ type Props = {
 };
 
 /* ---------------- helpers ---------------- */
+
+function roundedRectShape(minX: number, maxX: number, minY: number, maxY: number, r: number): THREE.Shape {
+  const shape = new THREE.Shape();
+  shape.moveTo(minX + r, minY);
+  shape.lineTo(maxX - r, minY);
+  shape.quadraticCurveTo(maxX, minY, maxX, minY + r);
+  shape.lineTo(maxX, maxY - r);
+  shape.quadraticCurveTo(maxX, maxY, maxX - r, maxY);
+  shape.lineTo(minX + r, maxY);
+  shape.quadraticCurveTo(minX, maxY, minX, maxY - r);
+  shape.lineTo(minX, minY + r);
+  shape.quadraticCurveTo(minX, minY, minX + r, minY);
+  shape.closePath();
+  return shape;
+}
 
 function shapeBounds(shape: THREE.Shape) {
   const pts = shape.getPoints(256);
@@ -210,6 +228,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   showEdges = false,
   isFullColourPlaque = false,
   isUrn = false,
+  isStainlessSteel = false,
+  ssFinish = 'brushed' as 'brushed' | 'polished',
+  cornerRadius = 0,
   headstoneStyle = 'upright',
   slantThickness = 150, // Default 150mm
   meshProps,
@@ -407,11 +428,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     const base = cloneSolid(primary.shape);
     const { minX, maxX, minY, maxY, dx, dy } = primary.bounds;
-    const otherSolidShapes = shapesWithBounds
-      .filter((entry) => entry.shape !== primary.shape)
-      .map((entry) => ({ shape: cloneSolid(entry.shape), isRelief: false }));
-
-    const additionalShapes = [...otherSolidShapes, ...holeShapeEntries];
 
     const widthW = dx * Math.abs(scale);
     const heightW = dy * Math.abs(scale);
@@ -423,15 +439,32 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const targetH_SV = preserveTop ? toSV(wantH) : dy * sCore;
     const bottomTarget_SV = minY + targetH_SV;
 
-    return { base, additionalShapes, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV };
-  }, [svgData, scale, targetWidth, targetHeight, preserveTop]);
+    // When rounding corners, build the shape to exactly the target height in both
+    // the expanding (wantH > coreH_world) and shrinking (wantH < coreH_world) cases.
+    // Using bottomTarget_SV directly avoids both the rectangle band AND the vertex-clamp
+    // path from cutting off the bottom rounded corners.
+    const effectiveBottom = cornerRadius > 0 && preserveTop
+      ? bottomTarget_SV
+      : maxY;
+    const baseShape = cornerRadius > 0
+      ? roundedRectShape(minX, maxX, minY, effectiveBottom, Math.min(cornerRadius, dx / 2, dy / 2))
+      : base;
+
+    const otherSolidShapes = shapesWithBounds
+      .filter((entry) => entry.shape !== primary.shape)
+      .map((entry) => ({ shape: cloneSolid(entry.shape), isRelief: false }));
+
+    const additionalShapes = [...otherSolidShapes, ...holeShapeEntries];
+
+    return { base: baseShape, additionalShapes, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV, cornerRadius };
+  }, [svgData, scale, targetWidth, targetHeight, preserveTop, cornerRadius]);
 
   // 3a. Calculate outline (now at top level)
   const outline = useMemo(() => {
     if (!shapeParams) return null;
 
     const { base, minX, maxX, maxY, dx, dy, wantH, coreH_world, bottomTarget_SV } = shapeParams;
-    const isExpanded = preserveTop && wantH > coreH_world + 1e-4;
+    const isExpanded = preserveTop && wantH > coreH_world + 1e-4 && !shapeParams.cornerRadius;
     
     let ptsForOutline = base.getPoints(12);
     
@@ -818,8 +851,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     let coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
     const geoms: THREE.BufferGeometry[] = [coreGeom];
 
-    // Preserve top logic
-    if (preserveTop && wantH > coreH_world + 1e-9) {
+    // Preserve top logic — skip the band when corners are rounded (shape already covers full height)
+    if (preserveTop && wantH > coreH_world + 1e-9 && !cornerRadius) {
       const s = new THREE.Shape();
       s.moveTo(minX, maxY);
       s.lineTo(maxX, maxY);
@@ -828,7 +861,8 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       s.closePath();
       const band = new THREE.ExtrudeGeometry(s, extrudeSettings);
       geoms.push(band);
-    } else if (preserveTop && wantH < coreH_world - 1e-9) {
+    } else if (preserveTop && wantH < coreH_world - 1e-9 && !cornerRadius) {
+      // Vertex-clamp only when no rounded corners (rounded rect is already sized to bottomTarget_SV)
       const pos = coreGeom.getAttribute('position') as THREE.BufferAttribute;
       const P = pos.array as Float32Array;
       for (let i = 0; i < P.length; i += 3)
@@ -1112,6 +1146,40 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       return [faceMat, sideMat];
     }
 
+    // Stainless Steel Plaque (product 52): PBR metal material per finish.
+    if (isStainlessSteel) {
+      if (ssFinish === 'polished') {
+        // Same calibrated steel preset as the Stainless Steel Inlaid Urn (product 2350)
+        const mat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(0xe8e8e8),
+          roughness: 0.18,
+          metalness: 0.98,
+          clearcoat: 0.9,
+          clearcoatRoughness: 0.1,
+          envMapIntensity: 2.0,
+          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1,
+        });
+        return [mat, mat];
+      }
+      // Brushed finish — light silvery tone, no dark texture map (swatch JPEG is for UI only)
+      const brushedMat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0xe2e2e2),
+        roughness: 0.30,
+        metalness: 0.92,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.35,
+        envMapIntensity: 1.8,
+        side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+        polygonOffset: true,
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1,
+      });
+      return [brushedMat, brushedMat];
+    }
+
     // Urn: entire body (face + sides) is brushed stainless steel.
     // The vitreous enamel inlay (with background texture) is rendered as a
     // separate UrnEnamelInlay mesh slightly in front of this surface.
@@ -1179,7 +1247,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         });
 
     return [faceMat, sideMat];
-  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn]);
+  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, ssFinish]);
 
   // 5a. Dispose geometries and materials on cleanup
   React.useEffect(() => {

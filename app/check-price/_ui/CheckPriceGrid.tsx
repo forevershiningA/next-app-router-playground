@@ -22,7 +22,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
-import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
+import { calculatePrice, calculatePricePowerLaw, computeQuantity } from '#/lib/xml-parser';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
@@ -168,14 +168,20 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   // Calculate headstone price using catalog.
   // Urns: quantity = 1 unit; price entry is matched by urnShapeCode (note field).
   // Other products: derive quantity from dimensions and quantity_type.
-  const headstoneQuantity = isUrnProduct
-    ? 1
-    : (catalog?.product?.priceModel
-        ? computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness })
-        : 0);
-  
+  // Product 52 (SS Plaque): power-law formula (legacy getEquation case 2); value = mm².
+  const headstoneQuantity = productId === '52'
+    ? widthMm * heightMm            // raw mm² — power-law function divides by 100 internally
+    : isUrnProduct
+      ? 1
+      : (catalog?.product?.priceModel
+          ? computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness })
+          : 0);
+
+  const ssMaterialNote = (headstoneMaterialUrl ?? '').includes('polished') ? 'polished' : 'brushed';
   const headstonePrice = catalog && headstoneQuantity > 0
-    ? calculatePrice(catalog.product.priceModel, headstoneQuantity, urnShapeCode ?? undefined)
+    ? (productId === '52'
+        ? calculatePricePowerLaw(catalog.product.priceModel, headstoneQuantity, ssMaterialNote)
+        : calculatePrice(catalog.product.priceModel, headstoneQuantity, urnShapeCode ?? undefined))
     : 0;
 
   // Calculate base price using catalog

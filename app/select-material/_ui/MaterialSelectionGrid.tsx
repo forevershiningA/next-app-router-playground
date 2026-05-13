@@ -58,6 +58,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
+  const isStainlessSteel = productId === '52';
   const isUrn = catalog?.product.type === 'urn';
   const usesBackgrounds = isFullColourPlaque || isUrn;
   const [bgTab, setBgTab] = useState<'background' | 'color'>('background');
@@ -114,6 +115,88 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   // Don't show the full grid when canvas is visible (shape already selected)
   if (hasSelectedShape) {
     return null;
+  }
+
+  const BRUSHED_URL = '/jpg/metals/l/brushed-ss-swatch.jpg';
+  const POLISHED_URL = '/jpg/metals/l/high-polished-ss-swatch.jpg';
+
+  if (isStainlessSteel) {
+    const ssFinishes = [
+      { label: 'Brushed Finish', url: BRUSHED_URL },
+      { label: 'Highly Polished Finish', url: POLISHED_URL },
+    ];
+    const activeSsUrl = currentHeadstoneMaterialUrl ?? BRUSHED_URL;
+
+    const handleFinishSelect = (url: string) => {
+      setIsMaterialChange(true);
+      setHeadstoneMaterialUrl(url);
+      setTimeout(() => setIsMaterialChange(false), 100);
+      router.push('/select-size');
+    };
+
+    return (
+      <div className="min-h-screen bg-gray-900">
+        <div className="border-b border-gray-800">
+          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
+                Select Your Finish
+              </h1>
+              <p className="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">
+                Choose between a brushed or highly polished stainless steel surface for your plaque.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
+          <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 max-w-xl mx-auto">
+            {ssFinishes.map(({ label, url }) => {
+              const isSelected = activeSsUrl === url;
+              return (
+                <button
+                  key={url}
+                  onClick={() => handleFinishSelect(url)}
+                  className={`group relative overflow-hidden rounded-2xl border p-6 text-left transition-all hover:scale-100 hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
+                    isSelected
+                      ? 'border-[#cfac6c]/70 bg-gradient-to-br from-[#cfac6c]/20 to-gray-900/50 shadow-lg shadow-[#cfac6c]/20'
+                      : 'border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 hover:from-gray-700/60 hover:to-gray-800/60 hover:border-[#cfac6c]/30'
+                  }`}
+                >
+                  {isSelected && (
+                    <div className="absolute top-2 right-2 z-10 rounded-full bg-[#cfac6c] px-3 py-1 text-xs font-semibold text-slate-900 shadow-lg">
+                      Selected
+                    </div>
+                  )}
+                  <div className="relative aspect-square overflow-hidden rounded-xl bg-white/5 mb-4 ring-1 ring-white/10">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={url}
+                      alt={label}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/0 to-[#cfac6c]/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-semibold text-white text-center line-clamp-2 mb-3 tracking-wide">
+                      {label}
+                    </h3>
+                    <div className="flex items-center justify-center gap-2 text-sm font-medium text-[#cfac6c]/80 group-hover:text-[#cfac6c] transition-colors">
+                      <span>Select</span>
+                      <svg className="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="absolute inset-0 -z-10 bg-gradient-to-r from-gray-700/10 to-gray-800/10 opacity-0 blur-xl transition-opacity group-hover:opacity-100" />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   const handleMaterialSelect = (material: MaterialOption) => {

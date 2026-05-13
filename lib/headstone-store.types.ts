@@ -314,6 +314,9 @@ export type HeadstoneState = {
   borderName: string | null;
   setBorderName: (name: string | null) => void;
 
+  ssCorners: 'rounded' | 'straight';
+  setSsCorners: (v: 'rounded' | 'straight') => void;
+
   showInsetContour: boolean;
   setShowInsetContour: (show: boolean) => void;
 

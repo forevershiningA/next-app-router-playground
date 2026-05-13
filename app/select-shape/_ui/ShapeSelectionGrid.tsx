@@ -50,6 +50,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const isPlaque = catalog?.product.type === 'plaque';
   const isUrn = catalog?.product.type === 'urn' || (catalog === null && fallbackProduct?.category === 'urns');
   const isFullColourPlaque = catalog?.product?.id === '32';
+  const isStainlessSteel = productId === '52';
   const hasBorder = catalog?.product?.border === '1';
   const productName = catalog?.product?.name ?? fallbackProduct?.name;
 
@@ -81,7 +82,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       ? `/shapes/masks/${shape.image}` 
       : `/shapes/headstones/${shape.image}`;
     setShapeUrl(shapeUrl);
-    if (isFullColourPlaque) {
+    if (isFullColourPlaque || isStainlessSteel) {
       router.push('/select-material');
       openPanel('select-material');
     } else if (hasBorder) {
@@ -103,7 +104,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         const svgDataUrl = e.target?.result as string;
         setUploadedSvg(svgDataUrl);
         setShapeUrl(svgDataUrl);
-        if (isFullColourPlaque) {
+        if (isFullColourPlaque || isStainlessSteel) {
           router.push('/select-material');
           openPanel('select-material');
         } else if (hasBorder) {
@@ -223,7 +224,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     const isRectangleShape = rectangleShapes.includes(shape.image);
     
     let shouldInclude: boolean;
-    if (isFullColourPlaque) {
+    if (isFullColourPlaque || isStainlessSteel) {
       shouldInclude = isRectangleShape;
     } else if (isPlaque) {
       shouldInclude = isPlaqueShape;

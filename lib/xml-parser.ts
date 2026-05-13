@@ -72,6 +72,7 @@ export interface CatalogData {
     name: string;
     type: string;
     laser: string;
+    retail: number;       // Product-level retail multiplier (e.g. 1.3)
     formula?: string; // "Engraved" | "Laser" | "Enamel" | "Bronze" etc.
     border?: string;
     color?: string; // "0" = no color selection, "1" = allow color selection
@@ -200,6 +201,54 @@ export function calculatePrice(
   }
 
   // Apply retail multiplier
+  return price * applicablePrice.retailMultiplier;
+}
+
+/**
+ * Product 52 (SS Plaque) uses a power-law formula — legacy getEquation() case 2:
+ *   q = q1 × (value/100)^q2 + q4
+ * Plus a minimum-size surcharge when value/100 < 300:
+ *   surcharge = (300 − value/100) / (5 + a),  a=1 for brushed, a=0 for polished.
+ *
+ * The model string "q1+q2($q-q4)" reuses the existing XML format but with different
+ * semantics: q1=power multiplier, q2=exponent, q4=additive constant (not an offset).
+ *
+ * @param priceModel - The product price model
+ * @param value      - Width × Height in mm² (raw, not pre-divided)
+ * @param noteFilter - "brushed" or "polished" — selects the matching price row
+ */
+export function calculatePricePowerLaw(
+  priceModel: PriceModel,
+  value: number,
+  noteFilter: string,
+): number {
+  const isBrushed = noteFilter.includes('brushed');
+
+  // Match by note AND range (|| length===1 mirrors the legacy fallback)
+  const applicablePrice = priceModel.prices.find((p) => {
+    const inRange =
+      value >= p.startQuantity && (p.endQuantity === 0 || value <= p.endQuantity);
+    const noteMatch = (p.note ?? '').toLowerCase().includes(noteFilter.toLowerCase());
+    return (inRange || priceModel.prices.length === 1) && noteMatch;
+  });
+
+  if (!applicablePrice) return 0;
+
+  const match = applicablePrice.model.match(/(\d+(?:\.\d+)?)\+([\d.]+)\(\$q-(\d+(?:\.\d+)?)\)/);
+  if (!match) return 0;
+
+  const q1 = parseFloat(match[1]); // power multiplier
+  const q2 = parseFloat(match[2]); // exponent
+  const q4 = parseFloat(match[3]); // additive constant
+  const x = value / 100;           // internal unit used by legacy formula
+
+  let price = q1 * Math.pow(x, q2) + q4;
+
+  // Minimum-size surcharge: polished (a=0) pays more than brushed (a=1) for small plaques
+  if (x < 300) {
+    price += (300 - x) / (5 + (isBrushed ? 1 : 0));
+  }
+
   return price * applicablePrice.retailMultiplier;
 }
 
@@ -368,6 +417,7 @@ export async function parseCatalogXML(
   const name = productElement.getAttribute('name') || '';
   const type = productElement.getAttribute('type') || '';
   const laser = productElement.getAttribute('laser') || '0';
+  const retail = parseFloat(productElement.getAttribute('retail') || '1');
   const formula = productElement.getAttribute('formula') || undefined;
   const border = productElement.getAttribute('border') || '0';
   const color = productElement.getAttribute('color') || undefined;
@@ -511,7 +561,7 @@ export async function parseCatalogXML(
     if (el) kerbsetPriceModel = parsePriceModel(el);
   }
 
-  const catalogData = { product: { id, name, type, laser, formula, border, color, defaultColor, shapes, additions, priceModel, basePriceModel, ledgerPriceModel, kerbsetPriceModel } };
+  const catalogData = { product: { id, name, type, laser, retail, formula, border, color, defaultColor, shapes, additions, priceModel, basePriceModel, ledgerPriceModel, kerbsetPriceModel } };
   catalogCache.set(productId, catalogData);
   return catalogData;
 }

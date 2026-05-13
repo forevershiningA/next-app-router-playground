@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-12 (evening)
+**Last Updated:** 2026-05-13
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,108 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+
+---
+
+## Current Status (2026-05-13 evening) — SS Plaque Corners Feature & Geometry Fix (Product 52)
+
+### ✅ Brushed Finish Default Selection Fix
+
+`components/MaterialSelector.tsx`: Added `SS_URLS` constant (array of brushed + polished swatch URLs). Added `useEffect` that fires when `isStainlessSteel && !SS_URLS.includes(headstoneMaterialUrl)` — auto-sets `headstoneMaterialUrl` to the brushed SS URL so the swatch always appears highlighted on first load (store default is `Imperial-Red.webp` which doesn't match either SS swatch). Changed `activeSsUrl` fallback to use `SS_URLS.includes(...)` guard so the yellow selection border shows immediately before the effect fires.
+
+---
+
+### ✅ Corners Nav Item & Sub-Panel (Product 52 only)
+
+`lib/headstone-store.ts` + `lib/headstone-store.types.ts`: Added `ssCorners: 'straight' | 'rounded'` state (default `'straight'`) + `setSsCorners` setter.
+
+`components/DesignerNav.tsx`:
+
+- **Nav item**: "Select Corners" appears only when `productId === '52'`, uses `ViewfinderCircleIcon`, no badge text, no inline panel expansion.
+- **Panel system**: `'corners'` is intentionally **not** in `fullscreenPanelSlugs` (prevents the route-sync `useEffect` from clearing the state and causing flicker). `shouldShowFullscreenPanel` excludes `'corners'`. The auto-clear `else` branch in the route-sync effect is guarded with `activeFullscreenPanel !== 'corners'`.
+- **3-way render ternary**: `shouldShowFullscreenPanel ? <fullscreen panel> : activeFullscreenPanel === 'corners' ? <corners sub-panel> : <normal menu>` — the corners sub-panel has a "← Back to Menu" button, title header, and two SVG-preview cards (Straight / Rounded).
+
+`components/three/headstone/ShapeSwapper.tsx`: reads `ssCorners` from store; passes `cornerRadius={isStainlessSteel && ssCorners === 'rounded' ? 25 : 0}` to `SvgHeadstone`.
+
+---
+
+### ✅ Rounded Corners 3D Geometry Fix (All 4 Corners)
+
+`components/SvgHeadstone.tsx` — root cause and fix:
+
+The SS plaque (300×200 mm) uses the 400×400 square SVG. With `targetHeight = 0.2m` but `coreH_world = 0.3m`, the shape is **shrinking** (not expanding), so `bottomTarget_SV = 266.67 < maxY = 400`. The old code used `effectiveBottom = Math.max(maxY, bottomTarget_SV) = 400`, but then the vertex-clamp pass (`P[i+1] > bottomTarget_SV → bottomTarget_SV`) sliced off all bottom rounded-corner vertices, making them flat.
+
+**Fixes applied:**
+
+1. **`effectiveBottom`**: Changed from `Math.max(maxY, bottomTarget_SV)` to simply `bottomTarget_SV`. The rounded rect is now built to exactly the target height in both the expanding and shrinking cases.
+
+2. **Vertex-clamp guard**: `else if (preserveTop && wantH < coreH_world - 1e-9 && !cornerRadius)` — skip vertex clamping when `cornerRadius > 0` (the rounded rect is already sized to `bottomTarget_SV`).
+
+3. **Outline `isExpanded` guard**: `const isExpanded = preserveTop && wantH > coreH_world + 1e-4 && !shapeParams.cornerRadius` — skip the outline stitching path when rounded corners are active (the base shape already has the correct bounds, the stitcher would insert sharp corner points).
+
+4. **Band guard** (from prior session): `if (preserveTop && wantH > coreH_world + 1e-9 && !cornerRadius)` — skip the rectangular extension band when rounded corners are used.
+
+> **Key insight**: `outline` is only used for UV/texture projection and child positioning — it does NOT affect the 3D mesh shape. The mesh is determined purely by `new THREE.ExtrudeGeometry(base, extrudeSettings)` where `base` is the `THREE.Shape` returned from `shapeParams`.
+
+---
+
+### 📌 Pending / Next Steps (2026-05-13 evening)
+
+- [ ] **Fix TS error in `ShapeSwapper.tsx` ~line 541**: `faceTexture` yields `string | null` for polished — pass swatch URL as fallback or widen prop type to `string | null`
+- [ ] **Delete unused outback textures**: `public/textures/three/outback/outback_diff_2k.jpg` + `outback_nor_gl_2k.jpg` (~9 MB)
+- [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+- [ ] **Email screenshot URL**: `screenshotUrl` passed to save-design email is the data URL (upload not yet complete at send time). Consider moving `sendEmail()` inside `after()`.
+
+---
+
+## Current Status (2026-05-13) — Stainless Steel Plaque Finish Options (Product 52)
+
+### ✅ Finish Picker UI for Product 52
+
+`app/select-material/_ui/MaterialSelectionGrid.tsx` and `components/MaterialSelector.tsx`: both components detect `productId === '52'` (`isStainlessSteel`) and render a dedicated 2-option finish picker instead of the standard material grid:
+
+- **Brushed Finish** (default) → `/jpg/metals/l/brushed-ss-swatch.jpg`
+- **Highly Polished Finish** → `/jpg/metals/l/high-polished-ss-swatch.jpg`
+
+Full-page view uses image cards; sidebar view uses a compact 2-button grid. Thumbnails use plain `<img>` (not `<Image fill>`) to bypass Next.js image optimization which was returning blank images for the JPEG swatches.
+
+---
+
+### ✅ PBR Material Presets in 3D Scene
+
+`components/SvgHeadstone.tsx`: added `isStainlessSteel` and `ssFinish: 'brushed' | 'polished'` props. When `isStainlessSteel` is true the `useMemo` builds a `MeshPhysicalMaterial` preset instead of the granite material:
+
+| Preset | metalness | roughness | clearcoat | clearcoatRoughness | envMapIntensity |
+|--------|-----------|-----------|-----------|-------------------|-----------------|
+| **Brushed** | 0.88 | 0.32 | 0.70 | 0.25 | 1.6 |
+| **Polished** | 1.00 | 0.05 | 1.00 | 0.04 | 3.0 |
+
+Brushed uses the swatch JPEG as an albedo map (`clonedFaceMap`). Polished has no face texture (warm silver color `0xdedad6`).
+
+`components/three/headstone/ShapeSwapper.tsx`: detects `catalog?.product.id === '52'`, derives `ssFinish` from `headstoneMaterialUrl`, passes both to `SvgHeadstone`, and returns `null` from `urnInlayTexUrl` for product 52 (prevents enamel inlay rendering).
+
+> **Known TS issue**: `faceTexture` prop in `SvgHeadstone` is typed as `string` (non-nullable). For polished finish, ShapeSwapper line ~541 passes `null`, causing a type error. Fix: pass the polished swatch URL as a fallback string, or widen the prop type to `string | null`.
+
+---
+
+### ✅ Shape Filtering & Post-Shape Routing for Product 52
+
+`components/three/headstone/ShapeSelectionGrid.tsx`: product 52 added to the rectangle-only filter (alongside `isFullColourPlaque`) — only **Landscape** and **Portrait** rectangle shapes are shown.
+
+Post-shape routing: after shape selection, product 52 routes to `/select-material` (same as product 32 bronze plaques).
+
+---
+
+### ✅ Grass Texture Fix for Tiny SS Plaque
+
+The 300×200 mm plaque puts the camera only ~0.28 m away, causing the grass repeat tiles to appear enormous and pixelated.
+
+`components/three/Scene.tsx` + `GrassFloor`: added `repeat` prop to `GrassFloor`; product 52 uses `repeat={150}` (tiles are ~2×2 m instead of ~11×11 m), producing fine grass texture at close range. The `pad={3}` approach (pushing camera back 3 m) was tried and reverted — autofit remains unmodified.
+
+---
+
+### 📌 Pending / Next Steps — moved to 2026-05-13 evening section above
 
 ---
 

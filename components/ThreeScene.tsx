@@ -6,7 +6,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice, computeQuantity, type CatalogData } from '#/lib/xml-parser';
+import { calculatePrice, calculatePricePowerLaw, computeQuantity, type CatalogData } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
@@ -56,6 +56,7 @@ function ProductNameHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
+  const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
@@ -148,8 +149,16 @@ function ProductNameHeader() {
   // Calculate total price including inscriptions and motifs
   const totalPrice = useMemo(() => {
     let headstonePrice = 0;
-    // Product 32 (Full Colour Plaque) uses fixed size-based pricing
-    if (productId === '32' && fixedSizes.length > 0) {
+    // Product 52 (YAG Lasered Stainless Steel Plaque): formula-based pricing per finish.
+    // The formula uses cm² (Width_cm × Height_cm), so divide mm² by 100.
+    // The note field selects "brushed" or "polished" price row.
+    if (productId === '52' && activeCatalog) {
+      const pm = activeCatalog.product.priceModel;
+
+      const ssMaterial = headstoneMaterialUrl ?? '';
+      const ssNote = ssMaterial.includes('polished') ? 'polished' : 'brushed';
+      headstonePrice = calculatePricePowerLaw(pm, widthMm * heightMm, ssNote);
+    } else if (productId === '32' && fixedSizes.length > 0) {
       const isLandscape = widthMm > heightMm;
       const matchW = isLandscape ? heightMm : widthMm;
       const matchH = isLandscape ? widthMm : heightMm;
@@ -212,6 +221,7 @@ function ProductNameHeader() {
     heightMm,
     isUrnProduct,
     urnShapeCode,
+    headstoneMaterialUrl,
   ]);
 
   const sizeLabel = useMemo(

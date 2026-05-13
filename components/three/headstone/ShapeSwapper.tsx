@@ -233,6 +233,10 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
   const isFullColourPlaque = catalog?.product.id === '32';
   const isUrn = catalog?.product.type === 'urn';
+  const isStainlessSteel = catalog?.product.id === '52';
+  const ssCorners = useHeadstoneStore((s) => s.ssCorners);
+  const ssFinish: 'brushed' | 'polished' =
+    headstoneMaterialUrl === '/jpg/metals/l/high-polished-ss-swatch.jpg' ? 'polished' : 'brushed';
   const bronzeBorderColor = '#FFDFA3';
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
@@ -393,6 +397,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     if (!isUrn) return null;
     if (!headstoneMaterialUrl) return null;
     if (headstoneMaterialUrl === '/jpg/metals/l/brushed-ss-swatch.jpg') return null;
+    if (headstoneMaterialUrl === '/jpg/metals/l/high-polished-ss-swatch.jpg') return null;
     if (headstoneMaterialUrl.startsWith('/textures/')) return null;
     return resolvedTex;
   }, [isUrn, headstoneMaterialUrl, resolvedTex]);
@@ -535,10 +540,13 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             depth={headstoneDepth}
             scale={0.01}
             faceTexture={resolvedTex}
-            sideTexture={isFullColourPlaque || isUrn ? null : resolvedTex}
+            sideTexture={isFullColourPlaque || isUrn || isStainlessSteel ? null : resolvedTex}
             stretchFace={isFullColourPlaque}
             isFullColourPlaque={isFullColourPlaque}
             isUrn={isUrn}
+            isStainlessSteel={isStainlessSteel}
+            ssFinish={ssFinish}
+            cornerRadius={isStainlessSteel && ssCorners === 'rounded' ? 25 : 0}
             tileSize={0.35}
             sideTileSize={0.35}
             topTileSize={0.35}

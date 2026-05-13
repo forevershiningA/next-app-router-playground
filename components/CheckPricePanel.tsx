@@ -8,7 +8,7 @@ import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
-import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
+import { calculatePrice, calculatePricePowerLaw, computeQuantity } from '#/lib/xml-parser';
 import {
   getCheckPriceMaterialName,
   getShapeNameFromUrl,
@@ -153,6 +153,16 @@ export default function CheckPricePanel() {
 
   // Calculate headstone price from catalog price model
   const headstonePrice = useMemo(() => {
+    // Product 52 (YAG Lasered Stainless Steel Plaque): formula-based pricing per finish.
+    // The formula uses cm² (Width_cm × Height_cm), so divide mm² by 100.
+    // The note field selects "brushed" or "polished" price row.
+    if (productId === '52' && activeCatalog) {
+      const pm = activeCatalog.product.priceModel;
+
+      const ssMaterial = headstoneMaterialUrl ?? '';
+      const ssNote = ssMaterial.includes('polished') ? 'polished' : 'brushed';
+      return calculatePricePowerLaw(pm, widthMm * heightMm, ssNote);
+    }
     // Product 32 (Full Colour Plaque) uses fixed size-based pricing
     if (productId === '32' && fixedSizes.length > 0) {
       const isLandscape = widthMm > heightMm;
@@ -171,7 +181,7 @@ export default function CheckPricePanel() {
     }
     const quantity = computeQuantity(pm, { width: widthMm, height: heightMm, depth: uprightThickness });
     return calculatePrice(pm, quantity);
-  }, [activeCatalog, widthMm, heightMm, uprightThickness, productId, fixedSizes, isUrnProduct, urnShapeCode]);
+  }, [activeCatalog, widthMm, heightMm, uprightThickness, productId, fixedSizes, isUrnProduct, urnShapeCode, headstoneMaterialUrl]);
 
   // Calculate base (stand) price from catalog basePriceModel
   const basePrice = useMemo(() => {

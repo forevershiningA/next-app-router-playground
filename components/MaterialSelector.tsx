@@ -39,6 +39,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
   const isFullColourPlaque = productId === '32';
+  const isStainlessSteel = productId === '52';
   const isUrn = catalog?.product.type === 'urn';
   const usesBackgrounds = isFullColourPlaque || isUrn;
   const isFullMonument = catalog?.product.type === 'full-monument';
@@ -238,6 +239,15 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     }
   }, [editingObject, isPlaque, setEditingObject, setSelected]);
 
+  // Initialise SS plaque to brushed finish when the URL isn't already one of the two SS swatches
+  const SS_URLS = ['/jpg/metals/l/brushed-ss-swatch.jpg', '/jpg/metals/l/high-polished-ss-swatch.jpg'];
+  useEffect(() => {
+    if (isStainlessSteel && !SS_URLS.includes(currentHeadstoneMaterialUrl ?? '')) {
+      setHeadstoneMaterialUrl('/jpg/metals/l/brushed-ss-swatch.jpg');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isStainlessSteel]);
+
   // Determine current material URL based on what's being edited
   const currentMaterialUrl =
     editingObject === 'base'
@@ -310,6 +320,62 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       };
     });
   };
+
+  const BRUSHED_URL = '/jpg/metals/l/brushed-ss-swatch.jpg';
+  const POLISHED_URL = '/jpg/metals/l/high-polished-ss-swatch.jpg';
+
+  if (isStainlessSteel) {
+    const ssFinishes = [
+      { label: 'Brushed Finish', url: BRUSHED_URL },
+      { label: 'Highly Polished Finish', url: POLISHED_URL },
+    ];
+    const activeSsUrl = SS_URLS.includes(currentHeadstoneMaterialUrl ?? '')
+      ? currentHeadstoneMaterialUrl!
+      : BRUSHED_URL;
+
+    return (
+      <div className="space-y-3">
+        <div className="text-xs text-white/60 uppercase tracking-widest mb-2">Finish</div>
+        <div className="grid grid-cols-2 gap-2">
+          {ssFinishes.map(({ label, url }) => {
+            const isSelected = activeSsUrl === url;
+            return (
+              <button
+                key={url}
+                onClick={() => {
+                  setIsMaterialChange(true);
+                  setHeadstoneMaterialUrl(url);
+                  setSelected('headstone');
+                  setEditingObject('headstone');
+                  setTimeout(() => setIsMaterialChange(false), 100);
+                }}
+                className="relative overflow-hidden cursor-pointer"
+                title={label}
+              >
+                <div className={`relative aspect-square overflow-hidden border-2 transition-colors ${
+                  isSelected
+                    ? 'border-[#D7B356] ring-2 ring-[#D7B356]'
+                    : 'border-white/10 hover:border-[#D7B356]/50'
+                }`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={url}
+                    alt={label}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                </div>
+                <div className="p-2 h-12 flex items-center justify-center">
+                  <div className={`text-xs text-center line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}>
+                    {label}
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
 
   // When in crop mode, show crop controls instead of material grid
   if (usesBackgrounds && showCropSection && uploadedImage) {
