@@ -17,6 +17,7 @@ import HeadstoneInscription from '../../HeadstoneInscription';
 import { BronzeBorder } from '../BronzeBorder';
 import InsetContourLine, { isContourSupported } from '../InsetContourLine';
 import UrnEnamelInlay from './UrnEnamelInlay';
+import { SsPlaqueHoles } from './SsPlaqueHoles';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
@@ -235,6 +236,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const isUrn = catalog?.product.type === 'urn';
   const isStainlessSteel = catalog?.product.id === '52';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
+  const ssHoles = useHeadstoneStore((s) => s.ssHoles);
   const ssFinish: 'brushed' | 'polished' =
     headstoneMaterialUrl === '/jpg/metals/l/high-polished-ss-swatch.jpg' ? 'polished' : 'brushed';
   const bronzeBorderColor = '#FFDFA3';
@@ -715,6 +717,16 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                     />
                   </React.Suspense>
                 </ErrorBoundary>
+              )}
+
+              {/* Mounting holes for SS plaque (product 52) */}
+              {isStainlessSteel && (
+                <SsPlaqueHoles
+                  ssHoles={ssHoles}
+                  worldWidth={api.worldWidth}
+                  worldHeight={api.worldHeight}
+                  meshRef={api.mesh}
+                />
               )}
 
               {/* Urn stainless steel border effect: vitreous enamel inlay in front of urn body */}

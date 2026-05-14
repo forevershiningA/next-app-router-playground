@@ -21,6 +21,7 @@ import {
   CloudArrowUpIcon,
   ShieldCheckIcon,
   ViewfinderCircleIcon,
+  CircleStackIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
@@ -60,6 +61,7 @@ const menuGroups = [
       { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
       { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
       { slug: 'corners', name: 'Corners', icon: ViewfinderCircleIcon, requiresSSPlaque: true },
+      { slug: 'holes', name: 'Holes', icon: CircleStackIcon, requiresSSPlaque: true },
     ],
   },
   {
@@ -295,6 +297,8 @@ export default function DesignerNav() {
   const hasBorder = catalog?.product?.border === '1';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const setSsCorners = useHeadstoneStore((s) => s.setSsCorners);
+  const ssHoles = useHeadstoneStore((s) => s.ssHoles);
+  const setSsHoles = useHeadstoneStore((s) => s.setSsHoles);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
@@ -517,7 +521,7 @@ export default function DesignerNav() {
     }
   }, [isCanvasVisible, hasCanvasBeenShown]);
 
-  const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel) && activeFullscreenPanel !== 'corners';
+  const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel) && activeFullscreenPanel !== 'corners' && activeFullscreenPanel !== 'holes';
 
   const hasActiveAdditionForPanel =
     !!selectedAdditionId &&
@@ -599,7 +603,7 @@ export default function DesignerNav() {
         setActiveFullscreenPanel(currentSlug);
       }
     } else {
-      if (activeFullscreenPanel && activeFullscreenPanel !== 'corners') {
+      if (activeFullscreenPanel && activeFullscreenPanel !== 'corners' && activeFullscreenPanel !== 'holes') {
         if (
           activeFullscreenPanel === 'inscriptions' ||
           activeFullscreenPanel === 'select-additions' ||
@@ -2934,6 +2938,86 @@ export default function DesignerNav() {
             </div>
           </div>
         </div>
+      ) : activeFullscreenPanel === 'holes' ? (
+        <div className="flex flex-col h-full">
+          {/* Holes sub-panel */}
+          <div className="flex items-center border-b border-white/10 px-5 py-4">
+            <button
+              type="button"
+              onClick={() => setActiveFullscreenPanel(null)}
+              className="inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-200 hover:border-white/40 hover:text-white"
+            >
+              <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5">
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </span>
+              <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
+            </button>
+          </div>
+          <div className="flex items-end justify-between border-b border-white/10 px-5 py-4">
+            <div className="text-right w-full">
+              <p className="font-playfair-display text-xs tracking-[0.35em] text-primary/60 italic">Guided Step</p>
+              <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">Holes</h2>
+              <div className="mt-3 h-px w-24 bg-white/20 ml-auto" />
+            </div>
+          </div>
+          <div className="flex-1 overflow-y-auto p-4">
+            <div className="space-y-4 p-2">
+              <p className="text-xs font-medium tracking-wider text-white/50 uppercase">Mounting Holes</p>
+              <div className="grid grid-cols-1 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setSsHoles('corner')}
+                  className={`flex items-center gap-4 rounded-2xl border p-4 transition-all ${
+                    ssHoles === 'corner'
+                      ? 'border-[#DEBD68] bg-[#DEBD68]/10 text-[#DEBD68]'
+                      : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
+                  }`}
+                >
+                  <svg viewBox="0 0 80 60" className="h-12 w-16 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="3">
+                    <rect x="6" y="6" width="68" height="48" rx="0" />
+                    <circle cx="16" cy="16" r="3.5" fill="currentColor" stroke="none" />
+                    <circle cx="64" cy="16" r="3.5" fill="currentColor" stroke="none" />
+                    <circle cx="16" cy="44" r="3.5" fill="currentColor" stroke="none" />
+                    <circle cx="64" cy="44" r="3.5" fill="currentColor" stroke="none" />
+                  </svg>
+                  <span className="text-sm font-medium text-left">Hole on each corner</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSsHoles('side-center')}
+                  className={`flex items-center gap-4 rounded-2xl border p-4 transition-all ${
+                    ssHoles === 'side-center'
+                      ? 'border-[#DEBD68] bg-[#DEBD68]/10 text-[#DEBD68]'
+                      : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
+                  }`}
+                >
+                  <svg viewBox="0 0 80 60" className="h-12 w-16 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="3">
+                    <rect x="6" y="6" width="68" height="48" rx="0" />
+                    <circle cx="16" cy="30" r="3.5" fill="currentColor" stroke="none" />
+                    <circle cx="64" cy="30" r="3.5" fill="currentColor" stroke="none" />
+                  </svg>
+                  <span className="text-sm font-medium text-left">Holes in centre of each side</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSsHoles('none')}
+                  className={`flex items-center gap-4 rounded-2xl border p-4 transition-all ${
+                    ssHoles === 'none'
+                      ? 'border-[#DEBD68] bg-[#DEBD68]/10 text-[#DEBD68]'
+                      : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
+                  }`}
+                >
+                  <svg viewBox="0 0 80 60" className="h-12 w-16 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="3">
+                    <rect x="6" y="6" width="68" height="48" rx="0" />
+                  </svg>
+                  <span className="text-sm font-medium text-left">No drilled holes</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       ) : (
         <>
           {/* Desktop Header */}
@@ -3194,6 +3278,32 @@ export default function DesignerNav() {
                             <ViewfinderCircleIcon className="h-5 w-5 flex-shrink-0" />
                             <span className="select-none" style={{ caretColor: 'transparent' }}>
                               Select Corners
+                            </span>
+                          </button>
+                        );
+                      }
+
+                      // Special handling for Holes — button opens sub-panel (same pattern as Corners)
+                      if (item.slug === 'holes') {
+                        const isHolesActive = activeFullscreenPanel === 'holes';
+                        return (
+                          <button
+                            key={item.slug}
+                            type="button"
+                            onClick={() =>
+                              setActiveFullscreenPanel(isHolesActive ? null : 'holes')
+                            }
+                            onMouseDown={(e) => e.preventDefault()}
+                            style={{ caretColor: 'transparent', userSelect: 'none' }}
+                            className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                              isHolesActive
+                                ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                            }`}
+                          >
+                            <CircleStackIcon className="h-5 w-5 flex-shrink-0" />
+                            <span className="select-none" style={{ caretColor: 'transparent' }}>
+                              Select Holes
                             </span>
                           </button>
                         );

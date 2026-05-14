@@ -317,6 +317,9 @@ export type HeadstoneState = {
   ssCorners: 'rounded' | 'straight';
   setSsCorners: (v: 'rounded' | 'straight') => void;
 
+  ssHoles: 'corner' | 'side-center' | 'none';
+  setSsHoles: (v: 'corner' | 'side-center' | 'none') => void;
+
   showInsetContour: boolean;
   setShowInsetContour: (show: boolean) => void;
 

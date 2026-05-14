@@ -1168,6 +1168,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ ssCorners: v });
   },
 
+  ssHoles: 'none',
+  setSsHoles(v) {
+    set({ ssHoles: v });
+  },
+
   showInsetContour: false,
   setShowInsetContour(show) {
     set({ showInsetContour: show });

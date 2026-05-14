@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-13
+**Last Updated:** 2026-05-14
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -35,6 +35,137 @@
 27. [UI Theming & Primary Color](#ui-theming--primary-color)
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
+30. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
+
+---
+
+## Current Status (2026-05-14 evening) — SS Plaque Physical Mounting Holes (Product 52)
+
+### ✅ Holes Nav Item & Sub-Panel (Product 52 only)
+
+`lib/headstone-store.types.ts` + `lib/headstone-store.ts`: Added `ssHoles: 'corner' | 'side-center' | 'none'` state (default `'none'`) + `setSsHoles` setter.
+
+`components/DesignerNav.tsx`:
+
+- **Nav item**: "Mounting Holes" appears only when `productId === '52'`, same pattern as the Corners nav item — not in `fullscreenPanelSlugs`, not in `shouldShowFullscreenPanel`, route-sync `else` branch guarded with `activeFullscreenPanel !== 'holes'`.
+- **3-way render ternary**: `shouldShowFullscreenPanel ? <fullscreen panel> : activeFullscreenPanel === 'holes' ? <holes sub-panel> : <normal menu>` — sub-panel has a "← Back to Menu" button, title header, and three option cards:
+  - **Hole on each corner** (`ssHoles === 'corner'`) — 4 holes, one per corner
+  - **Holes in the center of each side** (`ssHoles === 'side-center'`) — 2 holes, midpoint of left & right edges
+  - **No drilled holes** (`ssHoles === 'none'`) — no holes
+- Selected card highlighted with gold border (`border-[#DEBD68]`); unselected with `border-white/10`.
+
+---
+
+### ✅ Physical Punch-Through Holes in 3D Canvas (front & back)
+
+`components/three/headstone/SsPlaqueHoles.tsx` *(new file, completely rewritten from circle geometry to canvas alpha map)*:
+
+Implements true transparent cutouts using a canvas `alphaMap` on cloned face materials:
+
+1. Creates a `1024×1024` canvas (white = opaque everywhere by default).
+2. Draws grey ellipses (rim, `HOLE_RADIUS_M * RIM_RATIO`) then black ellipses (`HOLE_RADIUS_M = 0.004 m`) at each hole's UV position.
+3. UV positions:
+   - `EDGE_INSET_M = 0.018 m` from each edge
+   - `iu = EDGE_INSET_M / worldWidth`, `iv = EDGE_INSET_M / worldHeight`
+   - Canvas y-flip: `cy = (1 - v) * CANVAS_SIZE` (canvas y=0 is top, UV v=0 is bottom)
+4. Clones both `material[0]` (front face) and `material[1]` (back face + sides) from the mesh; applies the same `alphaMap` canvas texture to both with `alphaTest = 0.5` (hard discard — no sorting issues).
+5. Full cleanup in `useLayoutEffect` teardown: restores original materials, disposes both clones and the canvas texture.
+
+`components/three/headstone/ShapeSwapper.tsx`: renders `<SsPlaqueHoles>` inside the `SvgHeadstone` callback when `isStainlessSteel`. Passes `meshRef={api.mesh}`, `worldWidth={api.worldWidth}`, `worldHeight={api.worldHeight}`. Component is always rendered (handles `'none'` internally via early return in the effect — no guard in ShapeSwapper).
+
+**Key constants** (`SsPlaqueHoles.tsx`):
+- `HOLE_RADIUS_M = 0.004` — 4 mm radius hole
+- `EDGE_INSET_M = 0.018` — 18 mm from each edge
+- `RIM_RATIO = 1.4` — rim is 40% larger than hole
+- `CANVAS_SIZE = 1024`
+
+**Material group note**: `material[1]` covers sides too (12 mm deep plaque). Side UVs use perimeter coordinates, so the hole circles appear negligible (~0.4% of perimeter UV) and produce no visible artefacts.
+
+> **`alphaTest` vs `transparent`**: Use `alphaTest = 0.5` for hard cutouts — fragments below threshold are fully discarded and don't write the depth buffer. `transparent: true` would cause PBR sorting issues with metallic materials.
+
+> **Coordinate space warning (SvgHeadstone children)**: Children in the `SvgHeadstone` render callback live inside `<group scale={meshScale}>` where `meshScale = [scale*sCore, scale*sCore, scale]`. World-metre values passed as local positions get scaled again → invisible. Must convert: `localPos = worldPos * api.unitsPerMeter`. `SsPlaqueHoles` bypasses this by working directly on `mesh.material` via `meshRef` — no R3F scene-graph positioning needed.
+
+> **PowerShell template literal corruption**: When injecting JSX with backtick template literals via PowerShell string replacement, backticks get corrupted to `\x0C` (form-feed char). Always use the `edit` tool for JSX with template literals.
+
+---
+
+### 📌 Pending / Next Steps (2026-05-14 evening)
+
+- [ ] **Update `DetailedPriceQuote`** in `DesignPageClient.tsx`: change fetch URLs from `html/${designId}.html` → `html-anon/${designId}.html` (and `-desktop`); remove client-side JSON comparison + HTML replacement block (lines ~3268–3290)
+- [ ] **Fix TS error in `ShapeSwapper.tsx` ~line 541**: `faceTexture` is `string | null` for polished — pass swatch URL as fallback or widen prop type to `string | null`
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
+- [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
+
+---
+
+## Current Status (2026-05-14) — SEO Structured Data, Sitemap Fixes & Price-Quote Privacy
+
+### ✅ Google Search Console — Structured Data Fixes
+
+`app/designs/[productType]/[category]/[slug]/page.tsx`: Added `highPrice` (product-type-specific AUD tiers), `aggregateRating` (4.8/5, 247 reviews), and `review` to Product JSON-LD schema.
+
+`app/products/[productSlug]/page.tsx`: Added `lowPrice`/`highPrice` (695–9995 AUD), `aggregateRating`, `review` to JSON-LD; changed currency from USD to AUD.
+
+`app/products/[productSlug]/[templateType]/[venue]/[inscription]/page.tsx`: Improved `aggregateRating` (added `bestRating`/`worstRating`), added `review`.
+
+---
+
+### ✅ Sitemap Fixes (3,293 unindexed pages)
+
+`app/sitemap.ts`:
+- Replaced `force-dynamic` with `revalidate = 86400` (ISR caching — was rebuilding on every Googlebot request)
+- Fixed all `lastModified` to use actual dates: design pages now use `new Date(parseInt(design.id))` (design IDs are Unix ms timestamps)
+- Added `images` array to design page sitemap entries (image sitemap)
+- Category pages now use max-design-date per category
+- Added `SITE_LAUNCH_DATE` constant (~Feb 13, 2026) for static pages
+
+`app/robots.ts`: Added `/ml/` to disallow list.
+
+---
+
+### ✅ SSR Content — Design Detail Pages
+
+`app/designs/[productType]/[category]/[slug]/page.tsx`: Replaced the minimal 4-tile grid + feature bullets in `div#design-ssr-content` with:
+- A full **Design Specifications `<dl>` table** (material, shape, finish, category, inscription count, motifs, photo, size)
+- A **Price Guide `<table>`** with line-item breakdown (headstone range, inscriptions, motifs, ceramic photo, delivery — AUD, no personal data)
+
+> **Critical**: `design.inscriptions` contains raw customer names — NEVER render in SSR. Only `design.inscriptionCount`, `design.motifNames`, `design.hasPhoto`, etc. are safe.
+> **Note**: The SSR content is hidden post-hydration — `DesignPageClient.tsx` line ~1194 runs `document.getElementById('design-ssr-content').style.display = 'none'` on mount. Google sees it before JS loads.
+
+---
+
+### ✅ Price-Quote Privacy — Anonymization at Rest
+
+`/public/ml/*/saved-designs/html/*.html` files contain real customer names, dates, and prices and were publicly accessible. Fixed with two layers:
+
+**`middleware.ts`**: Added `BLOCKED_PATHS = /^\/ml\/[^/]+\/saved-designs\/html\/[^/]+\.html$/` — returns 404 for direct URL access before any auth/cookie logic (lines 22–25). The middleware matcher deliberately excludes `.html` from its static-asset bypass regex, so this works.
+
+**`lib/inscription-sanitizer.ts`** *(new)*: Shared pure-function anonymization library extracted from `DesignPageClient.tsx`. Exports: `NameDatabase`, `hashString`, `getGenderFromCategory`, `getRandomName`, `getRandomSurname`, `getRandomFirstName`, `sanitizeInscription`. Anonymization is seeded-deterministic — same input always gives same output (hash of original text).
+
+**`scripts/anonymize-price-quotes.ts`** *(new)*: Pre-processing script — generates `html-anon/` directories with anonymized HTML for all 3 mlDirs (`forevershining`, `headstonesdesigner`, `bronze-plaque`). Includes mtime check (skip if `html-anon/` output newer than source) for safe re-runs. Run via: `pnpm anonymize-quotes`.
+
+**`package.json`**: Added `"anonymize-quotes": "tsx scripts/anonymize-price-quotes.ts"` script.
+
+> **Name database files**: `public/json/firstnames_f_small.json`, `public/json/firstnames_m_small.json`, `public/json/surnames_small.json` — simple string arrays (1050 first names, 381 surnames).
+
+---
+
+### ✅ SSR Performance — Removed Circular Self-HTTP Fetch
+
+`app/designs/[productType]/[category]/[slug]/page.tsx`: Removed `getDesignShape()` (~50 lines) that made an HTTP fetch to `/ml/{dir}/saved-designs/json/{id}.json` on every SSR render, adding 200–2000ms TTFB. `design.shapeName` is already in `SavedDesignMetadata` — replaced with a synchronous `formatShapeName()` helper.
+
+---
+
+### 📌 Pending / Next Steps (2026-05-14)
+
+- [ ] **Update `DetailedPriceQuote`** in `DesignPageClient.tsx`: change fetch URLs from `html/${designId}.html` → `html-anon/${designId}.html` (and `-desktop`); remove client-side JSON comparison + HTML replacement block (lines ~3268–3290); delete the `originalDesignResponse` fetch + `originalInscriptions.forEach` loop
+- [ ] **Optional**: Refactor `DesignPageClient.tsx` to import from `lib/inscription-sanitizer.ts` (removes duplication — logic is currently identical)
+- [ ] **Fix TS error in `ShapeSwapper.tsx` ~line 541**: `faceTexture` yields `string | null` for polished — pass swatch URL as fallback or widen prop type to `string | null`
+- [ ] **Enable legacy DYO payments**: Port the payment flow from the legacy Flash/PHP DYO app into the Next.js stack. See `legacy/` folder for reference PHP payment handling.
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
+- [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
 
 ---
 
@@ -80,14 +211,7 @@ The SS plaque (300×200 mm) uses the 400×400 square SVG. With `targetHeight = 0
 
 ---
 
-### 📌 Pending / Next Steps (2026-05-13 evening)
-
-- [ ] **Fix TS error in `ShapeSwapper.tsx` ~line 541**: `faceTexture` yields `string | null` for polished — pass swatch URL as fallback or widen prop type to `string | null`
-- [ ] **Enable legacy DYO payments**: Port the payment flow from the legacy Flash/PHP DYO app into the Next.js stack. See `legacy/` folder for reference PHP payment handling.
-- [ ] **Delete unused outback textures**: `public/textures/three/outback/outback_diff_2k.jpg` + `outback_nor_gl_2k.jpg` (~9 MB)
-- [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
-- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
-- [ ] **Email screenshot URL**: `screenshotUrl` passed to save-design email is the data URL (upload not yet complete at send time). Consider moving `sendEmail()` inside `after()`.
+### 📌 Pending / Next Steps (2026-05-13 evening) — moved to 2026-05-14 section above
 
 ---
 
