@@ -560,37 +560,151 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
             loading="eager"
           />
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div className="bg-slate-50 rounded-lg p-4">
-              <div className="text-sm text-slate-500">Material</div>
-              <div className="font-medium text-slate-900">{material}</div>
-            </div>
-            <div className="bg-slate-50 rounded-lg p-4">
-              <div className="text-sm text-slate-500">Shape</div>
-              <div className="font-medium text-slate-900">{shapeName || 'Standard'}</div>
-            </div>
-            <div className="bg-slate-50 rounded-lg p-4">
-              <div className="text-sm text-slate-500">Finish</div>
-              <div className="font-medium text-slate-900">{finish}</div>
-            </div>
-            <div className="bg-slate-50 rounded-lg p-4">
-              <div className="text-sm text-slate-500">Inscriptions</div>
-              <div className="font-medium text-slate-900">{design.inscriptionCount} text area{design.inscriptionCount !== 1 ? 's' : ''}</div>
-            </div>
-          </div>
+          {/* Design Specifications */}
+          <section aria-labelledby="specs-heading-ssr" className="mb-8">
+            <h2 id="specs-heading-ssr" className="text-xl font-semibold text-slate-800 mb-4">Design Specifications</h2>
+            <dl className="divide-y divide-slate-100 border border-slate-200 rounded-lg overflow-hidden text-sm bg-white">
+              <div className="flex justify-between px-4 py-3 bg-slate-50">
+                <dt className="text-slate-500 font-medium">Material</dt>
+                <dd className="text-slate-900 font-semibold">{material}</dd>
+              </div>
+              {shapeName && (
+                <div className="flex justify-between px-4 py-3">
+                  <dt className="text-slate-500 font-medium">Shape</dt>
+                  <dd className="text-slate-900">{shapeName}</dd>
+                </div>
+              )}
+              <div className={`flex justify-between px-4 py-3${shapeName ? ' bg-slate-50' : ''}`}>
+                <dt className="text-slate-500 font-medium">Finish</dt>
+                <dd className="text-slate-900">{finish}</dd>
+              </div>
+              <div className={`flex justify-between px-4 py-3${shapeName ? '' : ' bg-slate-50'}`}>
+                <dt className="text-slate-500 font-medium">Type</dt>
+                <dd className="text-slate-900">{simplifiedProduct} {productTypeDisplay}</dd>
+              </div>
+              <div className={`flex justify-between px-4 py-3${shapeName ? ' bg-slate-50' : ''}`}>
+                <dt className="text-slate-500 font-medium">Category</dt>
+                <dd className="text-slate-900">{categoryTitle}</dd>
+              </div>
+              <div className={`flex justify-between px-4 py-3${shapeName ? '' : ' bg-slate-50'}`}>
+                <dt className="text-slate-500 font-medium">Inscription areas</dt>
+                <dd className="text-slate-900">
+                  {design.inscriptionCount} text {design.inscriptionCount === 1 ? 'area' : 'areas'}
+                </dd>
+              </div>
+              {design.hasMotifs && motifList && (
+                <div className="flex justify-between px-4 py-3 bg-slate-50">
+                  <dt className="text-slate-500 font-medium">Decorative motifs</dt>
+                  <dd className="text-slate-900">{motifList}</dd>
+                </div>
+              )}
+              {design.hasPhoto && (
+                <div className="flex justify-between px-4 py-3">
+                  <dt className="text-slate-500 font-medium">Photo portrait</dt>
+                  <dd className="text-slate-900">Ceramic / enamel photo placement</dd>
+                </div>
+              )}
+              {design.hasAdditions && (
+                <div className="flex justify-between px-4 py-3 bg-slate-50">
+                  <dt className="text-slate-500 font-medium">3D additions</dt>
+                  <dd className="text-slate-900">Statues and vases</dd>
+                </div>
+              )}
+              <div className="flex justify-between px-4 py-3">
+                <dt className="text-slate-500 font-medium">Typical size</dt>
+                <dd className="text-slate-900">
+                  {design.productType === 'monument'
+                    ? '900×600mm headstone + full base, ledger & kerb set'
+                    : design.productType === 'plaque'
+                    ? '457×305mm – 914×610mm (many standard sizes)'
+                    : '600×450mm – 1800×900mm (custom sizes available)'}
+                </dd>
+              </div>
+              <div className="flex justify-between px-4 py-3 bg-slate-50">
+                <dt className="text-slate-500 font-medium">Delivery</dt>
+                <dd className="text-slate-900">Included — mainland Australia</dd>
+              </div>
+            </dl>
+          </section>
 
-          <ul className="text-slate-600 space-y-2 mb-8">
-            {design.hasMotifs && motifList && (
-              <li>Decorative motifs: {motifList}</li>
-            )}
-            {design.hasPhoto && (
-              <li>Photo placement available</li>
-            )}
-            {design.hasAdditions && (
-              <li>3D additions included</li>
-            )}
-            <li>Fully customisable with live 3D preview</li>
-            <li>Free design proofs before manufacturing</li>
+          {/* Price Guide */}
+          <section aria-labelledby="price-heading-ssr" className="mb-8">
+            <h2 id="price-heading-ssr" className="text-xl font-semibold text-slate-800 mb-1">Price Guide</h2>
+            <p className="text-sm text-slate-500 mb-4">
+              Indicative pricing in AUD inc. GST. Exact price generated in the design tool.
+            </p>
+            <div className="border border-slate-200 rounded-lg overflow-hidden text-sm bg-white">
+              <table className="w-full">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-left px-4 py-3 font-semibold text-slate-700">Component</th>
+                    <th className="text-right px-4 py-3 font-semibold text-slate-700 w-36">Price (AUD)</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  <tr>
+                    <td className="px-4 py-3 text-slate-700">
+                      {simplifiedProduct} {productTypeDisplay}
+                      {shapeName ? ` — ${shapeName} shape` : ''}
+                      {', '}{material.toLowerCase()}, {finish.toLowerCase()}
+                    </td>
+                    <td className="px-4 py-3 text-right text-slate-900 font-medium">from ${lowPriceAud}</td>
+                  </tr>
+                  {design.productType === 'monument' && (
+                    <tr>
+                      <td className="px-4 py-3 text-slate-500 pl-8">Includes matching base, ledger slab &amp; kerb set</td>
+                      <td className="px-4 py-3 text-right text-slate-500">incl.</td>
+                    </tr>
+                  )}
+                  <tr>
+                    <td className="px-4 py-3 text-slate-700">
+                      Inscriptions — {design.inscriptionCount} text {design.inscriptionCount === 1 ? 'area' : 'areas'}
+                    </td>
+                    <td className="px-4 py-3 text-right text-slate-500">priced per character</td>
+                  </tr>
+                  {design.hasMotifs && (
+                    <tr>
+                      <td className="px-4 py-3 text-slate-700">
+                        Decorative motifs{motifList ? ` — ${motifList}` : ''}
+                      </td>
+                      <td className="px-4 py-3 text-right text-slate-500">from $180 each</td>
+                    </tr>
+                  )}
+                  {design.hasPhoto && (
+                    <tr>
+                      <td className="px-4 py-3 text-slate-700">Ceramic / enamel photo portrait</td>
+                      <td className="px-4 py-3 text-right text-slate-500">from $350</td>
+                    </tr>
+                  )}
+                  {design.hasAdditions && (
+                    <tr>
+                      <td className="px-4 py-3 text-slate-700">3D additions (statues, vases)</td>
+                      <td className="px-4 py-3 text-right text-slate-500">from $75 each</td>
+                    </tr>
+                  )}
+                  <tr>
+                    <td className="px-4 py-3 text-slate-700">Design proof (before manufacture)</td>
+                    <td className="px-4 py-3 text-right text-slate-500">Free</td>
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-slate-700">Delivery to mainland Australia</td>
+                    <td className="px-4 py-3 text-right text-slate-500">Included</td>
+                  </tr>
+                  <tr className="bg-slate-50 border-t-2 border-slate-300">
+                    <td className="px-4 py-3 text-slate-900 font-semibold">Total (indicative starting price)</td>
+                    <td className="px-4 py-3 text-right text-slate-900 font-semibold">from ${lowPriceAud}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <ul className="text-slate-600 space-y-1.5 text-sm mb-8">
+            <li>✓ Live 3D preview — see every change in real time</li>
+            <li>✓ Unlimited revisions before you approve</li>
+            <li>✓ Free digital proof before manufacturing</li>
+            <li>✓ Delivery included to mainland Australia</li>
+            <li>✓ Prices inc. GST — no hidden fees</li>
           </ul>
 
           <a

@@ -5,9 +5,14 @@ import { resolveUnitSystemFromCountry } from '#/lib/unit-system';
 // Only protect raw API endpoints — /my-account pages handle their own auth UI
 const PROTECTED_API = ['/api/account', '/api/orders'];
 
+// Block direct access to raw (non-anonymized) price-quote HTML files.
+// Anonymized copies are served from html-anon/ — see scripts/anonymize-price-quotes.ts
+const BLOCKED_PATHS = /^\/ml\/[^/]+\/saved-designs\/html\/[^/]+\.html$/;
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isProtected = PROTECTED_API.some((r) => pathname.startsWith(r));
+  const isBlocked = BLOCKED_PATHS.test(pathname);
   const countryHeader =
     request.headers.get('x-vercel-ip-country') ??
     request.headers.get('x-country-code');
@@ -15,6 +20,9 @@ export async function middleware(request: NextRequest) {
   const existingUnitSystem = request.cookies.get('unit_system')?.value;
 
   if (!isProtected) {
+    if (isBlocked) {
+      return new NextResponse(null, { status: 404 });
+    }
     const response = NextResponse.next();
     if (existingUnitSystem !== resolvedUnitSystem) {
       response.cookies.set('unit_system', resolvedUnitSystem, {

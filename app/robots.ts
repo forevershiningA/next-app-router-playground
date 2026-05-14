@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/my-account/'],
+      disallow: ['/api/', '/my-account/', '/ml/'],
     },
     sitemap: 'https://forevershining.org/sitemap.xml',
   };
