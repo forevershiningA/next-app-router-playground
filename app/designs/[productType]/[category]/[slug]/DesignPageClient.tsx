@@ -3180,7 +3180,7 @@ export default function DesignPageClient({
       {/* Detailed Price Quote from saved HTML */}
       <div className="px-0 md:px-6">
       {designId && sanitizedDesignData && designMetadata && (
-        <DetailedPriceQuote designId={designId} designData={sanitizedDesignData} mlDir={designMetadata.mlDir} />
+        <DetailedPriceQuote designId={designId} mlDir={designMetadata.mlDir} />
       )}
       </div>
 
@@ -3234,7 +3234,7 @@ export default function DesignPageClient({
 }
 
 // Component to load and display detailed price quote HTML
-function DetailedPriceQuote({ designId, designData, mlDir = 'headstonesdesigner' }: { designId: string; designData: any[]; mlDir?: string }) {
+function DetailedPriceQuote({ designId, mlDir = 'headstonesdesigner' }: { designId: string; mlDir?: string }) {
   const [priceHtml, setPriceHtml] = useState<string | null>(null);
   const [selectedMaterial, setSelectedMaterial] = useState<{ name: string; image: string } | null>(null);
   const [selectedMotif, setSelectedMotif] = useState<{ name: string; file: string } | null>(null);
@@ -3256,54 +3256,29 @@ function DetailedPriceQuote({ designId, designData, mlDir = 'headstonesdesigner'
   useEffect(() => {
     async function loadPriceHtml() {
       try {
-        // Load different HTML based on mobile/desktop
-        const htmlFile = isMobile 
-          ? `/ml/${mlDir}/saved-designs/html/${designId}.html`
-          : `/ml/${mlDir}/saved-designs/html/${designId}-desktop.html`;
+        // Fetch from html-anon/ — pre-anonymized at build time by scripts/anonymize-price-quotes.ts
+        const htmlFile = isMobile
+          ? `/ml/${mlDir}/saved-designs/html-anon/${designId}.html`
+          : `/ml/${mlDir}/saved-designs/html-anon/${designId}-desktop.html`;
         
         const response = await fetch(htmlFile);
         if (response.ok) {
           let html = await response.text();
           
-          // Replace original names with sanitized versions
-          const inscriptions = designData.filter((item: any) => item.type === 'Inscription' && item.label);
-          
-          // Create a mapping of original to sanitized text
-          const originalDesignResponse = await fetch(`/ml/${mlDir}/saved-designs/json/${designId}.json`);
-          if (originalDesignResponse.ok) {
-            const originalData = await originalDesignResponse.json();
-            const originalInscriptions = originalData.filter((item: any) => item.type === 'Inscription' && item.label);
-            
-            // Replace each original inscription with sanitized version in the HTML
-            originalInscriptions.forEach((origItem: any, index: number) => {
-              if (inscriptions[index] && origItem.label !== inscriptions[index].label) {
-                const originalText = origItem.label.replace(/&apos;/g, "'");
-                const sanitizedText = inscriptions[index].label.replace(/&apos;/g, "'");
-                
-                // Escape special regex characters
-                const escapeRegex = (str: string) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                
-                // Replace in HTML (case-sensitive, whole word)
-                const regex = new RegExp(escapeRegex(originalText), 'g');
-                html = html.replace(regex, sanitizedText);
-              }
-            });
-          }
-          
           // Make materials clickable
-          html = html.replace(/Material:\s*([^<\n]+)/g, (match, materialName) => {
+          html = html.replace(/Material:\s*([^<\n]+)/g, (_match, materialName) => {
             const trimmedName = materialName.trim();
             return `Material: <span class="material-link" data-material="${trimmedName}">${trimmedName}</span>`;
           });
           
           // Make motif files clickable
-          html = html.replace(/File:\s*([^<\n]+)/g, (match, fileName) => {
+          html = html.replace(/File:\s*([^<\n]+)/g, (_match, fileName) => {
             const trimmedFile = fileName.trim();
             return `File: <span class="motif-link" data-motif="${trimmedFile}">${trimmedFile}</span>`;
           });
           
           // Make shapes clickable
-          html = html.replace(/Shape:\s*([^<\n]+)/g, (match, shapeName) => {
+          html = html.replace(/Shape:\s*([^<\n]+)/g, (_match, shapeName) => {
             const trimmedName = shapeName.trim();
             return `Shape: <span class="shape-link" data-shape="${trimmedName}">${trimmedName}</span>`;
           });
@@ -3317,7 +3292,7 @@ function DetailedPriceQuote({ designId, designData, mlDir = 'headstonesdesigner'
     if (isMobile !== undefined) {
       loadPriceHtml();
     }
-  }, [designId, designData, isMobile]);
+  }, [designId, isMobile]);
 
   // Handle material, motif, and shape clicks
   useEffect(() => {
