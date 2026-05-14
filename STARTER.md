@@ -83,6 +83,7 @@ The SS plaque (300×200 mm) uses the 400×400 square SVG. With `targetHeight = 0
 ### 📌 Pending / Next Steps (2026-05-13 evening)
 
 - [ ] **Fix TS error in `ShapeSwapper.tsx` ~line 541**: `faceTexture` yields `string | null` for polished — pass swatch URL as fallback or widen prop type to `string | null`
+- [ ] **Enable legacy DYO payments**: Port the payment flow from the legacy Flash/PHP DYO app into the Next.js stack. See `legacy/` folder for reference PHP payment handling.
 - [ ] **Delete unused outback textures**: `public/textures/three/outback/outback_diff_2k.jpg` + `outback_nor_gl_2k.jpg` (~9 MB)
 - [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
 - [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`

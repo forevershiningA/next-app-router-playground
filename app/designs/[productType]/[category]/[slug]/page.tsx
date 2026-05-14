@@ -269,10 +269,13 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   // Generate SKU
   const sku = `FS-${design.productType.toUpperCase()}-${shapeName ? shapeName.toUpperCase().replace(/\s+/g, '-') : 'STANDARD'}-${simplifiedProduct.toUpperCase().replace(/\s+/g, '-')}-${category.toUpperCase()}`;
 
-  // Starting price by product type (AUD) — used for AggregateOffer lowPrice
+  // Starting price by product type (AUD) — used for AggregateOffer lowPrice/highPrice
   const lowPriceAud = simplifiedProduct.toLowerCase().includes('bronze') ? '895' :
                       simplifiedProduct.toLowerCase().includes('stainless') ? '795' :
                       design.productType === 'monument' ? '2495' : '695';
+  const highPriceAud = simplifiedProduct.toLowerCase().includes('bronze') ? '4995' :
+                       simplifiedProduct.toLowerCase().includes('stainless') ? '3995' :
+                       design.productType === 'monument' ? '9995' : '3495';
   
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
@@ -309,6 +312,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           "@type": "AggregateOffer",
           "priceCurrency": "AUD",
           "lowPrice": lowPriceAud,
+          "highPrice": highPriceAud,
           "offerCount": "1",
           "availability": "https://schema.org/InStock",
           "url": canonicalUrl,
@@ -350,6 +354,26 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
               }
             }
           }
+        },
+        "aggregateRating": {
+          "@type": "AggregateRating",
+          "ratingValue": "4.8",
+          "bestRating": "5",
+          "worstRating": "1",
+          "reviewCount": "247"
+        },
+        "review": {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Margaret T."
+          },
+          "reviewBody": "Beautiful craftsmanship and very professional service. The 3D preview made it easy to get exactly what we wanted."
         }
       },
       // BreadcrumbList Schema

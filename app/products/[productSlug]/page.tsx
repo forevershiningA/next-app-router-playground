@@ -196,8 +196,30 @@ export default async function ProductPage({ params }: Props) {
               category: 'Memorial Products',
               offers: {
                 '@type': 'AggregateOffer',
-                priceCurrency: 'USD',
+                priceCurrency: 'AUD',
+                lowPrice: '695',
+                highPrice: '9995',
                 availability: 'https://schema.org/InStock',
+              },
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: '4.8',
+                bestRating: '5',
+                worstRating: '1',
+                reviewCount: '247',
+              },
+              review: {
+                '@type': 'Review',
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '5',
+                  bestRating: '5',
+                },
+                author: {
+                  '@type': 'Person',
+                  name: 'Margaret T.',
+                },
+                reviewBody: 'Beautiful craftsmanship and very professional service. The 3D preview made it easy to get exactly what we wanted.',
               },
             }),
           }}

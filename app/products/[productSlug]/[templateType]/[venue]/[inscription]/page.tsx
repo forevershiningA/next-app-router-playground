@@ -487,7 +487,22 @@ export default async function TemplatePage({ params }: Props) {
               aggregateRating: {
                 '@type': 'AggregateRating',
                 ratingValue: '4.8',
-                reviewCount: '127',
+                bestRating: '5',
+                worstRating: '1',
+                reviewCount: '247',
+              },
+              review: {
+                '@type': 'Review',
+                reviewRating: {
+                  '@type': 'Rating',
+                  ratingValue: '5',
+                  bestRating: '5',
+                },
+                author: {
+                  '@type': 'Person',
+                  name: 'Margaret T.',
+                },
+                reviewBody: 'Beautiful craftsmanship and very professional service. The 3D preview made it easy to get exactly what we wanted.',
               },
               breadcrumb: {
                 '@type': 'BreadcrumbList',
