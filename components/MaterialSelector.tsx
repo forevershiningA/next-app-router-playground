@@ -604,12 +604,16 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
             <button
               key={material.id}
               onClick={() => textureUrl && handleMaterialSelect(material)}
-              className="relative overflow-hidden cursor-pointer disabled:cursor-not-allowed"
+              className={`relative overflow-hidden rounded-sm cursor-pointer disabled:cursor-not-allowed transition-all duration-150 ${
+                isSelected
+                  ? 'ring-2 ring-[#D7B356] ring-offset-1 ring-offset-[#1b1511]'
+                  : 'hover:ring-1 hover:ring-[#D7B356]/50 hover:ring-offset-1 hover:ring-offset-[#1b1511]'
+              }`}
               title={material.name}
               disabled={!textureUrl}
             >
               {/* Material Image */}
-              <div className={`relative aspect-square overflow-hidden ${isSelected ? 'ring-2 ring-[#D7B356]' : ''}`}>
+              <div className="relative aspect-square overflow-hidden">
                 <Image
                   src={coverSrc}
                   alt={material.name}
@@ -617,6 +621,13 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
                   className="object-cover"
                   sizes="100px"
                 />
+                {isSelected && (
+                  <div className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#D7B356]">
+                    <svg className="h-2.5 w-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                )}
               </div>
               
               {/* Material Name */}

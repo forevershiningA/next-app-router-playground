@@ -62,6 +62,13 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
                     className="object-contain"
                     sizes="100px"
                   />
+                  {isSelected && (
+                    <div className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#D7B356]">
+                      <svg className="h-2.5 w-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                  )}
                 </div>
                 <div className="p-2 h-12 flex items-center justify-center">
                   <div className={`text-xs text-center line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}>
@@ -183,6 +190,13 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
                   className="object-contain"
                   sizes="100px"
                 />
+                {isSelected && (
+                  <div className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#D7B356]">
+                    <svg className="h-2.5 w-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                )}
               </div>
               
               {/* Shape Name */}

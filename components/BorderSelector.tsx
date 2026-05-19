@@ -105,7 +105,7 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
                            (border.id === '0' && !currentBorderName);
           const baseCardClasses = isSelected
             ? `ring-2 ring-offset-2 ring-offset-[#0f0a07]`
-            : 'border border-white/10';
+            : 'border border-white/10 hover:border-[#D7B356]/40';
           const svgPath = getBorderAsset(border);
           
           return (
@@ -153,6 +153,13 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-sm text-slate-200/60">
                     None
+                  </div>
+                )}
+                {isSelected && (
+                  <div className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full" style={{ backgroundColor: accentHex }}>
+                    <svg className="h-2.5 w-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
                 )}
               </div>

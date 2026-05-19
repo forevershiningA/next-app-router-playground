@@ -523,6 +523,42 @@ export default function DesignerNav() {
 
   const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel) && activeFullscreenPanel !== 'corners' && activeFullscreenPanel !== 'holes';
 
+  // Ordered list of panels visible for the current product configuration
+  const navigablePanelSlugs = React.useMemo(() => {
+    return menuItems
+      .filter((item) => {
+        if (!fullscreenPanelSlugs.has(item.slug)) return false;
+        if (item.slug === 'select-material' && catalog?.product?.laser === '1') return false;
+        if (item.slug === 'select-border' && (!isPlaque || !hasBorder)) return false;
+        if (item.slug === 'select-additions' && (catalog?.product?.laser === '1' || isPlaque)) return false;
+        if ((item as { requiresBronzePlaque?: boolean }).requiresBronzePlaque && productId !== '5') return false;
+        return true;
+      })
+      .map((item) => item.slug);
+  }, [catalog, isPlaque, hasBorder, productId]);
+
+  const currentPanelIndex = activeFullscreenPanel
+    ? navigablePanelSlugs.indexOf(activeFullscreenPanel)
+    : -1;
+  const prevPanelSlug = currentPanelIndex > 0 ? navigablePanelSlugs[currentPanelIndex - 1] : null;
+  const nextPanelSlug =
+    currentPanelIndex >= 0 && currentPanelIndex < navigablePanelSlugs.length - 1
+      ? navigablePanelSlugs[currentPanelIndex + 1]
+      : null;
+
+  const handleNavigateToPanel = React.useCallback(
+    (slug: string) => {
+      if (slug === 'select-shape' && isCanvasVisible) {
+        openFullscreenPanel(slug);
+      } else if (pathname !== `/${slug}`) {
+        router.push(`/${slug}`);
+      } else {
+        openFullscreenPanel(slug);
+      }
+    },
+    [isCanvasVisible, pathname, openFullscreenPanel, router],
+  );
+
   const hasActiveAdditionForPanel =
     !!selectedAdditionId &&
     !!additionOffsets[selectedAdditionId] &&
@@ -2709,28 +2745,44 @@ export default function DesignerNav() {
         <div className="flex h-full flex-col">
           {/* Panel Header - desktop only */}
           <div className="hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="flex flex-col gap-2">
+            {/* Row 1: Guided Step label + step badge */}
+            <div className="mb-2 flex items-center justify-center gap-2.5">
+              <p className="font-playfair-display text-xs tracking-[0.35em] italic" style={{ color: '#aaaaaa' }}>
+                Guided Step
+              </p>
+              {currentPanelIndex >= 0 && (
+                <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-xs font-medium">
+                  <span className="font-semibold text-primary">{currentPanelIndex + 1}</span>
+                  <span className="text-white/30">/</span>
+                  <span className="text-white/50">{navigablePanelSlugs.length}</span>
+                </span>
+              )}
+            </div>
+            {/* Row 2: Section title centered */}
+            <h2 className="text-center text-3xl font-serif font-light tracking-tight text-white">
+              {activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
+                ? 'Background'
+                : menuItems.find(
+                    (item) => item.slug === activeFullscreenPanel,
+                  )?.name}
+            </h2>
+            {/* Fancy divider */}
+            <div className="my-3 flex items-center gap-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-primary/40" />
+              <div className="h-1 w-1 rotate-45 bg-primary/50" />
+              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/20 to-primary/40" />
+            </div>
+            {/* Row 3: Menu left, Prev/Next right */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
                 <button
                   onClick={handleBackToMenu}
-                  className="inline-flex items-center gap-3 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-colors duration-200 hover:border-white/40 hover:text-white"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white"
                 >
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M15 19l-7-7 7-7"
-                      />
-                    </svg>
-                  </span>
-                  <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Menu
                 </button>
                 {shouldShowBackToListButton && (
                   <button
@@ -2739,29 +2791,36 @@ export default function DesignerNav() {
                         ? handleBackToAdditionList
                         : handleBackToMotifList
                     }
-                    className="inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-200 hover:border-white/40 hover:text-white"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white"
                   >
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5 text-white/70">
-                      <Squares2X2Icon className="h-4 w-4" />
-                    </span>
-                    <span className="tracking-wide">
-                      Back&nbsp;to&nbsp;List
-                    </span>
+                    <Squares2X2Icon className="h-3 w-3" />
+                    List
                   </button>
                 )}
               </div>
-              <div className="text-left md:text-right">
-                <p className="font-playfair-display text-xs tracking-[0.35em] text-primary/60 italic">
-                  Guided Step
-                </p>
-                <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">
-                  {activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
-                    ? 'Background'
-                    : menuItems.find(
-                        (item) => item.slug === activeFullscreenPanel,
-                      )?.name}
-                </h2>
-                <div className="mt-3 h-px w-24 bg-white/20" />
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => prevPanelSlug && handleNavigateToPanel(prevPanelSlug)}
+                  disabled={!prevPanelSlug}
+                  title={prevPanelSlug ? `Go to ${menuItems.find((i) => i.slug === prevPanelSlug)?.name}` : undefined}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Prev
+                </button>
+                <button
+                  onClick={() => nextPanelSlug && handleNavigateToPanel(nextPanelSlug)}
+                  disabled={!nextPanelSlug}
+                  title={nextPanelSlug ? `Go to ${menuItems.find((i) => i.slug === nextPanelSlug)?.name}` : undefined}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  Next
+                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -2897,7 +2956,7 @@ export default function DesignerNav() {
           </div>
           <div className="flex items-end justify-between border-b border-white/10 px-5 py-4">
             <div className="text-right w-full">
-              <p className="font-playfair-display text-xs tracking-[0.35em] text-primary/60 italic">Guided Step</p>
+              <p className="font-playfair-display text-xs tracking-[0.35em] italic" style={{ color: '#aaaaaa' }}>Guided Step</p>
               <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">Corners</h2>
               <div className="mt-3 h-px w-24 bg-white/20 ml-auto" />
             </div>
@@ -2957,7 +3016,7 @@ export default function DesignerNav() {
           </div>
           <div className="flex items-end justify-between border-b border-white/10 px-5 py-4">
             <div className="text-right w-full">
-              <p className="font-playfair-display text-xs tracking-[0.35em] text-primary/60 italic">Guided Step</p>
+              <p className="font-playfair-display text-xs tracking-[0.35em] italic" style={{ color: '#aaaaaa' }}>Guided Step</p>
               <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">Holes</h2>
               <div className="mt-3 h-px w-24 bg-white/20 ml-auto" />
             </div>

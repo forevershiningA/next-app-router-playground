@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-14
+**Last Updated:** 2026-05-19
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -36,6 +36,76 @@
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
 30. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
+
+---
+
+## Current Status (2026-05-19) — Panel Header UX Redesign & Card Selector Polish
+
+### ✅ Panel Header — Prev/Next Navigation Buttons
+
+`components/DesignerNav.tsx`: Added step-based navigation so users can move between fullscreen panels without returning to the menu.
+
+**New computed values** (in the main component body):
+- `navigablePanelSlugs` — `useMemo` that filters `menuItems` to those in `fullscreenPanelSlugs` and visible for the current product type (hides `select-material` for laser, `select-border` when no border, `select-additions` for plaques, `select-emblems` when not product 5)
+- `currentPanelIndex` — index of `activeFullscreenPanel` within `navigablePanelSlugs`
+- `prevPanelSlug` / `nextPanelSlug` — adjacent slugs (undefined at boundaries → buttons disabled)
+- `handleNavigateToPanel(slug)` — routes via `router.push()` for route-based panels; calls `openFullscreenPanel()` for canvas-only panels (e.g. `select-shape` when canvas is visible)
+
+**Buttons**: Pill style `rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80`, disabled at boundary with `opacity-30`. Chevron SVG icons.
+
+---
+
+### ✅ Panel Header — Full Layout Redesign
+
+The fullscreen panel header (`hidden md:block` section in `DesignerNav.tsx`) was fully rebuilt into 3 rows:
+
+```
+  Guided Step  [3 / 6]        ← Row 1: centered flex, italic Playfair label + gold step badge
+     Select Size              ← Row 2: h2 centered, font-serif font-light tracking-tight text-3xl
+  ──── ◆ ────                 ← Row 3: fancy divider — gradient lines + rotated diamond in gold
+[‹ Menu] [⊞ List?]   [‹ Prev] [Next ›]   ← Row 4: buttons row
+```
+
+- **"Guided Step"** label: `font-playfair-display italic tracking-[0.35em]` in `#aaaaaa`
+- **Step badge** `[3 / 6]`: gold number / dim slash / dim total — `rounded-full border border-white/20 bg-white/5`
+- **Section title**: `font-serif font-light tracking-tight text-3xl` — matches the `select-product` page heading style (`ProductSelectionGrid.tsx` h1)
+- **Fancy divider**: two gradient lines (`from-transparent via-white/20 to-primary/40`) with a small rotated square diamond (gold `bg-primary/50`) in the center
+- **Menu** button: left side with chevron icon; **List** button (conditional, shown in additions/motifs panels) beside it
+- **Prev / Next** buttons: right side
+
+The two sub-panel headers ("Corners", "Holes") also use the same `Guided Step` label and were updated to `color: '#aaaaaa'`.
+
+---
+
+### ✅ Card Selectors — Selected State & Hover Polish
+
+**`components/MaterialSelector.tsx`**:
+- Selected card outer button: `ring-2 ring-[#D7B356] ring-offset-1 ring-offset-[#1b1511]`
+- Gold checkmark badge: `absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#D7B356]` with SVG check path `M5 13l4 4L19 7`
+- Unselected hover: `hover:ring-1 hover:ring-[#D7B356]/50 hover:ring-offset-1`
+
+**`components/ShapeSelector.tsx`**:
+- Gold checkmark badge added to both urn shapes and standard shapes selected cards
+
+**`components/BorderSelector.tsx`**:
+- Unselected cards: `hover:border-[#D7B356]/40`
+- Selected card: gold checkmark badge inside the preview div
+
+---
+
+### ✅ Step Indicator — Dynamic "Step X of Y"
+
+The "Guided Step" row shows a step badge using `currentPanelIndex + 1` / `navigablePanelSlugs.length`. Updates automatically as the user navigates between panels. Step count is product-aware (excludes panels hidden for the current product type).
+
+---
+
+### 📌 Pending / Next Steps (2026-05-19)
+
+- [ ] **Update `DetailedPriceQuote`** in `DesignPageClient.tsx`: change fetch URLs from `html/${designId}.html` → `html-anon/${designId}.html` (and `-desktop`)
+- [ ] **Fix TS error in `ShapeSwapper.tsx` ~line 541**: `faceTexture` is `string | null` for polished — pass swatch URL as fallback or widen prop type to `string | null`
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
+- [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
+- [ ] **Add 6 failures to KNOWN_FAILURES** in `scripts/batch-screenshot.js`: `1662337522025`, `1667480366612`, `1670405007473`, `1673437084641`, `1675259335154`, `1752619990342`
 
 ---
 
