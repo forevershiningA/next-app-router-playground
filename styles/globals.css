@@ -8,6 +8,9 @@
 @source not "../haxe";
 @source not "../archive";
 
+/* Admin dark mode: scoped to the admin wrapper so it doesn't affect the designer */
+@custom-variant dark (&:where([data-admin-theme=dark], [data-admin-theme=dark] *));
+
 /* CRITICAL: Prevent text cursor (caret) from appearing anywhere except inputs */
 *, *::before, *::after {
   caret-color: transparent !important;

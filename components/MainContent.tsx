@@ -10,19 +10,22 @@ export default function MainContent({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const pathname = usePathname();
-  
+
   // Check if we're on homepage
   const isHomepage = pathname === '/';
-  
+
   // Check if we're on any /designs route
   const isDesignsRoute = pathname?.startsWith('/designs');
-  
+  const isAdminRoute = pathname?.startsWith('/admin');
+
   // Check if we're on a design list page (product or category level)
-  const segments = pathname?.split('/').filter(s => s) || [];
-  const isDesignListPage = pathname?.startsWith('/designs/') && (segments.length === 2 || segments.length === 3);
-  
+  const segments = pathname?.split('/').filter((s) => s) || [];
+  const _isDesignListPage =
+    pathname?.startsWith('/designs/') &&
+    (segments.length === 2 || segments.length === 3);
+
   // Also check if on a category page with /designs/[productType]/[category] structure
-  const isAnyCategoryPage = pathname?.match(/^\/designs\/[^\/]+\/[^\/]+\/?$/);
+  const _isAnyCategoryPage = pathname?.match(/^\/designs\/[^\/]+\/[^\/]+\/?$/);
 
   useEffect(() => {
     const handler = () => setIsSidebarOpen((s) => !s);
@@ -31,7 +34,13 @@ export default function MainContent({
   }, []);
 
   return (
-    <div className={!isDesignsRoute && !isHomepage && isSidebarOpen ? 'lg:pl-[400px]' : ''}>
+    <div
+      className={
+        !isAdminRoute && !isDesignsRoute && !isHomepage && isSidebarOpen
+          ? 'lg:pl-[400px]'
+          : ''
+      }
+    >
       {children}
     </div>
   );

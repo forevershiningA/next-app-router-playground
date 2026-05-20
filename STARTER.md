@@ -39,6 +39,102 @@
 
 ---
 
+## Current Status (2026-05-20) — Admin Panel, Payment Integration & Order Persistence
+
+### ✅ Modern Admin Panel (`/admin`)
+
+A full modern admin panel was created at `app/admin/` — white/dark-mode design, separate from the Designer UI.
+
+**Auth**: Admin login renders inline at `/admin` (no URL change, no register). First admin account: `admin@forevershining.online` / `TechPar123` — seeded directly in the DB. `lib/auth/admin-session.ts` stores a separate `adminToken` cookie; `requireAdminSession()` helper used by all admin pages.
+
+**Layout** (`app/admin/layout.tsx`): Left sidebar with nav links (Dashboard, Orders, Customers, Designs, Payments, Enquiries, System), dark-mode toggle (Day/Night button, top-right), responsive.
+
+**Pages created**:
+- `app/admin/page.tsx` — Dashboard with stat cards (Total Orders, Customers, Designs, Enquiries, New Enquiries) + Recent Orders table
+- `app/admin/orders/page.tsx` — Orders list with status badges, invoice numbers, customer info
+- `app/admin/orders/new/page.tsx` — Add Custom Order form: `CustomerPicker` combobox (debounced search via `GET /api/admin/customers/search?q=`), line items with multi-line `<textarea>` descriptions, totals
+- `app/admin/customers/page.tsx` — Customers list
+- `app/admin/customers/new/page.tsx` — New Customer form: Account (email, password, role), Personal Details (name, phone, DOB, gender), Business Details (org, tradingName, taxId, website), Address (4-field, country dropdown defaulting to Australia)
+
+**API routes added**:
+- `GET /api/admin/customers/search?q=` — case-insensitive search on email, firstName, lastName, organization; returns up to 20 results
+
+---
+
+### ✅ Place Order — Three Payment Options
+
+`app/my-account/designs/[id]/buy/page.tsx` updated with three payment methods:
+
+1. **Credit Card** — Stripe Checkout (redirect-based)
+2. **PayPal** — PayPal Buttons SDK rendered inline
+3. **Pay by Phone / BPAY / Cheque** — shows real business details:
+   - Phone: `(08) 6191 0396 / 0419 945 950 / 1300 851 181 / +61 8 6191 0396`
+   - BPAY: Biller Code `566380`, reference = order ID
+   - Direct Deposit: The Stainless Steel Monument Company Pty Ltd, BSB 034-604, Acc 192-715
+   - Cheque: PO Box 1268, Bibra Lake WA 6965
+
+Both payment SDKs loaded via `next/script` with `strategy="lazyOnload"`:
+- `https://js.stripe.com/v3/`
+- `https://www.paypal.com/sdk/js?client-id=ARAQC6sW5wGhZbGbPoaqMhKYylVVgDXkLP3PVKGhDd_OywkKfwoqybq9Wf0-wPVghD4qxkbKIOHquUpt&currency=AUD`
+
+---
+
+### ✅ Stripe Checkout Integration
+
+`app/api/checkout/stripe/route.ts` — POST handler: instantiates `Stripe` inside the handler (not module-level, so missing key returns a clean 500 instead of crash), validates `STRIPE_SECRET_KEY`, creates a `stripe.checkout.sessions.create()` with `price_data` (line-item mode), returns `{ sessionId }`.
+
+Client calls `window.Stripe(NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY).redirectToCheckout({ sessionId })`.
+
+**Image URL guard**: only passes `images` to Stripe if `screenshotUrl` starts with `http` (Stripe requires absolute URLs).
+
+**Required env vars** (set in `.env.local` + Vercel Environment Variables):
+- `STRIPE_SECRET_KEY=sk_live_...` (retrieve from Stripe dashboard — do NOT commit)
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...` (retrieve from Stripe dashboard)
+
+---
+
+### ✅ PayPal Buttons Integration
+
+`paypal.Buttons()` rendered into a `ref` container when `paymentType === 'paypal'` and `paypalReady === true`. `paypalRendered` ref prevents double-render. Re-renders when `testMode` changes.
+
+`onApprove` captures payment and calls `POST /api/orders` to persist the order (status=`paid`).
+
+---
+
+### ✅ Localhost Test Mode ($1)
+
+Amber checkbox "🧪 Test mode — charge $1.00 instead of real price" shown only when `window.location.hostname === 'localhost'`.
+
+`effectiveAmountCents = testMode ? 100 : project?.totalPriceCents ?? 0` — passed to both Stripe and PayPal. Real price shown with strikethrough when test mode is active.
+
+---
+
+### ✅ Order Persistence — Orders Saved to Database
+
+**Critical bug fixed**: previously, completed payments (Stripe, PayPal, BPAY) never wrote to the `orders` table, so the admin dashboard always showed 0.
+
+**New API routes**:
+- `POST /api/orders` — creates `orders` + `orderItems` + `payments` records. Accepts `{ projectId, amountCents, currency, paymentMethod, paymentRef, status, designName }`. Generates invoice number `INV-YYYYMM-RAND`. Returns `{ orderId, invoiceNumber }`.
+- `PATCH /api/orders/[id]` — updates order status + payment status. Used by Stripe success redirect to mark order as `paid`.
+
+**Flow per payment method**:
+- **Stripe**: `POST /api/orders` (status=`pending`) → store `orderId` in `sessionStorage` → redirect to Stripe. On `?payment=success` return: read `orderId`, `PATCH /api/orders/[id]` → status=`paid`.
+- **PayPal**: `POST /api/orders` (status=`paid`) in `onApprove` callback with PayPal `details.id` as `providerRef`.
+- **BPAY/Other**: `POST /api/orders` (status=`pending`) before showing confirmation.
+
+---
+
+### 📌 Pending / Next Steps (2026-05-20)
+
+- [ ] Retrieve and set `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` from Stripe dashboard → add to `.env.local` and Vercel env vars
+- [ ] Test full Stripe flow end-to-end on production with test card `4242 4242 4242 4242` + test mode checkbox
+- [ ] **Update `DetailedPriceQuote`** in `DesignPageClient.tsx`: change fetch URLs from `html/${designId}.html` → `html-anon/${designId}.html`
+- [ ] **Fix TS error in `ShapeSwapper.tsx` ~line 541**: `faceTexture` is `string | null` for polished
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
+- [ ] **db:sync to remote**: Run `pnpm db:sync` to ensure remote home.pl DB has `json_path` column
+
+---
+
 ## Current Status (2026-05-19) — Panel Header UX Redesign & Card Selector Polish
 
 ### ✅ Panel Header — Prev/Next Navigation Buttons

@@ -35,60 +35,82 @@ export default function ConditionalCanvas() {
   const pathname = usePathname();
   const hideOverlay = useSceneOverlayStore((s) => s.hide);
   const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
-  
+
   // Hide canvas on design pages:
   // /designs/ -> ['designs'] = 1 segment (root page)
-  // /designs/bronze-plaque -> ['designs', 'bronze-plaque'] = 2 segments (product type page)  
+  // /designs/bronze-plaque -> ['designs', 'bronze-plaque'] = 2 segments (product type page)
   // /designs/bronze-plaque/husband-memorial -> ['designs', 'bronze-plaque', 'husband-memorial'] = 3 segments (category page)
   // /designs/bronze-plaque/husband-memorial/123_design-name -> ['designs', 'bronze-plaque', 'husband-memorial', '123_design-name'] = 4 segments (individual design page)
   const segments = pathname?.split('/').filter(Boolean) || [];
   const isDesignPage = pathname?.startsWith('/designs') && segments.length >= 1;
-  
+
   // Check if we're on the homepage
   const isHomePage = pathname === '/';
-  
+
   // Hide canvas on select-product page
   const isSelectProductPage = pathname === '/select-product';
-  
+
   // Hide canvas on select-shape page (full-page shape selector)
   const isSelectShapePage = pathname === '/select-shape';
-  
+
   // Show canvas on select-material page (used in sidebar flow)
   const isSelectMaterialPage = pathname === '/select-material';
-  
+
   // Show canvas on select-additions page (sidebar flow like materials)
   const isSelectAdditionsPage = pathname === '/select-additions';
-  
+
   // Show canvas on select-motifs page (sidebar flow like materials)
   const isSelectMotifsPage = pathname === '/select-motifs';
-  
+
   // Show canvas on select-emblems page (sidebar flow like materials)
-  const isSelectEmblemsPage = pathname === '/select-emblems';
-  
+  const _isSelectEmblemsPage = pathname === '/select-emblems';
+
   // Show canvas on select-border page (sidebar flow like materials)
   const isSelectBorderPage = pathname === '/select-border';
-  
+
   // Hide canvas on check-price page
   const isCheckPricePage = pathname === '/check-price';
-  
+
   // Hide canvas on my-account page and all sub-pages
-  const isMyAccountPage = pathname === '/my-account' || pathname?.startsWith('/my-account/');
+  const isMyAccountPage =
+    pathname === '/my-account' || pathname?.startsWith('/my-account/');
+
+  // Hide canvas on admin pages
+  const isAdminPage = pathname === '/admin' || pathname?.startsWith('/admin/');
 
   // Hide canvas on orders page (account-area page, same treatment as my-account)
-  const isOrdersPage = pathname === '/orders' || pathname?.startsWith('/orders/');
-  
+  const isOrdersPage =
+    pathname === '/orders' || pathname?.startsWith('/orders/');
+
   // Show canvas on select-size page
   const isSelectSizePage = pathname === '/select-size';
-  
+
   // Show canvas on inscriptions page
   const isInscriptionsPage = pathname === '/inscriptions';
-  
+
   // Show canvas on design-menu page (neutral menu view with canvas)
   const isDesignMenuPage = pathname === '/design-menu';
-  
+
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {
-    if (!pathname || ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage)) {
+    if (
+      !pathname ||
+      ((isHomePage ||
+        isDesignPage ||
+        isSelectProductPage ||
+        isSelectShapePage ||
+        isCheckPricePage ||
+        isMyAccountPage ||
+        isAdminPage ||
+        isOrdersPage) &&
+        !isSelectSizePage &&
+        !isInscriptionsPage &&
+        !isSelectMaterialPage &&
+        !isSelectAdditionsPage &&
+        !isSelectMotifsPage &&
+        !isSelectBorderPage &&
+        !isDesignMenuPage)
+    ) {
       hideOverlay();
     }
   }, [
@@ -103,23 +125,39 @@ export default function ConditionalCanvas() {
     isSelectBorderPage,
     isCheckPricePage,
     isMyAccountPage,
+    isAdminPage,
     isOrdersPage,
     isSelectSizePage,
     isInscriptionsPage,
     isDesignMenuPage,
     hideOverlay,
   ]);
-  
+
   // Also hide when pathname is null (e.g. SSR edge case before router context is ready)
-  if (!pathname || ((isHomePage || isDesignPage || isSelectProductPage || isSelectShapePage || isCheckPricePage || isMyAccountPage || isOrdersPage) && !isSelectSizePage && !isInscriptionsPage && !isSelectMaterialPage && !isSelectAdditionsPage && !isSelectMotifsPage && !isSelectBorderPage && !isDesignMenuPage)) {
+  if (
+    !pathname ||
+    ((isHomePage ||
+      isDesignPage ||
+      isSelectProductPage ||
+      isSelectShapePage ||
+      isCheckPricePage ||
+      isMyAccountPage ||
+      isAdminPage ||
+      isOrdersPage) &&
+      !isSelectSizePage &&
+      !isInscriptionsPage &&
+      !isSelectMaterialPage &&
+      !isSelectAdditionsPage &&
+      !isSelectMotifsPage &&
+      !isSelectBorderPage &&
+      !isDesignMenuPage)
+  ) {
     return null;
   }
 
   return (
-    <div id="scene-root" className="fixed inset-0 lg:left-[400px] z-0">
-      <Suspense
-        fallback={CanvasLoadingFallback}
-      >
+    <div id="scene-root" className="fixed inset-0 z-0 lg:left-[400px]">
+      <Suspense fallback={CanvasLoadingFallback}>
         <ErrorBoundary
           fallback={
             <div className="flex min-h-[400px] items-center justify-center rounded-lg border border-red-500/20 bg-red-950/10">

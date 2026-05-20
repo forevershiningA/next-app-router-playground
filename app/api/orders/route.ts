@@ -4,6 +4,80 @@ import { db } from '#/lib/db/index';
 import { orders, orderItems, payments } from '#/lib/db/schema';
 import { eq, desc } from 'drizzle-orm';
 
+function generateInvoiceNumber(): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const rand = Math.random().toString(36).substring(2, 6).toUpperCase();
+  return `INV-${y}${m}-${rand}`;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const session = await getServerSession();
+    if (!session?.accountId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = (await request.json()) as {
+      projectId: string;
+      amountCents: number;
+      currency?: string;
+      paymentMethod: 'stripe' | 'paypal' | 'other';
+      paymentRef?: string;
+      status?: 'pending' | 'paid';
+      designName?: string;
+    };
+
+    const { projectId, amountCents, currency = 'AUD', paymentMethod, paymentRef, status = 'pending', designName } = body;
+
+    if (!projectId || !amountCents) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const taxCents = Math.round(amountCents * 0.1);
+    const subtotalCents = amountCents - taxCents;
+
+    const [order] = await db
+      .insert(orders)
+      .values({
+        projectId,
+        accountId: session.accountId,
+        status: status === 'paid' ? 'paid' : 'pending',
+        subtotalCents,
+        taxCents,
+        totalCents: amountCents,
+        currency,
+        invoiceNumber: generateInvoiceNumber(),
+      })
+      .returning();
+
+    if (designName) {
+      await db.insert(orderItems).values({
+        orderId: order.id,
+        description: designName,
+        quantity: 1,
+        unitPriceCents: amountCents,
+      });
+    }
+
+    await db.insert(payments).values({
+      orderId: order.id,
+      provider: paymentMethod,
+      providerRef: paymentRef ?? null,
+      amountCents,
+      currency,
+      status: status === 'paid' ? 'completed' : 'pending',
+      receivedAt: status === 'paid' ? new Date() : null,
+    });
+
+    return NextResponse.json({ orderId: order.id, invoiceNumber: order.invoiceNumber });
+  } catch (error) {
+    console.error('Error creating order:', error);
+    return NextResponse.json({ error: 'Failed to create order' }, { status: 500 });
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession();

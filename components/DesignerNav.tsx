@@ -527,6 +527,8 @@ export default function DesignerNav() {
   const navigablePanelSlugs = React.useMemo(() => {
     return menuItems
       .filter((item) => {
+        // save-design is always included as the final guided step
+        if (item.slug === 'save-design') return true;
         if (!fullscreenPanelSlugs.has(item.slug)) return false;
         if (item.slug === 'select-material' && catalog?.product?.laser === '1') return false;
         if (item.slug === 'select-border' && (!isPlaque || !hasBorder)) return false;
@@ -537,9 +539,10 @@ export default function DesignerNav() {
       .map((item) => item.slug);
   }, [catalog, isPlaque, hasBorder, productId]);
 
+  const currentSlugFromPathname = pathname.replace('/', '');
   const currentPanelIndex = activeFullscreenPanel
     ? navigablePanelSlugs.indexOf(activeFullscreenPanel)
-    : -1;
+    : navigablePanelSlugs.indexOf(currentSlugFromPathname);
   const prevPanelSlug = currentPanelIndex > 0 ? navigablePanelSlugs[currentPanelIndex - 1] : null;
   const nextPanelSlug =
     currentPanelIndex >= 0 && currentPanelIndex < navigablePanelSlugs.length - 1
@@ -547,8 +550,18 @@ export default function DesignerNav() {
       : null;
 
   const handleNavigateToPanel = React.useCallback(
-    (slug: string) => {
-      if (slug === 'select-shape' && isCanvasVisible) {
+    async (slug: string) => {
+      if (slug === 'save-design') {
+        const res = await fetch('/api/auth/session');
+        if (!res.ok) {
+          const returnTo = encodeURIComponent(pathname + '?action=save-design');
+          router.push(`/my-account?returnTo=${returnTo}`);
+          return;
+        }
+        setShowSaveDesignModal(true);
+      } else if (slug === 'check-price') {
+        router.push('/check-price');
+      } else if (slug === 'select-shape' && isCanvasVisible && pathname === '/select-shape') {
         openFullscreenPanel(slug);
       } else if (pathname !== `/${slug}`) {
         router.push(`/${slug}`);
@@ -556,7 +569,7 @@ export default function DesignerNav() {
         openFullscreenPanel(slug);
       }
     },
-    [isCanvasVisible, pathname, openFullscreenPanel, router],
+    [isCanvasVisible, pathname, openFullscreenPanel, router, setShowSaveDesignModal],
   );
 
   const hasActiveAdditionForPanel =
@@ -1891,7 +1904,7 @@ export default function DesignerNav() {
   const isSelectMaterialPage = pathname === '/select-material';
   const isSelectMotifsPage = pathname === '/select-motifs';
   const isHomePage = pathname === '/';
-  const isCheckPricePage = pathname === '/check-price';
+
 
   // Helper function to determine status of menu items
   const getItemStatus = (
@@ -2759,7 +2772,7 @@ export default function DesignerNav() {
               )}
             </div>
             {/* Row 2: Section title centered */}
-            <h2 className="text-center text-3xl font-serif font-light tracking-tight text-white">
+            <h2 className="my-5 text-center text-3xl font-serif font-light tracking-tight text-white">
               {activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
                 ? 'Background'
                 : menuItems.find(

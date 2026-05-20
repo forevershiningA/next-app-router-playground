@@ -17,6 +17,9 @@ importers:
       '@mdx-js/react':
         specifier: 3.1.1
         version: 3.1.1(@types/react@19.1.12)(react@19.1.2)
+      '@neondatabase/serverless':
+        specifier: 1.1.0
+        version: 1.1.0
       '@next/mdx':
         specifier: 15.5.2
         version: 15.5.2(@mdx-js/loader@3.1.1)(@mdx-js/react@3.1.1(@types/react@19.1.12)(react@19.1.2))
@@ -67,7 +70,7 @@ importers:
         version: 17.3.1
       drizzle-orm:
         specifier: 0.45.1
-        version: 0.45.1(pg@8.19.0)(postgres@3.4.8)
+        version: 0.45.1(@neondatabase/serverless@1.1.0)(pg@8.19.0)(postgres@3.4.8)
       flowbite:
         specifier: 3.1.2
         version: 3.1.2
@@ -119,6 +122,9 @@ importers:
       sharp:
         specifier: 0.34.5
         version: 0.34.5
+      stripe:
+        specifier: 22.1.1
+        version: 22.1.1(@types/node@24.3.1)
       tailwind-merge:
         specifier: 3.4.0
         version: 3.4.0
@@ -1001,6 +1007,10 @@ packages:
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
+
+  '@neondatabase/serverless@1.1.0':
+    resolution: {integrity: sha512-r3ZZhRjEcfEdKIZnoB1RusNgvHuaBRqfCzV4Gi+5A9yUX0S4HTws/ASWqt13wL4y4I+0rqsWGdA2w7EQXHi3+Q==}
+    engines: {node: '>=19.0.0'}
 
   '@next/env@15.5.7':
     resolution: {integrity: sha512-4h6Y2NyEkIEN7Z8YxkA27pq6zTkS09bUSYC0xjd0NpwFxjnIKeZEeH591o5WECSmjpUhLn3H2QLJcDye3Uzcvg==}
@@ -3840,6 +3850,15 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
+  stripe@22.1.1:
+    resolution: {integrity: sha512-cmodIYP27tBkJ8G7DuGgWw0PFuemlFZbuF3Wwr1TrjFjUa3T7NIgCe6TVwX8BO2ynu+xtTuDGfHafNDCPt9lXA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@types/node': '>=18'
+    peerDependenciesMeta:
+      '@types/node':
+        optional: true
+
   style-to-js@1.1.21:
     resolution: {integrity: sha512-RjQetxJrrUJLQPHbLku6U/ocGtzyjbJMP9lCNK7Ag0CNh690nSH8woqWH9u16nMjYBAok+i7JO1NP2pOy8IsPQ==}
 
@@ -4788,6 +4807,8 @@ snapshots:
       '@emnapi/runtime': 1.8.1
       '@tybys/wasm-util': 0.10.1
     optional: true
+
+  '@neondatabase/serverless@1.1.0': {}
 
   '@next/env@15.5.7': {}
 
@@ -5880,8 +5901,9 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.45.1(pg@8.19.0)(postgres@3.4.8):
+  drizzle-orm@0.45.1(@neondatabase/serverless@1.1.0)(pg@8.19.0)(postgres@3.4.8):
     optionalDependencies:
+      '@neondatabase/serverless': 1.1.0
       pg: 8.19.0
       postgres: 3.4.8
 
@@ -7970,6 +7992,10 @@ snapshots:
   strip-bom@3.0.0: {}
 
   strip-json-comments@3.1.1: {}
+
+  stripe@22.1.1(@types/node@24.3.1):
+    optionalDependencies:
+      '@types/node': 24.3.1
 
   style-to-js@1.1.21:
     dependencies:

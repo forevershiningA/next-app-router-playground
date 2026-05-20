@@ -28,6 +28,7 @@
     "db:seed-materials": "tsx scripts/seed-materials.ts",
     "db:seed-shapes": "tsx scripts/seed-shapes.ts",
     "db:seed-sizes": "tsx scripts/seed-sizes.ts",
+    "db:seed-admin": "node --env-file=.env.local scripts/seed-admin.mjs",
     "anonymize-quotes": "tsx scripts/anonymize-price-quotes.ts",
     "db:seed-backgrounds": "tsx scripts/seed-backgrounds.ts"
   },
@@ -35,6 +36,7 @@
     "@heroicons/react": "2.2.0",
     "@mdx-js/loader": "3.1.1",
     "@mdx-js/react": "3.1.1",
+    "@neondatabase/serverless": "1.1.0",
     "@next/mdx": "15.5.2",
     "@react-email/components": "1.0.12",
     "@react-three/drei": "10.7.4",
@@ -69,6 +71,7 @@
     "remark-codehike": "0.0.1",
     "server-only": "0.0.1",
     "sharp": "0.34.5",
+    "stripe": "22.1.1",
     "tailwind-merge": "3.4.0",
     "three": "0.180.0",
     "use-count-up": "3.0.1",
