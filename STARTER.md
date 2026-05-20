@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-19
+**Last Updated:** 2026-06-02
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -36,6 +36,125 @@
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
 30. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
+
+---
+
+## Current Status (2026-06-02) — Admin Order View/Edit, Supplier Mail & SVG Export
+
+### ✅ Admin Orders — Invoice View
+
+`app/admin/orders/[id]/page.tsx` — read-only order detail page (server component):
+
+- **Header**: Invoice number `INV-YYYYMM-XXXX`, status badge, action buttons (Edit, Export SVG, Back)
+- **Details section** (directly below invoice number): customer name/email, order date, payment method, amount
+- **Quote / Design Preview**: lists every inscription, motif, image, and addition from `designState`, matching the email quote format
+- **Design screenshot**: shows `screenshotPath` thumbnail (stored as data URL or remote URL)
+
+Layout uses the same admin white/dark-mode card styling as the rest of the admin panel.
+
+---
+
+### ✅ Admin Orders — Edit View
+
+`app/admin/orders/[id]/edit/page.tsx` — interactive client component for editing an order:
+
+**Top section** (read-only):
+- Invoice number, status badge, customer info
+
+**Order details** (editable): status selector, payment method, notes
+
+**Design Elements section** (the key feature):
+- Every inscription, motif, ceramic image, and 3D addition from `designState` is listed as a card
+- Each card has a **checkbox on the right side** for selection
+- "**Mail Selected**" button (a `<select>` / button composite) **above** the design elements list — sends the checked items to the supplier via the supplier-mail API
+- Removing the old "Order Items" table (which showed raw order line-items) — replaced entirely by Design Elements cards
+
+**Supplier select box**: a `<select>` dropdown to pick which supplier/email address to send to, placed to the left of "Mail Selected".
+
+---
+
+### ✅ Supplier Mail Feature
+
+`app/api/orders/[id]/send-supplier/route.ts` — POST endpoint:
+
+- Accepts `{ supplierEmail, items: string[] }` (items = human-readable lines for selected design elements)
+- Uses Nodemailer + the existing email config to send a plain-text / HTML email to the supplier
+- Email body lists the design elements the admin checked, plus the order invoice number and screenshot URL
+- Returns `{ ok: true }` on success
+
+The admin Edit page calls this API when "Mail Selected" is clicked with at least one checkbox ticked.
+
+---
+
+### ✅ SVG Export — Ordered Design as Vector
+
+`app/api/orders/[id]/export-svg/route.ts` — `GET` endpoint (admin-only, requires `adminToken` cookie):
+
+**Purpose**: Suppliers use the SVG to position elements in Illustrator/Photoshop for laser etching or sandblasting. The SVG is overlaid at 50% opacity over the saved design screenshot to verify placement.
+
+**Output**: A single SVG file (`order-INV-xxx.svg`) containing:
+1. **Stone outline** — the shape path scaled to the stone's `widthMm × heightMm` dimensions in mm
+2. **Inscriptions** — `<text>` elements positioned using the stored `xPos`/`yPos` coordinates
+3. **Motifs** — SVG paths scaled to the motif's `heightMm`, positioned at the motif offset
+
+**Coordinate system** (critical — matches Three.js geometry pipeline):
+- `geoToMm = widthMm / dx` where `dx` = actual path bounding-box width (from `computePathBounds()`)
+- Stone outline: `translate(tx, ty) scale(geoToMm, geoToMm)` — isotropic transform
+  - `tx = cx - centerX * geoToMm`, `ty = -minY * geoToMm`
+- Inscriptions (`coordinateSpace` handling):
+  - `undefined` or `'absolute'` → `svgY = stoneH - yPos * geoToMm` (geo Y=0 is stone bottom)
+  - `'mm-center'` → `svgY = cy - yPos`, `svgX = cx + xPos`  
+  - `'offset'` → `svgY = cy + yPos * geoToMm`, `svgX = cx + xPos * geoToMm`
+  - Default zero `(0,0)` → always maps to stone centre `(cx, cy)`
+- Motifs: same `geoToSvg()` function, then positioned with `translate(mx, my)` + aspect-correct scale
+
+**`computePathBounds()` helper** (lines 39–65 of route.ts):
+- Parses all number-pairs from SVG `d` attributes as `(X, Y)` coordinates
+- Returns `{ minX, maxX, minY, maxY, dx, dy, centerX }`
+- Used to compute isotropic `geoToMm = widthMm / dx` (replaces the old `widthMm / shapeViewW` which used viewBox width 400 regardless of actual path extent)
+- **Limitation**: treats bezier control points as actual curve points → dx may be ≈1–2% larger than Three.js's sampled dx (which uses `shape.getPoints(256)`). For the test order (`cropped_peak.svg`, dx=400) this is exact.
+
+**"Export SVG" button** added to the admin orders list (`app/admin/orders/page.tsx`) as a direct download link next to the Edit button.
+
+**Known open issue**: For some orders, inscriptions still appear shifted by a few mm relative to the 3D screenshot overlay. Root cause is under investigation — see SVG Coordinate Investigation section below.
+
+---
+
+### 🔬 SVG Export — Coordinate Investigation (In Progress)
+
+**Symptom**: Inscriptions in the exported SVG appear "moved to the top" when overlaid on the saved design screenshot in Illustrator.
+
+**Test order**: `INV-202605-81AH`, shape `cropped_peak.svg`, stone 850×850mm.
+
+**Actual DB values** (confirmed by querying `orders` + `projects`):
+- Inscriptions have no `coordinateSpace` field → treated as absolute geometry-local coords
+- "Larkin Watts": `yPos=306.54` → `svgY = 850 - 306.54×2.125 = 198.6mm` from stone top (76.6% up from bottom)
+- Motif butterfly: `coordinateSpace='mm-center'`, `yPos=44.15` → `svgY = cy - 44.15 = 380.85mm`
+
+**Three.js coordinate pipeline** (confirmed by reading `SvgHeadstone.tsx` + `AutoFit.tsx`):
+- `dx_3js = 400` (from `getPoints(256)` sampling of cropped_peak.svg after Y-scale 0.9975)
+- `geoToMm = 850/400 = 2.125` ← this is what the code computes AND what Three.js uses → no error here
+- Stone bottom at geo Y=0, stone top at geo Y=400 (targetH_SV)
+- AutoFit camera: `dir = (0,0,1)` → perfectly front-on, zero elevation → perspective distortion is negligible (<3mm)
+
+**Math check**: `svgY = 850 - 306.54 × 2.125 = 198.6mm` is provably correct.
+
+**Current hypothesis**: The visual mismatch may be caused by the stone outline in the SVG not perfectly matching the 3D-rendered shape, causing the user to misalign when overlaying. The `cropped_peak.svg` has a Y-scale transform `matrix(1,0,0,0.9975,0,0)` in the SVG source that `computePathBounds` ignores (reads raw path from `<defs>` without applying the parent `<g>` transform). Effect is a ~0.25% Y stretch in the SVG outline → 1.6mm difference at the stone bottom.
+
+**Next steps**:
+- Apply the `<g transform>` matrix when extracting path coordinates in `computePathBounds`
+- Add an SVG debug comment showing all computed values (`dx`, `geoToMm`, per-inscription `xPos`/`yPos`/`svgX`/`svgY`) to help verify
+- Check whether `cropped_peak.svg`'s 0.9975 Y-scale is significant enough to cause visible misalignment at the bottom
+
+---
+
+### 📌 Pending / Next Steps (2026-06-02)
+
+- [ ] **SVG export coordinate fix**: Apply `<g transform>` Y-scale when computing path bounds in `computePathBounds()` — so stone outline exactly matches Three.js rendering
+- [ ] **SVG debug mode**: Add `?debug=1` query param to the export endpoint to include SVG comments with all computed values for troubleshooting
+- [ ] **Supplier email template**: Polish the HTML email body sent to supplier — add headstone image, nicer formatting
+- [ ] **Retrieve Stripe keys**: Set `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and `STRIPE_SECRET_KEY` from Stripe dashboard → `.env.local` + Vercel env vars
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
 
 ---
 
@@ -9406,4 +9525,4 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
-*End of STARTER.md - Last updated: May 5, 2026*
+*End of STARTER.md - Last updated: June 2, 2026*

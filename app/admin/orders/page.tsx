@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { and, desc, eq, inArray, isNull, ne } from 'drizzle-orm';
+import { ThumbnailModal } from './_components/ThumbnailModal';
 import { db } from '#/lib/db/index';
-import { accounts, orders, payments, profiles } from '#/lib/db/schema';
+import { accounts, orders, payments, profiles, projects } from '#/lib/db/schema';
 import {
   EmptyState,
   FilterTab,
@@ -79,11 +80,14 @@ export default async function AdminOrdersPage({
       lastName: profiles.lastName,
       organization: profiles.organization,
       paidOrderId: completedPayments.orderId,
+      screenshotPath: projects.screenshotPath,
+      thumbnailPath: projects.thumbnailPath,
     })
     .from(orders)
     .leftJoin(accounts, eq(orders.accountId, accounts.id))
     .leftJoin(profiles, eq(accounts.id, profiles.accountId))
     .leftJoin(completedPayments, eq(completedPayments.orderId, orders.id))
+    .leftJoin(projects, eq(orders.projectId, projects.id))
     .where(whereClause)
     .orderBy(desc(orders.createdAt));
 
@@ -125,59 +129,105 @@ export default async function AdminOrdersPage({
             <table className="min-w-full divide-y divide-gray-100 text-sm dark:divide-gray-700">
               <thead className="bg-gray-50 text-left text-xs text-gray-500 uppercase dark:bg-gray-700/50 dark:text-gray-400">
                 <tr>
-                  <th className="px-6 py-3 font-medium tracking-wide">
-                    Invoice #
-                  </th>
-                  <th className="px-6 py-3 font-medium tracking-wide">
-                    Customer
-                  </th>
-                  <th className="px-6 py-3 font-medium tracking-wide">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 font-medium tracking-wide">Total</th>
-                  <th className="px-6 py-3 font-medium tracking-wide">
-                    Created
-                  </th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Actions</th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Design</th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Invoice #</th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Customer</th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Status</th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Total</th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Ordered</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {orderRows.map((order) => (
-                  <tr
-                    key={order.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                  >
-                    <td className="px-6 py-4">
-                      <Link
-                        href={`/admin/orders/${order.id}`}
-                        className="font-medium text-gray-900 hover:text-blue-700 dark:text-gray-100 dark:hover:text-blue-300"
-                      >
-                        {order.invoiceNumber || 'Draft invoice'}
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4 text-gray-700 dark:text-gray-300">
-                      <div>{getDisplayName(order)}</div>
-                      <div className="text-xs text-gray-400 dark:text-gray-500">
-                        {order.email}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-2">
-                        <StatusBadge status={order.status} />
-                        {order.paidOrderId ? (
-                          <span className="text-xs text-green-600 dark:text-green-400">
-                            Paid
+                {orderRows.map((order) => {
+                  const thumb = order.thumbnailPath || order.screenshotPath;
+                  return (
+                    <tr
+                      key={order.id}
+                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    >
+                      {/* Actions */}
+                      <td className="px-4 py-3 whitespace-nowrap">
+                        <div className="flex flex-col gap-1">
+                          <Link
+                            href={`/admin/orders/${order.id}/invoice`}
+                            className="text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline dark:text-blue-400 dark:hover:text-blue-200"
+                          >
+                            View
+                          </Link>
+                          <Link
+                            href={`/admin/orders/${order.id}/edit`}
+                            className="text-xs font-medium text-orange-600 hover:text-orange-800 hover:underline dark:text-orange-400 dark:hover:text-orange-200"
+                          >
+                            Admin Edit
+                          </Link>
+                          <a
+                            href={`/api/orders/${order.id}/export-svg`}
+                            download
+                            className="text-xs font-medium text-purple-600 hover:text-purple-800 hover:underline dark:text-purple-400 dark:hover:text-purple-200"
+                          >
+                            Export SVG
+                          </a>
+                        </div>
+                      </td>
+
+                      {/* Design thumbnail */}
+                      <td className="px-4 py-3">
+                        {thumb ? (
+                          <ThumbnailModal
+                            src={thumb}
+                            fullSrc={order.screenshotPath || thumb}
+                          />
+                        ) : (
+                          <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-600 dark:bg-red-900/30 dark:text-red-400">
+                            custom
                           </span>
-                        ) : null}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-gray-700 dark:text-gray-300">
-                      {formatMoney(order.totalCents)}
-                    </td>
-                    <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
-                      {formatDate(order.createdAt)}
-                    </td>
-                  </tr>
-                ))}
+                        )}
+                      </td>
+
+                      {/* Invoice # + Details link */}
+                      <td className="px-4 py-3">
+                        <div className="font-medium text-gray-900 dark:text-gray-100">
+                          {order.invoiceNumber || '—'}
+                        </div>
+                        <Link
+                          href={`/admin/orders/${order.id}`}
+                          className="text-xs text-gray-500 hover:text-gray-700 hover:underline dark:text-gray-400 dark:hover:text-gray-200"
+                        >
+                          Details
+                        </Link>
+                      </td>
+
+                      {/* Customer */}
+                      <td className="px-4 py-3 text-gray-700 dark:text-gray-300">
+                        <div>{getDisplayName(order)}</div>
+                        <div className="text-xs text-gray-400 dark:text-gray-500">
+                          {order.email}
+                        </div>
+                      </td>
+
+                      {/* Status */}
+                      <td className="px-4 py-3">
+                        <div className="flex flex-col gap-1">
+                          <StatusBadge status={order.status} />
+                          {order.paidOrderId ? (
+                            <span className="text-xs text-green-600 dark:text-green-400">Paid ✓</span>
+                          ) : null}
+                        </div>
+                      </td>
+
+                      {/* Total */}
+                      <td className="px-4 py-3 text-gray-700 dark:text-gray-300 font-medium">
+                        {formatMoney(order.totalCents)}
+                      </td>
+
+                      {/* Ordered date */}
+                      <td className="px-4 py-3 text-gray-500 dark:text-gray-400">
+                        {formatDate(order.createdAt)}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -186,3 +236,5 @@ export default async function AdminOrdersPage({
     </div>
   );
 }
+
+

@@ -248,6 +248,12 @@ export const orders = pgTable('orders', {
   totalCents: integer('total_cents').notNull().default(0),
   currency: text('currency').notNull().default('AUD'),
   invoiceNumber: text('invoice_number').unique(),
+  notes: text('notes'),
+  paidAt: timestamp('paid_at', { withTimezone: true }),
+  factoryOrderAt: timestamp('factory_order_at', { withTimezone: true }),
+  factoryFinishAt: timestamp('factory_finish_at', { withTimezone: true }),
+  shippedAt: timestamp('shipped_at', { withTimezone: true }),
+  processedAt: timestamp('processed_at', { withTimezone: true }),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
 }, (t) => ({
