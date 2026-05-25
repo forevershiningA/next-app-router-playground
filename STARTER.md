@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-02
+**Last Updated:** 2026-05-25
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -154,6 +154,83 @@ The admin Edit page calls this API when "Mail Selected" is clicked with at least
 - [ ] **SVG debug mode**: Add `?debug=1` query param to the export endpoint to include SVG comments with all computed values for troubleshooting
 - [ ] **Supplier email template**: Polish the HTML email body sent to supplier — add headstone image, nicer formatting
 - [ ] **Retrieve Stripe keys**: Set `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and `STRIPE_SECRET_KEY` from Stripe dashboard → `.env.local` + Vercel env vars
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
+
+---
+
+## Current Status (2026-05-25) — GSC Analysis & SEO Indexing Fixes
+
+### 🔍 Google Search Console Analysis (forevershining.org)
+
+GSC data as of 2026-05-25:
+- **2,100 pages indexed** — green trend rising since ~May 7 (positive signal)
+- **1,370 not indexed** breakdown:
+  | Reason | Count |
+  |--------|-------|
+  | Discovered – not currently indexed | 1,147 |
+  | Crawled – not indexed | 204 |
+  | Page has redirect | 10 |
+  | Soft 404 | 3 |
+  | Noindex tag | 1 |
+  | Duplicate without canonical | 1 |
+
+Root causes identified:
+1. **Near-duplicate content** — intro paragraph was picked from 4 templates by `parseInt(design.id) % 4`; within the same category/product, hundreds of pages were nearly identical
+2. **Fake structured data review** — same hardcoded `"Margaret T."` review with `4.8/247` rating on all 3,114 design pages → Google spam signal
+3. **Zero pre-rendering** — `generateStaticParams()` returned `[]`; every Googlebot hit triggered a cold ISR render
+4. **Broken sitemap image entries** — ~73 design pages referenced screenshots that didn't exist on disk
+
+---
+
+### ✅ Fix 1 — Unique Per-Design Intro Content (`components/DesignContentBlock.tsx`)
+
+Replaced the 4-template rotating `generateIntro()` with a truly unique paragraph per design:
+- Decodes `design.inscriptions` HTML entities and extracts the first ~10 words as a quoted inscription snippet
+- Incorporates `design.motifNames`, `design.shapeName`, `categoryTitle`, and `productType`
+- Falls back to shape + motif description when inscriptions are absent
+- Eliminates near-duplicate content across all 3,114 gallery pages — the primary indexing blocker
+
+> **Privacy note**: `design.inscriptions` in `SavedDesignMetadata` is the raw customer inscription text. Using the first 10 words as a snippet is intentional — it is already publicly visible on the design preview screenshot, and it makes each page genuinely unique. Do NOT render full inscription text in SSR (personal names/dates of people still living).
+
+---
+
+### ✅ Fix 2 — Removed Fake Review Structured Data (`app/designs/[productType]/[category]/[slug]/page.tsx`)
+
+Removed the hardcoded `aggregateRating` (4.8 / 247 reviews) and `review` (author: "Margaret T.") blocks from the Product JSON-LD schema. These were **identical** across all 3,114 design pages — Google detects fabricated identical reviews and can suppress or penalise the entire site's structured data.
+
+If real reviews become available (e.g. from a reviews DB table), add `aggregateRating` at the product-type level only (not per-design page).
+
+---
+
+### ✅ Fix 3 — Sitemap Filtered to Designs With Screenshots (`app/sitemap.ts`)
+
+Added `getScreenshotIds()` using `fs.readdirSync('public/screenshots/v2026-3d')`:
+- Builds a `Set<string>` of design IDs with a real `.png` on disk (excludes `_small` variants)
+- `indexableDesigns` only includes designs where `screenshotIds.has(design.id)` is true
+- Eliminated ~73 broken `images:` entries (out of 3,114) pointing to non-existent PNGs
+- Category pages still use the full `designs` array for `lastModified` tracking
+
+---
+
+### ✅ Fix 4 — Pre-render Top 500 Designs at Build Time (`app/designs/.../page.tsx`)
+
+Changed `generateStaticParams()` from `return []` to returning the 500 most-recently added designs:
+```typescript
+return getAllSavedDesigns()
+  .sort((a, b) => parseInt(b.id) - parseInt(a.id))
+  .slice(0, 500)
+  .map((design) => ({ productType: design.productSlug, category: design.category, slug: design.slug }));
+```
+These pages are now pre-rendered as static HTML at build time. Googlebot no longer triggers cold ISR renders for the most-visited URLs. Remaining ~2,600 pages continue to use `revalidate = 86400` ISR.
+
+---
+
+### 📌 Pending / Next Steps (2026-05-25)
+
+- [ ] **Monitor GSC weekly** — expect the 1,147 "Discovered – not indexed" to reduce over 2–4 weeks as Google re-crawls. Trigger reindex via GSC URL Inspection on the most important category pages
+- [ ] **Request GSC reindex** of `/sitemap.xml` after this deployment so Google picks up the cleaned sitemap
+- [ ] **Improve category page content** — `/designs/[productType]/[category]` pages may be among the 204 "Crawled – not indexed"; adding more unique descriptive text per category could help
+- [ ] **Add real reviews** — if a reviews table exists or is added to the DB, surface `aggregateRating` on product-type pages only (not individual design pages)
 - [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
 
 ---
