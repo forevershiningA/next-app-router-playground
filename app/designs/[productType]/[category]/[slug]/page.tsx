@@ -71,10 +71,17 @@ interface SavedDesignPageProps {
   }>;
 }
 
-// Generate static params for popular designs
+// Pre-render the 500 most recently added designs at build time (ISR for the rest)
 export async function generateStaticParams() {
-  // In production, this would generate paths for all designs
-  return [];
+  const { getAllSavedDesigns } = await import('#/lib/saved-designs-data');
+  return getAllSavedDesigns()
+    .sort((a, b) => parseInt(b.id) - parseInt(a.id))
+    .slice(0, 500)
+    .map((design) => ({
+      productType: design.productSlug,
+      category: design.category,
+      slug: design.slug,
+    }));
 }
 
 // Enable ISR - revalidate every 24 hours
@@ -355,26 +362,6 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
             }
           }
         },
-        "aggregateRating": {
-          "@type": "AggregateRating",
-          "ratingValue": "4.8",
-          "bestRating": "5",
-          "worstRating": "1",
-          "reviewCount": "247"
-        },
-        "review": {
-          "@type": "Review",
-          "reviewRating": {
-            "@type": "Rating",
-            "ratingValue": "5",
-            "bestRating": "5"
-          },
-          "author": {
-            "@type": "Person",
-            "name": "Margaret T."
-          },
-          "reviewBody": "Beautiful craftsmanship and very professional service. The 3D preview made it easy to get exactly what we wanted."
-        }
       },
       // BreadcrumbList Schema
       {

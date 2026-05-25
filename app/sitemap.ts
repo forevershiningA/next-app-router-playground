@@ -1,4 +1,6 @@
 import { MetadataRoute } from 'next';
+import fs from 'fs';
+import path from 'path';
 import { getAllSavedDesigns, PRODUCT_STATS } from '#/lib/saved-designs-data';
 
 const BASE_URL = 'https://forevershining.org';
@@ -9,8 +11,25 @@ export const revalidate = 86400;
 // Approximate date the design gallery launched (from GSC indexing chart)
 const SITE_LAUNCH_DATE = new Date('2026-02-13');
 
+/** IDs of designs that have a real screenshot on disk — avoids broken image entries in sitemap */
+function getScreenshotIds(): Set<string> {
+  const dir = path.join(process.cwd(), 'public', 'screenshots', 'v2026-3d');
+  if (!fs.existsSync(dir)) return new Set();
+  return new Set(
+    fs.readdirSync(dir)
+      .filter((f) => f.endsWith('.png') && !f.includes('_small'))
+      .map((f) => f.replace('.png', ''))
+  );
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const designs = getAllSavedDesigns();
+  const screenshotIds = getScreenshotIds();
+
+  // Only include designs that have a screenshot — skip broken image entries
+  const indexableDesigns = screenshotIds.size > 0
+    ? designs.filter((d) => screenshotIds.has(d.id))
+    : designs;
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -44,9 +63,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  // Individual design pages — use the design's own timestamp ID as the actual creation date
-  // Also include the screenshot image so Google Images can index the design preview
-  const designPages: MetadataRoute.Sitemap = designs.map((design) => ({
+  // Individual design pages — only designs with screenshots to avoid broken image entries
+  const designPages: MetadataRoute.Sitemap = indexableDesigns.map((design) => ({
     url: `${BASE_URL}/designs/${design.productSlug}/${design.category}/${design.slug}`,
     lastModified: new Date(parseInt(design.id)),
     changeFrequency: 'monthly' as const,

@@ -48,23 +48,35 @@ export default function DesignContentBlock({
   const region = getRegionFromMlDir(design.mlDir);
   const locale = LOCALIZED_CONTENT[region];
   
-  // Generate intro paragraph
+  // Generate a unique intro paragraph per design using its actual inscription, motifs and shape.
+  // This avoids near-duplicate content across designs in the same category/product.
   const generateIntro = () => {
     const shape = shapeName ? `${shapeName.toLowerCase()}-shaped ` : '';
     const material = simplifiedProductName.toLowerCase();
-    const finish = material.includes('laser') ? 'laser-etched' : 
+    const finish = material.includes('laser') ? 'laser-etched' :
                    material.includes('traditional') ? 'traditional engraved' : 'laser-etched';
-    
-    const intros = [
-      `This ${categoryTitle.toLowerCase()} design features a ${shape}${material} ${productType} with ${finish} detailing. Perfect for creating a lasting tribute that reflects personality and cherished memories.`,
-      `Create a meaningful ${categoryTitle.toLowerCase()} with this ${shape}${material} ${productType}. The ${finish} finish ensures exceptional clarity and durability for generations to come.`,
-      `A beautiful ${shape}${material} ${productType} designed for ${categoryTitle.toLowerCase()}s. ${finish.charAt(0).toUpperCase() + finish.slice(1)} craftsmanship guarantees a timeless memorial.`,
-      `Design your ${categoryTitle.toLowerCase()} with this elegant ${shape}${material} ${productType}. ${finish.charAt(0).toUpperCase() + finish.slice(1)} detailing provides stunning visual impact and lasting quality.`
-    ];
-    
-    // Use design ID to deterministically select intro (keeps it consistent per design)
-    const index = parseInt(design.id) % intros.length;
-    return intros[index];
+    const finishCap = finish.charAt(0).toUpperCase() + finish.slice(1);
+
+    // Decode HTML entities and extract a meaningful inscription snippet (first ~10 words)
+    const rawInscription = design.inscriptions || '';
+    const decodedInscription = rawInscription
+      .replace(/&apos;/g, "'").replace(/&amp;/g, '&').replace(/&quot;/g, '"')
+      .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+    const inscriptionWords = decodedInscription.trim().split(/\s+/).filter(Boolean);
+    const snippet = inscriptionWords.slice(0, 10).join(' ');
+    const hasSnippet = snippet.length > 8;
+
+    // Build motif descriptor
+    const motifDesc = design.motifNames.length > 0
+      ? ` adorned with ${design.motifNames.slice(0, 2).join(' and ')} ${design.motifNames.length > 1 ? 'motifs' : 'motif'}`
+      : '';
+
+    if (hasSnippet) {
+      return `This ${categoryTitle.toLowerCase()} ${shape}${material} ${productType}${motifDesc} carries the inscription: "${snippet}${inscriptionWords.length > 10 ? '…' : ''}". ${finishCap} to the highest standard, it can be fully personalised online — adjust the text, fonts, motifs and layout with an instant 3D preview.`;
+    }
+
+    // Fallback when inscription is absent: still unique via shape + motifs
+    return `A ${shape}${material} ${productType}${motifDesc} for ${categoryTitle.toLowerCase()}s. ${finishCap} craftsmanship ensures lasting clarity, and every detail — fonts, motifs, inscriptions — can be changed online with a live 3D preview before you order.`;
   };
 
   // Generate design notes
