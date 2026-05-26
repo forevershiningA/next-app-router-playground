@@ -1,6 +1,9 @@
 import { notFound } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { desc, eq } from 'drizzle-orm';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Order Detail' };
 import { db } from '#/lib/db/index';
 import {
   accounts,

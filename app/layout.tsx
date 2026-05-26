@@ -6,13 +6,11 @@ import { data as internalData } from '#/app/_internal/_data';
 import { Metadata } from 'next';
 import { Geist, Geist_Mono, Playfair_Display } from 'next/font/google';
 import ErrorBoundary from '#/components/ErrorBoundary';
-import RouterBinder from '#/components/system/RouterBinder';
+import ClientShell from '#/components/ClientShell';
 import MobileHeader from '#/components/MobileHeader';
 import MainContent from '#/components/MainContent';
-import ConditionalCanvas from '#/components/ConditionalCanvas';
 import ConditionalNav from '#/components/ConditionalNav';
 import MaterialsLoader from '#/components/MaterialsLoader';
-import DefaultDesignLoader from '#/components/DefaultDesignLoader';
 import ShapesLoader from '#/components/ShapesLoader';
 import BordersLoader from '#/components/BordersLoader';
 import MotifsLoader from '#/components/MotifsLoader';
@@ -105,8 +103,7 @@ export default async function RootLayout({
         style={{ background: 'transparent' }}
       >
         <ErrorBoundary>
-          <RouterBinder /> {/* ← mount once, early */}
-          <DefaultDesignLoader />
+          <ClientShell />
           <MaterialsLoader materials={materials} />
           <ShapesLoader shapes={shapes} />
           <BordersLoader borders={borders} />
@@ -114,7 +111,6 @@ export default async function RootLayout({
           <MobileHeader />
           <ConditionalNav items={demos} />
           <MainContent>
-            <ConditionalCanvas />
             {children}
           </MainContent>
         </ErrorBoundary>

@@ -4,6 +4,8 @@ import type { Metadata } from 'next';
 import { db } from '#/lib/db/index';
 import { sharedDesigns, projects } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
+import { buildPdfQuoteFromProject } from '#/lib/design-quote';
+import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
 
 type Props = { params: Promise<{ token: string }> };
 
@@ -66,10 +68,7 @@ export default async function SharedDesignPage({ params }: Props) {
     .catch(() => {});
 
   const thumbnail = project.thumbnailPath || project.screenshotPath || '/screen.png';
-  const createdDate = new Date(project.createdAt);
-  const year = createdDate.getFullYear();
-  const month = String(createdDate.getMonth() + 1).padStart(2, '0');
-  const htmlQuotePath = `/saved-designs/html/${year}/${month}/design_${project.id}.html`;
+  const priceQuote = buildPdfQuoteFromProject(project as any);
 
   const currencyFormatter = new Intl.NumberFormat('en-AU', {
     style: 'currency',
@@ -129,16 +128,12 @@ export default async function SharedDesignPage({ params }: Props) {
             </div>
 
             {/* Quote */}
-            <div className="flex flex-col gap-2">
-              <p className="text-xs font-medium uppercase tracking-widest text-white/40">
-                Price Quote
-              </p>
-              <iframe
-                src={htmlQuotePath}
-                className="w-full flex-1 min-h-[460px] rounded-xl border border-white/20 bg-white"
-                title="Design Price Quote"
-              />
-            </div>
+              <div className="flex flex-col gap-2">
+                <p className="text-xs font-medium uppercase tracking-widest text-white/40">
+                  Price Quote
+                </p>
+                <PriceQuoteDisplay quote={priceQuote} />
+              </div>
           </div>
 
           {/* CTA */}

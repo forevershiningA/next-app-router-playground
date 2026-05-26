@@ -1,6 +1,9 @@
 import { desc, eq, like, or } from 'drizzle-orm';
+import type { Metadata } from 'next';
 import { db } from '#/lib/db/index';
 import { accounts, projects } from '#/lib/db/schema';
+import { ThumbnailModal } from '../orders/_components/ThumbnailModal';
+import { EditDesignButton } from '../_components/EditDesignButton';
 import {
   EmptyState,
   PageIntro,
@@ -10,6 +13,8 @@ import {
   formatMoney,
   requireAdminSession,
 } from '../_components/admin-utils';
+
+export const metadata: Metadata = { title: 'Designs' };
 
 type DesignsPageProps = { searchParams: Promise<{ q?: string }> };
 
@@ -29,6 +34,8 @@ export default async function AdminDesignsPage({
       totalPriceCents: projects.totalPriceCents,
       createdAt: projects.createdAt,
       email: accounts.email,
+      screenshotPath: projects.screenshotPath,
+      thumbnailPath: projects.thumbnailPath,
     })
     .from(projects)
     .leftJoin(accounts, eq(projects.accountId, accounts.id))
@@ -83,6 +90,7 @@ export default async function AdminDesignsPage({
               <thead className="bg-gray-50 text-left text-xs text-gray-500 uppercase dark:bg-gray-700/50 dark:text-gray-400">
                 <tr>
                   <th className="px-6 py-3 font-medium tracking-wide">Title</th>
+                  <th className="px-4 py-3 font-medium tracking-wide">Thumbnail</th>
                   <th className="px-6 py-3 font-medium tracking-wide">
                     Designer
                   </th>
@@ -106,6 +114,29 @@ export default async function AdminDesignsPage({
                       <div className="text-xs text-gray-400 dark:text-gray-500">
                         {design.id}
                       </div>
+                    </td>
+                    <td className="px-4 py-3">
+                      {design.thumbnailPath || design.screenshotPath ? (
+                        <div className="flex flex-col items-start gap-1">
+                          <ThumbnailModal
+                            src={design.thumbnailPath || design.screenshotPath!}
+                            fullSrc={design.screenshotPath || design.thumbnailPath!}
+                            alt={design.title ?? 'Design preview'}
+                            thumbSize="h-16 w-16"
+                          />
+                          <a
+                            href={`/design/${design.id}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs font-medium text-purple-600 hover:underline dark:text-purple-400"
+                          >
+                            View Design
+                          </a>
+                          <EditDesignButton projectId={design.id} />
+                        </div>
+                      ) : (
+                        <span className="inline-block h-16 w-16 rounded bg-gray-100 dark:bg-gray-700" />
+                      )}
                     </td>
                     <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
                       {design.email || '—'}

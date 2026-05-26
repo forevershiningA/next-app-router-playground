@@ -33,6 +33,26 @@ interface Props {
   additions: PDFQuote['additions'];
 }
 
+function CopyText({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false);
+  function handleCopy() {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  }
+  return (
+    <button
+      onClick={handleCopy}
+      title="Click to copy"
+      className="text-left hover:text-blue-600 dark:hover:text-blue-400 transition-colors cursor-copy"
+    >
+      &ldquo;{text}&rdquo;
+      {copied && <span className="ml-2 text-green-600 dark:text-green-400 font-normal text-xs">Copied!</span>}
+    </button>
+  );
+}
+
 export function DesignElementsSection({ orderId, inscriptions, motifs, additions }: Props) {
   const elements: DesignElement[] = [
     ...inscriptions.map((i) => ({ kind: 'inscription' as const, ...i })),
@@ -149,7 +169,9 @@ export function DesignElementsSection({ orderId, inscriptions, motifs, additions
               <tbody className="text-gray-700 dark:text-gray-300 divide-y divide-gray-50 dark:divide-gray-700/50">
                 {inscriptions.map((ins) => (
                   <tr key={ins.id} className={checked.has(ins.id) ? 'bg-blue-50 dark:bg-blue-900/10' : ''}>
-                    <td className="py-1.5 pr-4 font-medium">&ldquo;{ins.text}&rdquo;</td>
+                    <td className="py-1.5 pr-4 font-medium">
+                      <CopyText text={ins.text} />
+                    </td>
                     <td className="py-1.5 pr-4 text-gray-500">{ins.font}</td>
                     <td className="py-1.5 pr-4">{ins.sizeMm}</td>
                     <td className="py-1.5 pr-4">{ins.colorName}</td>
@@ -189,7 +211,13 @@ export function DesignElementsSection({ orderId, inscriptions, motifs, additions
                         <img src={m.thumbnail} alt="" className="h-8 w-8 object-contain" />
                       ) : <span className="text-gray-300">—</span>}
                     </td>
-                    <td className="py-1.5 pr-4 capitalize">{m.name}</td>
+                    <td className="py-1.5 pr-4 capitalize">
+                      {m.thumbnail ? (
+                        <a href={m.thumbnail} target="_blank" rel="noopener noreferrer" className="hover:underline text-blue-600 dark:text-blue-400">
+                          {m.name}
+                        </a>
+                      ) : m.name}
+                    </td>
                     <td className="py-1.5 pr-4">{m.heightMm}</td>
                     <td className="py-1.5 pr-4">{m.colorName}</td>
                     <td className="py-1.5 text-right">A$ {m.amount.toFixed(2)}</td>

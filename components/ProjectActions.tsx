@@ -7,6 +7,8 @@ import { captureDesignSnapshot, applyDesignSnapshot } from '#/lib/project-serial
 import type { PricingBreakdown, ProjectSummary, ProjectRecordWithState } from '#/lib/project-schemas';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
+import QuickEnquiryForm from '#/components/QuickEnquiryForm';
+
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
   currency: 'AUD',
@@ -275,6 +277,7 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
           })}
         </ul>
       </div>
+      <QuickEnquiryForm projectId={currentProjectId} />
       </div>
     </>
   );

@@ -78,6 +78,9 @@ export default function ConditionalCanvas() {
   // Hide canvas on admin pages
   const isAdminPage = pathname === '/admin' || pathname?.startsWith('/admin/');
 
+  // Hide canvas on /design/[id] share pages
+  const isDesignSharePage = pathname?.startsWith('/design/');
+
   // Hide canvas on orders page (account-area page, same treatment as my-account)
   const isOrdersPage =
     pathname === '/orders' || pathname?.startsWith('/orders/');
@@ -102,6 +105,7 @@ export default function ConditionalCanvas() {
         isCheckPricePage ||
         isMyAccountPage ||
         isAdminPage ||
+        isDesignSharePage ||
         isOrdersPage) &&
         !isSelectSizePage &&
         !isInscriptionsPage &&
@@ -143,6 +147,7 @@ export default function ConditionalCanvas() {
       isCheckPricePage ||
       isMyAccountPage ||
       isAdminPage ||
+      isDesignSharePage ||
       isOrdersPage) &&
       !isSelectSizePage &&
       !isInscriptionsPage &&

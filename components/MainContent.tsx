@@ -17,6 +17,7 @@ export default function MainContent({
   // Check if we're on any /designs route
   const isDesignsRoute = pathname?.startsWith('/designs');
   const isAdminRoute = pathname?.startsWith('/admin');
+  const isDesignShareRoute = pathname?.startsWith('/design/');
 
   // Check if we're on a design list page (product or category level)
   const segments = pathname?.split('/').filter((s) => s) || [];
@@ -36,7 +37,7 @@ export default function MainContent({
   return (
     <div
       className={
-        !isAdminRoute && !isDesignsRoute && !isHomepage && isSidebarOpen
+        !isAdminRoute && !isDesignShareRoute && !isDesignsRoute && !isHomepage && isSidebarOpen
           ? 'lg:pl-[400px]'
           : ''
       }

@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { and, desc, eq, inArray, isNull, ne } from 'drizzle-orm';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Orders' };
 import { ThumbnailModal } from './_components/ThumbnailModal';
 import { db } from '#/lib/db/index';
 import { accounts, orders, payments, profiles, projects } from '#/lib/db/schema';
@@ -161,23 +164,25 @@ export default async function AdminOrdersPage({
                           >
                             Admin Edit
                           </Link>
-                          <a
-                            href={`/api/orders/${order.id}/export-svg`}
-                            download
-                            className="text-xs font-medium text-purple-600 hover:text-purple-800 hover:underline dark:text-purple-400 dark:hover:text-purple-200"
-                          >
-                            Export SVG
-                          </a>
                         </div>
                       </td>
 
                       {/* Design thumbnail */}
                       <td className="px-4 py-3">
                         {thumb ? (
-                          <ThumbnailModal
-                            src={thumb}
-                            fullSrc={order.screenshotPath || thumb}
-                          />
+                          <div className="flex flex-col items-start gap-1">
+                            <ThumbnailModal
+                              src={thumb}
+                              fullSrc={order.screenshotPath || thumb}
+                            />
+                            <a
+                              href={`/api/orders/${order.id}/export-svg`}
+                              download
+                              className="text-xs font-medium text-purple-600 hover:text-purple-800 hover:underline dark:text-purple-400 dark:hover:text-purple-200"
+                            >
+                              Export SVG
+                            </a>
+                          </div>
                         ) : (
                           <span className="inline-block rounded bg-red-100 px-2 py-0.5 text-xs font-medium text-red-600 dark:bg-red-900/30 dark:text-red-400">
                             custom

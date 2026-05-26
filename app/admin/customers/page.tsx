@@ -1,5 +1,8 @@
 import Link from 'next/link';
 import { desc, eq } from 'drizzle-orm';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Customers' };
 import { db } from '#/lib/db/index';
 import { accounts, profiles } from '#/lib/db/schema';
 import {

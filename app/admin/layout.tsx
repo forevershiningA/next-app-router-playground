@@ -1,9 +1,16 @@
+import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { getServerSession } from '#/lib/auth/session';
 import AdminNav from './_components/AdminNav';
 import AdminLoginForm from './_components/AdminLoginForm';
 import { AdminThemeProvider } from './_components/AdminThemeProvider';
 import { ThemeToggle } from './_components/ThemeToggle';
+
+export const metadata: Metadata = {
+  title: { default: 'Admin', template: '%s | Admin - Forever Shining' },
+  description: 'Forever Shining admin panel.',
+  robots: { index: false, follow: false },
+};
 
 export default async function AdminLayout({
   children,

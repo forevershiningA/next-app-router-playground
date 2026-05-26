@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-25
+**Last Updated:** 2026-05-26
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -39,7 +39,106 @@
 
 ---
 
-## Current Status (2026-06-02) — Admin Order View/Edit, Supplier Mail & SVG Export
+## Current Status (2026-05-26) — Admin Improvements, Public Share Page & Quick Enquiry
+
+### ✅ Chunk Loading Timeout Fix (`app/layout.tsx`)
+
+Heavy client-only modules (`RouterBinder`, `DefaultDesignLoader`, `ConditionalCanvas`) were statically imported in the server layout, causing `Loading chunk app/layout failed` timeout errors on `/admin`.
+
+**Fix**: created `components/ClientShell.tsx` — a `'use client'` wrapper that lazy-loads all three via `next/dynamic({ ssr: false })`. The server layout now imports only `ClientShell` instead of the heavy modules directly. (`ssr: false` is not permitted in Server Components — it must live in a client component.)
+
+---
+
+### ✅ Admin Orders Page Improvements
+
+`app/admin/orders/page.tsx`:
+- Thumbnail image doubled in size (`h-12` → `h-24`)
+- "Export SVG" button moved below the thumbnail in the Design cell
+
+`app/admin/orders/[id]/edit/_design-elements-section.tsx`:
+- Motif name and thumbnail image are now links opening the SVG in a new tab
+- Inscription text has a **CopyText** inline button — click to copy, shows "Copied!" for 2 s
+
+`app/admin/orders/[id]/edit/page.tsx`:
+- Main design image shown via `ThumbnailModal` (click to view full-size popup)
+
+---
+
+### ✅ Admin Designs Page Improvements
+
+`app/admin/designs/page.tsx`:
+- Added **Thumbnail** column (2nd after Title) using `ThumbnailModal h-16 w-16`
+- Added **Edit Design** button (`app/admin/_components/EditDesignButton.tsx`) — client component that replicates My Account's `handleEdit` flow: `fetch /api/projects/${id}` → `applyDesignSnapshot` → `router.push('/select-size')`
+- Added **View Design** link to `/design/${id}` (public share page)
+
+---
+
+### ✅ Price Quote Display Fix (`components/PriceQuoteDisplay.tsx`)
+
+Old approach: iframe loading static HTML files at `/saved-designs/html/{year}/{month}/design_{id}.html`. Files missing for new designs caused Next.js to serve the 3D designer inside the iframe.
+
+**Fix**: replaced iframe in `my-account/designs/[id]/page.tsx` and `shared/[token]/page.tsx` with a new `PriceQuoteDisplay` React component that computes the quote inline using `buildPdfQuoteFromProject`.
+
+---
+
+### ✅ Public Share Page (`/design/[id]`)
+
+New shareable URL for any saved design — usable in emails and social media.
+
+**Files created**:
+- `app/api/design/[id]/route.ts` — public (no auth) endpoint returning only `id`, `title`, `designState`
+- `app/design/[id]/page.tsx` — server component with OG/Twitter metadata, Forever Shining logo header, compact title + price, 50%-width clickable design image, "Open in Designer" button, inline Price Quote
+- `app/design/[id]/_open-button.tsx` — `'use client'` component: renders clickable image with hover "Open in Designer" overlay + gold button; both call `handleOpen` which fetches the public API, applies the design snapshot, navigates to `/select-size`
+
+**Shell exclusion**: `ConditionalNav`, `MainContent`, `ConditionalCanvas` all check `pathname?.startsWith('/design/')` to hide the 3D designer shell on share pages.
+
+**Share page layout** (final):
+- Header: Forever Shining logo (`h-20`) left + "Create Your Own" gold CTA right
+- Compact title + price line (side-by-side, below header)
+- Design image at 50% width, centred, clickable (triggers Open in Designer)
+- Price Quote below image
+
+---
+
+### ✅ Admin Payments Page
+
+`app/admin/payments/page.tsx`:
+- Removed the **Ref** column (was causing table overflow)
+- Added **+ Add Payment** CTA button (same style as Add Order)
+
+`app/admin/payments/new/page.tsx` — new payment form matching orders/new style:
+- Fields: Order ID, Provider (Bank Transfer / Stripe / PayPal / PayWay / Cash / Cheque / Other), Transaction/Reference, Amount, Currency, Status, Received At
+- Same header layout (title + description left, "← Back to Payments" right, border-bottom), section heading, 2-col grid, red error box
+
+`app/api/admin/payments/route.ts` — admin-protected POST endpoint inserting into `payments` table.
+
+---
+
+### ✅ Quick Enquiry Form (Designer)
+
+`components/QuickEnquiryForm.tsx` — collapsible dark-themed card added to the `/check-price` page below Saved Designs:
+- Fields: Name, Email*, Phone, Message*
+- Collapses/expands by clicking the header (▲/▼ toggle)
+- On submit: POSTs to `/api/enquiries`, automatically attaches `projectId` (current design) and `accountId` (if logged in)
+- Shows green "✓ Enquiry sent!" success message
+
+`app/api/enquiries/route.ts` — public POST endpoint (no auth required). Saves to the `enquiries` DB table. Admin can view at `/admin/enquiries`.
+
+`components/ProjectActions.tsx` — `<QuickEnquiryForm projectId={currentProjectId} />` added as 3rd card.
+
+---
+
+### 📌 Pending / Next Steps (2026-05-26)
+
+- [ ] **SVG export coordinate fix**: Apply `<g transform>` Y-scale in `computePathBounds()` to fix ~1.6 mm outline mismatch
+- [ ] **Supplier email template**: Polish HTML email body — add headstone image, nicer formatting
+- [ ] **Retrieve Stripe keys**: `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` + `STRIPE_SECRET_KEY` → `.env.local` + Vercel env vars
+- [ ] **Submit sitemap in GSC**: Google Search Console → Sitemaps → `https://forevershining.org/sitemap.xml`
+- [ ] **Test Quick Enquiry end-to-end**: verify submission appears in `/admin/enquiries`
+
+---
+
+
 
 ### ✅ Admin Orders — Invoice View
 

@@ -2,11 +2,15 @@ import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { desc, eq } from 'drizzle-orm';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Edit Order' };
 import { db } from '#/lib/db/index';
 import { accounts, orders, payments, profiles, projects } from '#/lib/db/schema';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import type { PricingBreakdown } from '#/lib/project-schemas';
 import { requireAdminSession } from '../../../_components/admin-utils';
+import { ThumbnailModal } from '../../_components/ThumbnailModal';
 import { CancelOrderButton } from './_cancel-order-button';
 import { DesignElementsSection } from './_design-elements-section';
 
@@ -199,21 +203,13 @@ export default async function AdminOrderEditPage({ params }: Props) {
       <div className="rounded-xl border border-gray-200 bg-white p-5 dark:border-gray-700 dark:bg-gray-800">
         <div className="flex gap-6 items-start">
           {order.screenshotPath ? (
-            <div className="flex-shrink-0 space-y-2">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+            <div className="flex-shrink-0">
+              <ThumbnailModal
                 src={order.screenshotPath}
+                fullSrc={order.screenshotPath}
                 alt="Design preview"
-                className="h-40 w-40 rounded-lg object-contain border border-gray-200 bg-gray-50 dark:border-gray-600 dark:bg-gray-700"
+                thumbSize="h-40 w-40"
               />
-              <a
-                href={order.screenshotPath}
-                target="_blank"
-                rel="noreferrer"
-                className="block text-center text-xs text-blue-600 hover:underline dark:text-blue-400"
-              >
-                Show Large
-              </a>
             </div>
           ) : (
             <div className="flex-shrink-0 h-40 w-40 rounded-lg border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400 dark:border-gray-600">

@@ -1,6 +1,10 @@
 import { desc, eq } from 'drizzle-orm';
+import Link from 'next/link';
 import { db } from '#/lib/db/index';
 import { accounts, orders, payments, profiles } from '#/lib/db/schema';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'Payments' };
 import {
   EmptyState,
   PageIntro,
@@ -42,6 +46,14 @@ export default async function AdminPaymentsPage() {
       <PageIntro
         title="Payments"
         description="Review incoming payment activity across quotes and orders."
+        action={
+          <Link
+            href="/admin/payments/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+          >
+            + Add Payment
+          </Link>
+        }
       />
 
       <SectionCard className="overflow-hidden">
@@ -62,7 +74,6 @@ export default async function AdminPaymentsPage() {
                   <th className="px-6 py-3 font-medium tracking-wide">
                     Provider
                   </th>
-                  <th className="px-6 py-3 font-medium tracking-wide">Ref</th>
                   <th className="px-6 py-3 font-medium tracking-wide">
                     Amount
                   </th>
@@ -91,9 +102,6 @@ export default async function AdminPaymentsPage() {
                     </td>
                     <td className="px-6 py-4 text-gray-900 dark:text-gray-100">
                       {payment.provider}
-                    </td>
-                    <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
-                      {payment.providerRef || '—'}
                     </td>
                     <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
                       {formatMoney(payment.amountCents)}

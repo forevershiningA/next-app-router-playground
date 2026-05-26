@@ -88,7 +88,9 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     pathname?.startsWith('/check-price') ||
     pathname === '/design-menu';
 
-  if (isAdminRoute) {
+  const isDesignShareRoute = pathname?.startsWith('/design/');
+
+  if (isAdminRoute || isDesignShareRoute) {
     return null;
   }
 

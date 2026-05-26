@@ -1,6 +1,10 @@
 import { desc, eq } from 'drizzle-orm';
 import { db } from '#/lib/db/index';
 import { accounts, auditLog } from '#/lib/db/schema';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = { title: 'System' };
+
 import {
   EmptyState,
   PageIntro,

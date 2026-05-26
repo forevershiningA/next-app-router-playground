@@ -7,6 +7,7 @@ import { generateDesignPDF } from '#/lib/pdf-generator';
 import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
+import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
 
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
@@ -56,7 +57,6 @@ export default function DesignDetailPage() {
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState('');
   const [shareDropdownOpen, setShareDropdownOpen] = useState(false);
-  const [iframeHeight, setIframeHeight] = useState(600);
   const shareDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -105,17 +105,15 @@ export default function DesignDetailPage() {
   }
 
   const createdDate = new Date(project.createdAt);
-  const year = createdDate.getFullYear();
-  const month = String(createdDate.getMonth() + 1).padStart(2, '0');
   const thumbnail = project.thumbnailPath || project.screenshotPath || '/screen.png';
   const fullScreenshot = project.screenshotPath || '/screen.png';
-  const htmlQuotePath = `/saved-designs/html/${year}/${month}/design_${project.id}.html`;
   const priceLabel = project.totalPriceCents
     ? currencyFormatter.format(project.totalPriceCents / 100)
     : 'Price TBD';
   const productId = project.designState?.productId;
   const product = productId ? data.products.find((p: any) => p.id === productId) : null;
   const productName = (product as any)?.name || 'Custom memorial design';
+  const priceQuote = buildPdfQuoteFromProject(project);
 
   const getShareUrl = async (): Promise<string> => {
     try {
@@ -203,13 +201,6 @@ export default function DesignDetailPage() {
       alert('Failed to load design. Please try again.');
       setIsLoadingEdit(false);
     }
-  };
-
-  const handleIframeLoad = (e: React.SyntheticEvent<HTMLIFrameElement>) => {
-    try {
-      const doc = e.currentTarget.contentDocument;
-      if (doc) setIframeHeight(doc.documentElement.scrollHeight + 24);
-    } catch { /* cross-origin — keep default */ }
   };
 
   return (
@@ -363,13 +354,7 @@ export default function DesignDetailPage() {
           {/* Price quote — auto-height iframe, no nested scroll */}
           <div>
             <p className="mb-2 text-xs font-medium uppercase tracking-widest text-white/40">Price Quote</p>
-            <iframe
-              src={htmlQuotePath}
-              style={{ height: iframeHeight }}
-              className="w-full rounded-xl border-0 bg-transparent [color-scheme:dark] block"
-              title="Design Price Quote"
-              onLoad={handleIframeLoad}
-            />
+            <PriceQuoteDisplay quote={priceQuote} />
           </div>
         </div>
       </div>

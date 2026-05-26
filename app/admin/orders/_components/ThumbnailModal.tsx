@@ -7,9 +7,11 @@ interface ThumbnailModalProps {
   /** Full-size image shown in the modal. Falls back to src if not provided. */
   fullSrc?: string;
   alt?: string;
+  /** Tailwind size classes for the thumbnail. Defaults to 'h-24 w-24'. */
+  thumbSize?: string;
 }
 
-export function ThumbnailModal({ src, fullSrc, alt = 'Design preview' }: ThumbnailModalProps) {
+export function ThumbnailModal({ src, fullSrc, alt = 'Design preview', thumbSize = 'h-24 w-24' }: ThumbnailModalProps) {
   const modalSrc = fullSrc || src;
   const [open, setOpen] = useState(false);
 
@@ -30,7 +32,7 @@ export function ThumbnailModal({ src, fullSrc, alt = 'Design preview' }: Thumbna
         <img
           src={src}
           alt={alt}
-          className="h-12 w-12 rounded object-contain bg-gray-100 dark:bg-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
+          className={`${thumbSize} rounded object-contain bg-gray-100 dark:bg-gray-700 cursor-pointer hover:opacity-80 transition-opacity`}
         />
       </button>
 
