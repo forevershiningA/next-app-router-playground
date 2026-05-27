@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-26
+**Last Updated:** 2026-05-27
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -36,6 +36,96 @@
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
 30. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
+
+---
+
+## Current Status (2026-05-27) — Admin Charts, Quick Enquiry CTA on Canvas & Striped Tables
+
+### ✅ Admin Dashboard Analytics Charts
+
+Installed **Recharts 3.8.1** (`pnpm add recharts`).
+
+`app/admin/_components/DashboardCharts.tsx` — four chart components:
+- `RevenueOrdersChart` — dual-axis area chart (orders/month left axis, revenue right axis)
+- `OrderStatusChart` — donut/pie chart with percent labels per status
+- `CustomersChart` — bar chart of new customers per month
+- `DesignsChart` — bar chart of new saved designs per month
+
+`app/admin/page.tsx` — added four raw SQL queries via `db.execute(sql`...`)`:
+- Monthly orders + revenue (last 12 months) using `date_trunc('month', ...)` + `to_char(..., 'Mon YY')`
+- Monthly new customers
+- Monthly new designs
+- Orders by status (grouped count)
+
+Results are transformed in JS into a 12-month label series (filling months with 0 if no data). Charts rendered in a 2-row × 2-column responsive grid below the KPI stat cards.
+
+**Recharts 3 type quirks**: `ValueType` and `NameType` are NOT re-exported from the `recharts` package root — define them locally:
+```ts
+type TooltipValue = number | string | ReadonlyArray<number | string>;
+type TooltipName = number | string;
+```
+Pie label function uses `PieLabelRenderProps`; access the slice name via `props.name` (set by `nameKey="status"`).
+
+---
+
+### ✅ Admin Dashboard Top Padding Removed
+
+`app/admin/page.tsx`: changed `py-8` → `pb-8 pt-0` on the outer wrapper `div` to eliminate the gap above the stat cards.
+
+---
+
+### ✅ Quick Enquiry CTA — Moved to Canvas (Below Product Name Chip)
+
+The Quick Enquiry button was relocated from the bottom of the DesignerNav sidebar to the **3D canvas overlay**, stacked directly below the `• Product Name` pill at `top-6 left-6`.
+
+**`components/ThreeScene.tsx`** — changes inside `ProductNameHeader()` (the inner component that renders the canvas overlays):
+- Added `import QuickEnquiryModal from '#/components/QuickEnquiryModal'`
+- Added `const [showQuickEnquiry, setShowQuickEnquiry] = useState(false)` to `ProductNameHeader()`
+- Wrapped the product name chip and new Quick Enquiry button in a shared `absolute top-6 left-6 z-10 hidden lg:flex flex-col gap-2 items-start` container
+- Both elements use `h-8` (explicit fixed height, no `py-*`) so they render at identical height
+- Quick Enquiry button uses same frosted-glass style as the product chip: `bg-black/55 backdrop-blur-md border border-primary/40 rounded-full pl-2.5 pr-3.5 shadow-lg`
+- `<QuickEnquiryModal>` rendered directly in `ProductNameHeader` return
+
+**`components/DesignerNav.tsx`** — the sidebar Quick Enquiry block (pinned below the logo) now has `lg:hidden` so it is a **mobile-only fallback** (hidden on desktop where the canvas button is visible).
+
+**Layout summary**:
+| Breakpoint | Quick Enquiry location |
+|------------|----------------------|
+| Desktop (≥lg) | Canvas overlay, below product name pill |
+| Mobile/tablet (<lg) | Sidebar, below logo header |
+
+---
+
+### ✅ Product Name Chip & Quick Enquiry Button — Equalised Height
+
+Both elements in the canvas overlay now use `h-8` as the single source of truth for height (with `pl-2.5 pr-3.5`, no `py-*`). This prevents the icon inside the button from causing a height discrepancy vs the text-only chip.
+
+---
+
+### ✅ Admin Tables — Alternating Row Striping
+
+Every admin list table now has zebra striping: odd rows are white/transparent, even rows are `bg-gray-100 dark:bg-gray-700/50`. Hover state bumped to `hover:bg-gray-100` on all rows.
+
+Files updated:
+- `app/admin/designs/page.tsx`
+- `app/admin/orders/page.tsx`
+- `app/admin/customers/page.tsx`
+- `app/admin/customers/[id]/page.tsx` (projects table + orders table)
+- `app/admin/enquiries/page.tsx`
+- `app/admin/payments/page.tsx`
+- `app/admin/system/page.tsx`
+- `app/admin/orders/[id]/page.tsx` (order items table + payments table)
+
+Pattern used in all:
+```tsx
+{rows.map((row, index) => (
+  <tr
+    key={row.id}
+    className={`hover:bg-gray-100 dark:hover:bg-gray-700/50 ${
+      index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-700/50' : 'bg-white dark:bg-transparent'
+    }`}
+  >
+```
 
 ---
 
@@ -116,15 +206,18 @@ New shareable URL for any saved design — usable in emails and social media.
 
 ### ✅ Quick Enquiry Form (Designer)
 
-`components/QuickEnquiryForm.tsx` — collapsible dark-themed card added to the `/check-price` page below Saved Designs:
+Two entry points exist for the Quick Enquiry feature — both POST to `app/api/enquiries/route.ts` and attach `projectId`/`accountId` automatically:
+
+1. **Canvas CTA** (`components/ThreeScene.tsx` → `ProductNameHeader()`): Gold-bordered frosted pill button in the 3D canvas, stacked below the `• Product Name` chip at top-left. Desktop only (`hidden lg:flex`). Opens `<QuickEnquiryModal>`.
+2. **Sidebar fallback** (`components/DesignerNav.tsx`): Same button below the logo, visible on mobile/tablet only (`lg:hidden`).
+3. **Check-price card** (`components/QuickEnquiryForm.tsx`): Collapsible dark-themed card on the `/check-price` page below Saved Designs.
+
+`components/QuickEnquiryModal.tsx` — dark-themed modal (matching DesignerNav style), uses `createPortal` to `document.body`:
 - Fields: Name, Email*, Phone, Message*
-- Collapses/expands by clicking the header (▲/▼ toggle)
-- On submit: POSTs to `/api/enquiries`, automatically attaches `projectId` (current design) and `accountId` (if logged in)
-- Shows green "✓ Enquiry sent!" success message
+- Reads `currentProjectId` from Zustand store; attaches it to the POST body if set
+- Shows green "✓ Enquiry sent!" success message and auto-closes
 
 `app/api/enquiries/route.ts` — public POST endpoint (no auth required). Saves to the `enquiries` DB table. Admin can view at `/admin/enquiries`.
-
-`components/ProjectActions.tsx` — `<QuickEnquiryForm projectId={currentProjectId} />` added as 3rd card.
 
 ---
 

@@ -229,10 +229,10 @@ export default async function AdminCustomerDetailPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {projectRows.map((project) => (
+                {projectRows.map((project, index) => (
                   <tr
                     key={project.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className={`hover:bg-gray-100 dark:hover:bg-gray-700/50 ${index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-700/50' : 'bg-white dark:bg-transparent'}`}
                   >
                     <td className="px-6 py-4 text-gray-900 dark:text-gray-100">
                       <div>{project.title}</div>
@@ -283,10 +283,10 @@ export default async function AdminCustomerDetailPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {orderRows.map((order) => (
+                {orderRows.map((order, index) => (
                   <tr
                     key={order.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className={`hover:bg-gray-100 dark:hover:bg-gray-700/50 ${index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-700/50' : 'bg-white dark:bg-transparent'}`}
                   >
                     <td className="px-6 py-4">
                       <Link

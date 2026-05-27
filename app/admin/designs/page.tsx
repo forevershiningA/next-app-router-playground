@@ -104,10 +104,10 @@ export default async function AdminDesignsPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {designRows.map((design) => (
+                {designRows.map((design, index) => (
                   <tr
                     key={design.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className={`hover:bg-gray-100 dark:hover:bg-gray-700/50 ${index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-700/50' : 'bg-white dark:bg-transparent'}`}
                   >
                     <td className="px-6 py-4 text-gray-900 dark:text-gray-100">
                       <div>{design.title}</div>

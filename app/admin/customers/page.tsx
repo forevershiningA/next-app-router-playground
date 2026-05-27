@@ -114,10 +114,10 @@ export default async function AdminCustomersPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {customerRows.map((customer) => (
+                {customerRows.map((customer, index) => (
                   <tr
                     key={customer.id}
-                    className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className={`hover:bg-gray-100 dark:hover:bg-gray-700/50 ${index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-700/50' : 'bg-white dark:bg-transparent'}`}
                   >
                     <td className="px-6 py-4">
                       <Link

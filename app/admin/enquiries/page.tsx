@@ -137,10 +137,10 @@ export default async function AdminEnquiriesPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {enquiryRows.map((enquiry) => (
+                {enquiryRows.map((enquiry, index) => (
                   <tr
                     key={enquiry.id}
-                    className="align-top hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                    className={`align-top hover:bg-gray-100 dark:hover:bg-gray-700/50 ${index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-700/50' : 'bg-white dark:bg-transparent'}`}
                   >
                     <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                       {formatDate(enquiry.createdAt)}

@@ -142,12 +142,12 @@ export default async function AdminOrdersPage({
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-                {orderRows.map((order) => {
+                {orderRows.map((order, index) => {
                   const thumb = order.thumbnailPath || order.screenshotPath;
                   return (
                     <tr
                       key={order.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                      className={`hover:bg-gray-100 dark:hover:bg-gray-700/50 ${index % 2 === 1 ? 'bg-gray-100 dark:bg-gray-700/50' : 'bg-white dark:bg-transparent'}`}
                     >
                       {/* Actions */}
                       <td className="px-4 py-3 whitespace-nowrap">

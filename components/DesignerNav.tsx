@@ -40,6 +40,7 @@ import EmblemOverlayPanel from './EmblemOverlayPanel';
 import EmblemSelectionGrid from '#/app/select-emblems/_ui/EmblemSelectionGrid';
 import ImageSelector from './ImageSelector';
 import SaveDesignModal from './SaveDesignModal';
+import QuickEnquiryModal from './QuickEnquiryModal';
 import ConfirmModal from './ConfirmModal';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
@@ -425,6 +426,7 @@ export default function DesignerNav() {
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
+  const [showQuickEnquiry, setShowQuickEnquiry] = React.useState(false);
 
   // Auto-open save modal when returning from login with ?action=save-design
   useEffect(() => {
@@ -3115,6 +3117,20 @@ export default function DesignerNav() {
             </div>
           </div>
 
+          {/* Quick Enquiry — pinned below the logo (mobile only; desktop shows in canvas) */}
+          <div className="border-b border-white/10 px-4 py-3 lg:hidden">
+            <button
+              type="button"
+              onClick={() => setShowQuickEnquiry(true)}
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+            >
+              <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z" />
+              </svg>
+              Quick Enquiry
+            </button>
+          </div>
+
           {/* Menu Items */}
           <div className="flex-1 space-y-6 overflow-y-auto px-5 py-6 md:space-y-0 md:p-4">
             {/* Primary/Secondary CTAs */}
@@ -3638,6 +3654,10 @@ export default function DesignerNav() {
         onClose={() => setShowSaveDesignModal(false)}
         onSave={handleSaveDesign}
         isSaving={isSavingDesign}
+      />
+      <QuickEnquiryModal
+        isOpen={showQuickEnquiry}
+        onClose={() => setShowQuickEnquiry(false)}
       />
       <ConfirmModal
         isOpen={showNewDesignConfirm}
