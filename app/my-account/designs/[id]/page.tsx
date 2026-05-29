@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { generateDesignPDF } from '#/lib/pdf-generator';
@@ -8,6 +9,8 @@ import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
+
+const EmailShareModal = dynamic(() => import('#/components/EmailShareModal'));
 
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
@@ -57,6 +60,7 @@ export default function DesignDetailPage() {
   const [imagePreviewOpen, setImagePreviewOpen] = useState(false);
   const [copyFeedback, setCopyFeedback] = useState('');
   const [shareDropdownOpen, setShareDropdownOpen] = useState(false);
+  const [shareModalOpen, setShareModalOpen] = useState(false);
   const shareDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -87,7 +91,7 @@ export default function DesignDetailPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#050301] text-white/60">
+      <div className="flex min-h-screen items-center justify-center bg-[#050301] day:bg-stone-100 text-white/60 day:text-gray-400">
         Loading design…
       </div>
     );
@@ -95,8 +99,8 @@ export default function DesignDetailPage() {
 
   if (!project) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#050301] text-white">
-        <p className="text-white/60">Design not found.</p>
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-[#050301] day:bg-stone-100 text-white day:text-gray-900">
+        <p className="text-white/60 day:text-gray-500">Design not found.</p>
         <Link href="/my-account" className="text-[#D4A84F] underline hover:text-[#C49940]">
           ← Back to Saved Designs
         </Link>
@@ -204,16 +208,16 @@ export default function DesignDetailPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white">
+    <div className="relative min-h-screen bg-[#050301] day:bg-stone-100 text-white day:text-gray-900">
       {/* Background gradient */}
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
         aria-hidden
       />
 
       <div className="relative mx-auto w-full max-w-5xl px-6 py-10">
         {/* Breadcrumb */}
-        <nav className="mb-6 flex items-center gap-2 text-sm text-white/50">
+        <nav className="mb-6 flex items-center gap-2 text-sm text-white/50 day:text-gray-400">
           <Link href="/my-account" className="hover:text-[#D4A84F] transition">
             My Account
           </Link>
@@ -222,13 +226,13 @@ export default function DesignDetailPage() {
             Saved Designs
           </Link>
           <span>/</span>
-          <span className="text-white/80 truncate max-w-[200px]">{project.title}</span>
+          <span className="text-white/80 day:text-gray-700 truncate max-w-[200px]">{project.title}</span>
         </nav>
 
         <div className="mb-4">
           <Link
             href="/my-account"
-            className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-[#D4A84F] transition"
+            className="inline-flex items-center gap-1.5 text-sm text-white/50 day:text-gray-500 hover:text-[#D4A84F] transition"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -237,14 +241,14 @@ export default function DesignDetailPage() {
           </Link>
         </div>
 
-        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-8 pt-0 pb-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
+        <div className="rounded-[32px] border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white px-8 pt-0 pb-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-md backdrop-blur-2xl">
           {/* Header — title left, price right */}
-          <div className="mb-[10px] border-b border-white/5 pb-[10px]">
+          <div className="mb-[10px] border-b border-white/5 day:border-gray-100 pb-[10px]">
             <div className="flex items-start justify-between gap-4 pb-[10px]">
               <h1 className="text-2xl font-semibold tracking-tight leading-none">{project.title}</h1>
               <div className="text-right flex-shrink-0 pt-[30px]">
                 <p className="text-2xl font-bold text-[#D4A84F]">{priceLabel}</p>
-                <p className="mt-0.5 text-xs text-white/40">Created {formatDate(createdDate)}</p>
+                <p className="mt-0.5 text-xs text-white/40 day:text-gray-400">Created {formatDate(createdDate)}</p>
               </div>
             </div>
 
@@ -253,7 +257,7 @@ export default function DesignDetailPage() {
               {/* Thumbnail */}
               <button
                 onClick={() => setImagePreviewOpen(true)}
-                className="group relative inline-block rounded-xl bg-black/40 cursor-zoom-in overflow-visible flex-shrink-0"
+                className="group relative inline-block rounded-xl bg-black/40 day:bg-gray-100 cursor-zoom-in overflow-visible flex-shrink-0"
               >
                 <img
                   src={thumbnail}
@@ -275,7 +279,7 @@ export default function DesignDetailPage() {
                     <button
                       type="button"
                       onClick={() => setShareDropdownOpen((o) => !o)}
-                      className="flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-xs font-medium text-white transition hover:bg-white/20 cursor-pointer"
+                      className="flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/10 day:bg-gray-50 px-3 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/20 day:hover:bg-gray-100 cursor-pointer"
                     >
                       <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -283,25 +287,25 @@ export default function DesignDetailPage() {
                       Share
                     </button>
                     {shareDropdownOpen && (
-                      <div className="absolute right-0 top-full mt-1 z-50 w-44 rounded-xl border border-white/10 bg-[#1a1208] shadow-2xl overflow-hidden">
+                      <div className="absolute right-0 top-full mt-1 z-50 w-44 rounded-xl border border-white/10 day:border-gray-200 bg-[#1a1208] day:bg-white shadow-2xl overflow-hidden">
                         <button
                           type="button"
                           onClick={handleCopyShareLink}
-                          className="w-full px-4 py-2.5 text-left text-xs text-white hover:bg-white/10 transition flex items-center gap-2"
+                          className="w-full px-4 py-2.5 text-left text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition flex items-center gap-2"
                         >
                           🔗 {copyFeedback || 'Copy Link'}
                         </button>
                         <button
                           type="button"
-                          onClick={() => { alert('Email share coming soon'); setShareDropdownOpen(false); }}
-                          className="w-full px-4 py-2.5 text-left text-xs text-white hover:bg-white/10 transition flex items-center gap-2"
+                          onClick={() => { setShareDropdownOpen(false); setShareModalOpen(true); }}
+                          className="w-full px-4 py-2.5 text-left text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition flex items-center gap-2"
                         >
                           ✉️ Email
                         </button>
-                        <div className="border-t border-white/10" />
-                        <button type="button" onClick={() => handleShareSocial('facebook')} className="w-full px-4 py-2.5 text-left text-xs text-white/60 hover:bg-white/10 transition">Facebook</button>
-                        <button type="button" onClick={() => handleShareSocial('twitter')} className="w-full px-4 py-2.5 text-left text-xs text-white/60 hover:bg-white/10 transition">Twitter / X</button>
-                        <button type="button" onClick={() => handleShareSocial('linkedin')} className="w-full px-4 py-2.5 text-left text-xs text-white/60 hover:bg-white/10 transition">LinkedIn</button>
+                        <div className="border-t border-white/10 day:border-gray-100" />
+                        <button type="button" onClick={() => handleShareSocial('facebook')} className="w-full px-4 py-2.5 text-left text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition">Facebook</button>
+                        <button type="button" onClick={() => handleShareSocial('twitter')} className="w-full px-4 py-2.5 text-left text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition">Twitter / X</button>
+                        <button type="button" onClick={() => handleShareSocial('linkedin')} className="w-full px-4 py-2.5 text-left text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition">LinkedIn</button>
                       </div>
                     )}
                   </div>
@@ -332,14 +336,14 @@ export default function DesignDetailPage() {
                   <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10 cursor-pointer"
+                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer"
                       onClick={handleExportPDF}
                     >
                       Export PDF
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 transition hover:bg-red-500/20 disabled:opacity-50 cursor-pointer"
+                      className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 day:text-red-600 transition hover:bg-red-500/20 day:hover:bg-red-50 disabled:opacity-50 cursor-pointer"
                       onClick={handleDelete}
                       disabled={isDeleting}
                     >
@@ -353,11 +357,21 @@ export default function DesignDetailPage() {
 
           {/* Price quote — auto-height iframe, no nested scroll */}
           <div>
-            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-white/40">Price Quote</p>
+            <p className="mb-2 text-xs font-medium uppercase tracking-widest text-white/40 day:text-gray-400">Price Quote</p>
             <PriceQuoteDisplay quote={priceQuote} />
           </div>
         </div>
       </div>
+
+      {/* Email share modal */}
+      <EmailShareModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        projectId={id}
+        projectTitle={project?.title}
+        senderEmail={null}
+        screenshotUrl={thumbnail}
+      />
 
       {/* Full-resolution image overlay */}
       {imagePreviewOpen && (

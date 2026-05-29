@@ -4,13 +4,16 @@ import * as React from 'react';
 interface DesignPreviewProps {
   screenshotUrl?: string;
   designName: string;
-  /** URL for the "Edit Your Design" CTA button */
+  /** URL for the "View Design" primary CTA button */
+  viewUrl?: string;
+  /** URL for the "Edit Your Design" secondary CTA button */
   editUrl?: string;
 }
 
 export function DesignPreview({
   screenshotUrl,
   designName,
+  viewUrl,
   editUrl,
 }: DesignPreviewProps) {
   return (
@@ -31,11 +34,18 @@ export function DesignPreview({
         {designName}
       </Text>
 
-      {editUrl && (
+      {(viewUrl || editUrl) && (
         <Section style={ctaWrapper}>
-          <Button href={editUrl} style={ctaButton}>
-            Edit Your Design &rarr;
-          </Button>
+          {viewUrl && (
+            <Button href={viewUrl} style={ctaButton}>
+              View Design &rarr;
+            </Button>
+          )}
+          {editUrl && (
+            <Button href={editUrl} style={editButton}>
+              Edit Your Design &rarr;
+            </Button>
+          )}
         </Section>
       )}
     </Section>
@@ -95,4 +105,19 @@ const ctaButton: React.CSSProperties = {
   textDecoration: 'none',
   display: 'inline-block',
   fontFamily: 'Georgia, serif',
+};
+
+const editButton: React.CSSProperties = {
+  backgroundColor: 'transparent',
+  color: '#DEBD68',
+  fontSize: '11px',
+  fontWeight: 600,
+  letterSpacing: '1px',
+  textTransform: 'uppercase',
+  padding: '10px 20px',
+  border: '1px solid #DEBD68',
+  borderRadius: '2px',
+  textDecoration: 'none',
+  display: 'inline-block',
+  marginTop: '10px',
 };

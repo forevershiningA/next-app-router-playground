@@ -47,13 +47,13 @@ export default function SaveDesignModal({
   };
 
   const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
-      <div className="relative w-full max-w-md mx-4 rounded-2xl border border-white/20 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] p-6 shadow-2xl">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 day:bg-black/40">
+      <div className="relative w-full max-w-md mx-4 rounded-2xl border border-white/20 day:border-gray-200 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] day:from-white day:to-stone-50 p-6 shadow-2xl">
         {/* Close button */}
         <button
           onClick={onClose}
           disabled={isSaving}
-          className="absolute right-4 top-4 rounded-lg p-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50"
+          className="absolute right-4 top-4 rounded-lg p-1 text-white/60 day:text-gray-500 transition-colors hover:bg-white/10 day:hover:bg-gray-100 hover:text-white day:hover:text-gray-800 disabled:opacity-50"
           aria-label="Close"
         >
           <XMarkIcon className="h-5 w-5" />
@@ -61,8 +61,8 @@ export default function SaveDesignModal({
 
         {/* Header */}
         <div className="mb-6">
-          <h2 className="text-2xl font-light text-white">Save Design</h2>
-          <p className="mt-2 text-sm text-white/60">
+          <h2 className="text-2xl font-light text-white day:text-gray-900">Save Design</h2>
+          <p className="mt-2 text-sm text-white/60 day:text-gray-600">
             Enter a name for your design to save it to your account.
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function SaveDesignModal({
           <div>
             <label
               htmlFor="design-name"
-              className="mb-2 block text-sm font-medium text-white/80"
+              className="mb-2 block text-sm font-medium text-white/80 day:text-gray-700"
             >
               Design Name
             </label>
@@ -88,7 +88,7 @@ export default function SaveDesignModal({
               placeholder="e.g., Memorial Design for John"
               disabled={isSaving}
               autoFocus
-              className="w-full rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-white placeholder-white/40 transition-all focus:border-white/40 focus:bg-white/10 focus:outline-none disabled:opacity-50"
+              className="w-full rounded-lg border border-white/20 day:border-gray-300 bg-white/5 day:bg-white px-4 py-3 text-white day:text-gray-900 placeholder-white/40 day:placeholder-gray-400 transition-all focus:border-white/40 day:focus:border-[#D7B356]/60 focus:bg-white/10 day:focus:bg-white focus:outline-none disabled:opacity-50"
             />
             {error && (
               <p className="mt-2 text-sm text-red-400">{error}</p>
@@ -133,7 +133,7 @@ export default function SaveDesignModal({
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="flex-1 rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-sm font-medium text-white transition-all hover:bg-white/10 disabled:opacity-50"
+              className="flex-1 rounded-lg border border-white/20 day:border-gray-300 bg-white/5 day:bg-white px-4 py-3 text-sm font-medium text-white day:text-gray-700 transition-all hover:bg-white/10 day:hover:bg-gray-100 disabled:opacity-50"
             >
               Cancel
             </button>

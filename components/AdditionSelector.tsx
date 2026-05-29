@@ -71,7 +71,7 @@ export default function AdditionSelector({ additions }: Props) {
               className={`rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
                 isActive
                   ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                  : 'bg-[#1F1F1F] text-gray-200 hover:bg-[#2A2A2A]'
+                  : 'bg-[#1F1F1F] text-gray-200 hover:bg-[#2A2A2A] day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200'
               }`}
             >
               {filter.label}
@@ -94,11 +94,11 @@ export default function AdditionSelector({ additions }: Props) {
               onClick={() => handleToggle(addition)}
               className={`flex flex-col rounded-xl border text-left transition-all ${
                 isSelected
-                  ? 'border-[#D7B356] bg-[#2d2013] shadow-lg shadow-[#D7B356]/20'
-                  : 'border-white/10 bg-[#161616] hover:border-[#D7B356]/60'
+                  ? 'border-[#D7B356] bg-[#2d2013] shadow-lg shadow-[#D7B356]/20 day:bg-amber-50'
+                  : 'border-white/10 bg-[#161616] hover:border-[#D7B356]/60 day:bg-white day:border-gray-200'
               }`}
             >
-              <div className="relative aspect-square w-full overflow-hidden bg-[#0f0f0f]">
+              <div className="relative aspect-square w-full overflow-hidden bg-[#0f0f0f] day:bg-gray-100">
                 <Image
                   src={imagePath}
                   alt={addition.name}
@@ -113,7 +113,7 @@ export default function AdditionSelector({ additions }: Props) {
                 )}
               </div>
               <div className="flex flex-col gap-1 px-2 py-2">
-                <span className="text-xs font-medium text-white leading-tight line-clamp-2">
+                <span className="text-xs font-medium text-white leading-tight line-clamp-2 day:text-gray-900">
                   {addition.name}
                 </span>
                 <span className="text-[11px] text-[#D7B356] font-semibold">
@@ -125,7 +125,7 @@ export default function AdditionSelector({ additions }: Props) {
         })}
 
         {filteredAdditions.length === 0 && (
-          <div className="col-span-2 rounded-xl border border-dashed border-white/10 bg-black/20 p-6 text-center text-xs text-gray-400">
+          <div className="col-span-2 rounded-xl border border-dashed border-white/10 bg-black/20 p-6 text-center text-xs text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
             No additions in this category yet.
           </div>
         )}

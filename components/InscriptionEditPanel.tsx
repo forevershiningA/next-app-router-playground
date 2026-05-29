@@ -42,10 +42,10 @@ export default function InscriptionEditPanel() {
 
   const AlignControls = (
     <div>
-      <span className="mb-1.5 block text-sm font-medium text-slate-200">
+      <span className="mb-1.5 block text-sm font-medium text-slate-200 day:text-gray-700">
         Align
       </span>
-      <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
+      <div className="flex gap-2 rounded-lg border border-[#3A3A3A] bg-slate-950 p-1 day:border-gray-200 day:bg-gray-100">
         {(
           [
             { value: 'left', label: 'Left', glyph: '⟵' },
@@ -62,7 +62,7 @@ export default function InscriptionEditPanel() {
               className={`flex-1 cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all ${
                 isActive
                   ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                  : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
               }`}
             >
               <span className="mr-1">{opt.glyph}</span>
@@ -160,13 +160,13 @@ export default function InscriptionEditPanel() {
   return (
     <div className="space-y-4">
       {/* Input mode toggle */}
-      <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
+      <div className="flex gap-2 rounded-lg border border-[#3A3A3A] bg-slate-950 p-1 day:border-gray-200 day:bg-gray-100">
         <button
           type="button"
           className={`flex-1 cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all ${
             inputMode === 'single'
               ? 'bg-[#D7B356] text-slate-900 shadow-md'
-              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
           }`}
           onClick={() => setInputMode('single')}
         >
@@ -177,7 +177,7 @@ export default function InscriptionEditPanel() {
           className={`flex-1 cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all ${
             inputMode === 'multi'
               ? 'bg-[#D7B356] text-slate-900 shadow-md'
-              : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+              : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
           }`}
           onClick={() => setInputMode('multi')}
         >
@@ -190,13 +190,13 @@ export default function InscriptionEditPanel() {
           <div>
             <label
               htmlFor="inscriptionTextInput"
-              className="mb-2 block text-sm font-medium text-slate-200"
+              className="mb-2 block text-sm font-medium text-slate-200 day:text-gray-700"
             >
               Inscription Text
             </label>
             <input
               id="inscriptionTextInput"
-              className={`w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] ${textAlignClass}`}
+              className={`w-full rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder:text-gray-400 ${textAlignClass}`}
               value={activeInscriptionText ?? ''}
               onChange={(e) => {
                 setActiveInscriptionText(e.target.value);
@@ -214,14 +214,14 @@ export default function InscriptionEditPanel() {
           <div>
             <label
               htmlFor="inscriptionMultilineInput"
-              className="mb-2 block text-sm font-medium text-slate-200"
+              className="mb-2 block text-sm font-medium text-slate-200 day:text-gray-700"
             >
               Inscription Text (multi-line)
             </label>
             <textarea
               id="inscriptionMultilineInput"
               rows={5}
-              className={`w-full resize-y rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] ${textAlignClass}`}
+              className={`w-full resize-y rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder:text-gray-400 ${textAlignClass}`}
               value={multiText}
               onChange={(e) => {
                 const val = e.target.value;
@@ -240,12 +240,12 @@ export default function InscriptionEditPanel() {
 
       {/* Tabs for font and color (only show tabs if color is available) */}
       {showInscriptionColor && (
-        <div className="flex gap-2 rounded-lg bg-slate-950 p-1">
+        <div className="flex gap-2 rounded-lg border border-[#3A3A3A] bg-slate-950 p-1 day:border-gray-200 day:bg-gray-100">
           <button
             className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
               activeTab === 'font'
                 ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
             }`}
             onClick={() => setActiveTab('font')}
           >
@@ -255,7 +255,7 @@ export default function InscriptionEditPanel() {
             className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
               activeTab === 'color'
                 ? 'bg-[#D7B356] text-slate-900 shadow-md'
-                : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
             }`}
             onClick={() => setActiveTab('color')}
           >
@@ -268,13 +268,13 @@ export default function InscriptionEditPanel() {
       {(!showInscriptionColor || activeTab === 'font') && (
         <div className="space-y-4">
           {!showInscriptionColor && (
-            <label className="block text-sm font-medium text-slate-200">
+            <label className="block text-sm font-medium text-slate-200 day:text-gray-700">
               Select Font
             </label>
           )}
           <div className="relative">
             <select
-              className="w-full appearance-none rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 pr-8 text-sm text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356]"
+              className="w-full appearance-none rounded-lg border border-slate-600 bg-slate-950 px-3 py-2 pr-8 text-sm text-white outline-none focus:border-[#D7B356] focus:ring-1 focus:ring-[#D7B356] day:border-gray-300 day:bg-white day:text-gray-900"
               value={active?.font ?? selectedFont}
               onChange={(e) => {
                 const font = e.target.value;
@@ -291,7 +291,7 @@ export default function InscriptionEditPanel() {
                 </option>
               ))}
             </select>
-            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-slate-400">
+            <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 day:text-gray-500">
               ▾
             </span>
           </div>
@@ -305,7 +305,7 @@ export default function InscriptionEditPanel() {
           {/* Size Slider */}
           <div className="space-y-1">
             <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Size</label>
+              <label className="text-sm font-medium text-gray-200 day:text-gray-700 w-20">Size</label>
               <div className="flex items-center gap-2 justify-end">
                 <button
                   type="button"
@@ -313,7 +313,7 @@ export default function InscriptionEditPanel() {
                     const newVal = Math.max(inscriptionMinHeight, (active.sizeMm ?? 30) - 1);
                     updateLine(active.id, { sizeMm: newVal });
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors day:bg-gray-200 day:hover:bg-gray-300 day:text-gray-700"
                   aria-label="Decrease size by 1mm"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -335,10 +335,10 @@ export default function InscriptionEditPanel() {
                       updateLine(active.id, { sizeMm: inscriptionMaxHeight });
                     }
                   }}
-                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors day:bg-gray-100 day:text-gray-900 ${
                     (active.sizeMm ?? 30) < inscriptionMinHeight || (active.sizeMm ?? 30) > inscriptionMaxHeight
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                   }`}
                 />
                 <button
@@ -347,14 +347,14 @@ export default function InscriptionEditPanel() {
                     const newVal = Math.min(inscriptionMaxHeight, (active.sizeMm ?? 30) + 1);
                     updateLine(active.id, { sizeMm: newVal });
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors day:bg-gray-200 day:hover:bg-gray-300 day:text-gray-700"
                   aria-label="Increase size by 1mm"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                 </button>
-                <span className="text-sm font-medium text-gray-300">mm</span>
+                <span className="text-sm font-medium text-gray-300 day:text-gray-600">mm</span>
               </div>
             </div>
             <div className="relative">
@@ -377,7 +377,7 @@ export default function InscriptionEditPanel() {
           {/* Rotation Slider */}
           <div className="space-y-1">
             <div className="flex items-center justify-between gap-2">
-              <label className="text-sm font-medium text-gray-200 w-20">Rotation</label>
+              <label className="text-sm font-medium text-gray-200 day:text-gray-700 w-20">Rotation</label>
               <div className="flex items-center gap-2 justify-end">
                 <button
                   type="button"
@@ -385,7 +385,7 @@ export default function InscriptionEditPanel() {
                     const newVal = Math.max(-180, (active.rotationDeg ?? 0) - 1);
                     updateLine(active.id, { rotationDeg: newVal });
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors day:bg-gray-200 day:hover:bg-gray-300 day:text-gray-700"
                   aria-label="Decrease rotation by 1 degree"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -407,10 +407,10 @@ export default function InscriptionEditPanel() {
                       updateLine(active.id, { rotationDeg: 180 });
                     }
                   }}
-                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors ${
+                  className={`w-16 rounded border px-2 py-1.5 text-right text-sm text-white bg-[#454545] focus:outline-none focus:ring-2 transition-colors day:bg-gray-100 day:text-gray-900 ${
                     (active.rotationDeg ?? 0) < -180 || (active.rotationDeg ?? 0) > 180
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                   }`}
                 />
                 <button
@@ -419,14 +419,14 @@ export default function InscriptionEditPanel() {
                     const newVal = Math.min(180, (active.rotationDeg ?? 0) + 1);
                     updateLine(active.id, { rotationDeg: newVal });
                   }}
-                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors"
+                  className="flex items-center justify-center w-7 h-7 rounded bg-[#454545] hover:bg-[#5A5A5A] text-white transition-colors day:bg-gray-200 day:hover:bg-gray-300 day:text-gray-700"
                   aria-label="Increase rotation by 1 degree"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                 </button>
-                <span className="text-sm font-medium text-gray-300">°</span>
+                <span className="text-sm font-medium text-gray-300 day:text-gray-600">°</span>
               </div>
             </div>
             <div className="relative">
@@ -454,24 +454,24 @@ export default function InscriptionEditPanel() {
           {isEngraved && (
           <div className="grid grid-cols-2 gap-2 mb-4">
             <div
-              className="flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-950 p-3 transition-colors hover:border-[#D7B356]"
+              className="flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-950 p-3 transition-colors hover:border-[#D7B356] day:border-gray-300 day:bg-gray-50 day:hover:border-[#D7B356]"
               onClick={() => updateLine(active.id, { color: '#c99d44' })}
             >
               <div
-                className="h-6 w-6 rounded-md border border-slate-600"
+                className="h-6 w-6 rounded-md border border-slate-600 day:border-gray-300"
                 style={{ backgroundColor: '#c99d44' }}
               />
-              <span className="text-xs text-slate-200">Gold Gilding</span>
+              <span className="text-xs text-slate-200 day:text-gray-700">Gold Gilding</span>
             </div>
             <div
-              className="flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-950 p-3 transition-colors hover:border-[#D7B356]"
+              className="flex cursor-pointer flex-col items-center gap-1.5 rounded-lg border border-slate-600 bg-slate-950 p-3 transition-colors hover:border-[#D7B356] day:border-gray-300 day:bg-gray-50 day:hover:border-[#D7B356]"
               onClick={() => updateLine(active.id, { color: '#eeeeee' })}
             >
               <div
-                className="h-6 w-6 rounded-md border border-slate-600"
+                className="h-6 w-6 rounded-md border border-slate-600 day:border-gray-300"
                 style={{ backgroundColor: '#eeeeee' }}
               />
-              <span className="text-xs text-slate-200">Silver Gilding</span>
+              <span className="text-xs text-slate-200 day:text-gray-700">Silver Gilding</span>
             </div>
           </div>
           )}

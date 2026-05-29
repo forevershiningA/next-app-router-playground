@@ -207,9 +207,9 @@ function BaseMesh({
   const materials = useMemo(() => {
     const polishedMaterial = createPolishedGraniteMaterial({
       texture: baseTexture,
-      envMapIntensity: 0.82,
-      roughness: 0.24,
-      clearcoatRoughness: 0.16,
+      envMapIntensity: 1.1,
+      roughness: 0.18,
+      clearcoatRoughness: 0.08,
     });
 
     if (finish === 'rock-pitch' && rockNormalCanvas) {
@@ -231,9 +231,9 @@ function BaseMesh({
         color: rockColor,
         normalMap: texShort,
         normalScale: new THREE.Vector2(2.0, 2.0),
-        envMapIntensity: 0.82,
-        roughness: 0.24,
-        clearcoatRoughness: 0.16,
+        envMapIntensity: 1.1,
+        roughness: 0.18,
+        clearcoatRoughness: 0.08,
       });
 
       const matLong = createPolishedGraniteMaterial({
@@ -241,9 +241,9 @@ function BaseMesh({
         color: rockColor,
         normalMap: texLong,
         normalScale: new THREE.Vector2(2.0, 2.0),
-        envMapIntensity: 0.82,
-        roughness: 0.24,
-        clearcoatRoughness: 0.16,
+        envMapIntensity: 1.1,
+        roughness: 0.18,
+        clearcoatRoughness: 0.08,
       });
 
       return [

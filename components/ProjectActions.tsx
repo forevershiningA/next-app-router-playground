@@ -188,15 +188,15 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
     <>
       {savingOverlay}
       <div className="space-y-4">
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-4 day:border-gray-200 day:bg-gray-50">
         <div className="mb-3">
-          <label className="text-xs uppercase tracking-wide text-gray-400">Project Title</label>
+          <label className="text-xs uppercase tracking-wide text-gray-400 day:text-gray-500">Project Title</label>
           <input
             type="text"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
             placeholder="e.g. Oak Tree Memorial"
-            className="mt-1 w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-amber-400 focus:outline-none"
+            className="mt-1 w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/50 focus:border-amber-400 focus:outline-none day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder:text-gray-400"
           />
         </div>
         <button
@@ -205,41 +205,41 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
           disabled={isSaveDisabled}
           className={`w-full rounded-full px-6 py-3 text-sm font-semibold transition-all ${
             isSaveDisabled
-              ? 'bg-white/10 text-white/60 cursor-not-allowed'
-              : 'bg-white text-slate-900 hover:scale-[1.01]'
+              ? 'bg-white/10 text-white/60 cursor-not-allowed day:bg-gray-200 day:text-gray-400'
+              : 'bg-white text-slate-900 hover:scale-[1.01] day:bg-gray-900 day:text-white'
           }`}
         >
           {isSaving ? 'Saving…' : currentId ? 'Save Changes' : 'Save Design'}
         </button>
         {statusMessage && (
-          <p className="mt-3 text-center text-xs text-amber-200" role="status">
+          <p className="mt-3 text-center text-xs text-amber-200 day:text-amber-600" role="status">
             {statusMessage}
           </p>
         )}
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+      <div className="rounded-2xl border border-white/10 bg-white/5 p-4 day:border-gray-200 day:bg-gray-50">
         <div className="mb-3 flex items-center justify-between">
           <div>
-            <p className="text-sm font-semibold text-white">Saved Designs</p>
-            <p className="text-xs text-gray-400">Load a previous design to continue editing</p>
+            <p className="text-sm font-semibold text-white day:text-gray-900">Saved Designs</p>
+            <p className="text-xs text-gray-400 day:text-gray-500">Load a previous design to continue editing</p>
           </div>
           <button
             type="button"
             onClick={refreshProjects}
             disabled={isLoadingList}
-            className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 hover:border-white/40 disabled:cursor-not-allowed disabled:opacity-60"
+            className="rounded-full border border-white/20 px-3 py-1 text-xs text-white/80 hover:border-white/40 disabled:cursor-not-allowed disabled:opacity-60 day:border-gray-300 day:text-gray-600 day:hover:border-gray-400"
           >
             {isLoadingList ? 'Refreshing…' : 'Refresh'}
           </button>
         </div>
 
         {listError && (
-          <p className="text-xs text-red-300">{listError}</p>
+          <p className="text-xs text-red-300 day:text-red-600">{listError}</p>
         )}
 
         {projectList.length === 0 && !listError && !isLoadingList && (
-          <p className="text-sm text-gray-400">No saved designs yet.</p>
+          <p className="text-sm text-gray-400 day:text-gray-500">No saved designs yet.</p>
         )}
 
         <ul className="space-y-3">
@@ -252,14 +252,14 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
             return (
               <li
                 key={project.id}
-                className={`rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white ${
+                className={`rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-white day:border-gray-200 day:bg-white day:text-gray-900 ${
                   isCurrent ? 'ring-1 ring-amber-400/60' : ''
                 }`}
               >
                 <div className="flex items-center justify-between gap-3">
                   <div>
-                    <p className="font-semibold text-white">{project.title}</p>
-                    <p className="text-xs text-gray-400">
+                    <p className="font-semibold text-white day:text-gray-900">{project.title}</p>
+                    <p className="text-xs text-gray-400 day:text-gray-500">
                       {projectTotal} · Updated {formatTimestamp(project.updatedAt)}
                     </p>
                   </div>
@@ -267,7 +267,7 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
                     type="button"
                     onClick={() => handleLoad(project.id)}
                     disabled={loadingProjectId === project.id}
-                    className="rounded-full border border-white/30 px-3 py-1 text-xs text-white/80 hover:border-white disabled:cursor-not-allowed"
+                    className="rounded-full border border-white/30 px-3 py-1 text-xs text-white/80 hover:border-white disabled:cursor-not-allowed day:border-gray-300 day:text-gray-600 day:hover:border-gray-400"
                   >
                     {loadingProjectId === project.id ? 'Loading…' : 'Load'}
                   </button>

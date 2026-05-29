@@ -138,7 +138,7 @@ function renderDesignerSidebar(
       />
       <div
         className={clsx(
-          'fixed top-0 left-0 z-40 h-full w-[80%] max-w-sm transform bg-[#1b1511] shadow-2xl transition-transform duration-300 md:pointer-events-auto md:z-10 md:flex md:w-[400px] md:max-w-none md:translate-x-0 md:flex-col md:border-r md:border-gray-800 md:bg-transparent md:opacity-100 md:shadow-none',
+          'fixed top-0 left-0 z-40 h-full w-[80%] max-w-sm transform bg-[#1b1511] day:bg-stone-100 shadow-2xl transition-transform duration-300 md:pointer-events-auto md:z-10 md:flex md:w-[400px] md:max-w-none md:translate-x-0 md:flex-col md:border-r md:border-gray-800 day:md:border-stone-200 md:bg-transparent day:md:bg-stone-50/95 md:opacity-100 md:shadow-none',
           isMobileMenuOpen
             ? 'pointer-events-auto translate-x-0 opacity-100'
             : 'pointer-events-none -translate-x-full opacity-0',

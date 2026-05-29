@@ -82,19 +82,19 @@ export default function QuickEnquiryModal({
   }
 
   const inputClass =
-    'block w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/30 focus:border-primary/60 focus:bg-white/8 focus:ring-1 focus:ring-primary/40 focus:outline-none transition-colors';
+    'block w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2.5 text-sm text-white placeholder-white/30 focus:border-primary/60 focus:bg-white/8 focus:ring-1 focus:ring-primary/40 focus:outline-none transition-colors day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder-gray-400';
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4 day:bg-black/40"
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div className="relative w-full max-w-md rounded-2xl border border-white/20 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] p-6 shadow-2xl">
+      <div       className="relative w-full max-w-md rounded-2xl border border-white/20 bg-gradient-to-br from-[#1a1410] to-[#0f0a07] p-6 shadow-2xl day:border-gray-200 day:bg-none day:bg-white">
         {/* Close */}
         <button
           onClick={onClose}
           disabled={submitting}
-          className="absolute right-4 top-4 rounded-lg p-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50"
+          className="absolute right-4 top-4 rounded-lg p-1 text-white/60 transition-colors hover:bg-white/10 hover:text-white disabled:opacity-50 day:text-gray-400 day:hover:bg-gray-100 day:hover:text-gray-900"
           aria-label="Close"
         >
           <XMarkIcon className="h-5 w-5" />
@@ -106,10 +106,10 @@ export default function QuickEnquiryModal({
             <ChatBubbleLeftEllipsisIcon className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h2 className="font-playfair-display text-lg font-semibold text-white">
+            <h2 className="font-playfair-display text-lg font-semibold text-white day:text-gray-900">
               Quick Enquiry
             </h2>
-            <p className="text-xs text-white/40">We&apos;ll get back to you shortly</p>
+            <p className="text-xs text-white/40 day:text-gray-500">We&apos;ll get back to you shortly</p>
           </div>
         </div>
 
@@ -121,13 +121,13 @@ export default function QuickEnquiryModal({
               </svg>
             </div>
             <p className="text-sm font-medium text-green-400">Enquiry sent successfully!</p>
-            <p className="text-xs text-white/40">We&apos;ll be in touch soon.</p>
+            <p className="text-xs text-white/40 day:text-gray-500">We&apos;ll be in touch soon.</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-white/60">Name</label>
+                <label className="mb-1.5 block text-xs font-medium text-white/60 day:text-gray-600">Name</label>
                 <input
                   type="text"
                   value={name}
@@ -137,7 +137,7 @@ export default function QuickEnquiryModal({
                 />
               </div>
               <div>
-                <label className="mb-1.5 block text-xs font-medium text-white/60">
+                <label className="mb-1.5 block text-xs font-medium text-white/60 day:text-gray-600">
                   Email <span className="text-primary">*</span>
                 </label>
                 <input
@@ -153,7 +153,7 @@ export default function QuickEnquiryModal({
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-white/60">Phone</label>
+              <label className="mb-1.5 block text-xs font-medium text-white/60 day:text-gray-600">Phone</label>
               <input
                 type="tel"
                 value={phone}
@@ -164,7 +164,7 @@ export default function QuickEnquiryModal({
             </div>
 
             <div>
-              <label className="mb-1.5 block text-xs font-medium text-white/60">
+              <label className="mb-1.5 block text-xs font-medium text-white/60 day:text-gray-600">
                 Message <span className="text-primary">*</span>
               </label>
               <textarea
@@ -186,7 +186,7 @@ export default function QuickEnquiryModal({
                 type="button"
                 onClick={onClose}
                 disabled={submitting}
-                className="flex-1 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-medium text-white/70 transition-colors hover:border-white/25 hover:bg-white/5 disabled:opacity-50"
+                className="flex-1 rounded-lg border border-white/15 px-4 py-2.5 text-sm font-medium text-white/70 transition-colors hover:border-white/25 hover:bg-white/5 disabled:opacity-50 day:border-gray-200 day:text-gray-600 day:hover:border-gray-300 day:hover:bg-gray-50"
               >
                 Cancel
               </button>

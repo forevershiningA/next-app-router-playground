@@ -11,6 +11,9 @@
 /* Admin dark mode: scoped to the admin wrapper so it doesn't affect the designer */
 @custom-variant dark (&:where([data-admin-theme=dark], [data-admin-theme=dark] *));
 
+/* Day/light mode: toggled by setting data-theme="day" on <html> */
+@custom-variant day (&:where([data-theme=day], [data-theme=day] *));
+
 /* CRITICAL: Prevent text cursor (caret) from appearing anywhere except inputs */
 *, *::before, *::after {
   caret-color: transparent !important;
@@ -476,6 +479,60 @@ input[type='range']::-ms-thumb {
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: rgba(215, 179, 86, 0.8);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   DAY / LIGHT THEME OVERRIDES
+   Activates when <html data-theme="day"> is set by ThemeToggle.
+   These CSS rules use higher specificity than Tailwind utilities so they
+   don't need !important in most cases.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* Body background */
+[data-theme=day] body {
+  background-color: #f8f5f0;
+  color-scheme: light;
+}
+
+/* color-scheme on html for scrollbar/native controls */
+html[data-theme=day] {
+  color-scheme: light;
+}
+
+/* ── Stepper buttons (+ / - increment buttons in panels) ── */
+[data-theme=day] .fs-stepper-btn {
+  background-color: #e5e1db;
+  color: #2a1f14;
+}
+[data-theme=day] .fs-stepper-btn:hover {
+  background-color: #d5d0c8;
+}
+
+/* ── Stepper / number inputs inside the designer nav ── */
+[data-theme=day] .fs-designer-nav input[type="number"] {
+  background-color: #ffffff;
+  color: #1a1209;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+[data-theme=day] .fs-designer-nav input[type="number"]:focus {
+  border-color: #D7B356;
+  outline: none;
+}
+
+/* ── Range sliders (track) inside designer nav ── */
+[data-theme=day] .fs-designer-nav input[type="range"] {
+  accent-color: #D7B356;
+}
+
+/* ── Scrollbar in day mode ── */
+[data-theme=day] .custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.06);
+}
+[data-theme=day] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(215, 179, 86, 0.45);
+}
+[data-theme=day] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(215, 179, 86, 0.7);
 }
 
 /* Hide number input spinners for cleaner appearance */

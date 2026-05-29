@@ -174,6 +174,7 @@ export default async function AdminOrdersPage({
                             <ThumbnailModal
                               src={thumb}
                               fullSrc={order.screenshotPath || thumb}
+                              thumbSize="h-32 w-32"
                             />
                             <a
                               href={`/api/orders/${order.id}/export-svg`}

@@ -3,8 +3,8 @@
 import { useState } from 'react';
 
 const FIELD_CLS =
-  'w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-amber-400 focus:outline-none';
-const LABEL_CLS = 'text-xs uppercase tracking-wide text-gray-400';
+  'w-full rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm text-white placeholder:text-white/40 focus:border-amber-400 focus:outline-none day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder:text-gray-400';
+const LABEL_CLS = 'text-xs uppercase tracking-wide text-gray-400 day:text-gray-600';
 
 interface Props {
   projectId?: string | null;
@@ -52,17 +52,17 @@ export default function QuickEnquiryForm({ projectId }: Props) {
   }
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-4 day:border-gray-200 day:bg-gray-50">
       <button
         type="button"
         onClick={() => { setOpen((o) => !o); setDone(false); setError(''); }}
         className="flex w-full items-center justify-between"
       >
         <div>
-          <p className="text-sm font-semibold text-white text-left">Quick Enquiry</p>
-          <p className="text-xs text-gray-400 text-left">Ask us anything about your design</p>
+          <p className="text-left text-sm font-semibold text-white day:text-gray-900">Quick Enquiry</p>
+          <p className="text-left text-xs text-gray-400 day:text-gray-500">Ask us anything about your design</p>
         </div>
-        <span className="ml-2 text-white/60 text-lg leading-none">{open ? '▲' : '▼'}</span>
+        <span className="ml-2 text-lg leading-none text-white/60 day:text-gray-400">{open ? '▲' : '▼'}</span>
       </button>
 
       {open && (

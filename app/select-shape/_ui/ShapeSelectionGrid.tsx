@@ -124,13 +124,13 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     const catalogShapes = catalog?.product.shapes ?? [];
     const isLoadingCatalog = catalog === null;
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+      <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 day:bg-stone-100 day:bg-none">
         {/* Header Section */}
-        <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
+        <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden day:border-gray-200 day:bg-white day:bg-none">
+          <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent day:hidden" />
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
             <div className="text-center">
-              <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
+              <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl day:text-gray-900">
                 Select Your Shape
               </h1>
               {productName && (
@@ -138,7 +138,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   {productName}
                 </p>
               )}
-              <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+              <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto day:text-gray-600">
                 Choose the shape for your urn. Each shape has its own dimensions and unique character.
               </p>
             </div>
@@ -150,17 +150,17 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
           {isLoadingCatalog ? (
             <div className="py-20 text-center">
               <div className="animate-spin text-4xl mb-4">⟳</div>
-              <p className="text-gray-400">Loading urn shapes…</p>
+              <p className="text-gray-400 day:text-gray-500">Loading urn shapes…</p>
             </div>
           ) : catalogShapes.length === 0 ? (
             <div className="py-20 text-center">
               <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-xl font-medium text-white">No shapes found</h3>
-              <p className="mt-2 text-gray-400">No urn shapes available in catalog</p>
+              <h3 className="text-xl font-medium text-white day:text-gray-900">No shapes found</h3>
+              <p className="mt-2 text-gray-400 day:text-gray-500">No urn shapes available in catalog</p>
             </div>
           ) : (
             <>
-              <div className="mb-6 text-sm text-gray-400">
+              <div className="mb-6 text-sm text-gray-400 day:text-gray-500">
                 Showing {catalogShapes.length} shape{catalogShapes.length !== 1 ? 's' : ''}
               </div>
               <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -171,13 +171,13 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                     <button
                       key={catalogShape.code ?? catalogShape.name}
                       onClick={() => handleUrnShapeSelect(catalogShape)}
-                      className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all ${
+                      className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all day:bg-white ${
                         isSelected
                           ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
-                          : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10'
+                          : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10 day:border-gray-200 day:hover:border-[#cfac6c]/60'
                       }`}
                     >
-                      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30 cursor-pointer">
+                      <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30 cursor-pointer day:bg-gray-100 day:bg-none">
                         <div className="absolute inset-0 flex items-center justify-center p-8">
                           <Image
                             src={svgPath}
@@ -189,10 +189,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                         </div>
                       </div>
                       <div className="p-4 flex flex-col">
-                        <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-1">
+                        <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-1 day:text-gray-900">
                           {catalogShape.name}
                         </h3>
-                        <p className="text-xs text-gray-500 text-center mb-2">
+                        <p className="text-xs text-gray-500 text-center mb-2 day:text-gray-400">
                           {catalogShape.table.initWidth} × {catalogShape.table.initHeight} mm
                         </p>
                         <div className="h-5 mt-auto">
@@ -244,13 +244,13 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 day:bg-stone-100 day:bg-none">
       {/* Header Section */}
-      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
+      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden day:border-gray-200 day:bg-white day:bg-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent day:hidden" />
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
           <div className="text-center">
-            <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl day:text-gray-900">
               Select Your Shape
             </h1>
             {productName && (
@@ -258,7 +258,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 {productName}
               </p>
             )}
-            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto day:text-gray-600">
               Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.
             </p>
           </div>
@@ -266,8 +266,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       </div>
 
       {/* Category Filter */}
-      <div className="border-b border-white/5 bg-gray-900/30 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
+      <div className="border-b border-white/5 bg-gray-900/30 relative day:border-gray-200 day:bg-white">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent day:hidden" />
         <div className="mx-auto max-w-7xl pl-6 pr-6 py-6 lg:pl-8 lg:pr-8 relative">
           <div className="flex flex-wrap gap-3 -ml-3">
             <button
@@ -275,7 +275,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
               className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
                 selectedCategory === 'all'
                   ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
-                  : 'border border-white/20 text-white hover:bg-white/10 hover:border-[#cfac6c]/30'
+                  : 'border border-white/20 text-white hover:bg-white/10 hover:border-[#cfac6c]/30 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100'
               }`}
             >
               All Shapes
@@ -287,7 +287,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 className={`rounded-full px-6 py-3 text-sm font-medium transition-all ${
                   selectedCategory === category.id
                     ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
-                    : 'border border-white/20 text-white hover:bg-white/10 hover:border-[#cfac6c]/30'
+                    : 'border border-white/20 text-white hover:bg-white/10 hover:border-[#cfac6c]/30 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100'
                 }`}
               >
                 <span>{category.name}</span>
@@ -312,11 +312,11 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             <div className="mx-auto max-w-2xl">
               <button
                 onClick={handleCustomUpload}
-                className="group relative w-full overflow-hidden rounded-2xl border-2 border-dashed border-white/20 bg-[#1A1A1A] hover:bg-gray-800/50 hover:border-[#cfac6c]/60 p-12 text-center transition-all"
+                className="group relative w-full overflow-hidden rounded-2xl border-2 border-dashed border-white/20 bg-[#1A1A1A] hover:bg-gray-800/50 hover:border-[#cfac6c]/60 p-12 text-center transition-all day:bg-white day:border-gray-300 day:hover:bg-gray-50 day:hover:border-[#cfac6c]/60"
               >
                 <div className="flex flex-col items-center gap-4">
                   <svg
-                    className="h-16 w-16 text-gray-500 group-hover:text-[#cfac6c] transition-colors"
+                    className="h-16 w-16 text-gray-500 group-hover:text-[#cfac6c] transition-colors day:text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -329,21 +329,21 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                     />
                   </svg>
                   <div>
-                    <h3 className="text-xl font-medium text-white mb-2">Upload Custom SVG Shape</h3>
-                    <p className="text-gray-400">Click to browse or drag and drop your SVG file here</p>
-                    <p className="text-sm text-gray-500 mt-2">Accepted format: .svg</p>
+                    <h3 className="text-xl font-medium text-white mb-2 day:text-gray-900">Upload Custom SVG Shape</h3>
+                    <p className="text-gray-400 day:text-gray-500">Click to browse or drag and drop your SVG file here</p>
+                    <p className="text-sm text-gray-500 mt-2 day:text-gray-400">Accepted format: .svg</p>
                   </div>
                 </div>
               </button>
               
-              <div className="mt-8 rounded-2xl bg-[#1A1A1A] border border-white/10 p-6">
-                <h4 className="text-white font-medium mb-3 flex items-center gap-2">
+              <div className="mt-8 rounded-2xl bg-[#1A1A1A] border border-white/10 p-6 day:bg-gray-50 day:border-gray-200">
+                <h4 className="text-white font-medium mb-3 flex items-center gap-2 day:text-gray-900">
                   <svg className="h-5 w-5 text-[#cfac6c]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   SVG Requirements
                 </h4>
-                <ul className="text-sm text-gray-400 space-y-2">
+                <ul className="text-sm text-gray-400 space-y-2 day:text-gray-600">
                   <li>• File must be in SVG format</li>
                   <li>• Recommended size: 400x600px or similar proportions</li>
                   <li>• Use simple paths and shapes for best rendering</li>
@@ -355,12 +355,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         ) : filteredShapes.length === 0 ? (
           <div className="py-20 text-center">
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-medium text-white">No shapes found</h3>
-            <p className="mt-2 text-gray-400">Try adjusting your filters</p>
+            <h3 className="text-xl font-medium text-white day:text-gray-900">No shapes found</h3>
+            <p className="mt-2 text-gray-400 day:text-gray-500">Try adjusting your filters</p>
           </div>
         ) : (
           <>
-            <div className="mb-6 text-sm text-gray-400">
+            <div className="mb-6 text-sm text-gray-400 day:text-gray-500">
               Showing {filteredShapes.length} shape{filteredShapes.length !== 1 ? 's' : ''}
             </div>
             <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -376,14 +376,14 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   <button
                     key={shape.id}
                     onClick={() => handleShapeSelect(shape)}
-                    className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all ${
+                    className={`group relative overflow-hidden cursor-pointer rounded-2xl border-2 bg-[#1A1A1A] transition-all day:bg-white ${
                       isSelected
                         ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
-                        : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10'
+                        : 'border-white/10 hover:border-[#cfac6c]/60 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#cfac6c]/10 day:border-gray-200 day:hover:border-[#cfac6c]/60'
                     }`}
                   >
                     {/* Shape Image - Square aspect ratio */}
-                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30 cursor-pointer">
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-800/30 to-gray-900/30 cursor-pointer day:bg-gray-100 day:bg-none">
                       <div className="absolute inset-0 flex items-center justify-center p-8">
                         <Image
                           src={shapeUrl}
@@ -397,7 +397,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
 
                     {/* Shape Info - with padding and flexbox */}
                     <div className="p-4 flex flex-col">
-                      <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-2">
+                      <h3 className="text-sm font-medium text-white text-center line-clamp-2 mb-2 day:text-gray-900">
                         {shape.name}
                       </h3>
                       {/* Call to Action - always reserves space, visible on hover, anchored to bottom */}
@@ -417,19 +417,19 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
 
       {/* Category Info Cards (when category is selected) */}
       {selectedCategory !== 'all' && selectedCategory !== 'custom' && (
-        <div className="border-t border-white/5 bg-gray-900/30">
+        <div className="border-t border-white/5 bg-gray-900/30 day:border-gray-200 day:bg-stone-100">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
             {shapeCategories
               .filter((cat) => cat.id === selectedCategory)
               .map((category) => (
                 <div
                   key={category.id}
-                  className="rounded-2xl border border-white/10 bg-gradient-to-r from-gray-800/50 to-gray-900/50 p-8 text-center"
+                  className="rounded-2xl border border-white/10 bg-gradient-to-r from-gray-800/50 to-gray-900/50 p-8 text-center day:border-gray-200 day:bg-white"
                 >
-                  <h2 className="text-2xl font-serif font-light text-white mb-2">
+                  <h2 className="text-2xl font-serif font-light text-white mb-2 day:text-gray-900">
                     {category.name}
                   </h2>
-                  <p className="text-gray-300">{category.description}</p>
+                  <p className="text-gray-300 day:text-gray-600">{category.description}</p>
                 </div>
               ))}
           </div>

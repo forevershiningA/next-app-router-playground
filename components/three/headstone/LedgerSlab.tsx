@@ -49,9 +49,9 @@ function LedgerMesh({
     () =>
       createPolishedGraniteMaterial({
         texture,
-        envMapIntensity: 0.75,
-        roughness: 0.24,
-        clearcoatRoughness: 0.18,
+        envMapIntensity: 1.1,
+        roughness: 0.18,
+        clearcoatRoughness: 0.08,
       }),
     [texture],
   );

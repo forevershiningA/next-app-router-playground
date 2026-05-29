@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-27
+**Last Updated:** 2026-05-29
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
 
 ---
@@ -36,6 +36,169 @@
 28. [Design Management Scripts](#design-management-scripts)
 29. [Development Workflow](#development-workflow)
 30. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
+
+---
+
+## Current Status (2026-05-29) — Day Mode: Remaining Panels + Homepage
+
+### ✅ Additional Pages / Components Updated for Day Mode
+
+Continuing the day/night rollout from the prior session. All changes follow the same `day:` Tailwind variant pattern.
+
+#### New Files Updated
+
+| File | What was fixed |
+|------|---------------|
+| `components/DesignerNav.tsx` (Add Inscription section) | Tabs (`day:bg-gray-100`, `day:text-gray-900`), input fields (`day:bg-white day:border-gray-300 day:text-gray-900`), labels, font size slider, color swatches |
+| `components/DesignerNav.tsx` (Add Your Image section) | Upload zone, image list cards, position/size sliders, action buttons |
+| `components/DesignerNav.tsx` (Crop section) | Crop canvas overlay, control buttons, dimension inputs |
+| `components/DesignerNav.tsx` (Select Additions section) | Addition thumbnails, category tabs, size sliders |
+| `components/DesignerNav.tsx` (Select Motifs section) | Motif grid, category filter, size/position controls |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | Full page: header, both cards (Your Design + Price Summary), all expandable sections, section dividers, price values, notes box, "What's Included" section |
+| `components/ProjectActions.tsx` | Save card, saved designs list card, inputs, buttons, list items |
+| `app/_ui/HomeSplash.tsx` | Full homepage: hero, How It Works, CTA, footer — see details below |
+
+#### ✅ Critical Bug: Gradient Override Pattern
+
+Tailwind `bg-gradient-to-br` / `bg-gradient-to-r` sets `background-image: linear-gradient(...)`. Adding `day:bg-white` only sets `background-color`, which CSS renders **behind** `background-image` — so the gradient wins.
+
+**Fix**: Always add `day:bg-none` (sets `background-image: none`) **before** the `day:bg-[color]`:
+```tsx
+// ✅ Correct
+className="bg-gradient-to-br from-gray-800 to-gray-900 day:bg-none day:bg-white"
+
+// ❌ Wrong — gradient will still show in day mode
+className="bg-gradient-to-br from-gray-800 to-gray-900 day:bg-white"
+```
+
+Also, **dark-only decorative overlay divs** (glow orbs, black vignette gradients) must be hidden in day mode:
+```tsx
+<div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 day:hidden" />
+<div className="absolute -top-32 right-0 bg-[#d4af37]/30 blur-[180px] day:hidden" />
+```
+
+#### ✅ Homepage Day Mode — `isDayMode` MutationObserver Pattern
+
+The homepage (`app/_ui/HomeSplash.tsx`) uses many inline `style={{ background: '...' }}` backgrounds (radial/linear gradients). Inline styles **cannot** be overridden by Tailwind `day:` classes — inline styles always win in CSS specificity.
+
+**Solution**: local `isDayMode` React state driven by a `MutationObserver` on `<html data-theme>`:
+
+```tsx
+const [isDayMode, setIsDayMode] = useState(false);
+useEffect(() => {
+  const html = document.documentElement;
+  setIsDayMode(html.dataset.theme === 'day');
+  const observer = new MutationObserver(() =>
+    setIsDayMode(html.dataset.theme === 'day')
+  );
+  observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+  return () => observer.disconnect();
+}, []);
+```
+
+Then use it in JSX:
+```tsx
+<div style={{ background: isDayMode ? '#f9fafb' : 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}>
+```
+
+**Use this pattern in any component that has inline `style=` backgrounds and needs day-mode support.**
+
+#### Day Mode Color Palette (Homepage / Sections)
+
+| Section | Day background | Notes |
+|---------|---------------|-------|
+| Root wrapper | `#f9fafb` (gray-50) | Replaces dark radial gradient |
+| "How It Works" | `#f3f4f6` (gray-100) | Replaces dark linear gradient |
+| CTA section | `#fffbeb` (amber-50) | Replaces dark radial gradient |
+| Footer | `day:bg-gray-100` | Tailwind class (no inline style needed) |
+| Step / feature cards | `day:bg-white day:border-amber-200` | White on gray section bg |
+| Headings | `#1a1a1a` / `day:text-gray-900` | Near-black |
+| Body text | `#374151` / `day:text-gray-600` | Gray-700 |
+| Gold accents | `#b45309` / `day:text-amber-700` | Amber-700 replaces gold |
+
+#### Default Theme Decision
+
+**Dark mode is the default** — `useState('dark')` in `ThemeProvider.tsx`. The gold-on-dark aesthetic is the brand identity and makes the 3D scene and stone textures pop. Day mode is user opt-in via the ☀️/🌙 toggle.
+
+---
+
+## Current Status (2026-05-28) — Day/Night UI Theme Rollout
+
+### ✅ Day/Night Theme System
+
+A full **Day / Night** (light / dark) mode toggle has been implemented across the entire application UI (not the 3D scene — the scene always uses its own dark sky/grass environment).
+
+#### Core Implementation
+
+**`styles/globals.css`** — Tailwind v4 custom variant:
+```css
+@custom-variant day (&:where([data-theme=day], [data-theme=day] *));
+```
+This gives `day:` a specificity of `(0,1,1)`, which beats all standard utilities — no `!important` needed.
+
+**`app/layout.tsx`**:
+- `<html data-theme="dark">` as default (dark mode on first load)
+- Inline no-FOUC script reads `localStorage.getItem('theme')` and applies it before hydration
+- `<ThemeProvider>` (React context) + `<ThemeToggle>` button in layout
+
+**`components/ThemeToggle.tsx`** — Circular ☀️/🌙 button, `top-5 left-5` fixed, 20px margin from corner, `z-50`. Reads/writes `localStorage.theme` and sets `document.documentElement.dataset.theme`. Animates with a spin transition on swap.
+
+**`components/ThemeProvider.tsx`** — React context (`ThemeContext`) exposing `{ theme, setTheme }`. Wrap your whole app to give any component access via `useTheme()`.
+
+#### Tailwind `day:` Variant Pattern
+
+The convention used throughout the app:
+```tsx
+// Backgrounds
+className="bg-[#0A0A0A] day:bg-white"
+className="bg-gradient-to-br from-[...] to-[...] day:bg-none day:bg-gray-50"
+
+// Text
+className="text-white day:text-gray-900"         // headings
+className="text-white/70 day:text-gray-600"      // body
+className="text-white/40 day:text-gray-400"      // muted
+
+// Borders
+className="border-white/10 day:border-gray-200"
+
+// Hide dark-only decorative gradients
+className="bg-gradient-to-br from-[...] to-[...] day:hidden"
+
+// Inputs
+className="bg-white/5 border-white/15 text-white day:bg-white day:border-gray-300 day:text-gray-900"
+```
+
+#### Pages / Components Updated for Day Mode
+
+| File | What was fixed |
+|------|---------------|
+| `app/layout.tsx` | Theme system bootstrap, no-FOUC script |
+| `components/ThemeToggle.tsx` | Toggle button (new) |
+| `components/ThemeProvider.tsx` | Theme context (new) |
+| `components/DesignerNav.tsx` | Full sidebar: header, nav links, section panels, pill buttons (No Base/Polished/Rock Pitch) |
+| `components/ui/SegmentedControl.tsx` | Track bg `day:bg-gray-100`, inactive tabs `day:text-gray-500` |
+| `components/QuickEnquiryForm.tsx` | Sidebar accordion form — bg, title, labels, inputs |
+| `components/QuickEnquiryModal.tsx` | Modal dialog — backdrop, card bg (gradient suppressed), all labels/inputs/buttons |
+| `app/my-account/page.tsx` | Account overview |
+| `app/my-account/designs/page.tsx` | Saved designs list |
+| `app/my-account/designs/[id]/page.tsx` | Single design detail + Share Email panel |
+| `app/my-account/details/page.tsx` | Account details form (CSS constants + all elements) |
+| `app/my-account/invoice/page.tsx` | Invoice page |
+| `app/orders/page.tsx` | Orders list |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Product selector page |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Shape selector (both urn + regular render paths) |
+| `app/privacy/page.tsx` | Privacy policy page (new — see below) |
+| `app/inscriptions/InscriptionOverlayPanel.tsx` | Select Font / Select Color tabs |
+
+#### ✅ Privacy Page Created
+
+`app/privacy/page.tsx` — server component with `metadata`. Content extracted from `languages24.xml` tag `<privacy_policy_iframe>` CDATA block and rendered via `dangerouslySetInnerHTML`. Uses `@tailwindcss/typography` (`prose`) for typography with full day/night variant overrides.
+
+Link to `/privacy` already existed in `AccountNav.tsx`.
+
+#### Admin Theme — Separate Scope
+
+The admin panel (`/admin/**`) uses a **separate** `[data-admin-theme=dark]` CSS scope. Do NOT add `day:` classes to admin components — they have their own theme.
 
 ---
 
@@ -8327,7 +8490,20 @@ Large base64 data URLs (1–5 MB per image) would be embedded in the `designStat
 
 ---
 
-## UI Theming & Primary Color
+## UI Theming & Day/Night Mode
+
+### Day / Night Theme
+
+See **Current Status (2026-05-28)** above for the full implementation details.
+
+**Quick reference:**
+- Variant: `@custom-variant day (&:where([data-theme=day], [data-theme=day] *))` in `styles/globals.css`
+- Default: `data-theme="dark"` on `<html>`, persisted in `localStorage`
+- Toggle: `components/ThemeToggle.tsx` — fixed circle button top-left, 20px margin
+- Context: `components/ThemeProvider.tsx` — `useTheme()` hook
+- Admin is **separate scope** (`[data-admin-theme=dark]`) — never apply `day:` there
+
+---
 
 ### Primary Color: #DEBD68
 The application uses a gold/amber primary color `#DEBD68` for all CTAs, selection highlights, and UI accents. This is defined as a full Tailwind color scale in `tailwind.config.js`:
@@ -9794,4 +9970,4 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
-*End of STARTER.md - Last updated: June 2, 2026*
+*End of STARTER.md - Last updated: 2026-05-28*

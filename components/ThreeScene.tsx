@@ -238,8 +238,10 @@ function ProductNameHeader() {
       <div className="absolute top-6 left-6 z-10 hidden lg:flex flex-col gap-2 items-start">
         {displayProductName && (
           <div className="pointer-events-none flex h-8 items-center gap-2 bg-black/55 backdrop-blur-md border border-white/10 rounded-full pl-2.5 pr-3.5 shadow-lg">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#DEBD68] shrink-0" />
-            <span className="text-white/90 text-sm font-medium tracking-wide leading-none whitespace-nowrap">
+            <svg className="h-3.5 w-3.5 shrink-0 text-[#DEBD68]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 21h14M5 21V9a7 7 0 1114 0v12" />
+            </svg>
+            <span className="text-white text-sm font-semibold tracking-wide leading-none whitespace-nowrap">
               {displayProductName}
             </span>
           </div>
@@ -247,7 +249,7 @@ function ProductNameHeader() {
         <button
           type="button"
           onClick={() => setShowQuickEnquiry(true)}
-          className="flex h-8 items-center gap-2 bg-black/55 backdrop-blur-md border border-primary/40 rounded-full pl-2.5 pr-3.5 shadow-lg text-primary text-sm font-semibold tracking-wide transition-colors hover:bg-primary/20 pointer-events-auto"
+          className="flex h-8 items-center gap-2 bg-black/55 backdrop-blur-md border border-primary/40 rounded-full pl-2.5 pr-3.5 shadow-lg text-white text-sm font-semibold tracking-wide transition-colors hover:bg-primary/20 pointer-events-auto"
         >
           <svg className="h-3.5 w-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z" />

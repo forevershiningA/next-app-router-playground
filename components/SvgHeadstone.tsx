@@ -1203,17 +1203,17 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     // Match the calibrated polished granite response used across the monument parts.
     const common = {
       color: new THREE.Color(isSlant ? 0x444444 : 0xa6a6a6),
-      roughness: isSlant ? 0.08 : 0.24,
+      roughness: isSlant ? 0.08 : 0.18,
       metalness: 0.0,
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-      envMapIntensity: isSlant ? 2.0 : 0.78,
+      envMapIntensity: isSlant ? 2.0 : 1.1,
     };
 
     const faceMat = new THREE.MeshPhysicalMaterial({ 
       ...common, 
       map: clonedFaceMap,
       clearcoat: 1.0,
-      clearcoatRoughness: isSlant ? 0.05 : 0.18,
+      clearcoatRoughness: isSlant ? 0.05 : 0.08,
       polygonOffset: true,
       polygonOffsetFactor: 1,
       polygonOffsetUnits: 1,
@@ -1229,7 +1229,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
             normalScale: new THREE.Vector2(2.5, 2.5),
           } : {}),
           clearcoat: 1.0,
-          clearcoatRoughness: isSlant ? 0.05 : 0.18,
+          clearcoatRoughness: isSlant ? 0.05 : 0.08,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,

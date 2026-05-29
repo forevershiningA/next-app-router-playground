@@ -380,10 +380,10 @@ export default function CropCanvas() {
   }, [allowFreeformHandles, dragState, hasFixedSizes, imageBoxPx.height, imageBoxPx.width, maskBounds, updateCropArea]);
 
   return (
-    <div className="absolute inset-0 bg-[#0A0A0A] flex items-center justify-center">
+    <div className="absolute inset-0 bg-[#0A0A0A] day:bg-gray-200 flex items-center justify-center">
       <div className="w-full h-full max-w-6xl max-h-[90vh] p-8">
         {/* Interactive Crop Preview */}
-        <div className="relative w-full h-full bg-gray-900 rounded-lg overflow-hidden" ref={previewRef}>
+        <div className="relative w-full h-full bg-gray-900 day:bg-gray-300 rounded-lg overflow-hidden" ref={previewRef}>
           {/* Uploaded Image */}
           <Image
             src={uploadedImage}

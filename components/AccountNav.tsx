@@ -101,21 +101,21 @@ export default function AccountNav() {
   }
 
   return (
-    <aside className="fixed top-0 left-0 z-20 hidden h-full w-[400px] flex-col border-r border-[#3f2a1b]/80 bg-[#120804] text-white shadow-[0_45px_120px_rgba(0,0,0,0.85)] lg:flex">
+    <aside className="fixed top-0 left-0 z-20 hidden h-full w-[400px] flex-col border-r border-[#3f2a1b]/80 day:border-stone-200 bg-[#120804] day:bg-stone-50 text-white day:text-gray-900 shadow-[0_45px_120px_rgba(0,0,0,0.85)] lg:flex">
 
-      <div className="flex flex-1 flex-col bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410]">
+      <div className="flex flex-1 flex-col bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] day:from-stone-50 day:via-stone-50 day:to-stone-100">
 
         {/* Desktop Header */}
-        <div className="hidden items-center justify-between border-b border-white/10 px-6 md:flex">
+        <div className="hidden items-center justify-between border-b border-white/10 day:border-gray-200 px-6 md:flex">
           <Link href="/" className="hover:opacity-80 transition-opacity">
             <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" />
           </Link>
         </div>
 
         {/* Mobile Header */}
-        <div className="md:hidden border-b border-white/5 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)]">
+        <div className="md:hidden border-b border-white/5 day:border-gray-200 bg-[#120c08]/95 day:bg-stone-50 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)]">
           <div className="flex items-center justify-between gap-4">
-            <p className="text-[10px] uppercase tracking-[0.45em] text-white/50">Guided Studio</p>
+            <p className="text-[10px] uppercase tracking-[0.45em] text-white/50 day:text-gray-400">Guided Studio</p>
             <Link href="/" className="hover:opacity-80 transition-opacity">
               <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="h-8 w-auto" />
             </Link>
@@ -123,17 +123,17 @@ export default function AccountNav() {
         </div>
 
         <nav aria-label="Account menu" className="flex-1 overflow-y-auto px-5 py-6">
-          <p className="text-[12px] uppercase tracking-[0.4em] text-white/40">Account menu</p>
+          <p className="text-[12px] uppercase tracking-[0.4em] text-white/40 day:text-gray-400">Account menu</p>
           <div className="mt-4 space-y-3">
             {/* New Design — special button that resets design state */}
             <button
               onClick={handleNewDesign}
-              className="w-full flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border border-white/12 text-white/75 hover:border-white/30 hover:bg-white/5"
+              className="w-full flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border border-white/12 day:border-gray-200 text-white/75 day:text-gray-700 hover:border-white/30 day:hover:border-gray-400 hover:bg-white/5 day:hover:bg-gray-100"
             >
               <div className="flex items-center gap-4">
                 <SparklesIcon className="h-5 w-5" />
                 <div className="flex-1">
-                  <p className="text-[16px] text-white/45">New Design</p>
+                  <p className="text-[16px] text-white/45 day:text-gray-600">New Design</p>
                 </div>
               </div>
             </button>
@@ -143,7 +143,7 @@ export default function AccountNav() {
             {/* Logout button */}
             <button
               onClick={handleLogout}
-              className="w-full flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border border-white/12 text-white/75 hover:border-red-400/30 hover:bg-red-400/5 hover:text-red-300"
+              className="w-full flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all border border-white/12 day:border-gray-200 text-white/75 day:text-gray-700 hover:border-red-400/30 hover:bg-red-400/5 hover:text-red-300 day:hover:border-red-300 day:hover:bg-red-50 day:hover:text-red-600"
             >
               <div className="flex items-center gap-4">
                 <ShieldCheckIcon className="h-5 w-5" />
@@ -153,17 +153,17 @@ export default function AccountNav() {
               </div>
             </button>
           </div>
-          <div className="mt-8 rounded-2xl border border-white/12 bg-white/5 px-4 py-4 text-sm text-white/75 shadow-[0_2px_4px_rgba(0,0,0,0.5)]">
-            <p className="text-[12px] uppercase tracking-[0.4em] text-white/45">Signed in as</p>
-            <p className="mt-2 text-lg font-semibold text-white">
+          <div className="mt-8 rounded-2xl border border-white/12 day:border-gray-200 bg-white/5 day:bg-white px-4 py-4 text-sm text-white/75 day:text-gray-700 shadow-[0_2px_4px_rgba(0,0,0,0.5)] day:shadow-sm">
+            <p className="text-[12px] uppercase tracking-[0.4em] text-white/45 day:text-gray-400">Signed in as</p>
+            <p className="mt-2 text-lg font-semibold text-white day:text-gray-900">
               {sessionEmail ?? 'Loading...'}
             </p>
           </div>
         </nav>
       </div>
-      <div className="border-t border-white/8 px-6 py-5 text-sm text-white/70">
+      <div className="border-t border-white/8 day:border-gray-200 px-6 py-5 text-sm text-white/70 day:text-gray-600">
         Need assistance?{' '}
-        <a href="mailto:support@forevershining.com" className="text-amber-200 hover:text-white">
+        <a href="mailto:support@forevershining.com" className="text-amber-200 day:text-amber-700 hover:text-white day:hover:text-amber-900">
           Email support
         </a>
       </div>
@@ -181,14 +181,14 @@ function AccountNavLink({
   isActive,
 }: AccountNavLinkProps) {
   const cardClasses = isActive
-    ? 'border-white/35 bg-white/12 text-white shadow-[0_2px_5px_rgba(0,0,0,0.6)]'
-    : 'border-white/12 text-white/75 hover:border-white/30 hover:bg-white/5';
+    ? 'border-white/35 day:border-[#DEBD68]/50 bg-white/12 day:bg-amber-50 text-white day:text-gray-900 shadow-[0_2px_5px_rgba(0,0,0,0.6)]'
+    : 'border-white/12 day:border-gray-200 text-white/75 day:text-gray-700 hover:border-white/30 day:hover:border-gray-400 hover:bg-white/5 day:hover:bg-gray-100';
 
   const iconClasses = tone === 'primary'
     ? 'bg-gradient-to-tr from-amber-200 to-amber-400 text-[#2b1404] border-amber-200/60'
     : isActive
-      ? 'bg-white text-[#1a120c] border-white/70'
-      : 'bg-white/10 text-white/80 border-white/5';
+      ? 'bg-white day:bg-amber-100 text-[#1a120c] day:text-amber-800 border-white/70 day:border-amber-200'
+      : 'bg-white/10 day:bg-gray-100 text-white/80 day:text-gray-600 border-white/5 day:border-gray-200';
 
   return (
     <Link
@@ -199,7 +199,7 @@ function AccountNavLink({
       <div className="flex items-center gap-4">
         <Icon className="h-5 w-5" />
         <div className="flex-1">
-          <p className="text-[16px] text-white/45">{label}</p>
+          <p className="text-[16px] text-white/45 day:text-gray-600">{label}</p>
         </div>
       </div>
     </Link>

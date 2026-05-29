@@ -46,9 +46,9 @@ function KerbMesh({
     () =>
       createPolishedGraniteMaterial({
         texture,
-        envMapIntensity: 0.78,
-        roughness: 0.26,
-        clearcoatRoughness: 0.18,
+        envMapIntensity: 1.1,
+        roughness: 0.18,
+        clearcoatRoughness: 0.08,
       }),
     [texture],
   );

@@ -301,6 +301,7 @@ export default function MyAccountPage() {
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareProjectId, setShareProjectId] = useState<string | null>(null);
   const [shareProjectTitle, setShareProjectTitle] = useState<string | undefined>(undefined);
+  const [shareProjectScreenshot, setShareProjectScreenshot] = useState<string | undefined>(undefined);
 
   async function handleEdit(cardId: string) {
     setLoadingEditId(cardId);
@@ -432,36 +433,36 @@ export default function MyAccountPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white">
+    <div className="relative min-h-screen bg-[#050301] day:bg-stone-100 text-white day:text-gray-900">
       <div className="relative mx-auto w-full max-w-7xl px-10 py-10">
         <section
-          className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl"
+          className="rounded-[32px] border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white/90 px-10 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl"
           aria-labelledby="saved-designs-heading"
         >
-          <header className="mb-6 border-b border-white/5 pb-6">
+          <header className="mb-6 border-b border-white/5 day:border-gray-200 pb-6">
             <div className="flex items-start justify-between">
               <div>
                 <h2 id="saved-designs-heading" className="text-3xl font-semibold tracking-tight">
                   Saved Designs
                 </h2>
-                <p className="mt-3 inline-flex items-center gap-2 text-sm text-white/70">
-                  <UserCircleIcon className="h-5 w-5 text-white/60" aria-hidden />
+                <p className="mt-3 inline-flex items-center gap-2 text-sm text-white/70 day:text-gray-500">
+                  <UserCircleIcon className="h-5 w-5 text-white/60 day:text-gray-400" aria-hidden />
                   {session.email}
                 </p>
               </div>
               <div className="flex items-center gap-2">
                 <Link
                   href="/my-account/details"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-100 transition"
                 >
-                  <UserCircleIcon className="h-4 w-4 text-white/60" aria-hidden />
+                  <UserCircleIcon className="h-4 w-4 text-white/60 day:text-gray-400" aria-hidden />
                   Account Details
                 </Link>
                 <Link
                   href="/my-account/invoice"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-medium text-white hover:bg-white/10 transition"
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-100 transition"
                 >
-                  <UserCircleIcon className="h-4 w-4 text-white/60" aria-hidden />
+                  <UserCircleIcon className="h-4 w-4 text-white/60 day:text-gray-400" aria-hidden />
                   Invoice Details
                 </Link>
               </div>
@@ -473,7 +474,7 @@ export default function MyAccountPage() {
               return (
                 <article
                   key={card.id}
-                  className="flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.55)] backdrop-blur-sm"
+                  className="flex flex-col rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.55)] day:shadow-md backdrop-blur-sm"
                 >
                   {/* Preview Image */}
                   <div className="mb-4">
@@ -489,15 +490,15 @@ export default function MyAccountPage() {
 
                   {/* Card Header */}
                   <div className="mb-3">
-                    <h3 className="text-lg font-semibold text-white">{card.title}</h3>
-                    <div className="mt-1 flex items-center justify-between text-sm text-white/70">
+                    <h3 className="text-lg font-semibold text-white day:text-gray-900">{card.title}</h3>
+                    <div className="mt-1 flex items-center justify-between text-sm text-white/70 day:text-gray-500">
                       <span className="font-medium text-[#D4A84F]">{card.priceLabel}</span>
-                      <span className="text-white/50">{card.relativeUpdated}</span>
+                      <span className="text-white/50 day:text-gray-400">{card.relativeUpdated}</span>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="mb-4 flex-1 text-sm text-white/75 line-clamp-2">
+                  <p className="mb-4 flex-1 text-sm text-white/75 day:text-gray-600 line-clamp-2">
                     {card.description}
                   </p>
 
@@ -516,30 +517,30 @@ export default function MyAccountPage() {
                       type="button"
                       onClick={() => handleEdit(card.id)}
                       disabled={loadingEditId === card.id}
-                      className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/10 cursor-pointer disabled:opacity-50"
+                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer disabled:opacity-50"
                     >
                       {loadingEditId === card.id ? 'Loading…' : 'Edit'}
                     </button>
                     <Link
                       href={`/my-account/designs/${card.id}`}
-                      className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-xs font-medium text-white transition hover:bg-white/10 cursor-pointer text-center"
+                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer text-center"
                     >
                       More
                     </Link>
                     <div className="relative ml-auto" ref={openMenuId === card.id ? menuRef : null}>
                       <button
                         type="button"
-                        className="rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-white transition hover:bg-white/10 cursor-pointer"
+                        className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-3 py-2 text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer"
                         onClick={() => setOpenMenuId(openMenuId === card.id ? null : card.id)}
                         aria-label="More options"
                       >
                         ⋮
                       </button>
                       {openMenuId === card.id && (
-                        <div className="absolute right-0 bottom-full mb-1 z-50 w-48 rounded-xl border border-white/10 bg-[#1a1208] shadow-2xl overflow-hidden">
+                        <div className="absolute right-0 bottom-full mb-1 z-50 w-48 rounded-xl border border-white/10 day:border-gray-200 bg-[#1a1208] day:bg-white shadow-2xl overflow-hidden">
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white hover:bg-white/10 transition"
+                            className="w-full text-left px-4 py-2.5 text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
                             onClick={async () => {
                               setOpenMenuId(null);
                               try {
@@ -552,36 +553,36 @@ export default function MyAccountPage() {
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white hover:bg-white/10 transition"
-                            onClick={() => { setOpenMenuId(null); setShareProjectId(card.id); setShareProjectTitle(card.title); setShareModalOpen(true); }}
+                            className="w-full text-left px-4 py-2.5 text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
+                            onClick={() => { setOpenMenuId(null); setShareProjectId(card.id); setShareProjectTitle(card.title); setShareProjectScreenshot(card.preview); setShareModalOpen(true); }}
                           >
                             ✉️ Email
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 hover:bg-white/10 transition"
+                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition"
                             onClick={() => { setOpenMenuId(null); const u = window.location.origin + `/my-account/designs/${card.id}`; window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}`, '_blank', 'width=600,height=400'); }}
                           >
                             Facebook
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 hover:bg-white/10 transition"
+                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition"
                             onClick={() => { setOpenMenuId(null); const u = window.location.origin + `/my-account/designs/${card.id}`; window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(u)}&text=${encodeURIComponent('Check out my memorial design: ' + card.title)}`, '_blank', 'width=600,height=400'); }}
                           >
                             Twitter / X
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 hover:bg-white/10 transition"
+                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition"
                             onClick={() => { setOpenMenuId(null); const u = window.location.origin + `/my-account/designs/${card.id}`; window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(u)}`, '_blank', 'width=600,height=400'); }}
                           >
                             LinkedIn
                           </button>
-                          <div className="border-t border-white/10" />
+                          <div className="border-t border-white/10 day:border-gray-100" />
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white hover:bg-white/10 transition"
+                            className="w-full text-left px-4 py-2.5 text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
                             onClick={async () => {
                               setOpenMenuId(null);
                               try {
@@ -606,10 +607,10 @@ export default function MyAccountPage() {
                           >
                             Download PDF
                           </button>
-                          <div className="border-t border-white/10" />
+                          <div className="border-t border-white/10 day:border-gray-100" />
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-red-400 hover:bg-red-500/10 transition"
+                            className="w-full text-left px-4 py-2.5 text-xs text-red-400 day:text-red-600 hover:bg-red-500/10 day:hover:bg-red-50 transition"
                             onClick={() => handleDeleteCard(card.id)}
                           >
                             Delete
@@ -622,12 +623,12 @@ export default function MyAccountPage() {
               );
             })}
             {!visibleCards.length && !isLoading && (
-              <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-white/70">
+              <div className="col-span-full rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-gray-50 p-10 text-center text-white/70 day:text-gray-500">
                 No saved designs available yet. Start a new design to see it here.
               </div>
             )}
             {isLoading && (
-              <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-white/70">
+              <div className="col-span-full rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-gray-50 p-10 text-center text-white/70 day:text-gray-500">
                 Loading your saved designs...
               </div>
             )}
@@ -650,10 +651,11 @@ export default function MyAccountPage() {
           <React.Suspense fallback={null}>
             <EmailShareModal
               isOpen={shareModalOpen}
-              onClose={() => { setShareModalOpen(false); setShareProjectId(null); setShareProjectTitle(undefined); }}
+              onClose={() => { setShareModalOpen(false); setShareProjectId(null); setShareProjectTitle(undefined); setShareProjectScreenshot(undefined); }}
               projectId={shareProjectId}
               projectTitle={shareProjectTitle}
               senderEmail={session?.email ?? null}
+              screenshotUrl={shareProjectScreenshot}
             />
           </React.Suspense>
         )}

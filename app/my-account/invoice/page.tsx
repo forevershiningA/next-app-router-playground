@@ -80,42 +80,42 @@ export default function InvoiceDetailsPage() {
   }
 
   const inputClass =
-    'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40';
-  const labelClass = 'block text-xs font-medium text-white/70 mb-1';
-  const fieldValueClass = 'text-sm text-white';
-  const fieldLabelClass = 'text-xs text-white/55 mb-0.5';
-  const emptyClass = 'text-sm text-white/30';
+    'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40 day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-500 day:focus:ring-amber-400/40';
+  const labelClass = 'block text-xs font-medium text-white/70 mb-1 day:text-gray-600';
+  const fieldValueClass = 'text-sm text-white day:text-gray-900';
+  const fieldLabelClass = 'text-xs text-white/55 mb-0.5 day:text-gray-400';
+  const emptyClass = 'text-sm text-white/30 day:text-gray-400';
   const btnClass =
-    'inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:border-white/50 transition';
+    'inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:border-white/50 transition day:border-gray-300 day:bg-gray-50 day:text-gray-600 day:hover:bg-gray-100 day:hover:border-gray-400';
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white">
+    <div className="relative min-h-screen bg-[#050301] text-white day:bg-stone-100 day:text-gray-900">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
         aria-hidden
       />
       <div className="relative mx-auto w-full max-w-3xl px-10 py-10">
         <Link
           href="/my-account"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition day:text-gray-500 day:hover:text-gray-900"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           Back to Saved Designs
         </Link>
 
-        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin]">
+        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg">
           <header className="mb-0 pb-6">
-            <h1 className="py-[10px] text-3xl font-semibold tracking-tight">Invoice Details</h1>
+            <h1 className="py-[10px] text-3xl font-semibold tracking-tight day:text-gray-900">Invoice Details</h1>
           </header>
 
           {isLoading ? (
-            <p className="text-sm text-white/40">Loading…</p>
+            <p className="text-sm text-white/40 day:text-gray-400">Loading…</p>
           ) : (
             <div className="space-y-6">
 
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-base font-semibold text-white/90">Business Identity</h2>
+                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Business Identity</h2>
                   {!editing && (
                     <button onClick={() => { setEditing(true); setMsg(''); }} className={btnClass}>
                       <PencilIcon className="h-3.5 w-3.5" /> Edit
@@ -150,8 +150,8 @@ export default function InvoiceDetailsPage() {
                       <input className={inputClass} value={form.website || ''} onChange={(e) => setForm((f) => ({ ...f, website: e.target.value }))} placeholder="https://example.com.au" />
                     </div>
 
-                    <div className="border-t border-white/8 pt-4">
-                      <p className="mb-3 text-xs font-medium text-white/50 uppercase tracking-widest">Billing Address</p>
+                    <div className="border-t border-white/8 pt-4 day:border-gray-200">
+                      <p className="mb-3 text-xs font-medium text-white/50 uppercase tracking-widest day:text-gray-400">Billing Address</p>
                       <div className="space-y-3">
                         <div>
                           <label className={labelClass}>Street Address</label>
@@ -189,7 +189,7 @@ export default function InvoiceDetailsPage() {
                       </button>
                       <button
                         onClick={() => { setEditing(false); setMsg(''); setForm({ ...invoice }); }}
-                        className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition"
+                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
                       >
                         Cancel
                       </button>
@@ -220,8 +220,8 @@ export default function InvoiceDetailsPage() {
                       </div>
                     </dl>
 
-                    <div className="border-t border-white/8 pt-4">
-                      <p className="mb-3 text-xs font-medium text-white/50 uppercase tracking-widest">Billing Address</p>
+                    <div className="border-t border-white/8 pt-4 day:border-gray-200">
+                      <p className="mb-3 text-xs font-medium text-white/50 uppercase tracking-widest day:text-gray-400">Billing Address</p>
                       <dl className="grid grid-cols-2 gap-x-8 gap-y-4">
                         <div className="col-span-2">
                           <dt className={fieldLabelClass}>Street Address</dt>

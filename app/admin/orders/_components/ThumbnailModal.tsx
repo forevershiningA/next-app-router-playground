@@ -11,7 +11,7 @@ interface ThumbnailModalProps {
   thumbSize?: string;
 }
 
-export function ThumbnailModal({ src, fullSrc, alt = 'Design preview', thumbSize = 'h-24 w-24' }: ThumbnailModalProps) {
+export function ThumbnailModal({ src, fullSrc, alt = 'Design preview', thumbSize = 'h-32 w-32' }: ThumbnailModalProps) {
   const modalSrc = fullSrc || src;
   const [open, setOpen] = useState(false);
 

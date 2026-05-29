@@ -33,6 +33,7 @@ export function SavedDesignEmail({
       : `${(data.totalCents / 100).toFixed(2)} ${config.currencySymbol}`;
 
   const editUrl = `${config.link}/my-account`;
+  const viewDesignUrl = `${config.link}/design/${data.designId}`;
   const galleryUrl = `${config.link}/designs`;
   const contactUrl = `mailto:${config.email}`;
 
@@ -58,6 +59,7 @@ export function SavedDesignEmail({
       <DesignPreview
         screenshotUrl={data.screenshotUrl}
         designName={data.designName}
+        viewUrl={viewDesignUrl}
         editUrl={editUrl}
       />
 
@@ -90,6 +92,13 @@ export function SavedDesignEmail({
         <Text style={nextStepsHeading}>What would you like to do next?</Text>
         <Row>
           <Column style={stepCol}>
+            <Text style={stepIcon}>◎</Text>
+            <Text style={stepTitle}>View Design</Text>
+            <Text style={stepText}>See the full 3D design and quote in your browser</Text>
+            <Button href={viewDesignUrl} style={stepBtnPrimary}>View Design</Button>
+          </Column>
+          <Column style={stepDivider} />
+          <Column style={stepCol}>
             <Text style={stepIcon}>✏</Text>
             <Text style={stepTitle}>Edit Design</Text>
             <Text style={stepText}>Refine inscriptions, materials or dimensions</Text>
@@ -101,13 +110,6 @@ export function SavedDesignEmail({
             <Text style={stepTitle}>Get in Touch</Text>
             <Text style={stepText}>Questions? Our team is ready to help</Text>
             <Button href={contactUrl} style={stepBtn}>Contact Us</Button>
-          </Column>
-          <Column style={stepDivider} />
-          <Column style={stepCol}>
-            <Text style={stepIcon}>◈</Text>
-            <Text style={stepTitle}>View Gallery</Text>
-            <Text style={stepText}>Browse completed designs for inspiration</Text>
-            <Button href={galleryUrl} style={stepBtn}>View Gallery</Button>
           </Column>
         </Row>
       </Section>
@@ -279,6 +281,20 @@ const stepBtn: React.CSSProperties = {
   color: '#DEBD68',
   fontSize: '11px',
   fontWeight: 600,
+  letterSpacing: '1px',
+  textTransform: 'uppercase',
+  padding: '8px 14px',
+  border: '1px solid #DEBD68',
+  borderRadius: '2px',
+  textDecoration: 'none',
+  display: 'inline-block',
+};
+
+const stepBtnPrimary: React.CSSProperties = {
+  backgroundColor: '#DEBD68',
+  color: '#060709',
+  fontSize: '11px',
+  fontWeight: 700,
   letterSpacing: '1px',
   textTransform: 'uppercase',
   padding: '8px 14px',

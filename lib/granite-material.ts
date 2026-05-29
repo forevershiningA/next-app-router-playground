@@ -35,11 +35,11 @@ export function configureGraniteTexture(
 export function createPolishedGraniteMaterial({
   texture,
   color = DEFAULT_GRANITE_TINT,
-  roughness = 0.2,
+  roughness = 0.18,
   metalness = 0,
-  envMapIntensity = 0.95,
+  envMapIntensity = 1.1,
   clearcoat = 1,
-  clearcoatRoughness = 0.14,
+  clearcoatRoughness = 0.08,
   normalMap,
   normalScale,
 }: PolishedGraniteMaterialOptions) {

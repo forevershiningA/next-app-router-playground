@@ -181,12 +181,12 @@ export default function InscriptionOverlayPanel() {
         {/* Tabs for font and color (only show tabs if color is available) */}
         {showInscriptionColor && (
           <div>
-            <div className="flex gap-2 border-b border-white/20">
+            <div className="flex gap-2 border-b border-white/20 day:border-gray-200">
               <button
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   activeTab === 'font'
-                    ? 'border-b-2 border-violet-400 text-violet-300'
-                    : 'text-white/70 hover:text-white'
+                    ? 'border-b-2 border-violet-400 text-violet-300 day:border-amber-500 day:text-amber-600'
+                    : 'text-white/70 hover:text-white day:text-gray-500 day:hover:text-gray-900'
                 }`}
                 onClick={() => setActiveTab('font')}
               >
@@ -195,8 +195,8 @@ export default function InscriptionOverlayPanel() {
               <button
                 className={`px-4 py-2 text-sm font-medium transition-colors ${
                   activeTab === 'color'
-                    ? 'border-b-2 border-violet-400 text-violet-300'
-                    : 'text-white/70 hover:text-white'
+                    ? 'border-b-2 border-violet-400 text-violet-300 day:border-amber-500 day:text-amber-600'
+                    : 'text-white/70 hover:text-white day:text-gray-500 day:hover:text-gray-900'
                 }`}
                 onClick={() => setActiveTab('color')}
               >

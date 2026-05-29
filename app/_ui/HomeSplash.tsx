@@ -174,6 +174,17 @@ export default function HomeSplash() {
   const [rotation, setRotation] = useState(0);
   const [isInViewport, setIsInViewport] = useState(true);
   const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
+  const [isDayMode, setIsDayMode] = useState(false);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    setIsDayMode(html.dataset.theme === 'day');
+    const observer = new MutationObserver(() => {
+      setIsDayMode(html.dataset.theme === 'day');
+    });
+    observer.observe(html, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => observer.disconnect();
+  }, []);
 
   const handleHashLink = (slug: HashModalKey) => (event: MouseEvent<HTMLElement>) => {
     event.preventDefault();
@@ -271,7 +282,10 @@ export default function HomeSplash() {
   ];
 
   return (
-    <div className="min-h-screen" style={{ background: 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}>
+    <div
+      className="min-h-screen"
+      style={{ background: isDayMode ? '#f9fafb' : 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}
+    >
       
       {/* Hero Section - Full Viewport Layout */}
       <div className="relative min-h-screen flex flex-col overflow-hidden" role="banner">
@@ -305,7 +319,7 @@ export default function HomeSplash() {
             </Link>
             <Link 
               href="/designs" 
-              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors cursor-pointer"
+              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors cursor-pointer day:text-gray-800 day:hover:text-[#b89a5a]"
             >
               Browse Designs
             </Link>
@@ -323,7 +337,7 @@ export default function HomeSplash() {
           role="presentation"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/10" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/10 day:from-white/50 day:via-white/30 day:to-white/10" aria-hidden="true" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(212,175,55,0.25),transparent_55%)] opacity-70" aria-hidden="true" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:140px_140px] opacity-20 mix-blend-screen" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden="true" />
@@ -337,8 +351,8 @@ export default function HomeSplash() {
               <span
                 className="inline-block font-semibold text-[2rem] sm:text-5xl mx-auto"
                 style={{ 
-                  color: '#FFFEF8',
-                  textShadow: '0 1px 1px rgba(0,0,0,2), 0 4px 24px rgba(0,0,0,0)'
+                  color: isDayMode ? '#1a1a1a' : '#FFFEF8',
+                  textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,2), 0 4px 24px rgba(0,0,0,0)'
                 }}
               >
                 Create the Perfect Tribute
@@ -346,8 +360,8 @@ export default function HomeSplash() {
               <span
                 className="block font-light text-xl sm:text-3xl mt-4"
                 style={{ 
-                  color: '#FFFFFF',
-                  textShadow: '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
+                  color: isDayMode ? '#374151' : '#FFFFFF',
+                  textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
                 }}
               >
                 Design a beautiful tribute in real-time 3D - save, share, and order when ready.
@@ -367,8 +381,8 @@ export default function HomeSplash() {
                 <p 
                   className="text-md font-semibold"
                   style={{ 
-                    color: '#F8D64F',
-                    textShadow: '0 2px 8px rgba(0,0,0,0.5)'
+                    color: isDayMode ? '#b45309' : '#F8D64F',
+                    textShadow: isDayMode ? 'none' : '0 2px 8px rgba(0,0,0,0.5)'
                   }}
                 >
                   Trusted by 5,000+ families
@@ -378,7 +392,7 @@ export default function HomeSplash() {
                 {['No credit card', 'Live 3D preview', 'Save & share'].map((item) => (
                   <span
                     key={item}
-                    className="rounded-full border border-white/25 bg-black/35 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm"
+                    className="rounded-full border border-white/25 bg-black/35 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm day:border-gray-300 day:bg-white/80 day:text-gray-700"
                   >
                     {item}
                   </span>
@@ -407,7 +421,7 @@ export default function HomeSplash() {
                   {/* Rotation Controls - Subtle, elegant chevrons */}
                   <button 
                     onClick={rotateLeft}
-                    className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg"
+                    className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg day:bg-white/70 day:border-gray-300 day:text-gray-600"
                     aria-label="Rotate headstone left to view different angles"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -416,7 +430,7 @@ export default function HomeSplash() {
                   </button>
                   <button 
                     onClick={rotateRight}
-                    className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg"
+                    className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg day:bg-white/70 day:border-gray-300 day:text-gray-600"
                     aria-label="Rotate headstone right to view different angles"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -448,7 +462,7 @@ export default function HomeSplash() {
                 onClick={() => {
                   document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-xs font-medium tracking-[0.16em] text-white/80 transition-all hover:border-white/35 hover:text-white"
+                className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-xs font-medium tracking-[0.16em] text-white/80 transition-all hover:border-white/35 hover:text-white day:border-gray-400 day:bg-white/50 day:text-gray-600 day:hover:border-gray-500 day:hover:text-gray-800"
                 aria-label="Scroll to how it works section"
               >
                 SCROLL
@@ -463,21 +477,21 @@ export default function HomeSplash() {
       {/* Features Section - How It Works */}
       <section
         id="how-it-works"
-        className="relative py-24 overflow-hidden border-t border-[#2d241c]"
-        style={{ background: 'linear-gradient(180deg, #130b05 0%, #090503 60%, #050302 100%)' }}
+        className="relative py-24 overflow-hidden border-t border-[#2d241c] day:border-gray-200"
+        style={{ background: isDayMode ? '#f3f4f6' : 'linear-gradient(180deg, #130b05 0%, #090503 60%, #050302 100%)' }}
       >
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] opacity-20 pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 pointer-events-none" />
-        <div className="absolute -top-32 right-0 w-[28rem] h-[28rem] bg-[#d4af37]/30 blur-[180px] opacity-40 pointer-events-none" />
-        <div className="absolute -bottom-32 left-0 w-[32rem] h-[32rem] bg-[#5c4033]/40 blur-[160px] opacity-40 pointer-events-none" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] opacity-20 pointer-events-none day:hidden" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 pointer-events-none day:hidden" />
+        <div className="absolute -top-32 right-0 w-[28rem] h-[28rem] bg-[#d4af37]/30 blur-[180px] opacity-40 pointer-events-none day:hidden" />
+        <div className="absolute -bottom-32 left-0 w-[32rem] h-[32rem] bg-[#5c4033]/40 blur-[160px] opacity-40 pointer-events-none day:hidden" />
 
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-16">
           <div className="flex-1 text-center lg:text-left">
-            <p className="text-xs font-semibold tracking-[0.6em] text-[#d4af37]/80 mb-4">HOW IT WORKS</p>
-            <h2 className="text-4xl md:text-5xl font-serif text-white mb-4 leading-tight">
+            <p className="text-xs font-semibold tracking-[0.6em] text-[#d4af37]/80 mb-4 day:text-amber-700">HOW IT WORKS</p>
+            <h2 className="text-4xl md:text-5xl font-serif text-white mb-4 leading-tight day:text-gray-900">
               Design a Lasting Tribute from the Comfort of Home
             </h2>
-            <p className="text-lg text-white/90 max-w-xl lg:max-w-lg mx-auto lg:mx-0 leading-relaxed">
+            <p className="text-lg text-white/90 max-w-xl lg:max-w-lg mx-auto lg:mx-0 leading-relaxed day:text-gray-600">
               Guided steps keep you focused while the 3D studio mirrors every change in real time.
               No downloads, no pressure—just clarity before you commit.
             </p>
@@ -508,7 +522,7 @@ export default function HomeSplash() {
                 <div className="absolute inset-0" />
               </div>
             </div>
-            <p className="mt-4 text-center text-base font-medium text-white/90">
+            <p className="mt-4 text-center text-base font-medium text-white/90 day:text-gray-600">
               As you design, the 3D studio updates instantly
             </p>
           </div>
@@ -519,17 +533,17 @@ export default function HomeSplash() {
                 {compassionPhases.map((phase, index) => (
                   <div
                     key={phase.key}
-                    className="group relative rounded-2xl border border-[#d4af37]/30 bg-[#1a120c]/88 px-6 py-6 text-left backdrop-blur-sm shadow-[0_6px_20px_rgba(0,0,0,0.3)] h-full min-h-[185px] flex flex-col transition-all duration-300 hover:border-[#d4af37]/50 hover:shadow-[0_10px_28px_rgba(0,0,0,0.36)]"
+                    className="group relative rounded-2xl border border-[#d4af37]/30 bg-[#1a120c]/88 px-6 py-6 text-left backdrop-blur-sm shadow-[0_6px_20px_rgba(0,0,0,0.3)] h-full min-h-[185px] flex flex-col transition-all duration-300 hover:border-[#d4af37]/50 hover:shadow-[0_10px_28px_rgba(0,0,0,0.36)] day:bg-white day:border-amber-200 day:shadow-[0_6px_20px_rgba(0,0,0,0.08)] day:hover:border-amber-300"
                   >
                 <div className="relative flex flex-col h-full">
                   <div className="mb-3 flex items-center gap-3">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#2a1f15] text-sm font-semibold text-[#f7dca3]">
+                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#2a1f15] text-sm font-semibold text-[#f7dca3] day:bg-amber-50 day:text-amber-700">
                       {`0${index + 1}`}
                     </span>
-                    <p className="text-[11px] uppercase tracking-[0.26em] text-[#d4af37]/75 font-medium">{phase.eyebrow}</p>
+                    <p className="text-[11px] uppercase tracking-[0.26em] text-[#d4af37]/75 font-medium day:text-amber-600">{phase.eyebrow}</p>
                   </div>
-                  <p className="text-xl font-serif text-white mt-1 mb-2">{phase.summary}</p>
-                  <p className="text-sm leading-7 text-white/80 flex-1">{phase.description}</p>
+                  <p className="text-xl font-serif text-white mt-1 mb-2 day:text-gray-900">{phase.summary}</p>
+                  <p className="text-sm leading-7 text-white/80 flex-1 day:text-gray-600">{phase.description}</p>
                 </div>
 
                 {index < compassionPhases.length - 1 ? (
@@ -549,18 +563,18 @@ export default function HomeSplash() {
 
       {/* CTA Section */}
       <section
-        className="relative overflow-hidden border-t border-[#cfac6c]/30 py-16"
-        style={{ background: 'radial-gradient(circle at 50% 100%, #2a2118 0%, #0f0c09 65%)' }}
+        className="relative overflow-hidden border-t border-[#cfac6c]/30 py-16 day:border-amber-200"
+        style={{ background: isDayMode ? '#fffbeb' : 'radial-gradient(circle at 50% 100%, #2a2118 0%, #0f0c09 65%)' }}
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="rounded-3xl border border-[#d4af37]/25 bg-[#17120d]/85 px-6 py-8 shadow-[0_14px_40px_rgba(0,0,0,0.35)] sm:px-10 sm:py-10">
+          <div className="rounded-3xl border border-[#d4af37]/25 bg-[#17120d]/85 px-6 py-8 shadow-[0_14px_40px_rgba(0,0,0,0.35)] sm:px-10 sm:py-10 day:bg-white day:border-amber-200 day:shadow-[0_14px_40px_rgba(0,0,0,0.08)]">
             <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl text-center lg:text-left">
-                <p className="text-xs font-semibold tracking-[0.5em] text-[#d4af37]/75">READY WHEN YOU ARE</p>
-                <h2 className="mt-3 text-3xl font-serif leading-tight text-white sm:text-4xl">
+                <p className="text-xs font-semibold tracking-[0.5em] text-[#d4af37]/75 day:text-amber-700">READY WHEN YOU ARE</p>
+                <h2 className="mt-3 text-3xl font-serif leading-tight text-white sm:text-4xl day:text-gray-900">
                   Create a Tribute Worthy of Their Memory
                 </h2>
-                <p className="mt-3 text-base leading-relaxed text-white/80">
+                <p className="mt-3 text-base leading-relaxed text-white/80 day:text-gray-600">
                   Design with confidence, save your progress anytime, and place an order only when your family is fully ready.
                 </p>
               </div>
@@ -572,7 +586,7 @@ export default function HomeSplash() {
                 >
                   Start Your Free Design
                 </Link>
-                <p className="pt-1 text-[11px] uppercase tracking-[0.28em] text-white/60">
+                <p className="pt-1 text-[11px] uppercase tracking-[0.28em] text-white/60 day:text-gray-500">
                   No credit card &nbsp;•&nbsp; Live 3D &nbsp;•&nbsp; Save &amp; share
                 </p>
               </div>
@@ -582,85 +596,85 @@ export default function HomeSplash() {
       </section>
 
       {/* Footer Navigation */}
-      <footer className="relative bg-[#050402] border-t border-[#d4af37]/20">
+      <footer className="relative bg-[#050402] border-t border-[#d4af37]/20 day:bg-gray-100 day:border-gray-200">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:py-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-white">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-white day:text-gray-900">
             <div>
               <div className="flex items-center gap-3 text-2xl font-serif">
                 <span className="tracking-wide">Forever Shining</span>
               </div>
-              <p className="mt-4 text-sm text-white/70">
+              <p className="mt-4 text-sm text-white/70 day:text-gray-600">
                 Crafting lasting tributes for families around the world since 2005.
               </p>
               <div className="mt-6 flex items-center gap-3 text-sm">
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer">
+                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
                   IG
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer">
+                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
                   FB
                 </a>
-                <a href="https://pinterest.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer">
+                <a href="https://pinterest.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
                   PI
                 </a>
               </div>
             </div>
 
             <div>
-              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Memorials</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/70">
-                <li><a href="#headstones" onClick={handleHashLink('headstones')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Headstones</a></li>
-                <li><a href="#plaques" onClick={handleHashLink('plaques')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Plaques</a></li>
-                <li><a href="#urns" onClick={handleHashLink('urns')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Urns</a></li>
-                <li><a href="#monuments" onClick={handleHashLink('monuments')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Full Monuments</a></li>
-                <li><a href="#pets" onClick={handleHashLink('pets')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Pet Memorials</a></li>
+              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Memorials</p>
+              <ul className="mt-4 space-y-2 text-sm text-white/70 day:text-gray-600">
+                <li><a href="#headstones" onClick={handleHashLink('headstones')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Headstones</a></li>
+                <li><a href="#plaques" onClick={handleHashLink('plaques')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Plaques</a></li>
+                <li><a href="#urns" onClick={handleHashLink('urns')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Urns</a></li>
+                <li><a href="#monuments" onClick={handleHashLink('monuments')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Full Monuments</a></li>
+                <li><a href="#pets" onClick={handleHashLink('pets')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Pet Memorials</a></li>
               </ul>
             </div>
 
             <div>
-              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Help & Guides</p>
-              <ul className="mt-4 space-y-2 text-sm text-white/70">
-                <li><a href="#how-it-works" onClick={handleHashLink('how-it-works')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">How it Works</a></li>
-                <li><a href="#pricing" onClick={handleHashLink('pricing')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Pricing Guide</a></li>
-                <li><a href="#materials" onClick={handleHashLink('materials')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Material Guide</a></li>
-                <li><a href="#faq" onClick={handleHashLink('faq')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">FAQ</a></li>
+              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Help & Guides</p>
+              <ul className="mt-4 space-y-2 text-sm text-white/70 day:text-gray-600">
+                <li><a href="#how-it-works" onClick={handleHashLink('how-it-works')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">How it Works</a></li>
+                <li><a href="#pricing" onClick={handleHashLink('pricing')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Pricing Guide</a></li>
+                <li><a href="#materials" onClick={handleHashLink('materials')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Material Guide</a></li>
+                <li><a href="#faq" onClick={handleHashLink('faq')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">FAQ</a></li>
               </ul>
             </div>
 
             <div>
-              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase">Get in Touch</p>
-              <div className="mt-4 space-y-3 text-sm text-white/80">
-                <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer">(+1) 647 388 0931</a>
-                <p className="text-white/70">
-                  <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors cursor-pointer">admin@bronze-plaque.com</a>
+              <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Get in Touch</p>
+              <div className="mt-4 space-y-3 text-sm text-white/80 day:text-gray-600">
+                <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer day:text-gray-900 day:hover:text-amber-600">(+1) 647 388 0931</a>
+                <p className="text-white/70 day:text-gray-600">
+                  <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors cursor-pointer day:hover:text-amber-600">admin@bronze-plaque.com</a>
                 </p>
-                <p className="text-white/70 leading-relaxed">
+                <p className="text-white/70 leading-relaxed day:text-gray-600">
                   1101 Eagle Ridge Drive<br />Oshawa Ontario L1K 0L8
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-12 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60">
+          <div className="mt-12 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60 day:border-gray-200 day:text-gray-500">
             <p>© 2025 Forever Shining. All rights reserved.</p>
-            <div className="flex items-center gap-4 text-white/70 text-sm">
-              <a href="#privacy" onClick={handleHashLink('privacy')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Privacy Policy</a>
-              <span className="text-white/40">|</span>
-              <a href="#terms" onClick={handleHashLink('terms')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Terms of Service</a>
-              <span className="text-white/40">|</span>
-              <a href="#sitemap" onClick={handleHashLink('sitemap')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer">Sitemap</a>
+            <div className="flex items-center gap-4 text-white/70 text-sm day:text-gray-600">
+              <a href="#privacy" onClick={handleHashLink('privacy')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Privacy Policy</a>
+              <span className="text-white/40 day:text-gray-300">|</span>
+              <a href="#terms" onClick={handleHashLink('terms')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Terms of Service</a>
+              <span className="text-white/40 day:text-gray-300">|</span>
+              <a href="#sitemap" onClick={handleHashLink('sitemap')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Sitemap</a>
             </div>
           </div>
 
-          <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-white/45">
+          <div className="mt-4 flex flex-col md:flex-row items-center justify-between gap-3 text-[11px] text-white/45 day:text-gray-400">
             <div className="flex items-center flex-wrap gap-2">
-              <span className="text-white/55">Partners:</span>
-              <a href="https://www.bronze-plaque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer">Bronze-Plaque.com</a>
+              <span className="text-white/55 day:text-gray-500">Partners:</span>
+              <a href="https://www.bronze-plaque.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer day:hover:text-gray-700">Bronze-Plaque.com</a>
               <span>•</span>
-              <a href="https://headstonesdesigner.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer">HeadstonesDesigner.com</a>
+              <a href="https://headstonesdesigner.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer day:hover:text-gray-700">HeadstonesDesigner.com</a>
               <span>•</span>
-              <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer">Forever Shining Australia</a>
+              <a href="https://www.forevershining.com.au/" target="_blank" rel="noopener noreferrer" className="hover:text-white cursor-pointer day:hover:text-gray-700">Forever Shining Australia</a>
             </div>
-            <div className="flex items-center gap-3 text-white/55">
+            <div className="flex items-center gap-3 text-white/55 day:text-gray-500">
               <span className="tracking-widest">VISA</span>
               <span className="tracking-widest">MC</span>
               <span className="tracking-widest">PayPal</span>

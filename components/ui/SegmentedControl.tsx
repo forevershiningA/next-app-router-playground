@@ -29,6 +29,8 @@ export default function SegmentedControl({
         'relative flex w-full items-center rounded-full bg-black/40 p-1 ring-1 ring-white/10 backdrop-blur-sm',
         // Inner shadow for depth
         'shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]',
+        // Day mode
+        'day:bg-gray-100 day:ring-gray-300 day:shadow-none',
         className
       )}
     >
@@ -41,7 +43,7 @@ export default function SegmentedControl({
             onClick={() => onChange(option.value)}
             className={cn(
               'relative z-10 flex-1 py-2 text-sm font-medium transition-colors duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c99d44] focus-visible:ring-offset-2',
-              isActive ? 'text-black' : 'text-zinc-400 hover:text-zinc-200'
+              isActive ? 'text-black' : 'text-zinc-400 hover:text-zinc-200 day:text-gray-500 day:hover:text-gray-900'
             )}
           >
             {isActive && (

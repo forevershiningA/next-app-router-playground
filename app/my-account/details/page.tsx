@@ -179,43 +179,43 @@ export default function AccountDetailsPage() {
   }
 
   const inputClass =
-    'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40';
-  const labelClass = 'block text-xs font-medium text-white/70 mb-1';
-  const fieldValueClass = 'text-sm text-white';
-  const fieldLabelClass = 'text-xs text-white/55 mb-0.5';
-  const emptyClass = 'text-sm text-white/30';
-  const btnClass = 'inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:border-white/50 transition';
+    'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40 day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-500 day:focus:ring-amber-400/40';
+  const labelClass = 'block text-xs font-medium text-white/70 mb-1 day:text-gray-600';
+  const fieldValueClass = 'text-sm text-white day:text-gray-900';
+  const fieldLabelClass = 'text-xs text-white/55 mb-0.5 day:text-gray-400';
+  const emptyClass = 'text-sm text-white/30 day:text-gray-400';
+  const btnClass = 'inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:border-white/50 transition day:border-gray-300 day:bg-gray-50 day:text-gray-600 day:hover:bg-gray-100 day:hover:border-gray-400';
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white">
+    <div className="relative min-h-screen bg-[#050301] text-white day:bg-stone-100 day:text-gray-900">
       <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
         aria-hidden
       />
       <div className="relative mx-auto w-full max-w-3xl px-10 py-10">
         {/* Back link */}
         <Link
           href="/my-account"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition day:text-gray-500 day:hover:text-gray-900"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           Back to Saved Designs
         </Link>
 
-        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin]">
+        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg">
           <header className="mb-0 pb-6">
-            <h1 className="py-[10px] text-3xl font-semibold tracking-tight">Account Details</h1>
+            <h1 className="py-[10px] text-3xl font-semibold tracking-tight day:text-gray-900">Account Details</h1>
           </header>
 
           {isLoading ? (
-            <p className="text-sm text-white/40">Loading…</p>
+            <p className="text-sm text-white/40 day:text-gray-400">Loading…</p>
           ) : (
             <div className="space-y-6">
 
               {/* Personal Details */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-base font-semibold text-white/90">Personal Details</h2>
+                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Personal Details</h2>
                   {!editingPersonal && (
                     <button
                       onClick={() => { setEditingPersonal(true); setPersonalMsg(''); }}
@@ -257,7 +257,7 @@ export default function AccountDetailsPage() {
                       </button>
                       <button
                         onClick={() => { setEditingPersonal(false); setPersonalMsg(''); }}
-                        className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition"
+                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
                       >
                         Cancel
                       </button>
@@ -289,7 +289,7 @@ export default function AccountDetailsPage() {
                       <dt className={fieldLabelClass}>Status</dt>
                       <dd>
                         {account.status ? (
-                          <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${account.status === 'active' ? 'bg-green-500/15 text-green-400' : 'bg-white/10 text-white/60'}`}>
+                          <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-medium ${account.status === 'active' ? 'bg-green-500/15 text-green-400 day:bg-green-100 day:text-green-700' : 'bg-white/10 text-white/60 day:bg-gray-100 day:text-gray-500'}`}>
                             {account.status}
                           </span>
                         ) : (
@@ -302,9 +302,9 @@ export default function AccountDetailsPage() {
               </section>
 
               {/* Password */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-base font-semibold text-white/90">Password</h2>
+                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Password</h2>
                   {!editingPassword && (
                     <button
                       onClick={() => { setEditingPassword(true); setPasswordMsg(''); }}
@@ -340,21 +340,21 @@ export default function AccountDetailsPage() {
                       </button>
                       <button
                         onClick={() => { setEditingPassword(false); setPasswordMsg(''); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }}
-                        className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition"
+                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
                       >
                         Cancel
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-sm tracking-[0.2em] text-white/40">{'\u2022'.repeat(12)}</p>
+                  <p className="text-sm tracking-[0.2em] text-white/40 day:text-gray-400">{'\u2022'.repeat(12)}</p>
                 )}
               </section>
 
               {/* Business & Invoice */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
                 <div className="mb-4 flex items-center justify-between">
-                  <h2 className="text-base font-semibold text-white/90">Business &amp; Invoice Details</h2>
+                  <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Business &amp; Invoice Details</h2>
                   {!editingBusiness && (
                     <button
                       onClick={() => { setEditingBusiness(true); setBusinessMsg(''); }}
@@ -424,7 +424,7 @@ export default function AccountDetailsPage() {
                       </button>
                       <button
                         onClick={() => { setEditingBusiness(false); setBusinessMsg(''); }}
-                        className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition"
+                       className="rounded-lg border border-white/20 px-4 py-2 text-sm text-white/60 hover:text-white transition day:border-gray-300 day:text-gray-500 day:hover:text-gray-900"
                       >
                         Cancel
                       </button>

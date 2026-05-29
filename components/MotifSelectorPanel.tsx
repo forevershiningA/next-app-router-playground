@@ -86,8 +86,8 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
       {!selectedCategory ? (
         <>
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white">Browse motif categories</h3>
-            <span className="text-xs text-white/50">{categories.length} categories</span>
+            <h3 className="text-sm font-semibold text-white day:text-gray-900">Browse motif categories</h3>
+            <span className="text-xs text-white/50 day:text-gray-500">{categories.length} categories</span>
           </div>
           <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
             <div className="grid grid-cols-2 gap-3 md:grid-cols-3 p-1">
@@ -98,9 +98,9 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                   key={category.id}
                   type="button"
                   onClick={() => handleCategorySelect(category.id)}
-                  className="group flex flex-col overflow-hidden rounded-2xl border-2 border-white/10 bg-[#161616] text-left transition-all hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10 cursor-pointer"
+                  className="group flex flex-col overflow-hidden rounded-2xl border-2 border-white/10 bg-[#161616] text-left transition-all hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10 cursor-pointer day:bg-white day:border-gray-200"
                 >
-                  <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/50 to-gray-900/50">
+                  <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/50 to-gray-900/50 day:from-gray-100 day:to-gray-200">
                     <div className="absolute inset-0 flex items-center justify-center p-4">
                       {allowsColor ? (
                         <div
@@ -128,7 +128,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                     </div>
                   </div>
                   <div className="px-3 py-3">
-                    <p className="text-xs font-medium text-white line-clamp-2 text-center">
+                    <p className="text-xs font-medium text-white line-clamp-2 text-center day:text-gray-900">
                       {getMotifCategoryName(category.name)}
                     </p>
                     <p className="mt-1 text-[11px] font-semibold text-[#D7B356] text-center opacity-0 group-hover:opacity-100 transition-opacity">
@@ -147,19 +147,19 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
             <button
               type="button"
               onClick={handleBackToCategories}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-white/40 hover:text-white"
+              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-white/40 hover:text-white day:border-gray-300 day:text-gray-600 day:hover:border-gray-400 day:hover:text-gray-900"
             >
               <span className="text-base">←</span>
               Back to categories
             </button>
-            <div className="text-sm text-white/70">
+            <div className="text-sm text-white/70 day:text-gray-600">
               {getMotifCategoryName(selectedCategory?.name ?? '')}
             </div>
           </div>
 
           <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
             {individualMotifs.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-white/15 bg-[#1F1F1F]/50 p-6 text-center text-sm text-gray-400">
+              <div className="rounded-xl border border-dashed border-white/15 bg-[#1F1F1F]/50 p-6 text-center text-sm text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
                 No motifs available in this category yet.
               </div>
             ) : (
@@ -177,11 +177,11 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                       disabled={!svgPath}
                       className={`group flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
                         isSelected
-                          ? 'border-[#D7B356] bg-[#2d2013] shadow-lg shadow-[#D7B356]/20'
-                          : 'border-white/10 bg-[#161616] hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
+                          ? 'border-[#D7B356] bg-[#2d2013] shadow-lg shadow-[#D7B356]/20 day:bg-amber-50'
+                          : 'border-white/10 bg-[#161616] hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10 day:bg-white day:border-gray-200'
                       }`}
                     >
-                      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/40 to-gray-900/40">
+                      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/40 to-gray-900/40 day:from-gray-100 day:to-gray-200">
                         <div className="absolute inset-0 flex items-center justify-center p-4">
                           {allowsColor && coverSrc ? (
                             <div
@@ -214,7 +214,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                         )}
                       </div>
                       <div className="px-3 py-3">
-                        <p className="text-xs font-medium text-white line-clamp-2 text-center">
+                        <p className="text-xs font-medium text-white line-clamp-2 text-center day:text-gray-900">
                           {motif.name}
                         </p>
                         <p className="mt-1 text-[11px] font-semibold text-[#D7B356] text-center">

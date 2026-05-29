@@ -381,11 +381,11 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   }, [inscriptions, inscriptionPrice]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 day:bg-none day:bg-white">
       <button
         type="button"
         onClick={handleClosePage}
-        className="check-price-grid__close-button fixed top-6 right-6 z-[10002] inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60"
+        className="check-price-grid__close-button fixed top-6 right-6 z-[10002] inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 day:border-gray-300 day:bg-gray-100 day:text-gray-900 day:hover:bg-gray-200"
         aria-label="Close check price"
       >
         <XMarkIcon className="h-5 w-5" aria-hidden="true" />
@@ -393,14 +393,14 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       </button>
       
       {/* Header Section */}
-      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden">
+      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden day:bg-none day:bg-gray-50 day:border-gray-200">
         <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
           <div className="text-center">
-            <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
+            <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl day:text-gray-900">
               Check Price
             </h1>
-            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto day:text-gray-600">
               Review your design selections and get an instant price estimate. Prices update automatically as you customize your memorial.
             </p>
           </div>
@@ -411,15 +411,15 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[60%_40%]">
           {/* Left Column - Design Summary */}
-          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8">
-            <h2 className="text-2xl font-serif font-light text-white mb-6">Your Design</h2>
+          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
+            <h2 className="text-2xl font-serif font-light text-white mb-6 day:text-gray-900">Your Design</h2>
             
             {/* Product Details */}
-            <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
+            <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10 day:bg-gray-50 day:border-gray-200">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <p className="text-sm text-gray-300 leading-relaxed">
-                    <strong className="text-white">Product ID: {productId} - {productName}</strong><br />
+                  <p className="text-sm text-gray-300 leading-relaxed day:text-gray-600">
+                    <strong className="text-white day:text-gray-900">Product ID: {productId} - {productName}</strong><br />
                     Shape: {shapeName}<br />
                     {isUrnProduct ? (
                       <>Background: {headstoneMaterialName}</>
@@ -432,24 +432,24 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl text-white font-semibold">${headstonePrice.toFixed(0)}</p>
+                  <p className="text-xl text-white font-semibold day:text-gray-900">${headstonePrice.toFixed(0)}</p>
                 </div>
               </div>
             </div>
 
             {/* Base Details */}
             {baseMaterialUrl && (
-              <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10">
+              <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10 day:bg-gray-50 day:border-gray-200">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <p className="text-sm text-gray-300 leading-relaxed">
-                      <strong className="text-white">Product ID: {productId} - Base</strong><br />
+                    <p className="text-sm text-gray-300 leading-relaxed day:text-gray-600">
+                      <strong className="text-white day:text-gray-900">Product ID: {productId} - Base</strong><br />
                       Material: {baseMaterialName}<br />
                       Size: {baseWidthMm}mm × {baseHeightMm}mm × {baseThickness}mm
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl text-white font-semibold">${basePrice.toFixed(0)}</p>
+                    <p className="text-xl text-white font-semibold day:text-gray-900">${basePrice.toFixed(0)}</p>
                   </div>
                 </div>
               </div>
@@ -458,16 +458,16 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
             <div className="space-y-4">
               {/* Additions */}
               {additionItems.length > 0 && (
-                <div className="border-b border-white/5 pb-4">
+                <div className="border-b border-white/5 pb-4 day:border-gray-200">
                   <div className="flex items-center justify-between gap-4">
                     <button
                       type="button"
                       onClick={() => toggleSection('additions')}
                       aria-expanded={expandedSections.additions}
-                      className="flex flex-col text-left text-white"
+                      className="flex flex-col text-left text-white day:text-gray-900"
                     >
-                      <p className="flex items-center gap-2 text-sm text-gray-400">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
                           {expandedSections.additions ? '−' : '+'}
                         </span>
                         Additions
@@ -476,10 +476,10 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                         {additionItems.length} item{additionItems.length !== 1 ? 's' : ''}
                       </p>
                     </button>
-                    <p className="text-xl text-white font-semibold">${additionsPrice.toFixed(2)}</p>
+                    <p className="text-xl text-white font-semibold day:text-gray-900">${additionsPrice.toFixed(2)}</p>
                   </div>
                   {expandedSections.additions && (
-                    <ul className="mt-3 space-y-2 text-sm text-gray-300">
+                    <ul className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
                       {additionItems.map((item) => (
                         <li key={item.id} className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
@@ -489,13 +489,13 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                               </div>
                             )}
                             <div>
-                              <p className="text-white font-medium">{item.name}</p>
-                              <p className="text-xs text-gray-400 capitalize">
+                              <p className="text-white font-medium day:text-gray-900">{item.name}</p>
+                              <p className="text-xs text-gray-400 capitalize day:text-gray-500">
                                 Product ID: {item.baseId} · Type: {item.type} · Size Variant: {item.sizeVariant}
                               </p>
                             </div>
                           </div>
-                          <p className="text-white font-semibold">$75.00</p>
+                          <p className="text-white font-semibold day:text-gray-900">$75.00</p>
                         </li>
                       ))}
                     </ul>
@@ -504,17 +504,17 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
               )}
 
               {/* Motifs */}
-              <div className="border-b border-white/5 pb-4">
+              <div className="border-b border-white/5 pb-4 day:border-gray-200">
                 <div className="flex items-center justify-between gap-4">
                   {motifItems.length > 0 ? (
                     <button
                       type="button"
                       onClick={() => toggleSection('motifs')}
                       aria-expanded={expandedSections.motifs}
-                      className="flex flex-col text-left text-white"
+                      className="flex flex-col text-left text-white day:text-gray-900"
                     >
-                      <p className="flex items-center gap-2 text-sm text-gray-400">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
                           {expandedSections.motifs ? '−' : '+'}
                         </span>
                         Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
@@ -525,16 +525,16 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                     </button>
                   ) : (
                     <div>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-400 day:text-gray-500">
                         Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
                       </p>
-                      <p className="text-lg text-white">0 motifs</p>
+                      <p className="text-lg text-white day:text-gray-900">0 motifs</p>
                     </div>
                   )}
-                  <p className="text-xl text-white font-semibold">${motifsPrice.toFixed(2)}</p>
+                  <p className="text-xl text-white font-semibold day:text-gray-900">${motifsPrice.toFixed(2)}</p>
                 </div>
                 {expandedSections.motifs && motifItems.length > 0 && (
-                  <div className="mt-3 space-y-2 text-sm text-gray-300">
+                  <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
                     {motifItems.map((item) => (
                       <div key={item.id} className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
@@ -544,12 +544,12 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                             </div>
                           )}
                           <div>
-                            <p className="text-white font-medium capitalize">{item.name}</p>
-                            <p className="text-xs text-gray-400">Height: {item.heightMm}mm · Color: {item.colorName}</p>
-                            <p className="text-xs text-gray-500">{item.svgPath}</p>
+                            <p className="text-white font-medium capitalize day:text-gray-900">{item.name}</p>
+                            <p className="text-xs text-gray-400 day:text-gray-500">Height: {item.heightMm}mm · Color: {item.colorName}</p>
+                            <p className="text-xs text-gray-500 day:text-gray-400">{item.svgPath}</p>
                           </div>
                         </div>
-                        <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
+                        <p className="text-white font-semibold day:text-gray-900">${item.price.toFixed(2)}</p>
                       </div>
                     ))}
                   </div>
@@ -558,16 +558,16 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
 
               {/* Emblems */}
               {emblemItems.length > 0 && (
-                <div className="border-b border-white/5 pb-4">
+                <div className="border-b border-white/5 pb-4 day:border-gray-200">
                   <div className="flex items-center justify-between gap-4">
                     <button
                       type="button"
                       onClick={() => toggleSection('emblems')}
                       aria-expanded={expandedSections.emblems}
-                      className="flex flex-col text-left text-white"
+                      className="flex flex-col text-left text-white day:text-gray-900"
                     >
-                      <p className="flex items-center gap-2 text-sm text-gray-400">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
                           {expandedSections.emblems ? '−' : '+'}
                         </span>
                         Product ID: 200 - Bronze Emblem ($109.00/unit)
@@ -576,10 +576,10 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                         {emblemItems.length} emblem{emblemItems.length !== 1 ? 's' : ''}
                       </p>
                     </button>
-                    <p className="text-xl text-white font-semibold">${emblemsPrice.toFixed(2)}</p>
+                    <p className="text-xl text-white font-semibold day:text-gray-900">${emblemsPrice.toFixed(2)}</p>
                   </div>
                   {expandedSections.emblems && (
-                    <div className="mt-3 space-y-2 text-sm text-gray-300">
+                    <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
                       {emblemItems.map((item) => (
                         <div key={item.id} className="flex items-center justify-between gap-4">
                           <div className="flex items-center gap-3">
@@ -589,11 +589,11 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                               </div>
                             )}
                             <div>
-                              <p className="text-white font-medium capitalize">{item.name}</p>
-                              <p className="text-xs text-gray-400">Size: {item.widthMm}×{item.heightMm}mm</p>
+                              <p className="text-white font-medium capitalize day:text-gray-900">{item.name}</p>
+                              <p className="text-xs text-gray-400 day:text-gray-500">Size: {item.widthMm}×{item.heightMm}mm</p>
                             </div>
                           </div>
-                          <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
+                          <p className="text-white font-semibold day:text-gray-900">${item.price.toFixed(2)}</p>
                         </div>
                       ))}
                     </div>
@@ -603,16 +603,16 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
 
               {/* Images */}
               {imageItems.length > 0 && (
-                <div className="border-b border-white/5 pb-4">
+                <div className="border-b border-white/5 pb-4 day:border-gray-200">
                   <div className="flex items-center justify-between gap-4">
                     <button
                       type="button"
                       onClick={() => toggleSection('images')}
                       aria-expanded={expandedSections.images}
-                      className="flex flex-col text-left text-white"
+                      className="flex flex-col text-left text-white day:text-gray-900"
                     >
-                      <p className="flex items-center gap-2 text-sm text-gray-400">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
                           {expandedSections.images ? '−' : '+'}
                         </span>
                         Ceramic & Photo Images
@@ -622,7 +622,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                       </p>
                     </button>
                     <div className="text-right">
-                      <p className="text-xl text-white font-semibold">
+                      <p className="text-xl text-white font-semibold day:text-gray-900">
                         {imagePricingData ? `$${imagePriceTotal.toFixed(2)}` : '—'}
                       </p>
                       {imagePricingError && (
@@ -633,18 +633,18 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                     </div>
                   </div>
                   {expandedSections.images && (
-                    <div className="mt-3 space-y-2 text-sm text-gray-300">
+                    <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
                       {imageItems.map((item) => (
                         <div key={item.id} className="flex items-center justify-between gap-4">
                           <div>
-                            <p className="text-white font-medium">
+                            <p className="text-white font-medium day:text-gray-900">
                               Product ID: {item.productId} - {item.baseName}
                             </p>
-                            <p className="text-xs text-gray-400">Type: {item.typeName || 'Image'}</p>
-                            <p className="text-xs text-gray-400">Size: {item.sizeLabel}</p>
-                            <p className="text-xs text-gray-400">Color Mode: {item.colorDisplay}</p>
+                            <p className="text-xs text-gray-400 day:text-gray-500">Type: {item.typeName || 'Image'}</p>
+                            <p className="text-xs text-gray-400 day:text-gray-500">Size: {item.sizeLabel}</p>
+                            <p className="text-xs text-gray-400 day:text-gray-500">Color Mode: {item.colorDisplay}</p>
                           </div>
-                          <p className="text-white font-semibold">
+                          <p className="text-white font-semibold day:text-gray-900">
                             {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
                           </p>
                         </div>
@@ -655,17 +655,17 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
               )}
 
               {/* Inscriptions */}
-              <div className="border-b border-white/5 pb-4">
+              <div className="border-b border-white/5 pb-4 day:border-gray-200">
                 <div className="flex items-center justify-between gap-4">
                   {inscriptionItems.length > 0 ? (
                     <button
                       type="button"
                       onClick={() => toggleSection('inscriptions')}
                       aria-expanded={expandedSections.inscriptions}
-                      className="flex flex-col text-left text-white"
+                      className="flex flex-col text-left text-white day:text-gray-900"
                     >
-                      <p className="flex items-center gap-2 text-sm text-gray-400">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold">
+                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
+                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
                           {expandedSections.inscriptions ? '−' : '+'}
                         </span>
                         Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
@@ -676,24 +676,24 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                     </button>
                   ) : (
                     <div>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-400 day:text-gray-500">
                         Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
                       </p>
-                      <p className="text-lg text-white">0 inscriptions</p>
+                      <p className="text-lg text-white day:text-gray-900">0 inscriptions</p>
                     </div>
                   )}
-                  <p className="text-xl text-white font-semibold">${inscriptionPrice.toFixed(2)}</p>
+                  <p className="text-xl text-white font-semibold day:text-gray-900">${inscriptionPrice.toFixed(2)}</p>
                 </div>
                 {expandedSections.inscriptions && inscriptionItems.length > 0 && (
-                  <div className="mt-3 space-y-2 text-sm text-gray-300">
+                  <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
                     {inscriptionItems.map((item) => (
                       <div key={item.id} className="flex items-center justify-between gap-4">
                         <div>
-                          <p className="text-white font-medium">{item.text}</p>
-                          <p className="text-xs text-gray-400">Font: {item.font} · Size: {item.sizeMm}mm · Color: {item.colorName}</p>
-                          <p className="text-xs text-gray-500">Line ID: {item.id}</p>
+                          <p className="text-white font-medium day:text-gray-900">{item.text}</p>
+                          <p className="text-xs text-gray-400 day:text-gray-500">Font: {item.font} · Size: {item.sizeMm}mm · Color: {item.colorName}</p>
+                          <p className="text-xs text-gray-500 day:text-gray-400">Line ID: {item.id}</p>
                         </div>
-                        <p className="text-white font-semibold">${item.price.toFixed(2)}</p>
+                        <p className="text-white font-semibold day:text-gray-900">${item.price.toFixed(2)}</p>
                       </div>
                     ))}
                   </div>
@@ -703,25 +703,25 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
           </div>
 
           {/* Right Column - Price Summary */}
-          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8">
-            <h2 className="text-2xl font-serif font-light text-white mb-6">Price Summary</h2>
+          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
+            <h2 className="text-2xl font-serif font-light text-white mb-6 day:text-gray-900">Price Summary</h2>
             
             <div className="space-y-6">
               {/* Subtotal */}
               <div className="flex items-center justify-between text-lg">
-                <p className="text-gray-300">Subtotal</p>
-                <p className="text-white font-semibold">${subtotal.toFixed(2)}</p>
+                <p className="text-gray-300 day:text-gray-600">Subtotal</p>
+                <p className="text-white font-semibold day:text-gray-900">${subtotal.toFixed(2)}</p>
               </div>
 
               {/* Tax */}
-              <div className="flex items-center justify-between text-lg border-b border-white/10 pb-6">
-                <p className="text-gray-300">Tax (10%)</p>
-                <p className="text-white font-semibold">${tax.toFixed(2)}</p>
+              <div className="flex items-center justify-between text-lg border-b border-white/10 pb-6 day:border-gray-200">
+                <p className="text-gray-300 day:text-gray-600">Tax (10%)</p>
+                <p className="text-white font-semibold day:text-gray-900">${tax.toFixed(2)}</p>
               </div>
 
               {/* Total */}
-              <div className="flex items-center justify-between text-2xl border-t border-white/10 pt-6">
-                <p className="text-white font-bold">Total</p>
+              <div className="flex items-center justify-between text-2xl border-t border-white/10 pt-6 day:border-gray-200">
+                <p className="text-white font-bold day:text-gray-900">Total</p>
                 <p className="text-[#cfac6c] font-bold">${total.toFixed(2)}</p>
               </div>
               <p className="text-right text-xs text-gray-500">Prices shown in USD. Tax is estimated at 10% for preview purposes.</p>
@@ -737,9 +737,9 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
               </div>
 
               {/* Notes */}
-              <div className="rounded-xl bg-white/5 p-4 mt-6">
-                <p className="text-sm text-gray-400">
-                  <strong className="text-white">Note:</strong> This is an estimate only. Final pricing will be confirmed upon quote request and may vary based on specific customizations, installation requirements, and location.
+              <div className="rounded-xl bg-white/5 p-4 mt-6 day:bg-gray-50">
+                <p className="text-sm text-gray-400 day:text-gray-600">
+                  <strong className="text-white day:text-gray-900">Note:</strong> This is an estimate only. Final pricing will be confirmed upon quote request and may vary based on specific customizations, installation requirements, and location.
                 </p>
               </div>
             </div>
@@ -747,29 +747,29 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         </div>
 
         {/* Additional Info */}
-        <div className="mt-12 rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8">
-          <h2 className="text-2xl font-serif font-light text-white mb-6 text-center">What's Included</h2>
+        <div className="mt-12 rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
+          <h2 className="text-2xl font-serif font-light text-white mb-6 text-center day:text-gray-900">What's Included</h2>
           
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="text-center">
               <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Professional Design</h3>
-              <p className="text-sm text-gray-400">Expert review of your custom design</p>
+              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Professional Design</h3>
+              <p className="text-sm text-gray-400 day:text-gray-600">Expert review of your custom design</p>
             </div>
             <div className="text-center">
               <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Quality Materials</h3>
-              <p className="text-sm text-gray-400">Premium granite and materials</p>
+              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Quality Materials</h3>
+              <p className="text-sm text-gray-400 day:text-gray-600">Premium granite and materials</p>
             </div>
             <div className="text-center">
               <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Craftsmanship</h3>
-              <p className="text-sm text-gray-400">Skilled artisan workmanship</p>
+              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Craftsmanship</h3>
+              <p className="text-sm text-gray-400 day:text-gray-600">Skilled artisan workmanship</p>
             </div>
             <div className="text-center">
               <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2">Support</h3>
-              <p className="text-sm text-gray-400">Dedicated customer service</p>
+              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Support</h3>
+              <p className="text-sm text-gray-400 day:text-gray-600">Dedicated customer service</p>
             </div>
           </div>
         </div>

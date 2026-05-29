@@ -14,6 +14,8 @@ import MaterialsLoader from '#/components/MaterialsLoader';
 import ShapesLoader from '#/components/ShapesLoader';
 import BordersLoader from '#/components/BordersLoader';
 import MotifsLoader from '#/components/MotifsLoader';
+import { ThemeProvider } from '#/components/ThemeProvider';
+import { ThemeToggle } from '#/components/ThemeToggle';
 import {
   mapMaterialRecord,
   mapShapeRecord,
@@ -97,23 +99,34 @@ export default async function RootLayout({
   }));
   
   return (
-    <html lang="en" className="[color-scheme:dark]">
+    <html lang="en" data-theme="dark" className="[color-scheme:dark]" suppressHydrationWarning>
+      {/* Prevent flash-of-unstyled-content: read theme from localStorage before first paint */}
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('fs_ui_theme');if(t==='day'){document.documentElement.setAttribute('data-theme','day');document.documentElement.style.colorScheme='light';}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
         className={`overflow-y-scroll font-sans ${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} antialiased`}
         style={{ background: 'transparent' }}
       >
-        <ErrorBoundary>
-          <ClientShell />
-          <MaterialsLoader materials={materials} />
-          <ShapesLoader shapes={shapes} />
-          <BordersLoader borders={borders} />
-          <MotifsLoader motifs={motifs} />
-          <MobileHeader />
-          <ConditionalNav items={demos} />
-          <MainContent>
-            {children}
-          </MainContent>
-        </ErrorBoundary>
+        <ThemeProvider>
+          <ErrorBoundary>
+            <ClientShell />
+            <MaterialsLoader materials={materials} />
+            <ShapesLoader shapes={shapes} />
+            <BordersLoader borders={borders} />
+            <MotifsLoader motifs={motifs} />
+            <MobileHeader />
+            <ConditionalNav items={demos} />
+            <MainContent>
+              {children}
+            </MainContent>
+            <ThemeToggle />
+          </ErrorBoundary>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -749,11 +749,11 @@ export default function DesignerNav() {
       <div className="flex h-full flex-col gap-4">
         {hasActiveAddition ? (
           <div className="space-y-4">
-            <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-              <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+            <div className="rounded-xl border border-white/15 bg-white/5 p-4 day:border-gray-200 day:bg-gray-50">
+              <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase day:text-gray-500">
                 Addition Price
               </div>
-              <div className="text-2xl font-semibold text-white">
+              <div className="text-2xl font-semibold text-white day:text-gray-900">
                 {activeAdditionSize?.retailPrice
                   ? `$${activeAdditionSize.retailPrice.toFixed(2)}`
                   : 'N/A'}
@@ -788,10 +788,10 @@ export default function DesignerNav() {
               {maxSize <= 1 ? (
                 <div className="space-y-1">
                   <div className="flex items-center justify-between gap-2">
-                    <label className="text-sm font-medium text-gray-200">
+                    <label className="text-sm font-medium text-gray-200 day:text-gray-700">
                       Size
                     </label>
-                    <div className="text-sm text-gray-400">
+                    <div className="text-sm text-gray-400 day:text-gray-500">
                       {activeAdditionSize
                         ? `${activeAdditionSize.width}×${activeAdditionSize.height}mm`
                         : ''}
@@ -801,7 +801,7 @@ export default function DesignerNav() {
               ) : (
                 <div className="space-y-1">
                   <div className="flex items-center justify-between gap-2">
-                    <label className="w-20 text-sm font-medium text-gray-200">
+                    <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
                       Size
                     </label>
                     <div className="flex items-center justify-end gap-2">
@@ -816,7 +816,7 @@ export default function DesignerNav() {
                             sizeVariant: newVal,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                         aria-label="Decrease size variant"
                       >
                         <svg
@@ -862,7 +862,7 @@ export default function DesignerNav() {
                                 : Math.min(maxSize, val),
                           });
                         }}
-                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none"
+                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none day:bg-gray-100 day:border-gray-300 day:text-gray-900"
                       />
                       <button
                         type="button"
@@ -878,7 +878,7 @@ export default function DesignerNav() {
                             sizeVariant: newVal,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                         aria-label="Increase size variant"
                       >
                         <svg
@@ -914,7 +914,7 @@ export default function DesignerNav() {
                       }}
                       className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
                     />
-                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
                       <span>
                         {additionSizes[0]
                           ? `${additionSizes[0].width}×${additionSizes[0].height}mm`
@@ -934,7 +934,7 @@ export default function DesignerNav() {
               {!isStatueOrVase && (
                 <div className="space-y-1">
                   <div className="flex items-center justify-between gap-2">
-                    <label className="w-20 text-sm font-medium text-gray-200">
+                    <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
                       Rotation
                     </label>
                     <div className="flex items-center justify-end gap-2">
@@ -949,7 +949,7 @@ export default function DesignerNav() {
                             rotationZ: (newVal * Math.PI) / 180,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                         aria-label="Decrease rotation by 1 degree"
                       >
                         <svg
@@ -996,7 +996,7 @@ export default function DesignerNav() {
                             });
                           }
                         }}
-                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none"
+                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none day:bg-gray-100 day:border-gray-300 day:text-gray-900"
                       />
                       <button
                         type="button"
@@ -1009,7 +1009,7 @@ export default function DesignerNav() {
                             rotationZ: (newVal * Math.PI) / 180,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                         aria-label="Increase rotation by 1 degree"
                       >
                         <svg
@@ -1026,7 +1026,7 @@ export default function DesignerNav() {
                           />
                         </svg>
                       </button>
-                      <span className="text-sm font-medium text-gray-300">
+                      <span className="text-sm font-medium text-gray-300 day:text-gray-600">
                         °
                       </span>
                     </div>
@@ -1048,7 +1048,7 @@ export default function DesignerNav() {
                       }}
                       className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
                     />
-                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
                       <span>-180°</span>
                       <span>180°</span>
                     </div>
@@ -1060,7 +1060,7 @@ export default function DesignerNav() {
         ) : null}
 
         {showAdditionCatalog && !hasActiveAddition && (
-          <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+          <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm day:border-gray-200 day:bg-white">
             <div className="h-full overflow-y-auto pr-1">
               <AdditionSelector additions={additionsList} />
             </div>
@@ -1126,11 +1126,11 @@ export default function DesignerNav() {
         {hasActiveMotif ? (
           <div className="space-y-4">
             {motifPriceValue !== null && (
-              <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-                <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+              <div className="rounded-xl border border-white/15 bg-white/5 p-4 day:border-gray-200 day:bg-gray-50">
+                <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase day:text-gray-500">
                   Motif Price
                 </div>
-                <div className="text-2xl font-semibold text-white">
+                <div className="text-2xl font-semibold text-white day:text-gray-900">
                   ${motifPriceValue.toFixed(2)}
                 </div>
               </div>
@@ -1165,7 +1165,7 @@ export default function DesignerNav() {
               {/* Height Slider */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between gap-2">
-                  <label className="w-20 text-sm font-medium text-gray-200">
+                  <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
                     Height
                   </label>
                   <div className="flex items-center justify-end gap-2">
@@ -1181,7 +1181,7 @@ export default function DesignerNav() {
                           heightMm: newVal,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                       aria-label="Decrease height by 1mm"
                     >
                       <svg
@@ -1224,11 +1224,11 @@ export default function DesignerNav() {
                           heightMm: clampedValue,
                         });
                       }}
-                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900 ${
                         (activeOffset.heightMm ?? initHeight) < minHeight ||
                         (activeOffset.heightMm ?? initHeight) > maxHeight
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                       }`}
                     />
                     <button
@@ -1243,7 +1243,7 @@ export default function DesignerNav() {
                           heightMm: newVal,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                       aria-label="Increase height by 1mm"
                     >
                       <svg
@@ -1260,7 +1260,7 @@ export default function DesignerNav() {
                         />
                       </svg>
                     </button>
-                    <span className="text-sm font-medium text-gray-300">
+                    <span className="text-sm font-medium text-gray-300 day:text-gray-600">
                       mm
                     </span>
                   </div>
@@ -1282,7 +1282,7 @@ export default function DesignerNav() {
                     }}
                     className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
                   />
-                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
                     <span>{minHeight}mm</span>
                     <span>{maxHeight}mm</span>
                   </div>
@@ -1292,7 +1292,7 @@ export default function DesignerNav() {
               {/* Rotation Slider */}
               <div className="space-y-1">
                 <div className="flex items-center justify-between gap-2">
-                  <label className="w-20 text-sm font-medium text-gray-200">
+                  <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
                     Rotation
                   </label>
                   <div className="flex items-center justify-end gap-2">
@@ -1306,7 +1306,7 @@ export default function DesignerNav() {
                           rotationZ: (newVal * Math.PI) / 180,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                       aria-label="Decrease rotation by 1 degree"
                     >
                       <svg
@@ -1351,10 +1351,10 @@ export default function DesignerNav() {
                           });
                         }
                       }}
-                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900 ${
                         rotationDegrees < -180 || rotationDegrees > 180
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                       }`}
                     />
                     <button
@@ -1367,7 +1367,7 @@ export default function DesignerNav() {
                           rotationZ: (newVal * Math.PI) / 180,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
                       aria-label="Increase rotation by 1 degree"
                     >
                       <svg
@@ -1384,7 +1384,7 @@ export default function DesignerNav() {
                         />
                       </svg>
                     </button>
-                    <span className="text-sm font-medium text-gray-300">°</span>
+                    <span className="text-sm font-medium text-gray-300 day:text-gray-600">°</span>
                   </div>
                 </div>
                 <div className="relative">
@@ -1403,7 +1403,7 @@ export default function DesignerNav() {
                     }
                     className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
                   />
-                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
                     <span>-180°</span>
                     <span>180°</span>
                   </div>
@@ -1412,7 +1412,7 @@ export default function DesignerNav() {
 
               {!isLaser && catalog?.product?.color !== '0' && (
                 <div>
-                  <label className="mb-2 block text-sm font-medium text-white">
+                  <label className="mb-2 block text-sm font-medium text-white day:text-gray-900">
                     Select Color
                   </label>
                   {isEngraved && (
@@ -1423,13 +1423,13 @@ export default function DesignerNav() {
                         selectedMotifId &&
                         setMotifColor(selectedMotifId, '#c99d44')
                       }
-                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5"
+                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5 day:border-gray-200 day:hover:bg-gray-100"
                     >
                       <span
-                        className="h-5 w-5 rounded border border-white/20"
+                        className="h-5 w-5 rounded border border-white/20 day:border-gray-300"
                         style={{ backgroundColor: '#c99d44' }}
                       />
-                      <span className="text-xs text-white/80">
+                      <span className="text-xs text-white/80 day:text-gray-700">
                         Gold Gilding
                       </span>
                     </button>
@@ -1439,13 +1439,13 @@ export default function DesignerNav() {
                         selectedMotifId &&
                         setMotifColor(selectedMotifId, '#eeeeee')
                       }
-                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5"
+                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5 day:border-gray-200 day:hover:bg-gray-100"
                     >
                       <span
-                        className="h-5 w-5 rounded border border-white/20"
+                        className="h-5 w-5 rounded border border-white/20 day:border-gray-300"
                         style={{ backgroundColor: '#eeeeee' }}
                       />
-                      <span className="text-xs text-white/80">
+                      <span className="text-xs text-white/80 day:text-gray-700">
                         Silver Gilding
                       </span>
                     </button>
@@ -1456,7 +1456,7 @@ export default function DesignerNav() {
                       <button
                         key={color.id}
                         type="button"
-                        className={`h-6 w-6 rounded border ${activeMotif?.color === color.hex ? 'border-[#D7B356] ring-2 ring-[#D7B356]' : 'border-white/20'}`}
+                        className={`h-6 w-6 rounded border ${activeMotif?.color === color.hex ? 'border-[#D7B356] ring-2 ring-[#D7B356]' : 'border-white/20 day:border-gray-300'}`}
                         style={{ backgroundColor: color.hex }}
                         onClick={() =>
                           selectedMotifId &&
@@ -1473,7 +1473,7 @@ export default function DesignerNav() {
         ) : null}
 
         {showMotifCatalog && (
-          <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+          <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm day:border-gray-200 day:bg-white">
             <MotifSelectorPanel motifs={motifCatalog} />
           </div>
         )}
@@ -2072,14 +2072,14 @@ export default function DesignerNav() {
 
         {editingObject === 'base' && (
           <>
-            <div className="flex gap-1.5 rounded-full border border-[#3A3A3A] bg-[#0A0A0A] p-1">
+            <div className="flex gap-1.5 rounded-full border border-[#3A3A3A] bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
               <button
                 type="button"
                 onClick={() => setShowBase(false)}
                 className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   !showBase
                     ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
+                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
                 }`}
               >
                 No Base
@@ -2093,7 +2093,7 @@ export default function DesignerNav() {
                 className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   baseFinish === 'default' && showBase
                     ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
+                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
                 }`}
               >
                 Polished
@@ -2107,7 +2107,7 @@ export default function DesignerNav() {
                 className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   baseFinish === 'rock-pitch' && showBase
                     ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
+                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
                 }`}
               >
                 Rock Pitch
@@ -2753,13 +2753,13 @@ export default function DesignerNav() {
   return (
     <nav
       ref={navRef}
-      className="flex h-full flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
+      className="flex h-full flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] text-white day:text-[#1a1209] fs-designer-nav"
     >
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
         <div className="flex h-full flex-col">
           {/* Panel Header - desktop only */}
-          <div className="hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
+          <div className="hidden border-b border-white/10 day:border-gray-200 bg-[#1b1511] day:bg-stone-50 px-5 py-4 md:block">
             {/* Row 1: Guided Step label + step badge */}
             <div className="mb-2 flex items-center justify-center gap-2.5">
               <p className="font-playfair-display text-xs tracking-[0.35em] italic" style={{ color: '#aaaaaa' }}>
@@ -2774,7 +2774,7 @@ export default function DesignerNav() {
               )}
             </div>
             {/* Row 2: Section title centered */}
-            <h2 className="my-5 text-center text-3xl font-serif font-light tracking-tight text-white">
+            <h2 className="my-5 text-center text-3xl font-serif font-light tracking-tight text-white day:text-gray-900">
               {activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
                 ? 'Background'
                 : menuItems.find(
@@ -2792,7 +2792,7 @@ export default function DesignerNav() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleBackToMenu}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900"
                 >
                   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -2806,7 +2806,7 @@ export default function DesignerNav() {
                         ? handleBackToAdditionList
                         : handleBackToMotifList
                     }
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900"
                   >
                     <Squares2X2Icon className="h-3 w-3" />
                     List
@@ -2818,7 +2818,7 @@ export default function DesignerNav() {
                   onClick={() => prevPanelSlug && handleNavigateToPanel(prevPanelSlug)}
                   disabled={!prevPanelSlug}
                   title={prevPanelSlug ? `Go to ${menuItems.find((i) => i.slug === prevPanelSlug)?.name}` : undefined}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                 className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -2829,7 +2829,7 @@ export default function DesignerNav() {
                   onClick={() => nextPanelSlug && handleNavigateToPanel(nextPanelSlug)}
                   disabled={!nextPanelSlug}
                   title={nextPanelSlug ? `Go to ${menuItems.find((i) => i.slug === nextPanelSlug)?.name}` : undefined}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   Next
                   <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -3095,14 +3095,14 @@ export default function DesignerNav() {
       ) : (
         <>
           {/* Desktop Header */}
-          <div className="hidden items-center justify-between border-b border-white/10 px-6 md:flex">
+          <div className="hidden items-center justify-between border-b border-white/10 day:border-gray-200 px-6 md:flex">
             <Link href="/" className="transition-opacity hover:opacity-80">
               <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" />
             </Link>
           </div>
 
           {/* Mobile Header */}
-          <div className="border-b border-primary/10 bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
+          <div className="border-b border-primary/10 day:border-[#DEBD68]/20 bg-[#120c08]/95 day:bg-stone-50 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
             <div className="flex items-center justify-between gap-4">
               <p className="font-playfair-display text-[10px] tracking-[0.45em] text-primary/50 italic">
                 Guided Studio
@@ -3122,7 +3122,7 @@ export default function DesignerNav() {
             <button
               type="button"
               onClick={() => setShowQuickEnquiry(true)}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/20"
             >
               <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z" />
@@ -3162,7 +3162,7 @@ export default function DesignerNav() {
             )}
 
             {showConvertPanel && productId && (
-              <div className="mb-6 rounded-2xl border border-white/15 bg-[#120c08]/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
+              <div className="mb-6 rounded-2xl border border-white/15 day:border-gray-200 bg-[#120c08]/90 day:bg-stone-50 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-white">
@@ -3240,7 +3240,7 @@ export default function DesignerNav() {
                     <div className="absolute -top-1 left-[22px] z-10 h-1 w-px bg-gradient-to-b from-primary/10 to-primary/30" />
                   )}
 
-                  <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+                  <div className="rounded-2xl border border-white/10 day:border-gray-200 bg-gradient-to-br from-white/5 day:from-stone-50 via-transparent day:via-stone-50 to-black/20 day:to-stone-50 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm">
                   <button
                     onClick={() => toggleGroup(groupIndex)}
                     className={`flex w-full cursor-pointer items-center gap-3 px-3 py-1.5 transition-colors duration-200 hover:bg-white/5 rounded-lg ${
@@ -3251,7 +3251,7 @@ export default function DesignerNav() {
                       {['I', 'II', 'III'][groupIndex]}
                     </span>
                     <div className="flex flex-1 items-baseline justify-between">
-                      <p className="font-playfair-display text-[19px] font-normal tracking-wide text-white/90">
+                      <p className="font-playfair-display text-[19px] font-normal tracking-wide text-white/90 day:text-gray-900">
                         {group.label}
                       </p>
                       <span className="font-playfair-display text-[10px] tracking-[0.3em] text-primary/50 italic">
@@ -3259,7 +3259,7 @@ export default function DesignerNav() {
                       </span>
                     </div>
                     <ChevronDownIcon
-                      className={`h-4 w-4 text-white/40 ${
+                              className={`h-4 w-4 text-white/40 day:text-gray-400 ${
                         openGroup !== groupIndex ? '-rotate-90' : 'rotate-0'
                       }`}
                     />
@@ -3359,8 +3359,8 @@ export default function DesignerNav() {
                             style={{ caretColor: 'transparent', userSelect: 'none' }}
                             className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
                               isCornersActive
-                                ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                             }`}
                           >
                             <ViewfinderCircleIcon className="h-5 w-5 flex-shrink-0" />
@@ -3385,8 +3385,8 @@ export default function DesignerNav() {
                             style={{ caretColor: 'transparent', userSelect: 'none' }}
                             className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
                               isHolesActive
-                                ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                             }`}
                           >
                             <CircleStackIcon className="h-5 w-5 flex-shrink-0" />
@@ -3426,8 +3426,8 @@ export default function DesignerNav() {
                               }}
                               className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
                                 highlightActive
-                                  ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                  : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                  ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                  : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                               }`}
                             >
                               <Icon className="h-5 w-5 flex-shrink-0" />
@@ -3466,8 +3466,8 @@ export default function DesignerNav() {
                                   }}
                                   className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
                                     isActive
-                                      ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                      : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                      ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                      : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                                   }`}
                                 >
                                   <Icon className="h-5 w-5 flex-shrink-0" />
@@ -3489,8 +3489,8 @@ export default function DesignerNav() {
                                 data-section={item.slug}
                                 className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                                   isActive
-                                    ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                    : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                    ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                    : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                                 }`}
                               >
                                 <Icon className="h-5 w-5 flex-shrink-0" />
@@ -3523,8 +3523,8 @@ export default function DesignerNav() {
                                   }}
                                   className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
                                     isActive
-                                      ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                      : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                      ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                      : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                                   }`}
                                 >
                                   <Icon className="h-5 w-5 flex-shrink-0" />
@@ -3540,7 +3540,7 @@ export default function DesignerNav() {
                                   !selectedMotifId &&
                                   !selectedAdditionId &&
                                   materials.length > 0 && (
-                                    <div className="mt-3 h-[calc(100vh-280px)] overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                                    <div className="mt-3 h-[calc(100vh-280px)] overflow-hidden rounded-2xl border border-[#3A3A3A] day:border-gray-200 bg-[#1F1F1F]/95 day:bg-white p-4 shadow-xl backdrop-blur-sm">
                                       <div className="h-full overflow-y-auto pr-1">
                                         <MaterialSelector
                                           materials={materials}
@@ -3557,8 +3557,8 @@ export default function DesignerNav() {
                                 data-section={item.slug}
                                 className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                                   isActive
-                                    ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                    : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                    ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                    : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                                 }`}
                               >
                                 <Icon className="h-5 w-5 flex-shrink-0" />
@@ -3606,8 +3606,8 @@ export default function DesignerNav() {
                               onClick={(e) => handleMenuClick(item.slug, e)}
                               className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                                 isActive
-                                  ? 'border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
-                                  : 'border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                  ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
+                                  : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
                               }`}
                             >
                               <div className="flex items-center gap-3">

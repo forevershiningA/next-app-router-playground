@@ -122,7 +122,7 @@ export default async function AdminDesignsPage({
                             src={design.thumbnailPath || design.screenshotPath!}
                             fullSrc={design.screenshotPath || design.thumbnailPath!}
                             alt={design.title ?? 'Design preview'}
-                            thumbSize="h-16 w-16"
+                            thumbSize="h-32 w-32"
                           />
                           <a
                             href={`/design/${design.id}`}
@@ -135,7 +135,7 @@ export default async function AdminDesignsPage({
                           <EditDesignButton projectId={design.id} />
                         </div>
                       ) : (
-                        <span className="inline-block h-16 w-16 rounded bg-gray-100 dark:bg-gray-700" />
+                        <span className="inline-block h-32 w-32 rounded bg-gray-100 dark:bg-gray-700" />
                       )}
                     </td>
                     <td className="px-6 py-4 text-gray-600 dark:text-gray-400">
