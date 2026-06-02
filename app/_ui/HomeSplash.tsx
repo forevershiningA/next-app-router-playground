@@ -175,6 +175,7 @@ export default function HomeSplash() {
   const [isInViewport, setIsInViewport] = useState(true);
   const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
   const [isDayMode, setIsDayMode] = useState(false);
+  const [heroSearchQuery, setHeroSearchQuery] = useState('');
 
   useEffect(() => {
     const html = document.documentElement;
@@ -246,6 +247,12 @@ export default function HomeSplash() {
 
   const rotateRight = () => {
     setRotation((prev) => prev - Math.PI / 4);
+  };
+
+  const handleHeroSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = heroSearchQuery.trim();
+    router.push(q ? `/designs?q=${encodeURIComponent(q)}` : '/designs');
   };
 
   const compassionPhases = [
@@ -343,7 +350,7 @@ export default function HomeSplash() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden="true" />
         
         {/* Main Content - Flex Grow to Center Vertically */}
-        <div className="relative z-10 flex flex-col justify-center flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-[129px] sm:pt-24">
+        <div className="relative z-10 flex flex-col justify-start flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-[100px] sm:pt-16">
           <div className="text-center">
             
             {/* Headlines - Emotional benefit prioritized with elegant serif */}
@@ -400,8 +407,42 @@ export default function HomeSplash() {
               </div>
             </div>
             
+            {/* Hero Search Bar */}
+            <form
+              onSubmit={handleHeroSearch}
+              className="relative mx-auto mb-8 w-full max-w-xl"
+              role="search"
+            >
+              <div className="relative flex items-center">
+                <svg
+                  className="pointer-events-none absolute left-4 h-5 w-5 text-white/50 day:text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  aria-hidden="true"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+                </svg>
+                <input
+                  type="text"
+                  value={heroSearchQuery}
+                  onChange={(e) => setHeroSearchQuery(e.target.value)}
+                  placeholder="Search designs — motif, shape, style…"
+                  className="w-full rounded-full border border-white/20 bg-black/35 py-3.5 pl-12 pr-28 text-sm font-light text-white placeholder-white/45 backdrop-blur-md transition-all focus:border-[#d4af37]/60 focus:bg-black/50 focus:outline-none focus:ring-1 focus:ring-[#d4af37]/40 day:border-gray-300 day:bg-white/80 day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-400 day:focus:ring-amber-300/40"
+                  aria-label="Search memorial designs"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1.5 rounded-full bg-gradient-to-r from-[#d4af37] to-[#b8922e] px-5 py-2 text-xs font-semibold tracking-wider text-slate-900 transition-all hover:scale-105 hover:shadow-[0_0_16px_rgba(212,175,55,0.55)]"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+
             {/* 3D Canvas - TALLER container with overlap layout */}
-            <div className="w-full h-[50vh] sm:h-[55vh] min-h-[400px] flex items-center justify-center relative -mt-4 -mb-16 sm:-mb-24 z-0 pointer-events-none">
+            <div className="w-full h-[45vh] sm:h-[49.5vh] min-h-[360px] flex items-center justify-center relative -mt-4 -mb-16 sm:-mb-24 z-0 pointer-events-none">
               
               {/* Enhanced Visual Effects - Spotlight and atmosphere */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

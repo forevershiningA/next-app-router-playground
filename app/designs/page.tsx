@@ -65,6 +65,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function DesignsPage() {
-  return <DesignsPageClient />;
+export default async function DesignsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  return <DesignsPageClient initialQuery={q ?? ''} />;
 }

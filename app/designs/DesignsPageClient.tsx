@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import Image from 'next/image';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import DesignSmartSearch from '#/components/DesignSmartSearch';
@@ -18,24 +19,31 @@ import {
 
 const MAX_SEARCH_RESULTS = 60;
 
-export default function DesignsPageClient() {
+export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?: string }) {
   const [allDesigns, setAllDesigns] = useState<SavedDesignMetadata[]>([]);
   const [groupedDesigns, setGroupedDesigns] = useState<Record<string, SavedDesignMetadata[]>>({});
   const [loading, setLoading] = useState(true);
 
   // Search state
-  const [filters, setFilters] = useState<SearchFilters>(EMPTY_FILTERS);
+  const [filters, setFilters] = useState<SearchFilters>(() =>
+    initialQuery ? { ...EMPTY_FILTERS, query: initialQuery } : EMPTY_FILTERS,
+  );
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [mlReady, setMlReady] = useState(false);
   const mlIndexRef = useRef<Map<string, MLDesignEntry>>(new Map());
   const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-  // Load designs (filter out hidden ones on localhost)
+  // Load designs — restricted to designs with v2026-3d regenerated screenshots
   useEffect(() => {
     const loadDesigns = async () => {
-      const { SAVED_DESIGNS } = await import('#/lib/saved-designs-data');
-      let designs = Object.values(SAVED_DESIGNS);
+      const [{ SAVED_DESIGNS }, v2026Ids] = await Promise.all([
+        import('#/lib/saved-designs-data'),
+        fetch('/screenshots/v2026-3d-ids.json').then((r) => r.json() as Promise<string[]>).catch(() => [] as string[]),
+      ]);
+
+      const v2026Set = new Set(v2026Ids);
+      let designs = Object.values(SAVED_DESIGNS).filter((d) => v2026Set.has(d.id));
 
       const isLocal =
         window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -61,6 +69,12 @@ export default function DesignsPageClient() {
 
       setGroupedDesigns(grouped);
       setLoading(false);
+
+      if (initialQuery) {
+        const f = { ...EMPTY_FILTERS, query: initialQuery };
+        const results = searchDesigns(designs, mlIndexRef.current, f);
+        setSearchResults(results.slice(0, MAX_SEARCH_RESULTS));
+      }
     };
     loadDesigns();
   }, []);
@@ -170,6 +184,28 @@ export default function DesignsPageClient() {
                   href={`/designs/${design.productSlug}/${design.category}/${design.slug}`}
                   className="group bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-300 hover:shadow-2xl transition-all duration-300"
                 >
+                  {/* Thumbnail — v2026-3d regenerated screenshot */}
+                  <div className="relative w-full aspect-[4/3] bg-slate-100 overflow-hidden">
+                    <Image
+                      src={`/screenshots/v2026-3d/${design.id}_small.png`}
+                      alt={design.title}
+                      fill
+                      className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      unoptimized
+                      onError={(e) => {
+                        const img = e.currentTarget;
+                        const fallback = design.preview
+                          ? design.preview.replace(/\.(jpg|jpeg|png)$/i, '_small.jpg')
+                          : null;
+                        if (fallback && img.src !== fallback) {
+                          img.src = fallback;
+                        } else {
+                          img.style.display = 'none';
+                        }
+                      }}
+                    />
+                  </div>
                   <div className="p-6">
                     {/* ML confidence badge */}
                     {mlConfidence != null && mlConfidence > 0.01 && (

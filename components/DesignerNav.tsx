@@ -3575,6 +3575,7 @@ export default function DesignerNav() {
                           <React.Fragment key={item.slug}>
                             <button
                               onClick={(e) => handleMenuClick(item.slug, e)}
+                              data-testid="save-design-nav-btn"
                               className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 px-4 py-3 text-left text-base font-light text-gray-200 transition-all hover:border-white/20 hover:bg-white/10"
                             >
                               <Icon className="h-5 w-5 flex-shrink-0" />

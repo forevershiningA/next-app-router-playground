@@ -1,7 +1,7 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-05-29
-**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots)
+**Last Updated:** 2026-06-02
+**Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
 
@@ -18,28 +18,232 @@
 10. [Rock Pitch Base Feature](#rock-pitch-base-feature)
 11. [Slant Headstone Feature](#slant-headstone-feature)
 12. [Design Gallery & SEO](#design-gallery--seo)
-13. [Check Price Feature](#check-price-feature)
-14. [Pricing System](#pricing-system)
-15. [Save Design Feature](#save-design-feature)
-16. [My Account System](#my-account-system)
-17. [Authentication System](#authentication-system)
-18. [Email System](#email-system)
-19. [File Storage System](#file-storage-system)
-20. [Database & Catalog System](#database--catalog-system)
-21. [ML Smart Search](#ml-smart-search)
-22. [Load Design Popup](#load-design-popup)
-23. [P3D Format & Converter](#p3d-format--converter)
-24. [Performance Considerations](#performance-considerations)
-25. [Memory Management](#memory-management)
-26. [Common Issues & Solutions](#common-issues--solutions)
-27. [UI Theming & Primary Color](#ui-theming--primary-color)
-28. [Design Management Scripts](#design-management-scripts)
-29. [Development Workflow](#development-workflow)
-30. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
+13. [Hero Search Bar](#hero-search-bar)
+14. [Check Price Feature](#check-price-feature)
+15. [Pricing System](#pricing-system)
+16. [Save Design Feature](#save-design-feature)
+17. [My Account System](#my-account-system)
+18. [Authentication System](#authentication-system)
+19. [Email System](#email-system)
+20. [File Storage System](#file-storage-system)
+21. [Database & Catalog System](#database--catalog-system)
+22. [ML Smart Search](#ml-smart-search)
+23. [Load Design Popup](#load-design-popup)
+24. [P3D Format & Converter](#p3d-format--converter)
+25. [Performance Considerations](#performance-considerations)
+26. [Memory Management](#memory-management)
+27. [Common Issues & Solutions](#common-issues--solutions)
+28. [UI Theming & Primary Color](#ui-theming--primary-color)
+29. [Design Management Scripts](#design-management-scripts)
+30. [Development Workflow](#development-workflow)
+31. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
+32. [Unit Testing (Vitest)](#unit-testing-vitest)
+33. [E2E Testing (Playwright)](#e2e-testing-playwright)
 
 ---
 
-## Current Status (2026-05-29) — Day Mode: Remaining Panels + Homepage
+## Current Status (2026-06-02) — Hero Search Bar & v2026-3D Design Gallery
+
+### ✅ Hero Search Bar on Home Page
+
+A search input was added to the homepage hero (`app/_ui/HomeSplash.tsx`) between the trust badges and the 3D canvas, allowing visitors to find inspiration before entering the designer.
+
+#### Implementation
+
+- **State**: `heroSearchQuery` + `handleHeroSearch` handler in `HomeSplash.tsx`
+- **UI**: Glassmorphic `<form>` (dark/day theme compatible) with text input + "Search" submit button
+- On submit, navigates to `/designs?q={query}` using `router.push()`
+
+#### Hero Layout Tweaks (same session)
+
+- **Canvas height −10%**: `h-[50vh] sm:h-[55vh] min-h-[400px]` → `h-[45vh] sm:h-[49.5vh] min-h-[360px]`
+- **Content shifted up**: `justify-center` → `justify-start`, padding `pt-[129px] sm:pt-24` → `pt-[100px] sm:pt-16`
+
+---
+
+### ✅ `/designs` Search Results — v2026-3D Thumbnails
+
+The `/designs` search results page (`app/designs/DesignsPageClient.tsx`) was updated to show only designs with 3D-regenerated screenshots and display those regenerated thumbnails.
+
+#### Filter: only 3,041 designs with 3D renders
+
+- **`public/screenshots/v2026-3d-ids.json`** — generated index of all 3,041 design IDs that have a `_small.png` in `public/screenshots/v2026-3d/`
+- `DesignsPageClient` fetches this JSON alongside `SAVED_DESIGNS` and filters to the intersection → `v2026Set.has(d.id)`
+- Replaces the previous filter against `public/designs/v2026-ids.json` (22,226 IDs, too broad)
+
+#### Thumbnail: v2026-3D PNG with fallback
+
+```tsx
+<Image
+  src={`/screenshots/v2026-3d/${design.id}_small.png`}
+  onError={(e) => {
+    const img = e.currentTarget;
+    const fallback = design.preview
+      ? design.preview.replace(/\.(jpg|jpeg|png)$/i, '_small.jpg')
+      : null;
+    if (fallback && img.src !== fallback) img.src = fallback;
+    else img.style.display = 'none';
+  }}
+/>
+```
+
+Priority chain matches `LoadDesignButton.tsx`:
+1. `/screenshots/v2026-3d/{id}_small.png` (3D transparent PNG)
+2. Legacy `_small.jpg` derived from `design.preview`
+3. Hidden if both fail
+
+#### Pre-populated search from URL
+
+- `app/designs/page.tsx` is an `async` server component; reads `await searchParams` and passes `initialQuery` to client
+- On mount, `DesignsPageClient` runs `searchDesigns(designs, mlIndexRef.current, filters)` synchronously with the locally-loaded `designs` array (avoids stale closure on `runSearch`)
+
+#### Files Changed
+
+| File | Change |
+|------|--------|
+| `app/_ui/HomeSplash.tsx` | Hero search form, canvas −10% height, content shifted up |
+| `app/designs/page.tsx` | Made `async`, reads `searchParams`, passes `initialQuery` |
+| `app/designs/DesignsPageClient.tsx` | Filters by v2026-3d-ids, thumbnails from `/screenshots/v2026-3d/` |
+| `public/screenshots/v2026-3d-ids.json` | Generated — 3,041 IDs with 3D `_small.png` renders |
+
+---
+
+
+
+### ✅ Playwright E2E Test Suite Added
+
+Full browser E2E tests covering the design creation and save flow, plus direct API tests for `/api/projects`.
+
+#### Installed
+
+```bash
+# @playwright/test 1.59.1 was already present as a devDependency
+pnpx playwright install chromium   # install Chromium browser binary
+```
+
+#### Configuration (`playwright.config.ts`)
+
+Key settings:
+- `testDir: 'tests/e2e'`
+- Two projects: `setup` (auth) → `chromium` (depends on setup)
+- `webServer`: `pnpm dev`, `reuseExistingServer: !CI` — reuses running dev server locally
+- Auth state saved to `playwright/.auth/user.json` (gitignored)
+- Reads `.env.test.local` via dotenv (gitignored) for `TEST_USER_EMAIL` / `TEST_USER_PASSWORD`
+
+#### Required Setup (one-time)
+
+Create `.env.test.local` (gitignored — see `.env.test.local.example`):
+```
+TEST_USER_EMAIL=your-test-account@example.com
+TEST_USER_PASSWORD=your-test-password
+```
+
+#### New Scripts (`package.json`)
+
+| Command | Description |
+|---------|-------------|
+| `pnpm test:e2e` | Run all 13 E2E tests (headless) |
+| `pnpm test:e2e:ui` | Interactive Playwright UI mode |
+| `pnpm test:e2e:debug` | Step-by-step debugger |
+| `pnpm test:e2e:report` | Open last HTML report |
+
+#### Test Files (`tests/e2e/`)
+
+| File | Tests | What's covered |
+|------|-------|----------------|
+| `auth.setup.ts` | 1 | Login via `/login` UI → saves `storageState` for all authenticated tests |
+| `designer.spec.ts` | 5 | Save modal open/submit/validate/close; auth guard (unauthenticated → 401) |
+| `projects-api.spec.ts` | 7 | `POST /api/projects` (save, 400 on missing state, default title), `GET` (list, limit), `DELETE` (delete + verify gone, 400 on missing ID) |
+
+**Total: 13 E2E tests.**
+
+#### Page Object Models (`tests/e2e/pages/`)
+
+- **`LoginPage.ts`** — `goto()`, `login(email, password)`, `expectError()`, `expectRedirectTo()`
+- **`DesignerPage.ts`** — `goto(path)`, `waitForReady()`, `openSaveModal()`, `saveDesign(name)`, `waitForCanvasRender()`
+
+#### Auth Strategy
+
+Uses Playwright's `storageState` pattern (not NextAuth):
+- `auth.setup.ts` logs in via the real UI → cookie `session` (JWT, httpOnly, 7-day expiry) is captured
+- All `[chromium]` project tests load `playwright/.auth/user.json` so they start already authenticated
+- `auth.setup.ts` runs before any `[chromium]` tests via `dependencies: ['setup']`
+
+#### Architecture Notes
+
+- Session cookie name: `session` (defined in `lib/auth/session.ts`)
+- Login page: no `htmlFor` on labels → use `getByPlaceholder('you@example.com')` and `getByPlaceholder('••••••••')`
+- "Save Design" button: nav item with `slug === 'save-design'` → opens `SaveDesignModal`
+- Save modal submit: `page.locator('form').getByRole('button', { name: 'Save Design' })`
+- After successful save: app redirects to `/my-account`
+
+---
+
+### ✅ Vitest Unit Test Suite Added
+
+The project had **no automated tests** — `pnpm build` was the only validation gate. A Vitest suite now covers the core pure-logic modules.
+
+#### Installed
+
+```bash
+pnpm add -D vitest @vitest/coverage-v8   # vitest 4.1.8
+```
+
+#### Configuration (`vitest.config.ts`)
+
+```typescript
+import { defineConfig } from 'vitest/config';
+import path from 'path';
+
+export default defineConfig({
+  test: {
+    environment: 'node',
+    include: ['tests/unit/**/*.test.ts'],
+    coverage: {
+      provider: 'v8',
+      include: ['lib/**/*.ts'],
+    },
+  },
+  resolve: {
+    alias: { '#': path.resolve(__dirname, '.') },  // mirrors tsconfig #/* alias
+  },
+});
+```
+
+#### New Scripts (`package.json`)
+
+| Command | Description |
+|---------|-------------|
+| `pnpm test` | Run all unit tests once |
+| `pnpm test:watch` | Watch mode (re-runs on file change) |
+| `pnpm test:coverage` | Run with V8 coverage report |
+
+#### Test Files (`tests/unit/`)
+
+| File | Tests | What's covered |
+|------|-------|----------------|
+| `unit-system.test.ts` | 26 | `resolveUnitSystemFromCountry`, `parseUnitSystemCookie`, `formatImperialFromMm`, `formatLengthFromMm`, `formatDimensionPair/Triplet` |
+| `slug.test.ts` | 9 | `toSlug` — lowercasing, hyphens, punctuation stripping, numbers |
+| `xml-parser-price.test.ts` | 18 | `calculatePrice` (linear formula, noteFilter, range matching), `calculatePricePowerLaw` (power-law + minimum-size surcharge), `computeQuantity` (all quantity types) |
+| `inscription-sanitizer.test.ts` | 20 | `hashString`, `getGenderFromCategory`, `sanitizeInscription` (memorial phrase preservation, name replacement, pattern-only mode) |
+| `motif-pricing.test.ts` | 9 | `calculateMotifPrice` (laser=free, color tiers, fallback, retail multiplier) |
+
+**Total: 82 tests — all passing.**
+
+#### What Is Intentionally Not Tested
+
+- Zustand stores (`headstone-store.ts`, `scene-overlay-store.ts`) — require React environment
+- 3D components (`components/three/`) — require WebGL/R3F
+- API routes — require database / HTTP server
+- Files with server-only imports (`lib/db/`, `lib/auth/`, `lib/email/`)
+
+#### Adding New Tests
+
+Place test files in `tests/unit/` as `*.test.ts`. Focus on pure functions in `lib/`:
+- No `fetch()`, no DOM, no React hooks
+- Import using the `#/` alias: `import { fn } from '#/lib/my-module'`
+
+---
 
 ### ✅ Additional Pages / Components Updated for Day Mode
 
@@ -7117,6 +7321,35 @@ export async function extractTotalPrice(
 
 ---
 
+## Hero Search Bar
+
+The homepage (`app/_ui/HomeSplash.tsx`) has an inline search form in the hero section that lets visitors find designs before entering the designer.
+
+### How It Works
+
+1. User types a query and submits the form
+2. `router.push('/designs?q={query}')` navigates to the gallery with the query pre-filled
+3. `app/designs/page.tsx` (async server component) reads `await searchParams` and passes `initialQuery` to `DesignsPageClient`
+4. On mount, the client runs `searchDesigns(designs, mlIndex, { query: initialQuery })` with the locally-loaded `designs` array and renders results immediately
+
+### Search Scope
+
+Results are restricted to the **3,041 designs** that have 3D-regenerated screenshots (`public/screenshots/v2026-3d-ids.json`). This ensures every result card shows a high-quality rendered thumbnail.
+
+### Thumbnail Chain
+
+Each result card loads `/screenshots/v2026-3d/{id}_small.png` (transparent 3D PNG). On error, falls back to legacy `_small.jpg` derived from `design.preview`. If both fail, the image slot is hidden.
+
+### Hero Layout
+
+| Property | Value |
+|----------|-------|
+| Canvas height | `h-[45vh] sm:h-[49.5vh] min-h-[360px]` (−10% vs original) |
+| Content padding | `pt-[100px] sm:pt-16` (shifted up) |
+| Content alignment | `justify-start` (top-anchored) |
+
+---
+
 ## Check Price Feature
 
 ### Overview
@@ -7884,6 +8117,87 @@ useEffect(() => {
 - Result: **16-19 min → 53 sec (95% improvement)** ✅
 - Alternative: Use JSON in `public/` + fetch() at runtime
 - Commit: `bb7d47ee3b`
+
+---
+
+## Unit Testing (Vitest)
+
+> Added 2026-06-01. See Current Status section at the top for full details.
+
+### Commands
+
+```bash
+pnpm test               # Run all 82 unit tests once (CI-safe)
+pnpm test:watch         # Watch mode — re-runs on file change
+pnpm test:coverage      # V8 coverage report
+```
+
+### Structure
+
+```
+tests/unit/
+├── unit-system.test.ts          # 26 tests — mm/imperial conversion + formatting
+├── slug.test.ts                 # 9 tests  — URL slug generation
+├── xml-parser-price.test.ts     # 18 tests — pricing engine formulas
+├── inscription-sanitizer.test.ts # 20 tests — name privacy/sanitization
+└── motif-pricing.test.ts        # 9 tests  — motif color tier pricing
+```
+
+### Key Facts
+
+- Uses **Vitest 4.1.8** + `@vitest/coverage-v8`
+- All tests run in `node` environment — no DOM, no WebGL
+- Path alias `#/*` resolved in `vitest.config.ts` matching tsconfig
+- `endQuantity === 0` in price tiers = unlimited (legacy sentinel, not literally zero)
+- Gold Gilding tier key color: `#c99d44`; Silver Gilding: `#eeeeee`
+
+---
+
+## E2E Testing (Playwright)
+
+> Added 2026-06-01. See Current Status section at the top for full details.
+
+### Commands
+
+```bash
+pnpm test:e2e           # Run all 13 E2E tests (headless Chromium)
+pnpm test:e2e:ui        # Interactive Playwright UI (visual test runner)
+pnpm test:e2e:debug     # Step-by-step debugger
+pnpm test:e2e:report    # Open last HTML report
+```
+
+### Setup Required
+
+Create `.env.test.local` (gitignored):
+```
+TEST_USER_EMAIL=your-test-account@example.com
+TEST_USER_PASSWORD=your-test-password
+```
+
+### Structure
+
+```
+playwright.config.ts          # Playwright config — webServer, auth projects
+playwright/.auth/             # GITIGNORED — saved session cookie (storageState)
+.env.test.local               # GITIGNORED — test credentials
+.env.test.local.example       # Template to copy from
+
+tests/e2e/
+├── auth.setup.ts             # Auth setup — login once, save storageState
+├── designer.spec.ts          # 5 tests — save modal E2E flow
+├── projects-api.spec.ts      # 7 tests — /api/projects save/list/delete
+└── pages/
+    ├── LoginPage.ts          # POM — login form locators
+    └── DesignerPage.ts       # POM — designer nav + save modal
+```
+
+### Key Facts
+
+- Uses **Playwright 1.59.1** (was already a devDependency)
+- Auth: JWT session cookie named `session` — captured via `storageState`
+- Login locators: `getByPlaceholder('you@example.com')` (no `htmlFor` on labels)
+- `projects-api.spec.ts` uses Playwright's `request` fixture — pure HTTP, no browser
+- The dev server is auto-started by `playwright.config.ts` (`pnpm dev`, reused locally)
 
 ---
 
