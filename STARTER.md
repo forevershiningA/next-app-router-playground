@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-02
+**Last Updated:** 2026-06-04
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -39,6 +39,273 @@
 31. [Stainless Steel Plaque — Mounting Holes](#stainless-steel-plaque--mounting-holes)
 32. [Unit Testing (Vitest)](#unit-testing-vitest)
 33. [E2E Testing (Playwright)](#e2e-testing-playwright)
+34. [Design Gallery Search UX (2026-06-03)](#current-status-2026-06-03--design-gallery-search-ux--sidebar-redesign)
+35. [Design Gallery Pixel-Perfect Polish (2026-06-04)](#current-status-2026-06-04--design-gallery-pixel-perfect-polish)
+
+---
+
+## Current Status (2026-06-04) — Design Gallery Pixel-Perfect Polish
+
+A full round of layout, accessibility, and SEO fixes across the `/designs` gallery and design detail pages. All changes were surgical — no unrelated code touched.
+
+### ✅ ThemeToggle — Hidden on `/designs` Routes
+
+**Problem:** The global `ThemeToggle` button (fixed `top-20px left-20px z-[9999]`) overlapped the sidebar logo/header on all `/designs` pages.
+
+**Fix (`components/ThemeToggle.tsx`):** Added `usePathname()` guard — returns `null` when `pathname?.startsWith('/designs')`. The designs section always uses a forced white background so the toggle is unnecessary there.
+
+---
+
+### ✅ Sidebar Badge — Design Count (not Category Count)
+
+**Problem:** Product-type badges in `DesignsTreeNav` showed the number of *categories* (e.g. 4), not the number of *designs* (e.g. 812). Misleading at a glance.
+
+**Fix (`components/DesignsTreeNav.tsx`):**
+```ts
+// Before (category count)
+Object.keys(productNode.categories).length
+
+// After (design count)
+Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.length, 0)
+```
+
+---
+
+### ✅ "Found X of Y" Bar — Aligned with Card Grid
+
+**Problem:** The results status bar had `max-w-3xl mx-auto` which made it narrower and offset from the card grid below it (optical misalignment).
+
+**Fix (`components/DesignSmartSearch.tsx`):** Removed `max-w-3xl mx-auto` from the results bar container — it now aligns flush with the card grid.
+
+---
+
+### ✅ Sidebar Logo — Replaced Text with Image
+
+**Before:** `<span className="font-serif text-xl font-light text-slate-900 tracking-tight">Forever Shining</span>`
+
+**After (`components/DesignsTreeNav.tsx`):**
+```tsx
+<Image
+  src="/ico/forever-transparent-logo-bw.png"
+  alt="Forever Shining"
+  width={400}
+  height={246}
+  className="w-full h-auto"
+  priority
+/>
+```
+
+- File used: `public/ico/forever-transparent-logo-bw.png` (400×246, transparent BW, same natural size as the `forever-transparent-logo.png` used in `DesignerNav`)
+- Container updated to `px-6` to match `DesignerNav` desktop header padding exactly
+- A `h-px bg-slate-200` thin divider separates the logo from the "Memorial Designs" label below
+
+---
+
+### ✅ Sidebar Loading State — Dark Background Flicker Eliminated
+
+**Problem:** During data load, `DesignsTreeNav` returns early (before its `<nav className="bg-white">` wrapper renders), exposing the parent container's old dark `bg-[#1b1511]` background + blue loading text.
+
+**Fixes:**
+- **`components/ConditionalNav.tsx`**: Wrapper div changed from `bg-[#1b1511] day:bg-stone-100 ... md:bg-transparent md:border-gray-800` → `bg-white md:bg-white md:border-slate-200` everywhere
+- **`components/DesignsTreeNav.tsx`**: Loading and empty states now explicitly have `bg-white h-full` so no parent bleed-through
+
+---
+
+### ✅ Sidebar Active State — Lighter Accent Style
+
+**Before:** `bg-slate-900 text-white` (heavy solid black block) for both product-type buttons and individual design links.
+
+**After:**
+| Element | Before | After |
+|---------|--------|-------|
+| Product-type button (active) | `bg-slate-900 text-white font-normal` | `bg-slate-100 text-slate-900 font-semibold` |
+| Product-type badge (active) | `bg-white/20 text-white/80` | `bg-slate-200 text-slate-600` |
+| Design leaf link (active) | `bg-slate-900 text-white font-normal` | `border-l-2 border-slate-500 bg-slate-50 text-slate-900 font-semibold pl-[10px]` |
+| Design leaf link (inactive) | `text-slate-500 font-light` | `text-slate-600 font-normal` (WCAG AA contrast) |
+
+---
+
+### ✅ Sidebar Font Size — Subcategories & Designs
+
+**Problem:** Category buttons and individual design links used `text-xs` (12px) — too small for older users.
+
+**Fix (`components/DesignsTreeNav.tsx`):**
+- Category buttons: `text-xs` → `text-sm`
+- Design leaf links: `text-xs` → `text-sm`
+
+---
+
+### ✅ Long Design Names — Truncation
+
+**Fix (`components/DesignsTreeNav.tsx`):** Added `line-clamp-2` to design link text so names longer than 2 lines are cut with ellipsis rather than wrapping to 3–4 lines.
+
+---
+
+### ✅ Design Detail Page — H1, Breadcrumb & Subtitle (Client + SSR)
+
+**Problem — Three conflicting signals:**
+1. Sidebar active item: "Cropped Peak - Dedicated Mother" (correct — from slug)
+2. Breadcrumb last item: "In loving memory" (wrong — was `designMetadata.title`, the first inscription text)
+3. H1: "Biblical Memorial – Laser-Etched Black Granite Headstone (Cropped Peak)" (wrong — verbose category+product+shape)
+4. Subtitle: empty string (broken `slugText` variable assumed old `id_slug` format)
+
+**Fix — two files needed (CSR + SSR):**
+
+#### `DesignPageClient.tsx` (client-rendered — what users see after JS hydrates)
+- Breadcrumb last item: `{designMetadata.title}` → `{formattedDesignTitle}`
+- H1: verbose string → `{formattedDesignTitle}` (e.g. "Cropped Peak – Dedicated Mother")
+- Subtitle `<p>`: broken `{slugText}` → `{categoryTitle} · {simplifiedProductName} {productTypeDisplay}` (e.g. "Biblical Memorial · Laser-Etched Black Granite Headstone")
+- Breadcrumb also simplified (removed redundant `productType` crumb)
+
+#### `app/designs/[productType]/[category]/[slug]/page.tsx` (server-rendered — what Google sees)
+- Added `formattedH1` computed from existing `shapeName` + `phraseFromSlug`:
+  ```ts
+  const formattedH1 = shapeName && phraseFromSlug
+    ? `${shapeName} – ${phraseFromSlug}`
+    : shapeName
+    ? `${shapeName} – ${categoryTitle}`
+    : formatSlugForDisplay(slug);
+  ```
+- SSR `#design-ssr-content` block updated: breadcrumb last item, `<h1>`, and subtitle all use `formattedH1`
+- JSON-LD `BreadcrumbList` position 6 (`design.title`) → `formattedH1`
+- Result: Google, crawlers, and `<noscript>` users all see the correct, concise design title
+
+#### Files Changed (2026-06-04)
+
+| File | Change |
+|------|--------|
+| `components/ThemeToggle.tsx` | Returns `null` on `/designs` routes |
+| `components/DesignsTreeNav.tsx` | Logo image; loading state bg-white; lighter active styles; `text-sm` font sizes; `line-clamp-2`; `px-6` container padding; design count badges |
+| `components/ConditionalNav.tsx` | Sidebar wrapper: `bg-white`, `border-slate-200` (was dark bg + gray-800 border) |
+| `components/DesignSmartSearch.tsx` | Removed `max-w-3xl mx-auto` from results status bar |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | H1 → `formattedDesignTitle`; breadcrumb last item fixed; subtitle fixed |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | SSR H1, breadcrumb, subtitle, and JSON-LD all use new `formattedH1` |
+
+---
+
+## Current Status (2026-06-03) — Design Gallery Search UX & Sidebar Redesign
+
+### ✅ `/designs` Smart Search — Full UX Overhaul
+
+Three rounds of iterative UX improvements to the `/designs?q=` search page, driven by detailed visual review.
+
+#### 1. Tiered Search Scoring (`lib/ml-search-service.ts`)
+
+The old flat text-bag scoring returned wrong results for visual queries (e.g. `?q=heart` showed a plain square headstone because a long inscription contained the word "heart" many times). Replaced with **tiered scoring**:
+
+| Bucket | Fields | Weight |
+|--------|--------|--------|
+| Visual | `shapeName`, `mlMotif`, `mlStyle`, motif names | ×3 |
+| Title | `title`, `slug` | ×2 |
+| Inscription | inscription/description text | ×0.5, **capped at 5 pts** |
+
+The inscription cap prevents long epitaphs from dominating over a heart-shaped monument.
+
+Added `matchedOn?: 'visual' | 'inscription' | 'mixed'` to `SearchResult` — used by the card UI to show a subtle hint ("Matched inscription text") without exposing private memorial text.
+
+#### 2. Sort on Full Result Set (`app/designs/DesignsPageClient.tsx`)
+
+- `fullSearchResults` state — uncapped, stores all matches
+- `displayResults` — `useMemo([fullSearchResults, sortBy])` derives the display slice (sorted + `.slice(0, 60)`)
+- Sort options: Best Match, Price ↑, Price ↓, Name A–Z
+- Sort is applied **before** the 60-result cap, so price-sort considers all matches, not just the top-60 relevance hits
+
+#### 3. ML-Ready Race Condition Fix
+
+Initial `?q=heart` page loads hit an empty ML index because `loadMLData` is async. Added `useEffect([mlReady, allDesigns.length])` to re-run search once both ML data and design list are loaded — ensuring the initial URL query gets ML-scored results.
+
+#### 4. Active Filter Chips
+
+Filter chips appear below the search bar whenever ML type/style/motif or feature toggles are active. Each chip has an ✕ to remove that one filter. Chips are hidden when the filter panel is open (panel already shows the controls).
+
+#### 5. Sort Dropdown — Strikethrough Bug Fixed (`components/DesignSmartSearch.tsx`)
+
+The native `<select>` showed strikethrough text in Chromium because `@plugin "@tailwindcss/typography"` in `styles/globals.css` injects `del { text-decoration: line-through }` which bleeds into native select text when `font-light` is applied.
+
+**Fix**: Replaced the native `<select>` with a custom sort dropdown using `appearance-none` + `font-normal` + a React-rendered `<ChevronDownIcon>` chevron. The wrapper pattern:
+```tsx
+<div className="relative">
+  <select
+    className="appearance-none pl-3 pr-7 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-700 font-normal ..."
+  >...</select>
+  <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+</div>
+```
+
+#### 6. Filter Button — Moved Outside Search Input
+
+The funnel icon was inside the text input (`pr-24` padding) which is a UX anti-pattern — it suggests filtering the *typed text*, not the *results*. Restructured the search bar as `flex gap-2`:
+```
+[ 🔍 Search input with ✕ clear         ] [ 🝖 Filters ]
+```
+The Filters button turns dark (`bg-slate-900`) and shows an amber badge count when ML/feature filters are active.
+
+#### 7. "Clear all filters" — Only Shown When Filters Active
+
+Previously showed whenever any search was active (including plain text). Now only renders when `activeFilterCount > 0` (ML type/style/motif or feature toggle filters). The text input has its own ✕ button inside it.
+
+#### 8. Card UI Simplification
+
+**Removed:**
+- ML confidence badge (color-coded indigo/violet/amber/green — visually chaotic)
+- `MOTIFS` header label
+- Feature count badges ("3 MOTIFS", "PHOTO", "ADDITIONS")
+- `ALL CAPS` product names
+
+**Added:**
+- Motif names as **unified gray pills** (`bg-slate-100 text-slate-600 rounded-full`), max 3 shown + `+N more` overflow
+- **Deduplication** of motif pills — `heart` and `hearts` collapse to one tag via stemming (`replace(/s$/, '')`)
+- **"Quote on request"** fallback when `mlData?.design_price` is null/zero (uniform card height)
+- **"VIEW →"** CTA: changed from `font-light text-slate-600` to `font-medium text-slate-500 tracking-widest` with `group-hover:text-slate-900` — makes the CTA visible as a visual anchor without being aggressive
+
+#### 9. "✨ Smart Search" / "AI Ranked" Badge — Removed
+
+The badge was creating false expectations ("Smart Search active" but results didn't always feel smart). Removed entirely. The `mlReady` and `mlRanked` states were cleaned up from both the component and its props interface.
+
+#### Files Changed
+
+| File | Change |
+|------|--------|
+| `lib/ml-search-service.ts` | `matchedOn` field on `SearchResult`; tiered scoring replacing flat text-bag |
+| `components/DesignSmartSearch.tsx` | Filter button outside input; sort dropdown (no native `<select>`); filter chips; "Clear all" condition; removed AI badge + `mlReady`/`mlRanked` props |
+| `app/designs/DesignsPageClient.tsx` | `fullSearchResults` (uncapped); `displayResults` via `useMemo`; `sortBy` state; ML-ready re-run fix; card UI rewrite (gray pills, no colored tags, deduplication, "Quote on request", VIEW CTA) |
+
+---
+
+### ✅ `DesignsTreeNav` Sidebar — Unified Light Theme
+
+The designs sidebar (`components/DesignsTreeNav.tsx`) used `bg-gradient-to-tr from-sky-900 to-yellow-900` — a dark gradient that visually clashed with the clean white main content area. Redesigned to match the light aesthetic.
+
+#### Visual Changes
+
+| Before | After |
+|--------|-------|
+| `bg-gradient-to-tr from-sky-900 to-yellow-900` | `bg-white` |
+| White/slate-300 text | slate-900/slate-700/slate-500 text |
+| `bg-white/15` active state (frosted glass) | `bg-slate-900 text-white` (crisp) |
+| `bg-white/10` hover | `hover:bg-slate-100` |
+| `forever-transparent-logo.png` (white glowing logo on dark bg) | Serif text `"Forever Shining"` (works on white) |
+| `bg-white/10 text-white` "3D Designer" button | `border border-slate-300 text-slate-600 hover:bg-slate-50` — matches Filters button style |
+| `"3114 thoughtfully crafted designs"` count (mismatched with 2278 in main content) | Removed — count confusion eliminated |
+| Visible default scrollbar | `[&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200` — 1px subtle |
+| `border-r border-gray-800` on wrapper | `border-r border-slate-200` |
+
+#### Count Discrepancy — Root Cause & Fix
+
+- Sidebar used `getAllSavedDesigns()` → 3114 total designs (ALL historical designs)
+- Main page filters to `v2026Set` → 2278 designs (only those with 3D screenshot renders)
+- **Fix**: Removed the count from the sidebar entirely. The sidebar is a navigation tree (links to individual design pages), not a catalog count display. The main content area already shows the authoritative "2278 designs across N collections" count.
+
+#### Architecture: Sidebar = Navigation, Filters = Search
+
+The sidebar links navigate to `/designs/[productType]/[category]` pages (Option B architecture). The `[ 🝖 Filters ]` button in the search bar handles keyword/ML filtering of the results on the same page. These are distinct UX affordances and both are kept.
+
+#### Files Changed
+
+| File | Change |
+|------|--------|
+| `components/DesignsTreeNav.tsx` | Light theme throughout; text logo; thin scrollbar; removed count; unified button/link styles |
+| `components/ConditionalNav.tsx` | `border-r border-gray-800` → `border-r border-slate-200` on sidebar wrapper div |
 
 ---
 

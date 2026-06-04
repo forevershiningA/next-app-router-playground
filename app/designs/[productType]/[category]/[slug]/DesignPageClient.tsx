@@ -3009,14 +3009,12 @@ export default function DesignPageClient({
           {/* Elegant Breadcrumb - Hidden on mobile, visible on desktop */}
           <nav className="hidden md:flex items-center gap-2 text-sm text-slate-500 mb-6">
             <a href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</a>
-            <ChevronRightIcon className="w-4 h-4" />
-            <a href={`/designs/${designMetadata.productType}`} className="hover:text-slate-900 transition-colors font-light tracking-wide capitalize">{designMetadata.productType}s</a>
-            <ChevronRightIcon className="w-4 h-4" />
+            <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
             <a href={`/designs/${productSlug}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{productName}</a>
-            <ChevronRightIcon className="w-4 h-4" />
+            <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
             <a href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{categoryTitle}</a>
-            <ChevronRightIcon className="w-4 h-4" />
-            <span className="text-slate-900 font-medium tracking-wide">{designMetadata.title}</span>
+            <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
+            <span className="text-slate-900 font-medium tracking-wide truncate">{formattedDesignTitle}</span>
           </nav>
 
           {/* Mobile Breadcrumb - Compact version showing only current page */}
@@ -3031,11 +3029,11 @@ export default function DesignPageClient({
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h1 className="text-2xl md:text-4xl font-serif font-light text-slate-900 tracking-tight mb-2 md:mb-4">
-                {categoryTitle} – {simplifiedProductName} {productTypeDisplay}{shapeDisplayName ? ` (${shapeDisplayName})` : ''}
+                {formattedDesignTitle}
               </h1>
               
-              <p className="text-lg md:text-2xl text-slate-600 font-light italic mb-3 md:mb-6">
-                {slugText}
+              <p className="text-base md:text-lg text-slate-500 font-light mb-3 md:mb-6">
+                {categoryTitle} · {simplifiedProductName} {productTypeDisplay}
               </p>
               
             </div>

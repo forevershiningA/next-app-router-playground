@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
@@ -203,7 +204,7 @@ export default function DesignsTreeNav() {
 
   if (loading) {
     return (
-      <div className="p-6 text-lg text-slate-600 font-light">
+      <div className="bg-white h-full p-6 text-sm text-slate-400 font-light">
         Loading memorial designs...
       </div>
     );
@@ -211,52 +212,52 @@ export default function DesignsTreeNav() {
 
   if (treeData.length === 0) {
     return (
-      <div className="p-6 text-lg text-slate-600 font-light">
+      <div className="bg-white h-full p-6 text-sm text-slate-400 font-light">
         No designs found.
       </div>
     );
   }
 
-  // Calculate total number of designs
-  const totalDesigns = treeData.reduce((total, productNode) => {
-    return total + Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.length, 0);
-  }, 0);
-
   return (
-    <nav className="overflow-y-auto h-full bg-gradient-to-tr from-sky-900 to-yellow-900">
+    <nav className="overflow-y-auto h-full bg-white [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-track]:bg-transparent">
       {/* Product Header - shown when catalog is loaded AND not on design gallery pages */}
       {catalog && !pathname?.startsWith('/designs') && (
-        <div className="border-b border-slate-700/50 bg-black/20 backdrop-blur-sm p-4">
-          <h1 className="text-lg font-semibold text-white">
+        <div className="border-b border-slate-200 bg-slate-50 p-4">
+          <h1 className="text-lg font-semibold text-slate-900">
             {displayProductName}
             <br />
-            <span className="text-slate-300">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
+            <span className="text-slate-500 font-normal">{widthMm} x {heightMm} mm (${price.toFixed(2)})</span>
           </h1>
         </div>
       )}
 
       {/* Header */}
-      <div className="p-4 pb-6 border-b border-slate-700/50">
-        <Link href="/designs" className="hover:opacity-80 transition-opacity">
-          <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" className="mb-4" />
+      <div className="px-6 border-b border-slate-200">
+        <Link href="/designs" className="transition-opacity hover:opacity-80 block">
+          <Image
+            src="/ico/forever-transparent-logo-bw.png"
+            alt="Forever Shining"
+            width={400}
+            height={246}
+            className="w-full h-auto"
+            priority
+          />
         </Link>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-2xl font-serif font-light text-white tracking-tight">
+        <div className="h-px bg-slate-200 rounded-full mb-4" />
+        <div className="flex items-center justify-between pb-4">
+          <h2 className="text-sm font-medium text-slate-700 uppercase tracking-widest">
             Memorial Designs
           </h2>
           <Link
             href="/"
-            className="px-4 py-2 bg-white/10 text-white rounded-lg hover:bg-white/20 transition-all text-sm font-medium backdrop-blur-sm border border-white/20"
+            className="px-3 py-1.5 text-slate-600 rounded-lg border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all text-xs font-light tracking-wide"
           >
             3D Designer
           </Link>
         </div>
-        <p className="text-sm text-slate-300 font-light">
-          {totalDesigns.toLocaleString()} thoughtfully crafted designs
-        </p>
       </div>
       
-      <div className="px-4 pb-4 pt-6 space-y-3">
+      <div className="px-3 pb-6 pt-4 space-y-1">
         {treeData.map((productNode) => {
           const productKey = productNode.productSlug;
           const isProductExpanded = expandedNodes.has(productKey);
@@ -264,33 +265,33 @@ export default function DesignsTreeNav() {
           const productLabel = productNode.productSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
           
           return (
-            <div key={productKey} className="mb-4">
+            <div key={productKey}>
               {/* Product Type Level */}
               <button
                 onClick={() => toggleNode(productKey)}
-                className={`w-full flex items-center gap-3 px-5 py-3.5 rounded-lg text-base font-light transition-all ${
+                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm transition-all ${
                   isActive(productPath) 
-                    ? 'bg-white/15 text-white shadow-lg border border-white/30 backdrop-blur-sm' 
-                    : 'bg-white/5 text-slate-200 hover:bg-white/10 border border-white/10 hover:border-white/20'
+                    ? 'bg-slate-100 text-slate-900 font-semibold' 
+                    : 'text-slate-700 hover:bg-slate-100 font-light'
                 }`}
                 aria-expanded={isProductExpanded}
               >
                 {isProductExpanded ? (
-                  <ChevronDownIcon className="w-5 h-5 flex-shrink-0 text-slate-300" />
+                  <ChevronDownIcon className="w-4 h-4 flex-shrink-0 opacity-50" />
                 ) : (
-                  <ChevronRightIcon className="w-5 h-5 flex-shrink-0 text-slate-300" />
+                  <ChevronRightIcon className="w-4 h-4 flex-shrink-0 opacity-50" />
                 )}
-                <span className="flex-1 text-left tracking-wide">{productLabel}</span>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-light tracking-wider ${
-                  isActive(productPath) ? 'bg-white/20 text-white' : 'bg-white/10 text-slate-300'
+                <span className="flex-1 text-left">{productLabel}</span>
+                <span className={`text-[11px] px-2 py-0.5 rounded-full font-light ${
+                  isActive(productPath) ? 'bg-slate-200 text-slate-600' : 'bg-slate-100 text-slate-400'
                 }`}>
-                  {Object.keys(productNode.categories).length}
+                  {Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.length, 0)}
                 </span>
               </button>
               
               {/* Categories */}
               {isProductExpanded && (
-                <div className="ml-4 mt-2 space-y-2">
+                <div className="ml-4 mt-1 mb-2 border-l border-slate-200 pl-3 space-y-0.5">
                   {Object.entries(productNode.categories).map(([categoryKey, categoryData]) => {
                     const categoryNodeKey = `${productKey}/${categoryKey}`;
                     const isCategoryExpanded = expandedNodes.has(categoryNodeKey);
@@ -301,27 +302,27 @@ export default function DesignsTreeNav() {
                         {/* Category Level */}
                         <button
                           onClick={() => toggleNode(categoryNodeKey)}
-                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-all ${
+                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all ${
                             isActive(categoryPath) && !pathname?.includes(categoryPath + '/') 
-                              ? 'bg-white/10 text-white font-normal border border-white/20 backdrop-blur-sm' 
-                              : 'bg-white/5 text-slate-300 hover:bg-white/8 border border-white/5 font-light'
+                              ? 'bg-slate-100 text-slate-900 font-medium' 
+                              : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-light'
                           }`}
                           aria-expanded={isCategoryExpanded}
                         >
                           {isCategoryExpanded ? (
-                            <ChevronDownIcon className="w-4 h-4 flex-shrink-0 text-slate-400" />
+                            <ChevronDownIcon className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />
                           ) : (
-                            <ChevronRightIcon className="w-4 h-4 flex-shrink-0 text-slate-400" />
+                            <ChevronRightIcon className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />
                           )}
-                          <span className="flex-1 text-left tracking-wide">{categoryData.name}</span>
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-slate-300 font-light">
+                          <span className="flex-1 text-left">{categoryData.name}</span>
+                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-400 font-light">
                             {categoryData.designs.length}
                           </span>
                         </button>
                         
                         {/* Designs */}
                         {isCategoryExpanded && (
-                          <div className="ml-4 mt-2 space-y-1.5">
+                          <div className="ml-3 mt-0.5 mb-1 border-l border-slate-100 pl-3 space-y-0.5">
                             {categoryData.designs.map((design, index) => {
                               const designPath = `/designs/${productNode.productSlug}/${categoryKey}/${design.slug}`;
                               const isDesignActive = pathname === designPath;
@@ -330,13 +331,13 @@ export default function DesignsTreeNav() {
                                 <Link
                                   key={`${productNode.productSlug}-${categoryKey}-${design.id}-${index}`}
                                   href={designPath}
-                                  className={`block px-4 py-2.5 rounded-lg text-sm transition-all ${
+                                  className={`block px-3 py-1.5 rounded-md text-sm leading-relaxed transition-all ${
                                     isDesignActive 
-                                      ? 'bg-white/15 text-white font-normal shadow-md border border-white/30' 
-                                      : 'bg-white/5 text-slate-300 hover:bg-white/8 border border-transparent hover:border-white/10 font-light'
+                                      ? 'border-l-2 border-slate-500 bg-slate-50 text-slate-900 font-semibold pl-[10px]' 
+                                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-normal'
                                   }`}
                                 >
-                                  <span className="leading-relaxed tracking-wide">{design.title}</span>
+                                  <span className="line-clamp-2">{design.title}</span>
                                 </Link>
                               );
                             })}

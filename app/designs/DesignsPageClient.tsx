@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef, useMemo } from 'react';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
-import { ChevronRightIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
 import MobileNavToggle from '#/components/MobileNavToggle';
@@ -17,7 +17,7 @@ import {
   hasActiveFilters,
 } from '#/lib/ml-search-service';
 
-const MAX_SEARCH_RESULTS = 60;
+const MAX_DISPLAY_RESULTS = 60;
 
 export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?: string }) {
   const [allDesigns, setAllDesigns] = useState<SavedDesignMetadata[]>([]);
@@ -28,11 +28,32 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
   const [filters, setFilters] = useState<SearchFilters>(() =>
     initialQuery ? { ...EMPTY_FILTERS, query: initialQuery } : EMPTY_FILTERS,
   );
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  // Full (uncapped) sorted result list — display is derived via useMemo
+  const [fullSearchResults, setFullSearchResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [mlReady, setMlReady] = useState(false);
+  const [sortBy, setSortBy] = useState('relevance');
   const mlIndexRef = useRef<Map<string, MLDesignEntry>>(new Map());
   const searchTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  // Sorted + capped results for rendering — never re-triggers a search
+  const displayResults = useMemo(() => {
+    if (sortBy === 'relevance') return fullSearchResults.slice(0, MAX_DISPLAY_RESULTS);
+
+    const sorted = [...fullSearchResults];
+    if (sortBy === 'price-asc') {
+      sorted.sort((a, b) => (a.mlData?.design_price ?? Infinity) - (b.mlData?.design_price ?? Infinity));
+    } else if (sortBy === 'price-desc') {
+      sorted.sort((a, b) => (b.mlData?.design_price ?? -Infinity) - (a.mlData?.design_price ?? -Infinity));
+    } else if (sortBy === 'name-asc') {
+      sorted.sort((a, b) => {
+        const aName = a.design.shapeName || a.design.title;
+        const bName = b.design.shapeName || b.design.title;
+        return aName.localeCompare(bName);
+      });
+    }
+    return sorted.slice(0, MAX_DISPLAY_RESULTS);
+  }, [fullSearchResults, sortBy]);
 
   // Load designs — restricted to designs with v2026-3d regenerated screenshots
   useEffect(() => {
@@ -72,12 +93,13 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
 
       if (initialQuery) {
         const f = { ...EMPTY_FILTERS, query: initialQuery };
+        // ML index may not be ready yet; re-runs when mlReady fires below
         const results = searchDesigns(designs, mlIndexRef.current, f);
-        setSearchResults(results.slice(0, MAX_SEARCH_RESULTS));
+        setFullSearchResults(results);
       }
     };
     loadDesigns();
-  }, []);
+  }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   // Load ML data in background
   useEffect(() => {
@@ -87,11 +109,19 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
     });
   }, []);
 
+  // Re-run search once ML data is ready (initial page load with ?q= hits empty index)
+  useEffect(() => {
+    if (mlReady && allDesigns.length > 0 && hasActiveFilters(filters)) {
+      runSearch(filters);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mlReady, allDesigns.length]);
+
   // Debounced search
   const runSearch = useCallback(
     async (f: SearchFilters) => {
       if (!hasActiveFilters(f)) {
-        setSearchResults([]);
+        setFullSearchResults([]);
         setIsSearching(false);
         return;
       }
@@ -102,9 +132,9 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
       // If all 3 ML filters set, try ML ranking
       if (f.mlType && f.mlStyle && f.mlMotif) {
         const ranked = await mlRankResults(results, f.mlType, f.mlStyle, f.mlMotif);
-        setSearchResults(ranked.slice(0, MAX_SEARCH_RESULTS));
+        setFullSearchResults(ranked);
       } else {
-        setSearchResults(results.slice(0, MAX_SEARCH_RESULTS));
+        setFullSearchResults(results);
       }
 
       setIsSearching(false);
@@ -168,17 +198,18 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
         <DesignSmartSearch
           filters={filters}
           onFiltersChange={handleFiltersChange}
-          resultCount={searchResults.length}
+          resultCount={fullSearchResults.length}
           totalCount={totalDesigns}
           isSearching={isSearching}
-          mlReady={mlReady}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
         />
 
         {/* Search Results or Product Grid */}
         {isSearchActive ? (
-          searchResults.length > 0 ? (
+          displayResults.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {searchResults.map(({ design, mlData, mlConfidence }) => (
+              {displayResults.map(({ design, mlData, matchedOn }) => (
                 <Link
                   key={design.id}
                   href={`/designs/${design.productSlug}/${design.category}/${design.slug}`}
@@ -206,85 +237,73 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
                       }}
                     />
                   </div>
-                  <div className="p-6">
-                    {/* ML confidence badge */}
-                    {mlConfidence != null && mlConfidence > 0.01 && (
-                      <div className="flex items-center gap-1 mb-2">
-                        <SparklesIcon className="w-3.5 h-3.5 text-amber-500" />
-                        <span className="text-[10px] uppercase tracking-wider text-amber-600 font-medium">
-                          AI Recommended
-                        </span>
-                      </div>
-                    )}
-
+                  <div className="p-5">
                     <h3 className="font-serif font-light text-xl text-slate-900 mb-1 group-hover:text-slate-700 transition-colors">
                       {design.shapeName
                         ? `${design.shapeName.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')}`
                         : design.slug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
                     </h3>
 
-                    <p className="text-xs text-slate-500 font-light mb-3 uppercase tracking-wider">
+                    <p className="text-xs text-slate-400 font-light mb-3">
                       {design.productName}
                     </p>
 
-                    {/* Motifs */}
-                    {design.motifNames.length > 0 && (
-                      <div className="mb-3">
-                        <p className="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Motifs</p>
-                        <p className="text-sm text-slate-700 font-light">
-                          {design.motifNames.join(', ')}
-                        </p>
-                      </div>
+                    {/* Inscription match hint — generic, no text exposed */}
+                    {matchedOn === 'inscription' && (
+                      <p className="text-xs text-slate-400 font-light italic mb-3">
+                        Matched inscription text
+                      </p>
+                    )}
+                    {matchedOn === 'mixed' && (
+                      <p className="text-xs text-slate-400 font-light italic mb-3">
+                        Matched shape &amp; inscription
+                      </p>
                     )}
 
-                    {/* ML Category Tags */}
-                    {mlData && (
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {mlData.ml_style && (
-                          <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 text-[10px] font-light uppercase tracking-wider border border-indigo-100 rounded">
-                            {mlData.ml_style}
-                          </span>
+                    {/* Motif tags — deduplicated gray pills, max 3 */}
+                    {design.motifNames.length > 0 && (() => {
+                      const seen = new Set<string>();
+                      const unique = design.motifNames.filter(n => {
+                        const key = n.toLowerCase().replace(/s$/, '');
+                        if (seen.has(key)) return false;
+                        seen.add(key);
+                        return true;
+                      });
+                      return (
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {unique.slice(0, 3).map((name) => (
+                            <span
+                              key={name}
+                              className="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-xs font-light rounded-full"
+                            >
+                              {name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()}
+                            </span>
+                          ))}
+                          {unique.length > 3 && (
+                            <span className="px-2 py-0.5 text-slate-400 text-xs font-light">
+                              +{unique.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })()}
+
+                    {/* Price + CTA */}
+                    <div className="pt-3 border-t border-slate-100 flex items-end justify-between gap-2">
+                      <div>
+                        {mlData?.design_price != null && mlData.design_price > 0 ? (
+                          <p className="text-lg font-serif text-slate-900">
+                            <span className="font-light text-sm text-slate-400">From </span>
+                            ${mlData.design_price.toFixed(2)}
+                          </p>
+                        ) : (
+                          <p className="text-sm text-slate-400 font-light italic">Quote on request</p>
                         )}
-                        {mlData.ml_motif && (
-                          <span className="px-2 py-0.5 bg-violet-50 text-violet-600 text-[10px] font-light uppercase tracking-wider border border-violet-100 rounded">
-                            {mlData.ml_motif}
-                          </span>
-                        )}
                       </div>
-                    )}
-
-                    {/* Feature badges */}
-                    <div className="flex items-center gap-2 flex-wrap mb-3">
-                      {design.hasPhoto && (
-                        <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-[10px] font-light uppercase tracking-wider border border-emerald-200">
-                          Photo
-                        </span>
-                      )}
-                      {design.hasMotifs && (
-                        <span className="px-2.5 py-0.5 bg-amber-50 text-amber-700 text-[10px] font-light uppercase tracking-wider border border-amber-200">
-                          {design.motifNames.length} Motif{design.motifNames.length !== 1 ? 's' : ''}
-                        </span>
-                      )}
-                      {design.hasAdditions && (
-                        <span className="px-2.5 py-0.5 bg-orange-50 text-orange-700 text-[10px] font-light uppercase tracking-wider border border-orange-200">
-                          Additions
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Price */}
-                    {mlData?.design_price != null && mlData.design_price > 0 && (
-                      <div className="pt-3 border-t border-slate-100 mb-3">
-                        <p className="text-lg font-serif text-slate-900">
-                          <span className="font-light text-sm text-slate-500">From </span>
-                          ${mlData.design_price.toFixed(2)}
-                        </p>
+                      <div className="flex items-center text-slate-500 font-medium text-xs uppercase tracking-widest group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-300 shrink-0">
+                        <span>View</span>
+                        <ChevronRightIcon className="w-3.5 h-3.5 ml-0.5" />
                       </div>
-                    )}
-
-                    <div className="flex items-center text-slate-700 font-light text-sm uppercase tracking-wider group-hover:translate-x-1 transition-transform duration-300">
-                      <span>View Design</span>
-                      <ChevronRightIcon className="w-4 h-4 ml-1" />
                     </div>
                   </div>
                 </Link>

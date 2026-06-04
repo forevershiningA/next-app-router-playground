@@ -41,6 +41,8 @@ export interface SearchResult {
   mlData?: MLDesignEntry;
   score: number;
   mlConfidence?: number;
+  /** Which fields drove the match — used to show a "why" hint in the UI */
+  matchedOn?: 'visual' | 'inscription' | 'mixed';
 }
 
 export const EMPTY_FILTERS: SearchFilters = {
@@ -254,15 +256,14 @@ export function searchDesigns(
     if (filters.mlStyle && ml?.ml_style !== filters.mlStyle) continue;
     if (filters.mlMotif && ml?.ml_motif !== filters.mlMotif) continue;
 
-    // Text search
+    // Text search — scored in three tiers to prioritise visual matches
+    let matchedOn: SearchResult['matchedOn'] | undefined;
+
     if (searchTerms.length > 0) {
-      const searchableText = [
-        design.title,
-        design.slug,
-        design.productName,
+      // Tier 1: visual / shape / motif fields (highest weight)
+      const visualText = [
         design.shapeName || '',
         design.motifNames.join(' '),
-        design.inscriptions || '',
         ml?.ml_tags || '',
         ml?.ml_motif || '',
         ml?.ml_style || '',
@@ -271,15 +272,31 @@ export function searchDesigns(
         ml?.product_name || '',
       ].join(' ');
 
-      const tokens = tokenize(searchableText);
-      score = computeTextScore(tokens, searchTerms);
+      // Tier 2: name / slug fields
+      const titleText = [design.title, design.slug, design.productName].join(' ');
+
+      // Tier 3: inscription text (intentionally low weight; cap contribution per term)
+      const inscriptionText = design.inscriptions || '';
+
+      const visualScore = computeTextScore(tokenize(visualText), searchTerms);
+      const titleScore = computeTextScore(tokenize(titleText), searchTerms);
+      const inscriptionScore = computeTextScore(tokenize(inscriptionText), searchTerms);
+
+      score =
+        visualScore * 3 +
+        titleScore * 2 +
+        Math.min(inscriptionScore, 5) * 0.5; // cap so long epitaphs can't dominate
 
       if (score === 0) continue;
+
+      if (visualScore > 0 && inscriptionScore > 0) matchedOn = 'mixed';
+      else if (visualScore > 0 || titleScore > 0) matchedOn = 'visual';
+      else matchedOn = 'inscription';
     } else {
       score = 1; // base score for filter-only results
     }
 
-    results.push({ design, mlData: ml, score });
+    results.push({ design, mlData: ml, score, matchedOn });
   }
 
   // Sort by score descending

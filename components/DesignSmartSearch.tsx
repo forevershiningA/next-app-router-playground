@@ -5,7 +5,7 @@ import {
   MagnifyingGlassIcon,
   FunnelIcon,
   XMarkIcon,
-  SparklesIcon,
+  ChevronDownIcon,
 } from '@heroicons/react/24/outline';
 import type { SearchFilters } from '#/lib/ml-search-service';
 import { EMPTY_FILTERS, getMLCategories, hasActiveFilters } from '#/lib/ml-search-service';
@@ -16,7 +16,8 @@ interface DesignSmartSearchProps {
   resultCount: number;
   totalCount: number;
   isSearching: boolean;
-  mlReady: boolean;
+  sortBy: string;
+  onSortChange: (sort: string) => void;
 }
 
 export default function DesignSmartSearch({
@@ -25,7 +26,8 @@ export default function DesignSmartSearch({
   resultCount,
   totalCount,
   isSearching,
-  mlReady,
+  sortBy,
+  onSortChange,
 }: DesignSmartSearchProps) {
   const [showFilters, setShowFilters] = useState(false);
   const [categories, setCategories] = useState<{
@@ -48,8 +50,9 @@ export default function DesignSmartSearch({
 
   const handleClear = useCallback(() => {
     onFiltersChange(EMPTY_FILTERS);
+    onSortChange('relevance');
     searchRef.current?.focus();
-  }, [onFiltersChange]);
+  }, [onFiltersChange, onSortChange]);
 
   const active = hasActiveFilters(filters);
   const activeFilterCount = [
@@ -63,55 +66,91 @@ export default function DesignSmartSearch({
 
   return (
     <div className="mb-12">
-      {/* Search bar */}
-      <div className="relative max-w-3xl mx-auto">
-        <div className="relative flex items-center">
-          <MagnifyingGlassIcon className="absolute left-4 w-5 h-5 text-slate-400" />
+      {/* Search bar + filter button */}
+      <div className="max-w-3xl mx-auto flex gap-2 items-stretch">
+        {/* Text input */}
+        <div className="relative flex-1">
+          <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
           <input
             ref={searchRef}
             type="text"
             value={filters.query}
             onChange={handleQueryChange}
             placeholder="Search designs by name, motif, shape, inscription..."
-            className="w-full pl-12 pr-24 py-4 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-300 shadow-sm text-base font-light transition-all"
+            className="w-full pl-12 pr-10 py-4 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-300 shadow-sm text-base font-light transition-all"
           />
-          <div className="absolute right-3 flex items-center gap-2">
-            {active && (
-              <button
-                onClick={handleClear}
-                className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
-                title="Clear search"
-              >
-                <XMarkIcon className="w-5 h-5" />
-              </button>
-            )}
+          {active && (
             <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`p-2 rounded-lg transition-colors ${
-                showFilters || activeFilterCount > 0
-                  ? 'bg-slate-800 text-white'
-                  : 'text-slate-400 hover:text-slate-600 hover:bg-slate-100'
-              }`}
-              title="Toggle filters"
+              onClick={handleClear}
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-600 transition-colors"
+              title="Clear search"
             >
-              <FunnelIcon className="w-5 h-5" />
-              {activeFilterCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-white text-[10px] font-semibold rounded-full flex items-center justify-center">
-                  {activeFilterCount}
-                </span>
-              )}
+              <XMarkIcon className="w-4 h-4" />
             </button>
-          </div>
+          )}
         </div>
 
-        {/* ML status indicator */}
-        {mlReady && (
-          <div className="absolute -bottom-6 right-0 flex items-center gap-1 text-xs text-emerald-600">
-            <SparklesIcon className="w-3.5 h-3.5" />
-            <span className="font-light">AI-powered search active</span>
-          </div>
-        )}
+        {/* Filters button — outside the input */}
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className={`relative flex items-center gap-2 px-4 rounded-xl border shadow-sm text-sm font-light transition-all ${
+            showFilters || activeFilterCount > 0
+              ? 'bg-slate-800 text-white border-slate-800'
+              : 'bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:text-slate-800'
+          }`}
+          title="Toggle filters"
+        >
+          <FunnelIcon className="w-4 h-4" />
+          <span>Filters</span>
+          {activeFilterCount > 0 && (
+            <span className="w-5 h-5 bg-amber-500 text-white text-[10px] font-semibold rounded-full flex items-center justify-center">
+              {activeFilterCount}
+            </span>
+          )}
+        </button>
       </div>
+
+      {/* Active filter chips — visible when filters are on but panel is closed */}
+      {!showFilters && activeFilterCount > 0 && (
+        <div className="max-w-3xl mx-auto mt-8 flex flex-wrap gap-2">
+          {filters.mlType && (
+            <FilterChip
+              label={`Type: ${filters.mlType}`}
+              onRemove={() => onFiltersChange({ ...filters, mlType: '' })}
+            />
+          )}
+          {filters.mlStyle && (
+            <FilterChip
+              label={`Style: ${filters.mlStyle}`}
+              onRemove={() => onFiltersChange({ ...filters, mlStyle: '' })}
+            />
+          )}
+          {filters.mlMotif && (
+            <FilterChip
+              label={`Motif: ${filters.mlMotif}`}
+              onRemove={() => onFiltersChange({ ...filters, mlMotif: '' })}
+            />
+          )}
+          {filters.hasPhoto !== null && (
+            <FilterChip
+              label={filters.hasPhoto ? 'Has Photo' : 'No Photo'}
+              onRemove={() => onFiltersChange({ ...filters, hasPhoto: null })}
+            />
+          )}
+          {filters.hasMotifs !== null && (
+            <FilterChip
+              label={filters.hasMotifs ? 'Has Motifs' : 'No Motifs'}
+              onRemove={() => onFiltersChange({ ...filters, hasMotifs: null })}
+            />
+          )}
+          {filters.hasAdditions !== null && (
+            <FilterChip
+              label={filters.hasAdditions ? 'Has Additions' : 'No Additions'}
+              onRemove={() => onFiltersChange({ ...filters, hasAdditions: null })}
+            />
+          )}
+        </div>
+      )}
 
       {/* Filter panel */}
       {showFilters && (
@@ -207,9 +246,9 @@ export default function DesignSmartSearch({
         </div>
       )}
 
-      {/* Results summary */}
+      {/* Results summary + sort */}
       {active && (
-        <div className="max-w-3xl mx-auto mt-8 flex items-center justify-between">
+        <div className="mt-8 flex items-center justify-between gap-4 flex-wrap">
           <p className="text-sm text-slate-600 font-light">
             {isSearching ? (
               <span className="flex items-center gap-2">
@@ -226,15 +265,63 @@ export default function DesignSmartSearch({
               </>
             )}
           </p>
-          <button
-            onClick={handleClear}
-            className="text-sm text-slate-500 hover:text-slate-700 font-light underline underline-offset-4 transition-colors"
-          >
-            Clear all filters
-          </button>
+          <div className="flex items-center gap-4">
+            {resultCount > 1 && (
+              <div className="flex items-center gap-2">
+                <label
+                  htmlFor="sort-select"
+                  className="text-xs text-slate-400 font-light whitespace-nowrap"
+                >
+                  Sort by:
+                </label>
+                <div className="relative">
+                  <select
+                    id="sort-select"
+                    value={sortBy}
+                    onChange={(e) => onSortChange(e.target.value)}
+                    className="appearance-none pl-3 pr-7 py-1.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-700 font-normal focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer"
+                  >
+                    <option value="relevance">Best Match</option>
+                    <option value="price-asc">Price: Low to High</option>
+                    <option value="price-desc">Price: High to Low</option>
+                    <option value="name-asc">Name: A – Z</option>
+                  </select>
+                  <ChevronDownIcon className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                </div>
+              </div>
+            )}
+            {/* Only show when ML/feature filters are active — query text has its own X */}
+            {activeFilterCount > 0 && (
+              <button
+                onClick={handleClear}
+                className="text-sm text-slate-500 hover:text-slate-700 font-light underline underline-offset-4 transition-colors"
+              >
+                Clear all filters
+              </button>
+            )}
+          </div>
         </div>
       )}
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Active filter chip                                                 */
+/* ------------------------------------------------------------------ */
+
+function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 border border-slate-200 rounded-full text-xs text-slate-700 font-light">
+      {label}
+      <button
+        onClick={onRemove}
+        className="text-slate-400 hover:text-slate-600 transition-colors"
+        title={`Remove filter: ${label}`}
+      >
+        <XMarkIcon className="w-3.5 h-3.5" />
+      </button>
+    </span>
   );
 }
 

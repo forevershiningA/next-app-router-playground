@@ -288,6 +288,14 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   const baseUrl = 'https://forevershining.org';
   const canonicalUrl = `${baseUrl}${canonicalPath}`;
   
+  // Human-readable design title matching the client component
+  // e.g. "Cropped Peak – Dedicated Mother" from slug "cropped-peak-dedicated-mother"
+  const formattedH1 = shapeName && phraseFromSlug
+    ? `${shapeName} – ${phraseFromSlug}`
+    : shapeName
+    ? `${shapeName} – ${categoryTitle}`
+    : formatSlugForDisplay(slug);
+
   // JSON-LD Structured Data
   const structuredData = {
     "@context": "https://schema.org",
@@ -401,7 +409,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           {
             "@type": "ListItem",
             "position": 6,
-            "name": design.title,
+            "name": formattedH1,
             "item": canonicalUrl
           }
         ]
@@ -518,18 +526,16 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
               <span aria-hidden="true">›</span>
               <a href={`/designs/${productSlug}/${category}`}>{categoryTitle}</a>
               <span aria-hidden="true">›</span>
-              <span>{design.title}</span>
+              <span>{formattedH1}</span>
             </nav>
 
             <h1 className="text-2xl md:text-4xl font-serif font-light text-slate-900 tracking-tight mb-2 md:mb-4">
-              {categoryTitle} – {simplifiedProduct} {productTypeDisplay}{shapeName ? ` (${shapeName})` : ''}
+              {formattedH1}
             </h1>
 
-            {phraseFromSlug && (
-              <p className="text-lg md:text-2xl text-slate-600 font-light italic mb-4">
-                {phraseFromSlug}
-              </p>
-            )}
+            <p className="text-base md:text-lg text-slate-500 font-light mb-3 md:mb-6">
+              {categoryTitle} · {simplifiedProduct} {productTypeDisplay}
+            </p>
 
             <p className="text-slate-600 mb-6 max-w-2xl">
               {description}

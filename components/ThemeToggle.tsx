@@ -1,12 +1,17 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { useTheme } from './ThemeProvider';
 
 /** Fixed circle button — top-left corner, 20px margin, always on top. */
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const pathname = usePathname();
   const isDay = theme === 'day';
+
+  // Designs pages always use white background — toggle not needed and would overlap the sidebar logo
+  if (pathname?.startsWith('/designs')) return null;
 
   return (
     <button

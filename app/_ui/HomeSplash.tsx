@@ -428,7 +428,7 @@ export default function HomeSplash() {
                   type="text"
                   value={heroSearchQuery}
                   onChange={(e) => setHeroSearchQuery(e.target.value)}
-                  placeholder="Search designs — motif, shape, style…"
+                  placeholder="Search designs - motif, shape, style…"
                   className="w-full rounded-full border border-white/20 bg-black/35 py-3.5 pl-12 pr-28 text-sm font-light text-white placeholder-white/45 backdrop-blur-md transition-all focus:border-[#d4af37]/60 focus:bg-black/50 focus:outline-none focus:ring-1 focus:ring-[#d4af37]/40 day:border-gray-300 day:bg-white/80 day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-400 day:focus:ring-amber-300/40"
                   aria-label="Search memorial designs"
                 />
