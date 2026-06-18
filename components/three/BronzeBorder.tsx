@@ -802,18 +802,18 @@ function buildBorderGroup(
     material.roughnessMap.needsUpdate = true;
   }
 
-  let topEdgeStartX: number | null = null;
-  let topEdgeEndX: number | null = null;
-  let bottomEdgeStartX: number | null = null;
-  let bottomEdgeEndX: number | null = null;
-  let topInnerEdgeY: number | null = null;
-  let bottomInnerEdgeY: number | null = null;
-  let leftEdgeTopInnerY: number | null = null;
-  let leftEdgeBottomInnerY: number | null = null;
-  let rightEdgeTopInnerY: number | null = null;
-  let rightEdgeBottomInnerY: number | null = null;
-  let leftInnerEdgeX: number | null = null;
-  let rightInnerEdgeX: number | null = null;
+  const topEdgeStartX: number | null = null;
+  const topEdgeEndX: number | null = null;
+  const bottomEdgeStartX: number | null = null;
+  const bottomEdgeEndX: number | null = null;
+  const topInnerEdgeY: number | null = null;
+  const bottomInnerEdgeY: number | null = null;
+  const leftEdgeTopInnerY: number | null = null;
+  const leftEdgeBottomInnerY: number | null = null;
+  const rightEdgeTopInnerY: number | null = null;
+  const rightEdgeBottomInnerY: number | null = null;
+  const leftInnerEdgeX: number | null = null;
+  const rightInnerEdgeX: number | null = null;
 
   const group = new THREE.Group();
   const resourceGeometries: THREE.BufferGeometry[] = [];

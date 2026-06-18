@@ -516,7 +516,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     const deltaY = ((e.clientY - dragStart.y) / rect.height) * 100;
 
     setCropArea((prev) => {
-      let newArea = { ...prev };
+      const newArea = { ...prev };
 
       if (dragHandle === 'move') {
         newArea.x = Math.max(0, Math.min(100 - prev.width, prev.x + deltaX));

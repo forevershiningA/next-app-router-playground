@@ -6,6 +6,8 @@ import { NextResponse } from 'next/server';
 
 export type UploadSubdir = 'backgrounds' | 'images' | 'screenshots' | 'pdfs' | 'designs';
 
+const MAX_BROWSER_UPLOAD_BYTES = 8 * 1024 * 1024;
+
 const EXT_MAP: Record<string, string> = {
   'image/jpeg': 'jpg',
   'image/png': 'png',
@@ -13,6 +15,30 @@ const EXT_MAP: Record<string, string> = {
   'application/pdf': 'pdf',
   'application/json': 'json',
 };
+
+const ALLOWED_TYPES: Record<UploadSubdir, Set<string>> = {
+  backgrounds: new Set(['image/jpeg', 'image/png', 'image/webp']),
+  images: new Set(['image/jpeg', 'image/png', 'image/webp']),
+  screenshots: new Set(['image/jpeg', 'image/png', 'image/webp']),
+  pdfs: new Set(['application/pdf']),
+  designs: new Set(['application/json']),
+};
+
+function validateBrowserUpload(file: File, subdir: UploadSubdir): NextResponse | null {
+  if (file.size <= 0) {
+    return NextResponse.json({ error: 'Uploaded file is empty' }, { status: 400 });
+  }
+
+  if (file.size > MAX_BROWSER_UPLOAD_BYTES) {
+    return NextResponse.json({ error: 'File is too large. Maximum size is 8 MB.' }, { status: 413 });
+  }
+
+  if (!ALLOWED_TYPES[subdir].has(file.type)) {
+    return NextResponse.json({ error: 'Unsupported file type' }, { status: 415 });
+  }
+
+  return null;
+}
 
 async function saveLocallyGetUrl(file: File, subdir: UploadSubdir): Promise<string> {
   const bytes = await file.arrayBuffer();
@@ -86,6 +112,9 @@ export async function uploadToStorage(file: File, subdir: UploadSubdir): Promise
  * Used by API route handlers that accept multipart uploads from the browser.
  */
 export async function proxyUpload(file: File, subdir: UploadSubdir): Promise<NextResponse> {
+  const validationError = validateBrowserUpload(file, subdir);
+  if (validationError) return validationError;
+
   try {
     const url = await uploadToStorage(file, subdir);
     return NextResponse.json({ url });

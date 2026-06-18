@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
+import Link from 'next/link';
+import type { DesignCategory, SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
@@ -131,7 +132,7 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
   useEffect(() => {
     // Get designs for this category
     import('#/lib/saved-designs-data').then(({ getDesignsByCategory }) => {
-      const categoryDesigns = getDesignsByCategory(category as any);
+      const categoryDesigns = getDesignsByCategory(category as DesignCategory);
       // Filter by product slug and sort alphabetically by formatted title
       const filtered = categoryDesigns
         .filter(d => d.productSlug === productSlug)
@@ -221,9 +222,9 @@ export default function CategoryPageClient({ productSlug, category }: CategoryPa
       <div className="container mx-auto px-8 py-12 max-w-7xl">
         {/* Elegant Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-12">
-          <a href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</a>
+          <Link href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</Link>
           <ChevronRightIcon className="w-4 h-4" />
-          <a href={`/designs/${productSlug}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{productName}</a>
+          <Link href={`/designs/${productSlug}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{productName}</Link>
           <ChevronRightIcon className="w-4 h-4" />
           <span className="text-slate-900 font-medium tracking-wide">{categoryTitle}</span>
         </nav>

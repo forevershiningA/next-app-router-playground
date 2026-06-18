@@ -1779,7 +1779,7 @@ export async function loadCanonicalDesignIntoEditor(
     canonicalInscriptionId?: string,
   ) {
     if (typeof font?.size_mm === 'number') return font.size_mm;
-    let sizePx =
+    const sizePx =
       (canonicalInscriptionId
         ? legacyInscriptionFontPxByCanonicalId.get(canonicalInscriptionId)
         : undefined) ??
@@ -2094,8 +2094,8 @@ export async function loadCanonicalDesignIntoEditor(
   canonicalMotifs.forEach((motif, index) => {
     // P3d embedded PNGs and photo placeholders are loaded as images, not SVG motifs
     if ((motif.assetType === 'embedded-png' || motif.assetType === 'photo-placeholder') && motif.asset) {
-      let target = canonicalSurfaceTarget(motif.surface);
-      let { xMm, yMm } = convertPositionToMm(motif.position, target);
+      const target = canonicalSurfaceTarget(motif.surface);
+      const { xMm, yMm } = convertPositionToMm(motif.position, target);
       const xPos = xMm * GLOBAL_LAYOUT_SCALE;
       const yPos = yMm * GLOBAL_LAYOUT_SCALE;
       const heightMm = clampCanonicalMotifHeight(motif.height_mm ?? 100);

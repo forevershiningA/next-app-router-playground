@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
@@ -17,6 +17,37 @@ type ShippingForm = {
   country: string;
   paymentType: 'credit-card' | 'paypal' | 'other';
   notes: string;
+};
+
+type Project = {
+  id: string;
+  title: string;
+  description?: string | null;
+  totalPriceCents?: number | null;
+  screenshotPath?: string | null;
+  thumbnailPath?: string | null;
+};
+
+type PayPalActions = {
+  order: {
+    create(input: unknown): Promise<string>;
+    capture(): Promise<{ id?: string }>;
+  };
+};
+
+type PayPalNamespace = {
+  Buttons(config: {
+    createOrder(data: unknown, actions: PayPalActions): Promise<string>;
+    onApprove(data: unknown, actions: PayPalActions): Promise<unknown>;
+    onError(): void;
+    onCancel(): void;
+  }): {
+    render(target: HTMLElement): void;
+  };
+};
+
+type StripeNamespace = {
+  redirectToCheckout(input: { sessionId: string }): Promise<unknown>;
 };
 
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
@@ -49,15 +80,11 @@ export default function BuyDesignPage() {
     if (payment === 'cancel') setError('Payment was cancelled. You can try again.');
   }, [searchParams]);
 
-  const [project, setProject] = useState<any>(null);
+  const [project, setProject] = useState<Project | null>(null);
   const [loadingProject, setLoadingProject] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [placed, setPlaced] = useState(false);
   const [error, setError] = useState('');
-
-  const isLocalhost =
-    typeof window !== 'undefined' &&
-    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 
   const [form, setForm] = useState<ShippingForm>({
     fullName: '',
@@ -83,8 +110,8 @@ export default function BuyDesignPage() {
         ]);
 
         if (projectRes.ok) {
-          const data = await projectRes.json();
-          setProject(data.project || data);
+          const data = (await projectRes.json()) as { project?: Project };
+          setProject(data.project ?? null);
         }
 
         const profilePrefill: Partial<ShippingForm> = {};
@@ -118,81 +145,12 @@ export default function BuyDesignPage() {
 
   // Render PayPal buttons once SDK is ready and PayPal method is selected
   const [paypalReady, setPaypalReady] = useState(false);
-  const [testMode, setTestMode] = useState(false);
   const paypalContainerRef = useRef<HTMLDivElement>(null);
   const paypalRendered = useRef(false);
 
-  const effectiveAmountCents = testMode ? 100 : (project?.totalPriceCents ?? 0);
+  const effectiveAmountCents = project?.totalPriceCents ?? 0;
 
-  useEffect(() => {
-    if (form.paymentType !== 'paypal' || !paypalReady || !paypalContainerRef.current) return;
-    if (paypalRendered.current) return;
-    paypalRendered.current = true;
-
-    const amountCents = effectiveAmountCents;
-    const amountStr = (amountCents / 100).toFixed(2);
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).paypal
-      .Buttons({
-        createOrder: (_data: unknown, actions: any) => {
-          return actions.order.create({
-            purchase_units: [
-              {
-                amount: {
-                  currency_code: 'AUD',
-                  value: amountStr,
-                  breakdown: { item_total: { currency_code: 'AUD', value: amountStr } },
-                },
-                items: [
-                  {
-                    name: project?.title ?? 'Headstone Design',
-                    sku: id,
-                    unit_amount: { currency_code: 'AUD', value: amountStr },
-                    quantity: '1',
-                    category: 'PHYSICAL_GOODS',
-                  },
-                ],
-              },
-            ],
-          });
-        },
-        onApprove: (_data: unknown, actions: any) => {
-          return actions.order.capture().then((details: any) => {
-            const paypalRef = details?.id ?? undefined;
-            fetch('/api/orders', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                projectId: id,
-                amountCents: effectiveAmountCents,
-                currency: 'AUD',
-                paymentMethod: 'paypal',
-                paymentRef: paypalRef,
-                status: 'paid',
-                designName: project?.title ?? 'Headstone Design',
-              }),
-            }).catch((err) => console.error('Order save failed:', err));
-            sendOrderEmail();
-            setPlaced(true);
-          });
-        },
-        onError: () => setError('PayPal payment failed. Please try again.'),
-        onCancel: () => setError('PayPal payment was cancelled.'),
-      })
-      .render(paypalContainerRef.current);
-  }, [form.paymentType, paypalReady, project, id, effectiveAmountCents]);
-
-  // Reset PayPal render flag when switching away from PayPal or test mode changes
-  useEffect(() => {
-    if (form.paymentType !== 'paypal') paypalRendered.current = false;
-  }, [form.paymentType]);
-
-  useEffect(() => {
-    paypalRendered.current = false;
-  }, [testMode]);
-
-  function sendOrderEmail() {
+  const sendOrderEmail = useCallback(() => {
     fetch('/api/email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -215,7 +173,69 @@ export default function BuyDesignPage() {
           .join(', '),
       }),
     }).catch((err) => console.error('Order email failed:', err));
-  }
+  }, [form.address, form.city, form.country, form.email, form.fullName, form.postcode, form.state, id, project]);
+
+  useEffect(() => {
+    if (form.paymentType !== 'paypal' || !paypalReady || !paypalContainerRef.current) return;
+    if (paypalRendered.current) return;
+    paypalRendered.current = true;
+
+    const amountCents = effectiveAmountCents;
+    const amountStr = (amountCents / 100).toFixed(2);
+    const paypal = (window as Window & { paypal?: PayPalNamespace }).paypal;
+    if (!paypal) return;
+
+    paypal
+      .Buttons({
+        createOrder: (_data: unknown, actions: PayPalActions) => {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: 'AUD',
+                  value: amountStr,
+                  breakdown: { item_total: { currency_code: 'AUD', value: amountStr } },
+                },
+                items: [
+                  {
+                    name: project?.title ?? 'Headstone Design',
+                    sku: id,
+                    unit_amount: { currency_code: 'AUD', value: amountStr },
+                    quantity: '1',
+                    category: 'PHYSICAL_GOODS',
+                  },
+                ],
+              },
+            ],
+          });
+        },
+        onApprove: (_data: unknown, actions: PayPalActions) => {
+          return actions.order.capture().then((details) => {
+            const paypalRef = details?.id ?? undefined;
+            fetch('/api/orders', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            projectId: id,
+            paymentMethod: 'paypal',
+            paymentRef: paypalRef,
+            status: 'paid',
+          }),
+            }).catch((err) => console.error('Order save failed:', err));
+            sendOrderEmail();
+            setPlaced(true);
+          });
+        },
+        onError: () => setError('PayPal payment failed. Please try again.'),
+        onCancel: () => setError('PayPal payment was cancelled.'),
+      })
+      .render(paypalContainerRef.current);
+  }, [form.paymentType, paypalReady, project, id, effectiveAmountCents, sendOrderEmail]);
+
+  // Reset PayPal render flag when switching away from PayPal or test mode changes
+  useEffect(() => {
+    if (form.paymentType !== 'paypal') paypalRendered.current = false;
+  }, [form.paymentType]);
 
   function set(field: keyof ShippingForm, value: string) {
     setForm((f) => ({ ...f, [field]: value }));
@@ -238,11 +258,8 @@ export default function BuyDesignPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             projectId: id,
-            amountCents: effectiveAmountCents,
-            currency: 'AUD',
             paymentMethod: 'stripe',
             status: 'pending',
-            designName: project?.title ?? 'Headstone Design',
           }),
         });
         const orderData = (await orderRes.json()) as { orderId?: string; error?: string };
@@ -256,11 +273,7 @@ export default function BuyDesignPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             projectId: id,
-            designName: project?.title ?? 'Headstone Design',
-            amountCents: effectiveAmountCents,
-            currency: 'AUD',
             customerEmail: form.email,
-            screenshotUrl: project?.screenshotPath ?? undefined,
           }),
         });
         const data = (await res.json()) as { sessionId?: string; error?: string };
@@ -268,8 +281,14 @@ export default function BuyDesignPage() {
           setError(data.error ?? 'Could not create payment session');
           return;
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const stripe = (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+        const stripeFactory = (window as Window & {
+          Stripe?: (publishableKey: string | undefined) => StripeNamespace;
+        }).Stripe;
+        if (!stripeFactory) {
+          setError('Payment system is unavailable. Please try again later.');
+          return;
+        }
+        const stripe = stripeFactory(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
         await stripe.redirectToCheckout({ sessionId: data.sessionId });
         return;
       }
@@ -281,11 +300,8 @@ export default function BuyDesignPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             projectId: id,
-            amountCents: effectiveAmountCents,
-            currency: 'AUD',
             paymentMethod: 'other',
             status: 'pending',
-            designName: project?.title ?? 'Headstone Design',
           }),
         });
         sendOrderEmail();
@@ -373,6 +389,7 @@ export default function BuyDesignPage() {
                 <div className="flex items-center gap-5">
                   {preview && (
                     <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-black/50">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={preview}
                         alt={project?.title || 'Design preview'}
@@ -388,31 +405,15 @@ export default function BuyDesignPage() {
                   </div>
                   <div className="flex-shrink-0 text-right">
                     {price && (
-                      <p className={`text-xl font-bold ${testMode ? 'line-through text-white/30' : 'text-[#D4A84F]'}`}>
+                      <p className="text-xl font-bold text-[#D4A84F]">
                         {currencyFormatter.format((project?.totalPriceCents ?? 0) / 100)}
                       </p>
                     )}
-                    {testMode && (
-                      <p className="text-xl font-bold text-amber-400">$1.00 <span className="text-xs font-normal text-amber-400/70">(test)</span></p>
-                    )}
-                    {!price && !testMode && (
+                    {!price && (
                       <p className="text-sm text-white/30">Price TBD</p>
                     )}
                   </div>
                 </div>
-
-                {/* Test mode toggle — localhost only */}
-                {isLocalhost && (
-                  <label className="mt-4 flex cursor-pointer items-center gap-2 rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-400 w-fit select-none">
-                    <input
-                      type="checkbox"
-                      checked={testMode}
-                      onChange={(e) => setTestMode(e.target.checked)}
-                      className="accent-amber-400"
-                    />
-                    <span>🧪 Test mode — charge $1.00 instead of real price</span>
-                  </label>
-                )}
               </section>
 
               {/* Shipping Details */}

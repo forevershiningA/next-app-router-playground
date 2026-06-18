@@ -4,10 +4,11 @@
 // a database client or ORM.
 
 // Lazy load additions to avoid build-time overhead
+import { loadAdditionsWithSizes } from './_additions-loader';
+
 let additionsCache: Addition[] | null = null;
 function getAdditions(): Addition[] {
   if (!additionsCache) {
-    const { loadAdditionsWithSizes } = require('./_additions-loader');
     additionsCache = loadAdditionsWithSizes();
   }
   return additionsCache ?? [];

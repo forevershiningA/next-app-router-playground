@@ -196,7 +196,7 @@ function getProjectedPerimeter(x: number, y: number, pts: THREE.Vector2[], cum: 
   const rel = new THREE.Vector2().subVectors(v, p1);
   const proj = rel.dot(seg.normalize()); // Distance along segment
   
-  let startDist = cum[baseIndex];
+  const startDist = cum[baseIndex];
   let finalDist = startDist + proj;
   
   // Normalize 0..1
@@ -466,7 +466,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const { base, minX, maxX, maxY, dx, dy, wantH, coreH_world, bottomTarget_SV } = shapeParams;
     const isExpanded = preserveTop && wantH > coreH_world + 1e-4 && !shapeParams.cornerRadius;
     
-    let ptsForOutline = base.getPoints(12);
+    const ptsForOutline = base.getPoints(12);
     
     if (isExpanded) {
       let idxL = -1, idxR = -1;
@@ -848,7 +848,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       curveSegments: 32 // Ensure smooth geometry curve
     };
 
-    let coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
+    const coreGeom = new THREE.ExtrudeGeometry(base, extrudeSettings);
     const geoms: THREE.BufferGeometry[] = [coreGeom];
 
     // Preserve top logic — skip the band when corners are rounded (shape already covers full height)

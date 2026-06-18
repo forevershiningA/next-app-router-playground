@@ -905,18 +905,8 @@ function AdditionModelInner({
       const data = computeInteractionPoint(clientX, clientY);
       if (!data) return;
 
-      let {
-        clamped,
-        centerX,
-        centerY,
-        minX,
-        maxX,
-        minY,
-        maxY,
-        minZ,
-        maxZ,
-        targetMesh,
-      } = data;
+      let { clamped } = data;
+      const { centerX, centerY, minX, maxX, minY, maxY, minZ, maxZ, targetMesh } = data;
 
       if (dragDeltaRef.current) {
         clamped = clamped.clone();

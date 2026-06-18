@@ -3,6 +3,7 @@ import { getServerSession } from '#/lib/auth/session';
 import { db } from '#/lib/db/index';
 import { orders, orderItems, payments } from '#/lib/db/schema';
 import { eq, desc } from 'drizzle-orm';
+import { getProjectRecord } from '#/lib/projects-db';
 
 function generateInvoiceNumber(): string {
   const now = new Date();
@@ -21,18 +22,27 @@ export async function POST(request: NextRequest) {
 
     const body = (await request.json()) as {
       projectId: string;
-      amountCents: number;
-      currency?: string;
       paymentMethod: 'stripe' | 'paypal' | 'other';
       paymentRef?: string;
       status?: 'pending' | 'paid';
-      designName?: string;
     };
 
-    const { projectId, amountCents, currency = 'AUD', paymentMethod, paymentRef, status = 'pending', designName } = body;
+    const { projectId, paymentMethod, paymentRef, status = 'pending' } = body;
 
-    if (!projectId || !amountCents) {
+    if (!projectId) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const project = await getProjectRecord(projectId, session.accountId);
+    if (!project) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+
+    const amountCents = project.totalPriceCents ?? 0;
+    const currency = project.currency ?? 'AUD';
+
+    if (amountCents <= 0) {
+      return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
     }
 
     const taxCents = Math.round(amountCents * 0.1);
@@ -52,14 +62,12 @@ export async function POST(request: NextRequest) {
       })
       .returning();
 
-    if (designName) {
-      await db.insert(orderItems).values({
-        orderId: order.id,
-        description: designName,
-        quantity: 1,
-        unitPriceCents: amountCents,
-      });
-    }
+    await db.insert(orderItems).values({
+      orderId: order.id,
+      description: project.title,
+      quantity: 1,
+      unitPriceCents: amountCents,
+    });
 
     await db.insert(payments).values({
       orderId: order.id,
@@ -78,7 +86,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession();
     

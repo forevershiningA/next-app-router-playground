@@ -1,9 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
 import path from 'path';
 
 // Load test-only env overrides (gitignored)
 try {
-  require('dotenv').config({ path: path.resolve(__dirname, '.env.test.local') });
+  dotenv.config({ path: path.resolve(__dirname, '.env.test.local') });
 } catch {
   // dotenv is optional — env vars can be set directly in CI
 }
@@ -18,6 +19,7 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? '50%' : undefined,
   reporter: [['list'], ['html', { open: 'never' }]],
+  timeout: 60_000,
 
   use: {
     baseURL: BASE_URL,

@@ -8,6 +8,7 @@
  * - Privacy-safe slugs (no personal names)
  * - Correct categorization based on content and product type
  */
+/* eslint-disable @typescript-eslint/no-require-imports */
 
 export type DesignCategory = 
   | 'biblical-memorial'

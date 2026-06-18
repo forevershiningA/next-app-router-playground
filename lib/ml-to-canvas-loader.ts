@@ -175,14 +175,12 @@ export function loadMLDesignToCanvas(design: MLDesign) {
  * Client-side hook to load design on page mount
  */
 export function useMLDesignLoader(design: MLDesign | null) {
-  if (typeof window === 'undefined' || !design) return;
-  
   // Load on mount
   React.useEffect(() => {
-    if (design) {
+    if (typeof window !== 'undefined' && design) {
       loadMLDesignToCanvas(design);
     }
-  }, [design?.id]);
+  }, [design]);
 }
 
 /**

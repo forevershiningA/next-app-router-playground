@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '#/lib/db/index';
 import { materials } from '#/lib/db/schema';
+import { getServerSession } from '#/lib/auth/session';
 
 const graniteMaterials = [
   { id: 1, name: 'African Black', image: 'African-Black.webp', category: '2' },
@@ -37,6 +38,15 @@ const graniteMaterials = [
 
 export async function POST() {
   try {
+    if (process.env.NODE_ENV === 'production') {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
+    const session = await getServerSession();
+    if (!session || session.role !== 'admin') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     console.log('🔄 Clearing existing materials...');
     await db.delete(materials);
 
@@ -62,11 +72,11 @@ export async function POST() {
       message: 'Successfully seeded 30 granite materials',
       materials: graniteMaterials.map(m => m.name)
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Error seeding materials:', error);
     return NextResponse.json({ 
       success: false, 
-      error: error.message 
+      error: error instanceof Error ? error.message : 'Unknown error',
     }, { status: 500 });
   }
 }

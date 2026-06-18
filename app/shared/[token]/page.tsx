@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import { cookies } from 'next/headers';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { db } from '#/lib/db/index';
@@ -6,6 +7,8 @@ import { sharedDesigns, projects } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
+import { hasValidShareAccessCookie } from '#/lib/share-access';
+import SharedAccessGate from './SharedAccessGate';
 
 type Props = { params: Promise<{ token: string }> };
 
@@ -16,17 +19,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       where: eq(sharedDesigns.shareToken, token),
     });
     if (!share) return { title: 'Shared Design | Forever Shining' };
-    const project = await db?.query.projects.findFirst({
-      where: eq(projects.id, share.projectId),
-    });
-    const title = project?.title ?? 'Memorial Design';
     return {
-      title: `${title} | Forever Shining`,
+      title: 'Shared Design | Forever Shining',
       description: 'A personalised memorial design created with Forever Shining.',
       openGraph: {
-        title,
+        title: 'Shared Design | Forever Shining',
         description: 'A personalised memorial design created with Forever Shining.',
-        images: project?.screenshotPath ? [{ url: project.screenshotPath }] : [],
       },
     };
   } catch {
@@ -50,6 +48,12 @@ export default async function SharedDesignPage({ params }: Props) {
 
   if (!share) notFound();
   if (share.expiresAt && share.expiresAt < new Date()) notFound();
+  if (!share.accessCodeHash) notFound();
+
+  const cookieStore = await cookies();
+  if (!hasValidShareAccessCookie(cookieStore, token)) {
+    return <SharedAccessGate token={token} />;
+  }
 
   try {
     project = await db?.query.projects.findFirst({
@@ -68,7 +72,9 @@ export default async function SharedDesignPage({ params }: Props) {
     .catch(() => {});
 
   const thumbnail = project.thumbnailPath || project.screenshotPath || '/screen.png';
-  const priceQuote = buildPdfQuoteFromProject(project as any);
+  const priceQuote = buildPdfQuoteFromProject(
+    project as Parameters<typeof buildPdfQuoteFromProject>[0],
+  );
 
   const currencyFormatter = new Intl.NumberFormat('en-AU', {
     style: 'currency',
@@ -119,6 +125,7 @@ export default async function SharedDesignPage({ params }: Props) {
                 Design Preview
               </p>
               <div className="overflow-hidden rounded-xl bg-black/40">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={thumbnail}
                   alt={project.title}

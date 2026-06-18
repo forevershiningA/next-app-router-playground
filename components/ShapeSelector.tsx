@@ -25,6 +25,18 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
   const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
   const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
 
+  // Filter shapes based on product type
+  const filteredShapes = React.useMemo(() => {
+    const rectangleShapes = ['landscape.svg', 'portrait.svg'];
+    const allPlaqueShapes = [...rectangleShapes, 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
+    return shapes.filter((shape) => {
+      const img = shape.image ?? '';
+      if (isFullColourPlaque) return rectangleShapes.includes(img);
+      if (isPlaque) return allPlaqueShapes.includes(img);
+      return !allPlaqueShapes.includes(img);
+    });
+  }, [shapes, isPlaque, isFullColourPlaque]);
+
   // Urn: use catalog shapes from XML, not the static DB list
   if (isUrn) {
     return (
@@ -82,18 +94,6 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
       </div>
     );
   }
-
-  // Filter shapes based on product type
-  const filteredShapes = React.useMemo(() => {
-    const rectangleShapes = ['landscape.svg', 'portrait.svg'];
-    const allPlaqueShapes = [...rectangleShapes, 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
-    return shapes.filter((shape) => {
-      const img = shape.image ?? '';
-      if (isFullColourPlaque) return rectangleShapes.includes(img);
-      if (isPlaque) return allPlaqueShapes.includes(img);
-      return !allPlaqueShapes.includes(img);
-    });
-  }, [shapes, isPlaque, isFullColourPlaque]);
 
   const getShapeUrl = (shape: ShapeOption) => {
     if (shape.image) {

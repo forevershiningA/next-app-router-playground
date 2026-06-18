@@ -1,5 +1,6 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 import { Metadata } from 'next';
+import Link from 'next/link';
 import { getProductFromId } from '#/lib/product-utils';
 import DesignPageClient from './DesignPageClient';
 
@@ -71,28 +72,22 @@ interface SavedDesignPageProps {
   }>;
 }
 
-// Pre-render the 500 most recently added designs at build time (ISR for the rest)
+// Render design detail pages on demand and cache them with ISR.
+// Pre-rendering hundreds of heavy saved-design pages makes production builds hang.
 export async function generateStaticParams() {
-  const { getAllSavedDesigns } = await import('#/lib/saved-designs-data');
-  return getAllSavedDesigns()
-    .sort((a, b) => parseInt(b.id) - parseInt(a.id))
-    .slice(0, 500)
-    .map((design) => ({
-      productType: design.productSlug,
-      category: design.category,
-      slug: design.slug,
-    }));
+  return [];
 }
 
 // Enable ISR - revalidate every 24 hours
 export const revalidate = 86400;
+export const dynamicParams = true;
 
 export async function generateMetadata({ params }: SavedDesignPageProps): Promise<Metadata> {
-  const { productType: productSlug, category, slug } = await params;
+  const { category, slug } = await params;
 
   // Try new slug lookup first, then fall back to old format
   const { getDesignFromSlug, DESIGN_CATEGORIES } = await import('#/lib/saved-designs-data');
-  let design = getDesignFromSlug(slug);
+  const design = getDesignFromSlug(slug);
 
   if (!design) {
     return {
@@ -134,8 +129,7 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
     ? `${shapeDisplay} ${categoryTitle} – ${simplifiedProduct} | Forever Shining`
     : `${categoryTitle} – ${simplifiedProduct} ${productTypeDisplay} | Forever Shining`;
 
-  // Fetch shapeName for structured data (falls back to shapeDisplay if already available)
-  const shapeName = shapeDisplay || (design.id ? await getDesignShape(design.id, design.mlDir) : null);
+  const shapeName = shapeDisplay;
 
   // Build H1 equivalent (used in OpenGraph)
   const h1Title = shapeDisplay
@@ -495,7 +489,6 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         rel="preload"
         as="image"
         href={`/screenshots/v2026-3d/${design.id}.png`}
-        // @ts-ignore - fetchPriority is valid but not in TS types yet
         fetchPriority="high"
       />
       
@@ -520,11 +513,11 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         <div className="border-b border-slate-200 bg-white/80">
           <div className="container mx-auto px-4 md:px-8 py-3 md:py-6 max-w-7xl">
             <nav className="flex items-center gap-2 text-sm text-slate-500 mb-6" aria-label="Breadcrumb">
-              <a href="/designs">Memorial Designs</a>
+              <Link href="/designs">Memorial Designs</Link>
               <span aria-hidden="true">›</span>
-              <a href={`/designs/${productSlug}`}>{productName}</a>
+              <Link href={`/designs/${productSlug}`}>{productName}</Link>
               <span aria-hidden="true">›</span>
-              <a href={`/designs/${productSlug}/${category}`}>{categoryTitle}</a>
+              <Link href={`/designs/${productSlug}/${category}`}>{categoryTitle}</Link>
               <span aria-hidden="true">›</span>
               <span>{formattedH1}</span>
             </nav>
@@ -544,6 +537,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         </div>
 
         <div className="container mx-auto px-4 md:px-8 py-8 max-w-7xl">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`/screenshots/v2026-3d/${design.id}.png`}
             alt={`${categoryTitle} ${simplifiedProduct} ${productTypeDisplay} design preview`}

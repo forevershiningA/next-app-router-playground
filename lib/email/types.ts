@@ -83,6 +83,8 @@ export interface SavedDesignEmailData extends BaseEmailData {
   type: 'saved-design';
   designId: string;
   designName: string;
+  reviewUrl?: string;
+  accessCode?: string;
   screenshotUrl?: string; // data URI or URL
   quoteItems: QuoteLineItem[];
   totalCents: number;

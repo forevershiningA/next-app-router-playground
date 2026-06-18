@@ -6,44 +6,33 @@ import { projects } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
+import { getServerSession } from '#/lib/auth/session';
 import { OpenInDesignerButton } from './_open-button';
 
 type Props = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  try {
-    const project = await db?.query.projects.findFirst({ where: eq(projects.id, id) });
-    if (!project) return { title: 'Memorial Design | Forever Shining' };
-    return {
-      title: `${project.title} | Forever Shining`,
-      description: 'A personalised memorial design created with Forever Shining Design Online.',
-      openGraph: {
-        title: project.title ?? 'Memorial Design',
-        description: 'A personalised memorial design created with Forever Shining Design Online.',
-        images: project.screenshotPath ? [{ url: project.screenshotPath }] : [],
-        type: 'website',
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: project.title ?? 'Memorial Design',
-        description: 'A personalised memorial design created with Forever Shining Design Online.',
-        images: project.screenshotPath ? [project.screenshotPath] : [],
-      },
-    };
-  } catch {
-    return { title: 'Memorial Design | Forever Shining' };
-  }
+  await params;
+  return {
+    title: 'Memorial Design | Forever Shining',
+    description: 'A personalised memorial design created with Forever Shining Design Online.',
+  };
 }
 
 export default async function DesignSharePage({ params }: Props) {
   const { id } = await params;
 
+  const session = await getServerSession();
+  if (!session) notFound();
+
   const project = await db?.query.projects.findFirst({ where: eq(projects.id, id) });
   if (!project) notFound();
+  if (project.accountId !== session.accountId && session.role !== 'admin') notFound();
 
   const fullImage = project.screenshotPath || project.thumbnailPath || null;
-  const priceQuote = buildPdfQuoteFromProject(project as any);
+  const priceQuote = buildPdfQuoteFromProject(
+    project as Parameters<typeof buildPdfQuoteFromProject>[0],
+  );
   const currencyFormatter = new Intl.NumberFormat('en-AU', {
     style: 'currency',
     currency: project.currency ?? 'AUD',
@@ -64,6 +53,7 @@ export default async function DesignSharePage({ params }: Props) {
         {/* Brand header */}
         <div className="mb-4 flex items-center justify-between">
           <Link href="/">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/ico/forever-transparent-logo.png" alt="Forever Shining" className="h-20 w-auto" />
           </Link>
           <Link

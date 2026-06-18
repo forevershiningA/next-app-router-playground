@@ -35,9 +35,23 @@ type CheckPriceGridProps = {
 const toAssetPath = (path?: string | null) =>
   path ? (path.startsWith('/') || path.startsWith('data:') ? path : `/${path}`) : '';
 
+const getInitialReturnPath = () => {
+  if (typeof window === 'undefined') return '/select-size';
+
+  const stored = sessionStorage.getItem('designer:last-section');
+  if (stored && stored !== '/check-price') {
+    const allowedPrefixes = ['/select', '/inscriptions'];
+    if (allowedPrefixes.some((prefix) => stored.startsWith(prefix))) {
+      return stored;
+    }
+  }
+
+  return '/select-size';
+};
+
 export default function CheckPriceGrid({ initialImagePricing = null }: CheckPriceGridProps) {
   const router = useRouter();
-  const [returnPath, setReturnPath] = useState('/select-size');
+  const [returnPath] = useState(getInitialReturnPath);
   const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(initialImagePricing);
   const [imagePricingError, setImagePricingError] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState<Record<GridExpandableSection, boolean>>({
@@ -78,20 +92,6 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const stored = sessionStorage.getItem('designer:last-section');
-    if (stored && stored !== '/check-price') {
-      const allowedPrefixes = ['/select', '/inscriptions'];
-      const isAllowed = allowedPrefixes.some((prefix) => stored.startsWith(prefix));
-      if (isAllowed) {
-        setReturnPath(stored);
-        return;
-      }
-    }
-    setReturnPath('/select-size');
-  }, []);
-
-  useEffect(() => {
     return () => {
       isMountedRef.current = false;
     };
@@ -106,7 +106,6 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   }, [expandAllSections]);
 
   const loadImagePricing = useCallback(() => {
-    setImagePricingError(null);
     fetchImagePricing()
       .then((data) => {
         if (!isMountedRef.current) return;
@@ -748,7 +747,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
 
         {/* Additional Info */}
         <div className="mt-12 rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
-          <h2 className="text-2xl font-serif font-light text-white mb-6 text-center day:text-gray-900">What's Included</h2>
+          <h2 className="text-2xl font-serif font-light text-white mb-6 text-center day:text-gray-900">What&apos;s Included</h2>
           
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             <div className="text-center">

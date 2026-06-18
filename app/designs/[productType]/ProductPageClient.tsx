@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/MobileNavToggle';
@@ -12,7 +12,6 @@ interface ProductPageClientProps {
 }
 
 export default function ProductPageClient({ productSlug }: ProductPageClientProps) {
-  const router = useRouter();
   const [designs, setDesigns] = useState<SavedDesignMetadata[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -66,9 +65,9 @@ export default function ProductPageClient({ productSlug }: ProductPageClientProp
       <div className="container mx-auto px-8 py-12 max-w-7xl">
         {/* Elegant Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-12">
-          <a href="/" className="hover:text-slate-900 transition-colors font-light tracking-wide">Home</a>
+          <Link href="/" className="hover:text-slate-900 transition-colors font-light tracking-wide">Home</Link>
           <ChevronRightIcon className="w-4 h-4" />
-          <a href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</a>
+          <Link href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</Link>
           <ChevronRightIcon className="w-4 h-4" />
           <span className="text-slate-900 font-medium tracking-wide">{productName}</span>
         </nav>
@@ -88,13 +87,13 @@ export default function ProductPageClient({ productSlug }: ProductPageClientProp
         {categoryDesigns.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-slate-600 text-lg font-light mb-6">No designs found for this product type.</p>
-            <a 
+            <Link
               href="/designs" 
               className="inline-flex items-center text-slate-800 font-light tracking-wide hover:text-slate-900 transition-colors uppercase text-sm"
             >
               Browse all designs
               <ChevronRightIcon className="w-4 h-4 ml-2" />
-            </a>
+            </Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -105,7 +104,7 @@ export default function ProductPageClient({ productSlug }: ProductPageClientProp
                 .join(' ');
 
               return (
-                <a
+                <Link
                   key={design.category}
                   href={`/designs/${design.productSlug}/${design.category}`}
                   className="group bg-white rounded-lg shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-slate-200 hover:border-slate-300"
@@ -119,7 +118,7 @@ export default function ProductPageClient({ productSlug }: ProductPageClientProp
                       <ChevronRightIcon className="w-4 h-4 ml-1" />
                     </div>
                   </div>
-                </a>
+                </Link>
               );
             })}
           </div>

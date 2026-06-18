@@ -175,7 +175,7 @@ export default function DesignsPageClient({ initialQuery = '' }: { initialQuery?
       <div className="container mx-auto px-8 py-12 max-w-7xl">
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-sm text-slate-500 mb-12">
-          <a href="/" className="hover:text-slate-900 transition-colors font-light tracking-wide">Home</a>
+          <Link href="/" className="hover:text-slate-900 transition-colors font-light tracking-wide">Home</Link>
           <ChevronRightIcon className="w-4 h-4" />
           <span className="text-slate-900 font-medium tracking-wide">Memorial Designs</span>
         </nav>

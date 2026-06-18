@@ -17,15 +17,6 @@ export default function SelectSizeOverlayCard() {
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
   
-  // Hide when addition, motif, or inscription panel is active
-  if (
-    (activePanel === 'addition' && selectedAdditionId) ||
-    (activePanel === 'motif' && selectedMotifId) ||
-    (activePanel === 'inscription' && selectedInscriptionId)
-  ) {
-    return null;
-  }
-  
   const cardRef = React.useRef<HTMLDivElement | null>(null);
   const [collapsed, setCollapsed] = React.useState(false);
   const [pos, setPos] = React.useState<{ x: number; y: number }>({
@@ -160,6 +151,15 @@ export default function SelectSizeOverlayCard() {
       downElRef.current = null;
     };
   }, []);
+
+  // Hide when addition, motif, or inscription panel is active
+  if (
+    (activePanel === 'addition' && selectedAdditionId) ||
+    (activePanel === 'motif' && selectedMotifId) ||
+    (activePanel === 'inscription' && selectedInscriptionId)
+  ) {
+    return null;
+  }
 
   return (
     <OverlayPortal containerId="scene-root">

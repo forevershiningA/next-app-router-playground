@@ -311,6 +311,9 @@ export const sharedDesigns = pgTable('shared_designs', {
     .notNull()
     .references(() => projects.id, { onDelete: 'cascade' }),
   shareToken: text('share_token').notNull().unique(),
+  accessCodeHash: text('access_code_hash'),
+  failedAccessAttempts: integer('failed_access_attempts').notNull().default(0),
+  lockedUntil: timestamp('locked_until', { withTimezone: true }),
   expiresAt: timestamp('expires_at', { withTimezone: true }),
   viewCount: integer('view_count').notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

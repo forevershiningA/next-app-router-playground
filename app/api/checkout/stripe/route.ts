@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 import { getServerSession } from '#/lib/auth/session';
+import { getProjectRecord } from '#/lib/projects-db';
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession();
@@ -19,16 +20,20 @@ export async function POST(request: NextRequest) {
   try {
     const body = (await request.json()) as {
       projectId: string;
-      designName: string;
-      amountCents: number;
-      currency: string;
       customerEmail: string;
-      screenshotUrl?: string;
     };
 
-    const { projectId, designName, amountCents, currency, customerEmail, screenshotUrl } = body;
+    const { projectId, customerEmail } = body;
+    const project = await getProjectRecord(projectId, session.accountId);
 
-    if (!amountCents || amountCents <= 0) {
+    if (!project) {
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
+    }
+
+    const amountCents = project.totalPriceCents ?? 0;
+    const currency = project.currency ?? 'AUD';
+
+    if (amountCents <= 0) {
       return NextResponse.json({ error: 'Invalid amount' }, { status: 400 });
     }
 
@@ -36,8 +41,8 @@ export async function POST(request: NextRequest) {
 
     // Only pass image URLs that are absolute (Stripe requires full URLs)
     const images =
-      screenshotUrl && screenshotUrl.startsWith('http')
-        ? [screenshotUrl]
+      project.screenshotPath && project.screenshotPath.startsWith('http')
+        ? [project.screenshotPath]
         : undefined;
 
     const checkoutSession = await stripe.checkout.sessions.create({
@@ -49,7 +54,7 @@ export async function POST(request: NextRequest) {
             currency: currency.toLowerCase(),
             unit_amount: amountCents,
             product_data: {
-              name: designName,
+              name: project.title,
               ...(images ? { images } : {}),
             },
           },
@@ -59,7 +64,7 @@ export async function POST(request: NextRequest) {
       mode: 'payment',
       success_url: `${origin}/my-account/designs/${projectId}/buy?payment=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/my-account/designs/${projectId}/buy?payment=cancel`,
-      metadata: { projectId },
+      metadata: { projectId, accountId: session.accountId },
     });
 
     return NextResponse.json({ sessionId: checkoutSession.id });

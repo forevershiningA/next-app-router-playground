@@ -17,7 +17,7 @@ import {
 
 export type PolymorphicProps<
   E extends ElementType,
-  P = {},
+  P = object,
 > = PropsWithChildren<P> & { as?: E } & Omit<
     ComponentPropsWithoutRef<E>,
     keyof P | 'as' | 'children'

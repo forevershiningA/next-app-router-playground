@@ -29,10 +29,10 @@ export default function EmailShareModal({ isOpen, onClose, projectId, projectTit
     if (isOpen && projectId) {
       setEmail('');
       const viewUrl = typeof window !== 'undefined'
-        ? `${window.location.origin}/design/${projectId}`
+        ? `${window.location.origin}/my-account/designs/${projectId}`
         : '';
       setMessage(
-        `Hi, I wanted to share this memorial design with you.\n\nYou can view it here:\n${viewUrl}\n\n${projectTitle ? `Design: ${projectTitle}` : ''}`
+        `Hi, I wanted to share this memorial design with you.\n\n${projectTitle ? `Design: ${projectTitle}\n` : ''}${viewUrl ? `My saved design: ${viewUrl}` : ''}`
       );
       setResult(null);
     }
@@ -56,7 +56,7 @@ export default function EmailShareModal({ isOpen, onClose, projectId, projectTit
       } else {
         setResult(data?.error || 'Failed to send email');
       }
-    } catch (err) {
+    } catch {
       setResult('Network error — please try again');
     } finally {
       setSending(false);

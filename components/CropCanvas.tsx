@@ -5,9 +5,19 @@ import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
 type MaskShape = 'oval' | 'horizontal-oval' | 'square' | 'rectangle' | 'heart' | 'teardrop' | 'triangle';
+type CropCanvasData = NonNullable<ReturnType<typeof useHeadstoneStore.getState>['cropCanvasData']>;
 
 export default function CropCanvas() {
   const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
+
+  if (!cropCanvasData) {
+    return null;
+  }
+
+  return <CropCanvasContent cropCanvasData={cropCanvasData} />;
+}
+
+function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData }) {
   const [dragState, setDragState] = useState({
     isDragging: false,
     handle: null as 'move' | 'nw' | 'ne' | 'sw' | 'se' | null,
@@ -20,10 +30,6 @@ export default function CropCanvas() {
   const cropAreaRef = useRef<HTMLDivElement>(null);
   const [previewSize, setPreviewSize] = useState({ width: 0, height: 0 });
   const [imageNaturalSize, setImageNaturalSize] = useState<{ width: number; height: number } | null>(null);
-
-  if (!cropCanvasData) {
-    return null;
-  }
 
   const {
     uploadedImage,

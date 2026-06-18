@@ -1,6 +1,6 @@
 /**
  * Auth setup — runs once before all authenticated tests.
- * Logs in via the UI and saves the session cookie to playwright/.auth/user.json.
+ * Logs in via the API and saves the session cookie to playwright/.auth/user.json.
  * Subsequent tests load that file instead of re-logging in every time.
  *
  * Required env vars (put in .env.test.local):
@@ -12,7 +12,7 @@ import path from 'path';
 
 const AUTH_FILE = path.resolve('playwright/.auth/user.json');
 
-setup('authenticate', async ({ page }) => {
+setup('authenticate', async ({ request }) => {
   const email = process.env.TEST_USER_EMAIL;
   const password = process.env.TEST_USER_PASSWORD;
 
@@ -23,17 +23,16 @@ setup('authenticate', async ({ page }) => {
     );
   }
 
-  await page.goto('/login');
-  await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible();
+  const login = await request.post('/api/auth/login', {
+    data: { email, password },
+  });
 
-  await page.getByPlaceholder('you@example.com').fill(email);
-  await page.getByPlaceholder('••••••••').fill(password);
-  await page.getByRole('button', { name: 'Sign in' }).click();
+  if (!login.ok()) {
+    throw new Error(`API login failed: ${login.status()} ${await login.text()}`);
+  }
 
-  // After successful login, the app redirects to /my-account
-  await page.waitForURL('**/my-account', { timeout: 30_000 });
-  await expect(page).toHaveURL(/my-account/);
+  const session = await request.get('/api/auth/session');
+  await expect(session).toBeOK();
 
-  // Save session cookie so authenticated tests can reuse it
-  await page.context().storageState({ path: AUTH_FILE });
+  await request.storageState({ path: AUTH_FILE });
 });

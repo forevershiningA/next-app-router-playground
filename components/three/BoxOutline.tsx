@@ -128,7 +128,6 @@ export default function BoxOutline<T extends THREE.Object3D = THREE.Object3D>({
     }
 
     const padded = boxRef.current.clone().expandByScalar(pad);
-    // @ts-ignore - Box3Helper exposes .box
     helper.box.copy(padded);
     helper.visible = !!visible;
     helper.updateMatrixWorld(true);

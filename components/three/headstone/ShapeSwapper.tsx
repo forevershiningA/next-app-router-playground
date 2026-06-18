@@ -578,12 +578,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             }}
           >
           {(api: HeadstoneAPI, selectedAdditionIds: string[]) => {
-            // Safe ref assignment using useLayoutEffect to avoid render phase side-effects
-            React.useLayoutEffect(() => {
-              if (resolvedHeadstoneMeshRef && api.mesh.current) {
-                (resolvedHeadstoneMeshRef as any).current = api.mesh.current;
-              }
-            }, [resolvedHeadstoneMeshRef, api.mesh]);
+            if (resolvedHeadstoneMeshRef && api.mesh.current) {
+              (resolvedHeadstoneMeshRef as any).current = api.mesh.current;
+            }
             
             return (
             <>

@@ -33,8 +33,7 @@ export function SavedDesignEmail({
       : `${(data.totalCents / 100).toFixed(2)} ${config.currencySymbol}`;
 
   const editUrl = `${config.link}/my-account`;
-  const viewDesignUrl = `${config.link}/design/${data.designId}`;
-  const galleryUrl = `${config.link}/designs`;
+  const viewDesignUrl = data.reviewUrl ?? `${config.link}/design/${data.designId}`;
   const contactUrl = `mailto:${config.email}`;
 
   return (
@@ -62,6 +61,16 @@ export function SavedDesignEmail({
         viewUrl={viewDesignUrl}
         editUrl={editUrl}
       />
+
+      {data.accessCode && (
+        <Section style={accessCodeBox}>
+          <Text style={accessCodeLabel}>Family review access code</Text>
+          <Text style={accessCodeValue}>{data.accessCode}</Text>
+          <Text style={accessCodeNote}>
+            Enter this code when opening the shared design link.
+          </Text>
+        </Section>
+      )}
 
       {/* ── Price highlight card ─────────────────────────────────── */}
       {data.totalCents > 0 && (
@@ -200,6 +209,37 @@ const priceCard: React.CSSProperties = {
   padding: '28px 32px',
   textAlign: 'center',
   margin: '0 0 32px',
+};
+
+const accessCodeBox: React.CSSProperties = {
+  backgroundColor: '#fff8ec',
+  border: '1px solid #ead6b7',
+  borderRadius: '14px',
+  padding: '18px',
+  textAlign: 'center',
+  margin: '20px 0',
+};
+
+const accessCodeLabel: React.CSSProperties = {
+  color: '#6b5b47',
+  fontSize: '11px',
+  letterSpacing: '2px',
+  textTransform: 'uppercase',
+  margin: '0 0 8px',
+};
+
+const accessCodeValue: React.CSSProperties = {
+  color: '#19130d',
+  fontSize: '28px',
+  fontWeight: 700,
+  letterSpacing: '8px',
+  margin: '0 0 8px',
+};
+
+const accessCodeNote: React.CSSProperties = {
+  color: '#6b5b47',
+  fontSize: '13px',
+  margin: 0,
 };
 
 const priceLabel: React.CSSProperties = {

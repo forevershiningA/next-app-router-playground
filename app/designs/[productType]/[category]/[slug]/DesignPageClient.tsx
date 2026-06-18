@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, Suspense, useRef, useMemo, useCallback } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useSavedDesign, convertSavedDesignToDYO } from '#/components/SavedDesignLoader';
 import {
@@ -2786,7 +2787,7 @@ export default function DesignPageClient({
     }
     
     // Extract from numbered patterns like "Headstone 27"
-    let extractedShape = shapeName
+    const extractedShape = shapeName
       .replace(/^(headstone|plaque)\s+\d+$/i, '')
       .replace(/^(headstone|plaque)_\d+$/i, '')
       .trim();
@@ -3008,21 +3009,21 @@ export default function DesignPageClient({
         <div className="container mx-auto px-4 md:px-8 py-3 md:py-6 max-w-7xl">
           {/* Elegant Breadcrumb - Hidden on mobile, visible on desktop */}
           <nav className="hidden md:flex items-center gap-2 text-sm text-slate-500 mb-6">
-            <a href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</a>
+            <Link href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <a href={`/designs/${productSlug}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{productName}</a>
+            <Link href={`/designs/${productSlug}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{productName}</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <a href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{categoryTitle}</a>
+            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{categoryTitle}</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
             <span className="text-slate-900 font-medium tracking-wide truncate">{formattedDesignTitle}</span>
           </nav>
 
           {/* Mobile Breadcrumb - Compact version showing only current page */}
           <nav className="md:hidden flex items-center gap-2 text-sm text-slate-500 mb-3">
-            <a href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light">
+            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light">
               <ChevronRightIcon className="w-4 h-4 rotate-180 inline" />
               <span className="ml-1">Back to {categoryTitle}</span>
-            </a>
+            </Link>
           </nav>
 
           {/* Sophisticated Header with Design Specifications */}

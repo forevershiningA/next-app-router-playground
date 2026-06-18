@@ -119,7 +119,7 @@ export default function DesignDetailPage() {
   const productName = (product as any)?.name || 'Custom memorial design';
   const priceQuote = buildPdfQuoteFromProject(project);
 
-  const getShareUrl = async (): Promise<string> => {
+  const getShareAccess = async (): Promise<{ url: string; accessCode?: string }> => {
     try {
       const res = await fetch('/api/share/create', {
         method: 'POST',
@@ -127,15 +127,20 @@ export default function DesignDetailPage() {
         body: JSON.stringify({ projectId: id }),
       });
       const body = await res.json();
-      if (body.success && body.shareUrl) return body.shareUrl;
+      if (body.success && body.shareUrl) {
+        return { url: body.shareUrl, accessCode: body.accessCode };
+      }
     } catch { /* fall through */ }
-    return window.location.origin + `/my-account/designs/${id}`;
+    return { url: window.location.origin + `/my-account/designs/${id}` };
   };
 
   const handleCopyShareLink = async () => {
-    const url = await getShareUrl();
+    const { url, accessCode } = await getShareAccess();
+    const clipboardText = accessCode
+      ? `Review link: ${url}\nAccess code: ${accessCode}`
+      : url;
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(clipboardText);
       setCopyFeedback('Copied!');
     } catch {
       setCopyFeedback('Failed to copy');
@@ -145,9 +150,12 @@ export default function DesignDetailPage() {
   };
 
   const handleShareSocial = async (platform: 'facebook' | 'twitter' | 'linkedin') => {
-    const url = await getShareUrl();
-    if (platform === 'facebook') shareToFacebook(url, project.title);
-    else if (platform === 'twitter') shareToTwitter(url, project.title);
+    const { url, accessCode } = await getShareAccess();
+    const shareTitle = accessCode
+      ? `${project.title} - access code ${accessCode}`
+      : project.title;
+    if (platform === 'facebook') shareToFacebook(url, shareTitle);
+    else if (platform === 'twitter') shareToTwitter(url, shareTitle);
     else shareToLinkedIn(url);
     setShareDropdownOpen(false);
   };
