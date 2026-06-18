@@ -3,7 +3,7 @@ import { db } from '#/lib/db/index';
 import { sharedDesigns, projects } from '#/lib/db/schema';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
-import { nanoid } from 'nanoid';
+import { randomBytes } from 'crypto';
 import { getServerSession } from '#/lib/auth/session';
 import { generateShareAccessCode } from '#/lib/share-access';
 
@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate unique share token
-    const shareToken = nanoid(32);
+    const shareToken = randomBytes(24).toString('base64url');
     const accessCode = generateShareAccessCode();
     const accessCodeHash = await bcrypt.hash(accessCode, 12);
 
