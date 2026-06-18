@@ -9,7 +9,7 @@ import { detailedQuoteItems } from '#/lib/email/helpers';
 import type { SavedDesignEmailData } from '#/lib/email/types';
 import type { DesignerSnapshot } from '#/lib/project-schemas';
 import bcrypt from 'bcryptjs';
-import { nanoid } from 'nanoid';
+import { randomBytes } from 'crypto';
 import { generateShareAccessCode } from '#/lib/share-access';
 
 const SHARE_EXPIRY_DAYS = 30;
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       const results: { to: string; success: boolean; error?: string }[] = [];
       for (const recipient of recipients) {
         try {
-          const shareToken = nanoid(32);
+          const shareToken = randomBytes(24).toString('base64url');
           const accessCode = generateShareAccessCode();
           const accessCodeHash = await bcrypt.hash(accessCode, 12);
           const expiresAt = new Date();
