@@ -31,28 +31,22 @@ export function EmailLayout({
       <Preview>{previewText}</Preview>
       <Body style={body}>
         <Container style={container}>
-
-          {/* Top brand bar */}
-          <Section style={topBar}>
-            {config.logo ? (
-              <Img
-                src={config.logo}
-                alt={config.company}
-                width={200}
-                height={123}
-                style={logo}
-              />
-            ) : (
-              <Text style={brandName}>{config.company}</Text>
-            )}
-          </Section>
-
-          {/* Gold accent line */}
-          <Section style={goldBar} />
-
-          {/* Page title strip */}
-          <Section style={titleStrip}>
-            <Text style={titleText}>{title}</Text>
+          <Section style={header}>
+            <Section style={brandCard}>
+              {config.logo ? (
+                <Img
+                  src={config.logo}
+                  alt={config.company}
+                  width={176}
+                  height={108}
+                  style={logo}
+                />
+              ) : (
+                <Text style={brandName}>{config.company}</Text>
+              )}
+              <Text style={headerKicker}>Memorial Design Online</Text>
+              <Text style={titleText}>{title}</Text>
+            </Section>
           </Section>
 
           {/* Content */}
@@ -60,9 +54,6 @@ export function EmailLayout({
 
           {/* Footer */}
           <Section style={footer}>
-            {/* Gold top accent */}
-            <Section style={footerGoldLine} />
-
             <Section style={footerInner}>
               <Text style={footerCompany}>{config.company}</Text>
               <Text style={footerAddress}>
@@ -101,32 +92,40 @@ export function EmailLayout({
 // ---------------------------------------------------------------------------
 
 const body: React.CSSProperties = {
-  backgroundColor: '#f0ebe3',
+  backgroundColor: '#f5f2ec',
   fontFamily:
-    'Georgia, "Times New Roman", Times, serif',
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   margin: 0,
-  padding: '24px 0',
+  padding: '32px 0',
 };
 
 const container: React.CSSProperties = {
   backgroundColor: '#ffffff',
   margin: '0 auto',
-  maxWidth: '600px',
-  borderRadius: '2px',
+  maxWidth: '640px',
+  borderRadius: '20px',
   overflow: 'hidden',
+  boxShadow: '0 24px 70px rgba(21, 17, 12, 0.12)',
 };
 
-const topBar: React.CSSProperties = {
-  backgroundColor: '#060709',
-  padding: '28px 40px',
+const header: React.CSSProperties = {
+  backgroundColor: '#17120c',
+  padding: '30px 32px',
   textAlign: 'center',
 };
 
+const brandCard: React.CSSProperties = {
+  border: '1px solid rgba(222, 189, 104, 0.32)',
+  borderRadius: '18px',
+  padding: '26px 24px 28px',
+  backgroundColor: '#211911',
+};
+
 const brandName: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#f4d98d',
   fontSize: '22px',
   fontWeight: 700,
-  letterSpacing: '3px',
+  letterSpacing: '2px',
   textTransform: 'uppercase',
   margin: 0,
 };
@@ -137,78 +136,67 @@ const logo: React.CSSProperties = {
   display: 'block',
 };
 
-const goldBar: React.CSSProperties = {
-  backgroundColor: '#DEBD68',
-  height: '4px',
-  lineHeight: '4px',
-  fontSize: '4px',
-};
-
-const titleStrip: React.CSSProperties = {
-  backgroundColor: '#0d0b08',
-  padding: '20px 40px',
-  textAlign: 'center',
+const headerKicker: React.CSSProperties = {
+  color: '#cdb87c',
+  fontSize: '11px',
+  fontWeight: 700,
+  letterSpacing: '2.5px',
+  textTransform: 'uppercase',
+  margin: '16px 0 10px',
 };
 
 const titleText: React.CSSProperties = {
-  color: '#f0ebe3',
-  fontSize: '13px',
-  fontWeight: 400,
-  letterSpacing: '2px',
-  textTransform: 'uppercase',
+  color: '#ffffff',
+  fontSize: '24px',
+  fontWeight: 650,
+  letterSpacing: '-0.3px',
+  lineHeight: '32px',
   margin: 0,
 };
 
 const content: React.CSSProperties = {
-  padding: '40px 40px 32px',
+  padding: '40px 42px 36px',
 };
 
 const footer: React.CSSProperties = {
-  backgroundColor: '#060709',
-};
-
-const footerGoldLine: React.CSSProperties = {
-  backgroundColor: '#DEBD68',
-  height: '3px',
-  lineHeight: '3px',
-  fontSize: '3px',
+  backgroundColor: '#17120c',
 };
 
 const footerInner: React.CSSProperties = {
-  padding: '28px 40px',
+  padding: '30px 42px',
   textAlign: 'center',
 };
 
 const footerCompany: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#f4d98d',
   fontSize: '13px',
-  fontWeight: 600,
+  fontWeight: 700,
   letterSpacing: '1px',
   textTransform: 'uppercase',
   margin: '0 0 10px',
 };
 
 const footerAddress: React.CSSProperties = {
-  color: '#8a7e70',
+  color: '#b8ab98',
   fontSize: '12px',
-  lineHeight: '20px',
+  lineHeight: '19px',
   margin: '0 0 8px',
 };
 
 const footerContact: React.CSSProperties = {
-  color: '#8a7e70',
+  color: '#b8ab98',
   fontSize: '12px',
-  lineHeight: '20px',
+  lineHeight: '19px',
   margin: '0 0 12px',
 };
 
 const footerLink: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#f4d98d',
   textDecoration: 'none',
 };
 
 const footerPowered: React.CSSProperties = {
-  color: '#4a4035',
+  color: '#7a6d5b',
   fontSize: '11px',
   margin: '8px 0 0',
 };

@@ -54,16 +54,17 @@ export function DesignPreview({
 
 const wrapper: React.CSSProperties = {
   textAlign: 'center',
-  margin: '0 0 32px',
+  margin: '0 0 30px',
 };
 
 const imageFrame: React.CSSProperties = {
-  border: '2px solid #DEBD68',
-  borderRadius: '2px',
-  padding: '10px',
-  backgroundColor: '#f9f6f1',
+  border: '1px solid #eadfca',
+  borderRadius: '18px',
+  padding: '12px',
+  backgroundColor: '#fbfaf7',
   display: 'inline-block',
   margin: '0 auto 0',
+  boxShadow: '0 14px 36px rgba(30, 22, 12, 0.08)',
 };
 
 const image: React.CSSProperties = {
@@ -73,16 +74,15 @@ const image: React.CSSProperties = {
 };
 
 const caption: React.CSSProperties = {
-  color: '#4a4035',
+  color: '#4f463a',
   fontSize: '13px',
-  fontStyle: 'italic',
   margin: '12px 0 0',
   textAlign: 'center',
 };
 
 const captionLabel: React.CSSProperties = {
-  color: '#DEBD68',
-  fontStyle: 'normal',
+  color: '#9a7322',
+  fontWeight: 700,
   letterSpacing: '1px',
   textTransform: 'uppercase',
   fontSize: '11px',
@@ -94,30 +94,24 @@ const ctaWrapper: React.CSSProperties = {
 };
 
 const ctaButton: React.CSSProperties = {
-  backgroundColor: '#DEBD68',
-  color: '#060709',
+  backgroundColor: '#17120c',
+  color: '#ffffff',
   fontSize: '13px',
   fontWeight: 700,
-  letterSpacing: '1px',
-  textTransform: 'uppercase',
-  padding: '14px 32px',
-  borderRadius: '2px',
+  padding: '14px 26px',
+  borderRadius: '999px',
   textDecoration: 'none',
   display: 'inline-block',
-  fontFamily: 'Georgia, serif',
 };
 
 const editButton: React.CSSProperties = {
-  backgroundColor: 'transparent',
-  color: '#DEBD68',
-  fontSize: '11px',
-  fontWeight: 600,
-  letterSpacing: '1px',
-  textTransform: 'uppercase',
-  padding: '10px 20px',
-  border: '1px solid #DEBD68',
-  borderRadius: '2px',
+  backgroundColor: '#f3ead8',
+  color: '#17120c',
+  fontSize: '13px',
+  fontWeight: 700,
+  padding: '13px 22px',
+  borderRadius: '999px',
   textDecoration: 'none',
   display: 'inline-block',
-  marginTop: '10px',
+  marginTop: '12px',
 };

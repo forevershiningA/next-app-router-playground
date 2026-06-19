@@ -165,55 +165,54 @@ export function SavedDesignEmail({
 
 const hero: React.CSSProperties = {
   textAlign: 'center',
-  padding: '8px 0 28px',
+  padding: '2px 0 26px',
 };
 
 const heroEyebrow: React.CSSProperties = {
-  color: '#4a4035',
+  color: '#9a7322',
   fontSize: '11px',
-  fontWeight: 400,
-  letterSpacing: '3px',
+  fontWeight: 700,
+  letterSpacing: '2px',
   textTransform: 'uppercase',
   margin: '0 0 14px',
 };
 
 const heroHeading: React.CSSProperties = {
-  color: '#060709',
-  fontSize: '26px',
-  fontWeight: 400,
-  lineHeight: '36px',
+  color: '#17120c',
+  fontSize: '30px',
+  fontWeight: 700,
+  lineHeight: '38px',
   margin: '0 0 14px',
-  fontFamily: 'Georgia, serif',
+  letterSpacing: '-0.5px',
 };
 
 const heroName: React.CSSProperties = {
-  color: '#DEBD68',
-  fontStyle: 'italic',
+  color: '#9a7322',
 };
 
 const heroCopy: React.CSSProperties = {
-  color: '#4a4035',
+  color: '#50473b',
   fontSize: '15px',
-  lineHeight: '24px',
+  lineHeight: '23px',
   margin: '0',
 };
 
 const divider: React.CSSProperties = {
-  borderColor: '#ede5da',
+  borderColor: '#eee5d5',
   margin: '28px 0',
 };
 
 const priceCard: React.CSSProperties = {
-  backgroundColor: '#060709',
-  borderRadius: '2px',
+  backgroundColor: '#17120c',
+  borderRadius: '18px',
   padding: '28px 32px',
   textAlign: 'center',
   margin: '0 0 32px',
 };
 
 const accessCodeBox: React.CSSProperties = {
-  backgroundColor: '#fff8ec',
-  border: '1px solid #ead6b7',
+  backgroundColor: '#fbfaf7',
+  border: '1px solid #e8ddc8',
   borderRadius: '14px',
   padding: '18px',
   textAlign: 'center',
@@ -221,7 +220,7 @@ const accessCodeBox: React.CSSProperties = {
 };
 
 const accessCodeLabel: React.CSSProperties = {
-  color: '#6b5b47',
+  color: '#8a6a2d',
   fontSize: '11px',
   letterSpacing: '2px',
   textTransform: 'uppercase',
@@ -229,7 +228,7 @@ const accessCodeLabel: React.CSSProperties = {
 };
 
 const accessCodeValue: React.CSSProperties = {
-  color: '#19130d',
+  color: '#17120c',
   fontSize: '28px',
   fontWeight: 700,
   letterSpacing: '8px',
@@ -243,10 +242,10 @@ const accessCodeNote: React.CSSProperties = {
 };
 
 const priceLabel: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#f4d98d',
   fontSize: '11px',
-  fontWeight: 400,
-  letterSpacing: '3px',
+  fontWeight: 700,
+  letterSpacing: '2px',
   textTransform: 'uppercase',
   margin: '0 0 8px',
 };
@@ -254,17 +253,15 @@ const priceLabel: React.CSSProperties = {
 const priceAmount: React.CSSProperties = {
   color: '#ffffff',
   fontSize: '38px',
-  fontWeight: 300,
+  fontWeight: 700,
   letterSpacing: '-1px',
   margin: '0 0 8px',
-  fontFamily: 'Georgia, serif',
 };
 
 const priceNote: React.CSSProperties = {
-  color: '#6a5e50',
+  color: '#b8ab98',
   fontSize: '12px',
   margin: '0',
-  fontStyle: 'italic',
 };
 
 const nextStepsSection: React.CSSProperties = {
@@ -272,14 +269,10 @@ const nextStepsSection: React.CSSProperties = {
 };
 
 const nextStepsHeading: React.CSSProperties = {
-  color: '#060709',
-  fontSize: '11px',
+  color: '#17120c',
+  fontSize: '13px',
   fontWeight: 700,
-  letterSpacing: '2px',
-  textTransform: 'uppercase',
   margin: '0 0 20px',
-  borderLeft: '3px solid #DEBD68',
-  paddingLeft: '10px',
 };
 
 const stepCol: React.CSSProperties = {
@@ -296,13 +289,13 @@ const stepDivider: React.CSSProperties = {
 };
 
 const stepIcon: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#9a7322',
   fontSize: '22px',
   margin: '0 0 8px',
 };
 
 const stepTitle: React.CSSProperties = {
-  color: '#060709',
+  color: '#17120c',
   fontSize: '13px',
   fontWeight: 700,
   margin: '0 0 6px',
@@ -310,56 +303,51 @@ const stepTitle: React.CSSProperties = {
 };
 
 const stepText: React.CSSProperties = {
-  color: '#7a6e65',
+  color: '#6d6255',
   fontSize: '12px',
   lineHeight: '18px',
   margin: '0 0 12px',
 };
 
 const stepBtn: React.CSSProperties = {
-  backgroundColor: 'transparent',
-  color: '#DEBD68',
-  fontSize: '11px',
-  fontWeight: 600,
-  letterSpacing: '1px',
-  textTransform: 'uppercase',
-  padding: '8px 14px',
-  border: '1px solid #DEBD68',
-  borderRadius: '2px',
+  backgroundColor: '#f3ead8',
+  color: '#17120c',
+  fontSize: '12px',
+  fontWeight: 700,
+  padding: '9px 15px',
+  borderRadius: '999px',
   textDecoration: 'none',
   display: 'inline-block',
 };
 
 const stepBtnPrimary: React.CSSProperties = {
-  backgroundColor: '#DEBD68',
-  color: '#060709',
-  fontSize: '11px',
+  backgroundColor: '#17120c',
+  color: '#ffffff',
+  fontSize: '12px',
   fontWeight: 700,
-  letterSpacing: '1px',
-  textTransform: 'uppercase',
   padding: '8px 14px',
-  border: '1px solid #DEBD68',
-  borderRadius: '2px',
+  borderRadius: '999px',
   textDecoration: 'none',
   display: 'inline-block',
 };
 
 const warrantyBox: React.CSSProperties = {
-  borderLeft: '4px solid #DEBD68',
-  backgroundColor: '#faf7f1',
+  border: '1px solid #e8ddc8',
+  backgroundColor: '#fbfaf7',
+  borderRadius: '16px',
   padding: '18px 20px',
   margin: '0 0 28px',
 };
 
 const warrantyIcon: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#9a7322',
   fontSize: '20px',
   margin: '0',
   fontWeight: 700,
 };
 
 const warrantyTitle: React.CSSProperties = {
-  color: '#060709',
+  color: '#17120c',
   fontSize: '13px',
   fontWeight: 700,
   margin: '0 0 4px',
@@ -367,33 +355,32 @@ const warrantyTitle: React.CSSProperties = {
 };
 
 const warrantyText: React.CSSProperties = {
-  color: '#6a5e50',
+  color: '#6d6255',
   fontSize: '13px',
   lineHeight: '20px',
   margin: '0',
 };
 
 const closing: React.CSSProperties = {
-  color: '#4a4035',
+  color: '#50473b',
   fontSize: '14px',
   lineHeight: '22px',
   margin: '0 0 24px',
 };
 
 const signature: React.CSSProperties = {
-  color: '#4a4035',
+  color: '#50473b',
   fontSize: '14px',
   lineHeight: '22px',
   margin: '0',
-  fontFamily: 'Georgia, serif',
 };
 
 const signatureCompany: React.CSSProperties = {
-  color: '#060709',
+  color: '#17120c',
   fontSize: '15px',
 };
 
 const signatureContact: React.CSSProperties = {
-  color: '#DEBD68',
+  color: '#9a7322',
   fontSize: '13px',
 };
