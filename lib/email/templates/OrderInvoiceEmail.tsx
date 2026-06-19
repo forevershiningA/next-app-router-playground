@@ -81,54 +81,54 @@ export function OrderInvoiceEmail({
 
 const greeting: React.CSSProperties = {
   fontSize: '16px',
-  color: '#17120c',
+  color: '#0f172a',
   margin: '0 0 16px',
-  fontWeight: 700,
+  fontWeight: 600,
 };
 
 const paragraph: React.CSSProperties = {
   fontSize: '14px',
   lineHeight: '22px',
-  color: '#50473b',
+  color: '#475569',
   margin: '0 0 16px',
 };
 
 const sectionTitle: React.CSSProperties = {
   fontSize: '13px',
-  fontWeight: 700,
-  color: '#17120c',
+  fontWeight: 600,
+  color: '#0f172a',
   margin: '16px 0 8px',
 };
 
 const hr: React.CSSProperties = {
-  borderColor: '#eee5d5',
+  borderColor: '#e2e8f0',
   margin: '24px 0',
 };
 
 const invoiceBox: React.CSSProperties = {
-  backgroundColor: '#fbfaf7',
-  borderRadius: '16px',
-  border: '1px solid #e8ddc8',
+  backgroundColor: '#f8fafc',
+  borderRadius: '8px',
+  border: '1px solid #e2e8f0',
   padding: '18px 20px',
   margin: '0 0 24px',
 };
 
 const invoiceLabel: React.CSSProperties = {
   fontSize: '14px',
-  color: '#17120c',
+  color: '#0f172a',
   margin: '0 0 4px',
 };
 
 const invoiceDetail: React.CSSProperties = {
   fontSize: '13px',
-  color: '#6d6255',
+  color: '#64748b',
   margin: '4px 0 0',
 };
 
 const infoBox: React.CSSProperties = {
-  backgroundColor: '#fff8ec',
-  border: '1px solid #ead6b7',
-  borderRadius: '16px',
+  backgroundColor: '#f8fafc',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
   padding: '16px 20px',
   margin: '24px 0',
 };
@@ -136,14 +136,13 @@ const infoBox: React.CSSProperties = {
 const infoText: React.CSSProperties = {
   fontSize: '13px',
   lineHeight: '20px',
-  color: '#5f5548',
+  color: '#475569',
   margin: 0,
-  fontWeight: 600,
 };
 
 const regards: React.CSSProperties = {
   fontSize: '14px',
-  color: '#50473b',
+  color: '#475569',
   margin: '24px 0 0',
   lineHeight: '22px',
 };

@@ -32,27 +32,23 @@ export function EmailLayout({
       <Body style={body}>
         <Container style={container}>
           <Section style={header}>
-            <Section style={brandCard}>
-              {config.logo ? (
-                <Img
-                  src={config.logo}
-                  alt={config.company}
-                  width={176}
-                  height={108}
-                  style={logo}
-                />
-              ) : (
-                <Text style={brandName}>{config.company}</Text>
-              )}
-              <Text style={headerKicker}>Memorial Design Online</Text>
-              <Text style={titleText}>{title}</Text>
-            </Section>
+            {config.logo ? (
+              <Img
+                src={config.logo}
+                alt={config.company}
+                width={210}
+                height={129}
+                style={logo}
+              />
+            ) : (
+              <Text style={brandName}>{config.company}</Text>
+            )}
+            <Text style={headerKicker}>Memorial Designs</Text>
+            <Text style={titleText}>{title}</Text>
           </Section>
 
-          {/* Content */}
           <Section style={content}>{children}</Section>
 
-          {/* Footer */}
           <Section style={footer}>
             <Section style={footerInner}>
               <Text style={footerCompany}>{config.company}</Text>
@@ -92,37 +88,31 @@ export function EmailLayout({
 // ---------------------------------------------------------------------------
 
 const body: React.CSSProperties = {
-  backgroundColor: '#f5f2ec',
+  backgroundColor: '#f8fafc',
   fontFamily:
     '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   margin: 0,
-  padding: '32px 0',
+  padding: '28px 0',
 };
 
 const container: React.CSSProperties = {
   backgroundColor: '#ffffff',
   margin: '0 auto',
   maxWidth: '640px',
-  borderRadius: '20px',
+  borderRadius: '8px',
   overflow: 'hidden',
-  boxShadow: '0 24px 70px rgba(21, 17, 12, 0.12)',
+  border: '1px solid #e2e8f0',
 };
 
 const header: React.CSSProperties = {
-  backgroundColor: '#17120c',
-  padding: '30px 32px',
+  backgroundColor: '#ffffff',
+  padding: '30px 42px 28px',
   textAlign: 'center',
-};
-
-const brandCard: React.CSSProperties = {
-  border: '1px solid rgba(222, 189, 104, 0.32)',
-  borderRadius: '18px',
-  padding: '26px 24px 28px',
-  backgroundColor: '#211911',
+  borderBottom: '1px solid #e2e8f0',
 };
 
 const brandName: React.CSSProperties = {
-  color: '#f4d98d',
+  color: '#b48a2c',
   fontSize: '22px',
   fontWeight: 700,
   letterSpacing: '2px',
@@ -137,66 +127,68 @@ const logo: React.CSSProperties = {
 };
 
 const headerKicker: React.CSSProperties = {
-  color: '#cdb87c',
+  color: '#64748b',
   fontSize: '11px',
-  fontWeight: 700,
+  fontWeight: 600,
   letterSpacing: '2.5px',
   textTransform: 'uppercase',
-  margin: '16px 0 10px',
+  margin: '18px 0 14px',
 };
 
 const titleText: React.CSSProperties = {
-  color: '#ffffff',
-  fontSize: '24px',
-  fontWeight: 650,
-  letterSpacing: '-0.3px',
-  lineHeight: '32px',
+  color: '#0f172a',
+  fontFamily: 'Georgia, "Times New Roman", serif',
+  fontSize: '30px',
+  fontWeight: 400,
+  letterSpacing: '-0.2px',
+  lineHeight: '38px',
   margin: 0,
 };
 
 const content: React.CSSProperties = {
-  padding: '40px 42px 36px',
+  padding: '36px 42px 34px',
 };
 
 const footer: React.CSSProperties = {
-  backgroundColor: '#17120c',
+  backgroundColor: '#ffffff',
+  borderTop: '1px solid #e2e8f0',
 };
 
 const footerInner: React.CSSProperties = {
-  padding: '30px 42px',
+  padding: '26px 42px 28px',
   textAlign: 'center',
 };
 
 const footerCompany: React.CSSProperties = {
-  color: '#f4d98d',
+  color: '#0f172a',
   fontSize: '13px',
-  fontWeight: 700,
+  fontWeight: 600,
   letterSpacing: '1px',
   textTransform: 'uppercase',
   margin: '0 0 10px',
 };
 
 const footerAddress: React.CSSProperties = {
-  color: '#b8ab98',
+  color: '#64748b',
   fontSize: '12px',
   lineHeight: '19px',
   margin: '0 0 8px',
 };
 
 const footerContact: React.CSSProperties = {
-  color: '#b8ab98',
+  color: '#64748b',
   fontSize: '12px',
   lineHeight: '19px',
   margin: '0 0 12px',
 };
 
 const footerLink: React.CSSProperties = {
-  color: '#f4d98d',
+  color: '#334155',
   textDecoration: 'none',
 };
 
 const footerPowered: React.CSSProperties = {
-  color: '#7a6d5b',
+  color: '#94a3b8',
   fontSize: '11px',
   margin: '8px 0 0',
 };

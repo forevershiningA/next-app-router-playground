@@ -57,27 +57,27 @@ export function RegistrationEmail({
 
 const greeting: React.CSSProperties = {
   fontSize: '16px',
-  color: '#17120c',
+  color: '#0f172a',
   margin: '0 0 16px',
-  fontWeight: 700,
+  fontWeight: 600,
 };
 
 const paragraph: React.CSSProperties = {
   fontSize: '14px',
   lineHeight: '22px',
-  color: '#50473b',
+  color: '#475569',
   margin: '0 0 16px',
 };
 
 const link: React.CSSProperties = {
-  color: '#9a7322',
+  color: '#334155',
   textDecoration: 'underline',
-  fontWeight: 700,
+  fontWeight: 600,
 };
 
 const regards: React.CSSProperties = {
   fontSize: '14px',
-  color: '#50473b',
+  color: '#475569',
   margin: '24px 0 0',
   lineHeight: '22px',
 };

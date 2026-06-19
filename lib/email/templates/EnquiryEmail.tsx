@@ -58,44 +58,44 @@ export function EnquiryEmail({
 
 const greeting: React.CSSProperties = {
   fontSize: '16px',
-  color: '#17120c',
+  color: '#0f172a',
   margin: '0 0 16px',
-  fontWeight: 700,
+  fontWeight: 600,
 };
 
 const paragraph: React.CSSProperties = {
   fontSize: '14px',
   lineHeight: '22px',
-  color: '#50473b',
+  color: '#475569',
   margin: '0 0 16px',
 };
 
 const detail: React.CSSProperties = {
   fontSize: '14px',
-  color: '#50473b',
+  color: '#475569',
   margin: '0 0 8px',
 };
 
 const hr: React.CSSProperties = {
-  borderColor: '#eee5d5',
+  borderColor: '#e2e8f0',
   margin: '24px 0',
 };
 
 const messageLabel: React.CSSProperties = {
   fontSize: '13px',
-  fontWeight: 700,
-  color: '#17120c',
+  fontWeight: 600,
+  color: '#0f172a',
   margin: '0 0 8px',
 };
 
 const messageBox: React.CSSProperties = {
-  backgroundColor: '#fbfaf7',
-  border: '1px solid #e8ddc8',
-  borderRadius: '16px',
+  backgroundColor: '#f8fafc',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
   padding: '16px 20px',
   fontSize: '14px',
   lineHeight: '22px',
-  color: '#30271d',
+  color: '#334155',
   margin: '0 0 24px',
   whiteSpace: 'pre-wrap',
 };

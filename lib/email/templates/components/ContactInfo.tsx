@@ -38,28 +38,28 @@ export function ContactInfo({ config }: ContactInfoProps) {
 }
 
 const wrapper: React.CSSProperties = {
-  backgroundColor: '#fbfaf7',
-  border: '1px solid #e8ddc8',
-  borderRadius: '16px',
+  backgroundColor: '#f8fafc',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
   padding: '18px 20px',
   margin: '24px 0',
 };
 
 const heading: React.CSSProperties = {
-  color: '#17120c',
+  color: '#0f172a',
   fontSize: '14px',
-  fontWeight: 700,
+  fontWeight: 600,
   margin: '0 0 6px',
 };
 
 const text: React.CSSProperties = {
-  color: '#5f5548',
+  color: '#475569',
   fontSize: '13px',
   lineHeight: '20px',
   margin: '0 0 12px',
 };
 
 const link: React.CSSProperties = {
-  color: '#9a7322',
+  color: '#334155',
   textDecoration: 'none',
 };

@@ -91,9 +91,9 @@ const wrapper: React.CSSProperties = {
 };
 
 const sectionHeading: React.CSSProperties = {
-  color: '#17120c',
+  color: '#0f172a',
   fontSize: '13px',
-  fontWeight: 700,
+  fontWeight: 600,
   margin: '0 0 14px',
 };
 
@@ -101,22 +101,23 @@ const table: React.CSSProperties = {
   width: '100%',
   borderCollapse: 'separate',
   borderSpacing: 0,
-  border: '1px solid #e8ddc8',
-  borderRadius: '14px',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
   overflow: 'hidden',
 };
 
 const theadRow: React.CSSProperties = {
-  backgroundColor: '#17120c',
+  backgroundColor: '#f8fafc',
 };
 
 const th: React.CSSProperties = {
   padding: '10px 14px',
   fontSize: '11px',
-  fontWeight: 700,
-  color: '#f4d98d',
+  fontWeight: 600,
+  color: '#64748b',
   textTransform: 'uppercase',
   letterSpacing: '1px',
+  borderBottom: '1px solid #e2e8f0',
 };
 
 const tdRowEven: React.CSSProperties = {
@@ -124,37 +125,38 @@ const tdRowEven: React.CSSProperties = {
 };
 
 const tdRowOdd: React.CSSProperties = {
-  backgroundColor: '#fbfaf7',
+  backgroundColor: '#f8fafc',
 };
 
 const td: React.CSSProperties = {
   padding: '11px 14px',
   fontSize: '13px',
-  color: '#30271d',
-  borderBottom: '1px solid #eee5d5',
+  color: '#334155',
+  borderBottom: '1px solid #e2e8f0',
 };
 
 const subtotalTd: React.CSSProperties = {
   padding: '9px 14px',
   fontSize: '13px',
-  color: '#6d6255',
-  borderBottom: '1px solid #eee5d5',
+  color: '#64748b',
+  borderBottom: '1px solid #e2e8f0',
 };
 
 const totalRow: React.CSSProperties = {
-  backgroundColor: '#17120c',
+  backgroundColor: '#ffffff',
 };
 
 const totalTd: React.CSSProperties = {
   padding: '13px 14px',
   fontSize: '15px',
-  fontWeight: 700,
-  color: '#f4d98d',
+  fontWeight: 600,
+  color: '#0f172a',
   letterSpacing: '0.5px',
+  borderTop: '1px solid #cbd5e1',
 };
 
 const disclaimer: React.CSSProperties = {
-  color: '#8d8174',
+  color: '#94a3b8',
   fontSize: '11px',
   margin: '8px 0 0',
   textAlign: 'right',

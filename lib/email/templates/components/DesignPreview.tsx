@@ -58,13 +58,12 @@ const wrapper: React.CSSProperties = {
 };
 
 const imageFrame: React.CSSProperties = {
-  border: '1px solid #eadfca',
-  borderRadius: '18px',
-  padding: '12px',
-  backgroundColor: '#fbfaf7',
+  border: '1px solid #e2e8f0',
+  borderRadius: '8px',
+  padding: '10px',
+  backgroundColor: '#f8fafc',
   display: 'inline-block',
   margin: '0 auto 0',
-  boxShadow: '0 14px 36px rgba(30, 22, 12, 0.08)',
 };
 
 const image: React.CSSProperties = {
@@ -74,15 +73,15 @@ const image: React.CSSProperties = {
 };
 
 const caption: React.CSSProperties = {
-  color: '#4f463a',
+  color: '#334155',
   fontSize: '13px',
   margin: '12px 0 0',
   textAlign: 'center',
 };
 
 const captionLabel: React.CSSProperties = {
-  color: '#9a7322',
-  fontWeight: 700,
+  color: '#64748b',
+  fontWeight: 600,
   letterSpacing: '1px',
   textTransform: 'uppercase',
   fontSize: '11px',
@@ -94,23 +93,24 @@ const ctaWrapper: React.CSSProperties = {
 };
 
 const ctaButton: React.CSSProperties = {
-  backgroundColor: '#17120c',
+  backgroundColor: '#0f172a',
   color: '#ffffff',
   fontSize: '13px',
-  fontWeight: 700,
-  padding: '14px 26px',
-  borderRadius: '999px',
+  fontWeight: 600,
+  padding: '12px 22px',
+  borderRadius: '8px',
   textDecoration: 'none',
   display: 'inline-block',
 };
 
 const editButton: React.CSSProperties = {
-  backgroundColor: '#f3ead8',
-  color: '#17120c',
+  backgroundColor: '#ffffff',
+  color: '#0f172a',
   fontSize: '13px',
-  fontWeight: 700,
-  padding: '13px 22px',
-  borderRadius: '999px',
+  fontWeight: 600,
+  padding: '11px 20px',
+  borderRadius: '8px',
+  border: '1px solid #cbd5e1',
   textDecoration: 'none',
   display: 'inline-block',
   marginTop: '12px',
