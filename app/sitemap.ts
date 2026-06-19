@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import fs from 'fs';
 import path from 'path';
 import { getAllSavedDesigns, PRODUCT_STATS } from '#/lib/saved-designs-data';
+import { productSEOData } from '#/lib/seo-templates';
 
 const BASE_URL = 'https://forevershining.org';
 
@@ -38,6 +39,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/select-size`, lastModified: SITE_LAUNCH_DATE, changeFrequency: 'monthly', priority: 0.8 },
   ];
 
+  const guidePages: MetadataRoute.Sitemap = [
+    'buying-guide',
+    'cemetery-regulations',
+    'design-your-own',
+    'pricing',
+  ].map((slug) => ({
+    url: `${BASE_URL}/designs/guide/${slug}`,
+    lastModified: SITE_LAUNCH_DATE,
+    changeFrequency: 'monthly' as const,
+    priority: 0.65,
+  }));
+
+  const seoProductPages: MetadataRoute.Sitemap = Object.keys(productSEOData).map((productSlug) => ({
+    url: `${BASE_URL}/products/${productSlug}`,
+    lastModified: SITE_LAUNCH_DATE,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
+  }));
+
   // Product type pages
   const productPages: MetadataRoute.Sitemap = Object.keys(PRODUCT_STATS).map((productSlug) => ({
     url: `${BASE_URL}/designs/${productSlug}`,
@@ -72,5 +92,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     images: [`${BASE_URL}/screenshots/v2026-3d/${design.id}.png`],
   }));
 
-  return [...staticPages, ...productPages, ...categoryPages, ...designPages];
+  return [
+    ...staticPages,
+    ...guidePages,
+    ...seoProductPages,
+    ...productPages,
+    ...categoryPages,
+    ...designPages,
+  ];
 }

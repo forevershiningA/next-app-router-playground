@@ -4,7 +4,13 @@ import DesignsPageClient from './DesignsPageClient';
 
 // The client component loads the full design dataset; skip SSG to avoid OOM in build workers
 export const dynamic = 'force-dynamic';
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}): Promise<Metadata> {
+  const { q } = await searchParams;
+  const hasSearchQuery = Boolean(q?.trim());
   const totalDesigns = Object.values(PRODUCT_STATS).reduce((sum, n) => sum + n, 0);
   const productCount = Object.keys(PRODUCT_STATS).length;
   const categoryCount = Object.keys(CATEGORY_STATS).length;
@@ -62,6 +68,12 @@ export async function generateMetadata(): Promise<Metadata> {
         'x-default': `${baseUrl}/designs`,
       },
     },
+    robots: hasSearchQuery
+      ? {
+          index: false,
+          follow: true,
+        }
+      : undefined,
   };
 }
 
