@@ -33,18 +33,31 @@ export function PriceQuoteDisplay({ quote }: { quote: PDFQuote }) {
       {/* Motifs */}
       {motifs.length > 0 && (
         <div>
-          <p className="mb-1.5 text-xs uppercase tracking-widest text-white/40 day:text-gray-400">Motifs</p>
-          <div className="space-y-1">
+          <p className="mb-2 text-xs uppercase tracking-widest text-white/45 day:text-gray-400">Motifs</p>
+          <div className="space-y-2">
             {motifs.map((m) => (
-              <div key={m.id} className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
+              <div
+                key={m.id}
+                className="flex items-center justify-between gap-3 rounded-lg border border-white/5 bg-white/[0.03] px-3 py-2 day:border-gray-200 day:bg-white"
+              >
+                <div className="flex min-w-0 items-center gap-3">
                   {m.thumbnail && (
-                    <img src={m.thumbnail} alt={m.name} className="h-6 w-6 object-contain opacity-80" />
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-white/10 p-1.5 day:bg-gray-100">
+                      <img
+                        src={m.thumbnail}
+                        alt={m.name}
+                        className="h-full w-full object-contain opacity-95 invert day:invert-0"
+                      />
+                    </span>
                   )}
-                  <span className="text-white/80 day:text-gray-700">{m.name}</span>
-                  <span className="text-white/40 day:text-gray-400">{m.colorName} · {m.heightMm}mm</span>
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-white/90 day:text-gray-900">{m.name}</p>
+                    <p className="text-xs text-white/55 day:text-gray-500">{m.colorName} · {m.heightMm}mm</p>
+                  </div>
                 </div>
-                <span>{fmt(m.amount, currency)}</span>
+                <span className="shrink-0 text-sm font-semibold text-white/90 day:text-gray-900">
+                  {fmt(m.amount, currency)}
+                </span>
               </div>
             ))}
           </div>
