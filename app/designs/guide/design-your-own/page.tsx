@@ -1,14 +1,18 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
+import { GuideStructuredData, guideMetadata } from '../_seo';
 
-export const metadata: Metadata = {
+const seo = {
+  slug: 'design-your-own',
   title: 'Design Your Own Memorial Guide | Forever Shining',
   description: 'Learn how to use our online design tool to create a personalized memorial. Step-by-step guide to customizing headstones and plaques.',
 };
 
+export const metadata = guideMetadata(seo);
+
 export default function DesignYourOwnGuide() {
   return (
     <div className="min-h-screen bg-white relative z-10">
+      <GuideStructuredData {...seo} />
       <div className="container mx-auto px-8 py-12 max-w-4xl relative">
         <nav className="mb-8">
           <Link href="/designs" className="text-slate-600 hover:text-slate-900 font-light">
