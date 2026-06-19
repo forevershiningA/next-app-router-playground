@@ -73,6 +73,9 @@ const SCENERY = {
   },
 } as const;
 
+const GRASS_NORMAL_SCALE = new THREE.Vector2(1.2, 1.2);
+const OUTBACK_NORMAL_SCALE = new THREE.Vector2(0.4, 0.4);
+
 // --- COMPONENTS ---
 
 // Gradient sky sphere — colours driven by active scenery config
@@ -159,7 +162,7 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
           aoMap={props.aoMap}
           color={color}
           roughness={1}
-          normalScale={new THREE.Vector2(1.2, 1.2)}
+          normalScale={GRASS_NORMAL_SCALE}
           metalness={0}
           envMapIntensity={0}
           fog={true}
@@ -217,6 +220,9 @@ function OutbackFloor({ color }: { color: string }) {
       if (tex) {
         tex.wrapS = tex.wrapT = THREE.MirroredRepeatWrapping;
         tex.repeat.set(REPEAT_SCALE, REPEAT_SCALE);
+        tex.generateMipmaps = true;
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+        tex.magFilter = THREE.LinearFilter;
         tex.anisotropy = anisotropy;
         tex.needsUpdate = true;
       }
@@ -235,7 +241,7 @@ function OutbackFloor({ color }: { color: string }) {
           normalMap={props.normalMap}
           color={color}
           roughness={1}
-          normalScale={new THREE.Vector2(0.4, 0.4)}
+          normalScale={OUTBACK_NORMAL_SCALE}
           metalness={0}
           envMapIntensity={0}
           fog={true}
@@ -549,7 +555,7 @@ export default function Scene({
       {/* Rim light (Back Right) - Separates stone from background */}
       <spotLight color={cfg.rimColor} intensity={cfg.rimIntensity} position={[5, 5, -5]} distance={30} />
 
-      <Environment files="/hdri/spring.hdr" background={false} resolution={2048} environmentIntensity={0.5} />
+      <Environment files="/hdri/spring.hdr" background={false} resolution={512} environmentIntensity={0.5} />
 
       <OrbitControls
         makeDefault

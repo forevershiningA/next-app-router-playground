@@ -36,6 +36,8 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   animationDuration?: number;
 };
 
+const MAX_OUTLINE_FLOATS = 8 * 2 * 2 * 3;
+
 /**
  * Elegant bounding box outline with viewfinder corners that rotates with the target object.
  * Shows corner brackets instead of full box edges for a cleaner, professional look.
@@ -59,19 +61,37 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   const { gl } = useThree();
   const helperRef = React.useRef<THREE.LineSegments | null>(null);
   const depthPadding = depthPad ?? pad;
-  const localBox = new THREE.Box3();
-  const childBox = new THREE.Box3();
-  const inverseMatrix = new THREE.Matrix4();
-  const relativeMatrix = new THREE.Matrix4();
-  const localCenter = new THREE.Vector3();
-  const localSize = new THREE.Vector3();
-  const worldCenter = new THREE.Vector3();
-  const axisXVec = new THREE.Vector3();
-  const axisYVec = new THREE.Vector3();
-  const axisZVec = new THREE.Vector3();
-  const cameraDir = new THREE.Vector3();
-  const cornerTemp = new THREE.Vector3();
-  const endpointTemp = new THREE.Vector3();
+  const {
+    localBox,
+    childBox,
+    inverseMatrix,
+    relativeMatrix,
+    localCenter,
+    localSize,
+    worldCenter,
+    axisXVec,
+    axisYVec,
+    axisZVec,
+    cameraDir,
+    cornerTemp,
+    endpointTemp,
+    outlinePositions,
+  } = React.useMemo(() => ({
+    localBox: new THREE.Box3(),
+    childBox: new THREE.Box3(),
+    inverseMatrix: new THREE.Matrix4(),
+    relativeMatrix: new THREE.Matrix4(),
+    localCenter: new THREE.Vector3(),
+    localSize: new THREE.Vector3(),
+    worldCenter: new THREE.Vector3(),
+    axisXVec: new THREE.Vector3(),
+    axisYVec: new THREE.Vector3(),
+    axisZVec: new THREE.Vector3(),
+    cameraDir: new THREE.Vector3(),
+    cornerTemp: new THREE.Vector3(),
+    endpointTemp: new THREE.Vector3(),
+    outlinePositions: new Float32Array(MAX_OUTLINE_FLOATS),
+  }), []);
   const clippingPlaneRef = React.useRef(new THREE.Plane());
   const animationStartRef = React.useRef<number | null>(null);
   const animationProgressRef = React.useRef(animateOnShow ? 0 : 1);
@@ -98,6 +118,10 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       }
 
       const geometry = new THREE.BufferGeometry();
+      const positionAttribute = new THREE.BufferAttribute(outlinePositions, 3);
+      positionAttribute.setUsage(THREE.DynamicDrawUsage);
+      geometry.setAttribute('position', positionAttribute);
+      geometry.setDrawRange(0, 0);
       const material = new THREE.LineBasicMaterial({
         color: new THREE.Color(color as any).getHex(),
         depthTest: !through,
@@ -111,6 +135,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
       const helper = new THREE.LineSegments(geometry, material);
       helper.renderOrder = renderOrder;
+      helper.frustumCulled = false;
       helper.raycast = () => null;
       helperRef.current = helper;
 
@@ -270,16 +295,14 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       (helper.material as THREE.LineBasicMaterial).clippingPlanes = [clippingPlaneRef.current];
     }
 
-    const positions: number[] = [];
+    let positionOffset = 0;
     const pushLine = (startLocal: THREE.Vector3, endLocal: THREE.Vector3) => {
-      positions.push(
-        startLocal.x,
-        startLocal.y,
-        startLocal.z,
-        endLocal.x,
-        endLocal.y,
-        endLocal.z,
-      );
+      outlinePositions[positionOffset++] = startLocal.x;
+      outlinePositions[positionOffset++] = startLocal.y;
+      outlinePositions[positionOffset++] = startLocal.z;
+      outlinePositions[positionOffset++] = endLocal.x;
+      outlinePositions[positionOffset++] = endLocal.y;
+      outlinePositions[positionOffset++] = endLocal.z;
     };
 
     const cornerSigns: [number, number, number][] = [
@@ -323,14 +346,14 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       // Skip the depth leg so corners stay like a 2D viewfinder even on thick meshes
     });
 
-    if (positions.length === 0) {
+    if (positionOffset === 0) {
       helper.visible = false;
       return;
     }
 
-    const vertices = new Float32Array(positions);
-    helper.geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    helper.geometry.computeBoundingSphere();
+    const positionAttribute = helper.geometry.getAttribute('position') as THREE.BufferAttribute;
+    positionAttribute.needsUpdate = true;
+    helper.geometry.setDrawRange(0, positionOffset / 3);
 
     helper.visible = true;
   });
