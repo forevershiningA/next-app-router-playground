@@ -18,17 +18,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const share = await db?.query.sharedDesigns.findFirst({
       where: eq(sharedDesigns.shareToken, token),
     });
-    if (!share) return { title: 'Shared Design | Forever Shining' };
+    if (!share) {
+      return {
+        title: 'Shared Design | Forever Shining',
+        robots: {
+          index: false,
+          follow: false,
+        },
+      };
+    }
     return {
       title: 'Shared Design | Forever Shining',
       description: 'A personalised memorial design created with Forever Shining.',
+      robots: {
+        index: false,
+        follow: false,
+      },
       openGraph: {
         title: 'Shared Design | Forever Shining',
         description: 'A personalised memorial design created with Forever Shining.',
       },
     };
   } catch {
-    return { title: 'Shared Design | Forever Shining' };
+    return {
+      title: 'Shared Design | Forever Shining',
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
   }
 }
 

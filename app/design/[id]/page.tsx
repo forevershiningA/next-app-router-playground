@@ -16,6 +16,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: 'Memorial Design | Forever Shining',
     description: 'A personalised memorial design created with Forever Shining Design Online.',
+    robots: {
+      index: false,
+      follow: false,
+    },
   };
 }
 

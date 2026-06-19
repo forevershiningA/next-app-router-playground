@@ -5,7 +5,20 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/', '/my-account/', '/ml/'],
+      disallow: [
+        '/api/',
+        '/admin/',
+        '/account/',
+        '/my-account/',
+        '/orders/',
+        '/design/',
+        '/shared/',
+        '/login',
+        '/select-size/checkout/',
+        '/ml/',
+        '/_hooks/',
+        '/_patterns/',
+      ],
     },
     sitemap: 'https://forevershining.org/sitemap.xml',
   };

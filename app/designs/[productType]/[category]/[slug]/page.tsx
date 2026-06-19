@@ -385,24 +385,18 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           {
             "@type": "ListItem",
             "position": 3,
-            "name": `${productTypeDisplay}s`,
-            "item": `${baseUrl}/designs/${design.productType}`
-          },
-          {
-            "@type": "ListItem",
-            "position": 4,
             "name": productName,
             "item": `${baseUrl}/designs/${productSlug}`
           },
           {
             "@type": "ListItem",
-            "position": 5,
+            "position": 4,
             "name": categoryTitle,
             "item": `${baseUrl}/designs/${productSlug}/${category}`
           },
           {
             "@type": "ListItem",
-            "position": 6,
+            "position": 5,
             "name": formattedH1,
             "item": canonicalUrl
           }

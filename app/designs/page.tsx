@@ -33,7 +33,7 @@ export async function generateMetadata(): Promise<Metadata> {
     'forever shining australia',
   ];
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.com.au';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.org';
   const canonicalUrl = `${baseUrl}/designs`;
 
   return {
