@@ -1,5 +1,5 @@
 'use client';
-import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles, AdaptiveDpr } from '@react-three/drei';
+import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles } from '@react-three/drei';
 // REMOVED: EffectComposer & DepthOfField (Causing artifacts)
 import * as THREE from 'three';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
@@ -135,6 +135,9 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
         // MirroredRepeatWrapping flips adjacent tiles — breaks the obvious grid pattern
         tex.wrapS = tex.wrapT = THREE.MirroredRepeatWrapping;
         tex.repeat.set(repeat, repeat);
+        tex.generateMipmaps = true;
+        tex.minFilter = THREE.LinearMipmapLinearFilter;
+        tex.magFilter = THREE.LinearFilter;
         tex.anisotropy = anisotropy;
         tex.needsUpdate = true;
       }
@@ -340,9 +343,9 @@ export default function Scene({
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const sceneryVariant = useHeadstoneStore((s) => s.sceneryVariant);
   const productId = useHeadstoneStore((s) => s.productId);
-  // SS plaque is tiny (300×200mm) — camera auto-fits very close so we use finer
-  // grass tiles (2m vs 10.7m default) to avoid pixelation at close camera distance.
-  const grassRepeat = productId === '52' ? 150 : 28;
+  // SS plaque is tiny (300x200mm), so the camera auto-fits very close. Keep the
+  // grass finer than default without oversampling into a noisy/pixelated pattern.
+  const grassRepeat = productId === '52' ? 64 : 28;
 
   const cfg = SCENERY[sceneryVariant];
 
@@ -464,9 +467,6 @@ export default function Scene({
 
   return (
     <>
-      {/* OPTIMIZATION: Downgrades quality while moving/rotating to keep 60fps */}
-      <AdaptiveDpr pixelated />
-
       {/* Background: screenshot uses pure white; normal scenery uses sky colour from config;
           hideScenery mode clears background (CSS on container div provides the colour) */}
       {screenshotMode && <color attach="background" args={['#ffffff']} />}
