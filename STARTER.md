@@ -153,6 +153,32 @@ Notes:
 - `pnpm build` passed before the final Playwright timeout/assertion cleanup. No production code changed after that, only `playwright.config.ts` and the E2E assertion.
 - The focused E2E test needs valid `TEST_USER_EMAIL` and `TEST_USER_PASSWORD` in `.env.test.local`.
 
+### Vercel Deployment Status
+
+Vercel initially failed during type-check because two share routes imported `nanoid`, which was not a direct dependency in `package.json`.
+
+Fixed by replacing `nanoid(32)` with Node's built-in crypto token generation:
+
+```ts
+randomBytes(24).toString('base64url')
+```
+
+Updated files:
+- `app/api/share/create/route.ts`
+- `app/api/share/email/route.ts`
+
+After those fixes, the Vercel build completed successfully.
+
+Deployed-site smoke test completed on 2026-06-19:
+1. Login on the Vercel site worked.
+2. Saving two designs worked.
+3. Sending the design email worked.
+4. Viewing an owned saved design worked:
+   `https://forevershining.org/design/4a486f8e-6ba3-489a-a61c-cd708af25544`
+
+Remaining deployment follow-up:
+- Confirm the remote database used by Vercel has migration `0004` applied.
+
 ### Current Working-Tree Context
 
 This audit batch touches many files across:
