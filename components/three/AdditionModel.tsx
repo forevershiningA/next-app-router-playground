@@ -1372,7 +1372,3 @@ function AdditionModelInner({
   );
 }
 
-// Preload common additions
-useGLTF.preload('/additions/1134/Art1134.glb');
-useGLTF.preload('/additions/2497/Art2497.glb');
-useGLTF.preload('/additions/320/320.glb');

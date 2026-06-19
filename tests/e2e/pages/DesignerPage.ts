@@ -55,12 +55,32 @@ export class DesignerPage {
       () => {
         const canvas = document.querySelector('canvas');
         if (!canvas) return false;
-        const gl = canvas.getContext('webgl') ?? canvas.getContext('webgl2');
+        const gl =
+          (window as unknown as { __r3fGL?: { getContext?: () => WebGLRenderingContext | WebGL2RenderingContext } })
+            .__r3fGL?.getContext?.() ?? canvas.getContext('webgl2');
         if (!gl) return false;
+        const samplePoints = [
+          [0.5, 0.5],
+          [0.35, 0.45],
+          [0.65, 0.45],
+          [0.5, 0.3],
+          [0.5, 0.7],
+        ];
         const pixels = new Uint8Array(4);
-        gl.readPixels(canvas.width / 2, canvas.height / 2, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
-        return pixels.some((p) => p > 0);
+        return samplePoints.some(([x, y]) => {
+          gl.readPixels(
+            Math.floor(canvas.width * x),
+            Math.floor(canvas.height * y),
+            1,
+            1,
+            gl.RGBA,
+            gl.UNSIGNED_BYTE,
+            pixels,
+          );
+          return pixels.some((p) => p > 0);
+        });
       },
+      undefined,
       { timeout },
     );
   }

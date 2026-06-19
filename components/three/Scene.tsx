@@ -125,9 +125,9 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
   */
 
   const props = useTexture({
-    map: '/textures/three/grass/grass_color.webp',
-    normalMap: '/textures/three/grass/grass_normal.webp',
-    aoMap: '/textures/three/grass/grass_ao.webp',
+    map: '/textures/three/grass/grass_color_optimized.webp',
+    normalMap: '/textures/three/grass/grass_normal_optimized.webp',
+    aoMap: '/textures/three/grass/grass_ao_optimized.webp',
   });
 
   useEffect(() => {
