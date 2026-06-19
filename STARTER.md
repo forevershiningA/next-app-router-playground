@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-18
+**Last Updated:** 2026-06-19
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -42,6 +42,60 @@
 34. [Design Gallery Search UX (2026-06-03)](#current-status-2026-06-03--design-gallery-search-ux--sidebar-redesign)
 35. [Design Gallery Pixel-Perfect Polish (2026-06-04)](#current-status-2026-06-04--design-gallery-pixel-perfect-polish)
 36. [Audit Fixes: Protected Sharing, Security, Tests, Migrations (2026-06-18)](#current-status-2026-06-18--audit-fixes-protected-sharing-security-tests-migrations)
+37. [Vercel Build Payload Optimization (2026-06-19)](#current-status-2026-06-19--vercel-build-payload-optimization)
+
+---
+
+## Current Status (2026-06-19) - Vercel Build Payload Optimization
+
+The local production build is not the main bottleneck anymore. `pnpm build` completed successfully in about 5 minutes, while the Vercel deployment path was still taking roughly 25 minutes. That points to deployment payload size and static asset handling rather than pure Next.js compile time.
+
+### Build Timing
+
+- Local `pnpm build` completed successfully in about 5m 10s.
+- Next reported compilation in about 4.4 minutes.
+- Static generation was fast: `Generating static pages (106/106)` finished quickly.
+- ESLint is already skipped during production builds via `eslint.ignoreDuringBuilds: true` in `next.config.ts`.
+
+### Repo Size Findings
+
+The repository still contains a very large `public/` tree:
+
+- `public/` total size is about 10 GB.
+- `public/` contains roughly 395k files.
+- Largest directories include:
+  - `public/ml` at about 5.5 GB
+  - `public/designs` at about 1.2 GB
+  - `public/screenshots` at about 1.0 GB
+  - `public/shapes` at about 618 MB
+  - `public/additions` at about 567 MB
+
+This makes the deployment payload itself a plausible source of slow Vercel builds, even when the code build is healthy.
+
+### Deployment Payload Optimization
+
+I updated [.vercelignore](./.vercelignore) to exclude assets that are not needed at runtime:
+
+- `public/**/*.avi`
+- `public/**/*.psd`
+- `public/**/*.rar`
+- `public/**/*.zip`
+- superseded rollout folders under `public/designs/` that are no longer part of the active runtime path
+
+The change is committed in `2ab7750086` (`chore: reduce vercel deployment payload`).
+
+### Remaining Work
+
+The main remaining optimization is structural: move large historical/static asset sets out of the Git/Vercel deployment path and into object storage or a CDN-backed asset store.
+
+The biggest candidates are:
+
+- `public/ml`
+- `public/designs`
+- `public/screenshots`
+- `public/shapes`
+
+Those directories are still large enough that Vercel deploy time may remain high even after the ignore-file reduction.
 
 ---
 
