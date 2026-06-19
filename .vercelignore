@@ -29,6 +29,21 @@ drizzle.config.ts
 # Exclude: All old 2D screenshots — replaced by 3D renders in /screenshots/v2026-3d/
 public/ml/**/screenshots/
 
+# Heavy source/archive binaries are never served by the app.
+public/**/*.avi
+public/**/*.psd
+public/**/*.rar
+public/**/*.zip
+
+# Superseded canonical rollout artifacts. Runtime uses:
+# - /designs/v2026-p3d
+# - /designs/p3d-assets
+# - /designs/v2026-rollout-full-20260324-190828
+public/designs/v2026/
+public/designs/v2026-rollout5k-20260324-185544/
+public/designs/v2026-rollout10k-20260324-190612/
+public/designs/v2026-pilot-20260324-185005/
+
 # Root-level screenshots / debug artifacts not referenced by the app
 screen.jpg
 screen.png
