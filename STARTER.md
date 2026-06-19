@@ -43,6 +43,57 @@
 35. [Design Gallery Pixel-Perfect Polish (2026-06-04)](#current-status-2026-06-04--design-gallery-pixel-perfect-polish)
 36. [Audit Fixes: Protected Sharing, Security, Tests, Migrations (2026-06-18)](#current-status-2026-06-18--audit-fixes-protected-sharing-security-tests-migrations)
 37. [Vercel Build Payload Optimization (2026-06-19)](#current-status-2026-06-19--vercel-build-payload-optimization)
+38. [Minimal Email Template Redesign (2026-06-19)](#current-status-2026-06-19--minimal-email-template-redesign)
+
+---
+
+## Current Status (2026-06-19) - Minimal Email Template Redesign
+
+Email templates were redesigned to match the simple minimal aesthetic used by the `/designs/` pages: white surfaces, slate typography, thin dividers, compact rounded controls, and the gold logo as the primary brand accent.
+
+### Commit
+
+Committed in `9d03bc3353`:
+
+```bash
+design: simplify email templates
+```
+
+### Scope
+
+Updated the shared React Email template system:
+
+| File | Change |
+|------|--------|
+| `lib/email/templates/components/EmailLayout.tsx` | Replaced dark decorative shell with a white minimal layout, thin slate borders, centered logo, serif title, light footer |
+| `lib/email/templates/components/DesignPreview.tsx` | Simplified image frame and CTA buttons to match `/designs/` styling |
+| `lib/email/templates/components/QuoteTable.tsx` | Removed dark table header/footer; now uses light rows, slate borders, and restrained totals |
+| `lib/email/templates/components/ContactInfo.tsx` | Converted contact box to a simple light slate panel |
+| `lib/email/templates/SavedDesignEmail.tsx` | Removed decorative icons/copy, simplified hero, price card, access-code panel, next steps, and guarantee block |
+| `lib/email/templates/OrderInvoiceEmail.tsx` | Updated invoice details and info panels to the minimal light style |
+| `lib/email/templates/EnquiryEmail.tsx` | Updated message/details styling to the minimal light style |
+| `lib/email/templates/RegistrationEmail.tsx` | Updated typography and links to match the shared palette |
+| `lib/email/templates/PasswordResetEmail.tsx` | Updated reset CTA and text styling to match the shared palette |
+
+### Design Direction
+
+- Main email shell is white with `#e2e8f0` borders and `8px` radius.
+- Text uses slate tones: `#0f172a`, `#334155`, `#475569`, `#64748b`.
+- Email titles use `Georgia, "Times New Roman", serif` to echo the `/designs/` page title treatment.
+- Heavy dark/gold cards, large shadows, pill buttons, and decorative symbols were removed.
+- Email behavior, payloads, URLs, translations, and delivery logic were not changed.
+
+### Verification
+
+Passed:
+
+```bash
+pnpm type-check
+```
+
+Only unrelated local file left outside the email commit at the time of the change:
+
+- `screen.png`
 
 ---
 
