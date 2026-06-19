@@ -176,8 +176,8 @@ Deployed-site smoke test completed on 2026-06-19:
 4. Viewing an owned saved design worked:
    `https://forevershining.org/design/4a486f8e-6ba3-489a-a61c-cd708af25544`
 
-Remaining deployment follow-up:
-- Confirm the remote database used by Vercel has migration `0004` applied.
+Remote database follow-up completed on 2026-06-19:
+- Ran `npm run db:sync` to sync the remote database used by the deployed site.
 
 ### Current Working-Tree Context
 
