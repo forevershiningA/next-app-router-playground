@@ -117,15 +117,21 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     return null;
   }
 
-  const BRUSHED_URL = '/jpg/metals/l/brushed-ss-swatch.jpg';
-  const POLISHED_URL = '/jpg/metals/l/high-polished-ss-swatch.jpg';
+  const BRUSHED_URL = '/textures/forever/l/brushed-ss-swatch.webp';
+  const POLISHED_URL = '/textures/forever/l/high-polished-ss-swatch.webp';
+  const normalizeStainlessFinishUrl = (url: string | null | undefined) => {
+    if (url?.includes('high-polished-ss-swatch')) return POLISHED_URL;
+    return BRUSHED_URL;
+  };
 
   if (isStainlessSteel) {
     const ssFinishes = [
       { label: 'Brushed Finish', url: BRUSHED_URL },
       { label: 'Highly Polished Finish', url: POLISHED_URL },
     ];
-    const activeSsUrl = currentHeadstoneMaterialUrl ?? BRUSHED_URL;
+    const activeSsUrl = currentHeadstoneMaterialUrl?.includes('ss-swatch')
+      ? normalizeStainlessFinishUrl(currentHeadstoneMaterialUrl)
+      : BRUSHED_URL;
 
     const handleFinishSelect = (url: string) => {
       setIsMaterialChange(true);
@@ -313,12 +319,12 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                 <button
                   onClick={() => {
                     setIsMaterialChangeLocal(true);
-                    setHeadstoneMaterialUrl('/jpg/metals/l/brushed-ss-swatch.jpg');
+                    setHeadstoneMaterialUrl('/textures/forever/l/brushed-ss-swatch.webp');
                     setTimeout(() => setIsMaterialChangeLocal(false), 100);
                     router.push('/select-size');
                   }}
                   className={`group relative overflow-hidden rounded-2xl p-6 text-center transition-all hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
-                    currentHeadstoneMaterialUrl === '/jpg/metals/l/brushed-ss-swatch.jpg' || !currentHeadstoneMaterialUrl
+                    currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl
                       ? 'border-2 border-[#cfac6c] ring-2 ring-[#cfac6c]/30'
                       : 'border border-white/10 hover:border-[#cfac6c]/50'
                   }`}

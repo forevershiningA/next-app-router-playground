@@ -77,8 +77,11 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       if (!productId) return null;
       return data.products.find(p => p.id === productId);
     }, [productId]);
-    const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
-    const isPlaque = catalog?.product.type === 'plaque';
+    const productName = product?.name ?? catalog?.product.name ?? '';
+    const productNameLower = productName.toLowerCase();
+    const isTraditionalEngraved = productName.includes('Traditional Engraved');
+    const isPlaque = catalog?.product.type === 'plaque' || productNameLower.includes('plaque');
+    const isBronzePlaque = isPlaque && productNameLower.includes('bronze');
     const isLedgerSurface = surface === 'ledger';
     const isBaseSurface = surface === 'base';
 
@@ -587,6 +590,26 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const groupRotation: [number, number, number] = isLedgerSurface
       ? [-Math.PI / 2, rotationRad, 0]
       : [0, 0, rotationRad];
+    const renderedTextColor = isBronzePlaque ? '#c7a06a' : color;
+    const textMaterialProps = isBronzePlaque
+      ? {
+          metalness: 0.9,
+          roughness: 0.22,
+          envMapIntensity: 2.4,
+        }
+      : (renderedTextColor.toLowerCase().includes('gold') ||
+          renderedTextColor.toLowerCase() === '#d4af37' ||
+          renderedTextColor.toLowerCase() === '#ffd700')
+      ? {
+          metalness: 1.0,
+          roughness: 0.3,
+          envMapIntensity: 2.0,
+        }
+      : {
+          metalness: 0.2,
+          roughness: 0.4,
+          envMapIntensity: 1.5,
+        };
 
     // Base inscriptions with mm-center: imperatively position each frame so we
     // always use the *current* mesh position/scale (set by HeadstoneBaseAuto's
@@ -612,29 +635,35 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         rotation={groupRotation}
         visible={coordinateSpace !== 'mm-center' || !!surfaceBounds || (isBaseSurface && !!baseMesh)}
       >
+        {isBronzePlaque && (
+          <Text
+            font={font}
+            color="#21150c"
+            anchorX="center"
+            anchorY="middle"
+            textAlign={textAlign}
+            fontSize={fontSizeUnits}
+            position={[0.0012 * units, -0.0012 * units, -0.0006]}
+            outlineWidth={0}
+            fillOpacity={0.95}
+            renderOrder={-1}
+          >
+            {text}
+          </Text>
+        )}
+
         {/* Main text */}
         <Text
           font={font}
-          color={color}
+          color={renderedTextColor}
           anchorX="center"
           anchorY="middle"
           textAlign={textAlign}
           fontSize={fontSizeUnits}
-          outlineWidth={isTraditionalEngraved || isPlaque ? 0 : 0.002 * units}
-          outlineColor={isTraditionalEngraved || isPlaque ? color : "black"}
+          outlineWidth={isBronzePlaque ? 0.0015 * units : isTraditionalEngraved || isPlaque ? 0 : 0.002 * units}
+          outlineColor={isBronzePlaque ? '#26180d' : isTraditionalEngraved || isPlaque ? renderedTextColor : "black"}
           fillOpacity={isTraditionalEngraved ? 1 : 1}
-          {...(color.toLowerCase().includes('gold') || color.toLowerCase() === '#d4af37' || color.toLowerCase() === '#ffd700'
-            ? { 
-                metalness: 1.0,
-                roughness: 0.3,
-                envMapIntensity: 2.0
-              }
-            : {
-                metalness: 0.2,
-                roughness: 0.4,
-                envMapIntensity: 1.5
-              }
-          )}
+          {...textMaterialProps}
           onSync={handleTextSync}
           // Use onClick for selection; onPointerDown stays for drag init only
           onClick={(e) => {

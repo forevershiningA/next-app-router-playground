@@ -642,6 +642,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const showBase = isHeadstoneLike || productType === 'monument' || productType === 'full-monument' || productType === 'urn';
       const isFullMonument = productType === 'full-monument';
       const showInscriptionColor = catalog.product.laser !== '1' && catalog.product.color !== '0';
+      const productDefaultColor =
+        catalog.product.defaultColor ||
+        (catalog.product.laser === '1' ? '#ffffff' : '#c99d44');
       set((s) => {
         const visibility = {
           showBase,
@@ -747,7 +750,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         set((s) => ({
           inscriptions: s.inscriptions.map((line) => ({
             ...line,
-            color: '#ffffff',
+            color: productDefaultColor,
           })),
         }));
       }
@@ -878,9 +881,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           }
         }
 
-        const productDefaultColor =
-          catalog.product.defaultColor ||
-          (catalog.product.laser === '1' ? '#ffffff' : '#c99d44');
         const headstoneHeightLimit = Math.max(10, targetHeight);
         const baseHeightLimit = hasBase
           ? Math.max(10, effectiveStandHeight > 0 ? effectiveStandHeight : targetHeight)
@@ -1417,7 +1417,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Determine color: use catalog defaultColor if available, otherwise use hardcoded defaults
     let color: string;
     if (state.showInscriptionColor === false) {
-      color = '#ffffff';
+      color = state.catalog?.product.defaultColor ?? '#ffffff';
     } else {
       color = patch.color ?? state.catalog?.product.defaultColor ?? '#c99d44';
     }

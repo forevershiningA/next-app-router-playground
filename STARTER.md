@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-19
+**Last Updated:** 2026-06-22
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -44,6 +44,116 @@
 36. [Audit Fixes: Protected Sharing, Security, Tests, Migrations (2026-06-18)](#current-status-2026-06-18--audit-fixes-protected-sharing-security-tests-migrations)
 37. [Vercel Build Payload Optimization (2026-06-19)](#current-status-2026-06-19--vercel-build-payload-optimization)
 38. [Minimal Email Template Redesign (2026-06-19)](#current-status-2026-06-19--minimal-email-template-redesign)
+39. [3D Designer Material and Panel Polish (2026-06-22)](#current-status-2026-06-22--3d-designer-material-and-panel-polish)
+
+---
+
+## Current Status (2026-06-22) - 3D Designer Material and Panel Polish
+
+This batch is uncommitted working-tree context from the 3D Designer polish session. It covers plaques, inscriptions, image cropping, and design-detail page copy/layout improvements.
+
+### Design Gallery Detail Pages
+
+The `/designs/...` detail pages were improved in a batch-friendly way:
+
+| File | Change |
+|------|--------|
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Cleaner product-page structure and copy for design detail pages |
+| `components/DesignContentBlock.tsx` | Updated content section presentation/copy |
+| `lib/saved-designs-data.ts` | Gallery data/content support for the updated detail-page experience |
+
+The intent is to improve all current gallery designs through shared templates and generated/supporting content rather than hand-editing each page.
+
+### Bronze Plaque Text Rendering
+
+Bronze plaque inscriptions were changed from flat white text to a more realistic raised bronze look based on the supplied plaque photos.
+
+| File | Change |
+|------|--------|
+| `components/HeadstoneInscription.tsx` | Detects plaque products more broadly and applies bronze-specific text color/material properties |
+
+Current behavior:
+- Bronze plaque text uses a warm bronze color (`#c7a06a`) with high metalness and stronger environment response.
+- A subtle dark backing/shadow is rendered behind bronze plaque text to mimic raised letters on the dark plaque surface.
+- Non-bronze plaque/headstone text behavior remains separate.
+
+### Stainless Steel Plaque and Urn Material
+
+Single Thickness Stainless Steel Plaque and Stainless Steel Inlaid Urn material rendering were updated to avoid the previous overly dark/flat look.
+
+| File | Change |
+|------|--------|
+| `components/SvgHeadstone.tsx` | Adds procedural stainless steel color, roughness, and normal maps via `CanvasTexture` |
+| `components/MaterialSelector.tsx` | Uses `/textures/forever/l/*ss-swatch.webp` stainless finish URLs and normalizes older swatch paths |
+| `app/select-material/_ui/MaterialSelectionGrid.tsx` | Same stainless finish URL normalization for material selection |
+| `components/three/headstone/ShapeSwapper.tsx` | Detects polished finish by filename substring instead of exact old JPG path |
+
+Current stainless behavior:
+- Brushed stainless uses a light silver base with anisotropic-looking horizontal texture variation.
+- Polished stainless is brighter, smoother, and more reflective than brushed.
+- Generated stainless textures are disposed on cleanup.
+- Finish detection accepts both old and new swatch path formats by checking for `ss-swatch` / `high-polished-ss-swatch`.
+
+Important caveat:
+- `components/three/headstone/UrnEnamelInlay.tsx` was intentionally reverted to its original behavior after several heart-border/glitch attempts made the result worse. Do not continue from the failed heart-outline experiments unless the inlay geometry is redesigned more carefully.
+
+### Stainless Steel Default Inscription Color
+
+The Single Thickness Stainless Steel Plaque should honor the XML `default-color="#000000"` even when `color="0"` disables the color picker.
+
+| File | Change |
+|------|--------|
+| `lib/headstone-store.ts` | Product default inscription color is read from `catalog.product.defaultColor` before falling back to legacy defaults |
+
+Current behavior:
+- When inscription color selection is hidden, the store now still uses the product XML default color if present.
+- For SS Plaque this means black text by default instead of forced white.
+
+### Add Your Inscriptions Panel
+
+The inscription edit panel UI was tightened after screenshots showed overly long CTAs and crowded action states.
+
+| File | Change |
+|------|--------|
+| `components/InscriptionEditPanel.tsx` | Shorter labels, compact action area, clearer selected/non-selected states |
+
+Current behavior:
+- Input toggle labels are `Single` and `Multiple`.
+- Empty/single state CTA is `+ Add line`.
+- Multi-line state CTA is `+ Add inscription`.
+- Selected inscription action row is `+ Add line`, `Copy`, `Delete`.
+- Actions are separated with a top divider and use compact button sizing.
+
+### Add Your Image Crop Panel
+
+The image crop UI was tightened for readability and shorter actions.
+
+| File | Change |
+|------|--------|
+| `components/ImageSelector.tsx` | Compact crop controls, clearer step labels, shorter crop CTA, centered default placement |
+
+Current behavior:
+- Step labels are `Step 1 · Mask`, `Step 2 · Photo finish`, and `Step 3 · Crop area`.
+- Size and rotation controls show current values.
+- Smaller/larger and `-5°`/`+5°` controls use compact two-column rows.
+- Flip and 90-degree rotate controls are grouped before the main CTA.
+- Main crop CTA is `Apply crop`; update mode says `Update photo`.
+- Newly added cropped images now use `xPos: 0`, `yPos: 0`, and `coordinateSpace: 'mm-center'`, so images appear centered horizontally and vertically on the headstone instead of low on the stone.
+
+### Verification
+
+The following checks passed during this batch:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+git diff --check
+```
+
+Notes:
+- `pnpm lint` reports a Babel deoptimization notice for large `lib/saved-designs-data.ts`; this is informational.
+- `git diff --check` reports LF/CRLF warnings for touched files; no whitespace errors were reported.
+- `screen.png` and the uploaded bronze reference photos are local working files and should not be committed unless intentionally needed.
 
 ---
 

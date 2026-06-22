@@ -158,7 +158,7 @@ export default function InscriptionEditPanel() {
   }, [inputMode]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Input mode toggle */}
       <div className="flex gap-2 rounded-lg border border-[#3A3A3A] bg-slate-950 p-1 day:border-gray-200 day:bg-gray-100">
         <button
@@ -170,7 +170,7 @@ export default function InscriptionEditPanel() {
           }`}
           onClick={() => setInputMode('single')}
         >
-          Single Line
+          Single
         </button>
         <button
           type="button"
@@ -181,7 +181,7 @@ export default function InscriptionEditPanel() {
           }`}
           onClick={() => setInputMode('multi')}
         >
-          Multiple Lines
+          Multiple
         </button>
       </div>
 
@@ -491,37 +491,54 @@ export default function InscriptionEditPanel() {
       )}
 
       {/* Action buttons — placed last */}
-      <div className="flex flex-wrap gap-2 pt-2">
+      <div className="border-t border-white/10 pt-3 day:border-gray-200">
         {active ? (
-          <>
+          <div className="grid grid-cols-3 gap-2">
             <button
-              className="flex-1 cursor-pointer rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors shadow-md"
-              onClick={() => duplicateInscription(active.id)}
+              type="button"
+              className="cursor-pointer rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
+              onClick={handleAddNewLine}
             >
-              Duplicate
+              + Add line
             </button>
             <button
-              className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors shadow-md"
+              type="button"
+              className="cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#D7B356]/10 px-3 py-2 text-sm font-medium text-[#F2D58B] transition-colors hover:bg-[#D7B356]/20 day:text-[#8a6a12]"
+              onClick={() => duplicateInscription(active.id)}
+            >
+              Copy
+            </button>
+            <button
+              type="button"
+              className="cursor-pointer rounded-lg border border-red-500/50 bg-red-500/10 px-3 py-2 text-sm font-medium text-red-200 transition-colors hover:bg-red-500/20 day:text-red-700"
               onClick={() => deleteInscription(active.id)}
             >
               Delete
             </button>
-          </>
+          </div>
         ) : inputMode === 'multi' ? (
-          <button
-            className="flex-1 cursor-pointer rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-            onClick={handleAddMultipleLines}
-            disabled={multiText.trim().length === 0}
-          >
-            Add Inscription
-          </button>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+              onClick={handleAddMultipleLines}
+              disabled={multiText.trim().length === 0}
+            >
+              <span aria-hidden="true">+</span>
+              Add inscription
+            </button>
+          </div>
         ) : (
-          <button
-            className="flex-1 cursor-pointer rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 transition-colors shadow-md"
-            onClick={handleAddNewLine}
-          >
-            Add New Line
-          </button>
+          <div className="flex justify-end">
+            <button
+              type="button"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
+              onClick={handleAddNewLine}
+            >
+              <span aria-hidden="true">+</span>
+              Add line
+            </button>
+          </div>
         )}
       </div>
     </div>

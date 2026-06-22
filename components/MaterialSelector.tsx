@@ -240,10 +240,14 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   }, [editingObject, isPlaque, setEditingObject, setSelected]);
 
   // Initialise SS plaque to brushed finish when the URL isn't already one of the two SS swatches
-  const SS_URLS = ['/jpg/metals/l/brushed-ss-swatch.jpg', '/jpg/metals/l/high-polished-ss-swatch.jpg'];
+  const isStainlessFinishUrl = (url: string | null | undefined) => url?.includes('ss-swatch') ?? false;
+  const normalizeStainlessFinishUrl = (url: string | null | undefined) => {
+    if (url?.includes('high-polished-ss-swatch')) return '/textures/forever/l/high-polished-ss-swatch.webp';
+    return '/textures/forever/l/brushed-ss-swatch.webp';
+  };
   useEffect(() => {
-    if (isStainlessSteel && !SS_URLS.includes(currentHeadstoneMaterialUrl ?? '')) {
-      setHeadstoneMaterialUrl('/jpg/metals/l/brushed-ss-swatch.jpg');
+    if (isStainlessSteel && !isStainlessFinishUrl(currentHeadstoneMaterialUrl)) {
+      setHeadstoneMaterialUrl('/textures/forever/l/brushed-ss-swatch.webp');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isStainlessSteel]);
@@ -321,16 +325,16 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     });
   };
 
-  const BRUSHED_URL = '/jpg/metals/l/brushed-ss-swatch.jpg';
-  const POLISHED_URL = '/jpg/metals/l/high-polished-ss-swatch.jpg';
+  const BRUSHED_URL = '/textures/forever/l/brushed-ss-swatch.webp';
+  const POLISHED_URL = '/textures/forever/l/high-polished-ss-swatch.webp';
 
   if (isStainlessSteel) {
     const ssFinishes = [
       { label: 'Brushed Finish', url: BRUSHED_URL },
       { label: 'Highly Polished Finish', url: POLISHED_URL },
     ];
-    const activeSsUrl = SS_URLS.includes(currentHeadstoneMaterialUrl ?? '')
-      ? currentHeadstoneMaterialUrl!
+    const activeSsUrl = isStainlessFinishUrl(currentHeadstoneMaterialUrl)
+      ? normalizeStainlessFinishUrl(currentHeadstoneMaterialUrl)
       : BRUSHED_URL;
 
     return (
@@ -549,14 +553,14 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
           <button
             onClick={() => {
               setIsMaterialChange(true);
-              setHeadstoneMaterialUrl('/jpg/metals/l/brushed-ss-swatch.jpg');
+              setHeadstoneMaterialUrl('/textures/forever/l/brushed-ss-swatch.webp');
               setTimeout(() => setIsMaterialChange(false), 100);
             }}
             className="relative overflow-hidden cursor-pointer"
             title="No Background"
           >
             <div className={`relative aspect-square overflow-hidden border-2 flex items-center justify-center transition-colors ${
-              currentHeadstoneMaterialUrl === '/jpg/metals/l/brushed-ss-swatch.jpg' || !currentHeadstoneMaterialUrl
+              currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl
                 ? 'border-[#D7B356] ring-2 ring-[#D7B356]'
                 : 'border-white/10 hover:border-[#D7B356]/50'
             }`}>

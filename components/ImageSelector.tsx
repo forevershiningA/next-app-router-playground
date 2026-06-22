@@ -462,12 +462,13 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           widthMm: targetWidthMm,
           heightMm: targetHeightMm,
           xPos: 0,
-          yPos: 100,
+          yPos: 0,
           rotationZ: 0,
           sizeVariant: sizeVariantValue ?? 1,
           croppedAspectRatio: canonicalAspectRatio,
           maskShape: maskShapeFilename,
           colorMode: cropColorMode,
+          coordinateSpace: 'mm-center',
         });
       }
 
@@ -1108,7 +1109,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   {/* Step 1: Select Mask — hidden for Full Color Plaque (printed directly) */}
                   {productId !== '32' && (
                   <div>
-                    <div className="text-xs text-white/60 day:text-gray-500 mb-1">Step 1 — SELECT MASK</div>
+                    <div className="mb-1 text-xs font-medium uppercase tracking-wide text-white/60 day:text-gray-500">Step 1 · Mask</div>
                     <div className="grid grid-cols-5 gap-1.5">
                       {MASK_OPTIONS.filter((mask) =>
                         isGraniteImage
@@ -1143,7 +1144,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
                   {/* Step 2: Color Mode */}
                   <div>
-                    <div className="text-xs text-white/60 day:text-gray-500 mb-2">Step 2</div>
+                    <div className="mb-2 text-xs font-medium uppercase tracking-wide text-white/60 day:text-gray-500">Step 2 · Photo finish</div>
                     <select
                       value={cropColorMode}
                       onChange={(e) => setCropColorMode(e.target.value as 'full' | 'bw' | 'sepia')}
@@ -1165,12 +1166,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
                   {/* Step 3: Position and Resize */}
                   <div>
-                    <div className="text-xs text-white/60 day:text-gray-500 mb-2">Step 3</div>
-                    <div className="text-sm text-white day:text-gray-900 font-medium mb-3">Position and Resize Crop Area</div>
+                    <div className="mb-2 text-xs font-medium uppercase tracking-wide text-white/60 day:text-gray-500">Step 3 · Crop area</div>
                     
                     {/* Size Slider - controls mask height */}
                     <div className="space-y-2">
-                      <div className="text-xs text-white/60 day:text-gray-500">Adjust Size</div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium text-white day:text-gray-900">Size</span>
+                        <span className="text-xs text-white/60 day:text-gray-500">{Math.round(cropArea.height)}%</span>
+                      </div>
                       <input
                         type="range"
                         min="20"
@@ -1209,7 +1212,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         }}
                         className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
                       />
-                      <div className="flex justify-between items-center">
+                      <div className="grid grid-cols-2 gap-2">
                         <button
                           onClick={() => {
                             const newHeight = Math.max(20, cropArea.height - 5);
@@ -1240,9 +1243,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                               };
                             });
                           }}
-                          className="flex flex-col items-center gap-1 text-white/60 hover:text-white day:text-gray-500 day:hover:text-gray-900 text-xs"
+                          className="flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-[#1F1F1F] px-3 py-2 text-xs font-medium text-white/70 transition-colors hover:bg-[#2A2A2A] hover:text-white day:border-gray-200 day:bg-white day:text-gray-600 day:hover:bg-gray-100 day:hover:text-gray-900"
                         >
-                          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                           </svg>
                           Smaller
@@ -1277,9 +1280,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                               };
                             });
                           }}
-                          className="flex flex-col items-center gap-1 text-white/60 hover:text-white day:text-gray-500 day:hover:text-gray-900 text-xs"
+                          className="flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-[#1F1F1F] px-3 py-2 text-xs font-medium text-white/70 transition-colors hover:bg-[#2A2A2A] hover:text-white day:border-gray-200 day:bg-white day:text-gray-600 day:hover:bg-gray-100 day:hover:text-gray-900"
                         >
-                          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                           </svg>
                           Larger
@@ -1289,7 +1292,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
                     {/* Rotation (always available) */}
                      <div className="mt-4 space-y-2">
-                      <div className="text-sm text-white/80 day:text-gray-700">SELECT ROTATION: {cropRotation}°</div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="font-medium text-white day:text-gray-900">Rotation</span>
+                        <span className="text-xs text-white/60 day:text-gray-500">{cropRotation}°</span>
+                      </div>
                       <input
                         type="range"
                         min="0"
@@ -1298,33 +1304,61 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         onChange={(e) => setCropRotation(parseInt(e.target.value))}
                         className="w-full h-1.5 rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F]"
                       />
-                      <div className="flex justify-between items-center">
+                      <div className="grid grid-cols-2 gap-2">
                         <button
                           onClick={() => setCropRotation(((cropRotation - 5) % 360 + 360) % 360)}
-                          className="flex flex-col items-center gap-1 text-white/60 hover:text-white day:text-gray-500 day:hover:text-gray-900 text-xs"
+                          className="flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-[#1F1F1F] px-3 py-2 text-xs font-medium text-white/70 transition-colors hover:bg-[#2A2A2A] hover:text-white day:border-gray-200 day:bg-white day:text-gray-600 day:hover:bg-gray-100 day:hover:text-gray-900"
                         >
-                          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                           </svg>
-                          Decrease
+                          -5°
                         </button>
                         <button
                           onClick={() => setCropRotation((cropRotation + 5) % 360)}
-                          className="flex flex-col items-center gap-1 text-white/60 hover:text-white day:text-gray-500 day:hover:text-gray-900 text-xs"
+                          className="flex items-center justify-center gap-2 rounded-lg border border-white/15 bg-[#1F1F1F] px-3 py-2 text-xs font-medium text-white/70 transition-colors hover:bg-[#2A2A2A] hover:text-white day:border-gray-200 day:bg-white day:text-gray-600 day:hover:bg-gray-100 day:hover:text-gray-900"
                         >
-                          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                           </svg>
-                          Increase
+                          +5°
                         </button>
                       </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="mt-4 grid grid-cols-4 gap-2">
+                      <button
+                        onClick={handleFlipX}
+                        className="rounded-lg border border-white/20 bg-[#1F1F1F] px-2 py-2 text-xs font-medium text-white transition-colors hover:bg-[#2A2A2A] day:border-gray-200 day:bg-white day:text-gray-900 day:hover:bg-gray-100"
+                      >
+                        Flip X
+                      </button>
+                      <button
+                        onClick={handleFlipY}
+                        className="rounded-lg border border-white/20 bg-[#1F1F1F] px-2 py-2 text-xs font-medium text-white transition-colors hover:bg-[#2A2A2A] day:border-gray-200 day:bg-white day:text-gray-900 day:hover:bg-gray-100"
+                      >
+                        Flip Y
+                      </button>
+                      <button
+                        onClick={handleRotateLeft}
+                        className="rounded-lg border border-white/20 bg-[#1F1F1F] px-2 py-2 text-xs font-medium text-white transition-colors hover:bg-[#2A2A2A] day:border-gray-200 day:bg-white day:text-gray-900 day:hover:bg-gray-100"
+                      >
+                        90° L
+                      </button>
+                      <button
+                        onClick={handleRotateRight}
+                        className="rounded-lg border border-white/20 bg-[#1F1F1F] px-2 py-2 text-xs font-medium text-white transition-colors hover:bg-[#2A2A2A] day:border-gray-200 day:bg-white day:text-gray-900 day:hover:bg-gray-100"
+                      >
+                        90° R
+                      </button>
                     </div>
 
                     {/* Crop Button */}
                     <button
                       onClick={handleCropImage}
                       disabled={isCropping}
-                      className="mt-4 w-full rounded-lg bg-[#D7B356] border border-[#D7B356] px-4 py-3 text-black font-medium hover:bg-[#E4C778] transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 font-medium text-black transition-colors hover:bg-[#E4C778] disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {isCropping ? (
                         <>
@@ -1339,55 +1373,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                           </svg>
-                          {updatingImageId ? 'Update Photo' : 'Crop Image'}
+                          {updatingImageId ? 'Update photo' : 'Apply crop'}
                         </>
                       )}
                     </button>
 
-                    {/* Action Buttons */}
-                    <div className="mt-4 grid grid-cols-2 gap-2">
-                      <button
-                        onClick={handleFlipX}
-                        className="rounded-lg bg-[#1F1F1F] border border-white/20 day:bg-white day:border-gray-200 px-3 py-2 text-white day:text-gray-900 text-sm hover:bg-[#2A2A2A] day:hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-                        </svg>
-                        Flip X
-                      </button>
-                      <button
-                        onClick={handleFlipY}
-                        className="rounded-lg bg-[#1F1F1F] border border-white/20 day:bg-white day:border-gray-200 px-3 py-2 text-white day:text-gray-900 text-sm hover:bg-[#2A2A2A] day:hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                        </svg>
-                        Flip Y
-                      </button>
-                      <button
-                        onClick={handleRotateLeft}
-                        className="rounded-lg bg-[#1F1F1F] border border-white/20 day:bg-white day:border-gray-200 px-3 py-2 text-white day:text-gray-900 text-sm hover:bg-[#2A2A2A] day:hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
-                        </svg>
-                        Rotate ↺
-                      </button>
-                      <button
-                        onClick={handleRotateRight}
-                        className="rounded-lg bg-[#1F1F1F] border border-white/20 day:bg-white day:border-gray-200 px-3 py-2 text-white day:text-gray-900 text-sm hover:bg-[#2A2A2A] day:hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
-                      >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10h-10a8 8 0 00-8 8v2M21 10l-6 6m6-6l-6-6" />
-                        </svg>
-                        Rotate ↻
-                      </button>
+                    <div className="mt-2">
                       <button
                         onClick={() => {
                           resetCropState();
                           setUpdatingImageId(null);
                         }}
-                        className="rounded-lg bg-red-900/20 border border-red-500/30 px-3 py-2 text-red-400 text-sm hover:bg-red-900/30 transition-colors flex items-center justify-center gap-2"
+                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-500/30 bg-red-900/20 px-3 py-2 text-sm text-red-400 transition-colors hover:bg-red-900/30"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

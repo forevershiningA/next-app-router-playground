@@ -238,7 +238,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
   const ssFinish: 'brushed' | 'polished' =
-    headstoneMaterialUrl === '/jpg/metals/l/high-polished-ss-swatch.jpg' ? 'polished' : 'brushed';
+    headstoneMaterialUrl?.includes('high-polished-ss-swatch') ? 'polished' : 'brushed';
   const bronzeBorderColor = '#FFDFA3';
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
@@ -398,8 +398,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const urnInlayTexUrl = React.useMemo(() => {
     if (!isUrn) return null;
     if (!headstoneMaterialUrl) return null;
-    if (headstoneMaterialUrl === '/jpg/metals/l/brushed-ss-swatch.jpg') return null;
-    if (headstoneMaterialUrl === '/jpg/metals/l/high-polished-ss-swatch.jpg') return null;
+    if (headstoneMaterialUrl.includes('ss-swatch')) return null;
     if (headstoneMaterialUrl.startsWith('/textures/')) return null;
     return resolvedTex;
   }, [isUrn, headstoneMaterialUrl, resolvedTex]);
