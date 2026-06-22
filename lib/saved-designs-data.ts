@@ -83,23 +83,23 @@ export interface CategoryInfo {
 export const DESIGN_CATEGORIES: Record<DesignCategory, CategoryInfo> = {
   'memorial': {
     name: 'Memorial',
-    description: 'Memorial designs for memorial',
+    description: 'General memorial layouts for names, dates, personal messages and balanced decorative details.',
   },
   'mother-memorial': {
     name: 'Mother Memorial',
-    description: 'Memorial designs for mother',
+    description: 'Warm memorial layouts for mothers, grandmothers and maternal tributes.',
   },
   'biblical-memorial': {
     name: 'Biblical Memorial',
-    description: 'Memorial designs for biblical',
+    description: 'Faith-based memorials with scripture, crosses, doves and other biblical symbols.',
   },
   'religious-memorial': {
     name: 'Religious Memorial',
-    description: 'Memorial designs for religious',
+    description: 'Religious memorial layouts with space for prayers, verses and sacred symbols.',
   },
   'father-memorial': {
     name: 'Father Memorial',
-    description: 'Memorial designs for father',
+    description: 'Memorial layouts for fathers, grandfathers and paternal tributes.',
   },
   'in-loving-memory': {
     name: 'In Loving Memory',
@@ -107,23 +107,23 @@ export const DESIGN_CATEGORIES: Record<DesignCategory, CategoryInfo> = {
   },
   'wife-memorial': {
     name: 'Wife Memorial',
-    description: 'Memorial designs for wife',
+    description: 'Personal memorial designs for wives, partners and lifelong companions.',
   },
   'son-memorial': {
     name: 'Son Memorial',
-    description: 'Memorial designs for son',
+    description: 'Thoughtful memorial layouts for sons with room for family messages and meaningful motifs.',
   },
   'husband-memorial': {
     name: 'Husband Memorial',
-    description: 'Memorial designs for husband',
+    description: 'Memorial designs for husbands and partners with space for family tributes.',
   },
   'dove-memorial': {
     name: 'Dove Memorial',
-    description: 'Memorial designs for dove',
+    description: 'Peaceful memorial designs featuring dove motifs and gentle symbolic layouts.',
   },
   'daughter-memorial': {
     name: 'Daughter Memorial',
-    description: 'Memorial designs for daughter',
+    description: 'Tender memorial layouts for daughters with space for loving family messages.',
   },
   'rest-in-peace': {
     name: 'Rest In Peace',
@@ -131,11 +131,11 @@ export const DESIGN_CATEGORIES: Record<DesignCategory, CategoryInfo> = {
   },
   'butterfly-memorial': {
     name: 'Butterfly Memorial',
-    description: 'Memorial designs for butterfly',
+    description: 'Memorial designs with butterfly motifs symbolising remembrance, hope and transformation.',
   },
   'baby-memorial': {
     name: 'Baby Memorial',
-    description: 'Memorial designs for baby',
+    description: 'Gentle memorial layouts for babies and infants with soft, simple design details.',
   },
   'military-veteran': {
     name: 'Military Veteran',
@@ -143,19 +143,19 @@ export const DESIGN_CATEGORIES: Record<DesignCategory, CategoryInfo> = {
   },
   'floral-memorial': {
     name: 'Floral Memorial',
-    description: 'Memorial designs for floral',
+    description: 'Memorial designs with floral motifs, sprays and decorative botanical details.',
   },
   'garden-memorial': {
     name: 'Garden Memorial',
-    description: 'Memorial designs for garden',
+    description: 'Garden-style memorial layouts suited to natural, floral and outdoor remembrance themes.',
   },
   'music-memorial': {
     name: 'Music Memorial',
-    description: 'Memorial designs for music',
+    description: 'Memorial designs for musicians and music lovers, with room for instruments or notes.',
   },
   'brother-memorial': {
     name: 'Brother Memorial',
-    description: 'Memorial designs for brother',
+    description: 'Memorial layouts for brothers with space for family relationships and personal messages.',
   },
   'dedication': {
     name: 'Dedication',
@@ -167,19 +167,19 @@ export const DESIGN_CATEGORIES: Record<DesignCategory, CategoryInfo> = {
   },
   'islamic-memorial': {
     name: 'Islamic Memorial',
-    description: 'Memorial designs for islamic',
+    description: 'Islamic memorial layouts with respectful space for names, dates and faith-based wording.',
   },
   'child-memorial': {
     name: 'Child Memorial',
-    description: 'Memorial designs for child',
+    description: 'Sensitive memorial designs for children with gentle layouts and soft symbolic details.',
   },
   'service-memorial': {
     name: 'Service Memorial',
-    description: 'Memorial designs for service',
+    description: 'Service memorial layouts for public service, community roles and duty-based tributes.',
   },
   'sister-memorial': {
     name: 'Sister Memorial',
-    description: 'Memorial designs for sister',
+    description: 'Memorial designs for sisters with space for family messages and personal details.',
   },
   'pet-memorial': {
     name: 'Pet Memorial',
@@ -187,39 +187,39 @@ export const DESIGN_CATEGORIES: Record<DesignCategory, CategoryInfo> = {
   },
   'fishing-memorial': {
     name: 'Fishing Memorial',
-    description: 'Memorial designs for fishing',
+    description: 'Memorial designs for fishing enthusiasts with angling, water and outdoor motifs.',
   },
   'maori-memorial': {
     name: 'Maori Memorial',
-    description: 'Memorial designs for maori',
+    description: 'Maori-inspired memorial designs with space for cultural wording and symbolic motifs.',
   },
   'nurse-memorial': {
     name: 'Nurse Memorial',
-    description: 'Memorial designs for nurse',
+    description: 'Memorial designs for nurses and carers, with layouts suited to service and care tributes.',
   },
   'teacher-memorial': {
     name: 'Teacher Memorial',
-    description: 'Memorial designs for teacher',
+    description: 'Memorial layouts for teachers, mentors and educators.',
   },
   'jewish-memorial': {
     name: 'Jewish Memorial',
-    description: 'Memorial designs for jewish',
+    description: 'Jewish memorial layouts with respectful space for Hebrew, English and symbolic details.',
   },
   'psalm-23-memorial': {
     name: 'Psalm 23 Memorial',
-    description: 'Memorial designs for psalm 23',
+    description: 'Psalm 23 memorial designs with space for scripture, names and religious motifs.',
   },
   'doctor-memorial': {
     name: 'Doctor Memorial',
-    description: 'Memorial designs for doctor',
+    description: 'Memorial layouts for doctors and medical professionals.',
   },
   'golf-memorial': {
     name: 'Golf Memorial',
-    description: 'Memorial designs for golf',
+    description: 'Memorial designs for golfers with sport, club and landscape-inspired details.',
   },
   'hawaiian-memorial': {
     name: 'Hawaiian Memorial',
-    description: 'Memorial designs for hawaiian',
+    description: 'Hawaiian memorial designs with tropical, floral and island-inspired motifs.',
   },
 };
 

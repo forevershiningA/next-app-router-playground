@@ -36,6 +36,13 @@ type LayoutItem = {
   cy?: number;
 };
 
+function formatMarketingList(items: string[]): string {
+  if (items.length === 0) return '';
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
 // Helper function to detect if design uses physical coordinates
 function designUsesPhysicalCoords(
   items: LayoutItem[],
@@ -254,13 +261,17 @@ function DesignSpecificContent({
       motifTip: 'motifs can be positioned throughout the design'
     };
 
-    const productType = productSlug.includes('laser') ? 'laser-etched' : 
+    const finishType = productSlug.includes('laser') ? 'laser-etched' :
                        productSlug.includes('bronze') ? 'bronze' : 'traditional engraved';
+    const productKind = productSlug.includes('plaque') ? 'plaque' :
+                        productSlug.includes('monument') ? 'monument' : 'headstone';
+    const materialHint = productSlug.includes('bronze') ? 'bronze' :
+                         productSlug.includes('stainless') ? 'stainless steel' : 'granite';
 
     setContent({
-      intro: `This ${shapeName} design is a classic ${productType} headstone that suits ${categoryTitle.toLowerCase()} inscriptions. The ${shapeName.toLowerCase()} shape frames a central family name beautifully, with space for meaningful text and decorative motifs. Most families choose Black Granite with a serif family name and a clean, highly legible verse font.`,
+      intro: `This ${shapeName} design is a ${finishType} ${productKind} layout for ${categoryTitle.toLowerCase()} wording. The ${shapeName.toLowerCase()} shape frames the main inscription clearly, with space for meaningful text and decorative motifs. It works well in ${materialHint} with a prominent family name and a clean, highly legible verse font.`,
       layoutGuidance: `Top line (family name): up to 12 words; best at 2–3 words|Body lines: ${guidance.chars}, ${guidance.lines}|Motifs: ${guidance.motifTip}|Tip: keep the longest line in the center for visual balance`,
-      sizes: 'Standard tablet sizes: 600×600, 700×500, 800×600 mm|Finishes: Traditional Engraved, Laser Etched (photo-realistic), or Sandblasted|Granite: Black, Blue Pearl, Imperial Red, and 27 more options',
+      sizes: 'Common sizes vary by product and cemetery rules|Finishes: traditional engraving, laser etching, bronze casting or colour detail where available|Materials: granite, bronze and stainless steel options depend on product type',
       approval: 'We prepare proofs for your cemetery and can help with permits. Installation is available through our certified installer network.',
       timeline: 'Lead time typically 2–3 weeks after proof approval (express available)'
     });
@@ -2845,6 +2856,48 @@ export default function DesignPageClient({
     
     return words.join(' ');
   }, [slug, shapeDisplayName]);
+
+  const heroSummary = useMemo(() => {
+    const shapeText = shapeDisplayName ? `${shapeDisplayName.toLowerCase()} ` : '';
+    const motifText = designMetadata.motifNames.length > 0
+      ? ` with ${formatMarketingList(designMetadata.motifNames.slice(0, 3))} motif${designMetadata.motifNames.length > 1 ? 's' : ''}`
+      : '';
+    const inscriptionFit = designMetadata.inscriptionCount <= 2
+      ? 'a concise name, date and message'
+      : designMetadata.inscriptionCount <= 5
+      ? 'names, dates and a short verse'
+      : 'multiple names, dates and a longer tribute';
+    const photoText = designMetadata.hasPhoto ? ' A photo area is included and can be changed or removed.' : '';
+
+    return `A ${shapeText}${categoryTitle.toLowerCase()} ${productTypeDisplay.toLowerCase()} in ${simplifiedProductName.toLowerCase()}${motifText}. Start from this layout when you need room for ${inscriptionFit}.${photoText}`;
+  }, [
+    categoryTitle,
+    designMetadata.hasPhoto,
+    designMetadata.inscriptionCount,
+    designMetadata.motifNames,
+    productTypeDisplay,
+    shapeDisplayName,
+    simplifiedProductName,
+  ]);
+
+  const heroFeatures = useMemo(() => {
+    const features = [
+      shapeDisplayName ? `${shapeDisplayName} shape` : null,
+      simplifiedProductName,
+      `${designMetadata.inscriptionCount} text ${designMetadata.inscriptionCount === 1 ? 'area' : 'areas'}`,
+      designMetadata.motifNames.length > 0 ? `${formatMarketingList(designMetadata.motifNames.slice(0, 3))} motifs` : null,
+      designMetadata.hasPhoto ? 'Photo area' : null,
+      'Free proof before manufacture',
+    ];
+
+    return features.filter((feature): feature is string => Boolean(feature));
+  }, [
+    designMetadata.hasPhoto,
+    designMetadata.inscriptionCount,
+    designMetadata.motifNames,
+    shapeDisplayName,
+    simplifiedProductName,
+  ]);
   
   // Get store state for price calculation
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -3036,6 +3089,42 @@ export default function DesignPageClient({
               <p className="text-base md:text-lg text-slate-500 font-light mb-3 md:mb-6">
                 {categoryTitle} · {simplifiedProductName} {productTypeDisplay}
               </p>
+
+              <p className="max-w-3xl text-sm md:text-base text-slate-700 leading-relaxed font-light mb-4">
+                {heroSummary}
+              </p>
+
+              <div className="flex flex-wrap gap-2 mb-5">
+                {heroFeatures.map((feature) => (
+                  <span
+                    key={feature}
+                    className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs md:text-sm text-slate-600"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-3">
+                <button
+                  onClick={() => {
+                    if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
+                      setLoadingIntoEditor(true);
+                      router.push('/select-size');
+                    }
+                  }}
+                  disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
+                  className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Start with this design
+                </button>
+                <a
+                  href="#price-guide"
+                  className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-800 transition-colors hover:bg-slate-50"
+                >
+                  See price guide
+                </a>
+              </div>
               
             </div>
           </div>
@@ -3154,7 +3243,7 @@ export default function DesignPageClient({
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Personalize Design
+                Start with this design
               </>
             )}
           </button>
@@ -3222,7 +3311,7 @@ export default function DesignPageClient({
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
               </svg>
-              Use This Template
+              Start with this design
             </>
           )}
         </button>
@@ -3371,7 +3460,7 @@ function DetailedPriceQuote({ designId, mlDir = 'headstonesdesigner' }: { design
 
   return (
     <>
-    <div className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 overflow-hidden mb-4 md:mb-6 shadow-none md:shadow-sm">
+    <div id="price-guide" className="bg-white rounded-none md:rounded-lg border-0 md:border border-slate-200 overflow-hidden mb-4 md:mb-6 shadow-none md:shadow-sm">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"

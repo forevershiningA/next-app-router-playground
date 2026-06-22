@@ -26,6 +26,13 @@ function formatShapeName(shapeName: string): string {
     .join(' ');
 }
 
+function formatList(items: string[]): string {
+  if (items.length === 0) return '';
+  if (items.length === 1) return items[0];
+  if (items.length === 2) return `${items[0]} and ${items[1]}`;
+  return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
 interface DesignContentBlockProps {
   design: SavedDesignMetadata;
   categoryTitle: string;
@@ -48,35 +55,24 @@ export default function DesignContentBlock({
   const region = getRegionFromMlDir(design.mlDir);
   const locale = LOCALIZED_CONTENT[region];
   
-  // Generate a unique intro paragraph per design using its actual inscription, motifs and shape.
-  // This avoids near-duplicate content across designs in the same category/product.
+  // Generate a unique intro from structured traits instead of raw inscription text.
+  // Raw inscriptions often contain personal names and dates, so keep marketing copy privacy-safe.
   const generateIntro = () => {
-    const shape = shapeName ? `${shapeName.toLowerCase()}-shaped ` : '';
+    const shape = shapeName ? `${shapeName.toLowerCase()} ` : '';
     const material = simplifiedProductName.toLowerCase();
     const finish = material.includes('laser') ? 'laser-etched' :
                    material.includes('traditional') ? 'traditional engraved' : 'laser-etched';
-    const finishCap = finish.charAt(0).toUpperCase() + finish.slice(1);
-
-    // Decode HTML entities and extract a meaningful inscription snippet (first ~10 words)
-    const rawInscription = design.inscriptions || '';
-    const decodedInscription = rawInscription
-      .replace(/&apos;/g, "'").replace(/&amp;/g, '&').replace(/&quot;/g, '"')
-      .replace(/&lt;/g, '<').replace(/&gt;/g, '>');
-    const inscriptionWords = decodedInscription.trim().split(/\s+/).filter(Boolean);
-    const snippet = inscriptionWords.slice(0, 10).join(' ');
-    const hasSnippet = snippet.length > 8;
-
-    // Build motif descriptor
     const motifDesc = design.motifNames.length > 0
-      ? ` adorned with ${design.motifNames.slice(0, 2).join(' and ')} ${design.motifNames.length > 1 ? 'motifs' : 'motif'}`
+      ? ` with ${formatList(design.motifNames.slice(0, 3))} motif${design.motifNames.length > 1 ? 's' : ''}`
       : '';
+    const textAreaDesc = design.inscriptionCount <= 2
+      ? 'a concise name, date and short message'
+      : design.inscriptionCount <= 5
+      ? 'names, dates and a short verse'
+      : 'multiple names, dates and a longer tribute';
+    const photoDesc = design.hasPhoto ? ' It also includes a photo area that can be replaced or removed.' : '';
 
-    if (hasSnippet) {
-      return `This ${categoryTitle.toLowerCase()} ${shape}${material} ${productType}${motifDesc} carries the inscription: "${snippet}${inscriptionWords.length > 10 ? '…' : ''}". ${finishCap} to the highest standard, it can be fully personalised online — adjust the text, fonts, motifs and layout with an instant 3D preview.`;
-    }
-
-    // Fallback when inscription is absent: still unique via shape + motifs
-    return `A ${shape}${material} ${productType}${motifDesc} for ${categoryTitle.toLowerCase()}s. ${finishCap} craftsmanship ensures lasting clarity, and every detail — fonts, motifs, inscriptions — can be changed online with a live 3D preview before you order.`;
+    return `This ${shape}${categoryTitle.toLowerCase()} ${productType} uses a ${finish} ${material} layout${motifDesc}. It is best suited to ${textAreaDesc}, with room to adjust the wording, typefaces, motif placement and overall balance before you request a proof.${photoDesc}`;
   };
 
   // Generate design notes
@@ -94,7 +90,7 @@ export default function DesignContentBlock({
       'Traditional engraving works best with bold, clear fonts such as Arial, Helvetica, or strong serif options like Georgia for optimal readability.';
     
     const motifGuidance = hasMotifs ?
-      `This design includes ${design.motifNames.join(', ')} motif${design.motifNames.length > 1 ? 's' : ''}. Motifs are best positioned in corners or above/below inscriptions to frame the text beautifully without overwhelming the design.` :
+      `This design includes ${formatList(design.motifNames)} motif${design.motifNames.length > 1 ? 's' : ''}. Keep motifs close to the visual edges or above and below the main text so the inscription stays easy to read.` :
       'Motifs can be added to enhance this design. Popular choices include flowers, crosses, doves, or butterflies, typically placed in corner positions or as header elements.';
     
     const photoGuidance = hasPhoto ?
@@ -273,14 +269,14 @@ export default function DesignContentBlock({
 
         {/* Design Notes Section */}
         <div className="mb-12">
-          <h2 className="text-2xl font-serif font-light text-slate-900 mb-6">Design Notes & Recommendations</h2>
+          <h2 className="text-2xl font-serif font-light text-slate-900 mb-6">Why This Layout Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-50/50 rounded-lg p-6 border border-blue-200/50">
               <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-                Verse & Inscription Guidance
+                Names, Dates & Verse Fit
               </h3>
               <p className="text-slate-700 text-sm font-light mb-2">
                 This design works best with <strong>{designNotes.verseLength}</strong> inscriptions.
@@ -295,7 +291,7 @@ export default function DesignContentBlock({
                 <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
                 </svg>
-                Motif Positioning
+                Motif Placement
               </h3>
               <p className="text-slate-700 text-sm font-light">
                 {designNotes.motifGuidance}
@@ -320,7 +316,7 @@ export default function DesignContentBlock({
 
         {/* Specifications Table */}
         <div className="mb-12">
-          <h2 className="text-2xl font-serif font-light text-slate-900 mb-6">Technical Specifications</h2>
+          <h2 className="text-2xl font-serif font-light text-slate-900 mb-6">Sizes, Materials & Options</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse bg-white rounded-lg overflow-hidden shadow-sm">
               <tbody>
@@ -402,7 +398,7 @@ export default function DesignContentBlock({
         {/* Related Designs */}
         {relatedDesigns.length > 0 && (
           <div className="mb-12">
-            <h2 className="text-2xl font-serif font-light text-slate-900 mb-6">Similar Designs You May Like</h2>
+            <h2 className="text-2xl font-serif font-light text-slate-900 mb-6">Similar Designs To Compare</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {relatedDesigns.slice(0, 6).map((relatedDesign) => (
                 <Link
