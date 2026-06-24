@@ -127,8 +127,8 @@ See [MOTIF_SIZING_FIX_2025_01_29.md](MOTIF_SIZING_FIX_2025_01_29.md) for detaile
 
 1. Clone the repository:
 ```sh
-git clone https://github.com/yourusername/next-dyo.git
-cd next-dyo
+git clone https://github.com/forevershiningA/next-app-router-playground.git
+cd next-app-router-playground
 ```
 
 2. Install dependencies:
@@ -161,7 +161,7 @@ pnpm start
 ## Project Structure
 
 ```
-next-dyo/
+next-app-router-playground/
 ├── app/                          # Next.js App Router pages
 │   ├── additions/               # 3D additions & embellishments
 │   ├── designs/                 # Saved design gallery & viewer
