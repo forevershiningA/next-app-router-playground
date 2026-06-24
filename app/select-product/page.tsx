@@ -21,6 +21,11 @@ const PRODUCT_DESCRIPTION_TAGS: Record<string, string> = {
   '2350': 'stainless_steel_vitreous_urn_description',
 };
 
+const PRODUCT_DESCRIPTION_FALLBACKS: Record<string, string> = {
+  '1': 'Light-transmitting stainless steel headstone with traditional shapes, cut-through inscription styling, and glass-backed motif options.',
+  '23': 'Light-reflective stainless steel headstone with traditional shapes, polished metal styling, stainless motifs, and matching base options.',
+};
+
 function summarizeDescription(raw: string) {
   const text = raw
     .replace(/<[^>]+>/g, ' ')
@@ -44,9 +49,19 @@ async function buildDescriptionMap(productIds: string[]) {
 
   productIds.forEach((id) => {
     const tag = PRODUCT_DESCRIPTION_TAGS[id];
-    if (!tag) return;
+    if (!tag) {
+      if (PRODUCT_DESCRIPTION_FALLBACKS[id]) {
+        map[id] = PRODUCT_DESCRIPTION_FALLBACKS[id];
+      }
+      return;
+    }
     const element = doc.getElementsByTagName(tag)[0];
-    if (!element || !element.textContent) return;
+    if (!element || !element.textContent) {
+      if (PRODUCT_DESCRIPTION_FALLBACKS[id]) {
+        map[id] = PRODUCT_DESCRIPTION_FALLBACKS[id];
+      }
+      return;
+    }
     map[id] = summarizeDescription(element.textContent);
   });
 

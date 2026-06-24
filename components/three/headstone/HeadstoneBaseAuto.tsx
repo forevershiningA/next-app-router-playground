@@ -99,6 +99,8 @@ function BaseMesh({
   name,
   dimensions,
   finish,
+  isStainlessSteel,
+  stainlessFinish,
 }: {
   baseRef: React.RefObject<THREE.Mesh | null>;
   baseTexture: THREE.Texture;
@@ -106,6 +108,8 @@ function BaseMesh({
   name?: string;
   dimensions: { width: number; height: number; depth: number };
   finish: 'default' | 'rock-pitch';
+  isStainlessSteel: boolean;
+  stainlessFinish: 'brushed' | 'polished';
 }) {
   // 1. Generate the Source Canvas (The "Great" Texture)
   const rockNormalCanvas = useMemo(() => {
@@ -205,6 +209,19 @@ function BaseMesh({
 
   // 3. Create Materials
   const materials = useMemo(() => {
+    if (isStainlessSteel) {
+      const isPolished = stainlessFinish === 'polished';
+      return new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(isPolished ? 0xffffff : 0xf1f1ec),
+        map: baseTexture,
+        roughness: isPolished ? 0.14 : 0.38,
+        metalness: isPolished ? 0.82 : 0.68,
+        clearcoat: isPolished ? 1.0 : 0.55,
+        clearcoatRoughness: isPolished ? 0.05 : 0.28,
+        envMapIntensity: isPolished ? 3.0 : 2.4,
+      });
+    }
+
     const polishedMaterial = createPolishedGraniteMaterial({
       texture: baseTexture,
       envMapIntensity: 1.1,
@@ -257,7 +274,7 @@ function BaseMesh({
     }
 
     return polishedMaterial;
-  }, [baseTexture, finish, rockNormalCanvas]);
+  }, [baseTexture, finish, isStainlessSteel, rockNormalCanvas, stainlessFinish]);
 
   // 4. Update Material Repeats - matching slant headstone quality
   useLayoutEffect(() => {
@@ -424,6 +441,10 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     }, [baseSwapping, setBaseSwapping]);
 
     const baseTexture = useTexture(visibleBaseTex);
+    const isStainlessSteelBase = requestedBaseTex.includes('ss-swatch');
+    const stainlessBaseFinish: 'brushed' | 'polished' = requestedBaseTex.includes('high-polished-ss-swatch')
+      ? 'polished'
+      : 'brushed';
 
     const hasTx = useRef(false);
     const targetPos = useRef(new THREE.Vector3());
@@ -512,6 +533,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
             name={name}
             dimensions={baseDimensions}
             finish={baseFinish}
+            isStainlessSteel={isStainlessSteelBase}
+            stainlessFinish={stainlessBaseFinish}
           />
         </Suspense>
 

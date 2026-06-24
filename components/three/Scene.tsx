@@ -125,9 +125,9 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
   */
 
   const props = useTexture({
-    map: '/textures/three/grass/grass_color_optimized.webp',
-    normalMap: '/textures/three/grass/grass_normal_optimized.webp',
-    aoMap: '/textures/three/grass/grass_ao_optimized.webp',
+    map: '/textures/three/grass/grass_color.webp',
+    normalMap: '/textures/three/grass/grass_normal.webp',
+    aoMap: '/textures/three/grass/grass_ao.webp',
   });
 
   useEffect(() => {
@@ -135,8 +135,7 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
 
     [props.map, props.normalMap, props.aoMap].forEach((tex) => {
       if (tex) {
-        // MirroredRepeatWrapping flips adjacent tiles — breaks the obvious grid pattern
-        tex.wrapS = tex.wrapT = THREE.MirroredRepeatWrapping;
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
         tex.repeat.set(repeat, repeat);
         tex.generateMipmaps = true;
         tex.minFilter = THREE.LinearMipmapLinearFilter;
@@ -348,11 +347,6 @@ export default function Scene({
   const hideScenery = useHeadstoneStore((s) => s.hideScenery);
   const baseSwapping = useHeadstoneStore((s) => s.baseSwapping);
   const sceneryVariant = useHeadstoneStore((s) => s.sceneryVariant);
-  const productId = useHeadstoneStore((s) => s.productId);
-  // SS plaque is tiny (300x200mm), so the camera auto-fits very close. Keep the
-  // grass finer than default without oversampling into a noisy/pixelated pattern.
-  const grassRepeat = productId === '52' ? 64 : 28;
-
   const cfg = SCENERY[sceneryVariant];
 
   // Any mode that suppresses the outdoor scene (screenshot capture or user toggle)
@@ -401,6 +395,10 @@ export default function Scene({
       : [0, 3.8, 0];
   const viewportWidth = useThree((state) => state.size.width);
   const isMobileViewport = viewportWidth < 1024;
+  // Keep the meadow texture density stable across products so the floor does
+  // not change character when switching between headstones and plaques.
+  const grassRepeat = 144;
+
   // Outback needs fog pushed further so the red dirt stretches to the treeline
   const fogSettings = sceneryVariant === 'outback'
     ? (isMobileViewport ? { near: 22, far: 60 } : { near: 25, far: 80 })

@@ -135,6 +135,12 @@ const categories: Category[] = [
 
 const products: Product[] = [
   {
+    id: '1',
+    name: 'Stainless Steel Light Transmitting Headstone',
+    image: 'APP_ID_1-medium.webp',
+    category: 'headstones',
+  },
+  {
     id: '4',
     name: 'Laser-etched Black Granite Headstone',
     image: 'APP_ID_4-medium.webp',
@@ -150,6 +156,12 @@ const products: Product[] = [
     id: '22',
     name: 'Laser-etched Black Granite Mini Headstone',
     image: 'APP_ID_22-medium.webp',
+    category: 'headstones',
+  },
+  {
+    id: '23',
+    name: 'Stainless Steel Light Reflective Headstone',
+    image: 'APP_ID_23-medium.webp',
     category: 'headstones',
   },
   {

@@ -319,6 +319,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const isLaser = catalog?.product.laser === '1';
     // Use defaultColor from catalog, fallback to white for laser or gold for others
     const defaultColor = catalog?.product.defaultColor || (isLaser ? '#ffffff' : '#c99d44');
+    const defaultHeightMm =
+      state.motifInitHeight ?? state.motifPriceModel?.initHeight ?? 100;
     
     // Set target based on currently selected object (headstone or base)
     const target: 'base' | 'headstone' | 'ledger' =
@@ -332,7 +334,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           yPos: 0,
           scale: 1,
           rotationZ: 0,
-          heightMm: 100,
+          heightMm: defaultHeightMm,
           target,
           coordinateSpace: 'offset',
           flipX: false,
@@ -756,19 +758,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       }
 
       const inscriptionAddition = catalog.product.additions.find(
-        (add) => add.id === '125' && add.type === 'inscription',
+        (add) => add.type === 'inscription',
       );
+      const minHeight =
+        inscriptionAddition?.minHeight ?? MIN_INSCRIPTION_SIZE_MM;
+      const maxHeight =
+        inscriptionAddition?.maxHeight ?? MAX_INSCRIPTION_SIZE_MM;
+      const initHeight =
+        inscriptionAddition?.initHeight ?? minHeight;
+      set({
+        inscriptionMinHeight: minHeight,
+        inscriptionMaxHeight: maxHeight,
+        inscriptionInitHeight: initHeight,
+      });
       if (inscriptionAddition) {
-        const minHeight =
-          inscriptionAddition.minHeight ?? MIN_INSCRIPTION_SIZE_MM;
-        const maxHeight =
-          inscriptionAddition.maxHeight ?? MAX_INSCRIPTION_SIZE_MM;
-        const initHeight =
-          inscriptionAddition.initHeight ?? MIN_INSCRIPTION_SIZE_MM;
-        set({
-          inscriptionMinHeight: minHeight,
-          inscriptionMaxHeight: maxHeight,
-        });
         set((s) => ({
           inscriptions: s.inscriptions.map((line) => ({
             ...line,
@@ -1002,10 +1005,14 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       const motifAddition = catalog.product.additions.find((a) => a.type === 'motif');
       const isEnamel = motifAddition?.formula?.toLowerCase() === 'enamel';
       const motifType = isBronze ? 'bronze' : isEnamel ? 'enamel' : isLaser ? 'laser' : 'engraved';
+      set({ motifInitHeight: 100 });
       
       const motifPricing = await fetchAndParseMotifPricing(motifType);
       if (motifPricing) {
-        set({ motifPriceModel: motifPricing });
+        set({
+          motifPriceModel: motifPricing,
+          motifInitHeight: motifPricing.initHeight,
+        });
       }
     } catch (error) {
       console.error('Failed to load or parse catalog XML:', error);
@@ -1361,10 +1368,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   activeInscriptionText: '',
   inscriptionMinHeight: 5,
   inscriptionMaxHeight: 1200,
+  inscriptionInitHeight: 30,
   fontLoading: false,
   inscriptionCost: 0,
 
   motifPriceModel: null,
+  motifInitHeight: 100,
   motifCost: 0,
 
   emblemCost: 0,
@@ -1408,7 +1417,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const text = patch.text ?? 'New line';
     const font = patch.font ?? 'Garamond';
     const sizeMm = clampInscriptionSize(
-      patch.sizeMm ?? state.inscriptionMinHeight,
+      patch.sizeMm ?? state.inscriptionInitHeight ?? state.inscriptionMinHeight,
     );
     const rotationDeg = clampInscriptionRotation(patch.rotationDeg ?? 0);
     const xPos = patch.xPos ?? 0;

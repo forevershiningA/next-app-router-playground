@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-22
+**Last Updated:** 2026-06-24
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -45,6 +45,149 @@
 37. [Vercel Build Payload Optimization (2026-06-19)](#current-status-2026-06-19--vercel-build-payload-optimization)
 38. [Minimal Email Template Redesign (2026-06-19)](#current-status-2026-06-19--minimal-email-template-redesign)
 39. [3D Designer Material and Panel Polish (2026-06-22)](#current-status-2026-06-22--3d-designer-material-and-panel-polish)
+40. [Stainless Steel Headstones Initial Catalog Implementation (2026-06-22)](#current-status-2026-06-22--stainless-steel-headstones-initial-catalog-implementation)
+41. [Meadow Ground Texture Repeat Standardization (2026-06-24)](#current-status-2026-06-24--meadow-ground-texture-repeat-standardization)
+
+---
+
+## Current Status (2026-06-24) - Meadow Ground Texture Repeat Standardization
+
+The meadow scenery grass floor was corrected so it no longer becomes visibly pixelated on close camera angles, especially for smaller bronze plaques.
+
+### What Changed
+
+| File | Change |
+|------|--------|
+| `components/three/Scene.tsx` | `GrassFloor` now uses the full grass textures (`grass_color.webp`, `grass_normal.webp`, `grass_ao.webp`) with `THREE.RepeatWrapping` and a single fixed repeat value |
+
+Current grass-floor behavior:
+- The grass repeat is now static across product sizes.
+- `grassRepeat` is fixed at `144` for every product, instead of changing with plaque/headstone size.
+- This keeps the ground sampling stable between 600×600 mm headstones and 300×200 mm bronze plaques.
+- The outback floor remains separate and unchanged.
+
+Why this mattered:
+- The previous size-dependent repeat made the plaque view sample the meadow texture too coarsely at close range.
+- A fixed repeat density keeps the same visual pattern and prevents the floor from blowing up into visible texels when the camera autofits smaller products.
+
+Verification:
+- `pnpm exec eslint components/three/Scene.tsx` still passes with the existing unrelated warning about the unused `shapeUrl` binding in the same file.
+
+---
+
+## Current Status (2026-06-22) - Stainless Steel Headstones Initial Catalog Implementation
+
+This batch adds the first implementation slice for legacy stainless steel headstones, using `pricing-au.xml` as the precursor catalog source and the existing traditional headstone geometry as the initial 3D shape set.
+
+### Implemented Products
+
+The first pass intentionally covers only the two requested products:
+
+| Product ID | Product | Source in `pricing-au.xml` |
+|------------|---------|----------------------------|
+| `1` | Stainless Steel Light Transmitting Headstone | `D-X-HS-SS-LT-XX` |
+| `23` | Stainless Steel Light Reflective Headstone | `D-X-HS-SS-LR-XX` |
+
+Current catalog files:
+
+| File | Purpose |
+|------|---------|
+| `public/xml/catalog-id-1.xml` | Current-format catalog for Stainless Steel Light Transmitting Headstone |
+| `public/xml/catalog-id-23.xml` | Current-format catalog for Stainless Steel Light Reflective Headstone |
+
+Both catalog files:
+- Use the 11 traditional headstone shapes as the initial shape set.
+- Use stainless material swatches from `/textures/forever/l/*ss-swatch.webp`.
+- Include the stainless headstone base product `26` as a nested `type="base"` product so base pricing is picked up by `parseCatalogXML()`.
+- Include postage/fixing products `44` and `45`.
+- Use `pricing-au.xml` formulas and multipliers for the main product and base.
+
+### Product Selection
+
+| File | Change |
+|------|--------|
+| `app/_internal/_data.ts` | Adds product cards for IDs `1` and `23` under `headstones` |
+| `app/select-product/page.tsx` | Adds fallback descriptions because language XML does not yet have dedicated description tags |
+| `public/webp/products/APP_ID_1-*.webp` | Generated product card images from `Blomfield headstone.jpg` |
+| `public/webp/products/APP_ID_23-*.webp` | Generated product card images from `Cook headstone.jpg` |
+
+Reference source images currently exist in the working tree:
+- `Blomfield headstone.jpg`
+- `Abela headstone inlay.jpg`
+- `Cook headstone.jpg`
+
+Do not assume those root JPG files should be committed unless they are intentionally kept as source/reference assets. The generated `public/webp/products/APP_ID_1-*` and `APP_ID_23-*` files are the app-facing product card assets.
+
+### Stainless Headstone Rendering Fix
+
+Initial screenshot review (`screen.png`) showed the new stainless steel headstones rendering as plain matte grey. Root cause: the renderer only treated product `52` as stainless steel, so product IDs `1` and `23` fell through to the default non-metal headstone material.
+
+| File | Change |
+|------|--------|
+| `components/three/headstone/ShapeSwapper.tsx` | `isStainlessSteel` now includes product IDs `1`, `23`, and `52` |
+| `components/three/headstone/HeadstoneBaseAuto.tsx` | Bases using `ss-swatch` textures now use a `MeshPhysicalMaterial` with metalness, clearcoat, roughness, and stronger environment response |
+
+Important behavior:
+- Product `1` uses `high-polished-ss-swatch.webp` in the XML, so it enters the polished stainless branch.
+- Product `23` uses `brushed-ss-swatch.webp`, so it enters the brushed stainless branch.
+- The upright and base now use stainless PBR treatment; there is still no dedicated stainless headstone mesh geometry.
+
+### Inscription Entries
+
+The old stainless inscription products existed in `pricing-au.xml` but were missing from the current AU inscription XML. Without these entries, parser smoke tests fell back and logged missing inscription IDs.
+
+| File | Change |
+|------|--------|
+| `public/xml/au_EN/inscriptions.xml` | Adds compact products `2` and `41` with old first-60-free formulas |
+
+Mapped inscription products:
+
+| ID | Meaning | Pricing |
+|----|---------|---------|
+| `2` | Stainless Steel Inscription Reflective (first 60 free) | `0.00+0($q-0)` to 60, then `0.00+1.60($q-60)` at multiplier `1.25` |
+| `41` | Stainless Steel Inscription Transmitting (first 60 free) | `0.00+0($q-0)` to 60, then `0.00+3.20($q-60)` at multiplier `1.25` |
+
+Both use `min_height="7"`, `max_height="300"`, and `init_height="20"` from the old pricing/catalog constraints.
+
+### What Is Not Implemented Yet
+
+This batch is only catalog + initial rendering support. It does not implement the candidate R&D/manufacturing work package from `ForeverShining_SoftwareSpecificGuide_FY2026.docx`.
+
+Still pending:
+- Laser-cut bridge-safe text geometry.
+- Enclosed glyph island detection.
+- Minimum bridge width / cut gap / stroke width validation.
+- SVG/DXF fabrication export for stainless steel headstones.
+- Supplier/fabricator validation table.
+- Dedicated stainless headstone models or construction-specific light-transmitting/backing geometry.
+- Product-specific language XML description tags.
+- Broader migration of products `25`, `29`, `131`, or the stainless base as an independently selectable product.
+
+### Verification
+
+Passed:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Parser/catalog smoke test passed with the same DOM implementation used by the server path:
+
+```text
+1 Stainless Steel Light Transmitting Headstone 11 1300 4444.20 true 7 2
+23 Stainless Steel Light Reflective Headstone 11 1300 3971.00 true 7 2
+```
+
+Meaning:
+- Both catalogs parse.
+- Each exposes 11 shapes.
+- Main price calculation works at the default 600 x 600 x 100 mm dimensions.
+- Base price model is present.
+- Inscription min height and two-tier inscription price model are present.
+
+Known verification gap:
+- A fresh browser screenshot was not captured after the stainless material fix because the local dev-server background start failed in the shell environment. `screen.png` is the pre-fix evidence showing matte grey rendering.
 
 ---
 
@@ -10918,4 +11061,4 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
-*End of STARTER.md - Last updated: 2026-06-18*
+*End of STARTER.md - Last updated: 2026-06-22*

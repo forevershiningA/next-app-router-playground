@@ -370,7 +370,7 @@ export async function fetchAndParseInscriptionDetails(
       10,
     );
     const initHeight = parseInt(
-      productElement.getAttribute('init_height') || '30',
+      productElement.getAttribute('init_height') || String(minHeight),
       10,
     );
 

@@ -61,6 +61,20 @@
 		</price_model>
 	</product>
 
+	<product id="2" code="Steel-Reflective" name="Stainless Steel Inscription Reflective (first 60 free)" surface="color" fixed="0" type="inscription" coloursId="4" free_characters="60" min_height="7" max_height="300" init_height="20" url="src/img/images/black-granite-inscription.png">
+		<price_model code="Steel-Reflective" name="Stainless Steel Inscription Reflective" quantity_type="Units" currency="Australian Dollar" >
+			<price id="1" nr="1" code="Steel-Reflective" name="Stainless Steel Inscription Reflective" model="0.00+0($q-0)" start_quantity="0" end_quantity="60" retail_multiplier="1.0000" note="" />
+			<price id="2" nr="2" code="Steel-Reflective" name="Stainless Steel Inscription Reflective" model="0.00+1.60($q-60)" start_quantity="60" end_quantity="0" retail_multiplier="1.2500" note="" />
+		</price_model>
+	</product>
+
+	<product id="41" code="Steel-Transmitting" name="Stainless Steel Inscription Transmitting (first 60 free)" surface="color" fixed="0" type="inscription" coloursId="4" free_characters="60" min_height="7" max_height="300" init_height="20" url="src/img/images/black-granite-inscription.png">
+		<price_model code="Steel-Transmitting" name="Stainless Steel Inscription Transmitting" quantity_type="Units" currency="Australian Dollar" >
+			<price id="1" nr="1" code="Steel-Transmitting" name="Stainless Steel Inscription Transmitting" model="0.00+0($q-0)" start_quantity="0" end_quantity="60" retail_multiplier="1.0000" note="" />
+			<price id="2" nr="2" code="Steel-Transmitting" name="Stainless Steel Inscription Transmitting" model="0.00+3.20($q-60)" start_quantity="60" end_quantity="0" retail_multiplier="1.2500" note="" />
+		</price_model>
+	</product>
+
 	<product id="78" code="Bronze" name="Inscription (Bronze)" surface="color" fixed="0" type="inscription" coloursId="4" free_characters="0" min_height="7" max_height="100" init_height="30" url="src/img/images/black-granite-inscription.png">
 		<shapes path="src/swf/inscriptions/" >
 			<font id="1" nr="1" code="INN_ADE" name="Adorable" url="adorable.swf" />

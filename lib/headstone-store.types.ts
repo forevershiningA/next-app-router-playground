@@ -198,6 +198,7 @@ export type HeadstoneState = {
   addMotif: (svgPath: string) => void;
   removeMotif: (id: string) => void;
   setMotifColor: (id: string, color: string) => void;
+  motifInitHeight: number;
 
   selectedEmblems: Array<{ id: string; emblemId: string; imageUrl: string }>;
   addEmblem: (emblemId: string, imageUrl: string) => void;
@@ -376,6 +377,7 @@ export type HeadstoneState = {
   activeInscriptionText: string;
   inscriptionMinHeight: number;
   inscriptionMaxHeight: number;
+  inscriptionInitHeight: number;
   fontLoading: boolean;
   inscriptionCost: number;
   calculateInscriptionCost: () => void;

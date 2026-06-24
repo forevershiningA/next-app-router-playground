@@ -234,7 +234,10 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
   const isFullColourPlaque = catalog?.product.id === '32';
   const isUrn = catalog?.product.type === 'urn';
-  const isStainlessSteel = catalog?.product.id === '52';
+  const isStainlessSteel =
+    catalog?.product.id === '1' ||
+    catalog?.product.id === '23' ||
+    catalog?.product.id === '52';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
   const ssFinish: 'brushed' | 'polished' =
