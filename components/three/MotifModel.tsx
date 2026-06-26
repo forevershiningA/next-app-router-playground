@@ -19,6 +19,81 @@ type Props = {
 };
 
 const MAX_TEXTURE_DIMENSION = 2048;
+const STAINLESS_MOTIF_PRODUCT_IDS = new Set(['1', '23']);
+const STAINLESS_MOTIF_COLOR = '#e4e8ea';
+const SILHOUETTE_BACKGROUND_LUMINANCE = 245;
+const SILHOUETTE_ALPHA_THRESHOLD = 12;
+
+function applyLineArtAlphaMask(imageData: ImageData) {
+  const pixels = imageData.data;
+  for (let i = 0; i < pixels.length; i += 4) {
+    const r = pixels[i];
+    const g = pixels[i + 1];
+    const b = pixels[i + 2];
+    const a = pixels[i + 3];
+    const luminance = (r + g + b) / 3;
+
+    pixels[i] = 255;
+    pixels[i + 1] = 255;
+    pixels[i + 2] = 255;
+    pixels[i + 3] = a > 0 ? 255 - luminance : 0;
+  }
+}
+
+function applySolidSilhouetteMask(imageData: ImageData) {
+  const { width, height, data: pixels } = imageData;
+  const size = width * height;
+  const outside = new Uint8Array(size);
+  const queue = new Int32Array(size);
+  let head = 0;
+  let tail = 0;
+
+  const isBackground = (pixelIndex: number) => {
+    const offset = pixelIndex * 4;
+    const alpha = pixels[offset + 3];
+    if (alpha <= SILHOUETTE_ALPHA_THRESHOLD) return true;
+
+    const luminance = (pixels[offset] + pixels[offset + 1] + pixels[offset + 2]) / 3;
+    return luminance >= SILHOUETTE_BACKGROUND_LUMINANCE;
+  };
+
+  const enqueueIfOutside = (pixelIndex: number) => {
+    if (outside[pixelIndex] || !isBackground(pixelIndex)) return;
+    outside[pixelIndex] = 1;
+    queue[tail] = pixelIndex;
+    tail += 1;
+  };
+
+  for (let x = 0; x < width; x += 1) {
+    enqueueIfOutside(x);
+    enqueueIfOutside((height - 1) * width + x);
+  }
+  for (let y = 1; y < height - 1; y += 1) {
+    enqueueIfOutside(y * width);
+    enqueueIfOutside(y * width + width - 1);
+  }
+
+  while (head < tail) {
+    const pixelIndex = queue[head];
+    head += 1;
+    const x = pixelIndex % width;
+    const y = Math.floor(pixelIndex / width);
+
+    if (x > 0) enqueueIfOutside(pixelIndex - 1);
+    if (x < width - 1) enqueueIfOutside(pixelIndex + 1);
+    if (y > 0) enqueueIfOutside(pixelIndex - width);
+    if (y < height - 1) enqueueIfOutside(pixelIndex + width);
+  }
+
+  for (let pixelIndex = 0; pixelIndex < size; pixelIndex += 1) {
+    const offset = pixelIndex * 4;
+    const isSilhouette = outside[pixelIndex] === 0;
+    pixels[offset] = 255;
+    pixels[offset + 1] = 255;
+    pixels[offset + 2] = 255;
+    pixels[offset + 3] = isSilhouette ? 255 : 0;
+  }
+}
 
 export default function MotifModel({
   id,
@@ -34,11 +109,16 @@ export default function MotifModel({
   
   // Check if this is a Traditional Engraved product (sandblasted effect)
   const productId = useHeadstoneStore((s) => s.productId);
+  const catalog = useHeadstoneStore((s) => s.catalog);
   const product = React.useMemo(() => {
     if (!productId) return null;
     return data.products.find(p => p.id === productId);
   }, [productId]);
   const isTraditionalEngraved = product?.name.includes('Traditional Engraved') ?? false;
+  const isStainlessSteelMotif =
+    Boolean(productId && STAINLESS_MOTIF_PRODUCT_IDS.has(productId)) ||
+    (catalog?.product.type === 'headstone' &&
+      catalog.product.formula?.toLowerCase() === 'steel');
   
   const setMotifRef = useHeadstoneStore((s) => s.setMotifRef);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
@@ -133,33 +213,13 @@ export default function MotifModel({
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
           
-          // Convert to grayscale alpha mask - extract alpha channel only
+          // Convert motif art into an alpha mask. Stainless motifs use a solid
+          // outside-contour silhouette so fabrication does not imply tiny cuts.
           const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-          const data = imageData.data;
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            const a = data[i + 3];
-            
-            // Calculate luminance/brightness of the original color
-            const luminance = (r + g + b) / 3;
-            
-            // Set RGB to white
-            data[i] = 255;     // R
-            data[i + 1] = 255; // G
-            data[i + 2] = 255; // B
-            
-            // Use luminance as alpha - if original pixel was dark/colored, make it opaque
-            // If it was already transparent (a=0), keep it transparent
-            if (a > 0) {
-              // For non-transparent pixels, use luminance to determine opacity
-              // Invert luminance so dark colors = opaque, white = transparent
-              data[i + 3] = 255 - luminance;
-            } else {
-              // Keep transparent pixels transparent
-              data[i + 3] = 0;
-            }
+          if (isStainlessSteelMotif) {
+            applySolidSilhouetteMask(imageData);
+          } else {
+            applyLineArtAlphaMask(imageData);
           }
           ctx.putImageData(imageData, 0, 0);
           
@@ -195,7 +255,7 @@ export default function MotifModel({
         activeTexture.dispose();
       }
     };
-  }, [svgPath, gl]);
+  }, [svgPath, gl, isStainlessSteelMotif]);
 
 
   const placeOnVerticalSurface = React.useCallback(
@@ -671,6 +731,27 @@ export default function MotifModel({
     <>
       {/* Parent group for positioning - same coordinate system as inscriptions */}
       <group position={groupPosition} rotation={groupRotation}>
+        {isStainlessSteelMotif && (
+          <mesh
+            geometry={planeGeometry}
+            scale={[scaleX * 1.035, scaleY * 1.035, 1]}
+            position={[0.004, -0.004, -0.001]}
+            name={`motif-${id}-contact-shadow`}
+          >
+            <meshBasicMaterial
+              color="#050505"
+              toneMapped={false}
+              transparent
+              opacity={0.28}
+              depthWrite={false}
+              depthTest={true}
+              side={THREE.DoubleSide}
+              map={textureInfo.texture}
+              alphaTest={0.01}
+            />
+          </mesh>
+        )}
+
         {/* Motif mesh rendered as textured plane */}
         <mesh
           ref={ref}
@@ -682,16 +763,36 @@ export default function MotifModel({
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
         >
-          <meshBasicMaterial
-            color={color}
-            toneMapped={false}
-            transparent
-            depthWrite={false}
-            depthTest={true}
-            side={THREE.DoubleSide}
-            map={textureInfo.texture}
-            alphaTest={0.01}
-          />
+          {isStainlessSteelMotif ? (
+            <meshPhysicalMaterial
+              color={STAINLESS_MOTIF_COLOR}
+              map={textureInfo.texture}
+              metalness={0.86}
+              roughness={0.2}
+              clearcoat={1}
+              clearcoatRoughness={0.08}
+              envMapIntensity={2.6}
+              transparent
+              depthWrite={false}
+              depthTest={true}
+              side={THREE.DoubleSide}
+              alphaTest={0.01}
+              polygonOffset
+              polygonOffsetFactor={-1}
+              polygonOffsetUnits={-1}
+            />
+          ) : (
+            <meshBasicMaterial
+              color={color}
+              toneMapped={false}
+              transparent
+              depthWrite={false}
+              depthTest={true}
+              side={THREE.DoubleSide}
+              map={textureInfo.texture}
+              alphaTest={0.01}
+            />
+          )}
         </mesh>
         
         {/* Selection box without scale - sibling to motif */}

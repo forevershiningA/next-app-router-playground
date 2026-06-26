@@ -178,24 +178,29 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    // Fire-and-forget: send saved-design email
-    sendEmail({
-      type: 'saved-design',
-      recipientEmail: session.email,
-      recipientName: session.email, // name not in session; template extracts local-part before @
-      countryCode: 'au',
-      designId: summary.id,
-      designName: summary.title,
-      screenshotUrl: screenshotDataUrl, // base64 data URI — sendEmail converts it to CID inline attachment
-      quoteItems: detailedQuoteItems({
-        breakdown: body.pricingBreakdown,
-        designState: cleanedDesignState,
-        totalCents: summary.totalPriceCents,
+    after(async () => {
+      const result = await sendEmail({
+        type: 'saved-design',
+        recipientEmail: session.email,
+        recipientName: session.email, // name not in session; template extracts local-part before @
+        countryCode: 'au',
+        designId: summary.id,
+        designName: summary.title,
+        screenshotUrl: screenshotDataUrl, // base64 data URI; sendEmail converts it to CID inline attachment
+        quoteItems: detailedQuoteItems({
+          breakdown: body.pricingBreakdown,
+          designState: cleanedDesignState,
+          totalCents: summary.totalPriceCents,
+          currency: summary.currency,
+        }),
+        totalCents: summary.totalPriceCents ?? 0,
         currency: summary.currency,
-      }),
-      totalCents: summary.totalPriceCents ?? 0,
-      currency: summary.currency,
-    }).catch((err) => console.error('[api/projects] Email send failed:', err));
+      });
+
+      if (!result.success) {
+        console.error('[api/projects] Email send failed:', result.error);
+      }
+    });
 
     return NextResponse.json({ project: summary });
   } catch (error) {

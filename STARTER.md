@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-24
+**Last Updated:** 2026-06-25
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -47,6 +47,53 @@
 39. [3D Designer Material and Panel Polish (2026-06-22)](#current-status-2026-06-22--3d-designer-material-and-panel-polish)
 40. [Stainless Steel Headstones Initial Catalog Implementation (2026-06-22)](#current-status-2026-06-22--stainless-steel-headstones-initial-catalog-implementation)
 41. [Meadow Ground Texture Repeat Standardization (2026-06-24)](#current-status-2026-06-24--meadow-ground-texture-repeat-standardization)
+42. [Stainless Headstone Motif Silhouette Rendering (2026-06-25)](#current-status-2026-06-25--stainless-headstone-motif-silhouette-rendering)
+
+---
+
+## Current Status (2026-06-25) - Stainless Headstone Motif Silhouette Rendering
+
+Stainless steel headstone motifs were updated after comparing `screen.png` from the current implementation with the old Flash reference. The old/current detailed line-art duck motif would imply many tiny stainless cuts. The desired behavior is a single filled outer shape: trace the bitmap's outside contour, make the interior solid black/opaque, and preview that as stainless steel.
+
+### What Changed
+
+| File | Change |
+|------|--------|
+| `components/three/MotifModel.tsx` | Adds stainless-specific motif detection for product IDs `1` and `23`, plus any headstone catalog with `formula="Steel"` |
+| `components/three/MotifModel.tsx` | Splits normal motif masking (`applyLineArtAlphaMask`) from stainless silhouette masking (`applySolidSilhouetteMask`) |
+| `components/three/MotifModel.tsx` | Stainless motifs now render with a metallic `meshPhysicalMaterial` and subtle contact shadow instead of the standard flat `meshBasicMaterial` |
+
+Current stainless motif behavior:
+- Applies to Stainless Steel Light Transmitting Headstone (`productId === '1'`) and Stainless Steel Light Reflective Headstone (`productId === '23'`).
+- SVG motif assets are still rasterized to a canvas, but stainless products now use a flood-fill silhouette pass:
+  - pixels reachable from the bitmap border and considered transparent/near-white become background;
+  - everything not reachable from the outside becomes the solid motif mask;
+  - the final mask is white RGB with alpha `255` for the silhouette and `0` for background.
+- The resulting mask is displayed in stainless silver (`#e4e8ea`) using high metalness, clearcoat, stronger environment response, and polygon offset.
+- A slightly enlarged dark mask behind the motif provides a contact-shadow/raised-piece cue.
+
+Why this matters:
+- The customer-facing preview now communicates one stainless motif shape, not dozens of fine cut lines.
+- It better matches a manufacturable interpretation for stainless steel motifs where internal feather/eye/detail strokes should not be individually cut.
+- Non-stainless products keep the previous line-art/luminance-alpha behavior.
+
+Known limitation:
+- The silhouette pass assumes the motif has a mostly closed outer contour. If the outer line has gaps, the outside flood fill can leak into the figure and prevent the silhouette from filling correctly.
+- If that happens, add a small close-gaps/dilation pass before flood fill, or use an explicit silhouette asset for that motif category.
+
+Verification:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Dev server note:
+- `pnpm dev -p 3001` was started successfully after correcting the argument syntax from `pnpm dev -- -p 3001` to `pnpm dev -p 3001`.
+- The running app responded with HTTP `200` at `http://localhost:3001`.
+
+Working-tree note:
+- `screen.png` is a local reference/screenshot file and may show as modified. Do not commit it unless intentionally preserving the latest visual evidence.
 
 ---
 
@@ -11061,4 +11108,4 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
-*End of STARTER.md - Last updated: 2026-06-22*
+*End of STARTER.md - Last updated: 2026-06-25*

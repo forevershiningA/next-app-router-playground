@@ -69,7 +69,7 @@ export function SavedDesignEmail({
         </Section>
       )}
 
-      {data.totalCents > 0 && (
+      {data.totalCents > 0 && data.quoteItems.length === 0 && (
         <Section style={priceCard}>
           <Text style={priceLabel}>Estimated Quote</Text>
           <Text style={priceAmount}>{totalFormatted}</Text>
@@ -85,7 +85,9 @@ export function SavedDesignEmail({
           totalCents={data.totalCents}
           currency={data.currency}
           currencySymbol={config.currencySymbol}
+          currencySide={config.currencySide}
           totalLabel={t('total') || 'Total'}
+          quoteStyle="ruled"
         />
       )}
 
