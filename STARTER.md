@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-25
+**Last Updated:** 2026-06-27
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -48,6 +48,91 @@
 40. [Stainless Steel Headstones Initial Catalog Implementation (2026-06-22)](#current-status-2026-06-22--stainless-steel-headstones-initial-catalog-implementation)
 41. [Meadow Ground Texture Repeat Standardization (2026-06-24)](#current-status-2026-06-24--meadow-ground-texture-repeat-standardization)
 42. [Stainless Headstone Motif Silhouette Rendering (2026-06-25)](#current-status-2026-06-25--stainless-headstone-motif-silhouette-rendering)
+43. [Saved Design Email Delivery Fix (2026-06-26)](#current-status-2026-06-26--saved-design-email-delivery-fix)
+44. [Stainless Headstone Inscription Stencil Bridge Investigation (2026-06-27)](#current-status-2026-06-27--stainless-headstone-inscription-stencil-bridge-investigation)
+
+---
+
+## Current Status (2026-06-27) - Stainless Headstone Inscription Stencil Bridge Investigation
+
+Flash reference screenshot for the stainless steel headstone inscription preview shows stencil-safe text: enclosed counters in letters such as `o`, `b`, `e`, and similar glyphs are opened near the top so cut-out islands do not fall out after laser cutting.
+
+### What Was Tried
+
+| File | Change |
+|------|--------|
+| `components/HeadstoneInscription.tsx` | Added stainless-headstone detection for product IDs `1` and `23`, plus headstone catalogs with `formula="Steel"` |
+| `components/HeadstoneInscription.tsx` | Removed the normal black outline from stainless headstone inscriptions so text does not look artificially bold |
+| `components/HeadstoneInscription.tsx` | Added a Troika `caretPositions`-based bridge-mask preview attempt for counter glyphs (`o`, `b`, `e`, `a`, `d`, `p`, `q`, `B`, `O`, `P`, `R`, `8`, etc.) |
+| `components/HeadstoneInscription.tsx` | Tried material/depth changes for the bridge masks: smaller masks, `meshBasicMaterial`, higher `renderOrder`, `depthTest={false}`, and `depthWrite={false}` |
+
+### Current Result
+
+The boldness issue is partly addressed by removing the stainless text outline, but the bridge masking approach is **not visually correct**. The latest `screen.png` still shows thin grey vertical bars over the letters rather than convincing cut-open stencil gaps matching the Flash reference.
+
+Do not treat the current bridge-mask overlay as complete.
+
+### Why The Current Approach Is Weak
+
+- The current inscription renderer uses `@react-three/drei` / Troika SDF text, not real glyph path geometry.
+- The attempted masks are rectangular overlays positioned from per-character caret bounds, so they do not know the actual counter shape inside each glyph.
+- Because they are separate planes above the text, they can look like extra strokes rather than subtractive cut-outs.
+
+### Recommended Next Implementation
+
+Replace the rectangular overlay attempt with a stainless-only raster/SDF or path-based text treatment:
+
+- Render stainless inscription text into a canvas texture using the selected font.
+- Apply bridge cuts directly into the alpha mask before creating the texture, so the holes are actually transparent/surface-colored.
+- Position bridge cuts per glyph using measured text metrics or a glyph path library, not just Troika caret bounds.
+- Longer-term fabrication work should still use true glyph path processing, island detection, minimum bridge-width validation, and SVG/DXF export.
+
+Verification after the attempted code changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm exec eslint components\HeadstoneInscription.tsx
+```
+
+TypeScript passed. ESLint on `components/HeadstoneInscription.tsx` had no errors, only pre-existing warnings in that file.
+
+---
+
+## Current Status (2026-06-26) - Saved Design Email Delivery Fix
+
+Saved Design confirmation emails were verified working again on the live site after moving the save-flow email send out of an untracked fire-and-forget promise.
+
+### What Changed
+
+| File | Change |
+|------|--------|
+| `app/api/projects/route.ts` | Replaced the fire-and-forget `sendEmail(...).catch(...)` call with a Next.js `after(async () => { ... })` callback |
+| `app/api/projects/route.ts` | Added explicit result checking so failed sends log `[api/projects] Email send failed: ...` |
+
+Root cause:
+- The save endpoint returned `NextResponse.json({ project: summary })` immediately after starting `sendEmail()`.
+- On Vercel/serverless, work not awaited or registered with `after()` can be frozen or terminated after the response is sent.
+- `STARTER.md` already documented this as a pending risk from the April email work; the live failure matched that risk.
+
+Current behavior:
+- The project save response still returns quickly.
+- Screenshot/file uploads continue to run in their existing `after()` callback.
+- Saved-design email sending now also runs in an `after()` callback, so Vercel keeps it attached to the request lifecycle.
+- If SMTP is missing or rejects the message, logs should now include either the existing `[Email] Skipping send ... no SMTP host configured` warning or `[api/projects] Email send failed: ...`.
+
+Live verification:
+- After deployment, saving a design on the live site successfully delivered the Saved Design email.
+
+Verification before deployment:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Related note:
+- Quote-table styling changes are independent of delivery. They only affect rendered email HTML after `sendEmail()` runs.
+- If saved-design emails fail again, first check Vercel Runtime Logs and Production env vars: `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` or country-specific `SMTP_AU_*`.
 
 ---
 
@@ -11104,8 +11189,53 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
+## Current Status (2026-06-28) — Select Product UI Refinements
+
+### Select Product Page
+
+- **Route**: `/select-product`
+- **Primary file**: `app/select-product/_ui/ProductSelectionGrid.tsx`
+- **Current layout**:
+  - Desktop/wide viewport uses a 5-column product grid (`xl:grid-cols-5`).
+  - Product cards keep compact spacing so the primary CTA is visible in the first viewport at ~1574×907.
+  - Product thumbnails use `object-contain` to show the full source image instead of cropping important memorial details.
+  - Thumbnail frame is square (`aspect-square`) with an even image inset (`p-2`) so empty space appears balanced around full-image thumbnails.
+  - Product cards show title, short 2-line description, starting price, max-size price, and a visible `Select product` CTA.
+  - Selected product state shows a stronger CTA style and selected badge.
+- **Design tradeoff**:
+  - `object-contain` preserves full product visibility but can reveal empty space when image aspect ratios differ.
+  - The current square thumbnail frame with inset was chosen to make that spacing intentional and consistent rather than left/right-only.
+
+### Designer Sidebar Progress
+
+- **Primary file**: `components/DesignerNav.tsx`
+- Workflow groups now show clearer progress labels:
+  - `Current`
+  - `Complete`
+  - `Upcoming`
+- The active workflow roman numeral badge keeps white text instead of switching to black.
+- Sidebar width was intentionally left unchanged.
+
+### Verification
+
+Commands run successfully after the UI changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Screenshots captured during refinement:
+
+- `C:\tmp\select-product-compact.png`
+- `C:\tmp\select-product-contain.png`
+- `C:\tmp\select-product-5col.png`
+- `C:\tmp\select-product-square-thumbs.png`
+
+---
+
 
 
 ---
 
-*End of STARTER.md - Last updated: 2026-06-25*
+*End of STARTER.md - Last updated: 2026-06-28*

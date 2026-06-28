@@ -3230,7 +3230,16 @@ export default function DesignerNav() {
 
             {/* Grouped Menu Navigation */}
             <div className="flex flex-col gap-5">
-              {menuGroups.map((group, groupIndex) => (
+              {menuGroups.map((group, groupIndex) => {
+                const isCurrentGroup = groupIndex === activeGroupIndex;
+                const isPastGroup = activeGroupIndex > groupIndex;
+                const groupStatus = isCurrentGroup
+                  ? 'Current'
+                  : isPastGroup
+                    ? 'Complete'
+                    : 'Upcoming';
+
+                return (
                 <div
                   key={group.label}
                   className="relative"
@@ -3240,26 +3249,46 @@ export default function DesignerNav() {
                     <div className="absolute -top-1 left-[22px] z-10 h-1 w-px bg-gradient-to-b from-primary/10 to-primary/30" />
                   )}
 
-                  <div className="rounded-2xl border border-white/10 day:border-gray-200 bg-gradient-to-br from-white/5 day:from-stone-50 via-transparent day:via-stone-50 to-black/20 day:to-stone-50 p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm">
+                  <div
+                    className={`rounded-2xl border p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors ${
+                      isCurrentGroup
+                        ? 'border-primary/45 bg-gradient-to-br from-primary/12 via-white/5 to-black/20 day:border-[#D7B356]/60 day:bg-[#DEBD68]/10'
+                        : 'border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20 day:border-gray-200 day:from-stone-50 day:via-stone-50 day:to-stone-50'
+                    }`}
+                  >
                   <button
                     onClick={() => toggleGroup(groupIndex)}
+                    aria-current={isCurrentGroup ? 'step' : undefined}
                     className={`flex w-full cursor-pointer items-center gap-3 px-3 py-1.5 transition-colors duration-200 hover:bg-white/5 rounded-lg ${
                       openGroup === groupIndex ? 'mb-3' : 'mb-0'
                     }`}
                   >
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-primary/40 font-playfair-display text-[13px] font-normal tracking-wide text-primary">
-                      {['I', 'II', 'III'][groupIndex]}
+                    <span
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border font-playfair-display text-[13px] font-normal tracking-wide ${
+                        isPastGroup
+                          ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                          : isCurrentGroup
+                            ? 'border-white/80 bg-primary/20 text-white'
+                            : 'border-primary/40 text-primary'
+                      }`}
+                    >
+                      {isPastGroup ? '✓' : ['I', 'II', 'III'][groupIndex]}
                     </span>
-                    <div className="flex flex-1 items-baseline justify-between">
-                      <p className="font-playfair-display text-[19px] font-normal tracking-wide text-white/90 day:text-gray-900">
-                        {group.label}
-                      </p>
-                      <span className="font-playfair-display text-[10px] tracking-[0.3em] text-primary/50 italic">
+                    <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <p className="font-playfair-display text-[19px] font-normal tracking-wide text-white/90 day:text-gray-900">
+                          {group.label}
+                        </p>
+                        <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-white/45 day:text-gray-500">
+                          {groupStatus}
+                        </p>
+                      </div>
+                      <span className="shrink-0 font-playfair-display text-[10px] tracking-[0.3em] text-primary/60 italic">
                         Step {groupIndex + 1}
                       </span>
                     </div>
                     <ChevronDownIcon
-                              className={`h-4 w-4 text-white/40 day:text-gray-400 ${
+                              className={`h-4 w-4 shrink-0 text-white/40 day:text-gray-400 ${
                         openGroup !== groupIndex ? '-rotate-90' : 'rotate-0'
                       }`}
                     />
@@ -3641,7 +3670,8 @@ export default function DesignerNav() {
                   </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Browse Designs CTA removed */}

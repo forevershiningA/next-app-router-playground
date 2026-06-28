@@ -40,6 +40,59 @@ type Props = {
 
 /* ------------------------------------------------------------------ */
 
+type StainlessBridgeMask = {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+type TroikaTextMesh = THREE.Mesh & {
+  textRenderInfo?: {
+    caretPositions?: Float32Array;
+  } | null;
+};
+
+const STENCIL_BRIDGE_CHARS = new Set([
+  '0', '4', '6', '8', '9',
+  'A', 'B', 'D', 'O', 'P', 'Q', 'R',
+  'a', 'b', 'd', 'e', 'g', 'o', 'p', 'q',
+]);
+
+function buildStainlessBridgeMasks(text: string, sprite: TroikaTextMesh): StainlessBridgeMask[] {
+  const caretPositions = sprite.textRenderInfo?.caretPositions;
+  if (!caretPositions) return [];
+
+  const masks: StainlessBridgeMask[] = [];
+  Array.from(text).forEach((char, index) => {
+    if (!STENCIL_BRIDGE_CHARS.has(char)) return;
+
+    const offset = index * 4;
+    const startX = caretPositions[offset];
+    const endX = caretPositions[offset + 1];
+    const bottomY = caretPositions[offset + 2];
+    const topY = caretPositions[offset + 3];
+    if (![startX, endX, bottomY, topY].every(Number.isFinite)) return;
+
+    const charWidth = Math.abs(endX - startX);
+    const charHeight = Math.abs(topY - bottomY);
+    if (charWidth <= 0 || charHeight <= 0) return;
+
+    const bridgeWidth = Math.max(charWidth * 0.105, charHeight * 0.048);
+    const bridgeHeight = Math.max(charHeight * 0.28, bridgeWidth * 1.45);
+    masks.push({
+      id: `${index}-${char}`,
+      x: (startX + endX) / 2,
+      y: topY - charHeight * 0.18,
+      width: bridgeWidth,
+      height: bridgeHeight,
+    });
+  });
+
+  return masks;
+}
+
 const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
   (
     {
@@ -82,8 +135,12 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const isTraditionalEngraved = productName.includes('Traditional Engraved');
     const isPlaque = catalog?.product.type === 'plaque' || productNameLower.includes('plaque');
     const isBronzePlaque = isPlaque && productNameLower.includes('bronze');
+    const isStainlessSteelHeadstone =
+      catalog?.product.type === 'headstone' &&
+      (productId === '1' || productId === '23' || catalog.product.formula === 'Steel');
     const isLedgerSurface = surface === 'ledger';
     const isBaseSurface = surface === 'base';
+    const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
 
     // root object users can reference
     const groupRef = React.useRef<THREE.Group | null>(null);
@@ -138,6 +195,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const [dragging, setDragging] = React.useState(false);
     const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());
     const [textBounds, setTextBounds] = React.useState({ width: 0, height: 0 });
+    const [stainlessBridgeMasks, setStainlessBridgeMasks] = React.useState<StainlessBridgeMask[]>([]);
     const textMeshRef = React.useRef<THREE.Mesh | null>(null);
     // Prevents double-fire when transferring surface mid-drag (component unmounts asynchronously)
     const transferringRef = React.useRef(false);
@@ -554,7 +612,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     /* --------------------------------------- UI ---------------------------------------- */
     
     // Calculate text bounds for the selection box
-    const handleTextSync = React.useCallback((sprite: any) => {
+    const handleTextSync = React.useCallback((sprite: TroikaTextMesh) => {
       // The sprite/mesh is available after text is rendered
       if (sprite && sprite.geometry) {
         sprite.geometry.computeBoundingBox();
@@ -566,9 +624,12 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           textMeshRef.current = sprite;
         }
       }
+      setStainlessBridgeMasks(
+        isStainlessSteelHeadstone ? buildStainlessBridgeMasks(text, sprite) : [],
+      );
       // Also refresh helper bounds if present
       helperRef.current?.update();
-    }, []);
+    }, [isStainlessSteelHeadstone, text]);
     
     const rotationRad = (rotationDeg * Math.PI) / 180;
     // For ledger: xPos/yPos are fractional (from worldToLocal on unit-cube mesh).
@@ -591,6 +652,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       ? [-Math.PI / 2, rotationRad, 0]
       : [0, 0, rotationRad];
     const renderedTextColor = isBronzePlaque ? '#c7a06a' : color;
+    const stainlessBridgeColor = headstoneMaterialUrl?.includes('high-polished-ss-swatch')
+      ? '#b7bec1'
+      : '#9da2a4';
     const textMaterialProps = isBronzePlaque
       ? {
           metalness: 0.9,
@@ -660,8 +724,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           anchorY="middle"
           textAlign={textAlign}
           fontSize={fontSizeUnits}
-          outlineWidth={isBronzePlaque ? 0.0015 * units : isTraditionalEngraved || isPlaque ? 0 : 0.002 * units}
-          outlineColor={isBronzePlaque ? '#26180d' : isTraditionalEngraved || isPlaque ? renderedTextColor : "black"}
+          outlineWidth={isBronzePlaque ? 0.0015 * units : isTraditionalEngraved || isPlaque || isStainlessSteelHeadstone ? 0 : 0.002 * units}
+          outlineColor={isBronzePlaque ? '#26180d' : isTraditionalEngraved || isPlaque || isStainlessSteelHeadstone ? renderedTextColor : "black"}
           fillOpacity={isTraditionalEngraved ? 1 : 1}
           {...textMaterialProps}
           onSync={handleTextSync}
@@ -722,6 +786,23 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         >
           {text}
         </Text>
+
+        {isStainlessSteelHeadstone && stainlessBridgeMasks.map((mask) => (
+          <mesh
+            key={mask.id}
+            position={[mask.x, mask.y, 0.0022 * units]}
+            renderOrder={100}
+            raycast={() => null}
+          >
+            <planeGeometry args={[mask.width, mask.height]} />
+            <meshBasicMaterial
+              color={stainlessBridgeColor}
+              depthTest={false}
+              depthWrite={false}
+              toneMapped={false}
+            />
+          </mesh>
+        ))}
         
         {/* Selection box with resize and rotation handles */}
         {selected && textBounds.width > 0 && (
