@@ -230,6 +230,23 @@ function ProductNameHeader() {
     () => formatDimensionPair(widthMm, heightMm, unitSystem),
     [widthMm, heightMm, unitSystem],
   );
+  const displayShapeName = useMemo(() => {
+    if (selectedShape?.name) {
+      return selectedShape.name;
+    }
+    if (!shapeUrl || shapeUrl.startsWith('data:')) {
+      return shapeUrl ? 'Custom Shape' : null;
+    }
+
+    const filename = shapeUrl.split('/').pop()?.replace(/\.svg$/i, '');
+    if (!filename) {
+      return null;
+    }
+
+    return filename
+      .replace(/[_-]+/g, ' ')
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }, [selectedShape, shapeUrl]);
   const priceLabel = `$${totalPrice.toFixed(2)}`;
 
   return (
@@ -237,12 +254,19 @@ function ProductNameHeader() {
       {/* Product name + Quick Enquiry — top left stack */}
       <div className="absolute top-6 left-6 z-10 hidden lg:flex flex-col gap-2 items-start">
         {displayProductName && (
-          <div className="pointer-events-none flex h-8 items-center gap-2 bg-black/55 backdrop-blur-md border border-white/10 rounded-full pl-2.5 pr-3.5 shadow-lg">
+          <div className="pointer-events-none flex min-h-8 max-w-[min(34rem,calc(100vw-460px))] items-center gap-2 rounded-full border border-white/10 bg-black/55 py-1.5 pl-2.5 pr-3.5 shadow-lg backdrop-blur-md">
             <svg className="h-3.5 w-3.5 shrink-0 text-[#DEBD68]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 21h14M5 21V9a7 7 0 1114 0v12" />
             </svg>
-            <span className="text-white text-sm font-semibold tracking-wide leading-none whitespace-nowrap">
-              {displayProductName}
+            <span className="min-w-0 leading-none">
+              <span className="block truncate text-sm font-semibold tracking-wide text-white">
+                {displayProductName}
+              </span>
+              {displayShapeName && (
+                <span className="mt-1 block truncate text-[11px] font-medium uppercase tracking-[0.14em] text-white/55">
+                  {displayShapeName}
+                </span>
+              )}
             </span>
           </div>
         )}

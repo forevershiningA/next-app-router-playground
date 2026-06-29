@@ -238,6 +238,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     catalog?.product.id === '1' ||
     catalog?.product.id === '23' ||
     catalog?.product.id === '52';
+  const showStainlessRim = catalog?.product.id === '1' || catalog?.product.id === '23';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
   const ssFinish: 'brushed' | 'polished' =
@@ -549,6 +550,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             isFullColourPlaque={isFullColourPlaque}
             isUrn={isUrn}
             isStainlessSteel={isStainlessSteel}
+            showStainlessRim={showStainlessRim}
             ssFinish={ssFinish}
             cornerRadius={isStainlessSteel && ssCorners === 'rounded' ? 25 : 0}
             tileSize={0.35}

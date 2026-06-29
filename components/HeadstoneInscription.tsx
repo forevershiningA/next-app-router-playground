@@ -51,6 +51,7 @@ type StainlessBridgeMask = {
 type TroikaTextMesh = THREE.Mesh & {
   textRenderInfo?: {
     caretPositions?: Float32Array;
+    glyphBounds?: Float32Array;
   } | null;
 };
 
@@ -60,12 +61,65 @@ const STENCIL_BRIDGE_CHARS = new Set([
   'a', 'b', 'd', 'e', 'g', 'o', 'p', 'q',
 ]);
 
+function getStainlessBridgeRect(
+  char: string,
+  minX: number,
+  minY: number,
+  maxX: number,
+  maxY: number,
+): Pick<StainlessBridgeMask, 'x' | 'y' | 'width' | 'height'> {
+  const glyphWidth = Math.abs(maxX - minX);
+  const glyphHeight = Math.abs(maxY - minY);
+  const centerX = (minX + maxX) / 2;
+  const centerY = (minY + maxY) / 2;
+
+  if ('pPbdqDR'.includes(char)) {
+    return {
+      x: centerX + glyphWidth * 0.16,
+      y: minY + glyphHeight * 0.68,
+      width: glyphWidth * 0.52,
+      height: Math.max(glyphHeight * 0.12, glyphWidth * 0.055),
+    };
+  }
+
+  if ('eag'.includes(char)) {
+    return {
+      x: centerX + glyphWidth * 0.08,
+      y: centerY + glyphHeight * 0.02,
+      width: glyphWidth * 0.46,
+      height: Math.max(glyphHeight * 0.12, glyphWidth * 0.055),
+    };
+  }
+
+  if ('AB'.includes(char)) {
+    return {
+      x: centerX,
+      y: centerY + glyphHeight * 0.08,
+      width: glyphWidth * 0.48,
+      height: Math.max(glyphHeight * 0.11, glyphWidth * 0.05),
+    };
+  }
+
+  return {
+    x: centerX,
+    y: centerY,
+    width: Math.max(glyphWidth * 0.11, glyphHeight * 0.04),
+    height: glyphHeight * 0.48,
+  };
+}
+
 function buildStainlessBridgeMasks(text: string, sprite: TroikaTextMesh): StainlessBridgeMask[] {
   const caretPositions = sprite.textRenderInfo?.caretPositions;
   if (!caretPositions) return [];
 
   const masks: StainlessBridgeMask[] = [];
+  let glyphIndex = 0;
   Array.from(text).forEach((char, index) => {
+    const hasGlyph = !/\s/.test(char);
+    const currentGlyphIndex = glyphIndex;
+    if (hasGlyph) {
+      glyphIndex += 1;
+    }
     if (!STENCIL_BRIDGE_CHARS.has(char)) return;
 
     const offset = index * 4;
@@ -79,14 +133,25 @@ function buildStainlessBridgeMasks(text: string, sprite: TroikaTextMesh): Stainl
     const charHeight = Math.abs(topY - bottomY);
     if (charWidth <= 0 || charHeight <= 0) return;
 
-    const bridgeWidth = Math.max(charWidth * 0.105, charHeight * 0.048);
-    const bridgeHeight = Math.max(charHeight * 0.28, bridgeWidth * 1.45);
+    const glyphBounds = sprite.textRenderInfo?.glyphBounds;
+    const glyphOffset = currentGlyphIndex * 4;
+    const glyphMinX = glyphBounds?.[glyphOffset];
+    const glyphMinY = glyphBounds?.[glyphOffset + 1];
+    const glyphMaxX = glyphBounds?.[glyphOffset + 2];
+    const glyphMaxY = glyphBounds?.[glyphOffset + 3];
+    const hasGlyphBounds =
+      [glyphMinX, glyphMinY, glyphMaxX, glyphMaxY].every(Number.isFinite) &&
+      Math.abs((glyphMaxX ?? 0) - (glyphMinX ?? 0)) > 0 &&
+      Math.abs((glyphMaxY ?? 0) - (glyphMinY ?? 0)) > 0;
+
+    const minX = hasGlyphBounds ? glyphMinX! : Math.min(startX, endX);
+    const maxX = hasGlyphBounds ? glyphMaxX! : Math.max(startX, endX);
+    const minY = hasGlyphBounds ? glyphMinY! : bottomY;
+    const maxY = hasGlyphBounds ? glyphMaxY! : topY;
+    const bridge = getStainlessBridgeRect(char, minX, minY, maxX, maxY);
     masks.push({
       id: `${index}-${char}`,
-      x: (startX + endX) / 2,
-      y: topY - charHeight * 0.18,
-      width: bridgeWidth,
-      height: bridgeHeight,
+      ...bridge,
     });
   });
 
@@ -653,8 +718,11 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       : [0, 0, rotationRad];
     const renderedTextColor = isBronzePlaque ? '#c7a06a' : color;
     const stainlessBridgeColor = headstoneMaterialUrl?.includes('high-polished-ss-swatch')
-      ? '#b7bec1'
-      : '#9da2a4';
+      ? '#d7dcde'
+      : '#bdc3c6';
+    // Keep bridges on the inscription plane. Render order, not physical Z,
+    // makes them visually cover the cut-through text.
+    const stainlessBridgeZ = 0;
     const textMaterialProps = isBronzePlaque
       ? {
           metalness: 0.9,
@@ -729,6 +797,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           fillOpacity={isTraditionalEngraved ? 1 : 1}
           {...textMaterialProps}
           onSync={handleTextSync}
+          renderOrder={isStainlessSteelHeadstone ? 80 : undefined}
           // Use onClick for selection; onPointerDown stays for drag init only
           onClick={(e) => {
             e.stopPropagation();
@@ -790,15 +859,20 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         {isStainlessSteelHeadstone && stainlessBridgeMasks.map((mask) => (
           <mesh
             key={mask.id}
-            position={[mask.x, mask.y, 0.0022 * units]}
-            renderOrder={100}
+            position={[mask.x, mask.y, stainlessBridgeZ]}
+            renderOrder={120}
             raycast={() => null}
           >
             <planeGeometry args={[mask.width, mask.height]} />
             <meshBasicMaterial
               color={stainlessBridgeColor}
+              transparent
+              opacity={1}
               depthTest={false}
               depthWrite={false}
+              polygonOffset
+              polygonOffsetFactor={-10}
+              polygonOffsetUnits={-10}
               toneMapped={false}
             />
           </mesh>

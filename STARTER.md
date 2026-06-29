@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-27
+**Last Updated:** 2026-06-29
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -50,6 +50,94 @@
 42. [Stainless Headstone Motif Silhouette Rendering (2026-06-25)](#current-status-2026-06-25--stainless-headstone-motif-silhouette-rendering)
 43. [Saved Design Email Delivery Fix (2026-06-26)](#current-status-2026-06-26--saved-design-email-delivery-fix)
 44. [Stainless Headstone Inscription Stencil Bridge Investigation (2026-06-27)](#current-status-2026-06-27--stainless-headstone-inscription-stencil-bridge-investigation)
+45. [Stainless Headstone UI and Rendering Update (2026-06-29)](#current-status-2026-06-29--stainless-headstone-ui-and-rendering-update)
+
+---
+
+## Current Status (2026-06-29) - Stainless Headstone UI and Rendering Update
+
+This session continued the stainless steel headstone work after comparing the current canvas screenshots, `Cook headstone.jpg`, and the old DYO spec documents.
+
+### Legacy Stainless Specs Read
+
+Two legacy Word `.doc` specs were extracted via binary text runs because `pandoc` cannot read `.doc` and Word COM automation was blocked in the shell session.
+
+| File | Key Knowledge |
+|------|---------------|
+| `dyo-specs-reflective-stainless-headstones-2010-12-16.doc` | Product code `23`; Stainless Steel Light Reflective Headstone; pricing based on `width + height`; size range `300-1200mm`; no ratio limits; supports 12 shapes: `gable`, `curved gable`, `peak`, `curved peak`, `cropped peak`, `curved top`, `serpentine`, `half round`, `gothic`, `left wave`, `right wave`, `square/rectangle`; fonts limited to `Arial`, `Franklin-Demi`, `French Script`, `Lucida Calligraphy`; note required that other shapes/sizes are special options. |
+| `dyo-specs-transmitting-stainless-plaques-2010-12-06.doc` | Product code `39`; Stainless Steel Light Transmitting Plaque; comes with inbuilt stand; pseudo-shapes `Plain` (`100x100-600x600`) and `Border` (`175x175-600x600`); border options include `Flush Border Transmitting`, `Raised Border Transmitting`, and `Raised Border - No Pattern`. |
+
+Important interpretation:
+- Stainless steel headstones and stainless plaques should stay separate in the UI and renderer.
+- The current app product IDs for stainless headstones are still `1` and `23`; product `52` is the existing stainless plaque path.
+- Product `23` from the old spec is the reflective stainless headstone.
+
+### Designer Panel Refresh
+
+The left-sidebar designer panels were refreshed to follow the Select Product card/list styling:
+
+| Area | Current Direction |
+|------|-------------------|
+| Select Shape | Updated toward the same card/list styling as Select Product. |
+| Select Material | Should not be available for stainless steel headstones. |
+| Select Size | Updated toward the current sidebar style. |
+| Add Your Inscription | Updated toward the current sidebar style. |
+| Add Your Image | Sidebar, crop section, and selected-image panel updated toward the current style. |
+| Select Additions | Should not be available for stainless steel headstones. |
+| Select Motifs | Sidebar and selected-motif panel updated toward the current style. |
+
+Stainless steel headstone workflow rule:
+- Hide or skip Select Material and Select Additions for stainless steel headstone products.
+- `components/DesignerNav.tsx`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, and `lib/headstone-store.ts` contain related navigation/flow changes.
+
+Canvas label rule:
+- The top-left canvas label should include both product name and selected shape name when available.
+
+### Stainless Rim and Material Rendering
+
+The stainless headstone now has a generated raised border/rim based on the same outline points used by the selected SVG shape.
+
+| File | Current Behavior |
+|------|------------------|
+| `components/SvgHeadstone.tsx` | Adds private `StainlessHeadstoneRim`, using `TubeGeometry` along `apiData.outlinePoints`. It renders a subtle raised stainless bead and a thin darker inset groove. Geometry/materials are disposed in cleanup. |
+| `components/SvgHeadstone.tsx` | Adds `showStainlessRim?: boolean`. When true, stainless headstone body material uses the same clean physical-metal settings as the raised rim instead of the older generated brushed canvas maps. |
+| `components/three/headstone/ShapeSwapper.tsx` | `isStainlessSteel` includes product IDs `1`, `23`, and `52`, but `showStainlessRim` is enabled only for product IDs `1` and `23` so plaque product `52` is not affected. |
+
+Current stainless headstone visual target:
+- Use the Cook reference look: reflective steel face, raised rim following the silhouette, and a thin darker inset/shadow line.
+- The first rim pass was too heavy and too black; it was reduced to a smaller, more inset rim and a thinner grey groove.
+- The headstone face now uses the same clean PBR steel settings as the rim for product IDs `1` and `23`.
+
+### Stainless Inscription Bridge Status
+
+Stencil bridge masking for stainless inscriptions is still the major unresolved rendering issue.
+
+Current state:
+- `components/HeadstoneInscription.tsx` contains stainless-specific bridge-mask attempts.
+- Screenshots still showed bridge masks not convincingly cutting the glyph counters, especially examples like `o` and `p` in `Jose`.
+- Rectangular overlay masks are not a reliable final approach because Troika SDF text does not expose true glyph counter geometry.
+
+Recommended next implementation remains:
+- Use glyph-path or raster-alpha processing for stainless inscriptions.
+- Apply bridge cuts directly into the text alpha/mask, rather than placing separate rectangles in front of the inscription.
+- Keep fabrication-oriented constraints in mind: island detection, minimum bridge width, cut gap, stroke width, and eventual SVG/DXF export.
+
+### Known Runtime Issue Fixed/Investigated
+
+There was a maximum update depth issue when an image was selected and clicking Next caused route/section switching between Add Your Image and Select Additions. The stainless-headstone flow now needs to keep Select Additions unavailable/skipped for stainless products, which reduces one trigger path for that loop.
+
+### Recent Verification
+
+The current stainless rim/material changes passed:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Known screenshot gap:
+- A fresh automated Playwright screenshot was not captured in the latest pass because `localhost:3001` did not respond within the short timeout.
+- Manual screenshot review drove the rim tuning.
 
 ---
 

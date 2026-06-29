@@ -59,8 +59,8 @@ export default function AdditionSelector({ additions }: Props) {
   };
 
   return (
-    <div className="space-y-3">
-      <div className="flex flex-wrap gap-1">
+    <div className="flex h-full min-h-0 flex-col gap-3">
+      <div className="flex shrink-0 gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
         {CATEGORY_FILTERS.map((filter) => {
           const isActive = category === filter.id;
           return (
@@ -68,10 +68,10 @@ export default function AdditionSelector({ additions }: Props) {
               key={filter.id}
               type="button"
               onClick={() => setCategory(filter.id)}
-              className={`rounded-full px-3 py-1.5 text-xs font-semibold tracking-wide transition-colors ${
+              className={`min-w-0 flex-1 rounded-md px-2.5 py-2 text-xs font-semibold transition-all ${
                 isActive
-                  ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                  : 'bg-[#1F1F1F] text-gray-200 hover:bg-[#2A2A2A] day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200'
+                  ? 'bg-[#D7B356] text-black shadow-md'
+                  : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
               }`}
             >
               {filter.label}
@@ -80,7 +80,8 @@ export default function AdditionSelector({ additions }: Props) {
         })}
       </div>
 
-      <div className="grid grid-cols-2 gap-2 overflow-y-auto pr-2 custom-scrollbar">
+      <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+        <div className="grid grid-cols-2 gap-2.5">
         {filteredAdditions.map((addition) => {
           const instanceId = findInstanceId(addition.id);
           const isSelected = Boolean(instanceId);
@@ -92,31 +93,31 @@ export default function AdditionSelector({ additions }: Props) {
               key={addition.id}
               type="button"
               onClick={() => handleToggle(addition)}
-              className={`flex flex-col rounded-xl border text-left transition-all ${
+              className={`group flex min-h-[198px] flex-col overflow-hidden rounded-lg border text-left shadow-lg shadow-black/15 transition-all ${
                 isSelected
-                  ? 'border-[#D7B356] bg-[#2d2013] shadow-lg shadow-[#D7B356]/20 day:bg-amber-50'
-                  : 'border-white/10 bg-[#161616] hover:border-[#D7B356]/60 day:bg-white day:border-gray-200'
+                  ? 'border-[#D7B356] bg-[#211A10] shadow-[#D7B356]/15 day:bg-amber-50'
+                  : 'border-white/10 bg-[#171717] hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] day:border-gray-200 day:bg-white'
               }`}
             >
-              <div className="relative aspect-square w-full overflow-hidden bg-[#0f0f0f] day:bg-gray-100">
+              <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-[#0A0A0A] day:border-gray-200 day:bg-gray-100">
                 <Image
                   src={imagePath}
                   alt={addition.name}
                   fill
                   sizes="120px"
-                  className="object-contain p-3"
+                  className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
                 />
                 {isSelected && (
-                  <div className="absolute top-2 right-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black">
+                  <div className="absolute top-2 right-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black shadow-md">
                     Added
                   </div>
                 )}
               </div>
-              <div className="flex flex-col gap-1 px-2 py-2">
-                <span className="text-xs font-medium text-white leading-tight line-clamp-2 day:text-gray-900">
+              <div className="flex min-h-[74px] flex-1 flex-col justify-between gap-2 p-2.5">
+                <span className="line-clamp-2 text-xs font-semibold leading-snug text-white day:text-gray-900">
                   {addition.name}
                 </span>
-                <span className="text-[11px] text-[#D7B356] font-semibold">
+                <span className="text-[11px] font-semibold text-[#D7B356]">
                   {isSelected ? 'Remove' : 'Add'} →
                 </span>
               </div>
@@ -125,10 +126,11 @@ export default function AdditionSelector({ additions }: Props) {
         })}
 
         {filteredAdditions.length === 0 && (
-          <div className="col-span-2 rounded-xl border border-dashed border-white/10 bg-black/20 p-6 text-center text-xs text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
+          <div className="col-span-2 rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
             No additions in this category yet.
           </div>
         )}
+        </div>
       </div>
     </div>
   );

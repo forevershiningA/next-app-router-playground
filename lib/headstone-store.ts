@@ -65,6 +65,12 @@ const isDesktopViewport = () => {
   if (typeof window === 'undefined') return false;
   return window.innerWidth >= 1024;
 };
+const stainlessSteelHeadstoneProductIds = new Set(['1', '23']);
+const isStainlessSteelHeadstone = (state: Pick<HeadstoneState, 'productId' | 'catalog'>) =>
+  stainlessSteelHeadstoneProductIds.has(state.productId ?? '') ||
+  (state.catalog?.product?.type === 'headstone' &&
+    state.catalog.product.name.toLowerCase().includes('stainless steel'));
+
 type AdditionOffset = HeadstoneState['additionOffsets'][string];
 type MotifOffset = HeadstoneState['motifOffsets'][string];
 type EmblemOffset = HeadstoneState['emblemOffsets'][string];
@@ -1997,6 +2003,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   },
 
   openAdditionsPanel: () => {
+    if (isStainlessSteelHeadstone(get())) {
+      get().navTo?.('/select-size');
+      return;
+    }
+
     // Close addition panel when opening additions panel
     set({ selectedAdditionId: null });
     get().setActivePanel('additions');

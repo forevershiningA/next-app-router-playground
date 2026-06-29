@@ -58,6 +58,16 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
   const allowsColor = catalog?.product?.color === '1';
   // Use catalog's default color for motif thumbnails so they match the 3D scene
   const motifPreviewColor = catalog?.product?.defaultColor || '#c99d44';
+  const cardClass =
+    'group flex min-h-[176px] flex-col overflow-hidden rounded-lg border text-left shadow-lg shadow-black/15 transition-all';
+  const inactiveCardClass =
+    'border-white/10 bg-[#171717] hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] day:border-gray-200 day:bg-white';
+  const selectedCardClass =
+    'border-[#D7B356] bg-[#211A10] shadow-[#D7B356]/15 day:bg-amber-50';
+  const previewClass =
+    'relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-[#0A0A0A] day:border-gray-200 day:bg-gray-100';
+  const titleClass =
+    'line-clamp-2 text-xs font-semibold leading-snug text-white day:text-gray-900';
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategoryId(categoryId);
@@ -82,15 +92,15 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
   };
 
   return (
-    <div className="flex h-full flex-col gap-4">
+    <div className="flex h-full min-h-0 flex-col gap-3">
       {!selectedCategory ? (
         <>
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white day:text-gray-900">Browse motif categories</h3>
-            <span className="text-xs text-white/50 day:text-gray-500">{categories.length} categories</span>
+          <div className="flex shrink-0 items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0A0A0A] px-3 py-2.5 day:border-gray-200 day:bg-gray-100">
+            <h3 className="text-sm font-semibold text-white day:text-gray-900">Browse categories</h3>
+            <span className="shrink-0 text-xs font-semibold text-white/45 day:text-gray-500">{categories.length}</span>
           </div>
-          <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 p-1">
+          <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+            <div className="grid grid-cols-2 gap-2.5">
               {categories.map((category) => {
                 const categoryImgSrc = category.previewUrl || '/ico/forever-transparent-logo.png';
                 return (
@@ -98,9 +108,9 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                   key={category.id}
                   type="button"
                   onClick={() => handleCategorySelect(category.id)}
-                  className="group flex flex-col overflow-hidden rounded-2xl border-2 border-white/10 bg-[#161616] text-left transition-all hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10 cursor-pointer day:bg-white day:border-gray-200"
+                  className={`${cardClass} ${inactiveCardClass}`}
                 >
-                  <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/50 to-gray-900/50 day:from-gray-100 day:to-gray-200">
+                  <div className={previewClass}>
                     <div className="absolute inset-0 flex items-center justify-center p-4">
                       {allowsColor ? (
                         <div
@@ -121,18 +131,18 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                         <img
                           src={categoryImgSrc}
                           alt={getMotifCategoryName(category.name)}
-                          className="max-h-full max-w-full object-contain filter brightness-0 invert"
+                          className="max-h-full max-w-full object-contain brightness-0 invert"
                           loading="lazy"
                         />
                       )}
                     </div>
                   </div>
-                  <div className="px-3 py-3">
-                    <p className="text-xs font-medium text-white line-clamp-2 text-center day:text-gray-900">
+                  <div className="flex min-h-[64px] flex-1 flex-col justify-between gap-2 p-2.5">
+                    <p className={titleClass}>
                       {getMotifCategoryName(category.name)}
                     </p>
-                    <p className="mt-1 text-[11px] font-semibold text-[#D7B356] text-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      Browse →
+                    <p className="text-[11px] font-semibold text-[#D7B356]">
+                      Browse
                     </p>
                   </div>
                 </button>
@@ -143,27 +153,27 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
         </>
       ) : (
         <>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex shrink-0 items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
             <button
               type="button"
               onClick={handleBackToCategories}
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-white/40 hover:text-white day:border-gray-300 day:text-gray-600 day:hover:border-gray-400 day:hover:text-gray-900"
+              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900"
             >
-              <span className="text-base">←</span>
-              Back to categories
+              <span aria-hidden="true">←</span>
+              Back
             </button>
-            <div className="text-sm text-white/70 day:text-gray-600">
+            <div className="min-w-0 truncate px-2 text-right text-xs font-semibold text-white day:text-gray-900">
               {getMotifCategoryName(selectedCategory?.name ?? '')}
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
+          <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
             {individualMotifs.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-white/15 bg-[#1F1F1F]/50 p-6 text-center text-sm text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
+              <div className="rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
                 No motifs available in this category yet.
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-3 md:grid-cols-3 p-1">
+              <div className="grid grid-cols-2 gap-2.5">
                 {individualMotifs.map((motif, index) => {
                   const svgPath = motif.svgUrl ?? motif.previewUrl;
                   const isSelected = svgPath ? selectedMotifs.some((m) => m.svgPath === svgPath) : false;
@@ -175,13 +185,13 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                       type="button"
                       onClick={() => svgPath && handleMotifToggle(motif)}
                       disabled={!svgPath}
-                      className={`group flex flex-col overflow-hidden rounded-2xl border-2 text-left transition-all cursor-pointer disabled:cursor-not-allowed ${
+                      className={`${cardClass} disabled:cursor-not-allowed ${
                         isSelected
-                          ? 'border-[#D7B356] bg-[#2d2013] shadow-lg shadow-[#D7B356]/20 day:bg-amber-50'
-                          : 'border-white/10 bg-[#161616] hover:-translate-y-1 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10 day:bg-white day:border-gray-200'
+                          ? selectedCardClass
+                          : inactiveCardClass
                       }`}
                     >
-                      <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-gray-800/40 to-gray-900/40 day:from-gray-100 day:to-gray-200">
+                      <div className={previewClass}>
                         <div className="absolute inset-0 flex items-center justify-center p-4">
                           {allowsColor && coverSrc ? (
                             <div
@@ -202,23 +212,23 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                             <img
                               src={coverSrc}
                               alt={motif.name}
-                              className="max-h-full max-w-full object-contain filter brightness-0 invert"
+                              className="max-h-full max-w-full object-contain brightness-0 invert"
                               loading="lazy"
                             />
                           ) : null}
                         </div>
                         {isSelected && (
-                          <div className="absolute right-2 top-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black">
+                          <div className="absolute top-2 right-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black shadow-md">
                             Added
                           </div>
                         )}
                       </div>
-                      <div className="px-3 py-3">
-                        <p className="text-xs font-medium text-white line-clamp-2 text-center day:text-gray-900">
+                      <div className="flex min-h-[64px] flex-1 flex-col justify-between gap-2 p-2.5">
+                        <p className={titleClass}>
                           {motif.name}
                         </p>
-                        <p className="mt-1 text-[11px] font-semibold text-[#D7B356] text-center">
-                          {isSelected ? 'Remove' : 'Add'} →
+                        <p className="text-[11px] font-semibold text-[#D7B356]">
+                          {isSelected ? 'Remove' : 'Add'}
                         </p>
                       </div>
                     </button>

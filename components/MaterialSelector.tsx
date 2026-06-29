@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { ArrowUpTrayIcon, CheckCircleIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
 import { bronzes } from '#/app/_internal/_data';
@@ -339,7 +340,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
 
     return (
       <div className="space-y-3">
-        <div className="text-xs text-white/60 uppercase tracking-widest mb-2">Finish</div>
+        <div className="text-xs font-medium uppercase tracking-[0.16em] text-white/50">Finish</div>
         <div className="grid grid-cols-2 gap-2">
           {ssFinishes.map(({ label, url }) => {
             const isSelected = activeSsUrl === url;
@@ -353,23 +354,28 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
                   setEditingObject('headstone');
                   setTimeout(() => setIsMaterialChange(false), 100);
                 }}
-                className="relative overflow-hidden cursor-pointer"
+                className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
+                  isSelected
+                    ? 'border-[#D7B356] shadow-lg shadow-[#D7B356]/15'
+                    : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
+                }`}
                 title={label}
               >
-                <div className={`relative aspect-square overflow-hidden border-2 transition-colors ${
-                  isSelected
-                    ? 'border-[#D7B356] ring-2 ring-[#D7B356]'
-                    : 'border-white/10 hover:border-[#D7B356]/50'
-                }`}>
+                <div className="relative aspect-square overflow-hidden bg-[#101010]">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={url}
                     alt={label}
                     className="absolute inset-0 w-full h-full object-cover"
                   />
+                  {isSelected && (
+                    <span className="absolute right-1.5 top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
+                      <CheckCircleIcon className="h-3.5 w-3.5" />
+                    </span>
+                  )}
                 </div>
-                <div className="p-2 h-12 flex items-center justify-center">
-                  <div className={`text-xs text-center line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}>
+                <div className="flex min-h-12 items-center justify-center px-2 py-2">
+                  <div className={`text-center text-xs font-semibold leading-tight line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-100'}`}>
                     {label}
                   </div>
                 </div>
@@ -545,6 +551,15 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         onChange={handleFileUpload}
       />
       
+      <div className="flex items-center justify-between gap-3 pr-2">
+        <div className="text-xs font-medium text-slate-300">
+          Showing {displayMaterials.length + (usesBackgrounds && bgTab === 'background' ? 2 : 0)} option{displayMaterials.length + (usesBackgrounds && bgTab === 'background' ? 2 : 0) !== 1 ? 's' : ''}
+        </div>
+        <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-white/35">
+          Select one
+        </div>
+      </div>
+
       <div
         className={`grid grid-cols-3 gap-2 pr-2 ${disableInternalScroll ? '' : 'overflow-y-auto custom-scrollbar'}`}
       >
@@ -556,23 +571,26 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
               setHeadstoneMaterialUrl('/textures/forever/l/brushed-ss-swatch.webp');
               setTimeout(() => setIsMaterialChange(false), 100);
             }}
-            className="relative overflow-hidden cursor-pointer"
+            className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
+              currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl
+                ? 'border-[#D7B356] shadow-lg shadow-[#D7B356]/15'
+                : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
+            }`}
             title="No Background"
           >
-            <div className={`relative aspect-square overflow-hidden border-2 flex items-center justify-center transition-colors ${
-              currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl
-                ? 'border-[#D7B356] ring-2 ring-[#D7B356]'
-                : 'border-white/10 hover:border-[#D7B356]/50'
-            }`}>
+            <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
               <div className="flex flex-col items-center gap-1">
-                <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
-                </svg>
+                <NoSymbolIcon className="h-6 w-6 text-gray-400 transition-colors group-hover:text-[#D7B356]" />
                 <span className="text-[10px] text-gray-400">None</span>
               </div>
+              {(currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl) && (
+                <span className="absolute right-1.5 top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
+                  <CheckCircleIcon className="h-3.5 w-3.5" />
+                </span>
+              )}
             </div>
-            <div className="p-2 h-12 flex items-center justify-center">
-              <div className="text-xs text-center text-slate-200">No Background</div>
+            <div className="flex min-h-12 items-center justify-center px-2 py-2">
+              <div className="text-center text-xs font-semibold leading-tight text-slate-100 line-clamp-2">No Background</div>
             </div>
           </button>
         )}
@@ -581,19 +599,17 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
         {usesBackgrounds && bgTab === 'background' && (
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="relative overflow-hidden cursor-pointer"
+            className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border border-dashed border-white/20 bg-[#171717] text-left transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10"
             title="Upload Image"
           >
-            <div className="relative aspect-square overflow-hidden border-2 border-dashed border-white/20 flex items-center justify-center hover:border-[#D7B356]/50 transition-colors">
+            <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-[#101010]">
               <div className="flex flex-col items-center gap-1">
-                <svg className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                </svg>
+                <ArrowUpTrayIcon className="h-6 w-6 text-gray-400 transition-colors group-hover:text-[#D7B356]" />
                 <span className="text-[10px] text-gray-400">Upload</span>
               </div>
             </div>
-            <div className="p-2 h-12 flex items-center justify-center">
-              <div className="text-xs text-center text-slate-200">Upload Image</div>
+            <div className="flex min-h-12 items-center justify-center px-2 py-2">
+              <div className="text-center text-xs font-semibold leading-tight text-slate-100 line-clamp-2">Upload Image</div>
             </div>
           </button>
         )}
@@ -608,35 +624,33 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
             <button
               key={material.id}
               onClick={() => textureUrl && handleMaterialSelect(material)}
-              className={`relative overflow-hidden rounded-sm cursor-pointer disabled:cursor-not-allowed transition-all duration-150 ${
+              className={`group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all disabled:cursor-not-allowed disabled:opacity-60 ${
                 isSelected
-                  ? 'ring-2 ring-[#D7B356] ring-offset-1 ring-offset-[#1b1511]'
-                  : 'hover:ring-1 hover:ring-[#D7B356]/50 hover:ring-offset-1 hover:ring-offset-[#1b1511]'
+                  ? 'border-[#D7B356] shadow-lg shadow-[#D7B356]/15'
+                  : 'border-white/10 hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:shadow-lg hover:shadow-[#D7B356]/10'
               }`}
               title={material.name}
               disabled={!textureUrl}
             >
               {/* Material Image */}
-              <div className="relative aspect-square overflow-hidden">
+              <div className="relative aspect-square overflow-hidden bg-[#101010]">
                 <Image
                   src={coverSrc}
                   alt={material.name}
                   fill
-                  className="object-cover"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105"
                   sizes="100px"
                 />
                 {isSelected && (
-                  <div className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#D7B356]">
-                    <svg className="h-2.5 w-2.5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
+                  <span className="absolute right-1.5 top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[#D7B356] text-slate-950 shadow-lg">
+                    <CheckCircleIcon className="h-3.5 w-3.5" />
+                  </span>
                 )}
               </div>
               
               {/* Material Name */}
-              <div className="p-2 h-12 flex items-center justify-center">
-                <div className={`text-xs text-center line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}>
+              <div className="flex min-h-12 items-center justify-center px-2 py-2">
+                <div className={`text-center text-xs font-semibold leading-tight line-clamp-2 ${isSelected ? 'text-[#D7B356]' : 'text-slate-100'}`}>
                   {material.name}
                 </div>
               </div>

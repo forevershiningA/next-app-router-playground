@@ -109,6 +109,8 @@ const fullscreenPanelSlugs = new Set([
   'select-motifs',
 ]);
 
+const stainlessSteelHeadstoneProductIds = new Set(['1', '23']);
+
 type PanelSource = 'menu' | 'canvas' | null;
 type SetActivePanelFn = (panel: 'inscription' | 'addition' | 'motif' | null) => void;
 
@@ -296,6 +298,10 @@ export default function DesignerNav() {
   const isPlaque = catalog?.product.type === 'plaque';
   const isUrn = catalog?.product.type === 'urn';
   const hasBorder = catalog?.product?.border === '1';
+  const isStainlessSteelHeadstone =
+    stainlessSteelHeadstoneProductIds.has(productId ?? '') ||
+    (catalog?.product?.type === 'headstone' &&
+      catalog.product.name.toLowerCase().includes('stainless steel'));
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const setSsCorners = useHeadstoneStore((s) => s.setSsCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
@@ -532,14 +538,14 @@ export default function DesignerNav() {
         // save-design is always included as the final guided step
         if (item.slug === 'save-design') return true;
         if (!fullscreenPanelSlugs.has(item.slug)) return false;
-        if (item.slug === 'select-material' && catalog?.product?.laser === '1') return false;
+        if (item.slug === 'select-material' && (catalog?.product?.laser === '1' || isStainlessSteelHeadstone)) return false;
         if (item.slug === 'select-border' && (!isPlaque || !hasBorder)) return false;
-        if (item.slug === 'select-additions' && (catalog?.product?.laser === '1' || isPlaque)) return false;
+        if (item.slug === 'select-additions' && (catalog?.product?.laser === '1' || isPlaque || isStainlessSteelHeadstone)) return false;
         if ((item as { requiresBronzePlaque?: boolean }).requiresBronzePlaque && productId !== '5') return false;
         return true;
       })
       .map((item) => item.slug);
-  }, [catalog, isPlaque, hasBorder, productId]);
+  }, [catalog, isPlaque, hasBorder, productId, isStainlessSteelHeadstone]);
 
   const currentSlugFromPathname = pathname.replace('/', '');
   const currentPanelIndex = activeFullscreenPanel
@@ -578,6 +584,30 @@ export default function DesignerNav() {
     !!selectedAdditionId &&
     !!additionOffsets[selectedAdditionId] &&
     activePanel === 'addition';
+
+  useEffect(() => {
+    if (
+      !isStainlessSteelHeadstone ||
+      (pathname !== '/select-material' && pathname !== '/select-additions')
+    ) {
+      return;
+    }
+
+    if (activePanel === 'addition') {
+      setActivePanel(null);
+    }
+    setActiveFullscreenPanel(null);
+    setPanelSource(null);
+    router.replace('/select-size');
+  }, [
+    activePanel,
+    isStainlessSteelHeadstone,
+    pathname,
+    router,
+    setActivePanel,
+    setActiveFullscreenPanel,
+    setPanelSource,
+  ]);
 
   const isAdditionCatalogVisible =
     activeFullscreenPanel === 'select-additions' &&
@@ -744,54 +774,73 @@ export default function DesignerNav() {
       forceAdditionCatalog ||
       panelSource === 'menu' ||
       (panelSource === null && isSelectAdditionsPage);
+    const additionSectionCardClass =
+      'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
+    const additionLabelClass =
+      'text-sm font-semibold text-slate-100 day:text-gray-800';
+    const additionControlButtonClass =
+      'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
+    const additionNumberInputClass =
+      'h-8 w-16 rounded-md border border-white/10 bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none day:border-gray-300 day:bg-gray-100 day:text-gray-900';
+    const additionRangeInputClass =
+      'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)]';
+    const additionRangeBoundsClass =
+      'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
 
     return (
-      <div className="flex h-full flex-col gap-4">
+      <div className="flex h-full min-h-0 flex-col gap-3">
         {hasActiveAddition ? (
-          <div className="space-y-4">
-            <div className="rounded-xl border border-white/15 bg-white/5 p-4 day:border-gray-200 day:bg-gray-50">
-              <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase day:text-gray-500">
+          <div className="space-y-3">
+            {activeAddition && (
+              <div className={additionSectionCardClass}>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45 day:text-gray-400">
+                      Selected Addition
+                    </div>
+                    <div className="mt-1 truncate text-sm font-semibold text-white day:text-gray-900">
+                      {activeAddition.name}
+                    </div>
+                    <div className="mt-1 text-xs font-medium text-white/45 day:text-gray-500">
+                      <span className="capitalize">{activeAddition.type}</span>
+                      {activeAdditionSize
+                        ? ` · ${activeAdditionSize.width} × ${activeAdditionSize.height} mm`
+                        : ''}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSelectedAdditionId(null);
+                      setActivePanel(null);
+                    }}
+                    className="shrink-0 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:text-gray-900"
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
+            )}
+
+            <div className={additionSectionCardClass}>
+              <div className="mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 uppercase day:text-gray-500">
                 Addition Price
               </div>
-              <div className="text-2xl font-semibold text-white day:text-gray-900">
+              <div className="text-2xl font-semibold text-[#2EE59D] day:text-gray-900">
                 {activeAdditionSize?.retailPrice
                   ? `$${activeAdditionSize.retailPrice.toFixed(2)}`
                   : 'N/A'}
               </div>
             </div>
 
-            <div className="flex space-x-2">
-              <button
-                type="button"
-                className="flex-1 cursor-pointer rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors shadow-md"
-                onClick={() =>
-                  selectedAdditionId && duplicateAddition(selectedAdditionId)
-                }
-              >
-                Duplicate
-              </button>
-              <button
-                type="button"
-                className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors shadow-md"
-                onClick={() => {
-                  if (selectedAdditionId) {
-                    removeAddition(selectedAdditionId);
-                    setSelectedAdditionId(null);
-                  }
-                }}
-              >
-                Delete
-              </button>
-            </div>
-
-            <div className="space-y-4">
+            <div className="space-y-3">
               {maxSize <= 1 ? (
-                <div className="space-y-1">
+                <div className={additionSectionCardClass}>
                   <div className="flex items-center justify-between gap-2">
-                    <label className="text-sm font-medium text-gray-200 day:text-gray-700">
+                    <label className={additionLabelClass}>
                       Size
                     </label>
-                    <div className="text-sm text-gray-400 day:text-gray-500">
+                    <div className="text-sm font-semibold text-white/60 day:text-gray-500">
                       {activeAdditionSize
                         ? `${activeAdditionSize.width}×${activeAdditionSize.height}mm`
                         : ''}
@@ -799,9 +848,9 @@ export default function DesignerNav() {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-1">
+                <div className={additionSectionCardClass}>
                   <div className="flex items-center justify-between gap-2">
-                    <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
+                    <label className={additionLabelClass}>
                       Size
                     </label>
                     <div className="flex items-center justify-end gap-2">
@@ -816,7 +865,7 @@ export default function DesignerNav() {
                             sizeVariant: newVal,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                        className={additionControlButtonClass}
                         aria-label="Decrease size variant"
                       >
                         <svg
@@ -862,7 +911,7 @@ export default function DesignerNav() {
                                 : Math.min(maxSize, val),
                           });
                         }}
-                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none day:bg-gray-100 day:border-gray-300 day:text-gray-900"
+                        className={additionNumberInputClass}
                       />
                       <button
                         type="button"
@@ -878,7 +927,7 @@ export default function DesignerNav() {
                             sizeVariant: newVal,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                        className={additionControlButtonClass}
                         aria-label="Increase size variant"
                       >
                         <svg
@@ -897,7 +946,7 @@ export default function DesignerNav() {
                       </button>
                     </div>
                   </div>
-                  <div className="relative">
+                  <div className="relative mt-3">
                     <input
                       type="range"
                       min={1}
@@ -912,9 +961,9 @@ export default function DesignerNav() {
                           sizeVariant: parseInt(e.target.value, 10),
                         });
                       }}
-                      className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                      className={additionRangeInputClass}
                     />
-                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
+                    <div className={additionRangeBoundsClass}>
                       <span>
                         {additionSizes[0]
                           ? `${additionSizes[0].width}×${additionSizes[0].height}mm`
@@ -932,9 +981,9 @@ export default function DesignerNav() {
 
               {/* Rotation Slider - Only shown for applications, not for statues/vases */}
               {!isStatueOrVase && (
-                <div className="space-y-1">
+                <div className={additionSectionCardClass}>
                   <div className="flex items-center justify-between gap-2">
-                    <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
+                    <label className={additionLabelClass}>
                       Rotation
                     </label>
                     <div className="flex items-center justify-end gap-2">
@@ -949,7 +998,7 @@ export default function DesignerNav() {
                             rotationZ: (newVal * Math.PI) / 180,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                        className={additionControlButtonClass}
                         aria-label="Decrease rotation by 1 degree"
                       >
                         <svg
@@ -996,7 +1045,7 @@ export default function DesignerNav() {
                             });
                           }
                         }}
-                        className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none day:bg-gray-100 day:border-gray-300 day:text-gray-900"
+                        className={additionNumberInputClass}
                       />
                       <button
                         type="button"
@@ -1009,7 +1058,7 @@ export default function DesignerNav() {
                             rotationZ: (newVal * Math.PI) / 180,
                           });
                         }}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                        className={additionControlButtonClass}
                         aria-label="Increase rotation by 1 degree"
                       >
                         <svg
@@ -1026,12 +1075,12 @@ export default function DesignerNav() {
                           />
                         </svg>
                       </button>
-                      <span className="text-sm font-medium text-gray-300 day:text-gray-600">
+                      <span className="text-sm font-semibold text-white/70 day:text-gray-600">
                         °
                       </span>
                     </div>
                   </div>
-                  <div className="relative">
+                  <div className="relative mt-3">
                     <input
                       type="range"
                       min={-180}
@@ -1046,9 +1095,9 @@ export default function DesignerNav() {
                           });
                         }
                       }}
-                      className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                      className={additionRangeInputClass}
                     />
-                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
+                    <div className={additionRangeBoundsClass}>
                       <span>-180°</span>
                       <span>180°</span>
                     </div>
@@ -1056,14 +1105,36 @@ export default function DesignerNav() {
                 </div>
               )}
             </div>
+
+            <div className="grid grid-cols-2 gap-2 border-t border-white/10 pt-3 day:border-gray-200">
+              <button
+                type="button"
+                className="cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15 day:bg-white day:text-[#8a6a12]"
+                onClick={() =>
+                  selectedAdditionId && duplicateAddition(selectedAdditionId)
+                }
+              >
+                Copy
+              </button>
+              <button
+                type="button"
+                className="cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15 day:bg-white day:text-red-700"
+                onClick={() => {
+                  if (selectedAdditionId) {
+                    removeAddition(selectedAdditionId);
+                    setSelectedAdditionId(null);
+                  }
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ) : null}
 
         {showAdditionCatalog && !hasActiveAddition && (
-          <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm day:border-gray-200 day:bg-white">
-            <div className="h-full overflow-y-auto pr-1">
-              <AdditionSelector additions={additionsList} />
-            </div>
+          <div className="min-h-0 flex-1 rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white">
+            <AdditionSelector additions={additionsList} />
           </div>
         )}
       </div>
@@ -1120,52 +1191,105 @@ export default function DesignerNav() {
     const showMotifCatalog =
       activeFullscreenPanel === 'select-motifs' &&
       (forceMotifCatalog || !hasActiveMotif);
+    const motifName =
+      activeMotif?.svgPath
+        ?.split('/')
+        .pop()
+        ?.replace(/\.svg$/i, '')
+        .replace(/[_-]+/g, ' ') || 'Motif';
+    const motifSurface =
+      activeOffset?.target === 'ledger'
+        ? 'Ledger'
+        : activeOffset?.target === 'base'
+          ? 'Base'
+          : 'Headstone';
+    const motifPreviewPath = activeMotif?.svgPath ?? null;
+    const motifPreviewColor =
+      activeMotif?.color ?? catalog?.product?.defaultColor ?? '#c99d44';
+    const sectionCardClass =
+      'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
+    const controlButtonClass =
+      'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
+    const numberInputClass =
+      'h-8 w-16 rounded-md border border-white/10 bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none day:border-gray-300 day:bg-gray-100 day:text-gray-900';
+    const rangeInputClass =
+      'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)] [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)]';
+    const rangeBoundsClass =
+      'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
+    const secondaryActionClass =
+      'cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15 day:bg-white day:text-[#8a6a12]';
+    const destructiveActionClass =
+      'cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15 day:bg-white day:text-red-700';
 
     return (
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
-          <div className="space-y-4">
-            {motifPriceValue !== null && (
-              <div className="rounded-xl border border-white/15 bg-white/5 p-4 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase day:text-gray-500">
-                  Motif Price
-                </div>
-                <div className="text-2xl font-semibold text-white day:text-gray-900">
-                  ${motifPriceValue.toFixed(2)}
+          <div className="flex min-h-0 flex-1 flex-col gap-3">
+            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar">
+              <div className={sectionCardClass}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A] day:border-gray-200 day:bg-gray-100">
+                      {motifPreviewPath ? (
+                        <div
+                          className="absolute inset-2"
+                          style={{
+                            backgroundColor: motifPreviewColor,
+                            WebkitMaskImage: `url(${motifPreviewPath})`,
+                            maskImage: `url(${motifPreviewPath})`,
+                            WebkitMaskRepeat: 'no-repeat',
+                            maskRepeat: 'no-repeat',
+                            WebkitMaskSize: 'contain',
+                            maskSize: 'contain',
+                            WebkitMaskPosition: 'center',
+                            maskPosition: 'center',
+                          }}
+                        />
+                      ) : (
+                        <SparklesIcon className="h-5 w-5 text-[#D7B356]" />
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs font-semibold tracking-[0.16em] text-[#D7B356] uppercase">
+                        Selected motif
+                      </div>
+                      <div className="mt-1 truncate text-sm font-semibold text-white capitalize day:text-gray-900">
+                        {motifName}
+                      </div>
+                      <div className="mt-0.5 text-xs text-white/45 day:text-gray-500">
+                        {motifSurface} · {activeOffset.heightMm ?? initHeight}mm
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="shrink-0 rounded-md border border-white/10 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white day:border-gray-200 day:text-gray-600 day:hover:text-gray-900"
+                    onClick={() => {
+                      setSelectedMotifId(null);
+                      setActivePanel(null);
+                    }}
+                  >
+                    Clear
+                  </button>
                 </div>
               </div>
-            )}
 
-            <div className="flex space-x-2">
-              <button
-                type="button"
-                className="flex-1 cursor-pointer rounded-lg bg-[#D7B356] px-3 py-2 text-sm font-medium text-slate-900 hover:bg-[#E4C778] transition-colors shadow-md"
-                onClick={() =>
-                  selectedMotifId && duplicateMotif(selectedMotifId)
-                }
-              >
-                Duplicate
-              </button>
-              <button
-                type="button"
-                className="flex-1 cursor-pointer rounded-lg bg-red-600 px-3 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors shadow-md"
-                onClick={() => {
-                  if (selectedMotifId) {
-                    removeMotif(selectedMotifId);
-                    setSelectedMotifId(null);
-                    setActivePanel(null);
-                  }
-                }}
-              >
-                Delete
-              </button>
-            </div>
+              {motifPriceValue !== null && (
+                <div className={sectionCardClass}>
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="text-sm font-semibold text-slate-100 day:text-gray-800">
+                      Motif price
+                    </span>
+                    <span className="text-xl font-semibold text-[#2EE59D]">
+                      ${motifPriceValue.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              )}
 
-            <div className="space-y-4">
-              {/* Height Slider */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
+              <div className={`${sectionCardClass} space-y-2`}>
+                <div className="flex items-center justify-between gap-3">
+                  <label className="text-sm font-semibold text-slate-100 day:text-gray-800">
                     Height
                   </label>
                   <div className="flex items-center justify-end gap-2">
@@ -1181,7 +1305,7 @@ export default function DesignerNav() {
                           heightMm: newVal,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                      className={controlButtonClass}
                       aria-label="Decrease height by 1mm"
                     >
                       <svg
@@ -1224,11 +1348,11 @@ export default function DesignerNav() {
                           heightMm: clampedValue,
                         });
                       }}
-                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900 ${
+                      className={`${numberInputClass} ${
                         (activeOffset.heightMm ?? initHeight) < minHeight ||
                         (activeOffset.heightMm ?? initHeight) > maxHeight
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
+                          : ''
                       }`}
                     />
                     <button
@@ -1243,7 +1367,7 @@ export default function DesignerNav() {
                           heightMm: newVal,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                      className={controlButtonClass}
                       aria-label="Increase height by 1mm"
                     >
                       <svg
@@ -1260,7 +1384,7 @@ export default function DesignerNav() {
                         />
                       </svg>
                     </button>
-                    <span className="text-sm font-medium text-gray-300 day:text-gray-600">
+                    <span className="text-sm font-semibold text-white/60 day:text-gray-600">
                       mm
                     </span>
                   </div>
@@ -1280,19 +1404,18 @@ export default function DesignerNav() {
                         heightMm: clampedValue,
                       });
                     }}
-                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                    className={rangeInputClass}
                   />
-                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
+                  <div className={rangeBoundsClass}>
                     <span>{minHeight}mm</span>
                     <span>{maxHeight}mm</span>
                   </div>
                 </div>
               </div>
 
-              {/* Rotation Slider */}
-              <div className="space-y-1">
-                <div className="flex items-center justify-between gap-2">
-                  <label className="w-20 text-sm font-medium text-gray-200 day:text-gray-700">
+              <div className={`${sectionCardClass} space-y-2`}>
+                <div className="flex items-center justify-between gap-3">
+                  <label className="text-sm font-semibold text-slate-100 day:text-gray-800">
                     Rotation
                   </label>
                   <div className="flex items-center justify-end gap-2">
@@ -1306,7 +1429,7 @@ export default function DesignerNav() {
                           rotationZ: (newVal * Math.PI) / 180,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                      className={controlButtonClass}
                       aria-label="Decrease rotation by 1 degree"
                     >
                       <svg
@@ -1351,10 +1474,10 @@ export default function DesignerNav() {
                           });
                         }
                       }}
-                      className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900 ${
+                      className={`${numberInputClass} ${
                         rotationDegrees < -180 || rotationDegrees > 180
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                          : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
+                          : ''
                       }`}
                     />
                     <button
@@ -1367,7 +1490,7 @@ export default function DesignerNav() {
                           rotationZ: (newVal * Math.PI) / 180,
                         });
                       }}
-                      className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] day:bg-gray-200 day:text-gray-700 day:hover:bg-gray-300"
+                      className={controlButtonClass}
                       aria-label="Increase rotation by 1 degree"
                     >
                       <svg
@@ -1384,7 +1507,7 @@ export default function DesignerNav() {
                         />
                       </svg>
                     </button>
-                    <span className="text-sm font-medium text-gray-300 day:text-gray-600">°</span>
+                    <span className="text-sm font-semibold text-white/60 day:text-gray-600">°</span>
                   </div>
                 </div>
                 <div className="relative">
@@ -1401,9 +1524,9 @@ export default function DesignerNav() {
                         rotationZ: (Number(e.target.value) * Math.PI) / 180,
                       })
                     }
-                    className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                    className={rangeInputClass}
                   />
-                  <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500 day:text-gray-400">
+                  <div className={rangeBoundsClass}>
                     <span>-180°</span>
                     <span>180°</span>
                   </div>
@@ -1411,25 +1534,29 @@ export default function DesignerNav() {
               </div>
 
               {!isLaser && catalog?.product?.color !== '0' && (
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-white day:text-gray-900">
-                    Select Color
+                <div className={`${sectionCardClass} space-y-2`}>
+                  <label className="block text-sm font-semibold text-slate-100 day:text-gray-800">
+                    Color
                   </label>
                   {isEngraved && (
-                  <div className="mb-3 grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
                       onClick={() =>
                         selectedMotifId &&
                         setMotifColor(selectedMotifId, '#c99d44')
                       }
-                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5 day:border-gray-200 day:hover:bg-gray-100"
+                      className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
+                        activeMotif?.color === '#c99d44'
+                          ? 'border-[#D7B356] bg-[#211A10] day:bg-amber-50'
+                          : 'border-white/10 bg-white/[0.04] hover:border-[#D7B356]/50 day:border-gray-200 day:bg-gray-50'
+                      }`}
                     >
                       <span
                         className="h-5 w-5 rounded border border-white/20 day:border-gray-300"
                         style={{ backgroundColor: '#c99d44' }}
                       />
-                      <span className="text-xs text-white/80 day:text-gray-700">
+                      <span className="text-xs font-semibold text-white/80 day:text-gray-700">
                         Gold Gilding
                       </span>
                     </button>
@@ -1439,24 +1566,32 @@ export default function DesignerNav() {
                         selectedMotifId &&
                         setMotifColor(selectedMotifId, '#eeeeee')
                       }
-                      className="flex flex-col items-center gap-1 rounded-lg border border-white/15 p-2 transition-colors hover:bg-white/5 day:border-gray-200 day:hover:bg-gray-100"
+                      className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
+                        activeMotif?.color === '#eeeeee'
+                          ? 'border-[#D7B356] bg-[#211A10] day:bg-amber-50'
+                          : 'border-white/10 bg-white/[0.04] hover:border-[#D7B356]/50 day:border-gray-200 day:bg-gray-50'
+                      }`}
                     >
                       <span
                         className="h-5 w-5 rounded border border-white/20 day:border-gray-300"
                         style={{ backgroundColor: '#eeeeee' }}
                       />
-                      <span className="text-xs text-white/80 day:text-gray-700">
+                      <span className="text-xs font-semibold text-white/80 day:text-gray-700">
                         Silver Gilding
                       </span>
                     </button>
                   </div>
                   )}
-                  <div className="grid grid-cols-7 gap-1">
+                  <div className="grid grid-cols-7 gap-1.5">
                     {data.colors.map((color) => (
                       <button
                         key={color.id}
                         type="button"
-                        className={`h-6 w-6 rounded border ${activeMotif?.color === color.hex ? 'border-[#D7B356] ring-2 ring-[#D7B356]' : 'border-white/20 day:border-gray-300'}`}
+                        className={`h-7 w-7 rounded-md border transition-transform hover:scale-105 ${
+                          activeMotif?.color === color.hex
+                            ? 'border-[#D7B356] ring-2 ring-[#D7B356]/70'
+                            : 'border-white/20 day:border-gray-300'
+                        }`}
                         style={{ backgroundColor: color.hex }}
                         onClick={() =>
                           selectedMotifId &&
@@ -1469,11 +1604,36 @@ export default function DesignerNav() {
                 </div>
               )}
             </div>
+
+            <div className="grid grid-cols-2 gap-2 border-t border-white/10 pt-3 day:border-gray-200">
+              <button
+                type="button"
+                className={secondaryActionClass}
+                onClick={() =>
+                  selectedMotifId && duplicateMotif(selectedMotifId)
+                }
+              >
+                Copy
+              </button>
+              <button
+                type="button"
+                className={destructiveActionClass}
+                onClick={() => {
+                  if (selectedMotifId) {
+                    removeMotif(selectedMotifId);
+                    setSelectedMotifId(null);
+                    setActivePanel(null);
+                  }
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ) : null}
 
         {showMotifCatalog && (
-          <div className="flex-1 overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm day:border-gray-200 day:bg-white">
+          <div className="min-h-0 flex-1 overflow-hidden rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white">
             <MotifSelectorPanel motifs={motifCatalog} />
           </div>
         )}
@@ -1541,16 +1701,19 @@ export default function DesignerNav() {
     selectedInscriptionId,
   ]);
 
-  // Auto-open image panel when an image is selected and activePanel is 'image'
+  // Keep the image edit panel open on the image route. Canvas selections open the
+  // panel through the openFullscreenPanel event; this guard avoids fighting guided
+  // navigation when a selected image remains active on later steps.
   useEffect(() => {
     if (
+      pathname === '/select-images' &&
       selectedImageId &&
       activePanel === 'image' &&
       activeFullscreenPanel !== 'select-images'
     ) {
       setActiveFullscreenPanel('select-images');
     }
-  }, [selectedImageId, activePanel, activeFullscreenPanel]);
+  }, [pathname, selectedImageId, activePanel, activeFullscreenPanel]);
 
   let quantity = widthMm * heightMm;
   if (catalog) {
@@ -2050,9 +2213,24 @@ export default function DesignerNav() {
           { label: 'Base', value: 'base' },
         ];
 
+    const dimensionCardClass =
+      'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
+    const dimensionHeaderClass =
+      'flex items-center justify-between gap-2';
+    const dimensionLabelClass =
+      'text-sm font-semibold text-slate-100 day:text-gray-800';
+    const controlButtonClass =
+      'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] disabled:cursor-not-allowed disabled:opacity-50 day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
+    const numberInputBaseClass =
+      'h-8 w-16 rounded-md border bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900';
+    const rangeInputClass =
+      'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)]';
+    const rangeBoundsClass =
+      'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
+
     return (
       <div
-        className={`fs-size-panel space-y-5 rounded-2xl p-4 shadow-xl backdrop-blur-sm ${extraClassName}`}
+        className={`fs-size-panel space-y-4 rounded-lg p-3.5 shadow-xl backdrop-blur-sm ${extraClassName}`}
       >
         {!isPlaque && (
           <SegmentedControl
@@ -2113,7 +2291,7 @@ export default function DesignerNav() {
                 Rock Pitch
               </button>
             </div>
-            <div className="-mx-4 border-t border-[#3A3A3A]/50"></div>
+            <div className="-mx-3.5 border-t border-white/10"></div>
           </>
         )}
 
@@ -2129,7 +2307,7 @@ export default function DesignerNav() {
                 { label: 'Slant', value: 'slant' },
               ]}
             />
-            <div className="-mx-4 border-t border-[#3A3A3A]/50"></div>
+            <div className="-mx-3.5 border-t border-white/10"></div>
           </>
         )}
 
@@ -2165,9 +2343,9 @@ export default function DesignerNav() {
                   </div>
                 </div>
 
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <label className="w-20 text-sm font-medium text-gray-200">
+                <div className={dimensionCardClass}>
+                  <div className={dimensionHeaderClass}>
+                    <label className={dimensionLabelClass}>
                       Size
                     </label>
                     <div className="flex items-center justify-end gap-2">
@@ -2175,21 +2353,21 @@ export default function DesignerNav() {
                         type="button"
                         onClick={() => applySize(selectedIndex - 1)}
                         disabled={selectedIndex <= 1}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                        className={controlButtonClass}
                         aria-label="Smaller size"
                       >
                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
                         </svg>
                       </button>
-                      <span className="min-w-[90px] text-center text-sm text-white">
+                      <span className="min-w-[90px] text-center text-sm font-semibold text-white">
                         {w} × {h} mm
                       </span>
                       <button
                         type="button"
                         onClick={() => applySize(selectedIndex + 1)}
                         disabled={selectedIndex >= maxSize}
-                        className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                        className={controlButtonClass}
                         aria-label="Larger size"
                       >
                         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2206,9 +2384,9 @@ export default function DesignerNav() {
                       step={1}
                       value={selectedIndex}
                       onChange={(e) => applySize(parseInt(e.target.value, 10))}
-                      className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                      className={rangeInputClass}
                     />
-                    <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                    <div className={rangeBoundsClass}>
                       <span>{sizes[0].width}×{sizes[0].height}mm</span>
                       <span>{sizes[maxSize - 1].width}×{sizes[maxSize - 1].height}mm</span>
                     </div>
@@ -2220,10 +2398,10 @@ export default function DesignerNav() {
         ) : (
         <>
         <div
-          className={`space-y-1 ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+          className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="w-20 text-sm font-medium text-gray-200">
+          <div className={dimensionHeaderClass}>
+            <label className={dimensionLabelClass}>
               Width
             </label>
             <div className="flex items-center justify-end gap-2">
@@ -2234,7 +2412,7 @@ export default function DesignerNav() {
                   setCurrentWidthMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                className={controlButtonClass}
                 aria-label="Decrease width by 10mm"
               >
                 <svg
@@ -2267,10 +2445,10 @@ export default function DesignerNav() {
                   }
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                className={`${numberInputBaseClass} ${
                   currentWidthMm < minWidth || currentWidthMm > maxWidth
                     ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                    : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                    : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                 }`}
               />
               <button
@@ -2280,7 +2458,7 @@ export default function DesignerNav() {
                   setCurrentWidthMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                className={controlButtonClass}
                 aria-label="Increase width by 10mm"
               >
                 <svg
@@ -2297,10 +2475,10 @@ export default function DesignerNav() {
                   />
                 </svg>
               </button>
-              <span className="text-sm font-medium text-gray-300">mm</span>
+              <span className="text-sm font-semibold text-white/70">mm</span>
             </div>
           </div>
-          <div className="relative">
+          <div className="relative mt-3">
             <input
               type="range"
               min={minWidth}
@@ -2309,9 +2487,9 @@ export default function DesignerNav() {
               value={currentWidthMm}
               onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
               disabled={editingObject === 'base' && !showBase}
-              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+              className={rangeInputClass}
             />
-            <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+            <div className={rangeBoundsClass}>
               <span>{minWidth}mm</span>
               <span>{maxWidth}mm</span>
             </div>
@@ -2319,10 +2497,10 @@ export default function DesignerNav() {
         </div>
 
         <div
-          className={`space-y-1 ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+          className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
         >
-          <div className="flex items-center justify-between gap-2">
-            <label className="w-20 text-sm font-medium text-gray-200">
+          <div className={dimensionHeaderClass}>
+            <label className={dimensionLabelClass}>
               Height
             </label>
             <div className="flex items-center justify-end gap-2">
@@ -2333,7 +2511,7 @@ export default function DesignerNav() {
                   setCurrentHeightMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                className={controlButtonClass}
                 aria-label="Decrease height by 10mm"
               >
                 <svg
@@ -2366,10 +2544,10 @@ export default function DesignerNav() {
                   }
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                className={`${numberInputBaseClass} ${
                   currentHeightMm < minHeight || currentHeightMm > maxHeight
                     ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                    : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                    : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                 }`}
               />
               <button
@@ -2379,7 +2557,7 @@ export default function DesignerNav() {
                   setCurrentHeightMm(newVal);
                 }}
                 disabled={editingObject === 'base' && !showBase}
-                className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A] disabled:cursor-not-allowed disabled:opacity-50"
+                className={controlButtonClass}
                 aria-label="Increase height by 10mm"
               >
                 <svg
@@ -2396,10 +2574,10 @@ export default function DesignerNav() {
                   />
                 </svg>
               </button>
-              <span className="text-sm font-medium text-gray-300">mm</span>
+              <span className="text-sm font-semibold text-white/70">mm</span>
             </div>
           </div>
-          <div className="relative">
+          <div className="relative mt-3">
             <input
               type="range"
               min={minHeight}
@@ -2408,9 +2586,9 @@ export default function DesignerNav() {
               value={currentHeightMm}
               onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
               disabled={editingObject === 'base' && !showBase}
-              className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+              className={rangeInputClass}
             />
-            <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+            <div className={rangeBoundsClass}>
               <span>{minHeight}mm</span>
               <span>{maxHeight}mm</span>
             </div>
@@ -2420,9 +2598,9 @@ export default function DesignerNav() {
         )}
 
         {editingObject === 'headstone' && !isPlaque && (
-          <div className="space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <label className="w-20 text-sm font-medium text-gray-200">
+          <div className={dimensionCardClass}>
+            <div className={dimensionHeaderClass}>
+              <label className={dimensionLabelClass}>
                 Thickness
               </label>
               <div className="flex items-center justify-end gap-2">
@@ -2440,7 +2618,7 @@ export default function DesignerNav() {
                       setSlantThickness(newVal);
                     }
                   }}
-                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                  className={controlButtonClass}
                   aria-label="Decrease thickness by 10mm"
                 >
                   <svg
@@ -2491,7 +2669,7 @@ export default function DesignerNav() {
                       }
                     }
                   }}
-                  className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                  className={`${numberInputBaseClass} ${
                     (headstoneStyle === 'upright'
                       ? uprightThickness
                       : slantThickness) < minThickness ||
@@ -2499,7 +2677,7 @@ export default function DesignerNav() {
                       ? uprightThickness
                       : slantThickness) > maxThickness
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                   }`}
                 />
                 <button
@@ -2516,7 +2694,7 @@ export default function DesignerNav() {
                       setSlantThickness(newVal);
                     }
                   }}
-                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                  className={controlButtonClass}
                   aria-label="Increase thickness by 10mm"
                 >
                   <svg
@@ -2533,10 +2711,10 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-medium text-gray-300">mm</span>
+                <span className="text-sm font-semibold text-white/70">mm</span>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative mt-3">
               <input
                 type="range"
                 min={minThickness}
@@ -2555,9 +2733,9 @@ export default function DesignerNav() {
                     setSlantThickness(newValue);
                   }
                 }}
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgба(215,179,86,0.6),0_0_0_3px_rgба(0,0,0,0.3)]"
+                className={rangeInputClass}
               />
-              <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+              <div className={rangeBoundsClass}>
                 <span>{minThickness}mm</span>
                 <span>{maxThickness}mm</span>
               </div>
@@ -2566,9 +2744,9 @@ export default function DesignerNav() {
         )}
 
         {editingObject === 'base' && showBase && (
-          <div className="space-y-1">
-            <div className="flex items-center justify-between gap-2">
-              <label className="w-20 text-sm font-medium text-gray-200">
+          <div className={dimensionCardClass}>
+            <div className={dimensionHeaderClass}>
+              <label className={dimensionLabelClass}>
                 Thickness
               </label>
               <div className="flex items-center justify-end gap-2">
@@ -2578,7 +2756,7 @@ export default function DesignerNav() {
                     const newVal = Math.max(minThickness, baseThickness - 10);
                     setBaseThickness(newVal);
                   }}
-                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                  className={controlButtonClass}
                   aria-label="Decrease base thickness by 10mm"
                 >
                   <svg
@@ -2610,10 +2788,10 @@ export default function DesignerNav() {
                       setBaseThickness(maxThickness);
                     }
                   }}
-                  className={`w-16 rounded border bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:ring-2 focus:outline-none ${
+                  className={`${numberInputBaseClass} ${
                     baseThickness < minThickness || baseThickness > maxThickness
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-[#5A5A5A] focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                      : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
                   }`}
                 />
                 <button
@@ -2622,7 +2800,7 @@ export default function DesignerNav() {
                     const newVal = Math.min(maxThickness, baseThickness + 10);
                     setBaseThickness(newVal);
                   }}
-                  className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                  className={controlButtonClass}
                   aria-label="Increase base thickness by 10mm"
                 >
                   <svg
@@ -2639,10 +2817,10 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-medium text-gray-300">mm</span>
+                <span className="text-sm font-semibold text-white/70">mm</span>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative mt-3">
               <input
                 type="range"
                 min={minThickness}
@@ -2650,9 +2828,9 @@ export default function DesignerNav() {
                 step={10}
                 value={baseThickness}
                 onChange={(e) => setBaseThickness(Number(e.target.value))}
-                className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgба(215,179,86,0.4),0_0_0_3px_rgба(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgба(215,179,86,0.6),0_0_0_3px_rgба(0,0,0,0.3)]"
+                className={rangeInputClass}
               />
-              <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+              <div className={rangeBoundsClass}>
                 <span>{minThickness}mm</span>
                 <span>{maxThickness}mm</span>
               </div>
@@ -2663,9 +2841,9 @@ export default function DesignerNav() {
         {(editingObject === 'ledger' || editingObject === 'kerbset') &&
           currentDepthMm !== null &&
           setCurrentDepthMm && (
-            <div className="space-y-1">
-              <div className="flex items-center justify-between gap-2">
-                <label className="w-20 text-sm font-medium text-gray-200">
+            <div className={dimensionCardClass}>
+              <div className={dimensionHeaderClass}>
+                <label className={dimensionLabelClass}>
                   Length
                 </label>
                 <div className="flex items-center justify-end gap-2">
@@ -2676,7 +2854,7 @@ export default function DesignerNav() {
                         Math.max(minThickness, currentDepthMm - 10),
                       )
                     }
-                    className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                    className={controlButtonClass}
                     aria-label="Decrease length by 10mm"
                   >
                     <svg
@@ -2700,7 +2878,7 @@ export default function DesignerNav() {
                     step={10}
                     value={currentDepthMm}
                     onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
-                    className="w-16 rounded border border-[#5A5A5A] bg-[#454545] px-2 py-1.5 text-right text-sm text-white transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 focus:outline-none"
+                    className={`${numberInputBaseClass} border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300`}
                   />
                   <button
                     type="button"
@@ -2709,7 +2887,7 @@ export default function DesignerNav() {
                         Math.min(maxThickness, currentDepthMm + 10),
                       )
                     }
-                    className="flex h-7 w-7 items-center justify-center rounded bg-[#454545] text-white transition-colors hover:bg-[#5A5A5A]"
+                    className={controlButtonClass}
                     aria-label="Increase length by 10mm"
                   >
                     <svg
@@ -2726,10 +2904,10 @@ export default function DesignerNav() {
                       />
                     </svg>
                   </button>
-                  <span className="text-sm font-medium text-gray-300">mm</span>
+                  <span className="text-sm font-semibold text-white/70">mm</span>
                 </div>
               </div>
-              <div className="relative">
+              <div className="relative mt-3">
                 <input
                   type="range"
                   min={minThickness}
@@ -2737,9 +2915,9 @@ export default function DesignerNav() {
                   step={10}
                   value={currentDepthMm}
                   onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
-                  className="fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[22px] [&::-moz-range-thumb]:w-[22px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#1F1F1F] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:h-[22px] [&::-webkit-slider-thumb]:w-[22px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#1F1F1F] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.4),0_0_0_3px_rgba(0,0,0,0.3)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.6),0_0_0_3px_rgba(0,0,0,0.3)]"
+                  className={rangeInputClass}
                 />
-                <div className="mt-0.5 flex w-full justify-between text-xs text-gray-500">
+                <div className={rangeBoundsClass}>
                   <span>{minThickness}mm</span>
                   <span>{maxThickness}mm</span>
                 </div>
@@ -3329,10 +3507,11 @@ export default function DesignerNav() {
                             ? 'border-amber-500/30 text-amber-400'
                             : 'border-white/10 text-gray-200';
 
-                      // Hide "Select Material" for laser etched products
+                      // Hide "Select Material" for laser etched products and stainless steel headstones
                       if (
                         item.slug === 'select-material' &&
-                        catalog?.product?.laser === '1'
+                        (catalog?.product?.laser === '1' ||
+                          isStainlessSteelHeadstone)
                       ) {
                         return null;
                       }
@@ -3342,10 +3521,11 @@ export default function DesignerNav() {
                         return null;
                       }
 
-                      // Hide "Select Additions" for laser etched products
+                      // Hide "Select Additions" for laser etched products and stainless steel headstones
                       if (
                         item.slug === 'select-additions' &&
-                        catalog?.product?.laser === '1'
+                        (catalog?.product?.laser === '1' ||
+                          isStainlessSteelHeadstone)
                       ) {
                         return null;
                       }

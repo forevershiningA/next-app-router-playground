@@ -188,6 +188,7 @@ type Props = {
   isFullColourPlaque?: boolean;
   isUrn?: boolean;
   isStainlessSteel?: boolean;
+  showStainlessRim?: boolean;
   ssFinish?: 'brushed' | 'polished';
   cornerRadius?: number;
   headstoneStyle?: 'upright' | 'slant';
@@ -306,6 +307,103 @@ function getProjectedPerimeter(x: number, y: number, pts: THREE.Vector2[], cum: 
   return total > 0 ? finalDist / total : 0;
 }
 
+function StainlessHeadstoneRim({
+  outlinePoints,
+  finish,
+}: {
+  outlinePoints?: THREE.Vector2[];
+  finish: 'brushed' | 'polished';
+}) {
+  const rim = React.useMemo(() => {
+    if (!outlinePoints || outlinePoints.length < 12) return null;
+
+    let minX = Infinity;
+    let maxX = -Infinity;
+    let minY = Infinity;
+    let maxY = -Infinity;
+
+    outlinePoints.forEach((point) => {
+      minX = Math.min(minX, point.x);
+      maxX = Math.max(maxX, point.x);
+      minY = Math.min(minY, point.y);
+      maxY = Math.max(maxY, point.y);
+    });
+
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    const span = Math.max(maxX - minX, maxY - minY);
+    const step = Math.max(1, Math.floor(outlinePoints.length / 180));
+
+    const makeCurve = (insetScale: number, z: number) => {
+      const points = outlinePoints
+        .filter((_, index) => index % step === 0)
+        .map((point) => {
+          const x = centerX + (point.x - centerX) * insetScale;
+          const y = centerY + (point.y - centerY) * insetScale;
+          return new THREE.Vector3(x, y, z);
+        });
+
+      return new THREE.CatmullRomCurve3(points, true, 'centripetal', 0.2);
+    };
+
+    const rimGeometry = new THREE.TubeGeometry(
+      makeCurve(0.976, span * 0.001),
+      320,
+      span * 0.0046,
+      10,
+      true,
+    );
+    const grooveGeometry = new THREE.TubeGeometry(
+      makeCurve(0.948, span * 0.0015),
+      300,
+      span * 0.0007,
+      6,
+      true,
+    );
+
+    const rimMaterial = new THREE.MeshPhysicalMaterial({
+      color: finish === 'polished' ? new THREE.Color('#f6f8f8') : new THREE.Color('#dfe5e5'),
+      metalness: 0.92,
+      roughness: finish === 'polished' ? 0.12 : 0.24,
+      clearcoat: 0.9,
+      clearcoatRoughness: 0.18,
+      envMapIntensity: finish === 'polished' ? 2.4 : 1.7,
+      polygonOffset: true,
+      polygonOffsetFactor: -2,
+      polygonOffsetUnits: -2,
+    });
+    const grooveMaterial = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color('#465055'),
+      metalness: 0.55,
+      roughness: 0.38,
+      envMapIntensity: 1.3,
+      polygonOffset: true,
+      polygonOffsetFactor: -3,
+      polygonOffsetUnits: -3,
+    });
+
+    return { rimGeometry, grooveGeometry, rimMaterial, grooveMaterial };
+  }, [outlinePoints, finish]);
+
+  React.useEffect(() => {
+    return () => {
+      rim?.rimGeometry.dispose();
+      rim?.grooveGeometry.dispose();
+      rim?.rimMaterial.dispose();
+      rim?.grooveMaterial.dispose();
+    };
+  }, [rim]);
+
+  if (!rim) return null;
+
+  return (
+    <group renderOrder={9}>
+      <mesh geometry={rim.rimGeometry} material={rim.rimMaterial} renderOrder={9} />
+      <mesh geometry={rim.grooveGeometry} material={rim.grooveMaterial} renderOrder={9} />
+    </group>
+  );
+}
+
 const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   url,
   depth,
@@ -329,6 +427,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   isFullColourPlaque = false,
   isUrn = false,
   isStainlessSteel = false,
+  showStainlessRim = false,
   ssFinish = 'brushed' as 'brushed' | 'polished',
   cornerRadius = 0,
   headstoneStyle = 'upright',
@@ -1260,8 +1359,27 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       return [faceMat, sideMat];
     }
 
-    // Stainless Steel Plaque (product 52): PBR metal material per finish.
+    // Stainless Steel Headstone: match the clean raised border material so
+    // the face and rim read as the same polished/brushed steel family.
     if (isStainlessSteel) {
+      if (showStainlessRim) {
+        const headstoneSteelMat = new THREE.MeshPhysicalMaterial({
+          color: ssFinish === 'polished' ? new THREE.Color('#f6f8f8') : new THREE.Color('#dfe5e5'),
+          metalness: 0.92,
+          roughness: ssFinish === 'polished' ? 0.12 : 0.24,
+          clearcoat: 0.9,
+          clearcoatRoughness: 0.18,
+          envMapIntensity: ssFinish === 'polished' ? 2.4 : 1.7,
+          side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
+          polygonOffset: true,
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1,
+        });
+
+        return [headstoneSteelMat, headstoneSteelMat];
+      }
+
+      // Stainless Steel Plaque (product 52): PBR metal material per finish.
       if (ssFinish === 'polished') {
         const mat = new THREE.MeshPhysicalMaterial({
           color: new THREE.Color(0xffffff),
@@ -1372,7 +1490,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         });
 
     return [faceMat, sideMat];
-  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, ssFinish, stainlessMaps]);
+  }, [clonedFaceMap, clonedSideMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, showStainlessRim, ssFinish, stainlessMaps]);
 
   // 5a. Dispose geometries and materials on cleanup
   React.useEffect(() => {
@@ -1454,12 +1572,18 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         {headstoneStyle === 'slant' ? (
           <group position-z={apiData?.frontZ || 0.001}>
             <group renderOrder={10} scale={meshScale}>
+               {showStainlessRim && (
+                 <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
+               )}
                {typeof children === 'function' && children(childApi, selectedAdditions)}
             </group>
           </group>
         ) : (
           <group position-z={apiData?.frontZ || 0}>
             <group renderOrder={10} scale={meshScale}>
+               {showStainlessRim && (
+                 <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
+               )}
                {typeof children === 'function' && children(childApi, selectedAdditions)}
             </group>
           </group>
