@@ -997,7 +997,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             className={secondaryActionClass}
             onClick={() => duplicateImage(selectedImageId)}
           >
-            Copy
+            Duplicate
           </button>
           <button
             type="button"

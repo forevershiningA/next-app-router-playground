@@ -52,7 +52,9 @@ export function PriceQuoteDisplay({ quote }: { quote: PDFQuote }) {
                   )}
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold text-white/90 day:text-gray-900">{m.name}</p>
-                    <p className="text-xs text-white/55 day:text-gray-500">{m.colorName} · {m.heightMm}mm</p>
+                    <p className="text-xs text-white/55 day:text-gray-500">
+                      {m.detailLabel}: {m.colorName} · {m.heightMm}mm
+                    </p>
                   </div>
                 </div>
                 <span className="shrink-0 text-sm font-semibold text-white/90 day:text-gray-900">

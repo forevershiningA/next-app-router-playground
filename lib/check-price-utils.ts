@@ -49,6 +49,16 @@ export const getCheckPriceMaterialName = (url: string | null | undefined) => {
   return getMaterialNameFromUrl(url);
 };
 
+export const isStainlessSteelHeadstoneProduct = (
+  productId: string | null | undefined,
+  catalog: CatalogData | null | undefined,
+) =>
+  productId === '1' ||
+  productId === '23' ||
+  (catalog?.product?.type === 'headstone' &&
+    (catalog.product.name.toLowerCase().includes('stainless steel') ||
+      catalog.product.formula?.toLowerCase() === 'steel'));
+
 export const formatMmAsImperial = (mm: number) => {
   const inches = mm / 25.4;
   const whole = Math.floor(inches);

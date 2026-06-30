@@ -7,12 +7,14 @@ import { useMotifCategory } from '#/lib/use-motifs';
 import { data } from '#/app/_internal/_data';
 import { getMotifThumbnailPath, getMotifSvgPath } from '#/lib/motifs';
 import { getMotifCategoryName } from '#/lib/motif-translations';
+import { getMotifCategoryImage } from '#/lib/motif-category-image';
 import type { ProductFormula } from '#/lib/motifs';
 import type { MotifCatalogItem } from '#/lib/headstone-store.types';
 
 type LegacyMotifCategory = {
   id: string | number;
   name: string;
+  src?: string;
   img?: string;
 };
 
@@ -320,15 +322,14 @@ export default function MotifOverlayPanel() {
               {filteredCategories.map((motif, index) => {
                 // Find the actual index in the full array
                 const actualIndex = categories.findIndex((item) => item.id === motif.id);
-                // Get thumbnail path from png/motifs/s/
-                const thumbnailPath =
-                  ('previewUrl' in motif &&
-                    typeof motif.previewUrl === 'string' &&
-                    motif.previewUrl) ||
-                  ('img' in motif &&
-                    typeof motif.img === 'string' &&
-                    motif.img.replace('/motifs/', '/png/motifs/s/')) ||
-                  '/png/motifs/s/default.png';
+                const thumbnailPath = getMotifCategoryImage({
+                  name: motif.name,
+                  category: 'category' in motif ? motif.category : null,
+                  src: 'src' in motif ? motif.src : undefined,
+                  img: 'img' in motif ? motif.img : undefined,
+                  previewUrl: 'previewUrl' in motif ? motif.previewUrl : undefined,
+                  fallback: '/png/motifs/s/default.png',
+                });
                 
                 return (
                   <button

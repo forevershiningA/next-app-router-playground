@@ -3,12 +3,13 @@
 import { useMemo, useState } from 'react';
 import { useHeadstoneStore, type MotifCatalogItem } from '#/lib/headstone-store';
 import { getMotifCategoryName } from '#/lib/motif-translations';
-import { data } from '#/app/_internal/_data';
+import { getMotifCategoryImage } from '#/lib/motif-category-image';
 
 type MotifCategoryGroup = {
   id: string;
   name: string;
   previewUrl: string | null;
+  category: string;
   motifs: MotifCatalogItem[];
 };
 
@@ -28,6 +29,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
           id: categoryId,
           name: motif.categoryName ?? categoryId,
           previewUrl: motif.previewUrl ?? motif.svgUrl ?? null,
+          category: motif.category,
           motifs: [],
         });
       }
@@ -102,7 +104,12 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
           <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
             <div className="grid grid-cols-2 gap-2.5">
               {categories.map((category) => {
-                const categoryImgSrc = category.previewUrl || '/ico/forever-transparent-logo.png';
+                const categoryImgSrc = getMotifCategoryImage({
+                  name: category.name,
+                  category: category.category || category.id,
+                  src: category.id,
+                  previewUrl: category.previewUrl,
+                });
                 return (
                 <button
                   key={category.id}

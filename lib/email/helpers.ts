@@ -101,7 +101,8 @@ export function detailedQuoteItems(args: {
   }
 
   for (const motif of quote.motifs) {
-    const meta = [motif.heightMm ? `${motif.heightMm}mm` : null, motif.colorName]
+    const motifDetail = motif.colorName ? `${motif.detailLabel}: ${motif.colorName}` : null;
+    const meta = [motif.heightMm ? `${motif.heightMm}mm` : null, motifDetail]
       .filter(Boolean)
       .join(', ');
     items.push({

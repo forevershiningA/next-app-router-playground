@@ -1,5 +1,6 @@
 import type { PricingBreakdown } from '#/lib/project-schemas';
 import { data } from '#/app/_internal/_data';
+import { getMaterialNameFromUrl } from '#/lib/material-utils';
 
 export type PDFQuoteItem = {
   label: string;
@@ -25,6 +26,7 @@ export type PDFQuote = {
     name: string;
     heightMm: number;
     colorName: string;
+    detailLabel: 'Color' | 'Material';
     thumbnail?: string;
     amount: number;
   }>;
@@ -47,6 +49,8 @@ type MinimalProject = {
   currency?: string | null;
   pricingBreakdown?: PricingBreakdown | null;
   designState?: {
+    productId?: string | null;
+    headstoneMaterialUrl?: string | null;
     showBase?: boolean;
     selectedAdditions?: string[];
     additionOffsets?: Record<string, { sizeVariant?: number }>;
@@ -63,6 +67,8 @@ const numberOrUndefined = (value: unknown): number | undefined =>
 const round2 = (value: number) => Math.round(value * 100) / 100;
 const toAssetPath = (path?: string) =>
   path ? (path.startsWith('/') || path.startsWith('data:') ? path : `/${path}`) : undefined;
+const isStainlessSteelHeadstoneProduct = (productId: string | null | undefined) =>
+  productId === '1' || productId === '23';
 
 export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
   const breakdown = project.pricingBreakdown ?? {};
@@ -176,10 +182,16 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
     const cleanName =
       motif.svgPath?.split('/').pop()?.replace('.svg', '').replace(/[_-]/g, ' ') ||
       motif.id;
-    const colorName =
-      motif.color
+    const isStainlessSteelMotif = isStainlessSteelHeadstoneProduct(project.designState?.productId);
+    const stainlessSteelMaterialName = getMaterialNameFromUrl(project.designState?.headstoneMaterialUrl);
+    const colorName = isStainlessSteelMotif
+      ? stainlessSteelMaterialName === 'Not selected'
+        ? 'Stainless Steel'
+        : stainlessSteelMaterialName
+      : motif.color
         ? data.colors.find((entry) => entry.hex === motif.color)?.name || motif.color
         : 'Black';
+    const detailLabel: 'Color' | 'Material' = isStainlessSteelMotif ? 'Material' : 'Color';
     const heightMm = project.designState?.motifOffsets?.[motif.id]?.heightMm ?? 100;
     return {
       id: motif.id,
@@ -187,6 +199,7 @@ export function buildPdfQuoteFromProject(project: MinimalProject): PDFQuote {
       name: cleanName,
       heightMm,
       colorName,
+      detailLabel,
       thumbnail: toAssetPath(motif.svgPath),
       amount: motifsCount > 0 ? round2(motifsPrice / motifsCount) : 0,
     };

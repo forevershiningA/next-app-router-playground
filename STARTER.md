@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-29
+**Last Updated:** 2026-06-30
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -51,6 +51,100 @@
 43. [Saved Design Email Delivery Fix (2026-06-26)](#current-status-2026-06-26--saved-design-email-delivery-fix)
 44. [Stainless Headstone Inscription Stencil Bridge Investigation (2026-06-27)](#current-status-2026-06-27--stainless-headstone-inscription-stencil-bridge-investigation)
 45. [Stainless Headstone UI and Rendering Update (2026-06-29)](#current-status-2026-06-29--stainless-headstone-ui-and-rendering-update)
+46. [Stainless Motifs, Sidebar Language, and Quote Detail Alignment (2026-06-30)](#current-status-2026-06-30--stainless-motifs-sidebar-language-and-quote-detail-alignment)
+
+---
+
+## Current Status (2026-06-30) - Stainless Motifs, Sidebar Language, and Quote Detail Alignment
+
+This session aligned stainless steel motif rendering, motif category imagery, sidebar language, shape ordering, and quote/check-price detail surfaces with the latest design direction.
+
+### Stainless Steel Motif Rendering
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/stainless-texture.ts` | Shared procedural stainless texture helper used by both the headstone body and stainless motifs. |
+| `components/SvgHeadstone.tsx` | Stainless headstone material now uses the shared stainless texture settings. |
+| `components/three/MotifModel.tsx` | Stainless motifs use the same stainless texture and render as shallow raised/extruded metallic motif pieces, instead of flat color swatches. |
+
+Current rule:
+- Stainless motifs on stainless steel headstones should appear as raised stainless pieces matching the headstone material, not painted flat decals.
+- Stainless motif color swatches are hidden in the left sidebar because stainless motifs use the product material finish.
+
+### Motif Category Images
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/motif-category-image.ts` | Resolves motif category main images from the `img:` marker in motif data. |
+| `components/MotifSelectorPanel.tsx` | Category cards use the `img:`-marked image where available. |
+| `components/MotifOverlayPanel.tsx` | Overlay/category list uses the same category image resolver. |
+| `app/select-motifs/page.tsx` | Main select-motifs page uses the same category image resolver. |
+
+Current rule:
+- For Motifs in the Motifs List, the main category image should come from the image marked as `img:` in the motif data.
+
+### Shape Ordering
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/shape-ordering.ts` | Central shape ordering helper. |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Uses the central ordering helper. |
+| `components/ShapeSelector.tsx` | Uses the central ordering helper. |
+
+Current rule:
+- If `Serpentine` is available for the selected product, it should appear first in the Shapes list.
+- If a product does not offer Serpentine, the product-specific list stays otherwise intact.
+
+### Sidebar Language and Controls
+
+| Area | Current Behavior |
+|------|------------------|
+| Workflow status label | `Upcoming` was changed to `Available` to avoid implying unavailable/future functionality. |
+| Duplicate controls | User-facing `Copy` button labels were changed to `Duplicate`. |
+| Stainless motif color controls | Hidden for stainless steel headstone motifs. |
+
+Files touched:
+- `components/DesignerNav.tsx`
+- `components/ImageSelector.tsx`
+- `components/InscriptionEditPanel.tsx`
+
+### Check Price and Bottom Canvas Chip Modal
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/material-utils.ts` | Maps stainless swatch asset names to user-facing names such as `Highly Polished Stainless Steel` and `Brushed Stainless Steel`. |
+| `lib/check-price-utils.ts` | Adds stainless steel headstone product detection for the pricing detail UI. |
+| `components/CheckPricePanel.tsx` | Bottom canvas chip modal shows stainless motif detail as `Material: ...` instead of `Color`, with no color swatch. |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | Full Check Price page uses the same stainless motif material wording. |
+
+Current rule:
+- Stainless motif rows should show `Material: Highly Polished Stainless Steel` or `Material: Brushed Stainless Steel`.
+- Non-stainless motif rows still show paint/color details and color swatches.
+
+### Saved Designs, PDF, and Email Quote Details
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/design-quote.ts` | Quote motif items now carry `detailLabel: 'Color' | 'Material'` while keeping `colorName` for compatibility. Stainless steel headstone motifs use the selected headstone material name as the detail value. |
+| `components/PriceQuoteDisplay.tsx` | Saved design quote cards display `Material: ...` for stainless motifs and `Color: ...` for normal motifs. |
+| `lib/pdf-generator.ts` | Generated PDFs use the motif detail label instead of hardcoding `Color`. |
+| `lib/email/helpers.ts` | Detailed email quote line items use the same motif detail label. |
+
+Compatibility note:
+- `colorName` remains part of the quote item shape so existing quote consumers do not break.
+- The display label is separate, which lets stainless motifs use material wording without changing normal motif behavior.
+
+### Verification
+
+Commands run successfully after the changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Working-tree note:
+- `screen.png` is still a local screenshot/reference artifact and may show as modified. Do not commit it unless preserving the visual reference is intentional.
 
 ---
 
@@ -11326,4 +11420,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-06-28*
+*End of STARTER.md - Last updated: 2026-06-30*

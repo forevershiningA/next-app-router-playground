@@ -8,6 +8,7 @@ import type { HeadstoneAPI } from '../SvgHeadstone';
 import SelectionBox from '../SelectionBox';
 import { useRouter, usePathname } from 'next/navigation';
 import { data } from '#/app/_internal/_data';
+import { createStainlessTextureSet, type StainlessFinish } from '#/lib/stainless-texture';
 
 type Props = {
   id: string; // unique motif ID
@@ -20,7 +21,7 @@ type Props = {
 
 const MAX_TEXTURE_DIMENSION = 2048;
 const STAINLESS_MOTIF_PRODUCT_IDS = new Set(['1', '23']);
-const STAINLESS_MOTIF_COLOR = '#e4e8ea';
+const STAINLESS_MOTIF_RAISED_LAYERS = [0.35, 0.7, 1] as const;
 const SILHOUETTE_BACKGROUND_LUMINANCE = 245;
 const SILHOUETTE_ALPHA_THRESHOLD = 12;
 
@@ -128,6 +129,7 @@ export default function MotifModel({
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
+  const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
   const dragPositionRef = React.useRef<{ xPos: number; yPos: number } | null>(null);
@@ -145,13 +147,25 @@ export default function MotifModel({
   );
   const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
-  const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.CanvasTexture; aspect: number } | null>(null);
+  const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.CanvasTexture; alphaTexture: THREE.CanvasTexture; aspect: number } | null>(null);
   const planeGeometry = React.useMemo(() => new THREE.PlaneGeometry(1, 1), []);
   const pointerCaptureTargetRef = React.useRef<HTMLElement | null>(null);
   const isLedgerSurface = surface === 'ledger';
   const isBaseSurface = surface === 'base';
+  const stainlessFinish: StainlessFinish = headstoneMaterialUrl?.includes('high-polished-ss-swatch') ? 'polished' : 'brushed';
+  const stainlessMaps = React.useMemo(
+    () => (isStainlessSteelMotif ? createStainlessTextureSet(stainlessFinish) : null),
+    [isStainlessSteelMotif, stainlessFinish],
+  );
 
   React.useEffect(() => () => planeGeometry.dispose(), [planeGeometry]);
+  React.useEffect(() => {
+    return () => {
+      stainlessMaps?.colorMap.dispose();
+      stainlessMaps?.roughnessMap.dispose();
+      stainlessMaps?.normalMap.dispose();
+    };
+  }, [stainlessMaps]);
 
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
@@ -159,6 +173,7 @@ export default function MotifModel({
   React.useEffect(() => {
     let disposed = false;
     let activeTexture: THREE.CanvasTexture | null = null;
+    let activeAlphaTexture: THREE.CanvasTexture | null = null;
 
     async function loadTexture() {
       try {
@@ -222,21 +237,49 @@ export default function MotifModel({
             applyLineArtAlphaMask(imageData);
           }
           ctx.putImageData(imageData, 0, 0);
+
+          const alphaCanvas = document.createElement('canvas');
+          alphaCanvas.width = canvas.width;
+          alphaCanvas.height = canvas.height;
+          const alphaCtx = alphaCanvas.getContext('2d');
+          if (!alphaCtx) throw new Error('Failed to create alpha canvas context');
+          const alphaImageData = alphaCtx.createImageData(canvas.width, canvas.height);
+          const alphaPixels = alphaImageData.data;
+          for (let i = 0; i < imageData.data.length; i += 4) {
+            const alpha = imageData.data[i + 3];
+            alphaPixels[i] = alpha;
+            alphaPixels[i + 1] = alpha;
+            alphaPixels[i + 2] = alpha;
+            alphaPixels[i + 3] = 255;
+          }
+          alphaCtx.putImageData(alphaImageData, 0, 0);
           
           activeTexture = new THREE.CanvasTexture(canvas);
+          activeAlphaTexture = new THREE.CanvasTexture(alphaCanvas);
           activeTexture.flipY = false;
+          activeAlphaTexture.flipY = false;
           if (typeof gl.capabilities.getMaxAnisotropy === 'function') {
             activeTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
+            activeAlphaTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
           }
           activeTexture.generateMipmaps = true;
+          activeAlphaTexture.generateMipmaps = true;
           activeTexture.minFilter = THREE.LinearMipmapLinearFilter;
+          activeAlphaTexture.minFilter = THREE.LinearMipmapLinearFilter;
           activeTexture.magFilter = THREE.LinearFilter;
+          activeAlphaTexture.magFilter = THREE.LinearFilter;
           if ('colorSpace' in activeTexture) {
             (activeTexture as any).colorSpace = THREE.SRGBColorSpace;
           }
+          activeAlphaTexture.colorSpace = THREE.NoColorSpace;
           activeTexture.needsUpdate = true;
+          activeAlphaTexture.needsUpdate = true;
           if (!disposed) {
-            setTextureInfo({ texture: activeTexture, aspect: canvas.width / canvas.height || 1 });
+            setTextureInfo({
+              texture: activeTexture,
+              alphaTexture: activeAlphaTexture,
+              aspect: canvas.width / canvas.height || 1,
+            });
           }
         } finally {
           URL.revokeObjectURL(blobUrl);
@@ -253,6 +296,9 @@ export default function MotifModel({
       disposed = true;
       if (activeTexture) {
         activeTexture.dispose();
+      }
+      if (activeAlphaTexture) {
+        activeAlphaTexture.dispose();
       }
     };
   }, [svgPath, gl, isStainlessSteelMotif]);
@@ -672,6 +718,10 @@ export default function MotifModel({
   // the texture upside-down by default.  Negate scaleY so non-flipped motifs
   // appear right-side up; flipped motifs (flipY=true) keep the inversion.
   const scaleY = planeHeightUnits * (flipY ? 1 : -1);
+  const raisedThicknessUnits = isStainlessSteelMotif
+    ? Math.min(Math.max(3 * mmToLocalUnits, 0.0015), 0.008)
+    : 0;
+  const raisedEdgeOffset = raisedThicknessUnits * 0.35;
 
   const isSelected = selectedMotifId === id;
 
@@ -752,6 +802,42 @@ export default function MotifModel({
           </mesh>
         )}
 
+        {isStainlessSteelMotif && STAINLESS_MOTIF_RAISED_LAYERS.map((layer) => (
+          <mesh
+            key={`motif-${id}-raised-${layer}`}
+            geometry={planeGeometry}
+            scale={[scaleX, scaleY, 1]}
+            position={[
+              raisedEdgeOffset * layer,
+              -raisedEdgeOffset * layer,
+              -raisedThicknessUnits * layer,
+            ]}
+            name={`motif-${id}-raised-body-${layer}`}
+          >
+            <meshPhysicalMaterial
+              color={stainlessFinish === 'polished' ? '#cbd2d4' : '#bcc5c7'}
+              alphaMap={textureInfo.alphaTexture}
+              roughnessMap={stainlessMaps?.roughnessMap}
+              normalMap={stainlessMaps?.normalMap}
+              normalScale={stainlessFinish === 'polished' ? new THREE.Vector2(0.04, 0.01) : new THREE.Vector2(0.09, 0.024)}
+              metalness={stainlessFinish === 'polished' ? 0.68 : 0.58}
+              roughness={stainlessFinish === 'polished' ? 0.2 : 0.46}
+              clearcoat={stainlessFinish === 'polished' ? 0.8 : 0.35}
+              clearcoatRoughness={stainlessFinish === 'polished' ? 0.1 : 0.34}
+              envMapIntensity={stainlessFinish === 'polished' ? 2.2 : 1.9}
+              transparent
+              opacity={0.94}
+              depthWrite={false}
+              depthTest={true}
+              side={THREE.DoubleSide}
+              alphaTest={0.01}
+              polygonOffset
+              polygonOffsetFactor={-1}
+              polygonOffsetUnits={-1}
+            />
+          </mesh>
+        ))}
+
         {/* Motif mesh rendered as textured plane */}
         <mesh
           ref={ref}
@@ -765,13 +851,17 @@ export default function MotifModel({
         >
           {isStainlessSteelMotif ? (
             <meshPhysicalMaterial
-              color={STAINLESS_MOTIF_COLOR}
-              map={textureInfo.texture}
-              metalness={0.86}
-              roughness={0.2}
-              clearcoat={1}
-              clearcoatRoughness={0.08}
-              envMapIntensity={2.6}
+              color={stainlessFinish === 'polished' ? '#ffffff' : '#f7f7f3'}
+              map={stainlessMaps?.colorMap}
+              alphaMap={textureInfo.alphaTexture}
+              roughnessMap={stainlessMaps?.roughnessMap}
+              normalMap={stainlessMaps?.normalMap}
+              normalScale={stainlessFinish === 'polished' ? new THREE.Vector2(0.05, 0.012) : new THREE.Vector2(0.13, 0.035)}
+              metalness={stainlessFinish === 'polished' ? 0.72 : 0.62}
+              roughness={stainlessFinish === 'polished' ? 0.16 : 0.42}
+              clearcoat={stainlessFinish === 'polished' ? 1 : 0.48}
+              clearcoatRoughness={stainlessFinish === 'polished' ? 0.06 : 0.32}
+              envMapIntensity={stainlessFinish === 'polished' ? 2.9 : 2.6}
               transparent
               depthWrite={false}
               depthTest={true}

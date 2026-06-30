@@ -1114,7 +1114,7 @@ export default function DesignerNav() {
                   selectedAdditionId && duplicateAddition(selectedAdditionId)
                 }
               >
-                Copy
+                Duplicate
               </button>
               <button
                 type="button"
@@ -1206,6 +1206,8 @@ export default function DesignerNav() {
     const motifPreviewPath = activeMotif?.svgPath ?? null;
     const motifPreviewColor =
       activeMotif?.color ?? catalog?.product?.defaultColor ?? '#c99d44';
+    const showMotifColorControls =
+      !isLaser && !isStainlessSteelHeadstone && catalog?.product?.color !== '0';
     const sectionCardClass =
       'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
     const controlButtonClass =
@@ -1533,7 +1535,7 @@ export default function DesignerNav() {
                 </div>
               </div>
 
-              {!isLaser && catalog?.product?.color !== '0' && (
+              {showMotifColorControls && (
                 <div className={`${sectionCardClass} space-y-2`}>
                   <label className="block text-sm font-semibold text-slate-100 day:text-gray-800">
                     Color
@@ -1613,7 +1615,7 @@ export default function DesignerNav() {
                   selectedMotifId && duplicateMotif(selectedMotifId)
                 }
               >
-                Copy
+                Duplicate
               </button>
               <button
                 type="button"
@@ -3415,7 +3417,7 @@ export default function DesignerNav() {
                   ? 'Current'
                   : isPastGroup
                     ? 'Complete'
-                    : 'Upcoming';
+                    : 'Available';
 
                 return (
                 <div

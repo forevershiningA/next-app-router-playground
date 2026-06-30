@@ -520,7 +520,7 @@ export default function InscriptionEditPanel() {
               className="cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15 day:bg-white day:text-[#8a6a12]"
               onClick={() => duplicateInscription(active.id)}
             >
-              Copy
+              Duplicate
             </button>
             <button
               type="button"

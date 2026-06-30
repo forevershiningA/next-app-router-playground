@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import MotifSelectionGrid from './_ui/MotifSelectionGrid';
+import { getMotifCategoryImage } from '#/lib/motif-category-image';
 
 type MotifCategory = {
   id: string;
@@ -68,7 +69,12 @@ export default function Page() {
     id: cat.id,
     name: cat.name,
     src: cat.srcFolder,
-    img: cat.previewUrl,
+    img: getMotifCategoryImage({
+      name: cat.name,
+      category: cat.category,
+      src: cat.srcFolder,
+      previewUrl: cat.previewUrl,
+    }),
     traditional: cat.traditional,
     ss: cat.ss,
   }));

@@ -279,7 +279,7 @@ async function drawQuoteTable(
       rows: quote.motifs.map((entry) => ({
         key: entry.id,
         title: entry.name,
-        subtitle: `Product ID: ${entry.productId} · Height: ${entry.heightMm}mm · Color: ${entry.colorName}`,
+        subtitle: `Product ID: ${entry.productId} · Height: ${entry.heightMm}mm · ${entry.detailLabel}: ${entry.colorName}`,
         amount: entry.amount,
         thumbnail: entry.thumbnail,
       })),

@@ -8,6 +8,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Shape } from '#/lib/db';
 import { data } from '#/app/_internal/_data';
 import type { ShapeData } from '#/lib/xml-parser';
+import { putSerpentineFirst } from '#/lib/shape-ordering';
 
 type ShapeCategory = {
   id: string;
@@ -261,10 +262,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     return acc;
   }, [] as Shape[]);
 
-  const filteredShapes = uniqueShapes.filter((shape) => {
+  const filteredShapes = putSerpentineFirst(uniqueShapes.filter((shape) => {
     const matchesCategory = selectedCategory === 'all' || shape.category === selectedCategory;
     return matchesCategory;
-  });
+  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 day:bg-stone-100 day:bg-none">

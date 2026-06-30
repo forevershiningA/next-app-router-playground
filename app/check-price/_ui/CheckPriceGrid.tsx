@@ -27,6 +27,7 @@ import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
 import ProjectActions from '#/components/ProjectActions';
+import { getCheckPriceMaterialName, isStainlessSteelHeadstoneProduct } from '#/lib/check-price-utils';
 
 type CheckPriceGridProps = {
   initialImagePricing?: ImagePricingMap | null;
@@ -90,6 +91,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const catalog = useHeadstoneStore((s) => s.catalog);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
+  const isStainlessSteelHeadstone = isStainlessSteelHeadstoneProduct(productId, catalog);
 
   useEffect(() => {
     return () => {
@@ -328,9 +330,12 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       const offset = motifOffsets[motif.id];
       const heightMm = offset?.heightMm ?? 100;
       
-      // Get color name from data
+      const isStainlessSteelMotif = isStainlessSteelHeadstone;
       const colorObj = data.colors.find((c) => c.hex === motif.color);
-      const colorName = colorObj?.name || 'Black';
+      const materialName = getCheckPriceMaterialName(headstoneMaterialUrl);
+      const colorName = isStainlessSteelMotif
+        ? materialName
+        : colorObj?.name || 'Black';
       
       const motifFileName = motif.svgPath.split('/').pop()?.replace('.svg', '') || 'unknown';
       
@@ -353,11 +358,12 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         heightMm,
         color: motif.color,
         colorName,
+        isStainlessSteelMotif,
         thumbnail: toAssetPath(motif.svgPath),
         price: individualPrice,
       };
     });
-  }, [selectedMotifs, motifOffsets, motifPriceModel, catalog]);
+  }, [selectedMotifs, motifOffsets, motifPriceModel, catalog, isStainlessSteelHeadstone, headstoneMaterialUrl]);
 
   // Get detailed inscription items
   const inscriptionItems = useMemo(() => {
@@ -544,7 +550,9 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                           )}
                           <div>
                             <p className="text-white font-medium capitalize day:text-gray-900">{item.name}</p>
-                            <p className="text-xs text-gray-400 day:text-gray-500">Height: {item.heightMm}mm · Color: {item.colorName}</p>
+                            <p className="text-xs text-gray-400 day:text-gray-500">
+                              Height: {item.heightMm}mm · {item.isStainlessSteelMotif ? 'Material' : 'Color'}: {item.colorName}
+                            </p>
                             <p className="text-xs text-gray-500 day:text-gray-400">{item.svgPath}</p>
                           </div>
                         </div>

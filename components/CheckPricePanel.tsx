@@ -12,6 +12,7 @@ import { calculatePrice, calculatePricePowerLaw, computeQuantity } from '#/lib/x
 import {
   getCheckPriceMaterialName,
   getShapeNameFromUrl,
+  isStainlessSteelHeadstoneProduct,
   loadCatalogForProduct,
   SECTION_DEFAULT_STATE,
   type ExpandableSection,
@@ -62,6 +63,7 @@ export default function CheckPricePanel() {
   });
   const isMountedRef = useRef(true);
   const activeCatalog = catalog ?? resolvedCatalog;
+  const isStainlessSteelHeadstone = isStainlessSteelHeadstoneProduct(productId, activeCatalog);
 
   const isOpen = activePanel === 'checkprice';
 
@@ -290,10 +292,13 @@ export default function CheckPricePanel() {
     return selectedMotifs.map((motif) => {
       const offset = motifOffsets[motif.id];
       const heightMm = offset?.heightMm ?? 100;
+      const isStainlessSteelMotif = isStainlessSteelHeadstone;
       
       // Get color display name
       let colorDisplay = 'Standard';
-      if (motif.color === '#c99d44') {
+      if (isStainlessSteelMotif) {
+        colorDisplay = getCheckPriceMaterialName(headstoneMaterialUrl);
+      } else if (motif.color === '#c99d44') {
         colorDisplay = 'Gold Gilding';
       } else if (motif.color === '#eeeeee') {
         colorDisplay = 'Silver Gilding';
@@ -326,10 +331,11 @@ export default function CheckPricePanel() {
         heightMm,
         color: motif.color,
         colorDisplay,
+        isStainlessSteelMotif,
         price: individualPrice,
       };
     });
-  }, [selectedMotifs, motifOffsets, motifPriceModel, activeCatalog]);
+  }, [selectedMotifs, motifOffsets, motifPriceModel, activeCatalog, isStainlessSteelHeadstone, headstoneMaterialUrl, productId]);
 
   // Get detailed inscription items
   const inscriptionItems = useMemo(() => {
@@ -665,11 +671,15 @@ export default function CheckPricePanel() {
                         <p className="font-medium text-white/90 capitalize">{item.name}</p>
                         <p className="text-xs text-white/50">Height: {formatLengthFromMm(item.heightMm, unitSystem)}</p>
                         <div className="mt-1 flex items-center gap-2 text-xs text-white/50">
-                          <span>{item.colorDisplay}</span>
-                          <span
-                            className="inline-block h-3 w-3 rounded border border-white/20"
-                            style={{ backgroundColor: item.color }}
-                          />
+                          <span>
+                            {item.isStainlessSteelMotif ? 'Material' : 'Color'}: {item.colorDisplay}
+                          </span>
+                          {!item.isStainlessSteelMotif && (
+                            <span
+                              className="inline-block h-3 w-3 rounded border border-white/20"
+                              style={{ backgroundColor: item.color }}
+                            />
+                          )}
                         </div>
                       </td>
                       <td className="px-6 py-3 text-center text-sm text-white/85">1</td>

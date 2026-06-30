@@ -51,6 +51,14 @@ export const getMaterialNameFromUrl = (url: string | null | undefined) => {
   const filename = url.split('/').pop();
   if (!filename) return 'Not selected';
 
+  const normalizedFilename = filename.toLowerCase();
+  if (normalizedFilename.includes('high-polished-ss-swatch')) {
+    return 'Highly Polished Stainless Steel';
+  }
+  if (normalizedFilename.includes('brushed-ss-swatch')) {
+    return 'Brushed Stainless Steel';
+  }
+
   return filename
     .replace(/\.(webp|png|jpe?g)$/i, '')
     .replace(/-/g, ' ');

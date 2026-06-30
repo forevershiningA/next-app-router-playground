@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore, type ShapeOption } from '#/lib/headstone-store';
 import { isContourSupported } from '#/components/three/InsetContourLine';
+import { putSerpentineFirst } from '#/lib/shape-ordering';
 
 type ShapeSelectorProps = {
   shapes: ShapeOption[];
@@ -29,12 +30,12 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
   const filteredShapes = React.useMemo(() => {
     const rectangleShapes = ['landscape.svg', 'portrait.svg'];
     const allPlaqueShapes = [...rectangleShapes, 'oval_horizontal.svg', 'oval_vertical.svg', 'circle.svg'];
-    return shapes.filter((shape) => {
+    return putSerpentineFirst(shapes.filter((shape) => {
       const img = shape.image ?? '';
       if (isFullColourPlaque) return rectangleShapes.includes(img);
       if (isPlaque) return allPlaqueShapes.includes(img);
       return !allPlaqueShapes.includes(img);
-    });
+    }));
   }, [shapes, isPlaque, isFullColourPlaque]);
 
   // Urn: use catalog shapes from XML, not the static DB list
