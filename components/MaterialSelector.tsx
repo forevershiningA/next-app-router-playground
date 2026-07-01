@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { ArrowUpTrayIcon, CheckCircleIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
@@ -13,9 +14,11 @@ import type { MaskShape } from '#/lib/image-mask';
 type MaterialSelectorProps = {
   materials: MaterialOption[];
   disableInternalScroll?: boolean;
+  forceTarget?: 'headstone' | 'base' | 'ledger' | 'kerbset';
 };
 
-export default function MaterialSelector({ materials, disableInternalScroll = false }: MaterialSelectorProps) {
+export default function MaterialSelector({ materials, disableInternalScroll = false, forceTarget }: MaterialSelectorProps) {
+  const router = useRouter();
   const setHeadstoneMaterialUrl = useHeadstoneStore((s) => s.setHeadstoneMaterialUrl);
   const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const setLedgerMaterialUrl = useHeadstoneStore((s) => s.setLedgerMaterialUrl);
@@ -226,12 +229,21 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     return materials;
   }, [isBronzePlaque, usesBackgrounds, materials, bgTab]);
 
-  // Ensure canvas selection matches editingObject when component mounts
+  // Ensure canvas selection matches the active material target when component mounts
   useEffect(() => {
+    if (forceTarget) {
+      if (editingObject !== forceTarget) {
+        setEditingObject(forceTarget);
+      }
+      if (selected !== forceTarget) {
+        setSelected(forceTarget);
+      }
+      return;
+    }
     if (selected !== editingObject) {
       setSelected(editingObject);
     }
-  }, [editingObject, selected, setSelected]);
+  }, [editingObject, forceTarget, selected, setEditingObject, setSelected]);
 
   useEffect(() => {
     if (isPlaque && editingObject !== 'headstone') {
@@ -254,12 +266,13 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   }, [isStainlessSteel]);
 
   // Determine current material URL based on what's being edited
+  const materialTarget = forceTarget ?? editingObject;
   const currentMaterialUrl =
-    editingObject === 'base'
+    materialTarget === 'base'
       ? currentBaseMaterialUrl
-      : editingObject === 'ledger'
+      : materialTarget === 'ledger'
         ? currentLedgerMaterialUrl
-        : editingObject === 'kerbset'
+        : materialTarget === 'kerbset'
           ? currentKerbsetMaterialUrl
           : currentHeadstoneMaterialUrl;
 
@@ -292,7 +305,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
     }
 
     setIsMaterialChange(true);
-    const targetObject = isPlaque ? 'headstone' : editingObject;
+    const targetObject = isPlaque ? 'headstone' : (forceTarget ?? editingObject);
 
     if (targetObject === 'base') {
       setBaseMaterialUrl(materialUrl);
@@ -518,11 +531,14 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
       {!isPlaque && !isUrn && (
         <div className="mb-4">
           <SegmentedControl
-            value={editingObject}
+            value={forceTarget ?? editingObject}
             onChange={(value) => {
               const nextTarget = value as 'headstone' | 'base' | 'ledger' | 'kerbset';
               setEditingObject(nextTarget);
               setSelected(nextTarget);
+              if (forceTarget && nextTarget !== forceTarget) {
+                router.push('/select-size');
+              }
             }}
             options={targetOptions}
           />

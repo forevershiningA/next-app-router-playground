@@ -1,14 +1,28 @@
 'use client';
 
-import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import React, {
+  useState,
+  useMemo,
+  useRef,
+  useEffect,
+  useCallback,
+} from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import type { AdditionData } from '#/lib/xml-parser';
 import Image from 'next/image';
 import { fetchMaskMetrics } from '#/lib/mask-metrics';
-import { getFlexibleImageBounds, getImageSizeOptions, getImageSizeOption } from '#/lib/image-size-config';
+import {
+  getFlexibleImageBounds,
+  getImageSizeOptions,
+  getImageSizeOption,
+} from '#/lib/image-size-config';
 import { MASK_OPTIONS, getMaskAspectRatio, getMaskUrl } from '#/lib/image-mask';
 import { useImageCropState } from './useImageCropState';
-import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
+import {
+  calculateImagePrice,
+  fetchImagePricing,
+  type ImagePricingMap,
+} from '#/lib/image-pricing';
 import { logger } from '#/lib/logger';
 
 interface ImageSelectorProps {
@@ -24,6 +38,15 @@ const IMAGE_THUMBNAILS: Record<string, string> = {
   '2400': '/jpg/photos/plana.jpg',
 };
 
+function normalizeSignedRotation(value: number) {
+  if (value >= -180 && value <= 180) {
+    return value;
+  }
+
+  const normalized = ((((value + 180) % 360) + 360) % 360) - 180;
+  return normalized;
+}
+
 export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   // Store hooks
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
@@ -32,12 +55,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const updateImagePosition = useHeadstoneStore((s) => s.updateImagePosition);
   const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
-  const updateImageSizeVariant = useHeadstoneStore((s) => s.updateImageSizeVariant);
+  const updateImageSizeVariant = useHeadstoneStore(
+    (s) => s.updateImageSizeVariant,
+  );
   const updateImageRotation = useHeadstoneStore((s) => s.updateImageRotation);
   const removeImage = useHeadstoneStore((s) => s.removeImage);
   const duplicateImage = useHeadstoneStore((s) => s.duplicateImage);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
-  
+
   const {
     selectedType,
     setSelectedType,
@@ -72,16 +97,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     openUploadForImage,
     clearSelectedType,
   } = useImageCropState();
-  
+
   const [isDragging, setIsDragging] = useState(false);
-  const [dragHandle, setDragHandle] = useState<'move' | 'nw' | 'ne' | 'sw' | 'se' | null>(null);
+  const [dragHandle, setDragHandle] = useState<
+    'move' | 'nw' | 'ne' | 'sw' | 'se' | null
+  >(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const previewRef = useRef<HTMLDivElement>(null);
   const updateFileInputRef = useRef<HTMLInputElement>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [feedbackTone, setFeedbackTone] = useState<'error' | 'info'>('error');
   const [updatingImageId, setUpdatingImageId] = useState<string | null>(null);
-  
+
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   const addImage = useHeadstoneStore((s) => s.addImage);
@@ -89,16 +116,25 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
 
   // Image pricing state
-  const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
+  const [imagePricingData, setImagePricingData] =
+    useState<ImagePricingMap | null>(null);
   const [isCropping, setIsCropping] = useState(false);
   useEffect(() => {
-    fetchImagePricing().then(setImagePricingData).catch(() => {});
+    fetchImagePricing()
+      .then(setImagePricingData)
+      .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const normalizedRotation = normalizeSignedRotation(cropRotation);
+    if (cropRotation !== normalizedRotation) {
+      setCropRotation(normalizedRotation);
+    }
+  }, [cropRotation, setCropRotation]);
 
   const sectionCardClass =
     'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
-  const labelClass =
-    'text-sm font-semibold text-slate-100 day:text-gray-800';
+  const labelClass = 'text-sm font-semibold text-slate-100 day:text-gray-800';
   const controlButtonClass =
     'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
   const numberInputBaseClass =
@@ -141,12 +177,28 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     } else {
       setCropCanvasData(null);
     }
-  }, [showCropSection, uploadedImage, selectedMask, cropColorMode, cropScale, cropRotation, flipX, flipY, cropArea, hasFixedSizes, allowFreeformHandles, maskMetrics, setCropCanvasData]);
+  }, [
+    showCropSection,
+    uploadedImage,
+    selectedMask,
+    cropColorMode,
+    cropScale,
+    cropRotation,
+    flipX,
+    flipY,
+    cropArea,
+    hasFixedSizes,
+    allowFreeformHandles,
+    maskMetrics,
+    setCropCanvasData,
+  ]);
 
   // Filter catalog additions to get only image types
   const imageTypes = useMemo(() => {
     if (!catalog?.product?.additions) return [];
-    return catalog.product.additions.filter((addition) => addition.type === 'image');
+    return catalog.product.additions.filter(
+      (addition) => addition.type === 'image',
+    );
   }, [catalog]);
 
   // Full Color Plaque (product 32): auto-select "Free Image" (id 137) to skip type selection
@@ -155,7 +207,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       const freeImage = imageTypes.find((t) => t.id === '137') ?? imageTypes[0];
       handleImageTypeSelect(freeImage);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId, imageTypes, selectedType]);
 
   const handleImageTypeSelect = (imageType: AdditionData) => {
@@ -186,7 +238,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     const reader = new FileReader();
     reader.onload = (e) => {
       const imageUrl = e.target?.result as string;
-      
+
       // Load image to get dimensions
       const img = new window.Image();
       img.onload = () => {
@@ -221,9 +273,13 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       const img = new window.Image();
       img.onload = () => {
         // Use the existing image's type so the crop flow works
-        const existingImg = selectedImages.find((i) => i.id === updatingImageId);
+        const existingImg = selectedImages.find(
+          (i) => i.id === updatingImageId,
+        );
         if (existingImg && !selectedType) {
-          const matchingType = imageTypes.find((t) => t.id === String(existingImg.typeId));
+          const matchingType = imageTypes.find(
+            (t) => t.id === String(existingImg.typeId),
+          );
           if (matchingType) setSelectedType(matchingType);
         }
         openUploadForImage(imageUrl, { width: img.width, height: img.height });
@@ -245,7 +301,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       try {
         resolvedMaskMetrics = await fetchMaskMetrics(maskUrl);
       } catch (error) {
-        console.error('[handleCropImage] Failed to load mask metrics on demand:', error);
+        console.error(
+          '[handleCropImage] Failed to load mask metrics on demand:',
+          error,
+        );
       }
     }
 
@@ -267,13 +326,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         img.onerror = reject;
       });
 
-
       // 3. Calculate crop area in actual image pixels
       const cropX = (cropArea.x / 100) * img.width;
       const cropY = (cropArea.y / 100) * img.height;
       const cropW = (cropArea.width / 100) * img.width;
       const cropH = (cropArea.height / 100) * img.height;
-
 
       // 4. Set canvas size to crop dimensions
       canvas.width = cropW;
@@ -289,33 +346,39 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       // 6. Draw cropped and transformed portion of image
       ctx.drawImage(
         img,
-        cropX, cropY, cropW, cropH,
-        -cropW / 2, -cropH / 2, cropW, cropH
+        cropX,
+        cropY,
+        cropW,
+        cropH,
+        -cropW / 2,
+        -cropH / 2,
+        cropW,
+        cropH,
       );
       ctx.restore();
-
 
       // 7. Apply color mode filter
       if (cropColorMode === 'bw') {
         const imageData = ctx.getImageData(0, 0, cropW, cropH);
         const data = imageData.data;
         for (let i = 0; i < data.length; i += 4) {
-          const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+          const gray =
+            0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
           data[i] = data[i + 1] = data[i + 2] = gray;
         }
         ctx.putImageData(imageData, 0, 0);
-
       } else if (cropColorMode === 'sepia') {
         const imageData = ctx.getImageData(0, 0, cropW, cropH);
         const data = imageData.data;
         for (let i = 0; i < data.length; i += 4) {
-          const r = data[i], g = data[i + 1], b = data[i + 2];
-          data[i] = Math.min(255, (r * 0.393) + (g * 0.769) + (b * 0.189));
-          data[i + 1] = Math.min(255, (r * 0.349) + (g * 0.686) + (b * 0.168));
-          data[i + 2] = Math.min(255, (r * 0.272) + (g * 0.534) + (b * 0.131));
+          const r = data[i],
+            g = data[i + 1],
+            b = data[i + 2];
+          data[i] = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
+          data[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
+          data[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
         }
         ctx.putImageData(imageData, 0, 0);
-
       }
 
       // 8. Apply mask shape using compositing
@@ -324,12 +387,15 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       imageCanvas.height = cropH;
       const imageCtx = imageCanvas.getContext('2d');
       if (!imageCtx) {
-        console.error('[handleCropImage] Failed to create image canvas context');
+        console.error(
+          '[handleCropImage] Failed to create image canvas context',
+        );
         return;
       }
       imageCtx.drawImage(canvas, 0, 0);
 
-      const targetMaskAspect = resolvedMaskMetrics?.aspect ?? getMaskAspectRatio(selectedMask);
+      const targetMaskAspect =
+        resolvedMaskMetrics?.aspect ?? getMaskAspectRatio(selectedMask);
       const canvasAspect = cropW / cropH;
 
       let maskDrawWidth = cropW;
@@ -352,14 +418,22 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       finalCanvas.height = Math.round(maskDrawHeight);
       const finalCtx = finalCanvas.getContext('2d');
       if (!finalCtx) {
-        console.error('[handleCropImage] Failed to create final canvas context');
+        console.error(
+          '[handleCropImage] Failed to create final canvas context',
+        );
         return;
       }
 
       finalCtx.drawImage(
         imageCanvas,
-        maskDrawX, maskDrawY, maskDrawWidth, maskDrawHeight,
-        0, 0, finalCanvas.width, finalCanvas.height
+        maskDrawX,
+        maskDrawY,
+        maskDrawWidth,
+        maskDrawHeight,
+        0,
+        0,
+        finalCanvas.width,
+        finalCanvas.height,
       );
 
       if (maskUrl) {
@@ -377,12 +451,22 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         finalCtx.globalCompositeOperation = 'destination-in';
 
         if (resolvedMaskMetrics) {
-          const nativeWidth = maskImg.naturalWidth || maskImg.width || resolvedMaskMetrics.naturalWidth;
-          const nativeHeight = maskImg.naturalHeight || maskImg.height || resolvedMaskMetrics.naturalHeight;
-          const sourceX = resolvedMaskMetrics.normalizedBounds.left * nativeWidth;
-          const sourceY = resolvedMaskMetrics.normalizedBounds.top * nativeHeight;
-          const sourceWidth = resolvedMaskMetrics.normalizedBounds.width * nativeWidth;
-          const sourceHeight = resolvedMaskMetrics.normalizedBounds.height * nativeHeight;
+          const nativeWidth =
+            maskImg.naturalWidth ||
+            maskImg.width ||
+            resolvedMaskMetrics.naturalWidth;
+          const nativeHeight =
+            maskImg.naturalHeight ||
+            maskImg.height ||
+            resolvedMaskMetrics.naturalHeight;
+          const sourceX =
+            resolvedMaskMetrics.normalizedBounds.left * nativeWidth;
+          const sourceY =
+            resolvedMaskMetrics.normalizedBounds.top * nativeHeight;
+          const sourceWidth =
+            resolvedMaskMetrics.normalizedBounds.width * nativeWidth;
+          const sourceHeight =
+            resolvedMaskMetrics.normalizedBounds.height * nativeHeight;
 
           finalCtx.drawImage(
             maskImg,
@@ -393,7 +477,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             0,
             0,
             finalCanvas.width,
-            finalCanvas.height
+            finalCanvas.height,
           );
         } else {
           finalCtx.drawImage(
@@ -405,7 +489,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             0,
             0,
             finalCanvas.width,
-            finalCanvas.height
+            finalCanvas.height,
           );
         }
 
@@ -419,11 +503,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       if (!blob) throw new Error('finalCanvas.toBlob returned null');
 
       const form = new FormData();
-      form.append('file', new File([blob], 'portrait.png', { type: 'image/png' }));
+      form.append(
+        'file',
+        new File([blob], 'portrait.png', { type: 'image/png' }),
+      );
 
-      const uploadResponse = await fetch('/api/upload-image', { method: 'POST', body: form });
-      if (!uploadResponse.ok) throw new Error(`Image upload failed: ${uploadResponse.status}`);
-      const { url: processedImageUrl } = (await uploadResponse.json()) as { url: string };
+      const uploadResponse = await fetch('/api/upload-image', {
+        method: 'POST',
+        body: form,
+      });
+      if (!uploadResponse.ok)
+        throw new Error(`Image upload failed: ${uploadResponse.status}`);
+      const { url: processedImageUrl } = (await uploadResponse.json()) as {
+        url: string;
+      };
 
       logger.log('[handleCropImage] Canvas uploaded:', {
         canvasWidth: finalCanvas.width,
@@ -431,7 +524,6 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         canvasAspect: finalCanvas.width / finalCanvas.height,
         selectedMask,
       });
-
 
       // 10. Calculate dimensions based on trimmed canvas aspect ratio
       // After trimming, the canvas matches the mask's visible bounds exactly
@@ -460,19 +552,25 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       // 11. Add to 3D scene with trimmed aspect ratio
       // Convert selectedMask to SVG filename format
       const maskShapeMap: Record<string, string> = {
-        'oval': 'oval_vertical',
+        oval: 'oval_vertical',
         'horizontal-oval': 'oval_horizontal',
-        'square': 'rectangle_vertical',
-        'rectangle': 'rectangle_horizontal',
-        'heart': 'heart',
-        'teardrop': 'teardrop',
-        'triangle': 'triangle',
+        square: 'rectangle_vertical',
+        rectangle: 'rectangle_horizontal',
+        heart: 'heart',
+        teardrop: 'teardrop',
+        triangle: 'triangle',
       };
-      const maskShapeFilename = productId === '32' ? '' : (maskShapeMap[selectedMask] || 'oval_vertical');
+      const maskShapeFilename =
+        productId === '32' ? '' : maskShapeMap[selectedMask] || 'oval_vertical';
 
       if (updatingImageId) {
         // Update existing image: replace photo data, keep position/size/mask
-        updateImageData(updatingImageId, processedImageUrl, canonicalAspectRatio, cropColorMode);
+        updateImageData(
+          updatingImageId,
+          processedImageUrl,
+          canonicalAspectRatio,
+          cropColorMode,
+        );
         setUpdatingImageId(null);
       } else {
         addImage({
@@ -493,15 +591,12 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         });
       }
 
-
       // 12. Reset and close crop UI
       resetCropState();
-      
+
       // Clear crop canvas
       setCropCanvasData(null);
       setIsCropping(false);
-
-      
     } catch (error) {
       console.error('[handleCropImage] Error processing image:', error);
       setFeedbackTone('error');
@@ -511,20 +606,24 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     }
   };
 
-
   const handleFlipX = () => setFlipX(!flipX);
   const handleFlipY = () => setFlipY(!flipY);
-  const handleRotateLeft = () => setCropRotation(((cropRotation - 90) % 360 + 360) % 360);
-  const handleRotateRight = () => setCropRotation((cropRotation + 90) % 360);
+  const handleRotateLeft = () =>
+    setCropRotation((rotation) => normalizeSignedRotation(rotation - 90));
+  const handleRotateRight = () =>
+    setCropRotation((rotation) => normalizeSignedRotation(rotation + 90));
 
-  const handleMouseDown = (e: React.MouseEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
+  const handleMouseDown = (
+    e: React.MouseEvent,
+    handle: 'move' | 'nw' | 'ne' | 'sw' | 'se',
+  ) => {
     e.preventDefault();
-    
+
     // For fixed sizes, only allow moving, not resizing
     if (hasFixedSizes && handle !== 'move') {
       return;
     }
-    
+
     setIsDragging(true);
     setDragHandle(handle);
     setDragStart({ x: e.clientX, y: e.clientY });
@@ -551,20 +650,32 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         newArea.width = newWidth;
         newArea.height = newHeight;
       } else if (dragHandle === 'ne') {
-        const newWidth = Math.max(10, Math.min(100 - prev.x, prev.width + deltaX));
+        const newWidth = Math.max(
+          10,
+          Math.min(100 - prev.x, prev.width + deltaX),
+        );
         const newHeight = Math.max(10, prev.height - deltaY);
         newArea.y = Math.max(0, prev.y + deltaY);
         newArea.width = newWidth;
         newArea.height = newHeight;
       } else if (dragHandle === 'sw') {
         const newWidth = Math.max(10, prev.width - deltaX);
-        const newHeight = Math.max(10, Math.min(100 - prev.y, prev.height + deltaY));
+        const newHeight = Math.max(
+          10,
+          Math.min(100 - prev.y, prev.height + deltaY),
+        );
         newArea.x = Math.max(0, prev.x + deltaX);
         newArea.width = newWidth;
         newArea.height = newHeight;
       } else if (dragHandle === 'se') {
-        const newWidth = Math.max(10, Math.min(100 - prev.x, prev.width + deltaX));
-        const newHeight = Math.max(10, Math.min(100 - prev.y, prev.height + deltaY));
+        const newWidth = Math.max(
+          10,
+          Math.min(100 - prev.x, prev.width + deltaX),
+        );
+        const newHeight = Math.max(
+          10,
+          Math.min(100 - prev.y, prev.height + deltaY),
+        );
         newArea.width = newWidth;
         newArea.height = newHeight;
       }
@@ -600,16 +711,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   };
 
   // Get selected image data
-  const selectedImage = selectedImages.find(img => img.id === selectedImageId);
+  const selectedImage = selectedImages.find(
+    (img) => img.id === selectedImageId,
+  );
 
   // Debug logging
   useEffect(() => {
-    logger.log('[ImageSelector] State:', { 
-      selectedImageId, 
-      activePanel, 
+    logger.log('[ImageSelector] State:', {
+      selectedImageId,
+      activePanel,
       hasSelectedImage: !!selectedImage,
       selectedImagesCount: selectedImages.length,
-      selectedImageData: selectedImage ? { id: selectedImage.id, typeName: selectedImage.typeName } : null
+      selectedImageData: selectedImage
+        ? { id: selectedImage.id, typeName: selectedImage.typeName }
+        : null,
     });
   }, [selectedImageId, activePanel, selectedImage, selectedImages]);
 
@@ -618,10 +733,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     return (
       <div className="flex h-full flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-white day:text-gray-900">No image types available</h3>
+          <h3 className="day:text-gray-900 text-sm font-semibold text-white">
+            No image types available
+          </h3>
         </div>
-        <div className="flex-1 flex items-center justify-center">
-          <p className="text-sm text-white/60 day:text-gray-500">This product does not support images.</p>
+        <div className="flex flex-1 items-center justify-center">
+          <p className="day:text-gray-500 text-sm text-white/60">
+            This product does not support images.
+          </p>
         </div>
       </div>
     );
@@ -629,21 +748,30 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
   // If an image is selected, show editing controls
   // Skip when in update-crop mode so the crop UI renders instead
-  if (selectedImageId && selectedImage && !(showCropSection && updatingImageId)) {
+  if (
+    selectedImageId &&
+    selectedImage &&
+    !(showCropSection && updatingImageId)
+  ) {
     const imageRotationDeg = selectedImage.rotationZ || 0;
-    
+
     // Get size configuration for this image type
     const sizeOptions = getImageSizeOptions(selectedImage.typeId);
     const hasFixedSizes = sizeOptions.length > 0;
     const currentSizeVariant = selectedImage.sizeVariant || 1;
     const maxSize = hasFixedSizes ? sizeOptions.length : 4;
-    const flexibleBounds = hasFixedSizes ? null : getFlexibleImageBounds(selectedImage.typeId);
+    const flexibleBounds = hasFixedSizes
+      ? null
+      : getFlexibleImageBounds(selectedImage.typeId);
     const flexibleMinHeight = flexibleBounds?.minHeight ?? 30;
     const flexibleMaxHeight = flexibleBounds?.maxHeight ?? 1200;
     const flexibleInitHeight = flexibleBounds?.initHeight ?? 50;
     const currentFlexibleHeight = Math.min(
       flexibleMaxHeight,
-      Math.max(flexibleMinHeight, Math.round(selectedImage.heightMm || flexibleInitHeight))
+      Math.max(
+        flexibleMinHeight,
+        Math.round(selectedImage.heightMm || flexibleInitHeight),
+      ),
     );
     const aspectRatio =
       selectedImage.croppedAspectRatio ||
@@ -655,12 +783,12 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     const applyFlexibleHeight = (nextHeight: number) => {
       const clampedHeight = Math.min(
         flexibleMaxHeight,
-        Math.max(flexibleMinHeight, Math.round(nextHeight))
+        Math.max(flexibleMinHeight, Math.round(nextHeight)),
       );
       const derivedWidth = Math.max(1, Math.round(clampedHeight * aspectRatio));
       updateImageSize(selectedImageId, derivedWidth, clampedHeight);
     };
-    
+
     return (
       <div className="space-y-3">
         {/* Hidden file input for image update flow */}
@@ -674,14 +802,15 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         <div className={sectionCardClass}>
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45 day:text-gray-400">
+              <div className="day:text-gray-400 text-xs font-semibold tracking-[0.18em] text-white/45 uppercase">
                 Selected Image
               </div>
-              <div className="mt-1 truncate text-sm font-semibold text-white day:text-gray-900">
+              <div className="day:text-gray-900 mt-1 truncate text-sm font-semibold text-white">
                 {selectedImage.typeName}
               </div>
-              <div className="mt-1 text-xs font-medium text-white/45 day:text-gray-500">
-                {Math.round(selectedImage.widthMm)} × {Math.round(selectedImage.heightMm)} mm
+              <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
+                {Math.round(selectedImage.widthMm)} ×{' '}
+                {Math.round(selectedImage.heightMm)} mm
               </div>
             </div>
             <button
@@ -690,7 +819,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 setSelectedImageId(null);
                 setActivePanel(null);
               }}
-              className="shrink-0 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:text-gray-900"
+              className="day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:text-gray-900 shrink-0 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white"
             >
               Clear
             </button>
@@ -699,16 +828,21 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
         {(() => {
           const product = imagePricingData?.[String(selectedImage.typeId)];
-          const sizeOpt = getImageSizeOption(selectedImage.typeId, currentSizeVariant);
+          const sizeOpt = getImageSizeOption(
+            selectedImage.typeId,
+            currentSizeVariant,
+          );
           const w = sizeOpt?.width ?? Math.round(selectedImage.widthMm || 0);
           const h = sizeOpt?.height ?? Math.round(selectedImage.heightMm || 0);
-          const price = product ? calculateImagePrice(product, w, h, selectedImage.colorMode) : null;
+          const price = product
+            ? calculateImagePrice(product, w, h, selectedImage.colorMode)
+            : null;
           return price !== null ? (
             <div className={sectionCardClass}>
-              <div className="mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 day:text-gray-500 uppercase">
+              <div className="day:text-gray-500 mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 uppercase">
                 Image Price
               </div>
-              <div className="text-2xl font-semibold text-[#2EE59D] day:text-gray-900">
+              <div className="day:text-gray-900 text-2xl font-semibold text-[#2EE59D]">
                 ${price.toFixed(2)}
               </div>
             </div>
@@ -729,18 +863,36 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         updateImageSizeVariant(selectedImageId, newSize);
                         if (hasFixedSizes) {
                           const dims = sizeOptions[newSize - 1];
-                          const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                          const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                          const selectedImg = selectedImages.find(
+                            (img) => img.id === selectedImageId,
+                          );
+                          const aspectRatio =
+                            selectedImg?.croppedAspectRatio ||
+                            dims.width / dims.height;
                           const scaledHeight = dims.height;
                           const scaledWidth = scaledHeight * aspectRatio;
-                          updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                          updateImageSize(
+                            selectedImageId,
+                            scaledWidth,
+                            scaledHeight,
+                          );
                         }
                       }}
                       className={controlButtonClass}
                       aria-label="Decrease size"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M20 12H4"
+                        />
                       </svg>
                     </button>
                     <input
@@ -755,11 +907,19 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           updateImageSizeVariant(selectedImageId, val);
                           if (hasFixedSizes) {
                             const dims = sizeOptions[val - 1];
-                            const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                            const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                            const selectedImg = selectedImages.find(
+                              (img) => img.id === selectedImageId,
+                            );
+                            const aspectRatio =
+                              selectedImg?.croppedAspectRatio ||
+                              dims.width / dims.height;
                             const scaledHeight = dims.height;
                             const scaledWidth = scaledHeight * aspectRatio;
-                            updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                            updateImageSize(
+                              selectedImageId,
+                              scaledWidth,
+                              scaledHeight,
+                            );
                           }
                         }
                       }}
@@ -769,21 +929,37 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           updateImageSizeVariant(selectedImageId, 1);
                           if (hasFixedSizes) {
                             const dims = sizeOptions[0];
-                            const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                            const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                            const selectedImg = selectedImages.find(
+                              (img) => img.id === selectedImageId,
+                            );
+                            const aspectRatio =
+                              selectedImg?.croppedAspectRatio ||
+                              dims.width / dims.height;
                             const scaledHeight = dims.height;
                             const scaledWidth = scaledHeight * aspectRatio;
-                            updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                            updateImageSize(
+                              selectedImageId,
+                              scaledWidth,
+                              scaledHeight,
+                            );
                           }
                         } else if (val > maxSize) {
                           updateImageSizeVariant(selectedImageId, maxSize);
                           if (hasFixedSizes) {
                             const dims = sizeOptions[maxSize - 1];
-                            const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                            const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                            const selectedImg = selectedImages.find(
+                              (img) => img.id === selectedImageId,
+                            );
+                            const aspectRatio =
+                              selectedImg?.croppedAspectRatio ||
+                              dims.width / dims.height;
                             const scaledHeight = dims.height;
                             const scaledWidth = scaledHeight * aspectRatio;
-                            updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                            updateImageSize(
+                              selectedImageId,
+                              scaledWidth,
+                              scaledHeight,
+                            );
                           }
                         }
                       }}
@@ -792,22 +968,43 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     <button
                       type="button"
                       onClick={() => {
-                        const newSize = Math.min(maxSize, currentSizeVariant + 1);
+                        const newSize = Math.min(
+                          maxSize,
+                          currentSizeVariant + 1,
+                        );
                         updateImageSizeVariant(selectedImageId, newSize);
                         if (hasFixedSizes) {
                           const dims = sizeOptions[newSize - 1];
-                          const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                          const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                          const selectedImg = selectedImages.find(
+                            (img) => img.id === selectedImageId,
+                          );
+                          const aspectRatio =
+                            selectedImg?.croppedAspectRatio ||
+                            dims.width / dims.height;
                           const scaledHeight = dims.height;
                           const scaledWidth = scaledHeight * aspectRatio;
-                          updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                          updateImageSize(
+                            selectedImageId,
+                            scaledWidth,
+                            scaledHeight,
+                          );
                         }
                       }}
                       className={controlButtonClass}
                       aria-label="Increase size"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -824,11 +1021,19 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       updateImageSizeVariant(selectedImageId, newSize);
                       if (hasFixedSizes) {
                         const dims = sizeOptions[newSize - 1];
-                        const selectedImg = selectedImages.find(img => img.id === selectedImageId);
-                        const aspectRatio = selectedImg?.croppedAspectRatio || (dims.width / dims.height);
+                        const selectedImg = selectedImages.find(
+                          (img) => img.id === selectedImageId,
+                        );
+                        const aspectRatio =
+                          selectedImg?.croppedAspectRatio ||
+                          dims.width / dims.height;
                         const scaledHeight = dims.height;
                         const scaledWidth = scaledHeight * aspectRatio;
-                        updateImageSize(selectedImageId, scaledWidth, scaledHeight);
+                        updateImageSize(
+                          selectedImageId,
+                          scaledWidth,
+                          scaledHeight,
+                        );
                       }
                     }}
                     className={rangeInputClass}
@@ -846,12 +1051,24 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   <div className="flex items-center justify-end gap-2">
                     <button
                       type="button"
-                      onClick={() => applyFlexibleHeight(currentFlexibleHeight - 10)}
+                      onClick={() =>
+                        applyFlexibleHeight(currentFlexibleHeight - 10)
+                      }
                       className={controlButtonClass}
                       aria-label="Decrease height"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M20 12H4"
+                        />
                       </svg>
                     </button>
                     <input
@@ -876,15 +1093,29 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       }}
                       className={`${numberInputBaseClass} w-20`}
                     />
-                    <span className="text-sm font-semibold text-white/70 day:text-gray-600">mm</span>
+                    <span className="day:text-gray-600 text-sm font-semibold text-white/70">
+                      mm
+                    </span>
                     <button
                       type="button"
-                      onClick={() => applyFlexibleHeight(currentFlexibleHeight + 10)}
+                      onClick={() =>
+                        applyFlexibleHeight(currentFlexibleHeight + 10)
+                      }
                       className={controlButtonClass}
                       aria-label="Increase height"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 4v16m8-8H4"
+                        />
                       </svg>
                     </button>
                   </div>
@@ -896,7 +1127,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     max={flexibleMaxHeight}
                     step={1}
                     value={currentFlexibleHeight}
-                    onChange={(e) => applyFlexibleHeight(Number(e.target.value))}
+                    onChange={(e) =>
+                      applyFlexibleHeight(Number(e.target.value))
+                    }
                     className={rangeInputClass}
                   />
                   <div className={rangeBoundsClass}>
@@ -907,7 +1140,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               </>
             )}
           </div>
-          
+
           {/* Rotation Slider */}
           <div className={sectionCardClass}>
             <div className="flex items-center justify-between gap-2">
@@ -922,8 +1155,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   className={controlButtonClass}
                   aria-label="Decrease rotation by 1 degree"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20 12H4"
+                    />
                   </svg>
                 </button>
                 <input
@@ -933,7 +1176,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   step={1}
                   value={Math.round(imageRotationDeg)}
                   onChange={(e) => {
-                    updateImageRotation(selectedImageId, Number(e.target.value));
+                    updateImageRotation(
+                      selectedImageId,
+                      Number(e.target.value),
+                    );
                   }}
                   onBlur={(e) => {
                     const val = Number(e.target.value);
@@ -954,11 +1200,23 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   className={controlButtonClass}
                   aria-label="Increase rotation by 1 degree"
                 >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
                   </svg>
                 </button>
-                <span className="text-sm font-semibold text-white/70 day:text-gray-600">°</span>
+                <span className="day:text-gray-600 text-sm font-semibold text-white/70">
+                  °
+                </span>
               </div>
             </div>
             <div className="relative mt-3">
@@ -981,7 +1239,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-2 border-t border-white/10 pt-3 day:border-gray-200">
+        <div className="day:border-gray-200 grid grid-cols-3 gap-2 border-t border-white/10 pt-3">
           <button
             type="button"
             className="cursor-pointer rounded-lg border border-emerald-400/20 bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
@@ -1001,7 +1259,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           </button>
           <button
             type="button"
-            className="cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15 day:bg-white day:text-red-700"
+            className="day:bg-white day:text-red-700 cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
             onClick={() => {
               removeImage(selectedImageId);
               setSelectedImageId(null);
@@ -1038,22 +1296,27 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       {!selectedType ? (
         <>
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-white day:text-gray-900">Select image type</h3>
-            <span className="text-sm text-white/50 day:text-gray-500">{imageTypes.length} types</span>
+            <h3 className="day:text-gray-900 text-sm font-semibold text-white">
+              Select image type
+            </h3>
+            <span className="day:text-gray-500 text-sm text-white/50">
+              {imageTypes.length} types
+            </span>
           </div>
-          <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
+          <div className="custom-scrollbar flex-1 overflow-y-auto pr-1">
             <div className="grid grid-cols-3 gap-3 p-1">
               {imageTypes.map((imageType) => {
-                const thumbnail = IMAGE_THUMBNAILS[imageType.id] || '/jpg/photos/m.jpg';
-                
+                const thumbnail =
+                  IMAGE_THUMBNAILS[imageType.id] || '/jpg/photos/m.jpg';
+
                 return (
                   <button
                     key={imageType.id}
                     type="button"
                     onClick={() => handleImageTypeSelect(imageType)}
-                    className="group flex min-h-[166px] cursor-pointer flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] text-left shadow-lg shadow-black/15 transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] hover:shadow-[#D7B356]/10 day:border-gray-200 day:bg-white"
+                    className="group day:border-gray-200 day:bg-white flex min-h-[166px] cursor-pointer flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] text-left shadow-lg shadow-black/15 transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] hover:shadow-[#D7B356]/10"
                   >
-                    <div className="relative aspect-square w-full overflow-hidden bg-[#0A0A0A] day:bg-gray-100">
+                    <div className="day:bg-gray-100 relative aspect-square w-full overflow-hidden bg-[#0A0A0A]">
                       <Image
                         src={thumbnail}
                         alt={imageType.name}
@@ -1067,7 +1330,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       />
                     </div>
                     <div className="flex min-h-[58px] items-start p-3">
-                      <span className="line-clamp-2 flex-1 text-xs font-semibold leading-snug text-white day:text-gray-900">
+                      <span className="day:text-gray-900 line-clamp-2 flex-1 text-xs leading-snug font-semibold text-white">
                         {imageType.name}
                       </span>
                     </div>
@@ -1079,27 +1342,35 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         </>
       ) : (
         <>
-          {productId !== '32' && (
+          {productId !== '32' && !showCropSection && (
             <div className="flex items-center justify-between">
               <button
                 onClick={handleBackToImageTypes}
-                className="flex items-center gap-2 text-sm text-white/80 hover:text-white day:text-gray-600 day:hover:text-gray-900 transition-colors"
+                className="day:text-gray-600 day:hover:text-gray-900 flex items-center gap-2 text-sm text-white/80 transition-colors hover:text-white"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
                 Back to image types
               </button>
             </div>
           )}
 
-          <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
+          <div className="custom-scrollbar flex-1 overflow-y-auto pr-1">
             <div className="space-y-4">
-
-
               {/* Upload Section */}
               {!showCropSection && (
-                <div className="rounded-lg border border-dashed border-white/20 bg-[#171717] p-6 text-center shadow-lg shadow-black/15 day:border-gray-300 day:bg-white">
+                <div className="day:border-gray-300 day:bg-white rounded-lg border border-dashed border-white/20 bg-[#171717] p-6 text-center shadow-lg shadow-black/15">
                   <input
                     type="file"
                     accept="image/*"
@@ -1107,10 +1378,13 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     className="hidden"
                     id="image-upload"
                   />
-                  <label htmlFor="image-upload" className="cursor-pointer inline-block">
+                  <label
+                    htmlFor="image-upload"
+                    className="inline-block cursor-pointer"
+                  >
                     <div className="mb-4">
                       <svg
-                        className="mx-auto h-12 w-12 text-gray-400 day:text-gray-500"
+                        className="day:text-gray-500 mx-auto h-12 w-12 text-gray-400"
                         stroke="currentColor"
                         fill="none"
                         viewBox="0 0 48 48"
@@ -1123,8 +1397,12 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         />
                       </svg>
                     </div>
-                    <div className="text-white day:text-gray-900 font-semibold mb-2">Click to upload</div>
-                    <div className="text-sm text-gray-400 day:text-gray-500">PNG, JPG, GIF up to 5MB</div>
+                    <div className="day:text-gray-900 mb-2 font-semibold text-white">
+                      Click to upload
+                    </div>
+                    <div className="day:text-gray-500 text-sm text-gray-400">
+                      PNG, JPG, GIF up to 5MB
+                    </div>
                   </label>
                 </div>
               )}
@@ -1132,22 +1410,22 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               {/* Crop Section - Controls only in sidebar */}
               {showCropSection && uploadedImage && (
                 <div className="space-y-2.5">
-                  <div className={cropSectionClass}>
-                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45 day:text-gray-400">
-                      Image Type
-                    </div>
-                    <h4 className="text-sm font-semibold text-white day:text-gray-900">{selectedType.name}</h4>
-                  </div>
-
                   {/* Step 1: Select Mask — hidden for Full Color Plaque (printed directly) */}
                   {productId !== '32' && (
                     <div className={cropSectionClass}>
-                      <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/45 day:text-gray-500">Step 1 · Mask</div>
+                      <div className="day:text-gray-500 mb-2 text-xs font-semibold tracking-wide text-white/45 uppercase">
+                        Step 1 · Mask
+                      </div>
                       <div className="grid grid-cols-5 gap-1.5">
                         {MASK_OPTIONS.filter((mask) =>
                           isGraniteImage
                             ? true
-                            : ['oval', 'horizontal-oval', 'square', 'rectangle'].includes(mask.id)
+                            : [
+                                'oval',
+                                'horizontal-oval',
+                                'square',
+                                'rectangle',
+                              ].includes(mask.id),
                         ).map((mask) => (
                           <button
                             key={mask.id}
@@ -1156,7 +1434,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                             className={`h-12 rounded-md border-2 transition-all ${
                               selectedMask === mask.id
                                 ? 'border-[#D7B356] bg-[#D7B356]/20 shadow-[0_0_0_2px_rgba(215,179,86,0.18)]'
-                                : 'border-white/10 bg-white/[0.05] hover:border-[#D7B356]/50 day:border-gray-200 day:bg-white day:hover:border-gray-300'
+                                : 'day:border-gray-200 day:bg-white day:hover:border-gray-300 border-white/10 bg-white/[0.05] hover:border-[#D7B356]/50'
                             }`}
                           >
                             <div className="flex h-full items-center justify-center p-1">
@@ -1176,14 +1454,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   )}
 
                   {/* Step 2: Color Mode */}
-                    <div className={cropSectionClass}>
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/45 day:text-gray-500">Step 2 · Photo finish</div>
+                  <div className={cropSectionClass}>
+                    <div className="day:text-gray-500 mb-2 text-xs font-semibold tracking-wide text-white/45 uppercase">
+                      Step 2 · Photo finish
+                    </div>
                     <select
                       value={cropColorMode}
-                      onChange={(e) => setCropColorMode(e.target.value as 'full' | 'bw' | 'sepia')}
+                      onChange={(e) =>
+                        setCropColorMode(
+                          e.target.value as 'full' | 'bw' | 'sepia',
+                        )
+                      }
                       disabled={isGraniteImage}
-                      className={`w-full rounded-lg border border-white/10 bg-white/[0.08] px-3 py-1.5 text-sm font-semibold text-white outline-none transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 day:border-gray-300 day:bg-gray-100 day:text-gray-900 ${
-                        isGraniteImage ? 'opacity-60 cursor-not-allowed' : ''
+                      className={`day:border-gray-300 day:bg-gray-100 day:text-gray-900 w-full rounded-lg border border-white/10 bg-white/[0.08] px-3 py-1.5 text-sm font-semibold text-white transition-colors outline-none focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 [&>option]:bg-white [&>option]:text-gray-900 ${
+                        isGraniteImage ? 'cursor-not-allowed opacity-60' : ''
                       }`}
                     >
                       <option value="full">Full color</option>
@@ -1191,21 +1475,28 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       <option value="sepia">Sepia</option>
                     </select>
                     {isGraniteImage && (
-                      <div className="mt-2 text-xs text-white/60 day:text-gray-500">
-                        Granite images are laser etched and limited to Black & White.
+                      <div className="day:text-gray-500 mt-2 text-xs text-white/60">
+                        Granite images are laser etched and limited to Black &
+                        White.
                       </div>
                     )}
                   </div>
 
                   {/* Step 3: Position and Resize */}
                   <div className={cropSectionClass}>
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-wide text-white/45 day:text-gray-500">Step 3 · Crop area</div>
-                    
+                    <div className="day:text-gray-500 mb-2 text-xs font-semibold tracking-wide text-white/45 uppercase">
+                      Step 3 · Crop area
+                    </div>
+
                     {/* Size Slider - controls mask height */}
-                    <div className="rounded-lg border border-white/10 bg-white/[0.04] p-2.5 day:border-gray-200 day:bg-gray-50">
+                    <div className="day:border-gray-200 day:bg-gray-50 rounded-lg border border-white/10 bg-white/[0.04] p-2.5">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="font-semibold text-white day:text-gray-900">Size</span>
-                        <span className="rounded-md border border-white/10 bg-white/[0.06] px-2 py-1 text-xs font-semibold text-white/65 day:border-gray-200 day:bg-white day:text-gray-500">{Math.round(cropArea.height)}%</span>
+                        <span className="day:text-gray-900 font-semibold text-white">
+                          Size
+                        </span>
+                        <span className="day:border-gray-200 day:bg-white day:text-gray-500 rounded-md border border-white/10 bg-white/[0.06] px-2 py-1 text-xs font-semibold text-white/65">
+                          {Math.round(cropArea.height)}%
+                        </span>
                       </div>
                       <div className="relative mt-2.5">
                         <input
@@ -1215,14 +1506,15 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           value={cropArea.height}
                           onChange={(e) => {
                             const newHeight = parseInt(e.target.value);
-                            setCropArea(prev => {
+                            setCropArea((prev) => {
                               // Calculate center point (stays fixed during resize)
                               const centerX = prev.x + prev.width / 2;
                               const centerY = prev.y + prev.height / 2;
-                              
+
                               // Maintain aspect ratio if fixed sizes
                               if (hasFixedSizes && activeSize) {
-                                const aspectRatio = activeSize.width / activeSize.height;
+                                const aspectRatio =
+                                  activeSize.width / activeSize.height;
                                 const newWidth = newHeight * aspectRatio;
                                 return {
                                   ...prev,
@@ -1233,7 +1525,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                                 };
                               }
                               // Free scaling - maintain current aspect ratio
-                              const currentAspectRatio = prev.width / prev.height;
+                              const currentAspectRatio =
+                                prev.width / prev.height;
                               const newWidth = newHeight * currentAspectRatio;
                               return {
                                 ...prev,
@@ -1251,13 +1544,14 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         <button
                           onClick={() => {
                             const newHeight = Math.max(20, cropArea.height - 5);
-                            setCropArea(prev => {
+                            setCropArea((prev) => {
                               // Calculate center point (stays fixed during resize)
                               const centerX = prev.x + prev.width / 2;
                               const centerY = prev.y + prev.height / 2;
-                              
+
                               if (hasFixedSizes && activeSize) {
-                                const aspectRatio = activeSize.width / activeSize.height;
+                                const aspectRatio =
+                                  activeSize.width / activeSize.height;
                                 const newWidth = newHeight * aspectRatio;
                                 return {
                                   ...prev,
@@ -1267,7 +1561,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                                   height: newHeight,
                                 };
                               }
-                              const currentAspectRatio = prev.width / prev.height;
+                              const currentAspectRatio =
+                                prev.width / prev.height;
                               const newWidth = newHeight * currentAspectRatio;
                               return {
                                 ...prev,
@@ -1280,21 +1575,32 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           }}
                           className={cropAdjustButtonClass}
                         >
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M20 12H4"
+                            />
                           </svg>
                           Smaller
                         </button>
                         <button
                           onClick={() => {
                             const newHeight = Math.min(80, cropArea.height + 5);
-                            setCropArea(prev => {
+                            setCropArea((prev) => {
                               // Calculate center point (stays fixed during resize)
                               const centerX = prev.x + prev.width / 2;
                               const centerY = prev.y + prev.height / 2;
-                              
+
                               if (hasFixedSizes && activeSize) {
-                                const aspectRatio = activeSize.width / activeSize.height;
+                                const aspectRatio =
+                                  activeSize.width / activeSize.height;
                                 const newWidth = newHeight * aspectRatio;
                                 return {
                                   ...prev,
@@ -1304,7 +1610,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                                   height: newHeight,
                                 };
                               }
-                              const currentAspectRatio = prev.width / prev.height;
+                              const currentAspectRatio =
+                                prev.width / prev.height;
                               const newWidth = newHeight * currentAspectRatio;
                               return {
                                 ...prev,
@@ -1317,8 +1624,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           }}
                           className={cropAdjustButtonClass}
                         >
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          <svg
+                            className="h-4 w-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 4v16m8-8H4"
+                            />
                           </svg>
                           Larger
                         </button>
@@ -1326,40 +1643,31 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     </div>
 
                     {/* Rotation (always available) */}
-                    <div className="mt-2.5 rounded-lg border border-white/10 bg-white/[0.04] p-2.5 day:border-gray-200 day:bg-gray-50">
+                    <div className="day:border-gray-200 day:bg-gray-50 mt-2.5 rounded-lg border border-white/10 bg-white/[0.04] p-2.5">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="font-semibold text-white day:text-gray-900">Rotation</span>
-                        <span className="rounded-md border border-white/10 bg-white/[0.06] px-2 py-1 text-xs font-semibold text-white/65 day:border-gray-200 day:bg-white day:text-gray-500">{cropRotation}°</span>
+                        <span className="day:text-gray-900 font-semibold text-white">
+                          Rotation
+                        </span>
+                        <span className="day:border-gray-200 day:bg-white day:text-gray-500 rounded-md border border-white/10 bg-white/[0.06] px-2 py-1 text-xs font-semibold text-white/65">
+                          {cropRotation}°
+                        </span>
                       </div>
                       <div className="relative mt-2.5">
                         <input
                           type="range"
-                          min="0"
-                          max="360"
+                          min="-180"
+                          max="180"
                           value={cropRotation}
-                          onChange={(e) => setCropRotation(parseInt(e.target.value))}
+                          onChange={(e) =>
+                            setCropRotation(parseInt(e.target.value))
+                          }
                           className={rangeInputClass}
                         />
-                      </div>
-                      <div className="mt-2.5 grid grid-cols-2 gap-2">
-                        <button
-                          onClick={() => setCropRotation(((cropRotation - 5) % 360 + 360) % 360)}
-                          className={cropAdjustButtonClass}
-                        >
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
-                          </svg>
-                          -5°
-                        </button>
-                        <button
-                          onClick={() => setCropRotation((cropRotation + 5) % 360)}
-                          className={cropAdjustButtonClass}
-                        >
-                          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                          </svg>
-                          +5°
-                        </button>
+                        <div className={rangeBoundsClass}>
+                          <span>-180°</span>
+                          <span>0°</span>
+                          <span>+180°</span>
+                        </div>
                       </div>
                     </div>
 
@@ -1392,27 +1700,54 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     </div>
                   </div>
 
-                  <div className="border-t border-white/10 pt-3 day:border-gray-200">
+                  <div className="day:border-gray-200 border-t border-white/10 pt-2">
                     {/* Crop Button */}
                     <button
                       onClick={handleCropImage}
                       disabled={isCropping}
-                      className="mt-4 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 font-semibold text-black transition-colors hover:bg-[#E4C778] disabled:cursor-not-allowed disabled:opacity-70"
+                      className="flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 font-semibold text-black transition-colors hover:bg-[#E4C778] disabled:cursor-not-allowed disabled:opacity-70"
                     >
                       {isCropping ? (
                         <>
-                          <svg className="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                          <svg
+                            className="h-5 w-5 animate-spin"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            />
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8v8H4z"
+                            />
                           </svg>
                           Processing…
                         </>
                       ) : (
                         <>
-                          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          <svg
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                            />
                           </svg>
-                          {updatingImageId ? 'Update photo' : 'Apply crop'}
+                          {updatingImageId
+                            ? 'Update Cropped Image on Headstone'
+                            : 'Add Cropped Image to Headstone'}
                         </>
                       )}
                     </button>
@@ -1423,10 +1758,20 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                           resetCropState();
                           setUpdatingImageId(null);
                         }}
-                        className="flex w-full items-center justify-center gap-2 rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15 day:bg-white day:text-red-700"
+                        className="day:bg-white day:text-red-700 flex w-full items-center justify-center gap-2 rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
                       >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
                         </svg>
                         Cancel
                       </button>
@@ -1438,16 +1783,16 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               {/* Currently Added Images */}
               {selectedImages.length > 0 && (
                 <div className={sectionCardClass}>
-                  <h4 className="mb-3 text-sm font-semibold text-white day:text-gray-900">
+                  <h4 className="day:text-gray-900 mb-3 text-sm font-semibold text-white">
                     Added Images ({selectedImages.length})
                   </h4>
                   <div className="space-y-2">
                     {selectedImages.map((img) => (
                       <div
                         key={img.id}
-                        className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.05] p-3 day:border-gray-200 day:bg-gray-50"
+                        className="day:border-gray-200 day:bg-gray-50 flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.05] p-3"
                       >
-                        <div className="w-12 h-12 bg-gray-800 day:bg-gray-100 rounded overflow-hidden relative">
+                        <div className="day:bg-gray-100 relative h-12 w-12 overflow-hidden rounded bg-gray-800">
                           <Image
                             src={img.imageUrl}
                             alt={img.typeName}
@@ -1456,9 +1801,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                             unoptimized
                           />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="text-white day:text-gray-900 text-sm font-medium">{img.typeName}</div>
-                          <div className="text-xs text-gray-400 day:text-gray-500">
+                        <div className="min-w-0 flex-1">
+                          <div className="day:text-gray-900 text-sm font-medium text-white">
+                            {img.typeName}
+                          </div>
+                          <div className="day:text-gray-500 text-xs text-gray-400">
                             {img.widthMm} × {img.heightMm} mm
                           </div>
                         </div>

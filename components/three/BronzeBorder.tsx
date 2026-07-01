@@ -19,6 +19,9 @@ interface BronzeBorderProps {
   color: string;
   depth: number;
   isStainlessSteel?: boolean;
+  outlinePoints?: THREE.Vector2[];
+  useShapeOutlineBorder?: boolean;
+  shapeUrl?: string | null;
 }
 
 interface BorderResources {
@@ -411,6 +414,9 @@ export function BronzeBorder({
   color,
   depth,
   isStainlessSteel = false,
+  outlinePoints,
+  useShapeOutlineBorder = false,
+  shapeUrl = null,
 }: BronzeBorderProps) {
   const unitScale = Math.max(1e-6, Math.abs(unitsPerMeter) || 1);
   const localWidth = Math.max(1e-3, Math.abs(plaqueWidth) * unitScale);
@@ -422,10 +428,15 @@ export function BronzeBorder({
     : borderName;
   const normalizedName = effectiveBorderName?.toLowerCase() ?? '';
   const effectiveName = normalizedName.includes('no border') ? null : effectiveBorderName;
+  const usesShapeOutline =
+    useShapeOutlineBorder &&
+    !isStainlessSteel &&
+    (normalizedName.includes('solid') || normalizedName.includes('border 4') || normalizedName.includes('border4')) &&
+    Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle') || (outlinePoints && outlinePoints.length >= 3));
   const slug = effectiveName ? toBorderSlug(effectiveName) : null;
   const resolvedSlug = slug ? `${slug}a` : null;
   const usesIntegratedRails = Boolean(resolvedSlug);
-  const shouldRender = Boolean(resolvedSlug && localWidth > 0 && localHeight > 0);
+  const shouldRender = Boolean((resolvedSlug || usesShapeOutline) && localWidth > 0 && localHeight > 0);
 
   const effectiveColor = isStainlessSteel ? '#E8E8E8' : color;
   const bronzeTextures = useMemo(
@@ -521,7 +532,7 @@ export function BronzeBorder({
   }, [localWidth, localHeight, builtState]);
 
   useEffect(() => {
-    if (!resolvedSlug) {
+    if (!resolvedSlug || usesShapeOutline) {
       setSvgData(null);
       return;
     }
@@ -552,9 +563,34 @@ export function BronzeBorder({
     return () => {
       cancelled = true;
     };
-  }, [resolvedSlug]);
+  }, [resolvedSlug, usesShapeOutline]);
 
   useEffect(() => {
+    if (usesShapeOutline) {
+      const material = getMaterial();
+      const built = buildShapeOutlineBorderGroup(outlinePoints ?? [], {
+        plaqueWidth: debouncedDims.w,
+        plaqueHeight: debouncedDims.h,
+        frontZ,
+        unitScale,
+        material,
+        shapeUrl,
+      });
+
+      if (!built) {
+        disposeResources();
+        setBuiltState({ group: null, dims: { w: debouncedDims.w, h: debouncedDims.h } });
+        return;
+      }
+
+      disposeResources();
+      resourcesRef.current = {
+        geometries: built.geometries,
+      };
+      setBuiltState({ group: built.group, dims: { w: debouncedDims.w, h: debouncedDims.h } });
+      return;
+    }
+
     if (!shouldRender || !svgData) {
       disposeResources();
       setBuiltState({ group: null, dims: { w: debouncedDims.w, h: debouncedDims.h } });
@@ -590,7 +626,7 @@ export function BronzeBorder({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- localWidth/localHeight intentionally
     // excluded: the useLayoutEffect fast-path handles smooth scaling during drag; only debouncedDims
     // should trigger expensive geometry rebuilds.
-  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, unitScale, resolvedSlug, isStainlessSteel]);
+  }, [svgData, shouldRender, debouncedDims, depth, frontZ, bronzeTextures, disposeResources, usesIntegratedRails, getMaterial, unitScale, resolvedSlug, isStainlessSteel, usesShapeOutline, outlinePoints, shapeUrl]);
 
   if (!builtState.group) {
     return null;
@@ -610,6 +646,103 @@ function toBorderSlug(name: string) {
     return `border${match[0]}`;
   }
   return normalized || 'border1';
+}
+
+function buildShapeOutlineBorderGroup(
+  outlinePoints: THREE.Vector2[],
+  params: {
+    plaqueWidth: number;
+    plaqueHeight: number;
+    frontZ: number;
+    unitScale?: number;
+    material: THREE.MeshPhysicalMaterial;
+    shapeUrl?: string | null;
+  },
+): {
+  group: THREE.Group;
+  geometries: THREE.BufferGeometry[];
+} | null {
+  const { plaqueWidth, plaqueHeight, frontZ, unitScale, material, shapeUrl } = params;
+  const width = Math.max(1e-3, Math.abs(plaqueWidth));
+  const height = Math.max(1e-3, Math.abs(plaqueHeight));
+  const safeUnitScale = Math.max(1e-6, unitScale ?? 1);
+  const minDimension = Math.min(width, height);
+  const borderWidth = Math.max(
+    0.002 * safeUnitScale,
+    Math.min(0.018 * safeUnitScale, minDimension * 0.055),
+  );
+  const reliefDepth = Math.max(0.0008, Math.min(width, height) * 0.004);
+  const center = new THREE.Vector2(0, height / 2);
+
+  const shape = new THREE.Shape();
+  const hole = new THREE.Path();
+
+  if (shapeUrl?.includes('oval_') || shapeUrl?.includes('circle')) {
+    shape.absellipse(0, height / 2, width / 2, height / 2, 0, Math.PI * 2, false, 0);
+    hole.absellipse(
+      0,
+      height / 2,
+      Math.max(width / 2 - borderWidth, width * 0.1),
+      Math.max(height / 2 - borderWidth, height * 0.1),
+      0,
+      Math.PI * 2,
+      true,
+      0,
+    );
+    shape.holes = [hole];
+  } else {
+    const outerPoints = outlinePoints
+      .filter((point) => Number.isFinite(point.x) && Number.isFinite(point.y))
+      .map((point) => point.clone());
+
+    if (outerPoints.length < 3) {
+      return null;
+    }
+
+    const first = outerPoints[0];
+    const last = outerPoints[outerPoints.length - 1];
+    if (first.distanceTo(last) < 1e-5) {
+      outerPoints.pop();
+    }
+
+    const innerPoints = outerPoints.map((point) => {
+      const vector = point.clone().sub(center);
+      const distance = vector.length();
+      if (distance <= borderWidth) {
+        return point.clone();
+      }
+      return center.clone().add(vector.multiplyScalar((distance - borderWidth) / distance));
+    });
+
+    shape.setFromPoints(outerPoints);
+    hole.setFromPoints([...innerPoints].reverse());
+    shape.holes = [hole];
+  }
+
+  const geometry = new THREE.ExtrudeGeometry(shape, {
+    depth: reliefDepth,
+    bevelEnabled: true,
+    bevelSegments: 1,
+    bevelSize: reliefDepth * 0.25,
+    bevelThickness: reliefDepth * 0.25,
+    curveSegments: 16,
+    steps: 1,
+  });
+
+  geometry.translate(0, 0, frontZ + 0.0001);
+  geometry.computeVertexNormals();
+
+  const group = new THREE.Group();
+  const mesh = new THREE.Mesh(geometry, material);
+  mesh.castShadow = false;
+  mesh.receiveShadow = false;
+  mesh.renderOrder = 3;
+  group.add(mesh);
+
+  return {
+    group,
+    geometries: [geometry],
+  };
 }
 
 function buildBorderGroup(

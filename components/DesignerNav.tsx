@@ -45,6 +45,7 @@ import ConfirmModal from './ConfirmModal';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 import { logger } from '#/lib/logger';
+import { DEFAULT_TEX, TEX_BASE } from '#/lib/headstone-store.types';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -61,14 +62,28 @@ const menuGroups = [
       },
       { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
       { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
-      { slug: 'corners', name: 'Corners', icon: ViewfinderCircleIcon, requiresSSPlaque: true },
-      { slug: 'holes', name: 'Holes', icon: CircleStackIcon, requiresSSPlaque: true },
+      {
+        slug: 'corners',
+        name: 'Corners',
+        icon: ViewfinderCircleIcon,
+        requiresSSPlaque: true,
+      },
+      {
+        slug: 'holes',
+        name: 'Holes',
+        icon: CircleStackIcon,
+        requiresSSPlaque: true,
+      },
     ],
   },
   {
     label: 'Design',
     items: [
-      { slug: 'inscriptions', name: 'Add Your Inscriptions', icon: DocumentTextIcon },
+      {
+        slug: 'inscriptions',
+        name: 'Add Your Inscriptions',
+        icon: DocumentTextIcon,
+      },
       { slug: 'select-images', name: 'Add Your Image', icon: PhotoIcon },
       {
         slug: 'select-additions',
@@ -89,9 +104,7 @@ const menuGroups = [
   },
   {
     label: 'Account',
-    items: [
-      { slug: 'my-account', name: 'My Account', icon: UserCircleIcon },
-    ],
+    items: [{ slug: 'my-account', name: 'My Account', icon: UserCircleIcon }],
   },
 ];
 
@@ -110,9 +123,13 @@ const fullscreenPanelSlugs = new Set([
 ]);
 
 const stainlessSteelHeadstoneProductIds = new Set(['1', '23']);
+const STAINLESS_STEEL_BASE_TEX = `${TEX_BASE}brushed-ss-swatch.webp`;
+const GRANITE_BASE_TEX = `${TEX_BASE}${DEFAULT_TEX}`;
 
 type PanelSource = 'menu' | 'canvas' | null;
-type SetActivePanelFn = (panel: 'inscription' | 'addition' | 'motif' | null) => void;
+type SetActivePanelFn = (
+  panel: 'inscription' | 'addition' | 'motif' | null,
+) => void;
 
 function useDesignerNavPanelState({
   pathname,
@@ -316,6 +333,8 @@ export default function DesignerNav() {
   const setBaseHeightMm = useHeadstoneStore((s) => s.setBaseHeightMm);
   const baseFinish = useHeadstoneStore((s) => s.baseFinish);
   const setBaseFinish = useHeadstoneStore((s) => s.setBaseFinish);
+  const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
+  const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
   const setLedgerWidthMm = useHeadstoneStore((s) => s.setLedgerWidthMm);
   const ledgerHeightMm = useHeadstoneStore((s) => s.ledgerHeightMm);
@@ -346,6 +365,8 @@ export default function DesignerNav() {
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
+  const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
+  const setCropCanvasData = useHeadstoneStore((s) => s.setCropCanvasData);
   const selectedEmblems = useHeadstoneStore((s) => s.selectedEmblems);
   const selectedEmblemId = useHeadstoneStore((s) => s.selectedEmblemId);
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
@@ -355,6 +376,11 @@ export default function DesignerNav() {
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const setShowBase = useHeadstoneStore((s) => s.setShowBase);
+  const isStainlessSteelBase =
+    showBase && (baseMaterialUrl ?? '').includes('ss-swatch');
+  const isGraniteBase = showBase && !isStainlessSteelBase;
+  const canSelectStainlessGraniteBaseMaterial =
+    isStainlessSteelHeadstone && isGraniteBase && editingObject === 'base';
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
@@ -365,9 +391,10 @@ export default function DesignerNav() {
   const setProductId = useHeadstoneStore((s) => s.setProductId);
   const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
-  const urnShapeCode = isUrn && shapeUrl
-    ? shapeUrl.split('/').pop()?.replace('.svg', '') ?? null
-    : null;
+  const urnShapeCode =
+    isUrn && shapeUrl
+      ? (shapeUrl.split('/').pop()?.replace('.svg', '') ?? null)
+      : null;
 
   // Check if anything has been added to the headstone
   const hasCustomizations =
@@ -426,9 +453,10 @@ export default function DesignerNav() {
   }, []);
 
   const handleBackToMenu = React.useCallback(() => {
+    setCropCanvasData(null);
     closeFullscreenPanel();
     router.push('/design-menu');
-  }, [closeFullscreenPanel, router]);
+  }, [closeFullscreenPanel, router, setCropCanvasData]);
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
@@ -529,7 +557,10 @@ export default function DesignerNav() {
     }
   }, [isCanvasVisible, hasCanvasBeenShown]);
 
-  const shouldShowFullscreenPanel = Boolean(activeFullscreenPanel) && activeFullscreenPanel !== 'corners' && activeFullscreenPanel !== 'holes';
+  const shouldShowFullscreenPanel =
+    Boolean(activeFullscreenPanel) &&
+    activeFullscreenPanel !== 'corners' &&
+    activeFullscreenPanel !== 'holes';
 
   // Ordered list of panels visible for the current product configuration
   const navigablePanelSlugs = React.useMemo(() => {
@@ -538,27 +569,62 @@ export default function DesignerNav() {
         // save-design is always included as the final guided step
         if (item.slug === 'save-design') return true;
         if (!fullscreenPanelSlugs.has(item.slug)) return false;
-        if (item.slug === 'select-material' && (catalog?.product?.laser === '1' || isStainlessSteelHeadstone)) return false;
-        if (item.slug === 'select-border' && (!isPlaque || !hasBorder)) return false;
-        if (item.slug === 'select-additions' && (catalog?.product?.laser === '1' || isPlaque || isStainlessSteelHeadstone)) return false;
-        if ((item as { requiresBronzePlaque?: boolean }).requiresBronzePlaque && productId !== '5') return false;
+        if (
+          item.slug === 'select-material' &&
+          ((catalog?.product?.laser === '1' &&
+            !canSelectStainlessGraniteBaseMaterial) ||
+            (isStainlessSteelHeadstone &&
+              !canSelectStainlessGraniteBaseMaterial))
+        )
+          return false;
+        if (item.slug === 'select-border' && (!isPlaque || !hasBorder))
+          return false;
+        if (
+          item.slug === 'select-additions' &&
+          (catalog?.product?.laser === '1' ||
+            isPlaque ||
+            isStainlessSteelHeadstone)
+        )
+          return false;
+        if (
+          (item as { requiresBronzePlaque?: boolean }).requiresBronzePlaque &&
+          productId !== '5'
+        )
+          return false;
         return true;
       })
       .map((item) => item.slug);
-  }, [catalog, isPlaque, hasBorder, productId, isStainlessSteelHeadstone]);
+  }, [
+    catalog,
+    isPlaque,
+    hasBorder,
+    productId,
+    isStainlessSteelHeadstone,
+    canSelectStainlessGraniteBaseMaterial,
+  ]);
 
   const currentSlugFromPathname = pathname.replace('/', '');
   const currentPanelIndex = activeFullscreenPanel
     ? navigablePanelSlugs.indexOf(activeFullscreenPanel)
     : navigablePanelSlugs.indexOf(currentSlugFromPathname);
-  const prevPanelSlug = currentPanelIndex > 0 ? navigablePanelSlugs[currentPanelIndex - 1] : null;
+  const prevPanelSlug =
+    currentPanelIndex > 0 ? navigablePanelSlugs[currentPanelIndex - 1] : null;
   const nextPanelSlug =
     currentPanelIndex >= 0 && currentPanelIndex < navigablePanelSlugs.length - 1
       ? navigablePanelSlugs[currentPanelIndex + 1]
       : null;
+  const isImageCropActive =
+    activeFullscreenPanel === 'select-images' && Boolean(cropCanvasData);
+  const nextPanelTitle = nextPanelSlug
+    ? `Go to ${menuItems.find((i) => i.slug === nextPanelSlug)?.name}`
+    : undefined;
 
   const handleNavigateToPanel = React.useCallback(
     async (slug: string) => {
+      if (isImageCropActive && slug !== 'select-images') {
+        return;
+      }
+
       if (slug === 'save-design') {
         const res = await fetch('/api/auth/session');
         if (!res.ok) {
@@ -569,15 +635,43 @@ export default function DesignerNav() {
         setShowSaveDesignModal(true);
       } else if (slug === 'check-price') {
         router.push('/check-price');
-      } else if (slug === 'select-shape' && isCanvasVisible && pathname === '/select-shape') {
+      } else if (
+        slug === 'select-shape' &&
+        isCanvasVisible &&
+        pathname === '/select-shape'
+      ) {
         openFullscreenPanel(slug);
       } else if (pathname !== `/${slug}`) {
+        if (
+          slug === 'select-material' &&
+          canSelectStainlessGraniteBaseMaterial
+        ) {
+          setEditingObject('base');
+          setSelected('base');
+        }
         router.push(`/${slug}`);
       } else {
+        if (
+          slug === 'select-material' &&
+          canSelectStainlessGraniteBaseMaterial
+        ) {
+          setEditingObject('base');
+          setSelected('base');
+        }
         openFullscreenPanel(slug);
       }
     },
-    [isCanvasVisible, pathname, openFullscreenPanel, router, setShowSaveDesignModal],
+    [
+      isCanvasVisible,
+      isImageCropActive,
+      canSelectStainlessGraniteBaseMaterial,
+      pathname,
+      openFullscreenPanel,
+      router,
+      setEditingObject,
+      setSelected,
+      setShowSaveDesignModal,
+    ],
   );
 
   const hasActiveAdditionForPanel =
@@ -593,6 +687,13 @@ export default function DesignerNav() {
       return;
     }
 
+    if (
+      pathname === '/select-material' &&
+      canSelectStainlessGraniteBaseMaterial
+    ) {
+      return;
+    }
+
     if (activePanel === 'addition') {
       setActivePanel(null);
     }
@@ -601,6 +702,7 @@ export default function DesignerNav() {
     router.replace('/select-size');
   }, [
     activePanel,
+    canSelectStainlessGraniteBaseMaterial,
     isStainlessSteelHeadstone,
     pathname,
     router,
@@ -684,7 +786,11 @@ export default function DesignerNav() {
         setActiveFullscreenPanel(currentSlug);
       }
     } else {
-      if (activeFullscreenPanel && activeFullscreenPanel !== 'corners' && activeFullscreenPanel !== 'holes') {
+      if (
+        activeFullscreenPanel &&
+        activeFullscreenPanel !== 'corners' &&
+        activeFullscreenPanel !== 'holes'
+      ) {
         if (
           activeFullscreenPanel === 'inscriptions' ||
           activeFullscreenPanel === 'select-additions' ||
@@ -795,13 +901,13 @@ export default function DesignerNav() {
               <div className={additionSectionCardClass}>
                 <div className="flex items-center justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/45 day:text-gray-400">
+                    <div className="day:text-gray-400 text-xs font-semibold tracking-[0.18em] text-white/45 uppercase">
                       Selected Addition
                     </div>
-                    <div className="mt-1 truncate text-sm font-semibold text-white day:text-gray-900">
+                    <div className="day:text-gray-900 mt-1 truncate text-sm font-semibold text-white">
                       {activeAddition.name}
                     </div>
-                    <div className="mt-1 text-xs font-medium text-white/45 day:text-gray-500">
+                    <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
                       <span className="capitalize">{activeAddition.type}</span>
                       {activeAdditionSize
                         ? ` · ${activeAdditionSize.width} × ${activeAdditionSize.height} mm`
@@ -814,7 +920,7 @@ export default function DesignerNav() {
                       setSelectedAdditionId(null);
                       setActivePanel(null);
                     }}
-                    className="shrink-0 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:text-gray-900"
+                    className="day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:text-gray-900 shrink-0 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white"
                   >
                     Clear
                   </button>
@@ -823,10 +929,10 @@ export default function DesignerNav() {
             )}
 
             <div className={additionSectionCardClass}>
-              <div className="mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 uppercase day:text-gray-500">
+              <div className="day:text-gray-500 mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 uppercase">
                 Addition Price
               </div>
-              <div className="text-2xl font-semibold text-[#2EE59D] day:text-gray-900">
+              <div className="day:text-gray-900 text-2xl font-semibold text-[#2EE59D]">
                 {activeAdditionSize?.retailPrice
                   ? `$${activeAdditionSize.retailPrice.toFixed(2)}`
                   : 'N/A'}
@@ -837,10 +943,8 @@ export default function DesignerNav() {
               {maxSize <= 1 ? (
                 <div className={additionSectionCardClass}>
                   <div className="flex items-center justify-between gap-2">
-                    <label className={additionLabelClass}>
-                      Size
-                    </label>
-                    <div className="text-sm font-semibold text-white/60 day:text-gray-500">
+                    <label className={additionLabelClass}>Size</label>
+                    <div className="day:text-gray-500 text-sm font-semibold text-white/60">
                       {activeAdditionSize
                         ? `${activeAdditionSize.width}×${activeAdditionSize.height}mm`
                         : ''}
@@ -850,9 +954,7 @@ export default function DesignerNav() {
               ) : (
                 <div className={additionSectionCardClass}>
                   <div className="flex items-center justify-between gap-2">
-                    <label className={additionLabelClass}>
-                      Size
-                    </label>
+                    <label className={additionLabelClass}>Size</label>
                     <div className="flex items-center justify-end gap-2">
                       <button
                         type="button"
@@ -983,9 +1085,7 @@ export default function DesignerNav() {
               {!isStatueOrVase && (
                 <div className={additionSectionCardClass}>
                   <div className="flex items-center justify-between gap-2">
-                    <label className={additionLabelClass}>
-                      Rotation
-                    </label>
+                    <label className={additionLabelClass}>Rotation</label>
                     <div className="flex items-center justify-end gap-2">
                       <button
                         type="button"
@@ -1075,7 +1175,7 @@ export default function DesignerNav() {
                           />
                         </svg>
                       </button>
-                      <span className="text-sm font-semibold text-white/70 day:text-gray-600">
+                      <span className="day:text-gray-600 text-sm font-semibold text-white/70">
                         °
                       </span>
                     </div>
@@ -1106,10 +1206,10 @@ export default function DesignerNav() {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-2 border-t border-white/10 pt-3 day:border-gray-200">
+            <div className="day:border-gray-200 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
               <button
                 type="button"
-                className="cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15 day:bg-white day:text-[#8a6a12]"
+                className="day:bg-white day:text-[#8a6a12] cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
                 onClick={() =>
                   selectedAdditionId && duplicateAddition(selectedAdditionId)
                 }
@@ -1118,7 +1218,7 @@ export default function DesignerNav() {
               </button>
               <button
                 type="button"
-                className="cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15 day:bg-white day:text-red-700"
+                className="day:bg-white day:text-red-700 cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15"
                 onClick={() => {
                   if (selectedAdditionId) {
                     removeAddition(selectedAdditionId);
@@ -1133,7 +1233,7 @@ export default function DesignerNav() {
         ) : null}
 
         {showAdditionCatalog && !hasActiveAddition && (
-          <div className="min-h-0 flex-1 rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white">
+          <div className="day:border-gray-200 day:bg-white min-h-0 flex-1 rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15">
             <AdditionSelector additions={additionsList} />
           </div>
         )}
@@ -1227,11 +1327,11 @@ export default function DesignerNav() {
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
           <div className="flex min-h-0 flex-1 flex-col gap-3">
-            <div className="min-h-0 flex-1 space-y-3 overflow-y-auto pr-1 custom-scrollbar">
+            <div className="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
               <div className={sectionCardClass}>
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-3">
-                    <div className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A] day:border-gray-200 day:bg-gray-100">
+                    <div className="day:border-gray-200 day:bg-gray-100 relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A]">
                       {motifPreviewPath ? (
                         <div
                           className="absolute inset-2"
@@ -1255,17 +1355,17 @@ export default function DesignerNav() {
                       <div className="text-xs font-semibold tracking-[0.16em] text-[#D7B356] uppercase">
                         Selected motif
                       </div>
-                      <div className="mt-1 truncate text-sm font-semibold text-white capitalize day:text-gray-900">
+                      <div className="day:text-gray-900 mt-1 truncate text-sm font-semibold text-white capitalize">
                         {motifName}
                       </div>
-                      <div className="mt-0.5 text-xs text-white/45 day:text-gray-500">
+                      <div className="day:text-gray-500 mt-0.5 text-xs text-white/45">
                         {motifSurface} · {activeOffset.heightMm ?? initHeight}mm
                       </div>
                     </div>
                   </div>
                   <button
                     type="button"
-                    className="shrink-0 rounded-md border border-white/10 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white day:border-gray-200 day:text-gray-600 day:hover:text-gray-900"
+                    className="day:border-gray-200 day:text-gray-600 day:hover:text-gray-900 shrink-0 rounded-md border border-white/10 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white"
                     onClick={() => {
                       setSelectedMotifId(null);
                       setActivePanel(null);
@@ -1279,7 +1379,7 @@ export default function DesignerNav() {
               {motifPriceValue !== null && (
                 <div className={sectionCardClass}>
                   <div className="flex items-center justify-between gap-3">
-                    <span className="text-sm font-semibold text-slate-100 day:text-gray-800">
+                    <span className="day:text-gray-800 text-sm font-semibold text-slate-100">
                       Motif price
                     </span>
                     <span className="text-xl font-semibold text-[#2EE59D]">
@@ -1291,7 +1391,7 @@ export default function DesignerNav() {
 
               <div className={`${sectionCardClass} space-y-2`}>
                 <div className="flex items-center justify-between gap-3">
-                  <label className="text-sm font-semibold text-slate-100 day:text-gray-800">
+                  <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                     Height
                   </label>
                   <div className="flex items-center justify-end gap-2">
@@ -1386,7 +1486,7 @@ export default function DesignerNav() {
                         />
                       </svg>
                     </button>
-                    <span className="text-sm font-semibold text-white/60 day:text-gray-600">
+                    <span className="day:text-gray-600 text-sm font-semibold text-white/60">
                       mm
                     </span>
                   </div>
@@ -1417,7 +1517,7 @@ export default function DesignerNav() {
 
               <div className={`${sectionCardClass} space-y-2`}>
                 <div className="flex items-center justify-between gap-3">
-                  <label className="text-sm font-semibold text-slate-100 day:text-gray-800">
+                  <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                     Rotation
                   </label>
                   <div className="flex items-center justify-end gap-2">
@@ -1509,7 +1609,9 @@ export default function DesignerNav() {
                         />
                       </svg>
                     </button>
-                    <span className="text-sm font-semibold text-white/60 day:text-gray-600">°</span>
+                    <span className="day:text-gray-600 text-sm font-semibold text-white/60">
+                      °
+                    </span>
                   </div>
                 </div>
                 <div className="relative">
@@ -1537,52 +1639,52 @@ export default function DesignerNav() {
 
               {showMotifColorControls && (
                 <div className={`${sectionCardClass} space-y-2`}>
-                  <label className="block text-sm font-semibold text-slate-100 day:text-gray-800">
+                  <label className="day:text-gray-800 block text-sm font-semibold text-slate-100">
                     Color
                   </label>
                   {isEngraved && (
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        selectedMotifId &&
-                        setMotifColor(selectedMotifId, '#c99d44')
-                      }
-                      className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
-                        activeMotif?.color === '#c99d44'
-                          ? 'border-[#D7B356] bg-[#211A10] day:bg-amber-50'
-                          : 'border-white/10 bg-white/[0.04] hover:border-[#D7B356]/50 day:border-gray-200 day:bg-gray-50'
-                      }`}
-                    >
-                      <span
-                        className="h-5 w-5 rounded border border-white/20 day:border-gray-300"
-                        style={{ backgroundColor: '#c99d44' }}
-                      />
-                      <span className="text-xs font-semibold text-white/80 day:text-gray-700">
-                        Gold Gilding
-                      </span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        selectedMotifId &&
-                        setMotifColor(selectedMotifId, '#eeeeee')
-                      }
-                      className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
-                        activeMotif?.color === '#eeeeee'
-                          ? 'border-[#D7B356] bg-[#211A10] day:bg-amber-50'
-                          : 'border-white/10 bg-white/[0.04] hover:border-[#D7B356]/50 day:border-gray-200 day:bg-gray-50'
-                      }`}
-                    >
-                      <span
-                        className="h-5 w-5 rounded border border-white/20 day:border-gray-300"
-                        style={{ backgroundColor: '#eeeeee' }}
-                      />
-                      <span className="text-xs font-semibold text-white/80 day:text-gray-700">
-                        Silver Gilding
-                      </span>
-                    </button>
-                  </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          selectedMotifId &&
+                          setMotifColor(selectedMotifId, '#c99d44')
+                        }
+                        className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
+                          activeMotif?.color === '#c99d44'
+                            ? 'day:bg-amber-50 border-[#D7B356] bg-[#211A10]'
+                            : 'day:border-gray-200 day:bg-gray-50 border-white/10 bg-white/[0.04] hover:border-[#D7B356]/50'
+                        }`}
+                      >
+                        <span
+                          className="day:border-gray-300 h-5 w-5 rounded border border-white/20"
+                          style={{ backgroundColor: '#c99d44' }}
+                        />
+                        <span className="day:text-gray-700 text-xs font-semibold text-white/80">
+                          Gold Gilding
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          selectedMotifId &&
+                          setMotifColor(selectedMotifId, '#eeeeee')
+                        }
+                        className={`flex items-center gap-2 rounded-lg border p-2 text-left transition-colors ${
+                          activeMotif?.color === '#eeeeee'
+                            ? 'day:bg-amber-50 border-[#D7B356] bg-[#211A10]'
+                            : 'day:border-gray-200 day:bg-gray-50 border-white/10 bg-white/[0.04] hover:border-[#D7B356]/50'
+                        }`}
+                      >
+                        <span
+                          className="day:border-gray-300 h-5 w-5 rounded border border-white/20"
+                          style={{ backgroundColor: '#eeeeee' }}
+                        />
+                        <span className="day:text-gray-700 text-xs font-semibold text-white/80">
+                          Silver Gilding
+                        </span>
+                      </button>
+                    </div>
                   )}
                   <div className="grid grid-cols-7 gap-1.5">
                     {data.colors.map((color) => (
@@ -1592,7 +1694,7 @@ export default function DesignerNav() {
                         className={`h-7 w-7 rounded-md border transition-transform hover:scale-105 ${
                           activeMotif?.color === color.hex
                             ? 'border-[#D7B356] ring-2 ring-[#D7B356]/70'
-                            : 'border-white/20 day:border-gray-300'
+                            : 'day:border-gray-300 border-white/20'
                         }`}
                         style={{ backgroundColor: color.hex }}
                         onClick={() =>
@@ -1607,7 +1709,7 @@ export default function DesignerNav() {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-2 border-t border-white/10 pt-3 day:border-gray-200">
+            <div className="day:border-gray-200 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
               <button
                 type="button"
                 className={secondaryActionClass}
@@ -1635,7 +1737,7 @@ export default function DesignerNav() {
         ) : null}
 
         {showMotifCatalog && (
-          <div className="min-h-0 flex-1 overflow-hidden rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white">
+          <div className="day:border-gray-200 day:bg-white min-h-0 flex-1 overflow-hidden rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15">
             <MotifSelectorPanel motifs={motifCatalog} />
           </div>
         )}
@@ -1719,12 +1821,20 @@ export default function DesignerNav() {
 
   let quantity = widthMm * heightMm;
   if (catalog) {
-    quantity = computeQuantity(catalog.product.priceModel, { width: widthMm, height: heightMm, depth: uprightThickness });
+    quantity = computeQuantity(catalog.product.priceModel, {
+      width: widthMm,
+      height: heightMm,
+      depth: uprightThickness,
+    });
   }
 
   let baseQuantity = 0;
   if (showBase && catalog?.product?.basePriceModel) {
-    baseQuantity = computeQuantity(catalog.product.basePriceModel, { width: baseWidthMm, height: baseHeightMm, depth: baseThickness });
+    baseQuantity = computeQuantity(catalog.product.basePriceModel, {
+      width: baseWidthMm,
+      height: baseHeightMm,
+      depth: baseThickness,
+    });
   }
 
   let headstonePrice = 0;
@@ -1737,7 +1847,11 @@ export default function DesignerNav() {
     );
     headstonePrice = match?.price ?? 0;
   } else if (catalog) {
-    headstonePrice = calculatePrice(catalog.product.priceModel, quantity, urnShapeCode ?? undefined);
+    headstonePrice = calculatePrice(
+      catalog.product.priceModel,
+      quantity,
+      urnShapeCode ?? undefined,
+    );
   }
   const basePrice =
     showBase && catalog?.product?.basePriceModel
@@ -1766,6 +1880,13 @@ export default function DesignerNav() {
   const handleMenuClick = async (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
       e.preventDefault();
+      if (
+        slug === 'select-material' &&
+        canSelectStainlessGraniteBaseMaterial
+      ) {
+        setEditingObject('base');
+        setSelected('base');
+      }
       const keepCanvasVisibleForShape =
         slug === 'select-shape' && isCanvasVisible;
       if (!keepCanvasVisibleForShape && pathname !== `/${slug}`) {
@@ -1835,7 +1956,11 @@ export default function DesignerNav() {
         );
         headstonePrice = match?.price ?? 0;
       } else if (catalog) {
-        headstonePrice = calculatePrice(catalog.product.priceModel, quantity, urnShapeCode ?? undefined);
+        headstonePrice = calculatePrice(
+          catalog.product.priceModel,
+          quantity,
+          urnShapeCode ?? undefined,
+        );
       }
       const basePrice =
         state.showBase && catalog?.product?.basePriceModel
@@ -1850,7 +1975,13 @@ export default function DesignerNav() {
           const baseId = addId.split('_')[0];
           const addition = (data.additions || []).find((a) => a.id === baseId);
           if (addition?.sizes?.length) {
-            const variant = Math.max(1, Math.min(addition.sizes.length, Math.round(offset?.sizeVariant ?? 1)));
+            const variant = Math.max(
+              1,
+              Math.min(
+                addition.sizes.length,
+                Math.round(offset?.sizeVariant ?? 1),
+              ),
+            );
             const sizeData = addition.sizes[variant - 1] ?? addition.sizes[0];
             return total + (sizeData?.retailPrice ?? 0);
           }
@@ -1861,17 +1992,24 @@ export default function DesignerNav() {
       // Calculate motif prices (same pricing model used by Check Price)
       // Full Colour Plaque (product 32): motifs are free
       let motifsPrice = 0;
-      if (state.productId !== '32' && state.selectedMotifs && state.selectedMotifs.length > 0) {
+      if (
+        state.productId !== '32' &&
+        state.selectedMotifs &&
+        state.selectedMotifs.length > 0
+      ) {
         const isLaser = catalog?.product.laser === '1';
         motifsPrice = state.selectedMotifs.reduce((total, motif) => {
           const offset = state.motifOffsets?.[motif.id];
           const heightMm = offset?.heightMm ?? 100;
           if (!isLaser && motifPriceModel) {
-            return total + calculateMotifPrice(
-              heightMm,
-              motif.color,
-              motifPriceModel.priceModel,
-              isLaser,
+            return (
+              total +
+              calculateMotifPrice(
+                heightMm,
+                motif.color,
+                motifPriceModel.priceModel,
+                isLaser,
+              )
             );
           }
           return total;
@@ -1887,21 +2025,38 @@ export default function DesignerNav() {
       );
       let inscriptionPrice = 0;
       // Full Colour Plaque (product 32): inscriptions are free
-      if (state.productId !== '32' && state.inscriptionPriceModel && validInscriptions.length > 0) {
+      if (
+        state.productId !== '32' &&
+        state.inscriptionPriceModel &&
+        validInscriptions.length > 0
+      ) {
         inscriptionPrice = validInscriptions.reduce((total, line) => {
           const qty = line.sizeMm;
-          const colorName = data.colors.find((c: { hex: string; name: string }) => c.hex === line.color)?.name;
+          const colorName = data.colors.find(
+            (c: { hex: string; name: string }) => c.hex === line.color,
+          )?.name;
           let mappedNote = colorName;
-          if (colorName && !['Gold Gilding', 'Silver Gilding'].includes(colorName)) {
+          if (
+            colorName &&
+            !['Gold Gilding', 'Silver Gilding'].includes(colorName)
+          ) {
             mappedNote = 'Paint Fill';
           }
-          const tier = state.inscriptionPriceModel!.prices.find(
-            (p) => qty >= p.startQuantity && qty <= p.endQuantity && p.note === mappedNote,
-          ) ?? state.inscriptionPriceModel!.prices.find(
-            (p) => qty >= p.startQuantity && qty <= p.endQuantity,
-          );
+          const tier =
+            state.inscriptionPriceModel!.prices.find(
+              (p) =>
+                qty >= p.startQuantity &&
+                qty <= p.endQuantity &&
+                p.note === mappedNote,
+            ) ??
+            state.inscriptionPriceModel!.prices.find(
+              (p) => qty >= p.startQuantity && qty <= p.endQuantity,
+            );
           if (!tier) return total;
-          const price = calculatePrice({ ...state.inscriptionPriceModel!, prices: [tier] }, qty);
+          const price = calculatePrice(
+            { ...state.inscriptionPriceModel!, prices: [tier] },
+            qty,
+          );
           return total + price;
         }, 0);
       }
@@ -2004,10 +2159,16 @@ export default function DesignerNav() {
       const rawResponse = await response.text();
       let result: Record<string, unknown> = {};
       try {
-        result = rawResponse ? (JSON.parse(rawResponse) as Record<string, unknown>) : {};
+        result = rawResponse
+          ? (JSON.parse(rawResponse) as Record<string, unknown>)
+          : {};
       } catch {
         const compact = rawResponse
-          ? rawResponse.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180)
+          ? rawResponse
+              .replace(/<[^>]*>/g, ' ')
+              .replace(/\s+/g, ' ')
+              .trim()
+              .slice(0, 180)
           : '';
         result = {
           message: compact
@@ -2023,7 +2184,9 @@ export default function DesignerNav() {
           result,
         });
         const message =
-          typeof result.message === 'string' ? result.message : 'Failed to save design';
+          typeof result.message === 'string'
+            ? result.message
+            : 'Failed to save design';
         throw new Error(message);
       }
 
@@ -2071,7 +2234,6 @@ export default function DesignerNav() {
   const isSelectMaterialPage = pathname === '/select-material';
   const isSelectMotifsPage = pathname === '/select-motifs';
   const isHomePage = pathname === '/';
-
 
   // Helper function to determine status of menu items
   const getItemStatus = (
@@ -2180,7 +2342,7 @@ export default function DesignerNav() {
           ? 400
           : editingObject === 'kerbset'
             ? 500
-          : (firstShape?.table?.minDepth ?? 100);
+            : (firstShape?.table?.minDepth ?? 100);
     const maxThickness =
       editingObject === 'base'
         ? (firstShape?.stand?.maxDepth ?? 300)
@@ -2188,7 +2350,7 @@ export default function DesignerNav() {
           ? 2900
           : editingObject === 'kerbset'
             ? 3000
-          : (firstShape?.table?.maxDepth ?? 300);
+            : (firstShape?.table?.maxDepth ?? 300);
 
     const currentDepthMm =
       editingObject === 'ledger'
@@ -2217,8 +2379,7 @@ export default function DesignerNav() {
 
     const dimensionCardClass =
       'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
-    const dimensionHeaderClass =
-      'flex items-center justify-between gap-2';
+    const dimensionHeaderClass = 'flex items-center justify-between gap-2';
     const dimensionLabelClass =
       'text-sm font-semibold text-slate-100 day:text-gray-800';
     const controlButtonClass =
@@ -2252,46 +2413,83 @@ export default function DesignerNav() {
 
         {editingObject === 'base' && (
           <>
-            <div className="flex gap-1.5 rounded-full border border-[#3A3A3A] bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
+            <div className="day:border-gray-200 day:bg-gray-100 flex gap-1.5 rounded-full border border-[#3A3A3A] bg-[#0A0A0A] p-1">
               <button
                 type="button"
                 onClick={() => setShowBase(false)}
-                className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                className={`flex-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-semibold transition-all duration-200 ${
                   !showBase
                     ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
+                    : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
                 }`}
               >
                 No Base
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setBaseFinish('default');
-                  setShowBase(true);
-                }}
-                className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
-                  baseFinish === 'default' && showBase
-                    ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
-                }`}
-              >
-                Polished
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setBaseFinish('rock-pitch');
-                  setShowBase(true);
-                }}
-                className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
-                  baseFinish === 'rock-pitch' && showBase
-                    ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'text-gray-300 hover:bg-[#1A1A1A] hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'
-                }`}
-              >
-                Rock Pitch
-              </button>
+              {isStainlessSteelHeadstone ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBaseFinish('default');
+                      setBaseMaterialUrl(STAINLESS_STEEL_BASE_TEX);
+                      setShowBase(true);
+                    }}
+                    className={`flex-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-semibold transition-all duration-200 ${
+                      isStainlessSteelBase
+                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
+                    }`}
+                  >
+                    Stainless
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBaseFinish('default');
+                      setBaseMaterialUrl(GRANITE_BASE_TEX);
+                      setShowBase(true);
+                    }}
+                    className={`flex-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-semibold transition-all duration-200 ${
+                      isGraniteBase
+                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
+                    }`}
+                  >
+                    Granite
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBaseFinish('default');
+                      setShowBase(true);
+                    }}
+                    className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                      baseFinish === 'default' && showBase
+                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
+                    }`}
+                  >
+                    Polished
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setBaseFinish('rock-pitch');
+                      setShowBase(true);
+                    }}
+                    className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                      baseFinish === 'rock-pitch' && showBase
+                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
+                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
+                    }`}
+                  >
+                    Rock Pitch
+                  </button>
+                </>
+              )}
             </div>
             <div className="-mx-3.5 border-t border-white/10"></div>
           </>
@@ -2314,18 +2512,25 @@ export default function DesignerNav() {
         )}
 
         {/* Fixed size slider for Full Colour Plaque (product 32) */}
-        {catalog?.product?.id === '32' && editingObject === 'headstone' && fixedSizes.length > 0 ? (
+        {catalog?.product?.id === '32' &&
+        editingObject === 'headstone' &&
+        fixedSizes.length > 0 ? (
           (() => {
             const sizes = fixedSizes;
             const maxSize = sizes.length;
             const isLandscape = widthMm > heightMm;
             // Find which fixed size index matches current dimensions
-            const selectedIndex = Math.max(1, (() => {
-              const matchW = isLandscape ? heightMm : widthMm;
-              const matchH = isLandscape ? widthMm : heightMm;
-              const idx = sizes.findIndex((s) => s.width === matchW && s.height === matchH);
-              return idx >= 0 ? idx + 1 : 1;
-            })());
+            const selectedIndex = Math.max(
+              1,
+              (() => {
+                const matchW = isLandscape ? heightMm : widthMm;
+                const matchH = isLandscape ? widthMm : heightMm;
+                const idx = sizes.findIndex(
+                  (s) => s.width === matchW && s.height === matchH,
+                );
+                return idx >= 0 ? idx + 1 : 1;
+              })(),
+            );
             const activeSize = sizes[selectedIndex - 1] ?? sizes[0];
             const w = isLandscape ? activeSize.height : activeSize.width;
             const h = isLandscape ? activeSize.width : activeSize.height;
@@ -2347,9 +2552,7 @@ export default function DesignerNav() {
 
                 <div className={dimensionCardClass}>
                   <div className={dimensionHeaderClass}>
-                    <label className={dimensionLabelClass}>
-                      Size
-                    </label>
+                    <label className={dimensionLabelClass}>Size</label>
                     <div className="flex items-center justify-end gap-2">
                       <button
                         type="button"
@@ -2358,8 +2561,18 @@ export default function DesignerNav() {
                         className={controlButtonClass}
                         aria-label="Smaller size"
                       >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" />
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M20 12H4"
+                          />
                         </svg>
                       </button>
                       <span className="min-w-[90px] text-center text-sm font-semibold text-white">
@@ -2372,8 +2585,18 @@ export default function DesignerNav() {
                         className={controlButtonClass}
                         aria-label="Larger size"
                       >
-                        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        <svg
+                          className="h-4 w-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 4v16m8-8H4"
+                          />
                         </svg>
                       </button>
                     </div>
@@ -2389,8 +2612,12 @@ export default function DesignerNav() {
                       className={rangeInputClass}
                     />
                     <div className={rangeBoundsClass}>
-                      <span>{sizes[0].width}×{sizes[0].height}mm</span>
-                      <span>{sizes[maxSize - 1].width}×{sizes[maxSize - 1].height}mm</span>
+                      <span>
+                        {sizes[0].width}×{sizes[0].height}mm
+                      </span>
+                      <span>
+                        {sizes[maxSize - 1].width}×{sizes[maxSize - 1].height}mm
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -2398,213 +2625,211 @@ export default function DesignerNav() {
             );
           })()
         ) : (
-        <>
-        <div
-          className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
-        >
-          <div className={dimensionHeaderClass}>
-            <label className={dimensionLabelClass}>
-              Width
-            </label>
-            <div className="flex items-center justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  const newVal = Math.max(minWidth, currentWidthMm - 10);
-                  setCurrentWidthMm(newVal);
-                }}
-                disabled={editingObject === 'base' && !showBase}
-                className={controlButtonClass}
-                aria-label="Decrease width by 10mm"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 12H4"
+          <>
+            <div
+              className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              <div className={dimensionHeaderClass}>
+                <label className={dimensionLabelClass}>Width</label>
+                <div className="flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newVal = Math.max(minWidth, currentWidthMm - 10);
+                      setCurrentWidthMm(newVal);
+                    }}
+                    disabled={editingObject === 'base' && !showBase}
+                    className={controlButtonClass}
+                    aria-label="Decrease width by 10mm"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20 12H4"
+                      />
+                    </svg>
+                  </button>
+                  <input
+                    type="number"
+                    min={minWidth}
+                    max={maxWidth}
+                    step={10}
+                    value={currentWidthMm}
+                    onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
+                    onBlur={(e) => {
+                      const val = Number(e.target.value);
+                      if (val < minWidth) {
+                        setCurrentWidthMm(minWidth);
+                      } else if (val > maxWidth) {
+                        setCurrentWidthMm(maxWidth);
+                      }
+                    }}
+                    disabled={editingObject === 'base' && !showBase}
+                    className={`${numberInputBaseClass} ${
+                      currentWidthMm < minWidth || currentWidthMm > maxWidth
+                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                        : 'day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                    }`}
                   />
-                </svg>
-              </button>
-              <input
-                type="number"
-                min={minWidth}
-                max={maxWidth}
-                step={10}
-                value={currentWidthMm}
-                onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
-                onBlur={(e) => {
-                  const val = Number(e.target.value);
-                  if (val < minWidth) {
-                    setCurrentWidthMm(minWidth);
-                  } else if (val > maxWidth) {
-                    setCurrentWidthMm(maxWidth);
-                  }
-                }}
-                disabled={editingObject === 'base' && !showBase}
-                className={`${numberInputBaseClass} ${
-                  currentWidthMm < minWidth || currentWidthMm > maxWidth
-                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                    : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
-                }`}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const newVal = Math.min(maxWidth, currentWidthMm + 10);
-                  setCurrentWidthMm(newVal);
-                }}
-                disabled={editingObject === 'base' && !showBase}
-                className={controlButtonClass}
-                aria-label="Increase width by 10mm"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-              </button>
-              <span className="text-sm font-semibold text-white/70">mm</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newVal = Math.min(maxWidth, currentWidthMm + 10);
+                      setCurrentWidthMm(newVal);
+                    }}
+                    disabled={editingObject === 'base' && !showBase}
+                    className={controlButtonClass}
+                    aria-label="Increase width by 10mm"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  </button>
+                  <span className="text-sm font-semibold text-white/70">
+                    mm
+                  </span>
+                </div>
+              </div>
+              <div className="relative mt-3">
+                <input
+                  type="range"
+                  min={minWidth}
+                  max={maxWidth}
+                  step={10}
+                  value={currentWidthMm}
+                  onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
+                  disabled={editingObject === 'base' && !showBase}
+                  className={rangeInputClass}
+                />
+                <div className={rangeBoundsClass}>
+                  <span>{minWidth}mm</span>
+                  <span>{maxWidth}mm</span>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="relative mt-3">
-            <input
-              type="range"
-              min={minWidth}
-              max={maxWidth}
-              step={10}
-              value={currentWidthMm}
-              onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
-              disabled={editingObject === 'base' && !showBase}
-              className={rangeInputClass}
-            />
-            <div className={rangeBoundsClass}>
-              <span>{minWidth}mm</span>
-              <span>{maxWidth}mm</span>
-            </div>
-          </div>
-        </div>
 
-        <div
-          className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
-        >
-          <div className={dimensionHeaderClass}>
-            <label className={dimensionLabelClass}>
-              Height
-            </label>
-            <div className="flex items-center justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => {
-                  const newVal = Math.max(minHeight, currentHeightMm - 10);
-                  setCurrentHeightMm(newVal);
-                }}
-                disabled={editingObject === 'base' && !showBase}
-                className={controlButtonClass}
-                aria-label="Decrease height by 10mm"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 12H4"
+            <div
+              className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+            >
+              <div className={dimensionHeaderClass}>
+                <label className={dimensionLabelClass}>Height</label>
+                <div className="flex items-center justify-end gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newVal = Math.max(minHeight, currentHeightMm - 10);
+                      setCurrentHeightMm(newVal);
+                    }}
+                    disabled={editingObject === 'base' && !showBase}
+                    className={controlButtonClass}
+                    aria-label="Decrease height by 10mm"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M20 12H4"
+                      />
+                    </svg>
+                  </button>
+                  <input
+                    type="number"
+                    min={minHeight}
+                    max={maxHeight}
+                    step={10}
+                    value={currentHeightMm}
+                    onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
+                    onBlur={(e) => {
+                      const val = Number(e.target.value);
+                      if (val < minHeight) {
+                        setCurrentHeightMm(minHeight);
+                      } else if (val > maxHeight) {
+                        setCurrentHeightMm(maxHeight);
+                      }
+                    }}
+                    disabled={editingObject === 'base' && !showBase}
+                    className={`${numberInputBaseClass} ${
+                      currentHeightMm < minHeight || currentHeightMm > maxHeight
+                        ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
+                        : 'day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30'
+                    }`}
                   />
-                </svg>
-              </button>
-              <input
-                type="number"
-                min={minHeight}
-                max={maxHeight}
-                step={10}
-                value={currentHeightMm}
-                onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
-                onBlur={(e) => {
-                  const val = Number(e.target.value);
-                  if (val < minHeight) {
-                    setCurrentHeightMm(minHeight);
-                  } else if (val > maxHeight) {
-                    setCurrentHeightMm(maxHeight);
-                  }
-                }}
-                disabled={editingObject === 'base' && !showBase}
-                className={`${numberInputBaseClass} ${
-                  currentHeightMm < minHeight || currentHeightMm > maxHeight
-                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                    : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
-                }`}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const newVal = Math.min(maxHeight, currentHeightMm + 10);
-                  setCurrentHeightMm(newVal);
-                }}
-                disabled={editingObject === 'base' && !showBase}
-                className={controlButtonClass}
-                aria-label="Increase height by 10mm"
-              >
-                <svg
-                  className="h-4 w-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-              </button>
-              <span className="text-sm font-semibold text-white/70">mm</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const newVal = Math.min(maxHeight, currentHeightMm + 10);
+                      setCurrentHeightMm(newVal);
+                    }}
+                    disabled={editingObject === 'base' && !showBase}
+                    className={controlButtonClass}
+                    aria-label="Increase height by 10mm"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  </button>
+                  <span className="text-sm font-semibold text-white/70">
+                    mm
+                  </span>
+                </div>
+              </div>
+              <div className="relative mt-3">
+                <input
+                  type="range"
+                  min={minHeight}
+                  max={maxHeight}
+                  step={10}
+                  value={currentHeightMm}
+                  onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
+                  disabled={editingObject === 'base' && !showBase}
+                  className={rangeInputClass}
+                />
+                <div className={rangeBoundsClass}>
+                  <span>{minHeight}mm</span>
+                  <span>{maxHeight}mm</span>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="relative mt-3">
-            <input
-              type="range"
-              min={minHeight}
-              max={maxHeight}
-              step={10}
-              value={currentHeightMm}
-              onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
-              disabled={editingObject === 'base' && !showBase}
-              className={rangeInputClass}
-            />
-            <div className={rangeBoundsClass}>
-              <span>{minHeight}mm</span>
-              <span>{maxHeight}mm</span>
-            </div>
-          </div>
-        </div>
-        </>
+          </>
         )}
 
         {editingObject === 'headstone' && !isPlaque && (
           <div className={dimensionCardClass}>
             <div className={dimensionHeaderClass}>
-              <label className={dimensionLabelClass}>
-                Thickness
-              </label>
+              <label className={dimensionLabelClass}>Thickness</label>
               <div className="flex items-center justify-end gap-2">
                 <button
                   type="button"
@@ -2679,7 +2904,7 @@ export default function DesignerNav() {
                       ? uprightThickness
                       : slantThickness) > maxThickness
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
+                      : 'day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30'
                   }`}
                 />
                 <button
@@ -2748,9 +2973,7 @@ export default function DesignerNav() {
         {editingObject === 'base' && showBase && (
           <div className={dimensionCardClass}>
             <div className={dimensionHeaderClass}>
-              <label className={dimensionLabelClass}>
-                Thickness
-              </label>
+              <label className={dimensionLabelClass}>Thickness</label>
               <div className="flex items-center justify-end gap-2">
                 <button
                   type="button"
@@ -2793,7 +3016,7 @@ export default function DesignerNav() {
                   className={`${numberInputBaseClass} ${
                     baseThickness < minThickness || baseThickness > maxThickness
                       ? 'border-red-500 focus:border-red-500 focus:ring-red-500/50'
-                      : 'border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300'
+                      : 'day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30'
                   }`}
                 />
                 <button
@@ -2845,9 +3068,7 @@ export default function DesignerNav() {
           setCurrentDepthMm && (
             <div className={dimensionCardClass}>
               <div className={dimensionHeaderClass}>
-                <label className={dimensionLabelClass}>
-                  Length
-                </label>
+                <label className={dimensionLabelClass}>Length</label>
                 <div className="flex items-center justify-end gap-2">
                   <button
                     type="button"
@@ -2880,7 +3101,7 @@ export default function DesignerNav() {
                     step={10}
                     value={currentDepthMm}
                     onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
-                    className={`${numberInputBaseClass} border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30 day:border-gray-300`}
+                    className={`${numberInputBaseClass} day:border-gray-300 border-white/10 focus:border-[#D7B356] focus:ring-[#D7B356]/30`}
                   />
                   <button
                     type="button"
@@ -2906,7 +3127,9 @@ export default function DesignerNav() {
                       />
                     </svg>
                   </button>
-                  <span className="text-sm font-semibold text-white/70">mm</span>
+                  <span className="text-sm font-semibold text-white/70">
+                    mm
+                  </span>
                 </div>
               </div>
               <div className="relative mt-3">
@@ -2933,49 +3156,66 @@ export default function DesignerNav() {
   return (
     <nav
       ref={navRef}
-      className="flex h-full flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] text-white day:text-[#1a1209] fs-designer-nav"
+      className="day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] day:text-[#1a1209] fs-designer-nav flex h-full flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
     >
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
         <div className="flex h-full flex-col">
           {/* Panel Header - desktop only */}
-          <div className="hidden border-b border-white/10 day:border-gray-200 bg-[#1b1511] day:bg-stone-50 px-5 py-4 md:block">
+          <div className="day:border-gray-200 day:bg-stone-50 hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
             {/* Row 1: Guided Step label + step badge */}
             <div className="mb-2 flex items-center justify-center gap-2.5">
-              <p className="font-playfair-display text-xs tracking-[0.35em] italic" style={{ color: '#aaaaaa' }}>
+              <p
+                className="font-playfair-display text-xs tracking-[0.35em] italic"
+                style={{ color: '#aaaaaa' }}
+              >
                 Guided Step
               </p>
               {currentPanelIndex >= 0 && (
                 <span className="inline-flex items-center gap-1 rounded-full border border-white/20 bg-white/5 px-2.5 py-1 text-xs font-medium">
-                  <span className="font-semibold text-primary">{currentPanelIndex + 1}</span>
+                  <span className="text-primary font-semibold">
+                    {currentPanelIndex + 1}
+                  </span>
                   <span className="text-white/30">/</span>
-                  <span className="text-white/50">{navigablePanelSlugs.length}</span>
+                  <span className="text-white/50">
+                    {navigablePanelSlugs.length}
+                  </span>
                 </span>
               )}
             </div>
             {/* Row 2: Section title centered */}
-            <h2 className="my-5 text-center text-3xl font-serif font-light tracking-tight text-white day:text-gray-900">
-              {activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
+            <h2 className="day:text-gray-900 my-5 text-center font-serif text-3xl font-light tracking-tight text-white">
+              {activeFullscreenPanel === 'select-material' &&
+              (productId === '32' || isUrn)
                 ? 'Background'
-                : menuItems.find(
-                    (item) => item.slug === activeFullscreenPanel,
-                  )?.name}
+                : menuItems.find((item) => item.slug === activeFullscreenPanel)
+                    ?.name}
             </h2>
             {/* Fancy divider */}
             <div className="my-3 flex items-center gap-3">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/20 to-primary/40" />
-              <div className="h-1 w-1 rotate-45 bg-primary/50" />
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-white/20 to-primary/40" />
+              <div className="to-primary/40 h-px flex-1 bg-gradient-to-r from-transparent via-white/20" />
+              <div className="bg-primary/50 h-1 w-1 rotate-45" />
+              <div className="to-primary/40 h-px flex-1 bg-gradient-to-l from-transparent via-white/20" />
             </div>
             {/* Row 3: Menu left, Prev/Next right */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleBackToMenu}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900"
+                  className="day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white"
                 >
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <svg
+                    className="h-3 w-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
                   Menu
                 </button>
@@ -2986,7 +3226,7 @@ export default function DesignerNav() {
                         ? handleBackToAdditionList
                         : handleBackToMotifList
                     }
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900"
+                    className="day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white"
                   >
                     <Squares2X2Icon className="h-3 w-3" />
                     List
@@ -2995,25 +3235,57 @@ export default function DesignerNav() {
               </div>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => prevPanelSlug && handleNavigateToPanel(prevPanelSlug)}
+                  onClick={() =>
+                    prevPanelSlug && handleNavigateToPanel(prevPanelSlug)
+                  }
                   disabled={!prevPanelSlug}
-                  title={prevPanelSlug ? `Go to ${menuItems.find((i) => i.slug === prevPanelSlug)?.name}` : undefined}
-                 className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-30"
+                  title={
+                    prevPanelSlug
+                      ? `Go to ${menuItems.find((i) => i.slug === prevPanelSlug)?.name}`
+                      : undefined
+                  }
+                  className="day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
                 >
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  <svg
+                    className="h-3 w-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 19l-7-7 7-7"
+                    />
                   </svg>
                   Prev
                 </button>
                 <button
-                  onClick={() => nextPanelSlug && handleNavigateToPanel(nextPanelSlug)}
-                  disabled={!nextPanelSlug}
-                  title={nextPanelSlug ? `Go to ${menuItems.find((i) => i.slug === nextPanelSlug)?.name}` : undefined}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-white/30 day:border-gray-300 bg-white/10 day:bg-gray-100 px-3 py-1.5 text-xs font-medium text-white/80 day:text-gray-700 transition-colors duration-200 hover:border-white/50 day:hover:border-gray-400 hover:bg-white/15 day:hover:bg-gray-200 hover:text-white day:hover:text-gray-900 disabled:cursor-not-allowed disabled:opacity-30"
+                  onClick={() =>
+                    nextPanelSlug && handleNavigateToPanel(nextPanelSlug)
+                  }
+                  disabled={!nextPanelSlug || isImageCropActive}
+                  title={
+                    isImageCropActive
+                      ? 'Add the cropped image to the headstone before continuing'
+                      : nextPanelTitle
+                  }
+                  className="day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
                 >
-                  Next
-                  <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  {isImageCropActive ? 'Finish Crop First' : 'Next'}
+                  <svg
+                    className="h-3 w-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </button>
               </div>
@@ -3043,13 +3315,22 @@ export default function DesignerNav() {
                   <div className="flex flex-col items-center gap-4">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-[#3A3A3A] border-t-white" />
                     <p className="text-sm text-white/60">
-                      {productId === '32' || isUrn ? 'Loading backgrounds...' : 'Loading materials...'}
+                      {productId === '32' || isUrn
+                        ? 'Loading backgrounds...'
+                        : 'Loading materials...'}
                     </p>
                   </div>
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <MaterialSelector materials={materials} />
+                  <MaterialSelector
+                    materials={materials}
+                    forceTarget={
+                      canSelectStainlessGraniteBaseMaterial
+                        ? 'base'
+                        : undefined
+                    }
+                  />
                 </div>
               ))}
             {activeFullscreenPanel === 'select-border' &&
@@ -3064,7 +3345,11 @@ export default function DesignerNav() {
                 <div className="space-y-6">
                   <div className="h-[calc(100vh-220px)] overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
                     <div className="h-full overflow-y-auto pr-1">
-                      <BorderSelector borders={borders} disableInternalScroll isPlaque={isPlaque} />
+                      <BorderSelector
+                        borders={borders}
+                        disableInternalScroll
+                        isPlaque={isPlaque}
+                      />
                     </div>
                   </div>
                 </div>
@@ -3133,7 +3418,7 @@ export default function DesignerNav() {
           </div>
         </div>
       ) : activeFullscreenPanel === 'corners' ? (
-        <div className="flex flex-col h-full">
+        <div className="flex h-full flex-col">
           {/* Corners sub-panel — shown inside the sidebar (no route needed) */}
           <div className="flex items-center border-b border-white/10 px-5 py-4">
             <button
@@ -3142,23 +3427,42 @@ export default function DesignerNav() {
               className="inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-200 hover:border-white/40 hover:text-white"
             >
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </span>
               <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
             </button>
           </div>
           <div className="flex items-end justify-between border-b border-white/10 px-5 py-4">
-            <div className="text-right w-full">
-              <p className="font-playfair-display text-xs tracking-[0.35em] italic" style={{ color: '#aaaaaa' }}>Guided Step</p>
-              <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">Corners</h2>
-              <div className="mt-3 h-px w-24 bg-white/20 ml-auto" />
+            <div className="w-full text-right">
+              <p
+                className="font-playfair-display text-xs tracking-[0.35em] italic"
+                style={{ color: '#aaaaaa' }}
+              >
+                Guided Step
+              </p>
+              <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">
+                Corners
+              </h2>
+              <div className="mt-3 ml-auto h-px w-24 bg-white/20" />
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-4">
             <div className="space-y-4 p-2">
-              <p className="text-xs font-medium tracking-wider text-white/50 uppercase">Corner Style</p>
+              <p className="text-xs font-medium tracking-wider text-white/50 uppercase">
+                Corner Style
+              </p>
               <div className="grid grid-cols-2 gap-4">
                 <button
                   type="button"
@@ -3169,7 +3473,13 @@ export default function DesignerNav() {
                       : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
                   }`}
                 >
-                  <svg viewBox="0 0 80 60" className="h-16 w-20" fill="none" stroke="currentColor" strokeWidth="3">
+                  <svg
+                    viewBox="0 0 80 60"
+                    className="h-16 w-20"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                  >
                     <rect x="6" y="6" width="68" height="48" rx="0" />
                   </svg>
                   <span className="text-sm font-medium">Straight</span>
@@ -3183,17 +3493,23 @@ export default function DesignerNav() {
                       : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
                   }`}
                 >
-                  <svg viewBox="0 0 80 60" className="h-16 w-20" fill="none" stroke="currentColor" strokeWidth="3">
+                  <svg
+                    viewBox="0 0 80 60"
+                    className="h-16 w-20"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                  >
                     <rect x="6" y="6" width="68" height="48" rx="12" />
                   </svg>
                   <span className="text-sm font-medium">Rounded</span>
                 </button>
-                </div>
+              </div>
             </div>
           </div>
         </div>
       ) : activeFullscreenPanel === 'holes' ? (
-        <div className="flex flex-col h-full">
+        <div className="flex h-full flex-col">
           {/* Holes sub-panel */}
           <div className="flex items-center border-b border-white/10 px-5 py-4">
             <button
@@ -3202,23 +3518,42 @@ export default function DesignerNav() {
               className="inline-flex items-center gap-3 rounded-full border border-white/10 px-4 py-2 text-sm font-medium text-white/70 transition-colors duration-200 hover:border-white/40 hover:text-white"
             >
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/5">
-                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19l-7-7 7-7"
+                  />
                 </svg>
               </span>
               <span className="tracking-wide">Back&nbsp;to&nbsp;Menu</span>
             </button>
           </div>
           <div className="flex items-end justify-between border-b border-white/10 px-5 py-4">
-            <div className="text-right w-full">
-              <p className="font-playfair-display text-xs tracking-[0.35em] italic" style={{ color: '#aaaaaa' }}>Guided Step</p>
-              <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">Holes</h2>
-              <div className="mt-3 h-px w-24 bg-white/20 ml-auto" />
+            <div className="w-full text-right">
+              <p
+                className="font-playfair-display text-xs tracking-[0.35em] italic"
+                style={{ color: '#aaaaaa' }}
+              >
+                Guided Step
+              </p>
+              <h2 className="font-playfair-display mt-1 text-2xl font-normal tracking-wide text-white">
+                Holes
+              </h2>
+              <div className="mt-3 ml-auto h-px w-24 bg-white/20" />
             </div>
           </div>
           <div className="flex-1 overflow-y-auto p-4">
             <div className="space-y-4 p-2">
-              <p className="text-xs font-medium tracking-wider text-white/50 uppercase">Mounting Holes</p>
+              <p className="text-xs font-medium tracking-wider text-white/50 uppercase">
+                Mounting Holes
+              </p>
               <div className="grid grid-cols-1 gap-4">
                 <button
                   type="button"
@@ -3229,14 +3564,46 @@ export default function DesignerNav() {
                       : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
                   }`}
                 >
-                  <svg viewBox="0 0 80 60" className="h-12 w-16 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="3">
+                  <svg
+                    viewBox="0 0 80 60"
+                    className="h-12 w-16 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                  >
                     <rect x="6" y="6" width="68" height="48" rx="0" />
-                    <circle cx="16" cy="16" r="3.5" fill="currentColor" stroke="none" />
-                    <circle cx="64" cy="16" r="3.5" fill="currentColor" stroke="none" />
-                    <circle cx="16" cy="44" r="3.5" fill="currentColor" stroke="none" />
-                    <circle cx="64" cy="44" r="3.5" fill="currentColor" stroke="none" />
+                    <circle
+                      cx="16"
+                      cy="16"
+                      r="3.5"
+                      fill="currentColor"
+                      stroke="none"
+                    />
+                    <circle
+                      cx="64"
+                      cy="16"
+                      r="3.5"
+                      fill="currentColor"
+                      stroke="none"
+                    />
+                    <circle
+                      cx="16"
+                      cy="44"
+                      r="3.5"
+                      fill="currentColor"
+                      stroke="none"
+                    />
+                    <circle
+                      cx="64"
+                      cy="44"
+                      r="3.5"
+                      fill="currentColor"
+                      stroke="none"
+                    />
                   </svg>
-                  <span className="text-sm font-medium text-left">Hole on each corner</span>
+                  <span className="text-left text-sm font-medium">
+                    Hole on each corner
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -3247,12 +3614,32 @@ export default function DesignerNav() {
                       : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
                   }`}
                 >
-                  <svg viewBox="0 0 80 60" className="h-12 w-16 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="3">
+                  <svg
+                    viewBox="0 0 80 60"
+                    className="h-12 w-16 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                  >
                     <rect x="6" y="6" width="68" height="48" rx="0" />
-                    <circle cx="16" cy="30" r="3.5" fill="currentColor" stroke="none" />
-                    <circle cx="64" cy="30" r="3.5" fill="currentColor" stroke="none" />
+                    <circle
+                      cx="16"
+                      cy="30"
+                      r="3.5"
+                      fill="currentColor"
+                      stroke="none"
+                    />
+                    <circle
+                      cx="64"
+                      cy="30"
+                      r="3.5"
+                      fill="currentColor"
+                      stroke="none"
+                    />
                   </svg>
-                  <span className="text-sm font-medium text-left">Holes in centre of each side</span>
+                  <span className="text-left text-sm font-medium">
+                    Holes in centre of each side
+                  </span>
                 </button>
                 <button
                   type="button"
@@ -3263,10 +3650,18 @@ export default function DesignerNav() {
                       : 'border-white/10 text-gray-300 hover:border-white/20 hover:bg-white/5'
                   }`}
                 >
-                  <svg viewBox="0 0 80 60" className="h-12 w-16 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="3">
+                  <svg
+                    viewBox="0 0 80 60"
+                    className="h-12 w-16 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                  >
                     <rect x="6" y="6" width="68" height="48" rx="0" />
                   </svg>
-                  <span className="text-sm font-medium text-left">No drilled holes</span>
+                  <span className="text-left text-sm font-medium">
+                    No drilled holes
+                  </span>
                 </button>
               </div>
             </div>
@@ -3275,16 +3670,16 @@ export default function DesignerNav() {
       ) : (
         <>
           {/* Desktop Header */}
-          <div className="hidden items-center justify-between border-b border-white/10 day:border-gray-200 px-6 md:flex">
+          <div className="day:border-gray-200 hidden items-center justify-between border-b border-white/10 px-6 md:flex">
             <Link href="/" className="transition-opacity hover:opacity-80">
               <img src="/ico/forever-transparent-logo.png" alt="Forever Logo" />
             </Link>
           </div>
 
           {/* Mobile Header */}
-          <div className="border-b border-primary/10 day:border-[#DEBD68]/20 bg-[#120c08]/95 day:bg-stone-50 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
+          <div className="border-primary/10 day:border-[#DEBD68]/20 day:bg-stone-50 border-b bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
             <div className="flex items-center justify-between gap-4">
-              <p className="font-playfair-display text-[10px] tracking-[0.45em] text-primary/50 italic">
+              <p className="font-playfair-display text-primary/50 text-[10px] tracking-[0.45em] italic">
                 Guided Studio
               </p>
               <Link href="/" className="transition-opacity hover:opacity-80">
@@ -3302,10 +3697,20 @@ export default function DesignerNav() {
             <button
               type="button"
               onClick={() => setShowQuickEnquiry(true)}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-primary/40 bg-primary/10 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary/20"
+              className="border-primary/40 bg-primary/10 hover:bg-primary/20 flex w-full items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold text-white transition-colors"
             >
-              <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z" />
+              <svg
+                className="h-4 w-4 shrink-0"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z"
+                />
               </svg>
               Quick Enquiry
             </button>
@@ -3342,7 +3747,7 @@ export default function DesignerNav() {
             )}
 
             {showConvertPanel && productId && (
-              <div className="mb-6 rounded-2xl border border-white/15 day:border-gray-200 bg-[#120c08]/90 day:bg-stone-50 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
+              <div className="day:border-gray-200 day:bg-stone-50 mb-6 rounded-2xl border border-white/15 bg-[#120c08]/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold text-white">
@@ -3420,322 +3825,253 @@ export default function DesignerNav() {
                     : 'Available';
 
                 return (
-                <div
-                  key={group.label}
-                  className="relative"
-                >
-                  {/* Golden thread connector between sections */}
-                  {groupIndex > 0 && (
-                    <div className="absolute -top-1 left-[22px] z-10 h-1 w-px bg-gradient-to-b from-primary/10 to-primary/30" />
-                  )}
+                  <div key={group.label} className="relative">
+                    {/* Golden thread connector between sections */}
+                    {groupIndex > 0 && (
+                      <div className="from-primary/10 to-primary/30 absolute -top-1 left-[22px] z-10 h-1 w-px bg-gradient-to-b" />
+                    )}
 
-                  <div
-                    className={`rounded-2xl border p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors ${
-                      isCurrentGroup
-                        ? 'border-primary/45 bg-gradient-to-br from-primary/12 via-white/5 to-black/20 day:border-[#D7B356]/60 day:bg-[#DEBD68]/10'
-                        : 'border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20 day:border-gray-200 day:from-stone-50 day:via-stone-50 day:to-stone-50'
-                    }`}
-                  >
-                  <button
-                    onClick={() => toggleGroup(groupIndex)}
-                    aria-current={isCurrentGroup ? 'step' : undefined}
-                    className={`flex w-full cursor-pointer items-center gap-3 px-3 py-1.5 transition-colors duration-200 hover:bg-white/5 rounded-lg ${
-                      openGroup === groupIndex ? 'mb-3' : 'mb-0'
-                    }`}
-                  >
-                    <span
-                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border font-playfair-display text-[13px] font-normal tracking-wide ${
-                        isPastGroup
-                          ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
-                          : isCurrentGroup
-                            ? 'border-white/80 bg-primary/20 text-white'
-                            : 'border-primary/40 text-primary'
+                    <div
+                      className={`rounded-2xl border p-3 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm transition-colors ${
+                        isCurrentGroup
+                          ? 'border-primary/45 from-primary/12 day:border-[#D7B356]/60 day:bg-[#DEBD68]/10 bg-gradient-to-br via-white/5 to-black/20'
+                          : 'day:border-gray-200 day:from-stone-50 day:via-stone-50 day:to-stone-50 border-white/10 bg-gradient-to-br from-white/5 via-transparent to-black/20'
                       }`}
                     >
-                      {isPastGroup ? '✓' : ['I', 'II', 'III'][groupIndex]}
-                    </span>
-                    <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <p className="font-playfair-display text-[19px] font-normal tracking-wide text-white/90 day:text-gray-900">
-                          {group.label}
-                        </p>
-                        <p className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-white/45 day:text-gray-500">
-                          {groupStatus}
-                        </p>
-                      </div>
-                      <span className="shrink-0 font-playfair-display text-[10px] tracking-[0.3em] text-primary/60 italic">
-                        Step {groupIndex + 1}
-                      </span>
-                    </div>
-                    <ChevronDownIcon
-                              className={`h-4 w-4 shrink-0 text-white/40 day:text-gray-400 ${
-                        openGroup !== groupIndex ? '-rotate-90' : 'rotate-0'
-                      }`}
-                    />
-                  </button>
+                      <button
+                        onClick={() => toggleGroup(groupIndex)}
+                        aria-current={isCurrentGroup ? 'step' : undefined}
+                        className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-1.5 transition-colors duration-200 hover:bg-white/5 ${
+                          openGroup === groupIndex ? 'mb-3' : 'mb-0'
+                        }`}
+                      >
+                        <span
+                          className={`font-playfair-display flex h-9 w-9 shrink-0 items-center justify-center rounded-full border text-[13px] font-normal tracking-wide ${
+                            isPastGroup
+                              ? 'border-emerald-400/40 bg-emerald-400/10 text-emerald-300'
+                              : isCurrentGroup
+                                ? 'bg-primary/20 border-white/80 text-white'
+                                : 'border-primary/40 text-primary'
+                          }`}
+                        >
+                          {isPastGroup ? '✓' : ['I', 'II', 'III'][groupIndex]}
+                        </span>
+                        <div className="flex min-w-0 flex-1 items-center justify-between gap-3">
+                          <div className="min-w-0">
+                            <p className="font-playfair-display day:text-gray-900 text-[19px] font-normal tracking-wide text-white/90">
+                              {group.label}
+                            </p>
+                            <p className="day:text-gray-500 mt-0.5 text-[11px] font-medium tracking-[0.16em] text-white/45 uppercase">
+                              {groupStatus}
+                            </p>
+                          </div>
+                          <span className="font-playfair-display text-primary/60 shrink-0 text-[10px] tracking-[0.3em] italic">
+                            Step {groupIndex + 1}
+                          </span>
+                        </div>
+                        <ChevronDownIcon
+                          className={`day:text-gray-400 h-4 w-4 shrink-0 text-white/40 ${
+                            openGroup !== groupIndex ? '-rotate-90' : 'rotate-0'
+                          }`}
+                        />
+                      </button>
 
-                  {/* Group Items — collapsible */}
-                  <div
-                    className={`flex flex-col gap-2 overflow-hidden ${
-                      openGroup !== groupIndex
-                        ? 'max-h-0 opacity-0'
-                        : 'max-h-[2000px] opacity-100'
-                    }`}
-                  >
-                    {group.items.map((item, index) => {
-                      const Icon = item.icon;
-                      const isRouteActive = pathname === `/${item.slug}`;
-                      const isPanelActive = activeFullscreenPanel === item.slug;
-                      const isActive = isRouteActive || isPanelActive;
-                      const highlightActive = fullscreenPanelSlugs.has(
-                        item.slug,
-                      )
-                        ? isPanelActive || isRouteActive
-                        : isActive;
-                      const itemStatus = getItemStatus(item.slug);
-                      const itemCount = getItemCount(item.slug);
+                      {/* Group Items — collapsible */}
+                      <div
+                        className={`flex flex-col gap-2 overflow-hidden ${
+                          openGroup !== groupIndex
+                            ? 'max-h-0 opacity-0'
+                            : 'max-h-[2000px] opacity-100'
+                        }`}
+                      >
+                        {group.items.map((item, index) => {
+                          const Icon = item.icon;
+                          const isRouteActive = pathname === `/${item.slug}`;
+                          const isPanelActive =
+                            activeFullscreenPanel === item.slug;
+                          const isActive = isRouteActive || isPanelActive;
+                          const highlightActive = fullscreenPanelSlugs.has(
+                            item.slug,
+                          )
+                            ? isPanelActive || isRouteActive
+                            : isActive;
+                          const itemStatus = getItemStatus(item.slug);
+                          const itemCount = getItemCount(item.slug);
 
-                      // "Select Size & Base" for upright headstones; "Select Size" everywhere else
-                      const displayName =
-                        item.slug === 'select-size' && catalog?.product.type === 'headstone'
-                          ? 'Select Size & Base'
-                          : item.name;
+                          // "Select Size & Base" for upright headstones; "Select Size" everywhere else
+                          const displayName =
+                            item.slug === 'select-size' &&
+                            catalog?.product.type === 'headstone'
+                              ? 'Select Size & Base'
+                              : item.name;
 
-                      // Status-based styling
-                      const statusClasses =
-                        itemStatus === 'complete'
-                          ? 'border-green-500/30 text-green-400'
-                          : itemStatus === 'incomplete'
-                            ? 'border-amber-500/30 text-amber-400'
-                            : 'border-white/10 text-gray-200';
+                          // Status-based styling
+                          const statusClasses =
+                            itemStatus === 'complete'
+                              ? 'border-green-500/30 text-green-400'
+                              : itemStatus === 'incomplete'
+                                ? 'border-amber-500/30 text-amber-400'
+                                : 'border-white/10 text-gray-200';
 
-                      // Hide "Select Material" for laser etched products and stainless steel headstones
-                      if (
-                        item.slug === 'select-material' &&
-                        (catalog?.product?.laser === '1' ||
-                          isStainlessSteelHeadstone)
-                      ) {
-                        return null;
-                      }
+                          // Hide "Select Material" for laser etched products and stainless steel headstones
+                          if (
+                            item.slug === 'select-material' &&
+                            ((catalog?.product?.laser === '1' &&
+                              !canSelectStainlessGraniteBaseMaterial) ||
+                              (isStainlessSteelHeadstone &&
+                                !canSelectStainlessGraniteBaseMaterial))
+                          ) {
+                            return null;
+                          }
 
-                      // Hide "Select Border" for headstones (toggle is in Shape panel) and plaques without border support
-                      if (item.slug === 'select-border' && (!isPlaque || !hasBorder)) {
-                        return null;
-                      }
+                          // Hide "Select Border" for headstones (toggle is in Shape panel) and plaques without border support
+                          if (
+                            item.slug === 'select-border' &&
+                            (!isPlaque || !hasBorder)
+                          ) {
+                            return null;
+                          }
 
-                      // Hide "Select Additions" for laser etched products and stainless steel headstones
-                      if (
-                        item.slug === 'select-additions' &&
-                        (catalog?.product?.laser === '1' ||
-                          isStainlessSteelHeadstone)
-                      ) {
-                        return null;
-                      }
+                          // Hide "Select Additions" for laser etched products and stainless steel headstones
+                          if (
+                            item.slug === 'select-additions' &&
+                            (catalog?.product?.laser === '1' ||
+                              isStainlessSteelHeadstone)
+                          ) {
+                            return null;
+                          }
 
-                      // Hide "Select Emblems" for non-bronze-plaque products
-                      if (
-                        (item as { requiresBronzePlaque?: boolean }).requiresBronzePlaque &&
-                        productId !== '5'
-                      ) {
-                        return null;
-                      }
+                          // Hide "Select Emblems" for non-bronze-plaque products
+                          if (
+                            (item as { requiresBronzePlaque?: boolean })
+                              .requiresBronzePlaque &&
+                            productId !== '5'
+                          ) {
+                            return null;
+                          }
 
-                      // Hide "Select Additions" for plaque products
-                      if (
-                        (item as { hiddenForPlaque?: boolean }).hiddenForPlaque &&
-                        isPlaque
-                      ) {
-                        return null;
-                      }
+                          // Hide "Select Additions" for plaque products
+                          if (
+                            (item as { hiddenForPlaque?: boolean })
+                              .hiddenForPlaque &&
+                            isPlaque
+                          ) {
+                            return null;
+                          }
 
-                      // Hide "Corners" for non-SS-plaque products
-                      if (
-                        (item as { requiresSSPlaque?: boolean }).requiresSSPlaque &&
-                        productId !== '52'
-                      ) {
-                        return null;
-                      }
+                          // Hide "Corners" for non-SS-plaque products
+                          if (
+                            (item as { requiresSSPlaque?: boolean })
+                              .requiresSSPlaque &&
+                            productId !== '52'
+                          ) {
+                            return null;
+                          }
 
-                      // Special handling for Corners — button opens fullscreen panel (like Select Material)
-                      if (item.slug === 'corners') {
-                        const isCornersActive = activeFullscreenPanel === 'corners';
-                        return (
-                          <button
-                            key={item.slug}
-                            type="button"
-                            onClick={() =>
-                              setActiveFullscreenPanel(isCornersActive ? null : 'corners')
-                            }
-                            onMouseDown={(e) => e.preventDefault()}
-                            style={{ caretColor: 'transparent', userSelect: 'none' }}
-                            className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
-                              isCornersActive
-                                ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
-                            }`}
-                          >
-                            <ViewfinderCircleIcon className="h-5 w-5 flex-shrink-0" />
-                            <span className="select-none" style={{ caretColor: 'transparent' }}>
-                              Select Corners
-                            </span>
-                          </button>
-                        );
-                      }
-
-                      // Special handling for Holes — button opens sub-panel (same pattern as Corners)
-                      if (item.slug === 'holes') {
-                        const isHolesActive = activeFullscreenPanel === 'holes';
-                        return (
-                          <button
-                            key={item.slug}
-                            type="button"
-                            onClick={() =>
-                              setActiveFullscreenPanel(isHolesActive ? null : 'holes')
-                            }
-                            onMouseDown={(e) => e.preventDefault()}
-                            style={{ caretColor: 'transparent', userSelect: 'none' }}
-                            className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
-                              isHolesActive
-                                ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
-                            }`}
-                          >
-                            <CircleStackIcon className="h-5 w-5 flex-shrink-0" />
-                            <span className="select-none" style={{ caretColor: 'transparent' }}>
-                              Select Holes
-                            </span>
-                          </button>
-                        );
-                      }
-
-                      // Hide 3D Preview when canvas is already visible or on select-size page
-                      if (
-                        item.slug === '3d-preview' &&
-                        (showCanvas || pathname === '/select-size')
-                      ) {
-                        return null;
-                      }
-
-                      if (fullscreenPanelSlugs.has(item.slug) && item.slug !== 'select-material') {
-                        const shouldRenderInlinePanel =
-                          item.slug === 'select-size' &&
-                          isSelectSizePage &&
-                          !selectedMotifId &&
-                          !selectedAdditionId &&
-                          activeFullscreenPanel === 'select-size';
-
-                        return (
-                          <React.Fragment key={item.slug}>
-                            <button
-                              type="button"
-                              data-section={item.slug}
-                              onClick={(e) => handleMenuClick(item.slug, e)}
-                              onMouseDown={(e) => e.preventDefault()}
-                              style={{
-                                caretColor: 'transparent',
-                                userSelect: 'none',
-                              }}
-                              className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
-                                highlightActive
-                                  ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                  : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
-                              }`}
-                            >
-                              <Icon className="h-5 w-5 flex-shrink-0" />
-                              <span
-                                className="select-none"
-                                style={{ caretColor: 'transparent' }}
-                              >
-                                {displayName}
-                              </span>
-                            </button>
-
-                            {shouldRenderInlinePanel &&
-                              renderSelectSizePanel('mt-3')}
-                          </React.Fragment>
-                        );
-                      }
-
-                      // Special handling for Select Border - show border selector in sidebar when canvas is visible
-                      if (item.slug === 'select-border') {
-                        return (
-                          <React.Fragment key={item.slug}>
-                            {isCanvasVisible ? (
-                              <>
-                                <button
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    // Navigate to select-border page to keep canvas visible and show border selector
-                                    if (pathname !== '/select-border') {
-                                      router.push('/select-border');
-                                    }
-                                  }}
-                                  onMouseDown={(e) => e.preventDefault()}
-                                  style={{
-                                    caretColor: 'transparent',
-                                    userSelect: 'none',
-                                  }}
-                                  className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
-                                    isActive
-                                      ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                      : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
-                                  }`}
-                                >
-                                  <Icon className="h-5 w-5 flex-shrink-0" />
-                                  <span>{displayName}</span>
-                                </button>
-
-                                {isActive &&
-                                  !selectedMotifId &&
-                                  !selectedAdditionId && (
-                                    <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
-                                      <BorderSelector borders={borders} />
-                                    </div>
-                                  )}
-                              </>
-                            ) : (
-                              // Show link when canvas is not visible (first-time selection)
-                              <Link
-                                href={`/${item.slug}`}
-                                data-section={item.slug}
-                                className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                                  isActive
-                                    ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                    : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
+                          // Special handling for Corners — button opens fullscreen panel (like Select Material)
+                          if (item.slug === 'corners') {
+                            const isCornersActive =
+                              activeFullscreenPanel === 'corners';
+                            return (
+                              <button
+                                key={item.slug}
+                                type="button"
+                                onClick={() =>
+                                  setActiveFullscreenPanel(
+                                    isCornersActive ? null : 'corners',
+                                  )
+                                }
+                                onMouseDown={(e) => e.preventDefault()}
+                                style={{
+                                  caretColor: 'transparent',
+                                  userSelect: 'none',
+                                }}
+                                className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                                  isCornersActive
+                                    ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                    : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
                                 }`}
                               >
-                                <Icon className="h-5 w-5 flex-shrink-0" />
-                                <span>{displayName}</span>
-                              </Link>
-                            )}
-                          </React.Fragment>
-                        );
-                      }
+                                <ViewfinderCircleIcon className="h-5 w-5 flex-shrink-0" />
+                                <span
+                                  className="select-none"
+                                  style={{ caretColor: 'transparent' }}
+                                >
+                                  Select Corners
+                                </span>
+                              </button>
+                            );
+                          }
 
-                      // Special handling for Select Material - show material selector in sidebar when canvas is visible
-                      if (item.slug === 'select-material') {
-                        const materialLabel = productId === '32' || isUrn ? 'Background' : item.name;
-                        return (
-                          <React.Fragment key={item.slug}>
-                            {isCanvasVisible ? (
-                              <>
+                          // Special handling for Holes — button opens sub-panel (same pattern as Corners)
+                          if (item.slug === 'holes') {
+                            const isHolesActive =
+                              activeFullscreenPanel === 'holes';
+                            return (
+                              <button
+                                key={item.slug}
+                                type="button"
+                                onClick={() =>
+                                  setActiveFullscreenPanel(
+                                    isHolesActive ? null : 'holes',
+                                  )
+                                }
+                                onMouseDown={(e) => e.preventDefault()}
+                                style={{
+                                  caretColor: 'transparent',
+                                  userSelect: 'none',
+                                }}
+                                className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                                  isHolesActive
+                                    ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                    : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                }`}
+                              >
+                                <CircleStackIcon className="h-5 w-5 flex-shrink-0" />
+                                <span
+                                  className="select-none"
+                                  style={{ caretColor: 'transparent' }}
+                                >
+                                  Select Holes
+                                </span>
+                              </button>
+                            );
+                          }
+
+                          // Hide 3D Preview when canvas is already visible or on select-size page
+                          if (
+                            item.slug === '3d-preview' &&
+                            (showCanvas || pathname === '/select-size')
+                          ) {
+                            return null;
+                          }
+
+                          if (
+                            fullscreenPanelSlugs.has(item.slug) &&
+                            item.slug !== 'select-material'
+                          ) {
+                            const shouldRenderInlinePanel =
+                              item.slug === 'select-size' &&
+                              isSelectSizePage &&
+                              !selectedMotifId &&
+                              !selectedAdditionId &&
+                              activeFullscreenPanel === 'select-size';
+
+                            return (
+                              <React.Fragment key={item.slug}>
                                 <button
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    // Navigate to select-material page to keep canvas visible and show material selector
-                                    if (pathname !== '/select-material') {
-                                      router.push('/select-material');
-                                    }
-                                  }}
+                                  type="button"
+                                  data-section={item.slug}
+                                  onClick={(e) => handleMenuClick(item.slug, e)}
                                   onMouseDown={(e) => e.preventDefault()}
                                   style={{
                                     caretColor: 'transparent',
                                     userSelect: 'none',
                                   }}
                                   className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
-                                    isActive
-                                      ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                      : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
+                                    highlightActive
+                                      ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                      : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
                                   }`}
                                 >
                                   <Icon className="h-5 w-5 flex-shrink-0" />
@@ -3743,115 +4079,238 @@ export default function DesignerNav() {
                                     className="select-none"
                                     style={{ caretColor: 'transparent' }}
                                   >
-                                    {materialLabel}
+                                    {displayName}
                                   </span>
                                 </button>
 
-                                {isActive &&
-                                  !selectedMotifId &&
-                                  !selectedAdditionId &&
-                                  materials.length > 0 && (
-                                    <div className="mt-3 h-[calc(100vh-280px)] overflow-hidden rounded-2xl border border-[#3A3A3A] day:border-gray-200 bg-[#1F1F1F]/95 day:bg-white p-4 shadow-xl backdrop-blur-sm">
-                                      <div className="h-full overflow-y-auto pr-1">
-                                        <MaterialSelector
-                                          materials={materials}
-                                          disableInternalScroll
-                                        />
-                                      </div>
-                                    </div>
-                                  )}
-                              </>
-                            ) : (
-                              // Show link when canvas is not visible (first-time selection)
-                              <Link
-                                href={`/${item.slug}`}
-                                data-section={item.slug}
-                                className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                                  isActive
-                                    ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                    : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
-                                }`}
-                              >
-                                <Icon className="h-5 w-5 flex-shrink-0" />
-                                <span>{materialLabel}</span>
-                              </Link>
-                            )}
-                          </React.Fragment>
-                        );
-                      }
+                                {shouldRenderInlinePanel &&
+                                  renderSelectSizePanel('mt-3')}
+                              </React.Fragment>
+                            );
+                          }
 
-                      // Special handling for Save Design - always a button, never navigate
-                      if (item.slug === 'save-design') {
-                        return (
-                          <React.Fragment key={item.slug}>
-                            <button
-                              onClick={(e) => handleMenuClick(item.slug, e)}
-                              data-testid="save-design-nav-btn"
-                              className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 px-4 py-3 text-left text-base font-light text-gray-200 transition-all hover:border-white/20 hover:bg-white/10"
-                            >
-                              <Icon className="h-5 w-5 flex-shrink-0" />
-                              <span>{displayName}</span>
-                            </button>
-                          </React.Fragment>
-                        );
-                      }
+                          // Special handling for Select Border - show border selector in sidebar when canvas is visible
+                          if (item.slug === 'select-border') {
+                            return (
+                              <React.Fragment key={item.slug}>
+                                {isCanvasVisible ? (
+                                  <>
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        // Navigate to select-border page to keep canvas visible and show border selector
+                                        if (pathname !== '/select-border') {
+                                          router.push('/select-border');
+                                        }
+                                      }}
+                                      onMouseDown={(e) => e.preventDefault()}
+                                      style={{
+                                        caretColor: 'transparent',
+                                        userSelect: 'none',
+                                      }}
+                                      className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                                        isActive
+                                          ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                          : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                      }`}
+                                    >
+                                      <Icon className="h-5 w-5 flex-shrink-0" />
+                                      <span>{displayName}</span>
+                                    </button>
 
-                      // Determine if step should be disabled (steps 3-10 need a product selected)
-                      // Exception: Check Price is always enabled (users can see base price even with empty headstone)
-                      const needsProduct =
-                        index >= 2 && item.slug !== 'check-price';
-                      const isDisabled = needsProduct && !catalog;
-
-                      return (
-                        <React.Fragment key={item.slug}>
-                          {isDisabled ? (
-                            <div
-                              className="flex cursor-not-allowed items-center gap-3 rounded-lg border border-white/5 px-4 py-3 text-base font-light opacity-40"
-                              title="Please select a product first"
-                            >
-                              <Icon className="h-5 w-5 flex-shrink-0 text-gray-500" />
-                              <span className="text-gray-500">{displayName}</span>
-                            </div>
-                          ) : (
-                            <Link
-                              href={`/${item.slug}`}
-                              onClick={(e) => handleMenuClick(item.slug, e)}
-                              className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
-                                isActive
-                                  ? 'border border-white/30 day:border-[#D7B356]/40 bg-white/15 day:bg-[#DEBD68]/10 text-white day:text-[#3d2817] shadow-lg backdrop-blur-sm'
-                                  : 'border border-white/10 day:border-gray-200 text-gray-200 day:text-gray-700 hover:border-white/20 day:hover:border-gray-300 hover:bg-white/10 day:hover:bg-gray-100'
-                              }`}
-                            >
-                              <div className="flex items-center gap-3">
-                                <Icon className="h-5 w-5 flex-shrink-0" />
-                                <span>{displayName}</span>
-                              </div>
-
-                              {itemCount && itemCount > 0 && (
-                                <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-400">
-                                  {itemCount}
-                                </span>
-                              )}
-
-                              {/* Expandable Indicator */}
-                              {(item.slug === 'inscriptions' ||
-                                item.slug === 'select-additions' ||
-                                item.slug === 'select-motifs') &&
-                                itemCount &&
-                                itemCount > 0 &&
-                                (expandedSections[item.slug] ? (
-                                  <ChevronUpIcon className="h-4 w-4 flex-shrink-0" />
+                                    {isActive &&
+                                      !selectedMotifId &&
+                                      !selectedAdditionId && (
+                                        <div className="mt-3 rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                                          <BorderSelector borders={borders} />
+                                        </div>
+                                      )}
+                                  </>
                                 ) : (
-                                  <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
-                                ))}
-                            </Link>
-                          )}
-                        </React.Fragment>
-                      );
-                    })}
+                                  // Show link when canvas is not visible (first-time selection)
+                                  <Link
+                                    href={`/${item.slug}`}
+                                    data-section={item.slug}
+                                    className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                                      isActive
+                                        ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                        : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                    }`}
+                                  >
+                                    <Icon className="h-5 w-5 flex-shrink-0" />
+                                    <span>{displayName}</span>
+                                  </Link>
+                                )}
+                              </React.Fragment>
+                            );
+                          }
+
+                          // Special handling for Select Material - show material selector in sidebar when canvas is visible
+                          if (item.slug === 'select-material') {
+                            const materialLabel =
+                              canSelectStainlessGraniteBaseMaterial
+                                ? 'Select Material'
+                                : productId === '32' || isUrn
+                                  ? 'Background'
+                                  : item.name;
+                            const forcedMaterialTarget =
+                              canSelectStainlessGraniteBaseMaterial
+                                ? 'base'
+                                : undefined;
+                            return (
+                              <React.Fragment key={item.slug}>
+                                {isCanvasVisible ? (
+                                  <>
+                                    <button
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        if (forcedMaterialTarget) {
+                                          setEditingObject(
+                                            forcedMaterialTarget,
+                                          );
+                                          setSelected(forcedMaterialTarget);
+                                        }
+                                        // Navigate to select-material page to keep canvas visible and show material selector
+                                        if (pathname !== '/select-material') {
+                                          router.push('/select-material');
+                                        }
+                                      }}
+                                      onMouseDown={(e) => e.preventDefault()}
+                                      style={{
+                                        caretColor: 'transparent',
+                                        userSelect: 'none',
+                                      }}
+                                      className={`flex w-full cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-left text-base font-light transition-all ${
+                                        isActive
+                                          ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                          : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                      }`}
+                                    >
+                                      <Icon className="h-5 w-5 flex-shrink-0" />
+                                      <span
+                                        className="select-none"
+                                        style={{ caretColor: 'transparent' }}
+                                      >
+                                        {materialLabel}
+                                      </span>
+                                    </button>
+
+                                    {isActive &&
+                                      !selectedMotifId &&
+                                      !selectedAdditionId &&
+                                      materials.length > 0 && (
+                                        <div className="day:border-gray-200 day:bg-white mt-3 h-[calc(100vh-280px)] overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
+                                          <div className="h-full overflow-y-auto pr-1">
+                                            <MaterialSelector
+                                              materials={materials}
+                                              disableInternalScroll
+                                              forceTarget={
+                                                forcedMaterialTarget
+                                              }
+                                            />
+                                          </div>
+                                        </div>
+                                      )}
+                                  </>
+                                ) : (
+                                  // Show link when canvas is not visible (first-time selection)
+                                  <Link
+                                    href={`/${item.slug}`}
+                                    data-section={item.slug}
+                                    onClick={() => {
+                                      if (forcedMaterialTarget) {
+                                        setEditingObject(forcedMaterialTarget);
+                                        setSelected(forcedMaterialTarget);
+                                      }
+                                    }}
+                                    className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                                      isActive
+                                        ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                        : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                    }`}
+                                  >
+                                    <Icon className="h-5 w-5 flex-shrink-0" />
+                                    <span>{materialLabel}</span>
+                                  </Link>
+                                )}
+                              </React.Fragment>
+                            );
+                          }
+
+                          // Special handling for Save Design - always a button, never navigate
+                          if (item.slug === 'save-design') {
+                            return (
+                              <React.Fragment key={item.slug}>
+                                <button
+                                  onClick={(e) => handleMenuClick(item.slug, e)}
+                                  data-testid="save-design-nav-btn"
+                                  className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 px-4 py-3 text-left text-base font-light text-gray-200 transition-all hover:border-white/20 hover:bg-white/10"
+                                >
+                                  <Icon className="h-5 w-5 flex-shrink-0" />
+                                  <span>{displayName}</span>
+                                </button>
+                              </React.Fragment>
+                            );
+                          }
+
+                          // Determine if step should be disabled (steps 3-10 need a product selected)
+                          // Exception: Check Price is always enabled (users can see base price even with empty headstone)
+                          const needsProduct =
+                            index >= 2 && item.slug !== 'check-price';
+                          const isDisabled = needsProduct && !catalog;
+
+                          return (
+                            <React.Fragment key={item.slug}>
+                              {isDisabled ? (
+                                <div
+                                  className="flex cursor-not-allowed items-center gap-3 rounded-lg border border-white/5 px-4 py-3 text-base font-light opacity-40"
+                                  title="Please select a product first"
+                                >
+                                  <Icon className="h-5 w-5 flex-shrink-0 text-gray-500" />
+                                  <span className="text-gray-500">
+                                    {displayName}
+                                  </span>
+                                </div>
+                              ) : (
+                                <Link
+                                  href={`/${item.slug}`}
+                                  onClick={(e) => handleMenuClick(item.slug, e)}
+                                  className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
+                                    isActive
+                                      ? 'day:border-[#D7B356]/40 day:bg-[#DEBD68]/10 day:text-[#3d2817] border border-white/30 bg-white/15 text-white shadow-lg backdrop-blur-sm'
+                                      : 'day:border-gray-200 day:text-gray-700 day:hover:border-gray-300 day:hover:bg-gray-100 border border-white/10 text-gray-200 hover:border-white/20 hover:bg-white/10'
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <Icon className="h-5 w-5 flex-shrink-0" />
+                                    <span>{displayName}</span>
+                                  </div>
+
+                                  {itemCount && itemCount > 0 && (
+                                    <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-xs font-medium text-amber-400">
+                                      {itemCount}
+                                    </span>
+                                  )}
+
+                                  {/* Expandable Indicator */}
+                                  {(item.slug === 'inscriptions' ||
+                                    item.slug === 'select-additions' ||
+                                    item.slug === 'select-motifs') &&
+                                    itemCount &&
+                                    itemCount > 0 &&
+                                    (expandedSections[item.slug] ? (
+                                      <ChevronUpIcon className="h-4 w-4 flex-shrink-0" />
+                                    ) : (
+                                      <ChevronDownIcon className="h-4 w-4 flex-shrink-0" />
+                                    ))}
+                                </Link>
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
-                  </div>
-                </div>
                 );
               })}
             </div>
@@ -3889,7 +4348,12 @@ function captureBestCanvasScreenshot(): string | null {
   // Preferred path: use Three.js renderer directly for a reliable screenshot.
   // This avoids blank-frame issues caused by timing and alpha transparency.
   const win = window as unknown as Record<string, unknown>;
-  const gl = win.__r3fGL as { render: (s: unknown, c: unknown) => void; domElement: HTMLCanvasElement } | undefined;
+  const gl = win.__r3fGL as
+    | {
+        render: (s: unknown, c: unknown) => void;
+        domElement: HTMLCanvasElement;
+      }
+    | undefined;
   const scene = win.__r3fScene;
   const camera = win.__r3fCamera;
 

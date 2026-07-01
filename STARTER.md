@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-06-30
+**Last Updated:** 2026-07-01
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -52,6 +52,91 @@
 44. [Stainless Headstone Inscription Stencil Bridge Investigation (2026-06-27)](#current-status-2026-06-27--stainless-headstone-inscription-stencil-bridge-investigation)
 45. [Stainless Headstone UI and Rendering Update (2026-06-29)](#current-status-2026-06-29--stainless-headstone-ui-and-rendering-update)
 46. [Stainless Motifs, Sidebar Language, and Quote Detail Alignment (2026-06-30)](#current-status-2026-06-30--stainless-motifs-sidebar-language-and-quote-detail-alignment)
+47. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
+
+---
+
+## Current Status (2026-07-01) - Designer Flow Updates
+
+This session focused on user-facing designer flow fixes across product selection, shape visibility, crop workflow, motif names, custom SVG rendering, bronze plaque behavior, and stainless steel headstone base/material handling.
+
+### Product and Shape Selection
+
+| File | Current Behavior |
+|------|------------------|
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | `/select-product` groups products by type: Plaques first, Headstones second, then other products. Product selection awaits `setProductId(product.id)` before navigation to reduce stale/blank 3D viewer state. |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Shape thumbnails use a brighter dark-mode silhouette (`#999999` equivalent) so black shapes remain legible on dark backgrounds. |
+
+### Add Your Image and Crop Flow
+
+| File | Current Behavior |
+|------|------------------|
+| `components/ImageSelector.tsx` | Crop rotation now supports left/right rotation with `0` in the middle and range `-180` to `180`. |
+| `components/ImageSelector.tsx` | Crop action label changed to `Add Cropped Image to Headstone`. Extra crop controls were reduced so the primary action is visible without scrolling. |
+| `components/DesignerNav.tsx` | While image crop mode is active, navigating away is prevented; clicking Menu hides the crop canvas and restores the normal headstone canvas state. |
+
+Current rule:
+- Crop mode should not allow users to accidentally continue into motif selection or another designer step while the crop interface is still active.
+
+### Motif Selection
+
+| File | Current Behavior |
+|------|------------------|
+| `components/MotifSelectorPanel.tsx` | Motif list items hide raw asset names such as `1_127_07`; those names remain useful for quote/order data but are not user-facing in category lists. |
+| `app/select-motifs/_ui/MotifSelectionGrid.tsx` | Full-page motif lists follow the same hidden-name behavior. |
+
+### Uploaded Custom SVG Shapes
+
+| File | Current Behavior |
+|------|------------------|
+| `components/SvgHeadstone.tsx` | Uploaded custom SVG shapes can render the source SVG as a transparent front overlay via `sourceSvgOverlayUrl`, preserving visual detail closer to the uploaded SVG. |
+| `components/three/headstone/ShapeSwapper.tsx` | Detects custom `data:image/svg+xml` and `blob:` shapes and passes the source overlay to `SvgHeadstone`. |
+
+Current rule:
+- Custom uploaded SVGs should preserve recognizable source detail where possible, instead of only relying on the extruded silhouette.
+
+### Bronze Plaque Behavior
+
+| File | Current Behavior |
+|------|------------------|
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Bronze plaque product selection waits for store hydration before routing, reducing intermittent blank 3D viewer loads. |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Non-rectangular Bronze Plaque shapes automatically select the solid outline border. |
+| `components/BorderSelector.tsx` | For non-rectangular Bronze Plaques, border options are limited to `Plain cut` and `Solid`. |
+| `app/select-border/_ui/BorderSelectionGrid.tsx` | Full-page border selection uses the same `Plain cut` / `Solid` filtering for non-rectangular Bronze Plaques. |
+| `components/three/BronzeBorder.tsx` | Solid borders for oval/circle Bronze Plaques are generated procedurally to follow the plaque shape instead of showing rectangular borders. |
+| `components/three/headstone/ShapeSwapper.tsx` | Passes outline/border metadata to `BronzeBorder` for shape-following bronze borders. |
+
+Current rule:
+- Non-rectangular Bronze Plaques must not show rectangular border artwork. They use either no border (`Plain cut`) or a generated solid border following the plaque outline.
+
+### Stainless Steel Headstone Base and Material Flow
+
+| File | Current Behavior |
+|------|------------------|
+| `components/DesignerNav.tsx` | Stainless steel headstones show Base options as `No Base / Stainless / Granite`. |
+| `components/DesignerNav.tsx` | `Stainless` sets the base texture to `/textures/forever/l/brushed-ss-swatch.webp`; `Granite` sets it to the default granite texture. |
+| `components/DesignerNav.tsx` | `Select Material` is shown for stainless steel headstones only when the active size target is `Base` and the selected base type is `Granite`. |
+| `components/DesignerNav.tsx` | Opening `Select Material` in that flow forces the material target to `base`. Switching back to `Headstone` routes to `/select-size`, which hides `Select Material`. |
+| `components/MaterialSelector.tsx` | Adds `forceTarget?: 'headstone' | 'base' | 'ledger' | 'kerbset'`; when forced to `base`, selected granites update `baseMaterialUrl`, while the Headstone/Base switcher remains visible for returning to size editing. |
+| `components/three/headstone/HeadstoneBaseAuto.tsx` | Existing renderer behavior treats any base texture containing `ss-swatch` as stainless steel; other base textures render as granite. |
+
+Current rule:
+- Stainless steel headstone material selection remains hidden for the stainless headstone body.
+- Granite material selection is available only for the granite base, not for the stainless headstone itself.
+- Selecting `Headstone` from the forced base material panel should return the user to `/select-size` and remove `Select Material` from the left sidebar.
+
+### Verification
+
+Commands run successfully after the latest changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Notes:
+- Playwright screenshots often require an active dev server and may require elevated execution on this Windows workspace because browser/cache paths can hit sandbox ACL limits.
+- `screen.png`, `screen2.png`, and `test-svgrepo-com.svg` are local visual/reference artifacts from the custom SVG investigation and may appear in the working tree.
 
 ---
 
@@ -11420,4 +11505,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-06-30*
+*End of STARTER.md - Last updated: 2026-07-01*

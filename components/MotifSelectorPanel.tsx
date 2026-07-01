@@ -1,7 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useHeadstoneStore, type MotifCatalogItem } from '#/lib/headstone-store';
+import {
+  useHeadstoneStore,
+  type MotifCatalogItem,
+} from '#/lib/headstone-store';
 import { getMotifCategoryName } from '#/lib/motif-translations';
 import { getMotifCategoryImage } from '#/lib/motif-category-image';
 
@@ -17,8 +20,12 @@ interface MotifSelectorPanelProps {
   motifs: MotifCatalogItem[];
 }
 
-export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) {
-  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+export default function MotifSelectorPanel({
+  motifs,
+}: MotifSelectorPanelProps) {
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+    null,
+  );
 
   const categories = useMemo<MotifCategoryGroup[]>(() => {
     const categoryMap = new Map<string, MotifCategoryGroup>();
@@ -38,24 +45,25 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
     // Return categories in the order they appear in the motifs array (preserves database sort_order)
     const seen = new Set<string>();
     return motifs
-      .map(m => m.category ?? 'uncategorized')
-      .filter(cat => {
+      .map((m) => m.category ?? 'uncategorized')
+      .filter((cat) => {
         if (seen.has(cat)) return false;
         seen.add(cat);
         return true;
       })
-      .map(cat => categoryMap.get(cat)!)
+      .map((cat) => categoryMap.get(cat)!)
       .filter(Boolean);
   }, [motifs]);
 
-  const selectedCategory = categories.find((category) => category.id === selectedCategoryId) ?? null;
+  const selectedCategory =
+    categories.find((category) => category.id === selectedCategoryId) ?? null;
   const individualMotifs = selectedCategory?.motifs ?? [];
 
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const addMotif = useHeadstoneStore((s) => s.addMotif);
   const removeMotif = useHeadstoneStore((s) => s.removeMotif);
   const catalog = useHeadstoneStore((s) => s.catalog);
-  
+
   // Check if product allows color (color="1")
   const allowsColor = catalog?.product?.color === '1';
   // Use catalog's default color for motif thumbnails so they match the 3D scene
@@ -85,7 +93,9 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
       return;
     }
 
-    const existing = selectedMotifs.find((selected) => selected.svgPath === svgPath);
+    const existing = selectedMotifs.find(
+      (selected) => selected.svgPath === svgPath,
+    );
     if (existing) {
       removeMotif(existing.id);
       return;
@@ -97,11 +107,15 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
     <div className="flex h-full min-h-0 flex-col gap-3">
       {!selectedCategory ? (
         <>
-          <div className="flex shrink-0 items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0A0A0A] px-3 py-2.5 day:border-gray-200 day:bg-gray-100">
-            <h3 className="text-sm font-semibold text-white day:text-gray-900">Browse categories</h3>
-            <span className="shrink-0 text-xs font-semibold text-white/45 day:text-gray-500">{categories.length}</span>
+          <div className="day:border-gray-200 day:bg-gray-100 flex shrink-0 items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0A0A0A] px-3 py-2.5">
+            <h3 className="day:text-gray-900 text-sm font-semibold text-white">
+              Browse categories
+            </h3>
+            <span className="day:text-gray-500 shrink-0 text-xs font-semibold text-white/45">
+              {categories.length}
+            </span>
           </div>
-          <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
             <div className="grid grid-cols-2 gap-2.5">
               {categories.map((category) => {
                 const categoryImgSrc = getMotifCategoryImage({
@@ -111,48 +125,48 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                   previewUrl: category.previewUrl,
                 });
                 return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() => handleCategorySelect(category.id)}
-                  className={`${cardClass} ${inactiveCardClass}`}
-                >
-                  <div className={previewClass}>
-                    <div className="absolute inset-0 flex items-center justify-center p-4">
-                      {allowsColor ? (
-                        <div
-                          className="absolute inset-4"
-                          style={{
-                            backgroundColor: motifPreviewColor,
-                            WebkitMaskImage: `url(${categoryImgSrc})`,
-                            maskImage: `url(${categoryImgSrc})`,
-                            WebkitMaskRepeat: 'no-repeat',
-                            maskRepeat: 'no-repeat',
-                            WebkitMaskSize: 'contain',
-                            maskSize: 'contain',
-                            WebkitMaskPosition: 'center',
-                            maskPosition: 'center',
-                          }}
-                        />
-                      ) : (
-                        <img
-                          src={categoryImgSrc}
-                          alt={getMotifCategoryName(category.name)}
-                          className="max-h-full max-w-full object-contain brightness-0 invert"
-                          loading="lazy"
-                        />
-                      )}
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => handleCategorySelect(category.id)}
+                    className={`${cardClass} ${inactiveCardClass}`}
+                  >
+                    <div className={previewClass}>
+                      <div className="absolute inset-0 flex items-center justify-center p-4">
+                        {allowsColor ? (
+                          <div
+                            className="absolute inset-4"
+                            style={{
+                              backgroundColor: motifPreviewColor,
+                              WebkitMaskImage: `url(${categoryImgSrc})`,
+                              maskImage: `url(${categoryImgSrc})`,
+                              WebkitMaskRepeat: 'no-repeat',
+                              maskRepeat: 'no-repeat',
+                              WebkitMaskSize: 'contain',
+                              maskSize: 'contain',
+                              WebkitMaskPosition: 'center',
+                              maskPosition: 'center',
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={categoryImgSrc}
+                            alt={getMotifCategoryName(category.name)}
+                            className="max-h-full max-w-full object-contain brightness-0 invert"
+                            loading="lazy"
+                          />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex min-h-[64px] flex-1 flex-col justify-between gap-2 p-2.5">
-                    <p className={titleClass}>
-                      {getMotifCategoryName(category.name)}
-                    </p>
-                    <p className="text-[11px] font-semibold text-[#D7B356]">
-                      Browse
-                    </p>
-                  </div>
-                </button>
+                    <div className="flex min-h-[64px] flex-1 flex-col justify-between gap-2 p-2.5">
+                      <p className={titleClass}>
+                        {getMotifCategoryName(category.name)}
+                      </p>
+                      <p className="text-[11px] font-semibold text-[#D7B356]">
+                        Browse
+                      </p>
+                    </div>
+                  </button>
                 );
               })}
             </div>
@@ -160,31 +174,34 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
         </>
       ) : (
         <>
-          <div className="flex shrink-0 items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
+          <div className="day:border-gray-200 day:bg-gray-100 flex shrink-0 items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0A0A0A] p-1">
             <button
               type="button"
               onClick={handleBackToCategories}
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900"
+              className="day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-md px-2.5 py-2 text-xs font-semibold text-slate-300 transition-colors hover:bg-slate-800 hover:text-white"
             >
               <span aria-hidden="true">←</span>
               Back
             </button>
-            <div className="min-w-0 truncate px-2 text-right text-xs font-semibold text-white day:text-gray-900">
+            <div className="day:text-gray-900 min-w-0 truncate px-2 text-right text-xs font-semibold text-white">
               {getMotifCategoryName(selectedCategory?.name ?? '')}
             </div>
           </div>
 
-          <div className="min-h-0 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+          <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
             {individualMotifs.length === 0 ? (
-              <div className="rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
+              <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400">
                 No motifs available in this category yet.
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-2.5">
                 {individualMotifs.map((motif, index) => {
                   const svgPath = motif.svgUrl ?? motif.previewUrl;
-                  const isSelected = svgPath ? selectedMotifs.some((m) => m.svgPath === svgPath) : false;
-                  const coverSrc = svgPath || '/ico/forever-transparent-logo.png';
+                  const isSelected = svgPath
+                    ? selectedMotifs.some((m) => m.svgPath === svgPath)
+                    : false;
+                  const coverSrc =
+                    svgPath || '/ico/forever-transparent-logo.png';
 
                   return (
                     <button
@@ -193,9 +210,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                       onClick={() => svgPath && handleMotifToggle(motif)}
                       disabled={!svgPath}
                       className={`${cardClass} disabled:cursor-not-allowed ${
-                        isSelected
-                          ? selectedCardClass
-                          : inactiveCardClass
+                        isSelected ? selectedCardClass : inactiveCardClass
                       }`}
                     >
                       <div className={previewClass}>
@@ -230,10 +245,7 @@ export default function MotifSelectorPanel({ motifs }: MotifSelectorPanelProps) 
                           </div>
                         )}
                       </div>
-                      <div className="flex min-h-[64px] flex-1 flex-col justify-between gap-2 p-2.5">
-                        <p className={titleClass}>
-                          {motif.name}
-                        </p>
+                      <div className="flex min-h-[42px] flex-1 flex-col justify-center gap-2 p-2.5">
                         <p className="text-[11px] font-semibold text-[#D7B356]">
                           {isSelected ? 'Remove' : 'Add'}
                         </p>

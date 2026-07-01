@@ -31,10 +31,32 @@ export default function BorderSelector({ borders, disableInternalScroll = false,
   const currentBorderName = useHeadstoneStore((s) => s.borderName);
   const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
   const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
 
   const borderOptions = React.useMemo(() => {
-    return borders && borders.length > 0 ? borders : FALLBACK_BORDERS;
-  }, [borders]);
+    const baseOptions = borders && borders.length > 0 ? borders : FALLBACK_BORDERS;
+    const isNonRectangularBronze =
+      productId === '5' &&
+      Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
+
+    if (!isNonRectangularBronze) {
+      return baseOptions;
+    }
+
+    return baseOptions.filter((border) => border.id === '0' || border.displayName === 'Solid' || border.name === 'Border 4');
+  }, [borders, productId, shapeUrl]);
+
+  React.useEffect(() => {
+    if (!currentBorderName || borderOptions.some((border) => border.name === currentBorderName)) {
+      return;
+    }
+
+    const solidBorder = borderOptions.find((border) => border.displayName === 'Solid' || border.name === 'Border 4');
+    if (solidBorder) {
+      setBorderName(solidBorder.name);
+    }
+  }, [borderOptions, currentBorderName, setBorderName]);
 
   // Detect stainless steel (full colour plaque) borders
   const isStainlessSteel = React.useMemo(() => {

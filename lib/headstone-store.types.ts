@@ -270,7 +270,7 @@ export type HeadstoneState = {
   updateImageRotation: (id: string, rotationZ: number) => void;
 
   productId: string | null;
-  setProductId: (id: string) => void;
+  setProductId: (id: string) => Promise<void>;
 
   currentProjectId: string | null;
   currentProjectTitle: string | null;

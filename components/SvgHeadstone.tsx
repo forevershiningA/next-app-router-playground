@@ -82,6 +82,7 @@ type Props = {
   sideRepeatY?: number;
   targetHeight?: number;
   targetWidth?: number;
+  sourceSvgOverlayUrl?: string | null;
   preserveTop?: boolean;
   bevel?: boolean;
   doubleSided?: boolean;
@@ -321,6 +322,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   sideRepeatY = 1,
   targetHeight,
   targetWidth,
+  sourceSvgOverlayUrl = null,
   preserveTop = true,
   bevel = false,
   doubleSided = false,
@@ -340,6 +342,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   
   // 1. Load SVG and Textures
   const svgData = useLoader(SVGLoader, url);
+  const sourceSvgOverlayTexture = useBlobTexture(sourceSvgOverlayUrl);
   const hasSideTexture = sideTexture !== null;
   const sideTextureSrc = sideTexture ?? faceTexture;
 
@@ -1438,6 +1441,26 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   // Fixed: Position at origin as geometry is already normalized to ground
   // The slantGeometry.translate(-(minX + maxX) / 2, -minY, 0) already positions base at Y=0
   const groupPosition: [number, number, number] = [0, 0, 0];
+  const overlayHeight =
+    shapeParams ? Math.max(EPS, shapeParams.bottomTarget_SV - shapeParams.minY) : 0;
+  const sourceSvgOverlay =
+    sourceSvgOverlayTexture && shapeParams && overlayHeight > 0 ? (
+      <mesh
+        position={[0, overlayHeight / 2, (apiData?.frontZ ?? 0.0005) + 0.0008]}
+        renderOrder={9}
+      >
+        <planeGeometry args={[shapeParams.dx, overlayHeight]} />
+        <meshBasicMaterial
+          map={sourceSvgOverlayTexture}
+          transparent
+          alphaTest={0.05}
+          opacity={0.9}
+          depthWrite={false}
+          toneMapped={false}
+          side={THREE.FrontSide}
+        />
+      </mesh>
+    ) : null;
 
   // 6. Return JSX (FIX: JSX in return, not useMemo)
   // CRITICAL FIX: Move scale from group to individual meshes to prevent base inheritance
@@ -1473,6 +1496,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         {headstoneStyle === 'slant' ? (
           <group position-z={apiData?.frontZ || 0.001}>
             <group renderOrder={10} scale={meshScale}>
+               {sourceSvgOverlay}
                {showStainlessRim && (
                  <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
                )}
@@ -1482,6 +1506,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         ) : (
           <group position-z={apiData?.frontZ || 0}>
             <group renderOrder={10} scale={meshScale}>
+               {sourceSvgOverlay}
                {showStainlessRim && (
                  <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
                )}

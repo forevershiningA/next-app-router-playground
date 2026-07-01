@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import Image from 'next/image';
@@ -24,9 +25,11 @@ export default function BorderSelectionGrid() {
   const setBorderName = useHeadstoneStore((s) => s.setBorderName);
   const currentBorderName = useHeadstoneStore((s) => s.borderName);
   const storeBorders = useHeadstoneStore((s) => s.borders);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
 
   // Use store borders if available (product-specific), otherwise default
-  const borders = storeBorders.length > 0
+  const baseBorders = storeBorders.length > 0
     ? storeBorders.map((b) => ({
         id: b.id === '0' ? 'no-border' : b.id,
         name: b.name,
@@ -34,6 +37,23 @@ export default function BorderSelectionGrid() {
         image: b.image ? (b.image.endsWith('a.svg') ? b.image : b.image.replace('.svg', 'a.svg')) : null,
       }))
     : defaultBorders;
+  const isNonRectangularBronze =
+    productId === '5' &&
+    Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
+  const borders = isNonRectangularBronze
+    ? baseBorders.filter((border) => border.id === 'no-border' || border.displayName === 'Solid' || border.name === 'Border 4')
+    : baseBorders;
+
+  useEffect(() => {
+    if (!currentBorderName || borders.some((border) => border.name === currentBorderName)) {
+      return;
+    }
+
+    const solidBorder = borders.find((border) => border.displayName === 'Solid' || border.name === 'Border 4');
+    if (solidBorder) {
+      setBorderName(solidBorder.name);
+    }
+  }, [borders, currentBorderName, setBorderName]);
 
   const isStainlessSteel = storeBorders.some((b) => b.category === 'fullcolour');
   const accentColor = isStainlessSteel ? '#C0C0C0' : '#CD7F32';

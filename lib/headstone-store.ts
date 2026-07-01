@@ -1006,7 +1006,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       }
 
       // Load motif pricing based on product type
-      const isBronze = catalog.product.type === 'bronze_plaque';
+      const isBronze = catalog.product.id === '5';
       const isLaser = catalog.product.laser === '1';
       const motifAddition = catalog.product.additions.find((a) => a.type === 'motif');
       const isEnamel = motifAddition?.formula?.toLowerCase() === 'enamel';

@@ -232,6 +232,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
+  const isBronzePlaque = catalog?.product.id === '5';
   const isFullColourPlaque = catalog?.product.id === '32';
   const isUrn = catalog?.product.type === 'urn';
   const isStainlessSteel =
@@ -244,6 +245,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const ssFinish: 'brushed' | 'polished' =
     headstoneMaterialUrl?.includes('high-polished-ss-swatch') ? 'polished' : 'brushed';
   const bronzeBorderColor = '#FFDFA3';
+  const useShapeOutlineBorder =
+    isBronzePlaque &&
+    Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
     const oldMetrics = getBoxMetrics(oldBox);
@@ -416,6 +420,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     const parts = resolvedUrl.split('/');
     return parts[parts.length - 1]?.toLowerCase() ?? null;
   }, [resolvedUrl]);
+  const isCustomUploadedShape =
+    resolvedUrl.startsWith('data:image/svg+xml') || resolvedUrl.startsWith('blob:');
   const isFixedHeadstoneAsset = React.useMemo(() => {
     if (!currentShapeSlug) return false;
     if (builtinPedestalShapes.has(currentShapeSlug)) return true;
@@ -558,6 +564,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             topTileSize={0.35}
             targetHeight={targetHeightForShape}
             targetWidth={targetWidthForShape}
+            sourceSvgOverlayUrl={isCustomUploadedShape ? resolvedUrl : null}
             preserveTop={preserveTopForShape}
             showEdges={false}
             headstoneStyle={headstoneStyle}
@@ -715,6 +722,9 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       color={bronzeBorderColor}
                       depth={headstoneDepth}
                       isStainlessSteel={isFullColourPlaque}
+                      outlinePoints={api.outlinePoints}
+                      useShapeOutlineBorder={useShapeOutlineBorder}
+                      shapeUrl={shapeUrl}
                     />
                   </React.Suspense>
                 </ErrorBoundary>
