@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-01
+**Last Updated:** 2026-07-02
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -52,7 +52,99 @@
 44. [Stainless Headstone Inscription Stencil Bridge Investigation (2026-06-27)](#current-status-2026-06-27--stainless-headstone-inscription-stencil-bridge-investigation)
 45. [Stainless Headstone UI and Rendering Update (2026-06-29)](#current-status-2026-06-29--stainless-headstone-ui-and-rendering-update)
 46. [Stainless Motifs, Sidebar Language, and Quote Detail Alignment (2026-06-30)](#current-status-2026-06-30--stainless-motifs-sidebar-language-and-quote-detail-alignment)
-47. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
+47. [July 2 Stainless Inscription Stencil Fonts](#current-status-2026-07-02--stainless-inscription-stencil-fonts)
+48. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
+
+---
+
+## Current Status (2026-07-02) - Stainless Inscription Stencil Fonts
+
+This session moved stainless steel headstone inscriptions away from visual rectangle overlays and toward real bridged font outlines. The current approach is to generate special stencil variants of the existing inscription fonts, convert them to WOFF2 for browser/UI use, and use the matching TTF files for Three/Troika text rendering.
+
+### Current Direction
+
+| Area | Current Behavior |
+|------|------------------|
+| Stainless inscription fonts | Stainless steel headstones use generated stencil font variants instead of normal fonts with colored masking rectangles. |
+| Default stainless font | `Franklin Gothic Stencil` is the default for stainless light transmitting/reflective headstones. |
+| Normal inscription fonts | Non-stainless headstones continue to default to `Garamond` and hide stencil-only font options. |
+| Browser font files | Stencil font entries point at `public/fonts/stencil/*.woff2`. |
+| Three/Troika text files | Stencil WOFF2 paths are mapped back to their sibling `.ttf` files because Troika text rendering expects usable font outlines. |
+
+### Generated Font Assets
+
+Generated stencil assets currently live in `public/fonts/stencil/`:
+
+| Font Family | Files |
+|-------------|-------|
+| Arial Stencil | `arial_stencil.ttf`, `arial_stencil.woff2` |
+| Dobkin Stencil | `Dobkin_stencil.ttf`, `Dobkin_stencil.woff2` |
+| Franklin Gothic Stencil | `FranklinGothic_stencil.ttf`, `FranklinGothic_stencil.woff2` |
+| Garamond Stencil | `Garamond_stencil.ttf`, `Garamond_stencil.woff2` |
+| Great Vibes Stencil | `GreatVibes-Regular_stencil.ttf`, `GreatVibes-Regular_stencil.woff2` |
+| Lucida Calligraphy Stencil | `LucidaUnicodeCalligraphy_stencil.ttf`, `LucidaUnicodeCalligraphy_stencil.woff2` |
+| Xirwena Stencil | `xirwena1_stencil.ttf`, `xirwena1_stencil.woff2` |
+
+### Scripts
+
+| File | Purpose |
+|------|---------|
+| `scripts/create-stencil-fonts.py` | Uses `fontTools` and `skia-pathops` to subtract side-entry bridge notches from TrueType glyph outlines and write `_stencil.ttf` files. |
+| `scripts/convert-fonts-to-woff2.py` | Converts generated TTF/OTF files to WOFF2 using `fontTools` and `brotli`. |
+
+Regeneration commands:
+
+```bash
+python scripts/create-stencil-fonts.py --out-dir public/fonts/stencil --overwrite
+python scripts/convert-fonts-to-woff2.py --font-dir public/fonts/stencil --overwrite
+```
+
+Dependencies:
+
+```bash
+python -m pip install fonttools skia-pathops brotli
+```
+
+Important script behavior:
+- Only TrueType `glyf` fonts are supported by `create-stencil-fonts.py`.
+- OTF/CFF fonts such as `Adorable.otf`, `ChopinScript.otf`, and `French Script Std Regular.otf` are skipped by the generator.
+- Current bridge glyph set is `04689ABDOPQRabdegopq`.
+- The generator uses side-entry notches rather than center cuts so counters are opened to the outside without slicing the whole glyph.
+- The lowercase `e` bridge was specifically raised from `center_y + glyph_height * 0.08` to `center_y + glyph_height * 0.18` after visual review.
+
+### App Integration
+
+| File | Current Behavior |
+|------|------------------|
+| `app/_internal/_data.ts` | Adds stencil font entries with `category: 'stencil'`. |
+| `lib/stencil-fonts.ts` | Central stainless-product detection and default inscription font selection. Product IDs `1` and `23` are treated as stainless headstones. |
+| `lib/font-utils.ts` | Maps stencil WOFF2 font entries to sibling TTF files for Three/Troika text rendering. |
+| `lib/headstone-store.ts` | `addInscriptionLine` uses `getDefaultInscriptionFont(...)` instead of hardcoded `Garamond`. |
+| `components/InscriptionEditPanel.tsx` | Filters font options: stainless headstones show stencil fonts; other products show non-stencil fonts. Native select options force readable black text on white option backgrounds. |
+| `app/inscriptions/InscriptionOverlayPanel.tsx` | Uses the same stainless font filtering/default logic in the overlay panel. |
+| `components/three/headstone/ShapeSwapper.tsx` | Uses `getThreeTextFontUrl(...)` for inscription font maps. |
+| `components/three/headstone/HeadstoneBaseAuto.tsx` | Uses `getThreeTextFontUrl(...)` for base inscription rendering. |
+| `components/three/headstone/LedgerSurfaceContent.tsx` | Uses `getThreeTextFontUrl(...)` for ledger inscription rendering. |
+| `components/HeadstoneInscription.tsx` | Runtime rectangular bridge masks are skipped when a stencil font is active to avoid double-bridging. |
+
+### Current Rule
+
+- Stainless steel headstone inscriptions should use real stencil font outlines as the primary bridge/mask mechanism.
+- Do not rely on changing bridge rectangle colors to match the stainless background; the background is reflective/variable stainless steel, so color overlays are not reliable.
+- After regenerating TTF files, always regenerate the WOFF2 files too; the browser loads WOFF2 and may otherwise show stale outlines.
+- Browser font caching can hide changes, so hard refresh after font generation when reviewing screenshots.
+
+### Verification
+
+Commands run successfully after the latest stencil changes:
+
+```bash
+python -m py_compile scripts/create-stencil-fonts.py scripts/convert-fonts-to-woff2.py
+pnpm exec tsc --noEmit
+```
+
+Working-tree note:
+- `screen.png` is a local visual reference artifact and may show as modified. Do not commit it unless preserving the screenshot is intentional.
 
 ---
 
@@ -11505,4 +11597,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-01*
+*End of STARTER.md - Last updated: 2026-07-02*

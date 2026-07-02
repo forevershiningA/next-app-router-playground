@@ -11,13 +11,14 @@ import AdditionModel from '../AdditionModel';
 import type { HeadstoneAPI } from '../../SvgHeadstone';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
+import { getThreeTextFontUrl } from '#/lib/font-utils';
 import { useRouter, usePathname } from 'next/navigation';
 
 type Props = { ledgerRef: React.RefObject<THREE.Mesh> };
 
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
   (map, font) => {
-    map[font.name] = `/fonts/${font.image}`;
+    map[font.name] = getThreeTextFontUrl(font);
     return map;
   },
   {} as Record<string, string>,

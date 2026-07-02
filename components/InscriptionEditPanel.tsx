@@ -1,8 +1,12 @@
 'use client';
 
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
+import {
+  getDefaultInscriptionFont,
+  isStainlessHeadstoneProduct,
+} from '#/lib/stencil-fonts';
 
 const FONTS = data.fonts;
 
@@ -19,17 +23,32 @@ export default function InscriptionEditPanel() {
   const activeInscriptionText = useHeadstoneStore((s) => s.activeInscriptionText);
   const setActiveInscriptionText = useHeadstoneStore((s) => s.setActiveInscriptionText);
   const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
+  const productId = useHeadstoneStore((s) => s.productId);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isEngraved = catalog?.product.formula === 'Engraved';
 
   const active = lines.find((l) => l.id === selectedInscriptionId) ?? null;
-  const [selectedFont, setSelectedFont] = React.useState(active?.font || 'Franklin Gothic');
+  const defaultFont = getDefaultInscriptionFont(productId, catalog);
+  const usesStencilFonts = isStainlessHeadstoneProduct(productId, catalog);
+  const availableFonts = React.useMemo(
+    () => FONTS.filter((font) => (usesStencilFonts ? font.category === 'stencil' : font.category !== 'stencil')),
+    [usesStencilFonts],
+  );
+  const [selectedFont, setSelectedFont] = React.useState(active?.font || defaultFont);
   const [activeTab, setActiveTab] = React.useState<'font' | 'color'>('font');
   const [inputMode, setInputMode] = React.useState<'single' | 'multi'>('single');
   const [multiText, setMultiText] = React.useState('');
   const [pendingTextAlign, setPendingTextAlign] = React.useState<'left' | 'center' | 'right'>('center');
 
   const currentAlign: 'left' | 'center' | 'right' = active?.textAlign ?? pendingTextAlign;
+
+  React.useEffect(() => {
+    if (active?.font) return;
+    if (!availableFonts.some((font) => font.name === selectedFont)) {
+      setSelectedFont(defaultFont);
+    }
+  }, [active?.font, availableFonts, defaultFont, selectedFont]);
+
   const setAlign = useCallback(
     (value: 'left' | 'center' | 'right') => {
       if (active) {
@@ -285,6 +304,7 @@ export default function InscriptionEditPanel() {
           <div className="relative">
             <select
               className={`${fieldClass} appearance-none pr-8`}
+              style={{ colorScheme: 'dark' }}
               value={active?.font ?? selectedFont}
               onChange={(e) => {
                 const font = e.target.value;
@@ -295,8 +315,12 @@ export default function InscriptionEditPanel() {
                 }
               }}
             >
-              {FONTS.map((f) => (
-                <option key={f.id} value={f.name}>
+              {availableFonts.map((f) => (
+                <option
+                  key={f.id}
+                  value={f.name}
+                  style={{ backgroundColor: '#ffffff', color: '#111827' }}
+                >
                   {f.name}
                 </option>
               ))}

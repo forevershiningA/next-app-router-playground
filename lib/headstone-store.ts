@@ -49,6 +49,7 @@ import {
 } from '#/lib/headstone-store.types';
 import { normalizeAdditionBaseId } from '#/lib/addition-utils';
 import { logger } from '#/lib/logger';
+import { getDefaultInscriptionFont } from '#/lib/stencil-fonts';
 
 export type {
   AdditionKind,
@@ -1421,7 +1422,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const state = get();
 
     const text = patch.text ?? 'New line';
-    const font = patch.font ?? 'Garamond';
+    const font = patch.font ?? getDefaultInscriptionFont(state.productId, state.catalog);
     const sizeMm = clampInscriptionSize(
       patch.sizeMm ?? state.inscriptionInitHeight ?? state.inscriptionMinHeight,
     );

@@ -19,9 +19,10 @@ import ImageModel from '../ImageModel';
 import AdditionModel from '../AdditionModel';
 import type { HeadstoneAPI } from '../../SvgHeadstone';
 import { data } from '#/app/_internal/_data';
+import { getThreeTextFontUrl } from '#/lib/font-utils';
 
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
-  (map, font) => { map[font.name] = `/fonts/${font.image}`; return map; },
+  (map, font) => { map[font.name] = getThreeTextFontUrl(font); return map; },
   {} as Record<string, string>,
 );
 import {

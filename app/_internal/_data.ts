@@ -482,6 +482,28 @@ const fonts: Font[] = [
     category: '1',
   },
   { id: '10', name: 'Xirwena', image: 'xirwena1.ttf', category: '1' },
+  { id: 'stencil-2', name: 'Arial Stencil', image: 'stencil/arial_stencil.woff2', category: 'stencil' },
+  { id: 'stencil-4', name: 'Dobkin Stencil', image: 'stencil/Dobkin_stencil.woff2', category: 'stencil' },
+  {
+    id: 'stencil-5',
+    name: 'Franklin Gothic Stencil',
+    image: 'stencil/FranklinGothic_stencil.woff2',
+    category: 'stencil',
+  },
+  { id: 'stencil-7', name: 'Garamond Stencil', image: 'stencil/Garamond_stencil.woff2', category: 'stencil' },
+  {
+    id: 'stencil-8',
+    name: 'Great Vibes Stencil',
+    image: 'stencil/GreatVibes-Regular_stencil.woff2',
+    category: 'stencil',
+  },
+  {
+    id: 'stencil-9',
+    name: 'Lucida Calligraphy Stencil',
+    image: 'stencil/LucidaUnicodeCalligraphy_stencil.woff2',
+    category: 'stencil',
+  },
+  { id: 'stencil-10', name: 'Xirwena Stencil', image: 'stencil/xirwena1_stencil.woff2', category: 'stencil' },
 ];
 
 const c = "motif"; // class name for all motifs

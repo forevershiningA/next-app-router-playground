@@ -25,6 +25,7 @@ import { AdditionData } from '#/lib/xml-parser';
 import { usePathname, useRouter } from 'next/navigation';
 import type { Component, ReactNode } from 'react';
 import { logger } from '#/lib/logger';
+import { getThreeTextFontUrl } from '#/lib/font-utils';
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
@@ -84,7 +85,7 @@ const centerOffsetsFromAbsolute = (x: number, y: number, metrics: BoxMetrics) =>
 // Simply use the font files as specified in the data
 const FONT_MAP: Record<string, string> = data.fonts.reduce(
   (map, font) => {
-    map[font.name] = `/fonts/${font.image}`;
+    map[font.name] = getThreeTextFontUrl(font);
     return map;
   },
   {} as Record<string, string>,

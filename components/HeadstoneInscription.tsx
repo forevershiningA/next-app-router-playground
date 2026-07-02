@@ -55,6 +55,87 @@ type TroikaTextMesh = THREE.Mesh & {
   } | null;
 };
 
+const MAX_STAINLESS_BRIDGE_MASKS = 160;
+
+type BridgeMaskShader = THREE.WebGLProgramParametersWithUniforms & {
+  uniforms: {
+    uBridgeMaskCount?: { value: number };
+    uBridgeMasks?: { value: THREE.Vector4[] };
+  } & THREE.WebGLProgramParametersWithUniforms['uniforms'];
+};
+
+function createEmptyBridgeMaskUniforms() {
+  return Array.from({ length: MAX_STAINLESS_BRIDGE_MASKS }, () => new THREE.Vector4());
+}
+
+function updateBridgeMaskUniforms(
+  uniforms: THREE.Vector4[],
+  masks: StainlessBridgeMask[],
+) {
+  uniforms.forEach((uniform, index) => {
+    const mask = masks[index];
+    if (!mask) {
+      uniform.set(0, 0, 0, 0);
+      return;
+    }
+
+    uniform.set(
+      mask.x - mask.width / 2,
+      mask.y - mask.height / 2,
+      mask.x + mask.width / 2,
+      mask.y + mask.height / 2,
+    );
+  });
+}
+
+function applyBridgeMaskShader(
+  material: THREE.Material,
+  uniforms: THREE.Vector4[],
+  maskCount: number,
+) {
+  material.onBeforeCompile = (shader: BridgeMaskShader) => {
+    shader.uniforms.uBridgeMaskCount = { value: maskCount };
+    shader.uniforms.uBridgeMasks = { value: uniforms };
+
+    shader.vertexShader = shader.vertexShader.replace(
+      'void main() {',
+      'varying vec2 vInscriptionLocalPosition;\nvoid main() {',
+    );
+    shader.vertexShader = shader.vertexShader.replace(
+      '#include <begin_vertex>',
+      'vInscriptionLocalPosition = position.xy;\n#include <begin_vertex>',
+    );
+
+    shader.fragmentShader = shader.fragmentShader.replace(
+      'void main() {',
+      `uniform int uBridgeMaskCount;
+uniform vec4 uBridgeMasks[${MAX_STAINLESS_BRIDGE_MASKS}];
+varying vec2 vInscriptionLocalPosition;
+void main() {`,
+    );
+    shader.fragmentShader = shader.fragmentShader.replace(
+      '#include <clipping_planes_fragment>',
+      `#include <clipping_planes_fragment>
+  for (int i = 0; i < ${MAX_STAINLESS_BRIDGE_MASKS}; i++) {
+    if (i >= uBridgeMaskCount) {
+      break;
+    }
+    vec4 bridgeMask = uBridgeMasks[i];
+    if (
+      vInscriptionLocalPosition.x >= bridgeMask.x &&
+      vInscriptionLocalPosition.x <= bridgeMask.z &&
+      vInscriptionLocalPosition.y >= bridgeMask.y &&
+      vInscriptionLocalPosition.y <= bridgeMask.w
+    ) {
+      discard;
+    }
+  }`,
+    );
+  };
+  material.customProgramCacheKey = () => `stainless-inscription-bridges-${maskCount}`;
+  material.needsUpdate = true;
+}
+
 const STENCIL_BRIDGE_CHARS = new Set([
   '0', '4', '6', '8', '9',
   'A', 'B', 'D', 'O', 'P', 'Q', 'R',
@@ -82,7 +163,16 @@ function getStainlessBridgeRect(
     };
   }
 
-  if ('eag'.includes(char)) {
+  if (char === 'e') {
+    return {
+      x: centerX + glyphWidth * 0.18,
+      y: centerY + glyphHeight * 0.12,
+      width: glyphWidth * 0.38,
+      height: Math.max(glyphHeight * 0.105, glyphWidth * 0.05),
+    };
+  }
+
+  if ('ag'.includes(char)) {
     return {
       x: centerX + glyphWidth * 0.08,
       y: centerY + glyphHeight * 0.02,
@@ -203,9 +293,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const isStainlessSteelHeadstone =
       catalog?.product.type === 'headstone' &&
       (productId === '1' || productId === '23' || catalog.product.formula === 'Steel');
+    const isStencilFont = Boolean(font?.includes('/stencil/') || font?.includes('_stencil'));
     const isLedgerSurface = surface === 'ledger';
     const isBaseSurface = surface === 'base';
-    const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
 
     // root object users can reference
     const groupRef = React.useRef<THREE.Group | null>(null);
@@ -261,6 +351,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const [dragOffset, setDragOffset] = React.useState(new THREE.Vector3());
     const [textBounds, setTextBounds] = React.useState({ width: 0, height: 0 });
     const [stainlessBridgeMasks, setStainlessBridgeMasks] = React.useState<StainlessBridgeMask[]>([]);
+    const bridgeMaskUniforms = React.useMemo(() => createEmptyBridgeMaskUniforms(), []);
+    const stainlessTextMaterial = React.useMemo(() => new THREE.MeshStandardMaterial({ transparent: true }), []);
     const textMeshRef = React.useRef<THREE.Mesh | null>(null);
     // Prevents double-fire when transferring surface mid-drag (component unmounts asynchronously)
     const transferringRef = React.useRef(false);
@@ -331,6 +423,12 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       rafId = requestAnimationFrame(trySetup);
       return () => { cancelled = true; cancelAnimationFrame(rafId); };
     }, [headstone.mesh, headstone.frontZ, isLedgerSurface, isBaseSurface, liftLocal, xPos, yPos, coordinateSpace, mmToLocalUnits, id, updateLineStore]);
+
+    React.useEffect(() => {
+      return () => {
+        stainlessTextMaterial.dispose();
+      };
+    }, [stainlessTextMaterial]);
 
     /* ------------------------------ helper: place by pointer ----------------------------- */
     const placeOnLedgerSurface = React.useCallback(
@@ -690,11 +788,11 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         }
       }
       setStainlessBridgeMasks(
-        isStainlessSteelHeadstone ? buildStainlessBridgeMasks(text, sprite) : [],
+        isStainlessSteelHeadstone && !isStencilFont ? buildStainlessBridgeMasks(text, sprite) : [],
       );
       // Also refresh helper bounds if present
       helperRef.current?.update();
-    }, [isStainlessSteelHeadstone, text]);
+    }, [isStainlessSteelHeadstone, isStencilFont, text]);
     
     const rotationRad = (rotationDeg * Math.PI) / 180;
     // For ledger: xPos/yPos are fractional (from worldToLocal on unit-cube mesh).
@@ -717,12 +815,6 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       ? [-Math.PI / 2, rotationRad, 0]
       : [0, 0, rotationRad];
     const renderedTextColor = isBronzePlaque ? '#c7a06a' : color;
-    const stainlessBridgeColor = headstoneMaterialUrl?.includes('high-polished-ss-swatch')
-      ? '#d7dcde'
-      : '#bdc3c6';
-    // Keep bridges on the inscription plane. Render order, not physical Z,
-    // makes them visually cover the cut-through text.
-    const stainlessBridgeZ = 0;
     const textMaterialProps = isBronzePlaque
       ? {
           metalness: 0.9,
@@ -742,6 +834,29 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           roughness: 0.4,
           envMapIntensity: 1.5,
         };
+
+    React.useEffect(() => {
+      stainlessTextMaterial.color.set(renderedTextColor);
+      stainlessTextMaterial.metalness = textMaterialProps.metalness;
+      stainlessTextMaterial.roughness = textMaterialProps.roughness;
+      stainlessTextMaterial.envMapIntensity = textMaterialProps.envMapIntensity;
+      stainlessTextMaterial.needsUpdate = true;
+    }, [
+      renderedTextColor,
+      stainlessTextMaterial,
+      textMaterialProps.envMapIntensity,
+      textMaterialProps.metalness,
+      textMaterialProps.roughness,
+    ]);
+
+    React.useEffect(() => {
+      const activeMasks = isStainlessSteelHeadstone
+        && !isStencilFont
+        ? stainlessBridgeMasks.slice(0, MAX_STAINLESS_BRIDGE_MASKS)
+        : [];
+      updateBridgeMaskUniforms(bridgeMaskUniforms, activeMasks);
+      applyBridgeMaskShader(stainlessTextMaterial, bridgeMaskUniforms, activeMasks.length);
+    }, [bridgeMaskUniforms, isStainlessSteelHeadstone, isStencilFont, stainlessBridgeMasks, stainlessTextMaterial]);
 
     // Base inscriptions with mm-center: imperatively position each frame so we
     // always use the *current* mesh position/scale (set by HeadstoneBaseAuto's
@@ -796,6 +911,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           outlineColor={isBronzePlaque ? '#26180d' : isTraditionalEngraved || isPlaque || isStainlessSteelHeadstone ? renderedTextColor : "black"}
           fillOpacity={isTraditionalEngraved ? 1 : 1}
           {...textMaterialProps}
+          material={isStainlessSteelHeadstone ? stainlessTextMaterial : undefined}
           onSync={handleTextSync}
           renderOrder={isStainlessSteelHeadstone ? 80 : undefined}
           // Use onClick for selection; onPointerDown stays for drag init only
@@ -855,28 +971,6 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         >
           {text}
         </Text>
-
-        {isStainlessSteelHeadstone && stainlessBridgeMasks.map((mask) => (
-          <mesh
-            key={mask.id}
-            position={[mask.x, mask.y, stainlessBridgeZ]}
-            renderOrder={120}
-            raycast={() => null}
-          >
-            <planeGeometry args={[mask.width, mask.height]} />
-            <meshBasicMaterial
-              color={stainlessBridgeColor}
-              transparent
-              opacity={1}
-              depthTest={false}
-              depthWrite={false}
-              polygonOffset
-              polygonOffsetFactor={-10}
-              polygonOffsetUnits={-10}
-              toneMapped={false}
-            />
-          </mesh>
-        ))}
         
         {/* Selection box with resize and rotation handles */}
         {selected && textBounds.width > 0 && (

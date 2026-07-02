@@ -7,7 +7,10 @@ import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
 import Loader from '#/ui/loader';
 import { data } from '#/app/_internal/_data';
-import OverlayTitle from '#/ui/overlay-title';
+import {
+  getDefaultInscriptionFont,
+  isStainlessHeadstoneProduct,
+} from '#/lib/stencil-fonts';
 
 /* --------------------------- types + helpers --------------------------- */
 
@@ -40,11 +43,20 @@ export default function InscriptionOverlayPanel() {
     (s) => s.showInscriptionColor,
   );
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const catalog = useHeadstoneStore((s) => s.catalog);
 
   const activeId = selectedInscriptionId;
   const active = lines.find((l) => l.id === activeId) ?? null;
 
-  const [selectedFont, setSelectedFont] = useState(active?.font || 'Franklin Gothic');
+  const defaultFont = getDefaultInscriptionFont(productId, catalog);
+  const usesStencilFonts = isStainlessHeadstoneProduct(productId, catalog);
+  const availableFonts = React.useMemo(
+    () => FONTS.filter((font) => (usesStencilFonts ? font.category === 'stencil' : font.category !== 'stencil')),
+    [usesStencilFonts],
+  );
+
+  const [selectedFont, setSelectedFont] = useState(active?.font || defaultFont);
   const [overlayFontLoading, setOverlayFontLoading] = useState(false);
   const [activeTab, setActiveTab] = useState<'font' | 'color'>('font');
 
@@ -54,6 +66,13 @@ export default function InscriptionOverlayPanel() {
       setSelectedFont(active.font);
     }
   }, [active?.font, active?.id]);
+
+  useEffect(() => {
+    if (active?.font) return;
+    if (!availableFonts.some((font) => font.name === selectedFont)) {
+      setSelectedFont(defaultFont);
+    }
+  }, [active?.font, availableFonts, defaultFont, selectedFont]);
 
   // Close inscription panel when on select-shape page
   useEffect(() => {
@@ -218,7 +237,7 @@ export default function InscriptionOverlayPanel() {
             <div className="relative">
               <select
                 id="inscriptionFontSelect"
-                className="w-full appearance-none rounded-md border border-white/15 bg-neutral-900 px-3 py-2 pr-8 text-sm outline-none"
+                className="w-full appearance-none rounded-md border border-white/15 bg-neutral-900 px-3 py-2 pr-8 text-sm text-white outline-none day:bg-white day:text-gray-900"
                 value={active?.font ?? selectedFont}
                 onChange={async (e) => {
                   const font = e.target.value;
@@ -244,8 +263,8 @@ export default function InscriptionOverlayPanel() {
                   }, remaining);
                 }}
               >
-                {FONTS.map((f) => (
-                  <option key={f.id} value={f.name}>
+                {availableFonts.map((f) => (
+                  <option key={f.id} value={f.name} className="bg-white text-gray-900">
                     {f.name}
                   </option>
                 ))}
