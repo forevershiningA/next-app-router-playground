@@ -82,7 +82,7 @@ Implementation files:
 | `app/sitemap.ts` | Adds `/memorials/{type}` pages to the sitemap. |
 
 Current route behavior:
-- Product cards link to `/select-product?productId={id}` so the Designer opens with the selected product.
+- Product cards link to `/select-shape?productId={id}` so the Designer opens with the selected product and skips the product-list page. Legacy `/select-product?productId={id}` links are redirected by `RouterBinder` after selecting the product.
 - Public product names should use capitalized names and `Headstone` instead of `Mini Headstone` in public-facing page copy.
 - Memorial product pages are public content pages, not Designer UI pages.
 - `ConditionalCanvas`, `ConditionalNav`, and `MainContent` hide Designer canvas/sidebar chrome on `/memorials/*`.

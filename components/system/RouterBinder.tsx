@@ -47,12 +47,22 @@ export default function RouterBinder() {
   useEffect(() => {
     const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
     const queryProductId = params?.get('productId');
-    if (
-      queryProductId &&
-      queryProductId !== currentProductId &&
-      data.products.some((p) => p.id === queryProductId)
-    ) {
-      setProductId(queryProductId);
+    const currentPath = pathname || (typeof window !== 'undefined' ? window.location.pathname : null);
+    const hasValidQueryProduct = Boolean(
+      queryProductId && data.products.some((p) => p.id === queryProductId),
+    );
+
+    if (queryProductId && hasValidQueryProduct) {
+      if (queryProductId !== currentProductId) {
+        void (async () => {
+          await setProductId(queryProductId);
+          if (currentPath === '/select-product') {
+            router.replace('/select-shape');
+          }
+        })();
+      } else if (currentPath === '/select-product') {
+        router.replace('/select-shape');
+      }
       return;
     }
 
@@ -60,9 +70,6 @@ export default function RouterBinder() {
       return;
     }
 
-    // Get pathname from window if usePathname hasn't loaded yet
-    const currentPath = pathname || (typeof window !== 'undefined' ? window.location.pathname : null);
-    
     if (!currentPath) {
       return;
     }
@@ -111,7 +118,7 @@ export default function RouterBinder() {
     }
     
     setProductId(productId);
-  }, [pathname, currentProductId, setProductId]);
+  }, [pathname, currentProductId, router, setProductId]);
 
   useEffect(() => {
     // Load inscriptions XML for init size

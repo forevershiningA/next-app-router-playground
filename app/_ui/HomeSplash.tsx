@@ -298,7 +298,7 @@ export default function HomeSplash() {
       <div className="relative min-h-screen flex flex-col overflow-hidden" role="banner">
         
         {/* Responsive Header - Absolute top */}
-        <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-4 py-3 sm:px-6 sm:py-4" style={{ caretColor: 'transparent' }}>
+        <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between gap-5 px-4 py-3 sm:px-6 sm:py-4" style={{ caretColor: 'transparent' }}>
           {/* Logo - Responsive width, centered on mobile */}
           <div 
             className="w-52 sm:w-56 md:w-72 transition-all mx-auto md:mx-0 select-none pointer-events-none" 
@@ -316,8 +316,36 @@ export default function HomeSplash() {
             />
           </div>
 
+          <nav
+            className="hidden flex-1 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs font-medium text-white/85 xl:flex day:text-gray-700"
+            aria-label="Memorial product pages"
+          >
+            <span className="font-semibold tracking-[0.18em] text-[#f3d48f] uppercase day:text-amber-700">
+              Memorials:
+            </span>
+            <Link href="/memorials/headstones" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+              Headstones
+            </Link>
+            <span className="text-white/35 day:text-gray-300">/</span>
+            <Link href="/memorials/plaques" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+              Plaques
+            </Link>
+            <span className="text-white/35 day:text-gray-300">/</span>
+            <Link href="/memorials/full-monuments" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+              Full Monuments
+            </Link>
+            <span className="text-white/35 day:text-gray-300">/</span>
+            <Link href="/memorials/urns" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+              Urns
+            </Link>
+            <span className="text-white/35 day:text-gray-300">/</span>
+            <Link href="/memorials/pet-memorials" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+              Pet Memorials
+            </Link>
+          </nav>
+
           {/* Top Right Navigation */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden shrink-0 items-center gap-6 md:flex">
             <Link 
               href="/select-product" 
               className="rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
@@ -350,7 +378,7 @@ export default function HomeSplash() {
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden="true" />
         
         {/* Main Content - Flex Grow to Center Vertically */}
-        <div className="relative z-10 flex flex-col justify-start flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-[100px] sm:pt-16">
+        <div className="relative z-10 flex flex-col justify-start flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-[130px] sm:pt-[116px]">
           <div className="text-center">
             
             {/* Headlines - Emotional benefit prioritized with elegant serif */}

@@ -86,7 +86,7 @@ function productTypeJsonLd(page: ReturnType<typeof getMemorialTypePageData>) {
             name: product.displayName,
             image: `${BASE_URL}/webp/products/${product.image}`,
             description: product.description,
-            url: `${BASE_URL}/select-product?productId=${product.id}`,
+            url: `${BASE_URL}/select-shape?productId=${product.id}`,
           },
         })),
       },
@@ -191,7 +191,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
           {page.products.map((product) => (
             <Link
               key={product.id}
-              href={`/select-product?productId=${product.id}`}
+              href={`/select-shape?productId=${product.id}`}
               className="group flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-all hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10 day:border-gray-200 day:bg-white"
             >
               <div className="relative aspect-[4/3] border-b border-white/10 bg-[#101010] day:border-gray-200 day:bg-gray-50">

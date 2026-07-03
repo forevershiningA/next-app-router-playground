@@ -150,9 +150,9 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 Select Your Shape
               </h1>
               {productName && (
-                <p className="mt-3 text-sm font-medium tracking-[0.24em] text-[#cfac6c] uppercase">
+                <h2 className="mt-3 text-lg font-semibold tracking-[0.2em] text-[#cfac6c] uppercase sm:text-xl">
                   {productName}
-                </p>
+                </h2>
               )}
               <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
                 Choose the shape for your urn. Each shape has its own dimensions
@@ -306,9 +306,9 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
               Select Your Shape
             </h1>
             {productName && (
-              <p className="mt-3 text-sm font-medium tracking-[0.24em] text-[#cfac6c] uppercase">
+              <h2 className="mt-3 text-lg font-semibold tracking-[0.2em] text-[#cfac6c] uppercase sm:text-xl">
                 {productName}
-              </p>
+              </h2>
             )}
             <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
               Choose the perfect shape for your memorial. Browse our collection
