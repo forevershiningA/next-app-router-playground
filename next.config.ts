@@ -55,6 +55,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: '**.vercel.app',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.forevershining.com.au',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
     qualities: [75, 90, 100],

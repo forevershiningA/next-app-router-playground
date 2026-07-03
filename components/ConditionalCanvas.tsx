@@ -43,6 +43,7 @@ export default function ConditionalCanvas() {
   // /designs/bronze-plaque/husband-memorial/123_design-name -> ['designs', 'bronze-plaque', 'husband-memorial', '123_design-name'] = 4 segments (individual design page)
   const segments = pathname?.split('/').filter(Boolean) || [];
   const isDesignPage = pathname?.startsWith('/designs') && segments.length >= 1;
+  const isMemorialsPage = pathname?.startsWith('/memorials');
 
   // Check if we're on the homepage
   const isHomePage = pathname === '/';
@@ -100,6 +101,7 @@ export default function ConditionalCanvas() {
       !pathname ||
       ((isHomePage ||
         isDesignPage ||
+        isMemorialsPage ||
         isSelectProductPage ||
         isSelectShapePage ||
         isCheckPricePage ||
@@ -121,6 +123,7 @@ export default function ConditionalCanvas() {
     pathname,
     isHomePage,
     isDesignPage,
+    isMemorialsPage,
     isSelectProductPage,
     isSelectShapePage,
     isSelectMaterialPage,
@@ -142,6 +145,7 @@ export default function ConditionalCanvas() {
     !pathname ||
     ((isHomePage ||
       isDesignPage ||
+      isMemorialsPage ||
       isSelectProductPage ||
       isSelectShapePage ||
       isCheckPricePage ||

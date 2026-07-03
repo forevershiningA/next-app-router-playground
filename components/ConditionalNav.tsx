@@ -78,6 +78,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
 
   // Check if we're on /designs route
   const isDesignsRoute = pathname?.startsWith('/designs');
+  const isMemorialsRoute = pathname?.startsWith('/memorials');
   const isAdminRoute = pathname?.startsWith('/admin');
 
   // Check if we're on homepage or other designer pages
@@ -90,7 +91,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
 
   const isDesignShareRoute = pathname?.startsWith('/design/');
 
-  if (isAdminRoute || isDesignShareRoute) {
+  if (isAdminRoute || isDesignShareRoute || isMemorialsRoute) {
     return null;
   }
 

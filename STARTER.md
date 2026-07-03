@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-02
+**Last Updated:** 2026-07-03
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -54,6 +54,133 @@
 46. [Stainless Motifs, Sidebar Language, and Quote Detail Alignment (2026-06-30)](#current-status-2026-06-30--stainless-motifs-sidebar-language-and-quote-detail-alignment)
 47. [July 2 Stainless Inscription Stencil Fonts](#current-status-2026-07-02--stainless-inscription-stencil-fonts)
 48. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
+49. [July 3 Public SEO and Memorial Product Pages](#current-status-2026-07-03--public-seo-and-memorial-product-pages)
+
+---
+
+## Current Status (2026-07-03) - Public SEO and Memorial Product Pages
+
+This session moved the public marketing/SEO layer closer to production for Forever Shining and added real product-type landing pages for memorial categories. The main public focus is now Australia, United States, Canada, and Europe, mostly Bronze Plaques and other Plaques, plus Headstones.
+
+### Public Product-Type Pages
+
+| Route | Purpose |
+|------|---------|
+| `/memorials/headstones` | Headstones product-type page. |
+| `/memorials/plaques` | Plaques product-type page covering Bronze Plaques, Memorial Plaques, Full Colour Plaques, traditional engraved plaques, and stainless plaque options. |
+| `/memorials/full-monuments` | Full Monuments product-type page. Public wording should use `Full Monuments`, not `Full Memorials`. |
+| `/memorials/urns` | Urns product-type page. |
+| `/memorials/pet-memorials` | Pet Memorials product-type page. |
+
+Implementation files:
+
+| File | Current Behavior |
+|------|------------------|
+| `app/memorials/[type]/page.tsx` | Dynamic memorial product-type pages with metadata, JSON-LD, header/footer, product cards, Designer guidance, and links into the Designer. |
+| `app/memorials/[type]/MemorialHeaderGallery.tsx` | Client lightbox/gallery component used in the memorial page header. Thumbnail clicks open a modal popup; Escape closes it. |
+| `lib/memorial-product-pages.ts` | Server helper that maps product-type slugs to Designer products, XML descriptions, size text, catalog shapes, tutorial notes, and curated gallery images. |
+| `app/sitemap.ts` | Adds `/memorials/{type}` pages to the sitemap. |
+
+Current route behavior:
+- Product cards link to `/select-product?productId={id}` so the Designer opens with the selected product.
+- Public product names should use capitalized names and `Headstone` instead of `Mini Headstone` in public-facing page copy.
+- Memorial product pages are public content pages, not Designer UI pages.
+- `ConditionalCanvas`, `ConditionalNav`, and `MainContent` hide Designer canvas/sidebar chrome on `/memorials/*`.
+- `RouterBinder` honors `productId` query params even when a different product is already selected, so product-page cards can override prior Designer state.
+
+### Memorial Page Header and Gallery
+
+The memorial pages use a compact public header:
+- Same transparent Forever Shining logo asset as the Home Page.
+- Top nav includes `Home`, `Plaques`, `Headstones`, `Full Monuments`, `Urns`, and `Start Designing`.
+- The hero area is a 50%/50% desktop split: product intro on the left and a compact real-gallery preview on the right.
+- The old `Designer shape coverage` panel was removed from the hero so real content appears in the first viewport.
+- The gallery preview uses images from `https://www.forevershining.com.au/memorial-gallery/`.
+- `next.config.ts` allows `next/image` remote loading from `www.forevershining.com.au`.
+
+Current gallery examples are curated per memorial type in `lib/memorial-product-pages.ts`, with three images per type. Use `705x705` WordPress image variants where available to avoid loading oversized originals.
+
+### Memorial Footer
+
+The memorial footer is intentionally similar to the Home footer:
+- Logo/social column.
+- `Memorials` links.
+- `Help & Guides` links.
+- Wider `Get in Touch` column.
+
+The `Get in Touch` column is wider on desktop and displays the two contact blocks side by side:
+
+North America first:
+- `(+1) 647 388 0931`
+- `admin@bronze-plaque.com`
+- `1101 Eagle Ridge Drive, Oshawa Ontario L1K 0L8`
+
+Australia second:
+- `+61 8 6191 0396`
+- `admin@forevershining.com.au`
+- `1/44 Port Kembla Dve, Bibra Lake WA 6163`
+
+Footer copyright year is now `© 2026 Forever Shining. All rights reserved.`
+
+### Home Page SEO and Public Copy
+
+Files:
+
+| File | Current Behavior |
+|------|------------------|
+| `app/page.tsx` | Adds richer metadata and JSON-LD for Organization, LocalBusiness, WebPage, FAQPage, offers, social profiles, and two contact points. |
+| `app/_ui/HomeSplash.tsx` | Updated footer links/socials/contact details; footer memorial links now point to real `/memorials/*` pages instead of hash modals. |
+
+Important public copy/naming rules:
+- Use `Headstones`, not `Mini Headstones`, for public product category copy.
+- Use product names with capital letters: `Bronze Plaques`, `Memorial Plaques`, `Headstones`.
+- Use `Full Monuments`, not `Full Memorials`.
+- Home CTA text changed from phone-number CTA to `Contact us`, pointing to `https://www.forevershining.com.au/contact/`.
+- Home CTA heading says `Design a Plaque, Headstone, or full Memorial with the live Designer`.
+- Home footer contact order is North America first, then Australia.
+
+Social profiles now used in public structured data/footer:
+- `https://www.facebook.com/ForeverShiningAustralia/`
+- `https://www.instagram.com/forevershiningaus/`
+- `https://twitter.com/ForeverShiningA`
+- `https://www.pinterest.com/forevershining1/`
+- `https://www.youtube.com/@forevershining/featured`
+
+### SEO Notes
+
+Based on `seo.txt`, the useful work already applied was:
+- Replace hash-only product modal links with crawlable product-type pages.
+- Add sitemap entries for the new public pages.
+- Use XML/catalog/tutorial source data to generate page copy so pages are not thin duplicates.
+- Add real social/contact structured data.
+- Add FAQPage content for homepage long-tail SEO.
+- Use real product-type gallery images on memorial pages.
+
+Further useful SEO work:
+- Add more unique, human-edited copy per product type once final product positioning is approved.
+- Add internal links from design gallery/product SEO pages into the matching `/memorials/*` pages.
+- Consider adding canonical image assets locally if WordPress gallery image URLs become unstable.
+
+### Verification
+
+Commands run successfully after these public page changes:
+
+```bash
+pnpm type-check
+pnpm lint
+```
+
+Visual screenshots captured during review:
+- `C:\tmp\memorials-headstones-header-gallery-50-50.png`
+- `C:\tmp\memorials-headstones-popup.png`
+- `C:\tmp\memorials-headstones-footer-wide-contact.png`
+- `C:\tmp\memorials-plaques-gallery.png`
+- `C:\tmp\home-hero-aligned.png`
+- `C:\tmp\home-designer-aligned-full.png`
+
+Working-tree notes:
+- `screen.png` is a user-provided visual reference and may be modified. Do not revert it.
+- `seo.txt` is an untracked research/reference file. Do not remove it unless explicitly requested.
 
 ---
 
@@ -11597,4 +11724,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-02*
+*End of STARTER.md - Last updated: 2026-07-03*

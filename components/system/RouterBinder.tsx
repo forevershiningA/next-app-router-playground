@@ -45,6 +45,17 @@ export default function RouterBinder() {
 
   // Set product ID based on URL - only when no product has been selected yet
   useEffect(() => {
+    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const queryProductId = params?.get('productId');
+    if (
+      queryProductId &&
+      queryProductId !== currentProductId &&
+      data.products.some((p) => p.id === queryProductId)
+    ) {
+      setProductId(queryProductId);
+      return;
+    }
+
     if (currentProductId) {
       return;
     }
@@ -99,13 +110,6 @@ export default function RouterBinder() {
       }
     }
     
-    // Allow explicit product selection from query string on refresh/deep links.
-    const params = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
-    const queryProductId = params?.get('productId');
-    if (queryProductId && data.products.some((p) => p.id === queryProductId)) {
-      productId = queryProductId;
-    }
-
     setProductId(productId);
   }, [pathname, currentProductId, setProductId]);
 

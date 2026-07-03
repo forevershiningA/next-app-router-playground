@@ -22,13 +22,13 @@ const HASH_MODAL_CONTENT = {
     title: 'Talk with a Designer',
     description: 'Our memorial specialists are available every day to guide you through sizing, materials, and wording.',
     bullets: [
-      'Call us at (+1) 647 388 0931 between 9am and 7pm EST.',
-      'Email admin@bronze-plaque.com for a written response within one business day.',
+      'Call us at +61 8 6191 0396 for guidance on sizing, materials, and cemetery requirements.',
+      'Email admin@forevershining.com.au for a written response within one business day.',
       'Book a complimentary screen-share to co-design live with your family.'
     ],
     links: [
-      { label: 'Call Now', href: 'tel:+16473880931' },
-      { label: 'Email Support', href: 'mailto:admin@bronze-plaque.com' }
+      { label: 'Call Now', href: 'tel:+61861910396' },
+      { label: 'Email Support', href: 'mailto:admin@forevershining.com.au' }
     ]
   },
   headstones: {
@@ -78,7 +78,7 @@ const HASH_MODAL_CONTENT = {
     bullets: [
       'Pick playful motifs—paw prints, hearts, and florals.',
       'Upload photos for laser or sandblast etching.',
-      'Order lightweight plaques that ship anywhere in North America.'
+      'Order lightweight plaques with delivery options across Australia, the United States, Canada, and Europe.'
     ]
   },
   'how-it-works': {
@@ -128,9 +128,9 @@ const HASH_MODAL_CONTENT = {
     bullets: [
       'Design files stay encrypted at rest and are deleted on request.',
       'Payment data is handled by PCI-compliant processors; we never store card numbers.',
-      'You can export or purge personal data by emailing admin@bronze-plaque.com.'
+      'You can export or purge personal data by emailing admin@forevershining.com.au.'
     ],
-    links: [{ label: 'Request Full Policy', href: 'mailto:admin@bronze-plaque.com?subject=Privacy%20Policy%20Request' }]
+    links: [{ label: 'Request Full Policy', href: 'mailto:admin@forevershining.com.au?subject=Privacy%20Policy%20Request' }]
   },
   terms: {
     eyebrow: 'Policy Snapshot',
@@ -141,7 +141,7 @@ const HASH_MODAL_CONTENT = {
       '50% deposits are refundable until materials are cut; after that we credit future work.',
       'Manufacturing timelines average 6–10 weeks, depending on material availability.'
     ],
-    links: [{ label: 'Request Full Terms', href: 'mailto:admin@bronze-plaque.com?subject=Terms%20of%20Service%20Request' }]
+    links: [{ label: 'Request Full Terms', href: 'mailto:admin@forevershining.com.au?subject=Terms%20of%20Service%20Request' }]
   },
   sitemap: {
     eyebrow: 'Navigation',
@@ -258,27 +258,27 @@ export default function HomeSplash() {
   const compassionPhases = [
     {
       key: 'foundation',
-      eyebrow: 'Step 1',
-      title: 'The Foundation',
-      summary: 'Choose a memorial style',
+      eyebrow: 'Product',
+      title: 'Choose Product',
+      summary: 'Select product, shape, and size',
       description:
-        'Pick your shape and material, then see it render instantly in 3D.',
+        'Start with Bronze Plaques, Memorial Plaques, Headstones, or Monuments, then set the core dimensions before personalising.',
     },
     {
       key: 'tribute',
-      eyebrow: 'Step 2',
-      title: 'The Tribute',
-      summary: 'Personalize their story',
+      eyebrow: 'Design',
+      title: 'Personalise Layout',
+      summary: 'Add inscriptions, motifs, and photos',
       description:
-        'Add inscriptions, motifs, and accents while the preview updates live.',
+        'Use the same guided panels from the Designer to edit wording, imagery, bronze emblems, borders, and material finishes.',
     },
     {
       key: 'review',
-      eyebrow: 'Step 3',
-      title: 'Review & Share',
-      summary: 'Gather family input',
+      eyebrow: 'Review',
+      title: 'Price, Save, and Share',
+      summary: 'Check the quote before ordering',
       description:
-        'Review clear pricing, save your draft, and share before final approval.',
+        'Review pricing, save the design, send an enquiry, or share a proof with family before committing to production.',
     },
   ];
 
@@ -320,13 +320,13 @@ export default function HomeSplash() {
           <nav className="hidden md:flex items-center gap-6">
             <Link 
               href="/select-product" 
-              className="rounded-full bg-gradient-to-r from-[#cfac6c] to-[#b89a5a] px-5 py-2 text-sm font-semibold text-slate-900 shadow-md transition-all hover:scale-105 hover:shadow-lg hover:shadow-[#cfac6c]/30 hover:from-[#d4af37] hover:to-[#cfac6c] cursor-pointer"
+              className="rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
             >
               Start Designing
             </Link>
             <Link 
               href="/designs" 
-              className="text-sm font-medium text-white hover:text-[#cfac6c] transition-colors cursor-pointer day:text-gray-800 day:hover:text-[#b89a5a]"
+              className="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-white"
             >
               Browse Designs
             </Link>
@@ -399,7 +399,7 @@ export default function HomeSplash() {
                 {['No credit card', 'Live 3D preview', 'Save & share'].map((item) => (
                   <span
                     key={item}
-                    className="rounded-full border border-white/25 bg-black/35 px-3 py-1 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm day:border-gray-300 day:bg-white/80 day:text-gray-700"
+                    className="rounded-lg border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm day:border-gray-200 day:bg-white day:text-gray-700"
                   >
                     {item}
                   </span>
@@ -429,12 +429,12 @@ export default function HomeSplash() {
                   value={heroSearchQuery}
                   onChange={(e) => setHeroSearchQuery(e.target.value)}
                   placeholder="Search designs - motif, shape, style…"
-                  className="w-full rounded-full border border-white/20 bg-black/35 py-3.5 pl-12 pr-28 text-sm font-light text-white placeholder-white/45 backdrop-blur-md transition-all focus:border-[#d4af37]/60 focus:bg-black/50 focus:outline-none focus:ring-1 focus:ring-[#d4af37]/40 day:border-gray-300 day:bg-white/80 day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-400 day:focus:ring-amber-300/40"
+                  className="w-full rounded-lg border border-white/15 bg-[#171717]/80 py-3.5 pl-12 pr-28 text-sm font-light text-white placeholder-white/45 backdrop-blur-md transition-colors focus:border-[#cfac6c]/70 focus:bg-[#171717]/95 focus:outline-none focus:ring-1 focus:ring-[#cfac6c]/30 day:border-gray-300 day:bg-white/90 day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-400 day:focus:ring-amber-300/40"
                   aria-label="Search memorial designs"
                 />
                 <button
                   type="submit"
-                  className="absolute right-1.5 rounded-full bg-gradient-to-r from-[#d4af37] to-[#b8922e] px-5 py-2 text-xs font-semibold tracking-wider text-slate-900 transition-all hover:scale-105 hover:shadow-[0_0_16px_rgba(212,175,55,0.55)]"
+                  className="absolute right-1.5 rounded-md bg-[#cfac6c] px-5 py-2 text-xs font-semibold tracking-wider text-slate-950 transition-colors hover:bg-[#d7b979]"
                 >
                   Search
                 </button>
@@ -462,7 +462,7 @@ export default function HomeSplash() {
                   {/* Rotation Controls - Subtle, elegant chevrons */}
                   <button 
                     onClick={rotateLeft}
-                    className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg day:bg-white/70 day:border-gray-300 day:text-gray-600"
+                    className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
                     aria-label="Rotate headstone left to view different angles"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -471,7 +471,7 @@ export default function HomeSplash() {
                   </button>
                   <button 
                     onClick={rotateRight}
-                    className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-black/30 hover:bg-[#cfac6c]/90 backdrop-blur-lg border border-white/15 text-white/70 hover:text-slate-900 flex items-center justify-center transition-all duration-300 cursor-pointer z-30 opacity-80 hover:opacity-100 hover:scale-110 shadow-lg day:bg-white/70 day:border-gray-300 day:text-gray-600"
+                    className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
                     aria-label="Rotate headstone right to view different angles"
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -490,7 +490,7 @@ export default function HomeSplash() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                 <Link
                   href="/select-product"
-                  className="w-full sm:w-auto text-center group rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] px-10 py-4 text-base font-semibold tracking-wide text-slate-900 shadow-[0_20px_45px_rgba(238,178,31,0.45)] transition-all hover:scale-105 hover:shadow-[0_0_55px_rgba(238,178,31,0.65)] cursor-pointer"
+                  className="w-full rounded-lg bg-[#cfac6c] px-10 py-4 text-center text-base font-semibold tracking-wide text-slate-950 transition-colors hover:bg-[#d7b979] sm:w-auto"
                   aria-label="Start your free design"
                   style={{ letterSpacing: '0.05em' }}
                 >
@@ -503,7 +503,7 @@ export default function HomeSplash() {
                 onClick={() => {
                   document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className="mt-2 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-xs font-medium tracking-[0.16em] text-white/80 transition-all hover:border-white/35 hover:text-white day:border-gray-400 day:bg-white/50 day:text-gray-600 day:hover:border-gray-500 day:hover:text-gray-800"
+                className="mt-2 inline-flex items-center gap-2 rounded-lg border border-white/15 bg-[#171717]/60 px-3 py-1.5 text-xs font-medium tracking-[0.16em] text-white/80 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-300 day:bg-white/70 day:text-gray-600 day:hover:border-gray-400 day:hover:text-gray-800"
                 aria-label="Scroll to how it works section"
               >
                 SCROLL
@@ -518,119 +518,131 @@ export default function HomeSplash() {
       {/* Features Section - How It Works */}
       <section
         id="how-it-works"
-        className="relative py-24 overflow-hidden border-t border-[#2d241c] day:border-gray-200"
-        style={{ background: isDayMode ? '#f3f4f6' : 'linear-gradient(180deg, #130b05 0%, #090503 60%, #050302 100%)' }}
+        className="relative overflow-hidden border-t border-white/10 bg-[#0b0b0b] py-16 day:border-gray-200 day:bg-stone-100"
       >
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:120px_120px] opacity-20 pointer-events-none day:hidden" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70 pointer-events-none day:hidden" />
-        <div className="absolute -top-32 right-0 w-[28rem] h-[28rem] bg-[#d4af37]/30 blur-[180px] opacity-40 pointer-events-none day:hidden" />
-        <div className="absolute -bottom-32 left-0 w-[32rem] h-[32rem] bg-[#5c4033]/40 blur-[160px] opacity-40 pointer-events-none day:hidden" />
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
+            <div>
+              <p className="text-xs font-semibold tracking-[0.28em] text-[#cfac6c] uppercase day:text-amber-700">
+                Designer workflow
+              </p>
+              <h2 className="mt-3 max-w-2xl font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900">
+                The same guided flow, from first choice to final proof
+              </h2>
+              <p className="mt-4 max-w-xl text-base leading-7 text-gray-300 day:text-gray-600">
+                The home page should set expectations for the actual Designer: compact steps, visible progress, live preview, clear pricing, and simple ways to save or ask for help.
+              </p>
 
-        <div className="relative mx-auto max-w-7xl px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-16">
-          <div className="flex-1 text-center lg:text-left">
-            <p className="text-xs font-semibold tracking-[0.6em] text-[#d4af37]/80 mb-4 day:text-amber-700">HOW IT WORKS</p>
-            <h2 className="text-4xl md:text-5xl font-serif text-white mb-4 leading-tight day:text-gray-900">
-              Design a Lasting Tribute from the Comfort of Home
-            </h2>
-            <p className="text-lg text-white/90 max-w-xl lg:max-w-lg mx-auto lg:mx-0 leading-relaxed day:text-gray-600">
-              Guided steps keep you focused while the 3D studio mirrors every change in real time.
-              No downloads, no pressure—just clarity before you commit.
-            </p>
+              <div className="mt-6 flex flex-wrap gap-2">
+                {['Plaques first', 'Live preview', 'Save & share', 'Quote before order'].map((item) => (
+                  <span
+                    key={item}
+                    className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-medium text-gray-200 day:border-gray-200 day:bg-white day:text-gray-700"
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
 
-            {/* Primary CTA Button */}
-            <div className="mt-6 flex justify-center lg:justify-start">
-              <Link
-                href="/select-product"
-                className="rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] border border-[#f3c049]/40 px-8 py-3.5 text-sm font-bold tracking-wider text-[#1a140f] shadow-[0_20px_35px_rgba(240,178,31,0.35)] transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(240,178,31,0.55)] cursor-pointer"
-              >
-                Start Your Free Design
-              </Link>
-            </div>
-          </div>
-
-          <div className="flex-1 w-full lg:max-w-xl mx-auto lg:mx-0">
-            <div className="relative rounded-[36px] border border-white/10 bg-black/30 p-2 shadow-[0_45px_80px_rgba(0,0,0,0.55)]">
-              <div className="relative w-full min-h-[500px] lg:min-h-[600px] overflow-hidden rounded-[30px]">
-                <Image
-                  src="/backgrounds/dyo.webp"
-                  alt="3D memorial preview"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 100vw, 50vw"
-                  priority
-                  style={{ objectPosition: 'center center' }}
-                />
-                <div className="absolute inset-0" />
+              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="/select-product"
+                  className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+                >
+                  Start Design Process
+                </Link>
+                <Link
+                  href="/designs"
+                  className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-white"
+                >
+                  Browse Designs
+                </Link>
               </div>
             </div>
-            <p className="mt-4 text-center text-base font-medium text-white/90 day:text-gray-600">
-              As you design, the 3D studio updates instantly
-            </p>
-          </div>
-        </div>
 
-            <div className="mt-8 w-full max-w-7xl mx-auto px-6 lg:px-8">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-stretch relative z-10">
+            <div className="overflow-hidden rounded-lg border border-white/10 bg-[#171717] day:border-gray-200 day:bg-white">
+              <div className="border-b border-white/10 bg-white/[0.03] px-4 py-3 day:border-gray-200 day:bg-gray-50">
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="text-sm font-semibold text-white day:text-gray-900">
+                      Designer steps
+                    </p>
+                    <p className="mt-0.5 text-xs text-gray-400 day:text-gray-500">
+                      Mirrors the left navigation in the design tool
+                    </p>
+                  </div>
+                  <span className="rounded-lg bg-[#cfac6c]/15 px-2.5 py-1 text-xs font-semibold text-[#cfac6c] day:bg-amber-50 day:text-amber-700">
+                    3 stages
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-3">
                 {compassionPhases.map((phase, index) => (
                   <div
                     key={phase.key}
-                    className="group relative rounded-2xl border border-[#d4af37]/30 bg-[#1a120c]/88 px-6 py-6 text-left backdrop-blur-sm shadow-[0_6px_20px_rgba(0,0,0,0.3)] h-full min-h-[185px] flex flex-col transition-all duration-300 hover:border-[#d4af37]/50 hover:shadow-[0_10px_28px_rgba(0,0,0,0.36)] day:bg-white day:border-amber-200 day:shadow-[0_6px_20px_rgba(0,0,0,0.08)] day:hover:border-amber-300"
+                    className="relative flex min-h-[190px] flex-col rounded-lg border border-white/10 bg-white/[0.03] p-4 text-left transition-colors hover:border-[#cfac6c]/50 day:border-gray-200 day:bg-white day:hover:border-[#cfac6c]/60"
                   >
-                <div className="relative flex flex-col h-full">
-                  <div className="mb-3 flex items-center gap-3">
-                    <span className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#2a1f15] text-sm font-semibold text-[#f7dca3] day:bg-amber-50 day:text-amber-700">
-                      {`0${index + 1}`}
-                    </span>
-                    <p className="text-[11px] uppercase tracking-[0.26em] text-[#d4af37]/75 font-medium day:text-amber-600">{phase.eyebrow}</p>
+                    <div className="mb-4 flex items-center justify-between gap-3">
+                      <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#cfac6c]/40 bg-[#cfac6c]/10 text-sm font-semibold text-[#cfac6c]">
+                        {`0${index + 1}`}
+                      </span>
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500 day:text-gray-400">
+                        {phase.eyebrow}
+                      </span>
+                    </div>
+                    <h3 className="text-base font-semibold text-white day:text-gray-900">
+                      {phase.title}
+                    </h3>
+                    <p className="mt-1 text-sm font-medium text-gray-300 day:text-gray-600">
+                      {phase.summary}
+                    </p>
+                    <p className="mt-3 flex-1 text-sm leading-6 text-gray-400 day:text-gray-500">
+                      {phase.description}
+                    </p>
                   </div>
-                  <p className="text-xl font-serif text-white mt-1 mb-2 day:text-gray-900">{phase.summary}</p>
-                  <p className="text-sm leading-7 text-white/80 flex-1 day:text-gray-600">{phase.description}</p>
-                </div>
-
-                {index < compassionPhases.length - 1 ? (
-                  <div
-                    aria-hidden="true"
-                    className="hidden sm:flex absolute -right-4 top-1/2 -translate-y-1/2 z-20 h-8 w-8 items-center justify-center rounded-full border border-[#d4af37]/40 bg-[#1a120c]/95 text-[#f7dca3] shadow-[0_8px_20px_rgba(0,0,0,0.35)]"
-                  >
-                    →
-                  </div>
-                ) : null}
+                ))}
               </div>
-            ))}
+
+              <div className="border-t border-white/10 px-4 py-3 text-sm text-gray-400 day:border-gray-200 day:text-gray-500">
+                Tip: start with product selection, then the Designer keeps the canvas visible while you move through shape, material, size, inscriptions, motifs, and price.
+              </div>
+            </div>
           </div>
         </div>
-
       </section>
 
       {/* CTA Section */}
       <section
-        className="relative overflow-hidden border-t border-[#cfac6c]/30 py-16 day:border-amber-200"
-        style={{ background: isDayMode ? '#fffbeb' : 'radial-gradient(circle at 50% 100%, #2a2118 0%, #0f0c09 65%)' }}
+        className="relative overflow-hidden border-t border-white/10 bg-[#101010] py-10 day:border-gray-200 day:bg-white"
       >
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="rounded-3xl border border-[#d4af37]/25 bg-[#17120d]/85 px-6 py-8 shadow-[0_14px_40px_rgba(0,0,0,0.35)] sm:px-10 sm:py-10 day:bg-white day:border-amber-200 day:shadow-[0_14px_40px_rgba(0,0,0,0.08)]">
-            <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-              <div className="max-w-2xl text-center lg:text-left">
-                <p className="text-xs font-semibold tracking-[0.5em] text-[#d4af37]/75 day:text-amber-700">READY WHEN YOU ARE</p>
-                <h2 className="mt-3 text-3xl font-serif leading-tight text-white sm:text-4xl day:text-gray-900">
-                  Create a Tribute Worthy of Their Memory
-                </h2>
-                <p className="mt-3 text-base leading-relaxed text-white/80 day:text-gray-600">
-                  Design with confidence, save your progress anytime, and place an order only when your family is fully ready.
-                </p>
-              </div>
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold tracking-[0.22em] text-[#cfac6c] uppercase day:text-amber-700">
+                Ready when you are
+              </p>
+              <h2 className="mt-2 font-serif text-2xl leading-tight text-white sm:text-3xl day:text-gray-900">
+                Design a Plaque, Headstone, or full Memorial with the live Designer
+              </h2>
+              <p className="mt-2 text-sm leading-6 text-gray-300 day:text-gray-600">
+                No credit card required. Save progress, share proofs, and request help before production.
+              </p>
+            </div>
 
-              <div className="flex w-full flex-col items-center gap-3 lg:w-auto lg:items-end">
-                <Link
-                  href="/select-product"
-                  className="w-full rounded-full bg-gradient-to-r from-[#f8d64f] via-[#eeb21f] to-[#e08404] px-10 py-4 text-center text-base font-semibold text-slate-900 shadow-[0_16px_35px_rgba(238,178,31,0.42)] transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(238,178,31,0.6)] lg:w-auto"
-                >
-                  Start Your Free Design
-                </Link>
-                <p className="pt-1 text-[11px] uppercase tracking-[0.28em] text-white/60 day:text-gray-500">
-                  No credit card &nbsp;•&nbsp; Live 3D &nbsp;•&nbsp; Save &amp; share
-                </p>
-              </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:items-center">
+              <Link
+                href="/select-product"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+              >
+                Start Design Process
+              </Link>
+              <a
+                href="https://www.forevershining.com.au/contact/"
+                className="inline-flex min-h-11 items-center justify-center rounded-lg border border-white/15 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50"
+              >
+                Contact us
+              </a>
             </div>
           </div>
         </div>
@@ -639,7 +651,7 @@ export default function HomeSplash() {
       {/* Footer Navigation */}
       <footer className="relative bg-[#050402] border-t border-[#d4af37]/20 day:bg-gray-100 day:border-gray-200">
         <div className="mx-auto max-w-7xl px-6 py-16 lg:py-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-white day:text-gray-900">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_0.75fr_0.85fr_2.1fr] gap-10 text-white day:text-gray-900">
             <div>
               <div className="flex items-center gap-3 text-2xl font-serif">
                 <span className="tracking-wide">Forever Shining</span>
@@ -648,14 +660,20 @@ export default function HomeSplash() {
                 Crafting lasting tributes for families around the world since 2005.
               </p>
               <div className="mt-6 flex items-center gap-3 text-sm">
-                <a href="https://instagram.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a href="https://www.instagram.com/forevershiningaus/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Instagram" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
                   IG
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a href="https://www.facebook.com/ForeverShiningAustralia/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Facebook" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
                   FB
                 </a>
-                <a href="https://pinterest.com" target="_blank" rel="noreferrer" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                <a href="https://www.pinterest.com/forevershining1/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Pinterest" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
                   PI
+                </a>
+                <a href="https://twitter.com/ForeverShiningA" target="_blank" rel="noreferrer" aria-label="Forever Shining on X" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                  X
+                </a>
+                <a href="https://www.youtube.com/@forevershining/featured" target="_blank" rel="noreferrer" aria-label="Forever Shining on YouTube" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
+                  YT
                 </a>
               </div>
             </div>
@@ -663,11 +681,11 @@ export default function HomeSplash() {
             <div>
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Memorials</p>
               <ul className="mt-4 space-y-2 text-sm text-white/70 day:text-gray-600">
-                <li><a href="#headstones" onClick={handleHashLink('headstones')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Headstones</a></li>
-                <li><a href="#plaques" onClick={handleHashLink('plaques')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Plaques</a></li>
-                <li><a href="#urns" onClick={handleHashLink('urns')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Urns</a></li>
-                <li><a href="#monuments" onClick={handleHashLink('monuments')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Full Monuments</a></li>
-                <li><a href="#pets" onClick={handleHashLink('pets')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Pet Memorials</a></li>
+                <li><Link href="/memorials/headstones" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Headstones</Link></li>
+                <li><Link href="/memorials/plaques" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Plaques</Link></li>
+                <li><Link href="/memorials/urns" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Urns</Link></li>
+                <li><Link href="/memorials/full-monuments" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Full Monuments</Link></li>
+                <li><Link href="/memorials/pet-memorials" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Pet Memorials</Link></li>
               </ul>
             </div>
 
@@ -681,22 +699,38 @@ export default function HomeSplash() {
               </ul>
             </div>
 
-            <div>
+            <div className="lg:min-w-0">
               <p className="text-sm font-serif tracking-[0.4em] text-[#f3d48f] uppercase day:text-amber-700">Get in Touch</p>
-              <div className="mt-4 space-y-3 text-sm text-white/80 day:text-gray-600">
-                <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer day:text-gray-900 day:hover:text-amber-600">(+1) 647 388 0931</a>
-                <p className="text-white/70 day:text-gray-600">
-                  <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors cursor-pointer day:hover:text-amber-600">admin@bronze-plaque.com</a>
-                </p>
-                <p className="text-white/70 leading-relaxed day:text-gray-600">
-                  1101 Eagle Ridge Drive<br />Oshawa Ontario L1K 0L8
+              <div className="mt-4 text-sm text-white/80 day:text-gray-600">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <a href="tel:+16473880931" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer day:text-gray-900 day:hover:text-amber-600">(+1) 647 388 0931</a>
+                    <p className="mt-2 text-white/70 day:text-gray-600">
+                      <a href="mailto:admin@bronze-plaque.com" className="hover:text-[#f3d48f] transition-colors cursor-pointer day:hover:text-amber-600">admin@bronze-plaque.com</a>
+                    </p>
+                    <p className="mt-2 text-white/70 leading-relaxed day:text-gray-600">
+                      1101 Eagle Ridge Drive<br />Oshawa Ontario L1K 0L8
+                    </p>
+                  </div>
+                  <div className="border-t border-white/10 pt-3 sm:border-l sm:border-t-0 sm:pl-5 sm:pt-0 day:border-gray-200">
+                  <a href="tel:+61861910396" className="text-lg font-semibold text-white hover:text-[#f3d48f] transition-colors cursor-pointer day:text-gray-900 day:hover:text-amber-600">+61 8 6191 0396</a>
+                  <p className="mt-2 text-white/70 day:text-gray-600">
+                    <a href="mailto:admin@forevershining.com.au" className="hover:text-[#f3d48f] transition-colors cursor-pointer day:hover:text-amber-600">admin@forevershining.com.au</a>
+                  </p>
+                  <p className="mt-2 text-white/70 leading-relaxed day:text-gray-600">
+                    1/44 Port Kembla Dve<br />Bibra Lake WA 6163
+                  </p>
+                  </div>
+                </div>
+                <p className="mt-4 text-white/60 leading-relaxed day:text-gray-500">
+                  Serving Australia, the United States, Canada, and Europe for Bronze Plaques, Memorial Plaques, and Headstones.
                 </p>
               </div>
             </div>
           </div>
 
           <div className="mt-12 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/60 day:border-gray-200 day:text-gray-500">
-            <p>© 2025 Forever Shining. All rights reserved.</p>
+            <p>© 2026 Forever Shining. All rights reserved.</p>
             <div className="flex items-center gap-4 text-white/70 text-sm day:text-gray-600">
               <a href="#privacy" onClick={handleHashLink('privacy')} role="button" aria-haspopup="dialog" className="hover:text-white transition-colors cursor-pointer day:hover:text-gray-900">Privacy Policy</a>
               <span className="text-white/40 day:text-gray-300">|</span>

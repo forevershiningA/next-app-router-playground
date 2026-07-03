@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { getAllSavedDesigns, PRODUCT_STATS } from '#/lib/saved-designs-data';
 import { productSEOData } from '#/lib/seo-templates';
+import { memorialTypePages } from '#/lib/memorial-product-pages';
 
 const BASE_URL = 'https://forevershining.org';
 
@@ -58,6 +59,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const memorialTypePagesSitemap: MetadataRoute.Sitemap = Object.keys(memorialTypePages).map((typeSlug) => ({
+    url: `${BASE_URL}/memorials/${typeSlug}`,
+    lastModified: SITE_LAUNCH_DATE,
+    changeFrequency: 'monthly' as const,
+    priority: 0.75,
+  }));
+
   // Product type pages
   const productPages: MetadataRoute.Sitemap = Object.keys(PRODUCT_STATS).map((productSlug) => ({
     url: `${BASE_URL}/designs/${productSlug}`,
@@ -96,6 +104,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...staticPages,
     ...guidePages,
     ...seoProductPages,
+    ...memorialTypePagesSitemap,
     ...productPages,
     ...categoryPages,
     ...designPages,
