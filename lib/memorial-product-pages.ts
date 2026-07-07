@@ -49,6 +49,8 @@ const PRODUCT_DESCRIPTION_TAGS: Record<string, string> = {
   '1': 'one_colour_glass_backed_motif_description',
   '4': 'laser_etched_black_granite_headstone_description',
   '5': 'bronze_plaque_description',
+  '8': 'laser_etched_black_granite_pet_mini_headstone_description',
+  '9': 'laser_etched_black_granite_pet_plaque_description',
   '22': 'laser_etched_black_granite_mini_headstone_description',
   '23': 'one_colour_glass_backed_motif_description',
   '30': 'laser_etched_black_granite_plaque_description',
@@ -58,12 +60,15 @@ const PRODUCT_DESCRIPTION_TAGS: Record<string, string> = {
   '100': 'laser_etched_black_granite_full_monument_description',
   '101': 'traditional_engraved_full_monument_description',
   '124': 'traditional_engraved_headstone_description',
+  '135': 'laser_etched_black_granite_pet_rock_description',
   '2350': 'stainless_steel_vitreous_urn_description',
 };
 
 const PRODUCT_SIZE_TAGS: Record<string, string> = {
   '4': 'headstone_sizes',
   '5': 'bronze_plaque_sizes',
+  '8': 'instructions_sizes_pet',
+  '9': 'instructions_sizes_pet',
   '22': 'select_installation_description',
   '30': 'plaques_sizes',
   '32': 'full_colour_plaque_size',
@@ -72,8 +77,23 @@ const PRODUCT_SIZE_TAGS: Record<string, string> = {
   '100': 'headstone_sizes',
   '101': 'headstone_sizes_traditional',
   '124': 'headstone_sizes_traditional',
+  '135': 'instructions_sizes_pet',
   '2350': 'background_vitreous_description',
 };
+
+const PET_MINI_HEADSTONE_BASIC_SHAPES = new Set([
+  'Cropped Peak',
+  'Curved Gable',
+  'Curved Peak',
+  'Curved Top',
+  'Half Round',
+  'Gable',
+  'Left Wave',
+  'Peak',
+  'Right Wave',
+  'Serpentine',
+  'Square',
+]);
 
 export const memorialTypePages: Record<MemorialTypeSlug, PageConfig> = {
   headstones: {
@@ -197,12 +217,13 @@ export const memorialTypePages: Record<MemorialTypeSlug, PageConfig> = {
     title: 'Pet Memorials',
     navLabel: 'Pet Memorials',
     intro:
-      'Pet Memorials can be created from selected Plaque and Headstone products, using pet motifs, photo options and laser-etched layouts.',
+      'Design Laser-Etched Pet Mini Headstones, Pet Plaques and Pet Rocks with pet motifs, photo options and black granite layouts.',
     categoryIds: [],
-    productIds: ['22', '30', '32', '5'],
+    productIds: ['8', '9', '135'],
     tutorialTags: [
       'laser_etched_black_granite_pet_mini_headstone_description',
       'laser_etched_black_granite_pet_plaque_description',
+      'laser_etched_black_granite_pet_rock_description',
       'laser_etched_black_granite_pet_plaque_shapes',
       'motifs_info_pet',
     ],
@@ -251,6 +272,7 @@ function shortText(value: string, max = 280) {
 }
 
 function publicProductName(name: string) {
+  if (name.includes('Pet Mini Headstone')) return name;
   return name.replace(/\bMini Headstone\b/g, 'Headstone');
 }
 
@@ -286,6 +308,12 @@ function getCatalogShapes(productId: string): ProductShapeSummary[] {
         heightRange: formatRange(table?.getAttribute('min_height') ?? undefined, table?.getAttribute('max_height') ?? undefined),
       });
     });
+
+  if (productId === '8') {
+    return summaries
+      .filter((shape) => PET_MINI_HEADSTONE_BASIC_SHAPES.has(shape.name))
+      .slice(0, PET_MINI_HEADSTONE_BASIC_SHAPES.size);
+  }
 
   return summaries.slice(0, 8);
 }

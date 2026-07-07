@@ -13,6 +13,8 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { getThreeTextFontUrl } from '#/lib/font-utils';
 import { useRouter, usePathname } from 'next/navigation';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 type Props = { ledgerRef: React.RefObject<THREE.Mesh> };
 
@@ -50,6 +52,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
   const groupRef = React.useRef<THREE.Group>(null);
   const router = useRouter();
   const pathname = usePathname();
+  const productId = useHeadstoneStore((s) => s.productId);
 
   // Force a re-render once the ledger mesh mounts so content is visible on initial load
   const [meshReady, setMeshReady] = React.useState(false);
@@ -128,8 +131,8 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
                   setSelectedInscriptionId(line.id);
                   setActivePanel('inscription');
 
-                  if (pathname !== '/inscriptions') {
-                    router.push('/inscriptions');
+                  if (getDesignerStepSlug(pathname) !== 'inscriptions') {
+                    router.push(getDesignerProductStepHref('inscriptions', productId));
                   }
 
                   if (typeof window !== 'undefined') {

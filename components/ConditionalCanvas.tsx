@@ -9,6 +9,7 @@ import SEOPanel from '#/components/SEOPanel';
 import LoadDesignButton from '#/components/LoadDesignButton';
 import SceneryToggleButton from '#/components/SceneryToggleButton';
 import ErrorBoundary from '#/components/ErrorBoundary';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 import { useSceneOverlayStore } from '#/lib/scene-overlay-store';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 
@@ -33,6 +34,7 @@ const CropCanvas = dynamic(() => import('#/components/CropCanvas'), {
 
 export default function ConditionalCanvas() {
   const pathname = usePathname();
+  const designerStepSlug = getDesignerStepSlug(pathname);
   const hideOverlay = useSceneOverlayStore((s) => s.hide);
   const cropCanvasData = useHeadstoneStore((s) => s.cropCanvasData);
 
@@ -49,28 +51,28 @@ export default function ConditionalCanvas() {
   const isHomePage = pathname === '/';
 
   // Hide canvas on select-product page
-  const isSelectProductPage = pathname === '/select-product';
+  const isSelectProductPage = designerStepSlug === 'select-product';
 
   // Hide canvas on select-shape page (full-page shape selector)
-  const isSelectShapePage = pathname === '/select-shape';
+  const isSelectShapePage = designerStepSlug === 'select-shape';
 
   // Show canvas on select-material page (used in sidebar flow)
-  const isSelectMaterialPage = pathname === '/select-material';
+  const isSelectMaterialPage = designerStepSlug === 'select-material';
 
   // Show canvas on select-additions page (sidebar flow like materials)
-  const isSelectAdditionsPage = pathname === '/select-additions';
+  const isSelectAdditionsPage = designerStepSlug === 'select-additions';
 
   // Show canvas on select-motifs page (sidebar flow like materials)
-  const isSelectMotifsPage = pathname === '/select-motifs';
+  const isSelectMotifsPage = designerStepSlug === 'select-motifs';
 
   // Show canvas on select-emblems page (sidebar flow like materials)
-  const _isSelectEmblemsPage = pathname === '/select-emblems';
+  const _isSelectEmblemsPage = designerStepSlug === 'select-emblems';
 
   // Show canvas on select-border page (sidebar flow like materials)
-  const isSelectBorderPage = pathname === '/select-border';
+  const isSelectBorderPage = designerStepSlug === 'select-border';
 
   // Hide canvas on check-price page
-  const isCheckPricePage = pathname === '/check-price';
+  const isCheckPricePage = designerStepSlug === 'check-price';
 
   // Hide canvas on my-account page and all sub-pages
   const isMyAccountPage =
@@ -87,13 +89,13 @@ export default function ConditionalCanvas() {
     pathname === '/orders' || pathname?.startsWith('/orders/');
 
   // Show canvas on select-size page
-  const isSelectSizePage = pathname === '/select-size';
+  const isSelectSizePage = designerStepSlug === 'select-size';
 
   // Show canvas on inscriptions page
-  const isInscriptionsPage = pathname === '/inscriptions';
+  const isInscriptionsPage = designerStepSlug === 'inscriptions';
 
   // Show canvas on design-menu page (neutral menu view with canvas)
-  const isDesignMenuPage = pathname === '/design-menu';
+  const isDesignMenuPage = designerStepSlug === 'design-menu';
 
   // Close overlay when navigating to pages where canvas is hidden
   useEffect(() => {

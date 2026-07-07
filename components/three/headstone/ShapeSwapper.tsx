@@ -26,6 +26,8 @@ import { usePathname, useRouter } from 'next/navigation';
 import type { Component, ReactNode } from 'react';
 import { logger } from '#/lib/logger';
 import { getThreeTextFontUrl } from '#/lib/font-utils';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
@@ -231,11 +233,16 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const loading = useHeadstoneStore((s) => s.loading);
   const pathname = usePathname();
   const setLoading = useHeadstoneStore((s) => s.setLoading);
+  const productId = useHeadstoneStore((s) => s.productId);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const isPlaque = catalog?.product.type === 'plaque' || catalog?.product.type === 'bronze_plaque';
-  const isBronzePlaque = catalog?.product.id === '5';
+  const isBronzePlaque = productId === '5' || catalog?.product.id === '5';
   const isFullColourPlaque = catalog?.product.id === '32';
   const isUrn = catalog?.product.type === 'urn';
+  const suppressInscriptionSelectionOutline =
+    isUrn &&
+    (catalog?.product.id === '2350' ||
+      catalog.product.name.toLowerCase().includes('stainless steel'));
   const isStainlessSteel =
     catalog?.product.id === '1' ||
     catalog?.product.id === '23' ||
@@ -249,6 +256,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const useShapeOutlineBorder =
     isBronzePlaque &&
     Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
+  const isNonRectangularPlaque =
+    isPlaque && Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
     const oldMetrics = getBoxMetrics(oldBox);
@@ -428,7 +437,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     if (builtinPedestalShapes.has(currentShapeSlug)) return true;
     return currentShapeSlug.includes('headstone_');
   }, [currentShapeSlug, builtinPedestalShapes]);
-  const preserveTopForShape = !isFixedHeadstoneAsset && !isUrn;
+  const preserveTopForShape = !isFixedHeadstoneAsset && !isUrn && !isNonRectangularPlaque;
   const targetHeightForShape = heightM;
   const targetWidthForShape = widthM;
   const headstoneDepth = isPlaque ? 0.5 : uprightThickness / 10;
@@ -610,7 +619,10 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                         surface="headstone"
                        font={FONT_MAP[line.font] || '/fonts/ebgaramond.woff2'}
                       editable
-                      selected={selectedInscriptionId === line.id}
+                      selected={
+                        !suppressInscriptionSelectionOutline &&
+                        selectedInscriptionId === line.id
+                      }
                       onSelectInscription={() => {
                         setSelected(null);
                         setSelectedMotifId(null); // Clear motif selection
@@ -618,8 +630,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                         setSelectedInscriptionId(line.id);
                         
                         // Navigate to inscriptions if not already there
-                        if (pathname !== '/inscriptions') {
-                          router.push('/inscriptions');
+                        if (getDesignerStepSlug(pathname) !== 'inscriptions') {
+                          router.push(getDesignerProductStepHref('inscriptions', productId));
                         }
 
                         if (typeof window !== 'undefined') {

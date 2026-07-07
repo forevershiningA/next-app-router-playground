@@ -10,6 +10,8 @@ import { getLanguagesData } from '#/lib/server/xml-data';
 const PRODUCT_DESCRIPTION_TAGS: Record<string, string> = {
   '4': 'laser_etched_black_granite_headstone_description',
   '5': 'bronze_plaque_description',
+  '8': 'laser_etched_black_granite_pet_mini_headstone_description',
+  '9': 'laser_etched_black_granite_pet_plaque_description',
   '22': 'laser_etched_black_granite_mini_headstone_description',
   '30': 'laser_etched_black_granite_plaque_description',
   '32': 'full_colour_plaque_description',
@@ -18,6 +20,7 @@ const PRODUCT_DESCRIPTION_TAGS: Record<string, string> = {
   '100': 'laser_etched_black_granite_full_monument_description',
   '101': 'traditional_engraved_full_monument_description',
   '124': 'traditional_engraved_headstone_description',
+  '135': 'laser_etched_black_granite_pet_rock_description',
   '2350': 'stainless_steel_vitreous_urn_description',
 };
 

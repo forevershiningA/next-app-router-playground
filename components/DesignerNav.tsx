@@ -46,6 +46,11 @@ import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 import { logger } from '#/lib/logger';
 import { DEFAULT_TEX, TEX_BASE } from '#/lib/headstone-store.types';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import {
+  getDesignerStepSlug,
+  isDesignerStepSlug,
+} from '#/lib/designer-route-state';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -146,6 +151,7 @@ function useDesignerNavPanelState({
   setSelectedAdditionId: (id: string | null) => void;
   setSelectedMotifId: (id: string | null) => void;
 }) {
+  const designerStepSlug = getDesignerStepSlug(pathname);
   const [expandedSections, setExpandedSections] = React.useState<
     Record<string, boolean>
   >({
@@ -204,7 +210,7 @@ function useDesignerNavPanelState({
   };
 
   const closeFullscreenPanel = React.useCallback(() => {
-    const currentSlug = pathname.replace('/', '') || null;
+    const currentSlug = designerStepSlug;
     if (activeFullscreenPanel) {
       if (
         activeFullscreenPanel === 'inscriptions' ||
@@ -221,7 +227,7 @@ function useDesignerNavPanelState({
     }
     setActiveFullscreenPanel(null);
     setPanelSource(null);
-  }, [activeFullscreenPanel, pathname, setActivePanel]);
+  }, [activeFullscreenPanel, designerStepSlug, setActivePanel]);
 
   const handleBackToAdditionList = React.useCallback(() => {
     setForceAdditionCatalog(true);
@@ -248,7 +254,7 @@ function useDesignerNavPanelState({
   }, []);
 
   useEffect(() => {
-    const activeSection = pathname.replace('/', '');
+    const activeSection = designerStepSlug ?? '';
     if (activeSection && expandedSections.hasOwnProperty(activeSection)) {
       setExpandedSections((prev) => ({
         ...Object.keys(prev).reduce(
@@ -257,7 +263,7 @@ function useDesignerNavPanelState({
         ),
       }));
     }
-  }, [pathname]);
+  }, [designerStepSlug]);
 
   useEffect(() => {
     if (activeFullscreenPanel !== 'select-additions') {
@@ -304,6 +310,7 @@ function useDesignerNavPanelState({
 export default function DesignerNav() {
   const unitSystem = useUnitSystem();
   const pathname = usePathname();
+  const designerStepSlug = getDesignerStepSlug(pathname);
   const router = useRouter();
 
   // Ref for the nav container
@@ -312,6 +319,13 @@ export default function DesignerNav() {
   // Get catalog info
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
+  const designerHref = React.useCallback(
+    (slug: string) =>
+      isDesignerStepSlug(slug)
+        ? getDesignerProductStepHref(slug, productId)
+        : `/${slug}`,
+    [productId],
+  );
   const isPlaque = catalog?.product.type === 'plaque';
   const isUrn = catalog?.product.type === 'urn';
   const hasBorder = catalog?.product?.border === '1';
@@ -432,12 +446,12 @@ export default function DesignerNav() {
 
   // Accordion section groups — only one open at a time
   const activeGroupIndex = React.useMemo(() => {
-    const slug = pathname.replace('/', '');
+    const slug = designerStepSlug ?? '';
     const idx = menuGroups.findIndex((g) =>
       g.items.some((item) => item.slug === slug),
     );
     return idx >= 0 ? idx : -1;
-  }, [pathname]);
+  }, [designerStepSlug]);
 
   const [openGroup, setOpenGroup] = React.useState<number>(0);
 
@@ -455,8 +469,8 @@ export default function DesignerNav() {
   const handleBackToMenu = React.useCallback(() => {
     setCropCanvasData(null);
     closeFullscreenPanel();
-    router.push('/design-menu');
-  }, [closeFullscreenPanel, router, setCropCanvasData]);
+    router.push(designerHref('design-menu'));
+  }, [closeFullscreenPanel, designerHref, router, setCropCanvasData]);
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
@@ -533,8 +547,8 @@ export default function DesignerNav() {
   }, []);
 
   // Show Select Size panel when on select-size page
-  const isSelectSizePage = pathname === '/select-size';
-  const isSelectAdditionsPage = pathname === '/select-additions';
+  const isSelectSizePage = designerStepSlug === 'select-size';
+  const isSelectAdditionsPage = designerStepSlug === 'select-additions';
 
   // Determine if canvas is visible (on pages with 3D scene)
   const canvasVisiblePages = [
@@ -548,7 +562,9 @@ export default function DesignerNav() {
     '/select-emblems',
     '/design-menu',
   ];
-  const isCanvasVisible = canvasVisiblePages.some((page) => pathname === page);
+  const isCanvasVisible = canvasVisiblePages.some(
+    (page) => designerStepSlug === page.replace('/', ''),
+  );
 
   // Track if the 3D canvas has ever been shown during this session
   useEffect(() => {
@@ -603,7 +619,7 @@ export default function DesignerNav() {
     canSelectStainlessGraniteBaseMaterial,
   ]);
 
-  const currentSlugFromPathname = pathname.replace('/', '');
+  const currentSlugFromPathname = designerStepSlug ?? '';
   const currentPanelIndex = activeFullscreenPanel
     ? navigablePanelSlugs.indexOf(activeFullscreenPanel)
     : navigablePanelSlugs.indexOf(currentSlugFromPathname);
@@ -634,14 +650,14 @@ export default function DesignerNav() {
         }
         setShowSaveDesignModal(true);
       } else if (slug === 'check-price') {
-        router.push('/check-price');
+        router.push(designerHref('check-price'));
       } else if (
         slug === 'select-shape' &&
         isCanvasVisible &&
-        pathname === '/select-shape'
+        designerStepSlug === 'select-shape'
       ) {
         openFullscreenPanel(slug);
-      } else if (pathname !== `/${slug}`) {
+      } else if (designerStepSlug !== slug) {
         if (
           slug === 'select-material' &&
           canSelectStainlessGraniteBaseMaterial
@@ -649,7 +665,7 @@ export default function DesignerNav() {
           setEditingObject('base');
           setSelected('base');
         }
-        router.push(`/${slug}`);
+        router.push(designerHref(slug));
       } else {
         if (
           slug === 'select-material' &&
@@ -665,8 +681,10 @@ export default function DesignerNav() {
       isCanvasVisible,
       isImageCropActive,
       canSelectStainlessGraniteBaseMaterial,
+      designerStepSlug,
       pathname,
       openFullscreenPanel,
+      designerHref,
       router,
       setEditingObject,
       setSelected,
@@ -682,13 +700,14 @@ export default function DesignerNav() {
   useEffect(() => {
     if (
       !isStainlessSteelHeadstone ||
-      (pathname !== '/select-material' && pathname !== '/select-additions')
+      (designerStepSlug !== 'select-material' &&
+        designerStepSlug !== 'select-additions')
     ) {
       return;
     }
 
     if (
-      pathname === '/select-material' &&
+      designerStepSlug === 'select-material' &&
       canSelectStainlessGraniteBaseMaterial
     ) {
       return;
@@ -699,16 +718,17 @@ export default function DesignerNav() {
     }
     setActiveFullscreenPanel(null);
     setPanelSource(null);
-    router.replace('/select-size');
+    router.replace(designerHref('select-size'));
   }, [
     activePanel,
     canSelectStainlessGraniteBaseMaterial,
     isStainlessSteelHeadstone,
-    pathname,
+    designerStepSlug,
     router,
     setActivePanel,
     setActiveFullscreenPanel,
     setPanelSource,
+    designerHref,
   ]);
 
   const isAdditionCatalogVisible =
@@ -761,18 +781,18 @@ export default function DesignerNav() {
 
     if (
       activeFullscreenPanel === 'select-shape' &&
-      pathname !== '/select-shape'
+      designerStepSlug !== 'select-shape'
     ) {
       // If navigating to another panel route (e.g. /select-size after picking
       // a shape), let the logic below transition to the new panel instead of
       // keeping the stale select-shape panel open.
-      const currentSlug = pathname.replace('/', '');
+      const currentSlug = designerStepSlug ?? '';
       if (!fullscreenPanelSlugs.has(currentSlug)) {
         return;
       }
     }
 
-    const currentSlug = pathname.replace('/', '');
+    const currentSlug = designerStepSlug ?? '';
     if (fullscreenPanelSlugs.has(currentSlug)) {
       if (
         activeFullscreenPanel !== currentSlug &&
@@ -820,7 +840,7 @@ export default function DesignerNav() {
 
   useEffect(() => {
     if (
-      pathname === '/select-border' &&
+      designerStepSlug === 'select-border' &&
       isPlaque &&
       dismissedPanelSlug !== 'select-border'
     ) {
@@ -831,7 +851,7 @@ export default function DesignerNav() {
       }
     }
   }, [
-    pathname,
+    designerStepSlug,
     isPlaque,
     activeFullscreenPanel,
     dismissedPanelSlug,
@@ -1810,14 +1830,14 @@ export default function DesignerNav() {
   // navigation when a selected image remains active on later steps.
   useEffect(() => {
     if (
-      pathname === '/select-images' &&
+      designerStepSlug === 'select-images' &&
       selectedImageId &&
       activePanel === 'image' &&
       activeFullscreenPanel !== 'select-images'
     ) {
       setActiveFullscreenPanel('select-images');
     }
-  }, [pathname, selectedImageId, activePanel, activeFullscreenPanel]);
+  }, [designerStepSlug, selectedImageId, activePanel, activeFullscreenPanel]);
 
   let quantity = widthMm * heightMm;
   if (catalog) {
@@ -1889,12 +1909,12 @@ export default function DesignerNav() {
       }
       const keepCanvasVisibleForShape =
         slug === 'select-shape' && isCanvasVisible;
-      if (!keepCanvasVisibleForShape && pathname !== `/${slug}`) {
+      if (!keepCanvasVisibleForShape && designerStepSlug !== slug) {
         // Navigate first — the route-sync useEffect will open the panel
         // once the page is on a canvas-visible route. Opening it here
         // would cause a bounce: the effect clears it (old route isn't
         // canvas-visible) then re-opens it after the route settles.
-        router.push(`/${slug}`);
+        router.push(designerHref(slug));
       } else {
         openFullscreenPanel(slug);
       }
@@ -1903,7 +1923,7 @@ export default function DesignerNav() {
 
     if (slug === 'check-price') {
       e.preventDefault();
-      router.push('/check-price');
+      router.push(designerHref('check-price'));
     }
 
     if (slug === 'save-design') {
@@ -2229,10 +2249,10 @@ export default function DesignerNav() {
     setShowConvertPanel(false);
   };
 
-  const isSelectProductPage = pathname === '/select-product';
-  const isSelectShapePage = pathname === '/select-shape';
-  const isSelectMaterialPage = pathname === '/select-material';
-  const isSelectMotifsPage = pathname === '/select-motifs';
+  const isSelectProductPage = designerStepSlug === 'select-product';
+  const isSelectShapePage = designerStepSlug === 'select-shape';
+  const isSelectMaterialPage = designerStepSlug === 'select-material';
+  const isSelectMotifsPage = designerStepSlug === 'select-motifs';
   const isHomePage = pathname === '/';
 
   // Helper function to determine status of menu items
@@ -3886,7 +3906,7 @@ export default function DesignerNav() {
                       >
                         {group.items.map((item, index) => {
                           const Icon = item.icon;
-                          const isRouteActive = pathname === `/${item.slug}`;
+                          const isRouteActive = designerStepSlug === item.slug;
                           const isPanelActive =
                             activeFullscreenPanel === item.slug;
                           const isActive = isRouteActive || isPanelActive;
@@ -4041,7 +4061,7 @@ export default function DesignerNav() {
                           // Hide 3D Preview when canvas is already visible or on select-size page
                           if (
                             item.slug === '3d-preview' &&
-                            (showCanvas || pathname === '/select-size')
+                            (showCanvas || designerStepSlug === 'select-size')
                           ) {
                             return null;
                           }
@@ -4099,8 +4119,8 @@ export default function DesignerNav() {
                                       onClick={(e) => {
                                         e.preventDefault();
                                         // Navigate to select-border page to keep canvas visible and show border selector
-                                        if (pathname !== '/select-border') {
-                                          router.push('/select-border');
+                                        if (designerStepSlug !== 'select-border') {
+                                          router.push(designerHref('select-border'));
                                         }
                                       }}
                                       onMouseDown={(e) => e.preventDefault()}
@@ -4129,7 +4149,7 @@ export default function DesignerNav() {
                                 ) : (
                                   // Show link when canvas is not visible (first-time selection)
                                   <Link
-                                    href={`/${item.slug}`}
+                                    href={designerHref(item.slug)}
                                     data-section={item.slug}
                                     className={`flex cursor-pointer items-center gap-3 rounded-lg px-4 py-3 text-base font-light transition-all ${
                                       isActive
@@ -4171,8 +4191,8 @@ export default function DesignerNav() {
                                           setSelected(forcedMaterialTarget);
                                         }
                                         // Navigate to select-material page to keep canvas visible and show material selector
-                                        if (pathname !== '/select-material') {
-                                          router.push('/select-material');
+                                        if (designerStepSlug !== 'select-material') {
+                                          router.push(designerHref('select-material'));
                                         }
                                       }}
                                       onMouseDown={(e) => e.preventDefault()}

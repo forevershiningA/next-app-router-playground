@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import MotifSelectionGrid from './_ui/MotifSelectionGrid';
 import { getMotifCategoryImage } from '#/lib/motif-category-image';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 type MotifCategory = {
   id: string;
@@ -50,7 +51,7 @@ export default function Page() {
   }, []);
 
   // Only show the grid on mobile/tablet where the sidebar is hidden
-  const showGrid = pathname === '/select-motifs' && !isDesktop;
+  const showGrid = getDesignerStepSlug(pathname) === 'select-motifs' && !isDesktop;
 
   if (!showGrid) {
     return null;

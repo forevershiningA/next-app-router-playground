@@ -8,6 +8,7 @@ import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headst
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
 import SegmentedControl from '#/components/ui/SegmentedControl';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 type MaterialCategory = {
   id: string;
@@ -54,6 +55,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const storeMaterials = useHeadstoneStore((s) => s.materials);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const productId = useHeadstoneStore((s) => s.productId);
+  const selectSizeHref = getDesignerProductStepHref('select-size', productId);
 
   const isPlaque = catalog?.product.type === 'plaque';
   const isBronzePlaque = productId === '5';
@@ -137,7 +139,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
       setIsMaterialChange(true);
       setHeadstoneMaterialUrl(url);
       setTimeout(() => setIsMaterialChange(false), 100);
-      router.push('/select-size');
+      router.push(selectSizeHref);
     };
 
     return (
@@ -227,7 +229,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
     setEditingObject(targetSelection);
 
     setTimeout(() => setIsMaterialChange(false), 100);
-    router.push('/select-size');
+    router.push(selectSizeHref);
   };
 
   const filteredMaterials = usesBackgrounds
@@ -321,7 +323,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                     setIsMaterialChangeLocal(true);
                     setHeadstoneMaterialUrl('/textures/forever/l/brushed-ss-swatch.webp');
                     setTimeout(() => setIsMaterialChangeLocal(false), 100);
-                    router.push('/select-size');
+                    router.push(selectSizeHref);
                   }}
                   className={`group relative overflow-hidden rounded-2xl p-6 text-center transition-all hover:shadow-2xl hover:shadow-[#cfac6c]/10 ${
                     currentHeadstoneMaterialUrl === '/textures/forever/l/brushed-ss-swatch.webp' || !currentHeadstoneMaterialUrl
@@ -365,7 +367,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
                         setIsMaterialChangeLocal(true);
                         setHeadstoneMaterialUrl(url);
                         setTimeout(() => setIsMaterialChangeLocal(false), 100);
-                        router.push('/select-size');
+                        router.push(selectSizeHref);
                       } catch (err) {
                         console.error('Background upload failed:', err);
                       }

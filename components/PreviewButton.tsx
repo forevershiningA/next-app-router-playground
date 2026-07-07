@@ -1,13 +1,16 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 
 export default function PreviewButton() {
   const router = useRouter();
+  const productId = useHeadstoneStore((s) => s.productId);
 
   const handlePreview = () => {
     // Navigate to the 3D designer view
-    router.push('/select-size');
+    router.push(getDesignerProductStepHref('select-size', productId));
   };
 
   return (

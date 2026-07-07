@@ -8,6 +8,7 @@ import { usePathname } from 'next/navigation';
 import { data } from '#/app/_internal/_data';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 export default function MobileHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -28,14 +29,13 @@ export default function MobileHeader() {
   // Check if we're on a design list page (product or category level)
   const segments = pathname?.split('/').filter(s => s) || [];
   const isDesignListPage = pathname?.startsWith('/designs') && segments.length >= 1;
-  const canvasVisiblePages = new Set([
-    '/select-size',
-    '/inscriptions',
-    '/select-motifs',
-    '/select-material',
-    '/select-additions',
-  ]);
-  const isCanvasVisible = pathname ? canvasVisiblePages.has(pathname) : false;
+  const designerStepSlug = getDesignerStepSlug(pathname);
+  const isCanvasVisible = Boolean(
+    designerStepSlug &&
+      ['select-size', 'inscriptions', 'select-motifs', 'select-material', 'select-additions'].includes(
+        designerStepSlug,
+      ),
+  );
 
   // Detect desktop for header positioning
   useEffect(() => {

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-03
+**Last Updated:** 2026-07-04
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -55,6 +55,86 @@
 47. [July 2 Stainless Inscription Stencil Fonts](#current-status-2026-07-02--stainless-inscription-stencil-fonts)
 48. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
 49. [July 3 Public SEO and Memorial Product Pages](#current-status-2026-07-03--public-seo-and-memorial-product-pages)
+50. [July 4 Product-Prefixed Designer Routes, Home SEO, and Stainless Steel Urns](#current-status-2026-07-04--product-prefixed-designer-routes-home-seo-and-stainless-steel-urns)
+
+---
+
+## Current Status (2026-07-04) - Product-Prefixed Designer Routes, Home SEO, and Stainless Steel Urns
+
+This session focused on stabilizing product-prefixed Designer URLs, updating Home Page SEO metadata, and tuning Stainless Steel Urn inscription rendering.
+
+### Product-Prefixed Designer Routes
+
+The Designer now supports URLs like `/bronze-plaque/select-shape` without breaking the left sidebar, active menu state, or canvas visibility rules.
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/designer-route-state.ts` | Central helper that normalizes Designer routes. `getDesignerStepSlug('/bronze-plaque/select-shape')` returns `select-shape`; legacy `/select-shape` still returns `select-shape`. |
+| `components/ConditionalNav.tsx` | Uses `isDesignerRoutePath(...)` so product-prefixed Designer routes show the Designer sidebar. |
+| `components/ConditionalCanvas.tsx` | Uses normalized Designer step slugs so product-prefixed `/select-shape` still hides the canvas, while canvas-visible steps still work. |
+| `components/DesignerNav.tsx` | Uses normalized Designer step slugs for active workflow group, active menu item, full-screen panel state, and canvas-visible panel routing. |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Product selection now routes to `/{productSlug}/select-shape` when a product slug is available. |
+| `tests/unit/designer-route-state.test.ts` | Covers legacy route detection, product-prefixed route detection, and non-Designer nested route rejection. |
+
+Important behavior:
+- `/bronze-plaque/select-shape` should show the Designer sidebar with `Select Shape` active and should render the full shape grid, not the 3D canvas.
+- `/select-shape` remains supported.
+- Product-prefixed route detection is intentionally limited to two-segment routes where the second segment is a known Designer step, so unrelated public routes like `/products/bronze-plaque` are not treated as Designer routes.
+
+Verified screenshot:
+- `C:\tmp\bronze-plaque-select-shape-fixed.png`
+
+### Home Page SEO Metadata
+
+Home Page metadata was broadened from headstone-only wording to memorial-wide wording.
+
+| File | Current Behavior |
+|------|------------------|
+| `app/page.tsx` | Home metadata title uses absolute title `Design & Buy Memorials, Headstones, Plaques & Urns`; description mentions headstones, plaques, full monuments, urns, and pet memorials. WebPage JSON-LD name/description is aligned. |
+| `app/metadata.ts` | `homeMetadata` is aligned to the same title/description to avoid stale title reuse. |
+
+Current Home title:
+
+```text
+Design & Buy Memorials, Headstones, Plaques & Urns
+```
+
+Rationale:
+- Title is kept concise enough for search results.
+- Longer product coverage, including `full monuments` and `pet memorials`, lives in the description rather than overloading the title.
+- The page title uses `absolute` metadata so it does not inherit the root `| DYO Headstones` template.
+
+### Stainless Steel Urn Inscription Rendering
+
+Product ID `2350` (`Stainless Steel Vitreous Enamel Inlaid Urn`) has special inscription rendering behavior.
+
+| File | Current Behavior |
+|------|------------------|
+| `components/three/headstone/ShapeSwapper.tsx` | Suppresses the cyan inscription selection/resize outline for stainless steel urns while preserving click-to-select and edit-panel behavior. |
+| `components/HeadstoneInscription.tsx` | Detects stainless steel urns (`catalog.product.type === 'urn'` and product ID `2350` or stainless product name). |
+| `components/HeadstoneInscription.tsx` | Uses a small urn-specific lift of `0.18mm` so lettering reads as sitting on the enamel inlay rather than floating visibly above it. |
+| `components/HeadstoneInscription.tsx` | Uses render-order/polygon-offset safeguards and `depthWrite: false` for stainless steel urn text to reduce angle-based z-fighting against the inlay. |
+| `components/HeadstoneInscription.tsx` | Disables the default black text outline for stainless steel urn inscriptions; Arial and other normal fonts should not appear artificially bold/outlined. |
+
+Important visual rules:
+- Stainless Steel Urn inscriptions should sit visually on the inlaid/enamel face, not float in front of it.
+- Stainless Steel Urn inscriptions should not show the editable cyan selection outline/handles.
+- Stainless Steel Urn inscriptions should not receive the generic black outline used by some non-plaque products.
+- If text disappears at oblique angles again, prefer depth/render ordering or tiny sub-millimetre offsets over large physical offsets, because large offsets are visible from side camera angles.
+
+### Verification
+
+Commands run successfully after these updates:
+
+```bash
+pnpm test tests/unit/designer-route-state.test.ts
+pnpm exec tsc --noEmit
+```
+
+`pnpm build` was attempted but exceeded the command timeout before returning; it did not produce a TypeScript error in the captured work. Browser verification used a dev server on port `3001` because port `3000` was already occupied.
+
+Working-tree note:
+- `screen.png` continues to be a user-provided visual reference and may be modified. Do not revert it unless explicitly requested.
 
 ---
 
@@ -70,7 +150,7 @@ This session moved the public marketing/SEO layer closer to production for Forev
 | `/memorials/plaques` | Plaques product-type page covering Bronze Plaques, Memorial Plaques, Full Colour Plaques, traditional engraved plaques, and stainless plaque options. |
 | `/memorials/full-monuments` | Full Monuments product-type page. Public wording should use `Full Monuments`, not `Full Memorials`. |
 | `/memorials/urns` | Urns product-type page. |
-| `/memorials/pet-memorials` | Pet Memorials product-type page. |
+| `/memorials/pet-memorials` | Pet Memorials product-type page using catalog-native pet products: Product ID `8` Laser-Etched Pet Mini Headstone, Product ID `9` Laser-Etched Pet Plaque, and Product ID `135` Laser-Etched Pet Rock. |
 
 Implementation files:
 
@@ -79,11 +159,27 @@ Implementation files:
 | `app/memorials/[type]/page.tsx` | Dynamic memorial product-type pages with metadata, JSON-LD, header/footer, product cards, Designer guidance, and links into the Designer. |
 | `app/memorials/[type]/MemorialHeaderGallery.tsx` | Client lightbox/gallery component used in the memorial page header. Thumbnail clicks open a modal popup; Escape closes it. |
 | `lib/memorial-product-pages.ts` | Server helper that maps product-type slugs to Designer products, XML descriptions, size text, catalog shapes, tutorial notes, and curated gallery images. |
+| `app/_internal/_data.ts` | Product IDs `8`, `9`, and `135` are available as `pet-memorials` catalog products. |
+| `app/select-product/page.tsx` | Adds XML description tags for Pet Mini Headstone, Pet Plaque, and Pet Rock so the Designer product list uses catalog/language copy. |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Adds a visible `Pet Memorials` group in the Designer product selector. |
+| `app/select-shape/page.tsx` | Reads `productId` from `searchParams` for product-aware shape-step metadata, while still rendering the standard shape grid. |
+| `app/[productSlug]/select-shape/page.tsx` | Product-slug Designer entry route, e.g. `/bronze-plaque/select-shape`; renders the same shape grid and resolves metadata from the slug. |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Product ID `8` is restricted to basic traditional shapes; Product IDs `9` and `135` are treated as plaque-style products while catalog XML is loading. |
+| `lib/designer-product-routes.ts` | Central product ID/slug helper for Designer URLs and product-specific shape-step metadata. |
 | `app/sitemap.ts` | Adds `/memorials/{type}` pages to the sitemap. |
 
 Current route behavior:
-- Product cards link to `/select-shape?productId={id}` so the Designer opens with the selected product and skips the product-list page. Legacy `/select-product?productId={id}` links are redirected by `RouterBinder` after selecting the product.
+- Product cards link to `/{productSlug}/select-shape`, for example `/bronze-plaque/select-shape`, so the Designer opens with the selected product and skips the product-list page.
+- `/select-shape?productId={id}` remains supported for backwards compatibility. Legacy `/select-product?productId={id}` links are redirected by `RouterBinder` after selecting the product.
+- `/select-shape?productId={id}` and `/{productSlug}/select-shape` both generate product-aware metadata through `lib/designer-product-routes.ts`; Product ID `5` should show Bronze Plaque metadata, not generic DYO Headstones metadata.
+- Product-aware shape-step metadata uses absolute titles so it does not inherit the root `| DYO Headstones` title template. Verified examples: `/select-shape?productId=5` and `/bronze-plaque/select-shape` both output `Bronze Plaque Shape Designer | Forever Shining`.
+- Product-aware shape-step metadata canonicalizes to the slug route, e.g. `/select-shape?productId=5` has canonical `https://forevershining.org/bronze-plaque/select-shape`.
+- `RouterBinder` now resolves `/{productSlug}/select-shape` and sets the matching product ID in the Designer store, overriding any previously selected product.
 - Public product names should use capitalized names and `Headstone` instead of `Mini Headstone` in public-facing page copy.
+- Exception: `Laser-Etched Pet Mini Headstone` keeps `Pet Mini Headstone` because that is the catalog product name for Product ID `8`.
+- Product ID `8` should display only basic traditional headstone shapes in the Designer and public Pet Memorials page summaries.
+- Product ID `8` basic traditional shape list: Cropped Peak, Curved Gable, Curved Peak, Curved Top, Gable, Half Round, Left Wave, Peak, Right Wave, Serpentine, Square.
+- Product ID `9` catalog shapes are Plaque Landscape and Plaque Portrait. Product ID `135` catalog shapes are Bone and Plaque Portrait.
 - Memorial product pages are public content pages, not Designer UI pages.
 - `ConditionalCanvas`, `ConditionalNav`, and `MainContent` hide Designer canvas/sidebar chrome on `/memorials/*`.
 - `RouterBinder` honors `productId` query params even when a different product is already selected, so product-page cards can override prior Designer state.
@@ -11724,4 +11820,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-03*
+*End of STARTER.md - Last updated: 2026-07-04*

@@ -293,6 +293,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const isStainlessSteelHeadstone =
       catalog?.product.type === 'headstone' &&
       (productId === '1' || productId === '23' || catalog.product.formula === 'Steel');
+    const isStainlessSteelUrn =
+      catalog?.product.type === 'urn' &&
+      (productId === '2350' || productNameLower.includes('stainless steel'));
     const isStencilFont = Boolean(font?.includes('/stencil/') || font?.includes('_stencil'));
     const isLedgerSurface = surface === 'ledger';
     const isBaseSurface = surface === 'base';
@@ -334,8 +337,10 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       }
       return converted;
     }, [height, mmToLocalUnits]);
-    // Keep text just above the surface to prevent z-fighting (0.05 mm, scaled to local units)
-    const liftLocal = 0.05 * mmToLocalUnits;
+    // Keep text just above the surface to prevent z-fighting at oblique camera
+    // angles. Urn lettering still needs to read as sitting on the enamel inlay,
+    // so use only a tiny physical separation and rely on render ordering below.
+    const liftLocal = (isStainlessSteelUrn ? 0.18 : 0.05) * mmToLocalUnits;
 
     // initial Y based on approx height
     const initialYLocal = React.useMemo(() => {
@@ -820,6 +825,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           metalness: 0.9,
           roughness: 0.22,
           envMapIntensity: 2.4,
+          depthWrite: true,
         }
       : (renderedTextColor.toLowerCase().includes('gold') ||
           renderedTextColor.toLowerCase() === '#d4af37' ||
@@ -828,11 +834,24 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           metalness: 1.0,
           roughness: 0.3,
           envMapIntensity: 2.0,
+          depthWrite: true,
+        }
+      : isStainlessSteelUrn
+      ? {
+          metalness: 0.2,
+          roughness: 0.4,
+          envMapIntensity: 1.5,
+          depthWrite: false,
+          polygonOffset: true,
+          polygonOffsetFactor: -4,
+          polygonOffsetUnits: -4,
+          side: THREE.DoubleSide,
         }
       : {
           metalness: 0.2,
           roughness: 0.4,
           envMapIntensity: 1.5,
+          depthWrite: true,
         };
 
     React.useEffect(() => {
@@ -907,13 +926,33 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           anchorY="middle"
           textAlign={textAlign}
           fontSize={fontSizeUnits}
-          outlineWidth={isBronzePlaque ? 0.0015 * units : isTraditionalEngraved || isPlaque || isStainlessSteelHeadstone ? 0 : 0.002 * units}
-          outlineColor={isBronzePlaque ? '#26180d' : isTraditionalEngraved || isPlaque || isStainlessSteelHeadstone ? renderedTextColor : "black"}
+          outlineWidth={
+            isBronzePlaque
+              ? 0.0015 * units
+              : isTraditionalEngraved ||
+                  isPlaque ||
+                  isStainlessSteelHeadstone ||
+                  isStainlessSteelUrn
+                ? 0
+                : 0.002 * units
+          }
+          outlineColor={
+            isBronzePlaque
+              ? '#26180d'
+              : isTraditionalEngraved ||
+                  isPlaque ||
+                  isStainlessSteelHeadstone ||
+                  isStainlessSteelUrn
+                ? renderedTextColor
+                : 'black'
+          }
           fillOpacity={isTraditionalEngraved ? 1 : 1}
           {...textMaterialProps}
           material={isStainlessSteelHeadstone ? stainlessTextMaterial : undefined}
           onSync={handleTextSync}
-          renderOrder={isStainlessSteelHeadstone ? 80 : undefined}
+          renderOrder={
+            isStainlessSteelHeadstone || isStainlessSteelUrn ? 80 : undefined
+          }
           // Use onClick for selection; onPointerDown stays for drag init only
           onClick={(e) => {
             e.stopPropagation();

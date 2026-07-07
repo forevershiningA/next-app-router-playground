@@ -28,6 +28,7 @@ import { getImageSizeOption } from '#/lib/image-size-config';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
 import ProjectActions from '#/components/ProjectActions';
 import { getCheckPriceMaterialName, isStainlessSteelHeadstoneProduct } from '#/lib/check-price-utils';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 type CheckPriceGridProps = {
   initialImagePricing?: ImagePricingMap | null;
@@ -41,8 +42,7 @@ const getInitialReturnPath = () => {
 
   const stored = sessionStorage.getItem('designer:last-section');
   if (stored && stored !== '/check-price') {
-    const allowedPrefixes = ['/select', '/inscriptions'];
-    if (allowedPrefixes.some((prefix) => stored.startsWith(prefix))) {
+    if (getDesignerStepSlug(stored)) {
       return stored;
     }
   }

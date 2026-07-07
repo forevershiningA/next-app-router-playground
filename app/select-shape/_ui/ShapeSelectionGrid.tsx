@@ -14,6 +14,7 @@ import { Shape } from '#/lib/db';
 import { data } from '#/app/_internal/_data';
 import type { ShapeData } from '#/lib/xml-parser';
 import { putSerpentineFirst } from '#/lib/shape-ordering';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 type ShapeCategory = { id: string; name: string; description: string };
 
@@ -26,6 +27,10 @@ const shapeCategories: ShapeCategory[] = [
   { id: 'modern', name: 'Modern', description: 'Contemporary designs' },
   { id: 'custom', name: 'Custom', description: 'Upload your own SVG shape' },
 ];
+
+const petMiniHeadstoneShapeCategories = shapeCategories.filter(
+  (category) => category.id === 'traditional',
+);
 
 export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -42,9 +47,14 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   // Check product type — use fallbackProduct.category as a safety net while
   // the catalog XML is still loading asynchronously.
   const fallbackProduct = data.products.find((p) => p.id === productId);
+  const isPetPlaqueProduct = productId === '9' || productId === '135';
+  const isPetMiniHeadstone = productId === '8';
+  const designerHref = (stepSlug: Parameters<typeof getDesignerProductStepHref>[0]) =>
+    getDesignerProductStepHref(stepSlug, productId);
   const isPlaque =
     catalog?.product.type === 'plaque' ||
-    (catalog === null && fallbackProduct?.category === 'plaques');
+    (catalog === null &&
+      (fallbackProduct?.category === 'plaques' || isPetPlaqueProduct));
   const isUrn =
     catalog?.product.type === 'urn' ||
     (catalog === null && fallbackProduct?.category === 'urns');
@@ -73,7 +83,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     setShapeUrl(svgPath);
     setWidthMm(catalogShape.table.initWidth);
     setHeightMm(catalogShape.table.initHeight);
-    router.push('/select-material');
+    router.push(designerHref('select-material'));
     openPanel('select-material');
   };
 
@@ -96,14 +106,14 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       setBorderName('Border 4');
     }
     if (isFullColourPlaque || isStainlessSteelPlaque) {
-      router.push('/select-material');
+      router.push(designerHref('select-material'));
       openPanel('select-material');
     } else if (isStainlessSteelHeadstone) {
-      router.push('/select-size');
+      router.push(designerHref('select-size'));
     } else if (hasBorder) {
-      router.push('/select-border');
+      router.push(designerHref('select-border'));
     } else {
-      router.push('/select-size');
+      router.push(designerHref('select-size'));
     }
   };
 
@@ -119,14 +129,14 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         const svgDataUrl = e.target?.result as string;
         setShapeUrl(svgDataUrl);
         if (isFullColourPlaque || isStainlessSteelPlaque) {
-          router.push('/select-material');
+          router.push(designerHref('select-material'));
           openPanel('select-material');
         } else if (isStainlessSteelHeadstone) {
-          router.push('/select-size');
+          router.push(designerHref('select-size'));
         } else if (hasBorder) {
-          router.push('/select-border');
+          router.push(designerHref('select-border'));
         } else {
-          router.push('/select-size');
+          router.push(designerHref('select-size'));
         }
       };
       reader.readAsDataURL(file);
@@ -238,7 +248,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           >
                             <span>
                               {isSelected
-                                ? 'Continue with this shape'
+                                ? 'Use this shape'
                                 : 'Select shape'}
                             </span>
                             <ArrowRightIcon className="h-4 w-4" />
@@ -277,6 +287,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       shouldInclude = isRectangleShape;
     } else if (isPlaque) {
       shouldInclude = isPlaqueShape;
+    } else if (isPetMiniHeadstone) {
+      shouldInclude = !isPlaqueShape && shape.category === 'traditional';
     } else {
       shouldInclude = !isPlaqueShape;
     }
@@ -294,6 +306,9 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       return matchesCategory;
     }),
   );
+  const visibleShapeCategories = isPetMiniHeadstone
+    ? petMiniHeadstoneShapeCategories
+    : shapeCategories;
 
   return (
     <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -311,9 +326,9 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
               </h2>
             )}
             <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
-              Choose the perfect shape for your memorial. Browse our collection
-              of traditional and modern designs, or upload your own custom SVG
-              shape.
+              {isPetMiniHeadstone
+                ? 'Choose from the traditional basic shapes available for this pet mini headstone.'
+                : 'Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.'}
             </p>
           </div>
         </div>
@@ -334,7 +349,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             >
               All Shapes
             </button>
-            {shapeCategories.map((category) => (
+            {visibleShapeCategories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
@@ -472,7 +487,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                         >
                           <span>
                             {isSelected
-                              ? 'Continue with this shape'
+                              ? 'Use this shape'
                               : 'Select shape'}
                           </span>
                           <ArrowRightIcon className="h-4 w-4" />
@@ -491,7 +506,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       {selectedCategory !== 'all' && selectedCategory !== 'custom' && (
         <div className="day:border-gray-200 day:bg-stone-100 border-t border-white/5 bg-gray-900/30">
           <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-            {shapeCategories
+            {visibleShapeCategories
               .filter((cat) => cat.id === selectedCategory)
               .map((category) => (
                 <div

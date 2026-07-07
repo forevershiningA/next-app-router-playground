@@ -33,12 +33,14 @@ export default function HeadstoneAssembly() {
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const borderName = useHeadstoneStore((s) => s.borderName);
-  const isPlaque = productType === 'plaque';
+  const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
   const isFullMonument = productType === 'full-monument';
   const isUrn = productType === 'urn';
   // Only oval and heart urn shapes get the landscape oval base disc
   const urnShapeCode = shapeUrl?.split('/').pop()?.replace('.svg', '') ?? '';
   const urnHasOvalBase = isUrn && (urnShapeCode === 'oval' || urnShapeCode === 'heart');
+  const isNonRectangularPlaque =
+    isPlaque && Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
   const hasBorder =
     isPlaque && borderName ? !borderName.toLowerCase().includes('no border') : false;
   const headstoneOutlinePad = isPlaque ? 0.0012 : 0.006;
@@ -99,7 +101,7 @@ export default function HeadstoneAssembly() {
 
   return (
     <group ref={monumentGroupRef} position={[0, 0, zGroupOffset]}>
-      <group ref={assemblyRef} position={[0, showBase ? (urnHasOvalBase ? 0.01 : isUrn ? 0 : baseHeightMeters) : 0, 0]}>
+      <group ref={assemblyRef} position={[0, showBase && !isNonRectangularPlaque ? (urnHasOvalBase ? 0.01 : isUrn ? 0 : baseHeightMeters) : 0, 0]}>
         <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
 
         {/* Elegant Selection Indicators - Viewfinder Corners */}
@@ -130,7 +132,7 @@ export default function HeadstoneAssembly() {
           animationDuration={520}
         />
 
-        {showBase && !isUrn && (
+        {showBase && !isUrn && !isNonRectangularPlaque && (
             <HeadstoneBaseAuto
               ref={baseRef}
               headstoneObject={tabletRef}

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 const IMAGE_TYPES = [
   {
@@ -98,7 +99,7 @@ export default function Page() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const showMobileView = pathname === '/select-images' && !isDesktop;
+  const showMobileView = getDesignerStepSlug(pathname) === 'select-images' && !isDesktop;
 
   if (!showMobileView) {
     return null;

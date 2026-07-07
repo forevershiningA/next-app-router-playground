@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { captureDesignSnapshot, applyDesignSnapshot } from '#/lib/project-serializer';
 import type { PricingBreakdown, ProjectSummary, ProjectRecordWithState } from '#/lib/project-schemas';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 import QuickEnquiryForm from '#/components/QuickEnquiryForm';
 
@@ -156,7 +157,12 @@ export default function ProjectActions({ pricing }: ProjectActionsProps) {
       await applyDesignSnapshot(snapshot);
       setProjectMeta({ projectId: data.project.id, title: data.project.title });
       setStatusMessage(`Loaded "${data.project.title}"`);
-      router.push('/select-size');
+      router.push(
+        getDesignerProductStepHref(
+          'select-size',
+          useHeadstoneStore.getState().productId,
+        ),
+      );
     } catch (error) {
       console.error('[ProjectActions] Failed to load project', error);
       setStatusMessage('Unable to load that design.');

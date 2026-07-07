@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { data } from '#/app/_internal/_data';
 import AdditionSelectionGrid from './_ui/AdditionSelectionGrid';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 export default function Page() {
   const additions = data.additions;
@@ -22,7 +23,7 @@ export default function Page() {
 
   // Only show the full grid on mobile/tablet layouts where the sidebar (and canvas) are hidden.
   // isDesktop starts as null to avoid flashing the grid on desktop before the effect runs.
-  const showGrid = pathname === '/select-additions' && isDesktop === false;
+  const showGrid = getDesignerStepSlug(pathname) === 'select-additions' && isDesktop === false;
 
   if (!showGrid) {
     return null;

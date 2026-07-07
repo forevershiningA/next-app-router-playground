@@ -7,6 +7,7 @@ import DesignsTreeNav from '#/components/DesignsTreeNav';
 import DesignerNav from '#/components/DesignerNav';
 import AccountNav from '#/components/AccountNav';
 import { type DemoCategory } from '#/lib/db';
+import { isDesignerRoutePath } from '#/lib/designer-route-state';
 import clsx from 'clsx';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -82,12 +83,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const isAdminRoute = pathname?.startsWith('/admin');
 
   // Check if we're on homepage or other designer pages
-  const isDesignerRoute =
-    pathname === '/' ||
-    pathname?.startsWith('/select-') ||
-    pathname?.startsWith('/inscriptions') ||
-    pathname?.startsWith('/check-price') ||
-    pathname === '/design-menu';
+  const isDesignerRoute = isDesignerRoutePath(pathname);
 
   const isDesignShareRoute = pathname?.startsWith('/design/');
 

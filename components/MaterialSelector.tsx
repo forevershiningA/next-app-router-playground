@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowUpTrayIcon, CheckCircleIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore, type Material as MaterialOption } from '#/lib/headstone-store';
 import SegmentedControl from './ui/SegmentedControl';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { bronzes } from '#/app/_internal/_data';
 import { resolveMaterialAssetPath } from '#/lib/material-utils';
 import { useImageCropState } from './useImageCropState';
@@ -34,6 +35,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
+  const selectSizeHref = getDesignerProductStepHref('select-size', productId);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const showLedger = useHeadstoneStore((s) => s.showLedger);
   const showKerbset = useHeadstoneStore((s) => s.showKerbset);
@@ -537,7 +539,7 @@ export default function MaterialSelector({ materials, disableInternalScroll = fa
               setEditingObject(nextTarget);
               setSelected(nextTarget);
               if (forceTarget && nextTarget !== forceTarget) {
-                router.push('/select-size');
+                router.push(selectSizeHref);
               }
             }}
             options={targetOptions}

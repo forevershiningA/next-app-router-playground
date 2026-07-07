@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 
 export const homeMetadata: Metadata = {
-  title: 'Design Your Own Headstone Online | Forever Shining',
-  description: 'Create custom headstones, plaques and monuments. Choose stone, shape, size, inscriptions and motifs. Transparent pricing, world-wide delivery.',
+  title: {
+    absolute: 'Design & Buy Memorials, Headstones, Plaques & Urns',
+  },
+  description:
+    'Design and buy custom memorials online, including headstones, plaques, full monuments, urns and pet memorials. Preview materials, inscriptions and pricing.',
 };
 
 export const selectProductMetadata: Metadata = {

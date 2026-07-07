@@ -667,17 +667,24 @@ function buildShapeOutlineBorderGroup(
   const height = Math.max(1e-3, Math.abs(plaqueHeight));
   const safeUnitScale = Math.max(1e-6, unitScale ?? 1);
   const minDimension = Math.min(width, height);
+  const isRoundedPlaqueShape = Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
   const borderWidth = Math.max(
-    0.002 * safeUnitScale,
-    Math.min(0.018 * safeUnitScale, minDimension * 0.055),
+    isRoundedPlaqueShape ? 0.0012 * safeUnitScale : 0.002 * safeUnitScale,
+    Math.min(
+      (isRoundedPlaqueShape ? 0.010 : 0.018) * safeUnitScale,
+      minDimension * (isRoundedPlaqueShape ? 0.032 : 0.055),
+    ),
   );
-  const reliefDepth = Math.max(0.0008, Math.min(width, height) * 0.004);
+  const reliefDepth = Math.max(
+    isRoundedPlaqueShape ? 0.00045 : 0.0008,
+    Math.min(width, height) * (isRoundedPlaqueShape ? 0.0022 : 0.004),
+  );
   const center = new THREE.Vector2(0, height / 2);
 
   const shape = new THREE.Shape();
   const hole = new THREE.Path();
 
-  if (shapeUrl?.includes('oval_') || shapeUrl?.includes('circle')) {
+  if (isRoundedPlaqueShape) {
     shape.absellipse(0, height / 2, width / 2, height / 2, 0, Math.PI * 2, false, 0);
     hole.absellipse(
       0,

@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import EmblemSelectionGrid from './_ui/EmblemSelectionGrid';
 import { loadEmblems } from '#/app/_internal/_emblems-loader';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 const BRONZE_PLAQUE_PRODUCT_ID = '5';
 
@@ -33,7 +34,7 @@ export default function Page() {
   }, []);
 
   // Only show the full grid on mobile/tablet where the sidebar is hidden
-  const showGrid = pathname === '/select-emblems' && !isDesktop;
+  const showGrid = getDesignerStepSlug(pathname) === 'select-emblems' && !isDesktop;
 
   if (!showGrid) {
     return null;

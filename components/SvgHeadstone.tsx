@@ -539,7 +539,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const sCore = wantW / Math.max(EPS, widthW);
     const coreH_world = heightW * sCore;
     const toSV = (w: number) => w / Math.max(EPS, Math.abs(scale) * sCore);
-    const targetH_SV = preserveTop ? toSV(wantH) : dy * sCore;
+    const targetH_SV = preserveTop ? toSV(wantH) : dy;
     const bottomTarget_SV = minY + targetH_SV;
 
     // When rounding corners, build the shape to exactly the target height in both

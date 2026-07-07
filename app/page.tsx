@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import HomeSplash from './_ui/HomeSplash';
 
 export const metadata: Metadata = {
-  title: 'Design Your Own Headstone Online | Forever Shining',
-  description: 'Create custom Headstones, Plaques and Monuments. Choose stone, shape, size, inscriptions and motifs. Transparent pricing, world-wide delivery.',
+  title: {
+    absolute: 'Design & Buy Memorials, Headstones, Plaques & Urns',
+  },
+  description:
+    'Design and buy custom memorials online, including headstones, plaques, full monuments, urns and pet memorials. Preview materials, inscriptions and pricing.',
 };
 
 const businessContacts = [
@@ -167,9 +170,9 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': 'https://forevershining.org#webpage',
       url: 'https://forevershining.org',
-      name: 'Design Your Own Headstone Online | Forever Shining',
+      name: 'Design & Buy Memorials, Headstones, Plaques & Urns',
       description:
-        'Create custom Bronze Plaques, Memorial Plaques, Headstones and Monuments. Choose stone, shape, size, inscriptions and motifs with live 3D preview.',
+        'Design and buy custom memorials online, including headstones, plaques, full monuments, urns and pet memorials. Preview materials, inscriptions and pricing.',
       isPartOf: {
         '@id': 'https://forevershining.org#website',
       },

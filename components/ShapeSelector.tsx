@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useHeadstoneStore, type ShapeOption } from '#/lib/headstone-store';
 import { isContourSupported } from '#/components/three/InsetContourLine';
 import { putSerpentineFirst } from '#/lib/shape-ordering';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 type ShapeSelectorProps = {
   shapes: ShapeOption[];
@@ -25,6 +26,9 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
   const catalogShapes = useHeadstoneStore((s) => s.catalog?.product.shapes ?? []);
   const showInsetContour = useHeadstoneStore((s) => s.showInsetContour);
   const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const designerHref = (stepSlug: Parameters<typeof getDesignerProductStepHref>[0]) =>
+    getDesignerProductStepHref(stepSlug, productId);
 
   // Filter shapes based on product type
   const filteredShapes = React.useMemo(() => {
@@ -57,7 +61,7 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
                   // background panel opens. Without this, arriving from /select-shape
                   // (which is NOT in canvasVisiblePages) causes the panel to be
                   // immediately closed by the isCanvasVisible guard in DesignerNav.
-                  router.push('/select-material');
+                  router.push(designerHref('select-material'));
                   if (typeof window !== 'undefined') {
                     window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-material' } }));
                   }
@@ -112,7 +116,7 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
     }
     setShapeUrl(shapeUrl);
     if (isFullColourPlaque) {
-      router.push('/select-material');
+      router.push(designerHref('select-material'));
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
           new CustomEvent('openFullscreenPanel', {
@@ -121,7 +125,7 @@ export default function ShapeSelector({ shapes, disableInternalScroll = false }:
         );
       }
     } else if (hasBorder) {
-      router.push('/select-border');
+      router.push(designerHref('select-border'));
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
           new CustomEvent('openFullscreenPanel', {

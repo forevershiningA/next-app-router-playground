@@ -153,6 +153,18 @@ const products: Product[] = [
     category: 'plaques',
   },
   {
+    id: '8',
+    name: 'Laser-Etched Pet Mini Headstone',
+    image: 'APP_ID_8-medium.webp',
+    category: 'pet-memorials',
+  },
+  {
+    id: '9',
+    name: 'Laser-Etched Pet Plaque',
+    image: 'APP_ID_9-medium.webp',
+    category: 'pet-memorials',
+  },
+  {
     id: '22',
     name: 'Laser-etched Black Granite Mini Headstone',
     image: 'APP_ID_22-medium.webp',
@@ -193,6 +205,12 @@ const products: Product[] = [
     name: 'Traditional Engraved Headstone',
     image: 'APP_ID_124-medium.webp',
     category: 'headstones',
+  },
+  {
+    id: '135',
+    name: 'Laser-Etched Pet Rock',
+    image: 'APP_ID_135-medium.webp',
+    category: 'pet-memorials',
   },
   {
     id: '100',

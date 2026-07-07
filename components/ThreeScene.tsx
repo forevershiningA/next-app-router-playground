@@ -13,14 +13,6 @@ import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 import QuickEnquiryModal from '#/components/QuickEnquiryModal';
 
-const CANVAS_ROUTES = new Set([
-  '/select-size',
-  '/inscriptions',
-  '/select-material',
-  '/select-additions',
-  '/select-motifs',
-  '/select-border',
-]);
 import {
   CAMERA_3D_POSITION_Z,
   CAMERA_FOV,

@@ -5,6 +5,14 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { defaultErrorHandler } from '#/lib/error-handler';
 import { data } from '#/app/_internal/_data';
+import {
+  getDesignerProductBySlug,
+  getDesignerProductStepHref,
+} from '#/lib/designer-product-routes';
+import {
+  getDesignerStepSlug,
+  isDesignerStepSlug,
+} from '#/lib/designer-route-state';
 
 const DESIGNER_ROUTES = [
   '/select-size',
@@ -32,14 +40,21 @@ export default function RouterBinder() {
   const [loadError, setLoadError] = useState<string | null>(null);
 
   useEffect(() => {
-    setNavTo((href, opts) =>
-      opts?.replace ? router.replace(href) : router.push(href),
-    );
-  }, [router, setNavTo]);
+    setNavTo((href, opts) => {
+      const [path, suffix = ''] = href.split(/(?=[?#])/);
+      const stepSlug = getDesignerStepSlug(path);
+      const targetHref =
+        isDesignerStepSlug(stepSlug) && currentProductId
+          ? `${getDesignerProductStepHref(stepSlug, currentProductId)}${suffix}`
+          : href;
+
+      opts?.replace ? router.replace(targetHref) : router.push(targetHref);
+    });
+  }, [currentProductId, router, setNavTo]);
 
   useEffect(() => {
     if (typeof window === 'undefined' || !pathname) return;
-    if (pathname === '/check-price') return;
+    if (getDesignerStepSlug(pathname) === 'check-price') return;
     sessionStorage.setItem('designer:last-section', pathname);
   }, [pathname]);
 
@@ -51,17 +66,31 @@ export default function RouterBinder() {
     const hasValidQueryProduct = Boolean(
       queryProductId && data.products.some((p) => p.id === queryProductId),
     );
+    const productSlugMatch = currentPath?.match(/^\/([^/]+)\/([^/]+)$/);
+    const slugProduct = productSlugMatch
+      ? getDesignerProductBySlug(productSlugMatch[1])
+      : undefined;
+    const slugStep = productSlugMatch
+      ? getDesignerStepSlug(`/${productSlugMatch[2]}`)
+      : null;
 
     if (queryProductId && hasValidQueryProduct) {
       if (queryProductId !== currentProductId) {
         void (async () => {
           await setProductId(queryProductId);
           if (currentPath === '/select-product') {
-            router.replace('/select-shape');
+            router.replace(getDesignerProductStepHref('select-shape', queryProductId));
           }
         })();
       } else if (currentPath === '/select-product') {
-        router.replace('/select-shape');
+        router.replace(getDesignerProductStepHref('select-shape', queryProductId));
+      }
+      return;
+    }
+
+    if (slugProduct && slugStep) {
+      if (slugProduct.id !== currentProductId) {
+        void setProductId(slugProduct.id);
       }
       return;
     }

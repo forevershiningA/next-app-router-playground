@@ -7,6 +7,7 @@ import { ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
 import type { ProductPriceRange } from '#/lib/types/pricing';
+import { getDesignerProductSlug } from '#/lib/designer-product-routes';
 
 type ProductCategory = {
   id: string;
@@ -69,11 +70,18 @@ const productCategories: ProductCategory[] = [
     description: 'Memorial urns and cremation vessels',
     icon: '',
   },
+  {
+    id: 'pet-memorials',
+    name: 'Pet Memorials',
+    description: 'Pet headstones, plaques and rocks',
+    icon: '',
+  },
 ];
 
 const productGroups: ProductCategory[] = [
   ...productCategories.filter((category) => category.id === 'plaques'),
   ...productCategories.filter((category) => category.id === 'headstones'),
+  ...productCategories.filter((category) => category.id === 'pet-memorials'),
   {
     id: 'other',
     name: 'Other Products',
@@ -100,7 +108,8 @@ export default function ProductSelectionGrid({
 
   const handleProductSelect = async (product: Product) => {
     await setProductId(product.id);
-    router.push('/select-shape');
+    const productSlug = getDesignerProductSlug(product.id);
+    router.push(productSlug ? `/${productSlug}/select-shape` : '/select-shape');
   };
 
   const filteredProducts = products.filter((product) => {
