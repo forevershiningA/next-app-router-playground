@@ -225,6 +225,8 @@ export function calculateImagePrice(
   colorMode?: 'full' | 'bw' | 'sepia'
 ): number {
   if (!product) return 0;
+  if (product.code === 'Granite-Image' || product.id === '21') return 0;
+
   const { priceModel } = product;
   if (!priceModel || !priceModel.prices.length) return 0;
 

@@ -1744,7 +1744,6 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       // Close other panels when selecting an image
       // Note: We don't set activePanel='image' because images use fullscreen panel 'select-images'
       set({
-        selectedInscriptionId: null,
         selectedAdditionId: null,
         selectedMotifId: null,
         selected: null,

@@ -201,7 +201,8 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
       drawnW,
       drawnH,
       scale,
-      mw: vw,      mh: vh,
+      mw: vw,
+      mh: vh,
       maskBoundsLeftPx: cropPx.x + offsetX,
       maskBoundsTopPx: cropPx.y + offsetY,
       maskBoundsWidthPx: sw * scale,
@@ -210,7 +211,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
   }, [cropPx.height, cropPx.width, cropPx.x, cropPx.y, maskBounds, maskViewHeight, maskViewWidth]);
 
   const maskHandlesBox = useMemo(() => {
-    if (allowFreeformHandles || cropPx.width === 0 || cropPx.height === 0) {
+    if (cropPx.width === 0 || cropPx.height === 0) {
       return { left: 0, top: 0, width: 100, height: 100 };
     }
 
@@ -220,7 +221,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
     const height = (maskFit.maskBoundsHeightPx / cropPx.height) * 100;
 
     return { left, top, width, height };
-  }, [allowFreeformHandles, cropPx.height, cropPx.width, cropPx.x, cropPx.y, maskFit]);
+  }, [cropPx.height, cropPx.width, cropPx.x, cropPx.y, maskFit]);
 
   const handleMouseDown = (e: React.MouseEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
     e.preventDefault();
@@ -454,28 +455,19 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
           >
             {/* Bounding box rectangle with connecting lines - aligned to mask bounds */}
             {(() => {
-              const boundingStyle = allowFreeformHandles
-                ? { left: '0%', top: '0%', width: '100%', height: '100%' }
-                : {
-                    left: `${maskHandlesBox.left}%`,
-                    top: `${maskHandlesBox.top}%`,
-                    width: `${maskHandlesBox.width}%`,
-                    height: `${maskHandlesBox.height}%`,
-                  };
+              const boundingStyle = {
+                left: `${maskHandlesBox.left}%`,
+                top: `${maskHandlesBox.top}%`,
+                width: `${maskHandlesBox.width}%`,
+                height: `${maskHandlesBox.height}%`,
+              };
 
-              const handleConfigs: Array<{ corner: 'nw' | 'ne' | 'se' | 'sw'; cursor: string; left: number; top: number }> = allowFreeformHandles
-                ? [
-                    { corner: 'nw', cursor: 'nwse-resize', left: 0, top: 0 },
-                    { corner: 'ne', cursor: 'nesw-resize', left: 100, top: 0 },
-                    { corner: 'se', cursor: 'nwse-resize', left: 100, top: 100 },
-                    { corner: 'sw', cursor: 'nesw-resize', left: 0, top: 100 },
-                  ]
-                : [
-                    { corner: 'nw', cursor: 'nwse-resize', left: maskHandlesBox.left, top: maskHandlesBox.top },
-                    { corner: 'ne', cursor: 'nesw-resize', left: maskHandlesBox.left + maskHandlesBox.width, top: maskHandlesBox.top },
-                    { corner: 'se', cursor: 'nwse-resize', left: maskHandlesBox.left + maskHandlesBox.width, top: maskHandlesBox.top + maskHandlesBox.height },
-                    { corner: 'sw', cursor: 'nesw-resize', left: maskHandlesBox.left, top: maskHandlesBox.top + maskHandlesBox.height },
-                  ];
+              const handleConfigs: Array<{ corner: 'nw' | 'ne' | 'se' | 'sw'; cursor: string; left: number; top: number }> = [
+                { corner: 'nw', cursor: 'nwse-resize', left: maskHandlesBox.left, top: maskHandlesBox.top },
+                { corner: 'ne', cursor: 'nesw-resize', left: maskHandlesBox.left + maskHandlesBox.width, top: maskHandlesBox.top },
+                { corner: 'se', cursor: 'nwse-resize', left: maskHandlesBox.left + maskHandlesBox.width, top: maskHandlesBox.top + maskHandlesBox.height },
+                { corner: 'sw', cursor: 'nesw-resize', left: maskHandlesBox.left, top: maskHandlesBox.top + maskHandlesBox.height },
+              ];
               
               return (
                 <>

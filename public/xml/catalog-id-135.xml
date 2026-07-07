@@ -4,7 +4,7 @@
 
 <shapes>
 
-	<shape type="plaque" name="Bone" code="Landscape" double="0" stand="0" url="src/img/headstones/base/landscape.png">
+	<shape type="plaque" name="Bone" code="Bone" double="0" stand="0" url="src/img/headstones/base/pet_bone.svg">
 		<file type="base" />
 		<file type="kerb" />
 		<file type="lid" />
@@ -13,6 +13,66 @@
 			  min_width="220" max_width="220" init_width="220" 
 			  min_depth="10" max_depth="10" init_depth="10" 
 			  min_height="100" max_height="100" init_height="100" 
+              fixed="2"
+			  color="textures/forever/l/Glory-Black-2.webp" 
+			  color2="textures/forever/l/Glory-Black-2.webp" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+
+	<shape type="plaque" name="Cat Bowl" code="Bowl-Cat" double="0" stand="0" url="src/img/headstones/base/pet_bowl_cat.jpg">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="220" max_width="220" init_width="220" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="220" max_height="220" init_height="220" 
+              fixed="2"
+			  color="textures/forever/l/Glory-Black-2.webp" 
+			  color2="textures/forever/l/Glory-Black-2.webp" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+
+	<shape type="plaque" name="Dog Bowl" code="Bowl" double="0" stand="0" url="src/img/headstones/base/bowl.jpg">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="220" max_width="220" init_width="220" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="220" max_height="220" init_height="220" 
+              fixed="2"
+			  color="textures/forever/l/Glory-Black-2.webp" 
+			  color2="textures/forever/l/Glory-Black-2.webp" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+
+	<shape type="plaque" name="Paw" code="Paw" double="0" stand="0" url="src/img/headstones/base/pet_paw.svg">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="220" max_width="220" init_width="220" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="210" max_height="210" init_height="210" 
+              fixed="2"
+			  color="textures/forever/l/Glory-Black-2.webp" 
+			  color2="textures/forever/l/Glory-Black-2.webp" 
+			  url_3d="src/m3d/headstones24/square.m3d" />
+	</shape>
+
+	<shape type="plaque" name="Heart" code="Heart" double="0" stand="0" url="src/img/headstones/base/pet_heart.svg">
+		<file type="base" />
+		<file type="kerb" />
+		<file type="lid" />
+		<file type="stand" />
+		<file type="table" 
+			  min_width="220" max_width="220" init_width="220" 
+			  min_depth="10" max_depth="10" init_depth="10" 
+			  min_height="200" max_height="200" init_height="200" 
               fixed="2"
 			  color="textures/forever/l/Glory-Black-2.webp" 
 			  color2="textures/forever/l/Glory-Black-2.webp" 

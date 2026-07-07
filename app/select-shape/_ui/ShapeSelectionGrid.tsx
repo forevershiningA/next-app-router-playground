@@ -32,6 +32,46 @@ const petMiniHeadstoneShapeCategories = shapeCategories.filter(
   (category) => category.id === 'traditional',
 );
 
+const filenameFromCatalogUrl = (url?: string) => url?.split('/').pop() ?? '';
+
+const getPetRockPreviewSrc = (catalogShape: ShapeData) => {
+  const filename = filenameFromCatalogUrl(catalogShape.url);
+  if (
+    catalogShape.code === 'Bowl-Cat' ||
+    filename === 'pet_bowl_cat.jpg'
+  ) {
+    return '/shapes/headstones/cat_bowl2.svg';
+  }
+  if (
+    catalogShape.code === 'Bowl' ||
+    filename === 'bowl.jpg'
+  ) {
+    return '/shapes/headstones/pet_bowl.svg';
+  }
+  return filename
+    ? `/shapes/headstones/${filename}`
+    : '/shapes/headstones/pet_bone.svg';
+};
+
+const getPetRockShapeUrl = (catalogShape: ShapeData) => {
+  const filename = filenameFromCatalogUrl(catalogShape.url);
+  if (
+    catalogShape.code === 'Bowl-Cat' ||
+    filename === 'pet_bowl_cat.jpg'
+  ) {
+    return '/shapes/headstones/pet_bowl_outline.svg?petRock=cat';
+  }
+  if (
+    catalogShape.code === 'Bowl' ||
+    filename === 'bowl.jpg'
+  ) {
+    return '/shapes/headstones/pet_bowl_outline.svg?petRock=dog';
+  }
+  return filename
+    ? `/shapes/headstones/${filename}`
+    : '/shapes/headstones/pet_bone.svg';
+};
+
 export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -48,9 +88,11 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   // the catalog XML is still loading asynchronously.
   const fallbackProduct = data.products.find((p) => p.id === productId);
   const isPetPlaqueProduct = productId === '9' || productId === '135';
+  const isPetRock = productId === '135';
   const isPetMiniHeadstone = productId === '8';
-  const designerHref = (stepSlug: Parameters<typeof getDesignerProductStepHref>[0]) =>
-    getDesignerProductStepHref(stepSlug, productId);
+  const designerHref = (
+    stepSlug: Parameters<typeof getDesignerProductStepHref>[0],
+  ) => getDesignerProductStepHref(stepSlug, productId);
   const isPlaque =
     catalog?.product.type === 'plaque' ||
     (catalog === null &&
@@ -87,6 +129,13 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     openPanel('select-material');
   };
 
+  const handlePetRockShapeSelect = (catalogShape: ShapeData) => {
+    setShapeUrl(getPetRockShapeUrl(catalogShape));
+    setWidthMm(catalogShape.table.initWidth);
+    setHeightMm(catalogShape.table.initHeight);
+    router.push(designerHref('select-size'));
+  };
+
   const handleShapeSelect = (shape: Shape) => {
     // Plaque shapes (ovals and circle) are in /shapes/masks/, others in /shapes/headstones/
     const plaqueShapes = [
@@ -116,6 +165,134 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       router.push(designerHref('select-size'));
     }
   };
+
+  // Pet rock shapes come from catalog XML. They are fixed-size plaque shapes,
+  // but should not use the generic bronze/memorial plaque shape list.
+  if (isPetRock) {
+    const catalogShapes = (catalog?.product.shapes ?? []).filter(
+      (catalogShape) => catalogShape.code !== 'Portrait',
+    );
+    const isLoadingCatalog = catalog === null;
+
+    return (
+      <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
+        <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
+          <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
+          <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
+                Select Your Shape
+              </h1>
+              {productName && (
+                <h2 className="mt-3 text-lg font-semibold tracking-[0.2em] text-[#cfac6c] uppercase sm:text-xl">
+                  {productName}
+                </h2>
+              )}
+              <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
+                Choose from the fixed pet rock shapes available for this laser
+                etched black granite plaque.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
+          {isLoadingCatalog ? (
+            <div className="py-20 text-center">
+              <p className="day:text-gray-500 text-gray-400">
+                Loading pet rock shapes…
+              </p>
+            </div>
+          ) : catalogShapes.length === 0 ? (
+            <div className="py-20 text-center">
+              <h3 className="day:text-gray-900 text-xl font-medium text-white">
+                No shapes found
+              </h3>
+              <p className="day:text-gray-500 mt-2 text-gray-400">
+                No pet rock shapes available in catalog
+              </p>
+            </div>
+          ) : (
+            <>
+              <div className="mb-4 flex items-center justify-between gap-4">
+                <div className="day:text-gray-700 text-sm font-medium text-gray-200">
+                  Showing {catalogShapes.length} shape
+                  {catalogShapes.length !== 1 ? 's' : ''}
+                </div>
+                <div className="day:text-gray-400 hidden text-xs tracking-[0.16em] text-gray-500 uppercase sm:block">
+                  Select one to continue
+                </div>
+              </div>
+              <div className="grid grid-cols-2 items-stretch gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                {catalogShapes.map((catalogShape) => {
+                  const shapeUrl = getPetRockShapeUrl(catalogShape);
+                  const previewSrc = getPetRockPreviewSrc(catalogShape);
+                  const usesOriginalPreviewColors =
+                    previewSrc.endsWith('/cat_bowl2.svg');
+                  const isSelected = currentShapeUrl === shapeUrl;
+                  return (
+                    <button
+                      key={catalogShape.code ?? catalogShape.name}
+                      onClick={() => handlePetRockShapeSelect(catalogShape)}
+                      aria-pressed={isSelected}
+                      className={`group day:bg-white relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
+                        isSelected
+                          ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
+                          : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
+                      }`}
+                    >
+                      <div className="day:bg-gray-100 relative aspect-square w-full overflow-hidden bg-[#101010]">
+                        <Image
+                          src={previewSrc}
+                          alt={catalogShape.name}
+                          fill
+                          className={`object-contain p-8 transition-transform duration-300 group-hover:scale-105 ${
+                            usesOriginalPreviewColors
+                              ? ''
+                              : 'day:brightness-100 day:invert-0 brightness-0 invert-[60%]'
+                          }`}
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        />
+                        {isSelected && (
+                          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
+                            <CheckCircleIcon className="h-4 w-4" />
+                            Selected
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-1 flex-col gap-2.5 p-3.5">
+                        <h3 className="day:text-gray-900 line-clamp-2 min-h-10 text-center text-base leading-tight font-semibold text-white">
+                          {catalogShape.name}
+                        </h3>
+                        <p className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2 text-center text-xs text-gray-400">
+                          {catalogShape.table.initWidth} ×{' '}
+                          {catalogShape.table.initHeight} mm
+                        </p>
+                        <div className="mt-auto pt-1">
+                          <span
+                            className={`inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                              isSelected
+                                ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/30'
+                                : 'bg-transparent text-[#cfac6c] group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30'
+                            }`}
+                          >
+                            <span>
+                              {isSelected ? 'Use this shape' : 'Select shape'}
+                            </span>
+                            <ArrowRightIcon className="h-4 w-4" />
+                          </span>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   const handleCustomUpload = () => {
     fileInputRef.current?.click();
@@ -247,9 +424,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                             }`}
                           >
                             <span>
-                              {isSelected
-                                ? 'Use this shape'
-                                : 'Select shape'}
+                              {isSelected ? 'Use this shape' : 'Select shape'}
                             </span>
                             <ArrowRightIcon className="h-4 w-4" />
                           </span>
@@ -486,9 +661,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           }`}
                         >
                           <span>
-                            {isSelected
-                              ? 'Use this shape'
-                              : 'Select shape'}
+                            {isSelected ? 'Use this shape' : 'Select shape'}
                           </span>
                           <ArrowRightIcon className="h-4 w-4" />
                         </span>

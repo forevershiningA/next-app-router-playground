@@ -17,9 +17,50 @@ type PageProps = {
 
 const BASE_URL = 'https://forevershining.org';
 
+const productOfferRanges: Record<string, { lowPrice: string; highPrice: string }> = {
+  '1': { lowPrice: '603', highPrice: '11496' },
+  '4': { lowPrice: '966', highPrice: '11496' },
+  '5': { lowPrice: '346', highPrice: '5666' },
+  '8': { lowPrice: '255', highPrice: '4418' },
+  '9': { lowPrice: '255', highPrice: '4418' },
+  '22': { lowPrice: '603', highPrice: '11496' },
+  '23': { lowPrice: '603', highPrice: '11496' },
+  '30': { lowPrice: '255', highPrice: '4418' },
+  '32': { lowPrice: '255', highPrice: '4418' },
+  '34': { lowPrice: '255', highPrice: '4418' },
+  '52': { lowPrice: '255', highPrice: '4418' },
+  '100': { lowPrice: '966', highPrice: '11496' },
+  '101': { lowPrice: '603', highPrice: '11496' },
+  '124': { lowPrice: '603', highPrice: '11496' },
+  '135': { lowPrice: '255', highPrice: '4418' },
+  '2350': { lowPrice: '1742', highPrice: '2608' },
+};
+
+const productCategoryLabels: Record<string, string> = {
+  headstones: 'Memorial headstone',
+  plaques: 'Memorial plaque',
+  monuments: 'Full monument',
+  urns: 'Memorial urn',
+  'pet-memorials': 'Pet memorial',
+};
+
 function productDesignerUrl(productId: string) {
   const slug = getDesignerProductSlug(productId);
   return slug ? `/${slug}/select-shape` : `/select-shape?productId=${productId}`;
+}
+
+function productOffer(productId: string, url: string) {
+  const range = productOfferRanges[productId] ?? { lowPrice: '255', highPrice: '11496' };
+
+  return {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'USD',
+    lowPrice: range.lowPrice,
+    highPrice: range.highPrice,
+    offerCount: 1,
+    availability: 'https://schema.org/InStock',
+    url,
+  };
 }
 
 export function generateStaticParams() {
@@ -90,9 +131,11 @@ function productTypeJsonLd(page: ReturnType<typeof getMemorialTypePageData>) {
           item: {
             '@type': 'Product',
             name: product.displayName,
+            category: productCategoryLabels[product.category] ?? product.category,
             image: `${BASE_URL}/webp/products/${product.image}`,
             description: product.description,
             url: `${BASE_URL}${productDesignerUrl(product.id)}`,
+            offers: productOffer(product.id, `${BASE_URL}${productDesignerUrl(product.id)}`),
           },
         })),
       },
@@ -313,6 +356,9 @@ function PublicHeader() {
           </Link>
           <Link href="/memorials/urns" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
             Urns
+          </Link>
+          <Link href="/memorials/pet-memorials" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
+            Pet Memorials
           </Link>
           <Link href="/select-product" className="rounded-lg bg-[#cfac6c] px-4 py-2 font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]">
             Start Designing

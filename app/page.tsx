@@ -42,6 +42,18 @@ const socialProfiles = [
   'https://www.youtube.com/@forevershining/featured',
 ];
 
+function aggregateOffer(url: string, lowPrice: string, highPrice: string, offerCount: number) {
+  return {
+    '@type': 'AggregateOffer',
+    priceCurrency: 'USD',
+    lowPrice,
+    highPrice,
+    offerCount,
+    availability: 'https://schema.org/InStock',
+    url,
+  };
+}
+
 const faqItems = [
   {
     question: 'Can I design a memorial online before placing an order?',
@@ -128,26 +140,35 @@ const structuredData = {
       makesOffer: [
         {
           '@type': 'Offer',
+          availability: 'https://schema.org/InStock',
+          url: 'https://forevershining.org/bronze-plaque/select-shape',
           itemOffered: {
             '@type': 'Product',
             name: 'Bronze Plaques',
             category: 'Memorial plaque',
+            offers: aggregateOffer('https://forevershining.org/bronze-plaque/select-shape', '346', '5666', 3),
           },
         },
         {
           '@type': 'Offer',
+          availability: 'https://schema.org/InStock',
+          url: 'https://forevershining.org/memorials/plaques',
           itemOffered: {
             '@type': 'Product',
             name: 'Memorial Plaques',
             category: 'Plaque',
+            offers: aggregateOffer('https://forevershining.org/memorials/plaques', '255', '4418', 4),
           },
         },
         {
           '@type': 'Offer',
+          availability: 'https://schema.org/InStock',
+          url: 'https://forevershining.org/memorials/headstones',
           itemOffered: {
             '@type': 'Product',
             name: 'Headstones',
             category: 'Memorial headstone',
+            offers: aggregateOffer('https://forevershining.org/memorials/headstones', '603', '11496', 4),
           },
         },
       ],

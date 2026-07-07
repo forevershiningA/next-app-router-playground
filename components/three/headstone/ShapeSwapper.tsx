@@ -258,6 +258,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
   const isNonRectangularPlaque =
     isPlaque && Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
+  const isPetRockPlaque = catalog?.product.id === '135';
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
     const oldMetrics = getBoxMetrics(oldBox);
@@ -383,7 +384,24 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const heightM = React.useMemo(() => heightMm / 1000, [heightMm]);
   const widthM = React.useMemo(() => widthMm / 1000, [widthMm]);
 
-  const requestedUrl = shapeUrl || DEFAULT_SHAPE_URL;
+  const isLegacyCatBowlShape =
+    isPetRockPlaque &&
+    Boolean(shapeUrl?.includes('cat_bowl.svg') || shapeUrl?.includes('cat_bowl2.svg'));
+  const isLegacyPetBowlShape =
+    isPetRockPlaque && Boolean(shapeUrl?.includes('pet_bowl.svg'));
+  const requestedUrl = isLegacyCatBowlShape
+    ? '/shapes/headstones/pet_bowl_outline.svg?petRock=cat'
+    : isLegacyPetBowlShape
+      ? shapeUrl?.includes('petRock=cat')
+        ? '/shapes/headstones/pet_bowl_outline.svg?petRock=cat'
+        : '/shapes/headstones/pet_bowl_outline.svg?petRock=dog'
+    : shapeUrl || DEFAULT_SHAPE_URL;
+  const bowlArtworkOverlayUrl =
+    isPetRockPlaque && (requestedUrl.includes('petRock=cat') || isLegacyCatBowlShape)
+      ? '/shapes/headstones/cat_bowl2_overlay.svg'
+      : isPetRockPlaque && requestedUrl.includes('petRock=dog')
+        ? '/shapes/headstones/pet_bowl_overlay.svg'
+        : null;
   const requestedTex = React.useMemo(() => {
     if (!headstoneMaterialUrl) {
       return `${TEX_BASE}${DEFAULT_TEX}`;
@@ -437,7 +455,11 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     if (builtinPedestalShapes.has(currentShapeSlug)) return true;
     return currentShapeSlug.includes('headstone_');
   }, [currentShapeSlug, builtinPedestalShapes]);
-  const preserveTopForShape = !isFixedHeadstoneAsset && !isUrn && !isNonRectangularPlaque;
+  const preserveTopForShape =
+    !isFixedHeadstoneAsset &&
+    !isUrn &&
+    !isNonRectangularPlaque &&
+    !isPetRockPlaque;
   const targetHeightForShape = heightM;
   const targetWidthForShape = widthM;
   const headstoneDepth = isPlaque ? 0.5 : uprightThickness / 10;
@@ -574,7 +596,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             topTileSize={0.35}
             targetHeight={targetHeightForShape}
             targetWidth={targetWidthForShape}
-            sourceSvgOverlayUrl={isCustomUploadedShape ? resolvedUrl : null}
+            sourceSvgOverlayUrl={bowlArtworkOverlayUrl ?? (isCustomUploadedShape ? resolvedUrl : null)}
             preserveTop={preserveTopForShape}
             showEdges={false}
             headstoneStyle={headstoneStyle}

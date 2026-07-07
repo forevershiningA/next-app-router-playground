@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-04
+**Last Updated:** 2026-07-07
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -56,6 +56,113 @@
 48. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
 49. [July 3 Public SEO and Memorial Product Pages](#current-status-2026-07-03--public-seo-and-memorial-product-pages)
 50. [July 4 Product-Prefixed Designer Routes, Home SEO, and Stainless Steel Urns](#current-status-2026-07-04--product-prefixed-designer-routes-home-seo-and-stainless-steel-urns)
+51. [July 7 Bronze Plaques, Product Routes, GSC Product Schema, Granite Image, and Pet Rock Shapes](#current-status-2026-07-07--bronze-plaques-product-routes-gsc-product-schema-granite-image-and-pet-rock-shapes)
+
+---
+
+## Current Status (2026-07-07) - Bronze Plaques, Product Routes, GSC Product Schema, Granite Image, and Pet Rock Shapes
+
+This session is in progress. The most active area is Product ID `135`, Laser Etched Black Granite Pet Rock, especially Cat Bowl and Dog Bowl shape rendering. The user is testing visually from `screen.png`; do not use Playwright for this debugging unless explicitly asked.
+
+### Pet Rock Shape Selection and 3D Rendering
+
+Product ID `135` should use its catalog-native pet rock shapes, not the Bronze Plaque shapes.
+
+| File | Current Behavior |
+|------|------------------|
+| `public/xml/catalog-id-135.xml` | Pet Rock catalog entries include Bone, Cat Bowl, Dog Bowl, Paw, and Heart. |
+| `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Product ID `135` branches to catalog shapes, filters out unrelated portrait/plaque entries, and maps Cat/Dog bowl selection to controlled shape URLs. |
+| `components/ShapeSelector.tsx` | Matches the same Pet Rock shape URL/preview behavior used by the shape grid. |
+| `components/three/headstone/ShapeSwapper.tsx` | Detects Product ID `135`, normalizes old Cat/Dog bowl URLs, and passes a front artwork overlay URL into `SvgHeadstone`. |
+| `components/SvgHeadstone.tsx` | Supports `sourceSvgOverlayUrl` and renders it as a flat front overlay plane on the shape face. |
+
+Current Pet Rock shape assets:
+- `public/shapes/headstones/pet_bowl_outline.svg`: simple circular body used for both Cat Bowl and Dog Bowl 3D geometry.
+- `public/shapes/headstones/cat_bowl2.svg`: current Cat Bowl thumbnail/source reference from the user.
+- `public/shapes/headstones/cat_bowl2_overlay.svg`: white-stroke Cat Bowl front artwork overlay.
+- `public/shapes/headstones/pet_bowl_overlay.svg`: white-stroke Dog Bowl front artwork overlay.
+- `public/shapes/headstones/cat_bowl.svg`, `cat_bowl_overlay.svg`, and `cat_bowl.ai`: earlier Cat Bowl source/attempts; keep unless the user asks to remove them.
+
+Current direction:
+- Cat Bowl and Dog Bowl should be clean circular black granite bodies in 3D, with the bowl/fish/bone/dog artwork drawn as a flat front-face overlay.
+- The decorative artwork should not be part of the extruded 3D silhouette, because that produced angle/light-dependent raised details.
+- If the bowl artwork is still invisible or appears only from some angles, next patch target is `components/SvgHeadstone.tsx`: make the overlay material `THREE.DoubleSide`, increase the overlay Z offset slightly, and use `opacity={1}`.
+- Preserve `preserveTopForShape = false` for Pet Rock plaques; reusing the top-profile preservation path caused the bowl/circle variants to flatten or distort.
+
+Important selection mappings:
+- Cat Bowl preview: `/shapes/headstones/cat_bowl2.svg`
+- Cat Bowl 3D shape URL: `/shapes/headstones/pet_bowl_outline.svg?petRock=cat`
+- Dog Bowl 3D shape URL: `/shapes/headstones/pet_bowl_outline.svg?petRock=dog`
+- Dog Bowl overlay: `/shapes/headstones/pet_bowl_overlay.svg`
+
+### Bronze Plaque Shape and Border Work
+
+Recent Bronze Plaque work touched solid borders for Rectangle, Oval Landscape, Oval Portrait, and Circle plaque shapes.
+
+| File | Current Behavior / Caution |
+|------|----------------------------|
+| `components/three/BronzeBorder.tsx` | Border thickness/placement is being tuned against the old working implementation from GitHub. |
+| `components/SvgHeadstone.tsx` | Non-rectangular plaque shape handling is sensitive; changes here can fix Circle while breaking Oval Landscape/Portrait. |
+| `components/three/headstone/ShapeSwapper.tsx` | Product/shape branching affects whether shape-top preservation is applied. |
+| `components/three/headstone/HeadstoneAssembly.tsx` | Assembly-level offsets can make non-rectangular plaque borders appear sunk into the ground. |
+
+Known visual risks:
+- Circle Bronze Plaque border previously became vertically squashed and sat at the bottom of the shape.
+- Oval Portrait could become distorted.
+- Oval Landscape could sit in the ground.
+- A fix for one non-rectangular Bronze Plaque shape can regress the single-border behavior on the others, so test Circle, Oval Landscape, Oval Portrait, and Rectangle together.
+
+### Designer Routes and SEO Metadata
+
+Product-prefixed Designer routes were extended beyond `/bronze-plaque/select-shape`.
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/designer-route-state.ts` | Normalizes product-prefixed Designer routes to their step slug. |
+| `lib/designer-product-routes.ts` | Central product slug/metadata helper for Designer URLs. |
+| `app/[productSlug]/...` | Dynamic product-prefixed Designer step routes exist for the workflow. |
+
+Target route style:
+- `/bronze-plaque/select-shape`
+- `/bronze-plaque/select-material`
+- other design steps should follow the same product-prefixed pattern where supported.
+
+SEO requirement:
+- Designer step metadata should be unique per selected product and step.
+- Titles/descriptions/keywords should be tailored to the product, for example Bronze Plaque copy on Bronze Plaque routes, not generic DYO Headstones copy.
+
+### GSC Product Structured Data Fix
+
+Google Search Console reported critical Product structured-data issues for Headstones, Memorial Plaques, and Bronze Plaques: missing `offers`, `review`, or `aggregateRating`.
+
+| File | Current Behavior |
+|------|------------------|
+| `app/page.tsx` | Broad Product nodes now include offer information so the Product schema is not missing required commercial fields. |
+| `app/memorials/[type]/page.tsx` | Product items on memorial pages include category/offer data. |
+
+Current intent:
+- Prefer `offers` over fake review data.
+- Keep structured data truthful; do not invent reviews or ratings.
+
+### Granite Image Crop and Pricing
+
+The Granite Image workflow had two issues: crop handles did not match the visible image mask, and selecting Granite Image could prevent selecting Headstone Image plus Inscription together.
+
+| File | Current Behavior |
+|------|------------------|
+| `components/CropCanvas.tsx` | Crop handles are aligned to the visible mask/image bounds after cropping. This file may have a large diff from line endings; avoid casual edits. |
+| `lib/headstone-store.ts` | Selecting an image should no longer clear `selectedInscriptionId`. |
+| `lib/image-pricing.ts` | Granite Image product/code pricing is zero (`$0`), not `$80`. |
+
+### Verification and Working Tree Notes
+
+Latest successful verification during this sequence:
+
+```bash
+pnpm exec tsc --noEmit
+```
+
+Working tree currently includes user-provided `screen.png` and several untracked Cat/Dog bowl SVG assets. Do not revert user visual references or unrelated changes.
 
 ---
 
@@ -11820,4 +11927,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-04*
+*End of STARTER.md - Last updated: 2026-07-07*
