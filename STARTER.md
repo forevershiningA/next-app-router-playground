@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-07
+**Last Updated:** 2026-07-08
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -56,13 +56,13 @@
 48. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
 49. [July 3 Public SEO and Memorial Product Pages](#current-status-2026-07-03--public-seo-and-memorial-product-pages)
 50. [July 4 Product-Prefixed Designer Routes, Home SEO, and Stainless Steel Urns](#current-status-2026-07-04--product-prefixed-designer-routes-home-seo-and-stainless-steel-urns)
-51. [July 7 Bronze Plaques, Product Routes, GSC Product Schema, Granite Image, and Pet Rock Shapes](#current-status-2026-07-07--bronze-plaques-product-routes-gsc-product-schema-granite-image-and-pet-rock-shapes)
+51. [July 8 Pet Bowl SVG Overlays, Saved Design Email Spacing, and Memorial Nav](#current-status-2026-07-08--pet-bowl-svg-overlays-saved-design-email-spacing-and-memorial-nav)
 
 ---
 
-## Current Status (2026-07-07) - Bronze Plaques, Product Routes, GSC Product Schema, Granite Image, and Pet Rock Shapes
+## Current Status (2026-07-08) - Pet Bowl SVG Overlays, Saved Design Email Spacing, and Memorial Nav
 
-This session is in progress. The most active area is Product ID `135`, Laser Etched Black Granite Pet Rock, especially Cat Bowl and Dog Bowl shape rendering. The user is testing visually from `screen.png`; do not use Playwright for this debugging unless explicitly asked.
+This session focused on Product ID `135`, Laser Etched Black Granite Pet Rock, especially Cat Bowl and Dog Bowl shape rendering. The user is testing visually from `screen.png`; do not use Playwright for this debugging unless explicitly asked.
 
 ### Pet Rock Shape Selection and 3D Rendering
 
@@ -74,26 +74,59 @@ Product ID `135` should use its catalog-native pet rock shapes, not the Bronze P
 | `app/select-shape/_ui/ShapeSelectionGrid.tsx` | Product ID `135` branches to catalog shapes, filters out unrelated portrait/plaque entries, and maps Cat/Dog bowl selection to controlled shape URLs. |
 | `components/ShapeSelector.tsx` | Matches the same Pet Rock shape URL/preview behavior used by the shape grid. |
 | `components/three/headstone/ShapeSwapper.tsx` | Detects Product ID `135`, normalizes old Cat/Dog bowl URLs, and passes a front artwork overlay URL into `SvgHeadstone`. |
-| `components/SvgHeadstone.tsx` | Supports `sourceSvgOverlayUrl` and renders it as a flat front overlay plane on the shape face. |
+| `components/SvgHeadstone.tsx` | Supports `sourceSvgOverlayUrl`, converts SVG overlays to canvas textures, and renders them as flat front overlay planes on the shape face. |
 
 Current Pet Rock shape assets:
 - `public/shapes/headstones/pet_bowl_outline.svg`: simple circular body used for both Cat Bowl and Dog Bowl 3D geometry.
-- `public/shapes/headstones/cat_bowl2.svg`: current Cat Bowl thumbnail/source reference from the user.
-- `public/shapes/headstones/cat_bowl2_overlay.svg`: white-stroke Cat Bowl front artwork overlay.
-- `public/shapes/headstones/pet_bowl_overlay.svg`: white-stroke Dog Bowl front artwork overlay.
-- `public/shapes/headstones/cat_bowl.svg`, `cat_bowl_overlay.svg`, and `cat_bowl.ai`: earlier Cat Bowl source/attempts; keep unless the user asks to remove them.
+- `public/shapes/headstones/cat_bowl_a.svg`: current Cat Bowl preview and 3D front artwork overlay, simplified in Illustrator. It is still one compound SVG path, so use it as a texture overlay, not as extracted 3D geometry.
+- `public/shapes/headstones/pet_bowl_a.svg`: current Dog Bowl preview and 3D front artwork overlay, simplified in Illustrator.
+- `public/shapes/headstones/cat_bowl.svg`, `cat_bowl.ai`, `cat_bowl.json`, `pet_bowl.svg`, and `dog_bowl.json`: earlier bowl source/attempt files; keep unless the user asks to remove them.
 
 Current direction:
-- Cat Bowl and Dog Bowl should be clean circular black granite bodies in 3D, with the bowl/fish/bone/dog artwork drawn as a flat front-face overlay.
+- Cat Bowl and Dog Bowl should be clean circular black granite bodies in 3D, with fish/bone/dog artwork and the two circular bowl lines drawn as a white flat front-face SVG texture overlay.
 - The decorative artwork should not be part of the extruded 3D silhouette, because that produced angle/light-dependent raised details.
-- If the bowl artwork is still invisible or appears only from some angles, next patch target is `components/SvgHeadstone.tsx`: make the overlay material `THREE.DoubleSide`, increase the overlay Z offset slightly, and use `opacity={1}`.
+- `SvgHeadstone` injects overlay CSS at render time so SVG paths become `fill: none`, white stroke, `stroke-width: 2.13px`. This is important for Illustrator exports that otherwise render as filled black shapes and disappear on the black bowl.
+- `SvgHeadstone` uses `THREE.DoubleSide`, disables depth testing/writes for the overlay material, and renders the overlay slightly in front of the face to avoid angle-based disappearance.
 - Preserve `preserveTopForShape = false` for Pet Rock plaques; reusing the top-profile preservation path caused the bowl/circle variants to flatten or distort.
 
 Important selection mappings:
-- Cat Bowl preview: `/shapes/headstones/cat_bowl2.svg`
+- Cat Bowl preview: `/shapes/headstones/cat_bowl_a.svg`
 - Cat Bowl 3D shape URL: `/shapes/headstones/pet_bowl_outline.svg?petRock=cat`
+- Cat Bowl overlay: `/shapes/headstones/cat_bowl_a.svg`
+- Dog Bowl preview: `/shapes/headstones/pet_bowl_a.svg`
 - Dog Bowl 3D shape URL: `/shapes/headstones/pet_bowl_outline.svg?petRock=dog`
-- Dog Bowl overlay: `/shapes/headstones/pet_bowl_overlay.svg`
+- Dog Bowl overlay: `/shapes/headstones/pet_bowl_a.svg`
+
+### Saved Design Email Spacing
+
+Saved Design email subjects and headings need a space after the hyphen before the design name.
+
+| File | Current Behavior |
+|------|------------------|
+| `lib/email/helpers.ts` | `appendDesignName(label, designName)` appends names as `Label - Design Name` and avoids duplicate/missing spacing. |
+| `lib/email/index.ts` | Saved Design email subject uses the helper. |
+| `lib/email/templates/SavedDesignEmail.tsx` | Saved Design email title uses the helper. |
+| `tests/unit/email-helpers.test.ts` | Covers spacing helper behavior. |
+
+Expected example:
+
+```text
+Your Design has been Saved - test X
+```
+
+### Memorial Product Page Active Nav
+
+Top navigation on public memorial product pages should highlight the current product type.
+
+| Route | Selected top nav item |
+|------|------------------------|
+| `/memorials/plaques` | `Plaques` |
+| `/memorials/headstones` | `Headstones` |
+| `/memorials/full-monuments` | `Full Monuments` |
+| `/memorials/urns` | `Urns` |
+
+Implementation file:
+- `app/memorials/[type]/page.tsx`
 
 ### Bronze Plaque Shape and Border Work
 
@@ -159,10 +192,12 @@ The Granite Image workflow had two issues: crop handles did not match the visibl
 Latest successful verification during this sequence:
 
 ```bash
-pnpm exec tsc --noEmit
+pnpm type-check
+pnpm test tests/unit/email-helpers.test.ts
+pnpm exec eslint components/SvgHeadstone.tsx components/three/headstone/ShapeSwapper.tsx components/ShapeSelector.tsx app/select-shape/_ui/ShapeSelectionGrid.tsx app/memorials/[type]/page.tsx
 ```
 
-Working tree currently includes user-provided `screen.png` and several untracked Cat/Dog bowl SVG assets. Do not revert user visual references or unrelated changes.
+Working tree includes user-provided visual references such as `screen.png` and current Cat/Dog bowl SVG assets. Do not revert user visual references or unrelated changes.
 
 ---
 
@@ -11927,4 +11962,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-07*
+*End of STARTER.md - Last updated: 2026-07-08*

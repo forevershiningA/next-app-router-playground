@@ -8,11 +8,36 @@ import { useLoader } from '@react-three/fiber';
 import type { ThreeElements } from '@react-three/fiber';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js';
 import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUtils.js';
-import { Edges, useTexture } from '@react-three/drei';
+import { Edges, Line as DreiLine, useTexture } from '@react-three/drei';
 import { Line } from '#/lib/headstone-store';
 import { createStainlessTextureSet, type StainlessFinish } from '#/lib/stainless-texture';
 
 const DEFAULT_FACE_FALLBACK = '/textures/forever/l/Imperial-Red.webp';
+
+type SvgLineOverlay = {
+  bounds: {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  };
+  lines: THREE.Vector3[][];
+};
+
+function isSvgLikeUrl(url: string | null) {
+  return Boolean(url?.split('?')[0].toLowerCase().endsWith('.svg'));
+}
+
+function applyOverlaySvgPaint(svg: string) {
+  const paintCss =
+    'path, circle, ellipse, polygon, polyline, line { fill: none !important; stroke: #fff !important; stroke-width: 2.13px; }';
+
+  if (svg.includes('</style>')) {
+    return svg.replace('</style>', `${paintCss}</style>`);
+  }
+
+  return svg.replace(/<svg\b([^>]*)>/i, `<svg$1><style>${paintCss}</style>`);
+}
 
 /**
  * Manually load a texture from a blob: or data: URL,
@@ -27,8 +52,19 @@ function useBlobTexture(url: string | null): THREE.Texture | null {
       return;
     }
 
+    if (url.split('?')[0].toLowerCase().endsWith('.json')) {
+      setTexture(null);
+      return;
+    }
+
+    let disposed = false;
     const img = new Image();
     img.onload = () => {
+      if (disposed) return;
+      if (!img.naturalWidth || !img.naturalHeight) {
+        setTexture(null);
+        return;
+      }
       const tex = new THREE.Texture(img);
       tex.colorSpace = THREE.SRGBColorSpace;
       tex.needsUpdate = true;
@@ -37,10 +73,80 @@ function useBlobTexture(url: string | null): THREE.Texture | null {
     img.onerror = () => {
       console.error('[useBlobTexture] Failed to load:', url.slice(0, 60));
     };
+
     img.src = url;
 
     return () => {
+      disposed = true;
       // Dispose on cleanup
+      setTexture((prev) => {
+        prev?.dispose();
+        return null;
+      });
+    };
+  }, [url]);
+
+  return texture;
+}
+
+function useSvgCanvasOverlayTexture(url: string | null): THREE.Texture | null {
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+
+  useEffect(() => {
+    if (!url || !isSvgLikeUrl(url)) {
+      setTexture(null);
+      return;
+    }
+
+    const overlayUrl = url;
+    let disposed = false;
+    let objectUrl: string | null = null;
+    const image = new Image();
+
+    const loadTexture = async () => {
+      try {
+        const response = await fetch(overlayUrl);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const svg = await response.text();
+        const paintedSvg = applyOverlaySvgPaint(svg);
+        const blob = new Blob([paintedSvg], { type: 'image/svg+xml' });
+        objectUrl = URL.createObjectURL(blob);
+
+        image.onload = () => {
+          if (disposed) return;
+
+          const size = 1024;
+          const canvas = document.createElement('canvas');
+          canvas.width = size;
+          canvas.height = size;
+          const ctx = canvas.getContext('2d');
+          if (!ctx) return;
+
+          ctx.clearRect(0, 0, size, size);
+          ctx.drawImage(image, 0, 0, size, size);
+
+          const tex = new THREE.CanvasTexture(canvas);
+          tex.colorSpace = THREE.SRGBColorSpace;
+          tex.needsUpdate = true;
+          setTexture(tex);
+        };
+
+        image.onerror = () => {
+          if (!disposed) setTexture(null);
+        };
+        image.src = objectUrl;
+      } catch (error) {
+        console.error('[useSvgCanvasOverlayTexture] Failed to load:', error);
+        if (!disposed) setTexture(null);
+      }
+    };
+
+    void loadTexture();
+
+    return () => {
+      disposed = true;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
       setTexture((prev) => {
         prev?.dispose();
         return null;
@@ -209,6 +315,163 @@ function getProjectedPerimeter(x: number, y: number, pts: THREE.Vector2[], cum: 
   return total > 0 ? finalDist / total : 0;
 }
 
+function isLargeCircularOverlayLine(points: THREE.Vector3[], bounds: SvgLineOverlay['bounds']) {
+  if (points.length < 2) return true;
+
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  for (const point of points) {
+    minX = Math.min(minX, point.x);
+    minY = Math.min(minY, point.y);
+    maxX = Math.max(maxX, point.x);
+    maxY = Math.max(maxY, point.y);
+  }
+
+  const lineWidth = maxX - minX;
+  const lineHeight = maxY - minY;
+  return lineWidth > bounds.width * 0.72 && lineHeight > bounds.height * 0.72;
+}
+
+function simplifyOverlayLine(points: THREE.Vector3[], maxPoints = 72) {
+  if (points.length <= maxPoints) return points;
+
+  const simplified: THREE.Vector3[] = [];
+  const lastIndex = points.length - 1;
+  for (let i = 0; i < maxPoints; i++) {
+    simplified.push(points[Math.round((i / (maxPoints - 1)) * lastIndex)]);
+  }
+  return simplified;
+}
+
+function splitSvgPathDataByMove(d: string) {
+  const matches = Array.from(d.matchAll(/[Mm](?=\s*-?(?:\d|\.\d))/g));
+  if (matches.length <= 1) return [d];
+
+  return matches
+    .map((match, index) => {
+      const start = match.index ?? 0;
+      const end = matches[index + 1]?.index ?? d.length;
+      return d.slice(start, end).trim();
+    })
+    .filter(Boolean);
+}
+
+function extractSvgLinesFromDom(svg: string, bounds: SvgLineOverlay['bounds']) {
+  if (typeof document === 'undefined') return [];
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svg, 'image/svg+xml');
+  const pathElements = Array.from(doc.querySelectorAll('path'));
+  const lines: THREE.Vector3[][] = [];
+  const maxSamplesPerPath = 1800;
+  const maxLines = 220;
+
+  for (const sourcePath of pathElements) {
+    const d = sourcePath.getAttribute('d');
+    if (!d) continue;
+
+    for (const pathData of splitSvgPathDataByMove(d)) {
+      const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      path.setAttribute('d', pathData);
+
+      let length = 0;
+      try {
+        length = path.getTotalLength();
+      } catch {
+        continue;
+      }
+
+      if (!Number.isFinite(length) || length <= 0) continue;
+
+      const sampleCount = Math.min(maxSamplesPerPath, Math.max(24, Math.ceil(length / 8)));
+      const currentLine: THREE.Vector3[] = [];
+
+      for (let i = 0; i <= sampleCount; i++) {
+        const rawPoint = path.getPointAtLength((i / sampleCount) * length);
+        currentLine.push(new THREE.Vector3(rawPoint.x, rawPoint.y, 0));
+      }
+
+      if (currentLine.length > 1 && !isLargeCircularOverlayLine(currentLine, bounds)) {
+        lines.push(simplifyOverlayLine(currentLine));
+        if (lines.length >= maxLines) return lines;
+      }
+    }
+  }
+
+  return lines;
+}
+
+function useSvgLineOverlay(url: string | null): SvgLineOverlay | null {
+  const [overlay, setOverlay] = useState<SvgLineOverlay | null>(null);
+
+  useEffect(() => {
+    if (!url || !isSvgLikeUrl(url)) {
+      setOverlay(null);
+      return;
+    }
+
+    const overlayUrl = url;
+    let disposed = false;
+
+    const loadOverlay = async () => {
+      try {
+        const response = await fetch(overlayUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const svg = await response.text();
+        const viewBoxMatch = svg.match(/viewBox=["']([^"']+)["']/i);
+        const viewBox = viewBoxMatch?.[1]
+          .trim()
+          .split(/[\s,]+/)
+          .map(Number);
+        const bounds =
+          viewBox && viewBox.length === 4 && viewBox.every(Number.isFinite)
+            ? { left: viewBox[0], top: viewBox[1], width: viewBox[2], height: viewBox[3] }
+            : null;
+        if (!bounds || bounds.width <= 0 || bounds.height <= 0) {
+          throw new Error('Missing valid SVG viewBox');
+        }
+
+        const lines = extractSvgLinesFromDom(svg, bounds);
+
+        if (!lines.length) {
+          const parsed = new SVGLoader().parse(svg);
+          for (const path of parsed.paths) {
+            for (const subPath of path.subPaths) {
+              const points = subPath.getPoints(48).map((point) => new THREE.Vector3(point.x, point.y, 0));
+              if (points.length > 1 && !isLargeCircularOverlayLine(points, bounds)) {
+                lines.push(simplifyOverlayLine(points));
+                if (lines.length >= 220) break;
+              }
+            }
+            if (lines.length >= 220) break;
+          }
+        }
+
+        if (!disposed) {
+          setOverlay({ bounds, lines });
+        }
+      } catch (error) {
+        console.error('[useSvgLineOverlay] Failed to load:', error);
+        if (!disposed) {
+          setOverlay(null);
+        }
+      }
+    };
+
+    void loadOverlay();
+
+    return () => {
+      disposed = true;
+    };
+  }, [url]);
+
+  return overlay;
+}
+
 function StainlessHeadstoneRim({
   outlinePoints,
   finish,
@@ -342,7 +605,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   
   // 1. Load SVG and Textures
   const svgData = useLoader(SVGLoader, url);
-  const sourceSvgOverlayTexture = useBlobTexture(sourceSvgOverlayUrl);
+  const sourceSvgCanvasOverlayTexture = useSvgCanvasOverlayTexture(sourceSvgOverlayUrl);
+  const sourceSvgBlobOverlayTexture = useBlobTexture(
+    isSvgLikeUrl(sourceSvgOverlayUrl) ? null : sourceSvgOverlayUrl,
+  );
+  const sourceSvgOverlayTexture = sourceSvgCanvasOverlayTexture ?? sourceSvgBlobOverlayTexture;
+  const sourceSvgLineOverlay = useSvgLineOverlay(null);
   const hasSideTexture = sideTexture !== null;
   const sideTextureSrc = sideTexture ?? faceTexture;
 
@@ -1443,8 +1711,42 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   const groupPosition: [number, number, number] = [0, 0, 0];
   const overlayHeight =
     shapeParams ? Math.max(EPS, shapeParams.bottomTarget_SV - shapeParams.minY) : 0;
+  const sourceSvgLineOverlayMesh =
+    sourceSvgLineOverlay && shapeParams && overlayHeight > 0 ? (
+      <group
+        position={[0, overlayHeight / 2, (apiData?.frontZ ?? 0.0005) + 0.0012]}
+        scale={[
+          shapeParams.dx / Math.max(EPS, sourceSvgLineOverlay.bounds.width),
+          -overlayHeight / Math.max(EPS, sourceSvgLineOverlay.bounds.height),
+          1,
+        ]}
+        renderOrder={12}
+      >
+        <group
+          position={[
+            -(sourceSvgLineOverlay.bounds.left + sourceSvgLineOverlay.bounds.width / 2),
+            -(sourceSvgLineOverlay.bounds.top + sourceSvgLineOverlay.bounds.height / 2),
+            0,
+          ]}
+        >
+          {sourceSvgLineOverlay.lines.map((points, index) => (
+            <DreiLine
+              key={`svg-overlay-line-${index}`}
+              points={points}
+              color="#ffffff"
+              lineWidth={2.5}
+              transparent
+              opacity={0.96}
+              depthTest={false}
+              depthWrite={false}
+              renderOrder={12}
+            />
+          ))}
+        </group>
+      </group>
+    ) : null;
   const sourceSvgOverlay =
-    sourceSvgOverlayTexture && shapeParams && overlayHeight > 0 ? (
+    !sourceSvgLineOverlayMesh && sourceSvgOverlayTexture && shapeParams && overlayHeight > 0 ? (
       <mesh
         position={[0, overlayHeight / 2, (apiData?.frontZ ?? 0.0005) + 0.0008]}
         renderOrder={9}
@@ -1455,12 +1757,14 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           transparent
           alphaTest={0.05}
           opacity={0.9}
+          depthTest={false}
           depthWrite={false}
           toneMapped={false}
-          side={THREE.FrontSide}
+          side={THREE.DoubleSide}
         />
       </mesh>
     ) : null;
+  const sourceOverlay = sourceSvgLineOverlayMesh ?? sourceSvgOverlay;
 
   // 6. Return JSX (FIX: JSX in return, not useMemo)
   // CRITICAL FIX: Move scale from group to individual meshes to prevent base inheritance
@@ -1496,7 +1800,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         {headstoneStyle === 'slant' ? (
           <group position-z={apiData?.frontZ || 0.001}>
             <group renderOrder={10} scale={meshScale}>
-               {sourceSvgOverlay}
+               {sourceOverlay}
                {showStainlessRim && (
                  <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
                )}
@@ -1506,7 +1810,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         ) : (
           <group position-z={apiData?.frontZ || 0}>
             <group renderOrder={10} scale={meshScale}>
-               {sourceSvgOverlay}
+               {sourceOverlay}
                {showStainlessRim && (
                  <StainlessHeadstoneRim outlinePoints={apiData?.outlinePoints} finish={ssFinish} />
                )}

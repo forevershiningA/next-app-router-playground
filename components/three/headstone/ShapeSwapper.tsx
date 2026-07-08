@@ -258,7 +258,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
     Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
   const isNonRectangularPlaque =
     isPlaque && Boolean(shapeUrl?.includes('oval_') || shapeUrl?.includes('circle'));
-  const isPetRockPlaque = catalog?.product.id === '135';
+  const isPetRockPlaque = productId === '135' || catalog?.product.id === '135';
 
   const remapLayoutsBetweenBoxes = React.useCallback((oldBox: THREE.Box3, newBox: THREE.Box3) => {
     const oldMetrics = getBoxMetrics(oldBox);
@@ -386,9 +386,15 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
   const isLegacyCatBowlShape =
     isPetRockPlaque &&
-    Boolean(shapeUrl?.includes('cat_bowl.svg') || shapeUrl?.includes('cat_bowl2.svg'));
+    Boolean(
+      shapeUrl?.includes('cat_bowl.svg') ||
+        shapeUrl?.includes('cat_bowl_a.svg') ||
+        shapeUrl?.includes('cat_bowl2.svg') ||
+        shapeUrl?.includes('cat_bowl.json'),
+    );
   const isLegacyPetBowlShape =
-    isPetRockPlaque && Boolean(shapeUrl?.includes('pet_bowl.svg'));
+    isPetRockPlaque &&
+    Boolean(shapeUrl?.includes('pet_bowl.svg') || shapeUrl?.includes('pet_bowl_a.svg'));
   const requestedUrl = isLegacyCatBowlShape
     ? '/shapes/headstones/pet_bowl_outline.svg?petRock=cat'
     : isLegacyPetBowlShape
@@ -396,11 +402,17 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
         ? '/shapes/headstones/pet_bowl_outline.svg?petRock=cat'
         : '/shapes/headstones/pet_bowl_outline.svg?petRock=dog'
     : shapeUrl || DEFAULT_SHAPE_URL;
+  const isPetBowlOutlineShape = requestedUrl.includes('pet_bowl_outline.svg');
+  const isCatBowlShape =
+    requestedUrl.includes('petRock=cat') ||
+    isLegacyCatBowlShape ||
+    (isPetRockPlaque && isPetBowlOutlineShape && !requestedUrl.includes('petRock=dog'));
+  const isDogBowlShape = requestedUrl.includes('petRock=dog');
   const bowlArtworkOverlayUrl =
-    isPetRockPlaque && (requestedUrl.includes('petRock=cat') || isLegacyCatBowlShape)
-      ? '/shapes/headstones/cat_bowl2_overlay.svg'
-      : isPetRockPlaque && requestedUrl.includes('petRock=dog')
-        ? '/shapes/headstones/pet_bowl_overlay.svg'
+    isCatBowlShape
+      ? '/shapes/headstones/cat_bowl_a.svg'
+      : isDogBowlShape
+        ? '/shapes/headstones/pet_bowl_a.svg'
         : null;
   const requestedTex = React.useMemo(() => {
     if (!headstoneMaterialUrl) {

@@ -6,6 +6,10 @@ import type { DesignerSnapshot, PricingBreakdown } from '#/lib/project-schemas';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import type { QuoteLineItem } from './types';
 
+export function appendDesignName(label: string, designName: string): string {
+  return `${label.trimEnd()} ${designName}`.trim();
+}
+
 /**
  * Converts a PricingBreakdown into an array of QuoteLineItems for email templates.
  * Kept for non-designer emails (e.g. order flows) that only have aggregate totals.

@@ -40,13 +40,13 @@ const getPetRockPreviewSrc = (catalogShape: ShapeData) => {
     catalogShape.code === 'Bowl-Cat' ||
     filename === 'pet_bowl_cat.jpg'
   ) {
-    return '/shapes/headstones/cat_bowl2.svg';
+    return '/shapes/headstones/cat_bowl_a.svg';
   }
   if (
     catalogShape.code === 'Bowl' ||
     filename === 'bowl.jpg'
   ) {
-    return '/shapes/headstones/pet_bowl.svg';
+    return '/shapes/headstones/pet_bowl_a.svg';
   }
   return filename
     ? `/shapes/headstones/${filename}`
@@ -228,7 +228,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   const shapeUrl = getPetRockShapeUrl(catalogShape);
                   const previewSrc = getPetRockPreviewSrc(catalogShape);
                   const usesOriginalPreviewColors =
-                    previewSrc.endsWith('/cat_bowl2.svg');
+                    previewSrc.endsWith('/cat_bowl_a.svg');
                   const isSelected = currentShapeUrl === shapeUrl;
                   return (
                     <button

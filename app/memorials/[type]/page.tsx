@@ -44,6 +44,14 @@ const productCategoryLabels: Record<string, string> = {
   'pet-memorials': 'Pet memorial',
 };
 
+const headerMemorialLinks: MemorialTypeSlug[] = [
+  'plaques',
+  'headstones',
+  'full-monuments',
+  'urns',
+  'pet-memorials',
+];
+
 function productDesignerUrl(productId: string) {
   const slug = getDesignerProductSlug(productId);
   return slug ? `/${slug}/select-shape` : `/select-shape?productId=${productId}`;
@@ -186,7 +194,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productTypeJsonLd(page)) }}
       />
 
-      <PublicHeader />
+      <PublicHeader activeType={page.slug} />
 
       <section className="border-b border-white/10 bg-[#111] day:border-gray-200 day:bg-white">
         <div className="mx-auto max-w-7xl px-6 py-7 lg:px-8">
@@ -327,7 +335,14 @@ export default async function MemorialTypePage({ params }: PageProps) {
   );
 }
 
-function PublicHeader() {
+function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
+  const baseLinkClass =
+    'rounded-lg border px-3 py-2 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:hover:bg-gray-50';
+  const inactiveLinkClass =
+    'border-white/10 text-gray-200 day:border-gray-200 day:text-gray-700';
+  const activeLinkClass =
+    'border-[#cfac6c]/70 bg-[#cfac6c]/15 text-[#f3d48f] day:border-[#cfac6c] day:bg-[#fff7e6] day:text-gray-950';
+
   return (
     <header className="border-b border-white/10 bg-[#0b0b0b]/95 day:border-gray-200 day:bg-white">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-3 sm:flex-row sm:items-center sm:justify-between lg:px-8">
@@ -345,21 +360,19 @@ function PublicHeader() {
           <Link href="/" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
             Home
           </Link>
-          <Link href="/memorials/plaques" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
-            Plaques
-          </Link>
-          <Link href="/memorials/headstones" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
-            Headstones
-          </Link>
-          <Link href="/memorials/full-monuments" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
-            Full Monuments
-          </Link>
-          <Link href="/memorials/urns" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
-            Urns
-          </Link>
-          <Link href="/memorials/pet-memorials" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
-            Pet Memorials
-          </Link>
+          {headerMemorialLinks.map((slug) => {
+            const isActive = slug === activeType;
+            return (
+              <Link
+                key={slug}
+                href={`/memorials/${slug}`}
+                aria-current={isActive ? 'page' : undefined}
+                className={`${baseLinkClass} ${isActive ? activeLinkClass : inactiveLinkClass}`}
+              >
+                {memorialTypePages[slug].navLabel}
+              </Link>
+            );
+          })}
           <Link href="/select-product" className="rounded-lg bg-[#cfac6c] px-4 py-2 font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]">
             Start Designing
           </Link>

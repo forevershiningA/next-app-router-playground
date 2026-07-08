@@ -9,6 +9,7 @@ import { render } from '@react-email/components';
 import { createElement } from 'react';
 import { getCountryConfig } from './config/countries';
 import { getTranslationMap } from './config/translations';
+import { appendDesignName } from './helpers';
 import { generateEmailPDF } from './pdf-email';
 import { getTransporter } from './transport';
 import type {
@@ -118,7 +119,7 @@ function getSubject(
 
   switch (data.type) {
     case 'saved-design':
-      return `${t('your_design_have_been_saved')}${data.designName} - ${data.recipientEmail}`;
+      return `${appendDesignName(t('your_design_have_been_saved'), data.designName)} - ${data.recipientEmail}`;
     case 'order':
       return `${t('invoice')} - ${data.invoiceNumber} - ${data.recipientEmail}`;
     case 'enquiry':

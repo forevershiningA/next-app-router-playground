@@ -21,13 +21,13 @@ const getPetRockPreviewSrc = (code?: string, url?: string) => {
     code === 'Bowl-Cat' ||
     filename === 'pet_bowl_cat.jpg'
   ) {
-    return '/shapes/headstones/cat_bowl2.svg';
+    return '/shapes/headstones/cat_bowl_a.svg';
   }
   if (
     code === 'Bowl' ||
     filename === 'bowl.jpg'
   ) {
-    return '/shapes/headstones/pet_bowl.svg';
+    return '/shapes/headstones/pet_bowl_a.svg';
   }
   return filename
     ? `/shapes/headstones/${filename}`

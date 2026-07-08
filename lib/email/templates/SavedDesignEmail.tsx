@@ -1,6 +1,7 @@
 import { Button, Column, Hr, Row, Section, Text } from '@react-email/components';
 import * as React from 'react';
 import type { CountryEmailConfig, SavedDesignEmailData } from '../types';
+import { appendDesignName } from '../helpers';
 import { DesignPreview } from './components/DesignPreview';
 import { EmailLayout } from './components/EmailLayout';
 import { QuoteTable } from './components/QuoteTable';
@@ -18,7 +19,10 @@ export function SavedDesignEmail({
 }: SavedDesignEmailProps) {
   const t = (key: string) => translations[key] ?? key;
 
-  const title = t('your_design_have_been_saved') + data.designName;
+  const title = appendDesignName(
+    t('your_design_have_been_saved'),
+    data.designName,
+  );
   const previewText = `Your memorial design "${data.designName}" has been saved. View your quote inside.`;
 
   const firstName = (() => {
