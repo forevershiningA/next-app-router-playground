@@ -2,13 +2,13 @@
 
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
-import { Bars3Icon } from '@heroicons/react/24/solid';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { data } from '#/app/_internal/_data';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 export default function MobileHeader() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -23,8 +23,8 @@ export default function MobileHeader() {
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
   const motifCost = useHeadstoneStore((s) => s.motifCost);
   const unitSystem = useUnitSystem();
-  const [isDesktop, setIsDesktop] = useState(false);
   const pathname = usePathname();
+  const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
   
   // Check if we're on a design list page (product or category level)
   const segments = pathname?.split('/').filter(s => s) || [];
@@ -36,16 +36,6 @@ export default function MobileHeader() {
         designerStepSlug,
       ),
   );
-
-  // Detect desktop for header positioning
-  useEffect(() => {
-    const checkDesktop = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-    checkDesktop();
-    window.addEventListener('resize', checkDesktop);
-    return () => window.removeEventListener('resize', checkDesktop);
-  }, []);
 
   const quantity = useMemo(() => {
     if (!catalog) return widthMm * heightMm;
@@ -84,29 +74,20 @@ export default function MobileHeader() {
     [widthMm, heightMm, unitSystem],
   );
 
-  // Don't render header on design list pages, when catalog isn't ready, or when canvas is hidden
-  if (isDesignListPage || !catalog || !isCanvasVisible) {
+  // Don't render header on design list pages, when catalog isn't ready, when
+  // canvas is hidden, or while the mobile left drawer is open (it would overlap
+  // the drawer's own header on mobile).
+  if (isDesignListPage || !catalog || !isCanvasVisible || isMobileMenuOpen) {
     return null;
   }
 
   return (
-    <header 
-      className="fixed top-0 right-0 z-[9999] block border-b border-gray-800 bg-black p-4 transition-[left] duration-300 lg:hidden"
-      style={{ left: isDesktop ? '400px' : '0' }}
+    <header
+      className="fixed top-0 right-0 left-0 z-[9999] block border-b border-gray-800 bg-black p-4 md:hidden"
     >
-      <div className="flex items-center gap-4">
-        <button
-          onClick={() =>
-            window.dispatchEvent(new CustomEvent('toggle-sidebar'))
-          }
-          className="cursor-pointer text-white hover:text-gray-300 lg:hidden"
-          aria-label="Toggle navigation sidebar"
-          aria-expanded="false"
-          type="button"
-        >
-          <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-        </button>
-        <h1 className="text-xl font-semibold text-white !p-0 !m-0">
+      {/* Left padding leaves room for the floating hamburger (see ConditionalNav) */}
+      <div className="flex items-center pl-12">
+        <h1 className="truncate text-lg font-semibold text-white !m-0 !p-0">
           {displayProductName} - {dimensionLabel} ($
           {price.toFixed(2)})
         </h1>

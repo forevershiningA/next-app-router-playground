@@ -5,6 +5,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useEffect, useState, MouseEvent } from 'react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+
+const MEMORIAL_LINKS = [
+  { label: 'Headstones', href: '/memorials/headstones' },
+  { label: 'Plaques', href: '/memorials/plaques' },
+  { label: 'Full Monuments', href: '/memorials/full-monuments' },
+  { label: 'Urns', href: '/memorials/urns' },
+  { label: 'Pet Memorials', href: '/memorials/pet-memorials' },
+] as const;
 
 // FIX 1: Dynamic loader height to match the new responsive container logic
 const HeroCanvas = dynamic(() => import('#/components/HeroCanvas'), {
@@ -176,6 +185,7 @@ export default function HomeSplash() {
   const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
   const [isDayMode, setIsDayMode] = useState(false);
   const [heroSearchQuery, setHeroSearchQuery] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const html = document.documentElement;
@@ -240,6 +250,23 @@ export default function HomeSplash() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeModal]);
+
+  // Mobile menu: close on Escape and lock body scroll while open
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileMenuOpen]);
 
   const rotateLeft = () => {
     setRotation((prev) => prev + Math.PI / 4);
@@ -359,7 +386,81 @@ export default function HomeSplash() {
               Browse Designs
             </Link>
           </nav>
+
+          {/* Mobile menu button - only shown below md where the nav/CTAs are hidden */}
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(true)}
+            className="shrink-0 rounded-lg border border-white/15 bg-white/[0.06] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/60 md:hidden day:border-gray-300 day:bg-white/70 day:text-gray-800"
+            aria-label="Open menu"
+            aria-expanded={mobileMenuOpen}
+          >
+            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+          </button>
         </header>
+
+        {/* Mobile Menu Drawer */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true" aria-label="Site menu">
+            <div
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setMobileMenuOpen(false)}
+              aria-hidden="true"
+            />
+            <div className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto border-b border-[#d4af37]/25 bg-[#0d0a06]/95 px-5 pt-4 pb-6 shadow-2xl backdrop-blur-md day:border-gray-200 day:bg-white/95">
+              <div className="flex items-center justify-between">
+                <Image
+                  src="/ico/forever-transparent-logo.png"
+                  alt="Forever Shining"
+                  width={200}
+                  height={62}
+                  className="h-auto w-40"
+                />
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-lg border border-white/15 p-2 text-white/80 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-300 day:text-gray-700"
+                  aria-label="Close menu"
+                >
+                  <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                </button>
+              </div>
+
+              <p className="mt-6 px-1 text-[11px] font-semibold tracking-[0.24em] text-[#f3d48f] uppercase day:text-amber-700">
+                Memorials
+              </p>
+              <nav className="mt-2 flex flex-col" aria-label="Memorial product pages">
+                {MEMORIAL_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="rounded-lg px-1 py-3 text-base font-medium text-white/85 transition-colors hover:text-[#f3d48f] day:text-gray-700 day:hover:text-amber-700"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </nav>
+
+              <div className="mt-6 flex flex-col gap-3">
+                <Link
+                  href="/select-product"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-lg bg-[#cfac6c] px-5 py-3 text-center text-base font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+                >
+                  Start Designing
+                </Link>
+                <Link
+                  href="/designs"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="rounded-lg border border-white/15 px-5 py-3 text-center text-base font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-white"
+                >
+                  Browse Designs
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
       
         {/* Background Layers */}
         <div 

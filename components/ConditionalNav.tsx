@@ -7,13 +7,34 @@ import DesignsTreeNav from '#/components/DesignsTreeNav';
 import DesignerNav from '#/components/DesignerNav';
 import AccountNav from '#/components/AccountNav';
 import { type DemoCategory } from '#/lib/db';
-import { isDesignerRoutePath } from '#/lib/designer-route-state';
+import { isDesignerRoutePath, getDesignerStepSlug } from '#/lib/designer-route-state';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import clsx from 'clsx';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+
+// Designer steps whose primary UI renders *inside* the left drawer (canvas is
+// visible beside them on desktop). Navigating between these on mobile keeps the
+// drawer open so the user can move through options (Menu, Prev/Next, panel
+// switches) without reopening it. Full-page/overlay steps (select-product,
+// select-shape, check-price) are intentionally excluded so the drawer closes
+// and reveals their content.
+const DRAWER_PANEL_SLUGS = new Set<string>([
+  'design-menu',
+  'select-size',
+  'select-material',
+  'select-border',
+  'inscriptions',
+  'select-motifs',
+  'select-additions',
+  'select-images',
+  'select-emblems',
+]);
 
 export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const pathname = usePathname();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
+  const setIsMobileMenuOpen = useMobileNavStore((s) => s.setOpen);
+  const toggleMobileMenu = useMobileNavStore((s) => s.toggle);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -24,11 +45,11 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       if (window.innerWidth >= 768) {
         return;
       }
-      setIsMobileMenuOpen((prev) => !prev);
+      toggleMobileMenu();
     };
     window.addEventListener('toggle-sidebar', handler);
     return () => window.removeEventListener('toggle-sidebar', handler);
-  }, []);
+  }, [toggleMobileMenu]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -44,6 +65,12 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   }, []);
 
   useEffect(() => {
+    // Keep the mobile drawer open while navigating between in-drawer designer
+    // steps (e.g. "Menu" -> design-menu, or picking another option). Close it
+    // for any other destination so full-page/overlay content is revealed.
+    if (DRAWER_PANEL_SLUGS.has(getDesignerStepSlug(pathname) ?? '')) {
+      return;
+    }
     const timeout = window.setTimeout(() => setIsMobileMenuOpen(false), 0);
     return () => window.clearTimeout(timeout);
   }, [pathname]);
@@ -123,6 +150,20 @@ function renderDesignerSidebar(
 ) {
   return (
     <>
+      {/* Mobile hamburger — always available to open the designer sidebar on
+          mobile, regardless of the current step or catalog-load state.
+          Hidden at md+ where the sidebar is permanently visible. */}
+      {!isMobileMenuOpen && (
+        <button
+          type="button"
+          onClick={() => setIsMobileMenuOpen(true)}
+          aria-label="Open navigation"
+          aria-expanded={false}
+          className="fixed top-4 left-4 z-[10000] flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white shadow-md backdrop-blur-sm transition-all hover:border-white/40 hover:bg-[#1a1208]/95 md:hidden"
+        >
+          <Bars3Icon className="h-5 w-5" aria-hidden="true" />
+        </button>
+      )}
       <div
         className={clsx(
           'fixed inset-0 z-30 bg-black/70 backdrop-blur-sm transition-opacity duration-300 md:hidden',

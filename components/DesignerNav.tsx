@@ -22,6 +22,8 @@ import {
   ShieldCheckIcon,
   ViewfinderCircleIcon,
   CircleStackIcon,
+  SunIcon,
+  MoonIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
@@ -44,6 +46,7 @@ import QuickEnquiryModal from './QuickEnquiryModal';
 import ConfirmModal from './ConfirmModal';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
+import { useTheme } from './ThemeProvider';
 import { logger } from '#/lib/logger';
 import { DEFAULT_TEX, TEX_BASE } from '#/lib/headstone-store.types';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
@@ -312,6 +315,8 @@ export default function DesignerNav() {
   const pathname = usePathname();
   const designerStepSlug = getDesignerStepSlug(pathname);
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
+  const isDayTheme = theme === 'day';
 
   // Ref for the nav container
   const navRef = React.useRef<HTMLElement>(null);
@@ -3181,8 +3186,24 @@ export default function DesignerNav() {
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
         <div className="flex h-full flex-col">
-          {/* Panel Header - desktop only */}
-          <div className="day:border-gray-200 day:bg-stone-50 hidden border-b border-white/10 bg-[#1b1511] px-5 py-4 md:block">
+          {/* Panel Header — shown on all breakpoints so the mobile drawer
+              mirrors the desktop sidebar (Guided Step, title, Menu/Prev/Next). */}
+          <div className="day:border-gray-200 day:bg-stone-50 relative block border-b border-white/10 bg-[#1b1511] px-5 py-4">
+            {/* Day/night toggle — replaces the floating toggle on mobile; lives
+                inside the sidebar so it no longer overlaps the panel. */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={isDayTheme ? 'Switch to night mode' : 'Switch to day mode'}
+              title={isDayTheme ? 'Night mode' : 'Day mode'}
+              className="day:border-gray-300 day:bg-white/70 day:text-amber-700 absolute top-4 left-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 transition-colors hover:border-white/40 hover:text-white md:hidden"
+            >
+              {isDayTheme ? (
+                <MoonIcon className="h-4 w-4" />
+              ) : (
+                <SunIcon className="h-4 w-4" />
+              )}
+            </button>
             {/* Row 1: Guided Step label + step badge */}
             <div className="mb-2 flex items-center justify-center gap-2.5">
               <p
@@ -3699,9 +3720,24 @@ export default function DesignerNav() {
           {/* Mobile Header */}
           <div className="border-primary/10 day:border-[#DEBD68]/20 day:bg-stone-50 border-b bg-[#120c08]/95 px-5 py-4 shadow-[0_10px_25px_rgba(0,0,0,0.45)] md:hidden">
             <div className="flex items-center justify-between gap-4">
-              <p className="font-playfair-display text-primary/50 text-[10px] tracking-[0.45em] italic">
-                Guided Studio
-              </p>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={isDayTheme ? 'Switch to night mode' : 'Switch to day mode'}
+                  title={isDayTheme ? 'Night mode' : 'Day mode'}
+                  className="day:border-gray-300 day:bg-white/70 day:text-amber-700 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 transition-colors hover:border-white/40 hover:text-white"
+                >
+                  {isDayTheme ? (
+                    <MoonIcon className="h-4 w-4" />
+                  ) : (
+                    <SunIcon className="h-4 w-4" />
+                  )}
+                </button>
+                <p className="font-playfair-display text-primary/50 text-[10px] tracking-[0.45em] italic">
+                  Guided Studio
+                </p>
+              </div>
               <Link href="/" className="transition-opacity hover:opacity-80">
                 <img
                   src="/ico/forever-transparent-logo.png"

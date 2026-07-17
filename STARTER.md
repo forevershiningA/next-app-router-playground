@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-08
+**Last Updated:** 2026-07-17
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -56,11 +56,83 @@
 48. [July 1 Designer Flow Updates](#current-status-2026-07-01--designer-flow-updates)
 49. [July 3 Public SEO and Memorial Product Pages](#current-status-2026-07-03--public-seo-and-memorial-product-pages)
 50. [July 4 Product-Prefixed Designer Routes, Home SEO, and Stainless Steel Urns](#current-status-2026-07-04--product-prefixed-designer-routes-home-seo-and-stainless-steel-urns)
-51. [July 8 Pet Bowl SVG Overlays, Saved Design Email Spacing, and Memorial Nav](#current-status-2026-07-08--pet-bowl-svg-overlays-saved-design-email-spacing-and-memorial-nav)
+51. [July 8 Pet Bowl SVG Overlays, Saved Design Email Spacing, Memorial Nav, and Showroom Strategy](#current-status-2026-07-08--pet-bowl-svg-overlays-saved-design-email-spacing-memorial-nav-and-showroom-strategy)
+52. [July 17 Mobile Designer Navigation Overhaul](#current-status-2026-07-17--mobile-designer-navigation-overhaul)
 
 ---
 
-## Current Status (2026-07-08) - Pet Bowl SVG Overlays, Saved Design Email Spacing, and Memorial Nav
+## Current Status (2026-07-17) - Mobile Designer Navigation Overhaul
+
+This session audited and fixed the mobile (below `md` / 768px) behavior of the designer left sidebar and homepage navigation. On desktop the designer sidebar is permanently visible from `md`; on mobile it is a slide-out drawer. The goal was full mobile parity with desktop, a reliable opener, and no floating-control collisions.
+
+### Nav Architecture Recap
+
+The root layout (`app/layout.tsx`) mounts `MobileHeader`, `ConditionalNav`, `MainContent`, and `ThemeToggle`. `ConditionalNav` (`components/ConditionalNav.tsx`) is the central router-aware nav switch:
+
+| Route group | Rendered nav |
+|------|------|
+| Designer routes (incl. `/`) | `renderDesignerSidebar()` → `DesignerNav` inside a slide-out drawer |
+| `/my-account*` | `AccountNav` |
+| `/designs*` | `DesignsTreeNav` |
+| everything else | `GlobalNav` |
+
+`isDesignerRoutePath(pathname)` returns `true` for `/` too, so guards use `isDesignerRoutePath(pathname) && pathname !== '/'`.
+
+### Mobile Drawer Open State Now Lives in a Store
+
+The drawer open/close flag was local `useState` in `ConditionalNav`, which prevented sibling components from reacting to it. It now lives in a dedicated Zustand store so any component can subscribe.
+
+| File | Role |
+|------|------|
+| `lib/mobile-nav-store.ts` | **New.** `useMobileNavStore` with `isOpen`, `setOpen(value)`, `toggle()`. Single source of truth for the mobile designer drawer. |
+| `components/ConditionalNav.tsx` | Reads `isOpen`/`setOpen`/`toggle` from the store instead of local state. Renders floating hamburger + drawer. |
+| `components/MobileHeader.tsx` | Subscribes to `isOpen`; returns `null` while the drawer is open so the top info bar doesn't overlap the drawer header on mobile. |
+
+### Fixes Applied This Session
+
+1. **Reliable mobile hamburger.** The only opener used to be `MobileHeader`'s hamburger, which rendered only when the catalog was loaded AND the step was canvas-visible, and it collided with the floating `ThemeToggle`. A dedicated floating hamburger now lives in `ConditionalNav` (`fixed top-4 left-4 z-[10000]`, `md:hidden`), shown whenever the drawer is closed on all designer routes; it calls `setOpen(true)` directly. `MobileHeader`'s own hamburger was removed (it is now a pure info bar: product name + dimensions + price, `md:hidden`, `pl-12` to clear the hamburger).
+
+2. **Homepage mobile menu.** `app/_ui/HomeSplash.tsx` header previously showed only a centered logo below `md` (memorials nav is `xl:flex`, CTAs `md:flex`), leaving no mobile navigation. Added a `md:hidden` hamburger + slide-down drawer with `MEMORIAL_LINKS` + Start Designing / Browse Designs CTAs, backdrop, Escape-to-close, body-scroll-lock, and day/night theme support.
+
+3. **Mobile drawer parity with desktop.** The fullscreen panel header in `DesignerNav.tsx` was `hidden ... md:block` (desktop only), so the mobile drawer lacked the Guided-Step label, panel title ("Select Border" etc.), and Menu / Prev / Next controls. Changed it to render on all breakpoints (`relative block`).
+
+4. **Day/night toggle moved into the sidebar on mobile.** Added a `md:hidden` Sun/Moon toggle (via `useTheme` from `components/ThemeProvider.tsx`) inside both the panel header and the menu-list mobile header. `ThemeToggle` now hides below `md` on designer routes (`hidden md:flex`) so it no longer floats over the drawer.
+
+5. **"Menu" button no longer closes the drawer.** `ConditionalNav`'s pathname effect used to force-close the drawer on every navigation. Because in-drawer step UIs render *inside* the drawer, navigating between them (e.g. tapping "Menu" → `design-menu`, or Prev/Next) wrongly collapsed it. The effect now keeps the drawer open when the destination slug is in `DRAWER_PANEL_SLUGS` and closes it otherwise.
+
+   ```ts
+   const DRAWER_PANEL_SLUGS = new Set([
+     'design-menu', 'select-size', 'select-material', 'select-border',
+     'inscriptions', 'select-motifs', 'select-additions',
+     'select-images', 'select-emblems',
+   ]);
+   ```
+
+   Full-page/overlay steps (`select-product`, `select-shape`, `check-price`) are intentionally excluded so the drawer closes and reveals their content. `DesignerNav`'s route-sync effect auto-opens the correct panel via `setActiveFullscreenPanel(currentSlug)`, so keeping the drawer open always shows the right panel.
+
+### Breakpoint & Z-Index Conventions (mobile designer)
+
+- Sidebar permanently visible from `md` (768px); mobile openers/toggles use `md:hidden`.
+- Floating hamburger: `z-[10000]`; `MobileHeader` info bar: `z-[9999]`; drawer backdrop: `z-30`; drawer panel: `z-40` (mobile) / `md:z-10`.
+- The floating "N" seen bottom-left in screenshots is the **Next.js dev indicator**, not app UI — it does not appear in production.
+
+### Files Touched
+
+- `lib/mobile-nav-store.ts` (new)
+- `components/ConditionalNav.tsx`
+- `components/MobileHeader.tsx`
+- `components/ThemeToggle.tsx`
+- `components/DesignerNav.tsx`
+- `app/_ui/HomeSplash.tsx`
+
+### Verification
+
+All changes validated with `pnpm type-check`, `pnpm lint` (`--max-warnings 0`), and a full `pnpm build` — all pass (exit 0, 111/111 static pages). There is no automated test suite for nav behavior; `pnpm build` is the primary gate and mobile behavior was verified visually from `screen.png`.
+
+
+---
+
+## Current Status (2026-07-08) - Pet Bowl SVG Overlays, Saved Design Email Spacing, Memorial Nav, and Showroom Strategy
 
 This session focused on Product ID `135`, Laser Etched Black Granite Pet Rock, especially Cat Bowl and Dog Bowl shape rendering. The user is testing visually from `screen.png`; do not use Playwright for this debugging unless explicitly asked.
 
@@ -127,6 +199,54 @@ Top navigation on public memorial product pages should highlight the current pro
 
 Implementation file:
 - `app/memorials/[type]/page.tsx`
+
+### Marketing and Online Showroom Strategy
+
+The strategic positioning is not a blank technical configurator and not generic funeral-care content. The stronger model is an online memorial showroom:
+
+```text
+Browse finished memorial designs, choose one you like, customize it in live 3D, adjust it to cemetery requirements, then request a quote or installation guidance.
+```
+
+This mirrors the real stonemason showroom experience:
+- customer sees premade headstones/plaques/monuments,
+- chooses a style close to what they want,
+- provides the cemetery/location and installation context,
+- then personalizes wording, material, size, motifs, and photos.
+
+Recommended language:
+- Use `Customize this design in 3D` for design-gallery CTAs instead of generic `Start designing`.
+- Describe `/designs` as a showroom/collection of finished memorial ideas, not just a gallery.
+- Frame size controls as `Cemetery size requirements`, because plot limits and cemetery regulations are the practical reason for width/height/thickness controls.
+- Keep pro controls available, but make the default path design-first: `Design collection -> Customize in 3D -> Quote / installation enquiry`.
+
+Market positioning:
+- Primary: standard online memorial range for common AU/UK/CA/USA headstones, plaques, pet memorials, lawn memorials, bronze plaques, and laser-etched headstones.
+- Secondary: cultural and custom collections for Italian, Greek, European, Orthodox, Catholic, and other community-specific monument styles.
+- Custom/high-end work should be presented as a consultation pathway, not forced into the standard instant-design flow.
+
+Social/media strategy:
+- Avoid duplicating large funeral brands' broad grief-support content.
+- Compete on clarity, preview confidence, and transparency: choose a real design, edit it, see it in 3D, understand size/price implications, and avoid ordering blind.
+- Strong recurring formats: design transformations, flat proof vs 3D preview, layout mistake fixes, cemetery-size guidance, pet memorial examples, price transparency, and showroom browsing at home with family.
+- Social should drive people into specific design collections (`/designs/pet-memorials`, `/designs/bronze-plaques`, relationship/category pages), not into a blank Designer start.
+
+### Anonymized Saved Designs as SEO Showroom
+
+The `/designs` strategy is to recreate/anonymize legacy saved designs into public, editable showroom designs. This is likely the strongest marketing asset because it converts real historical design work into searchable inspiration pages.
+
+Example reviewed:
+- `https://forevershining.org/designs/traditional-headstone/biblical-memorial`
+- Metadata currently positions it as `Biblical Memorial - Traditional Engraved Headstone Designs`.
+- The page advertises `49` biblical memorial designs and targets AU/UK/US/global with canonical/hreflang metadata.
+
+Strategic notes:
+- Anonymized designs should feel like intentional sample showroom designs, not fake customer records.
+- Keep real names/private data out; use sample names, sample dates, and neutral memorial wording.
+- Category pages should ideally expose indexable design-card content server-side: design names, image thumbnails, alt text, links to detail pages, and short descriptions. The fetched HTML currently showed a client-rendered loading shell plus metadata; if design cards are only client-rendered, SEO may be weaker than the metadata suggests.
+- Individual design cards/pages should emphasize the next action: `Customize this design in 3D`.
+- Useful filters for category pages: with cross, with verse, with photo, simple inscription, companion layout, upright, base, material/product type.
+- Category intro copy should bridge inspiration and action, for example: `Browse biblical memorial designs inspired by traditional engraved headstones. Choose a layout, then personalize the wording, verse, shape, size, and granite finish in our 3D Designer.`
 
 ### Bronze Plaque Shape and Border Work
 
