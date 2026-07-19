@@ -4,9 +4,6 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
-import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
-import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2';
-import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry';
 
 type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   /** Object whose bounds should be outlined */
@@ -39,11 +36,62 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   animationDuration?: number;
 };
 
-const OUTLINE_LINE_WIDTH_PX = 4.5;
+const OUTLINE_ARM_COUNT = 16;
+const OUTLINE_THICKNESS_RATIO = 0.004;
+const OUTLINE_MIN_THICKNESS = 0.001;
+const DESKTOP_OUTLINE_THICKNESS_RATIO = 0.0012;
+const DESKTOP_OUTLINE_MIN_THICKNESS = 0.00035;
+const MOBILE_BREAKPOINT_PX = 768;
+
+type OutlineGroup = THREE.Group & {
+  userData: {
+    outlineGeometry?: THREE.BoxGeometry;
+    outlineMaterial?: THREE.MeshBasicMaterial;
+    outlineMeshes?: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[];
+  };
+};
+
+function createOutlineGroup(
+  color: string | number,
+  through: boolean,
+  renderOrder: number,
+  clippingPlane: THREE.Plane | null,
+) {
+  const group = new THREE.Group() as OutlineGroup;
+  const geometry = new THREE.BoxGeometry(1, 1, 1);
+  const material = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(color).getHex(),
+    depthTest: !through,
+    depthWrite: false,
+    transparent: true,
+    opacity: 1,
+    toneMapped: false,
+    clippingPlanes: clippingPlane ? [clippingPlane] : null,
+    clipIntersection: false,
+  });
+  const meshes: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[] = [];
+
+  for (let index = 0; index < OUTLINE_ARM_COUNT; index++) {
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.renderOrder = renderOrder;
+    mesh.frustumCulled = false;
+    mesh.raycast = () => null;
+    mesh.visible = false;
+    group.add(mesh);
+    meshes.push(mesh);
+  }
+
+  group.renderOrder = renderOrder;
+  group.userData.outlineGeometry = geometry;
+  group.userData.outlineMaterial = material;
+  group.userData.outlineMeshes = meshes;
+
+  return group;
+}
 
 /**
- * Elegant bounding box outline with viewfinder corners that rotates with the target object.
- * Shows corner brackets instead of full box edges for a cleaner, professional look.
+ * Bounding-box outline with viewfinder corners that rotates with the target object.
+ * Uses small mesh arms instead of WebGL line width so thickness is stable and centered.
  */
 export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Object3D>({
   targetRef,
@@ -62,7 +110,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   animationDuration = 420,
 }: RotatingBoxOutlineProps) {
   const { gl, size } = useThree();
-  const helperRef = React.useRef<LineSegments2 | null>(null);
+  const helperRef = React.useRef<OutlineGroup | null>(null);
   const depthPadding = depthPad ?? pad;
   const {
     localBox,
@@ -78,7 +126,6 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     cameraDir,
     cornerTemp,
     endpointTemp,
-    outlinePositions,
   } = React.useMemo(() => ({
     localBox: new THREE.Box3(),
     childBox: new THREE.Box3(),
@@ -93,7 +140,6 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     cameraDir: new THREE.Vector3(),
     cornerTemp: new THREE.Vector3(),
     endpointTemp: new THREE.Vector3(),
-    outlinePositions: [] as number[],
   }), []);
   const clippingPlaneRef = React.useRef(new THREE.Plane());
   const animationStartRef = React.useRef<number | null>(null);
@@ -109,7 +155,6 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     };
   }, [gl, frontFacingOnly]);
 
-  // Create the helper geometry and material (wait until target is ready)
   React.useEffect(() => {
     let rafId: number | null = null;
 
@@ -120,27 +165,13 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         return;
       }
 
-      const geometry = new LineSegmentsGeometry();
-      geometry.setPositions([0, 0, 0, 0, 0, 0]);
-      const material = new LineMaterial({
-        color: new THREE.Color(color).getHex(),
-        linewidth: OUTLINE_LINE_WIDTH_PX,
-        depthTest: !through,
-        depthWrite: false,
-        transparent: true,
-        opacity: 1.0,
-        resolution: new THREE.Vector2(size.width, size.height),
-      });
-
-      material.clippingPlanes = frontFacingOnly ? [clippingPlaneRef.current] : null;
-      material.clipIntersection = false;
-
-      const helper = new LineSegments2(geometry, material);
-      helper.renderOrder = renderOrder;
-      helper.frustumCulled = false;
-      helper.raycast = () => null;
+      const helper = createOutlineGroup(
+        color,
+        through,
+        renderOrder,
+        frontFacingOnly ? clippingPlaneRef.current : null,
+      );
       helperRef.current = helper;
-
       obj.add(helper);
     };
 
@@ -152,19 +183,19 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       }
       if (helperRef.current) {
         helperRef.current.parent?.remove(helperRef.current);
-        helperRef.current.geometry.dispose();
-        (helperRef.current.material as THREE.Material)?.dispose();
+        helperRef.current.userData.outlineGeometry?.dispose();
+        helperRef.current.userData.outlineMaterial?.dispose();
         helperRef.current = null;
       }
     };
-  }, [targetRef, color, through, renderOrder, frontFacingOnly, size.width, size.height]);
+  }, [targetRef, color, through, renderOrder, frontFacingOnly]);
 
-  // Update the helper every frame
   useFrame((state) => {
     const obj = targetRef.current;
     const helper = helperRef.current;
+    const meshes = helper?.userData.outlineMeshes;
 
-    if (!helper || !obj || !visible) {
+    if (!helper || !meshes || !obj || !visible) {
       if (helper) {
         helper.visible = false;
       }
@@ -201,21 +232,21 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       ? THREE.MathUtils.clamp((easedProgress - 0.2) / 0.8, 0, 1)
       : 1;
 
-    const material = helper.material as LineMaterial;
-    material.resolution.set(size.width, size.height);
-    const targetOpacity = animateOnShow ? 0.35 + 0.65 * easedProgress : 1;
-    if (material.opacity !== targetOpacity) {
-      material.opacity = targetOpacity;
+    const material = helper.userData.outlineMaterial;
+    if (material) {
+      const targetOpacity = animateOnShow ? 0.35 + 0.65 * easedProgress : 1;
+      if (material.opacity !== targetOpacity) {
+        material.opacity = targetOpacity;
+      }
     }
 
-    // Calculate oriented bounding box in local space
     obj.updateWorldMatrix(true, true);
     helper.parent?.updateWorldMatrix(true, true);
     inverseMatrix.copy(obj.matrixWorld).invert();
     localBox.makeEmpty();
 
     obj.traverse((child) => {
-      if (!(child instanceof THREE.Mesh) || !child.geometry) {
+      if (!(child instanceof THREE.Mesh) || !child.geometry || child.parent === helper) {
         return;
       }
 
@@ -278,6 +309,13 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
     const lenXLocal = halfWidthLocal * 2 * lineLength;
     const lenYLocal = halfHeightLocal * 2 * lineLength;
+    const isMobileViewport = size.width < MOBILE_BREAKPOINT_PX;
+    const localThickness = Math.max(
+      Math.min(halfWidthLocal, halfHeightLocal) * (
+        isMobileViewport ? OUTLINE_THICKNESS_RATIO : DESKTOP_OUTLINE_THICKNESS_RATIO
+      ),
+      isMobileViewport ? OUTLINE_MIN_THICKNESS : DESKTOP_OUTLINE_MIN_THICKNESS,
+    );
 
     const bottomLiftLocal = axisYLength !== 0 ? bottomLift / axisYLength : bottomLift;
     const frontExtensionLocal = axisZLength !== 0 ? frontExtension / axisZLength : frontExtension;
@@ -292,22 +330,29 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       cameraDir.set(0, 0, 1);
     }
 
-    if (frontFacingOnly && helper) {
+    if (frontFacingOnly && material) {
       clippingPlaneRef.current.setFromNormalAndCoplanarPoint(cameraDir, worldCenter);
       clippingPlaneRef.current.constant += depthPadding;
       material.clippingPlanes = [clippingPlaneRef.current];
     }
 
-    outlinePositions.length = 0;
-    const pushLine = (startLocal: THREE.Vector3, endLocal: THREE.Vector3) => {
-      outlinePositions.push(
-        startLocal.x,
-        startLocal.y,
-        startLocal.z,
-        endLocal.x,
-        endLocal.y,
-        endLocal.z,
-      );
+    let meshIndex = 0;
+    const setArm = (
+      startLocal: THREE.Vector3,
+      endLocal: THREE.Vector3,
+      axis: 'x' | 'y',
+    ) => {
+      const mesh = meshes[meshIndex++];
+      if (!mesh) return;
+
+      endpointTemp.addVectors(startLocal, endLocal).multiplyScalar(0.5);
+      mesh.position.copy(endpointTemp);
+      if (axis === 'x') {
+        mesh.scale.set(Math.abs(endLocal.x - startLocal.x), localThickness, localThickness);
+      } else {
+        mesh.scale.set(localThickness, Math.abs(endLocal.y - startLocal.y), localThickness);
+      }
+      mesh.visible = true;
     };
 
     const cornerSigns: [number, number, number][] = [
@@ -339,27 +384,21 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       if (horizontalScale > 0.0001) {
         endpointTemp.copy(cornerTemp);
         endpointTemp.x -= sx * lenXLocal * horizontalScale;
-        pushLine(cornerTemp, endpointTemp);
+        setArm(cornerTemp, endpointTemp, 'x');
       }
 
       if (verticalScale > 0.0001) {
         endpointTemp.copy(cornerTemp);
         endpointTemp.y -= sy * lenYLocal * verticalScale;
-        pushLine(cornerTemp, endpointTemp);
+        setArm(cornerTemp, endpointTemp, 'y');
       }
-
-      // Skip the depth leg so corners stay like a 2D viewfinder even on thick meshes
     });
 
-    if (outlinePositions.length === 0) {
-      helper.visible = false;
-      return;
+    for (let index = meshIndex; index < meshes.length; index++) {
+      meshes[index].visible = false;
     }
 
-    (helper.geometry as LineSegmentsGeometry).setPositions(outlinePositions);
-    helper.computeLineDistances();
-
-    helper.visible = true;
+    helper.visible = meshIndex > 0;
   });
 
   return null;
