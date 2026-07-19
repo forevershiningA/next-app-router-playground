@@ -4,6 +4,9 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useFrame, useThree } from '@react-three/fiber';
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
+import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2';
+import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry';
 
 type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   /** Object whose bounds should be outlined */
@@ -36,7 +39,7 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   animationDuration?: number;
 };
 
-const MAX_OUTLINE_FLOATS = 8 * 2 * 2 * 3;
+const OUTLINE_LINE_WIDTH_PX = 4.5;
 
 /**
  * Elegant bounding box outline with viewfinder corners that rotates with the target object.
@@ -58,8 +61,8 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   animateOnShow = false,
   animationDuration = 420,
 }: RotatingBoxOutlineProps) {
-  const { gl } = useThree();
-  const helperRef = React.useRef<THREE.LineSegments | null>(null);
+  const { gl, size } = useThree();
+  const helperRef = React.useRef<LineSegments2 | null>(null);
   const depthPadding = depthPad ?? pad;
   const {
     localBox,
@@ -90,7 +93,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     cameraDir: new THREE.Vector3(),
     cornerTemp: new THREE.Vector3(),
     endpointTemp: new THREE.Vector3(),
-    outlinePositions: new Float32Array(MAX_OUTLINE_FLOATS),
+    outlinePositions: [] as number[],
   }), []);
   const clippingPlaneRef = React.useRef(new THREE.Plane());
   const animationStartRef = React.useRef<number | null>(null);
@@ -117,23 +120,22 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         return;
       }
 
-      const geometry = new THREE.BufferGeometry();
-      const positionAttribute = new THREE.BufferAttribute(outlinePositions, 3);
-      positionAttribute.setUsage(THREE.DynamicDrawUsage);
-      geometry.setAttribute('position', positionAttribute);
-      geometry.setDrawRange(0, 0);
-      const material = new THREE.LineBasicMaterial({
-        color: new THREE.Color(color as any).getHex(),
+      const geometry = new LineSegmentsGeometry();
+      geometry.setPositions([0, 0, 0, 0, 0, 0]);
+      const material = new LineMaterial({
+        color: new THREE.Color(color).getHex(),
+        linewidth: OUTLINE_LINE_WIDTH_PX,
         depthTest: !through,
         depthWrite: false,
         transparent: true,
         opacity: 1.0,
-        linewidth: 2,
-        clippingPlanes: frontFacingOnly ? [clippingPlaneRef.current] : null,
-        clipIntersection: false,
+        resolution: new THREE.Vector2(size.width, size.height),
       });
 
-      const helper = new THREE.LineSegments(geometry, material);
+      material.clippingPlanes = frontFacingOnly ? [clippingPlaneRef.current] : null;
+      material.clipIntersection = false;
+
+      const helper = new LineSegments2(geometry, material);
       helper.renderOrder = renderOrder;
       helper.frustumCulled = false;
       helper.raycast = () => null;
@@ -155,7 +157,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
         helperRef.current = null;
       }
     };
-  }, [targetRef, color, through, renderOrder]);
+  }, [targetRef, color, through, renderOrder, frontFacingOnly, size.width, size.height]);
 
   // Update the helper every frame
   useFrame((state) => {
@@ -199,7 +201,8 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       ? THREE.MathUtils.clamp((easedProgress - 0.2) / 0.8, 0, 1)
       : 1;
 
-    const material = helper.material as THREE.LineBasicMaterial;
+    const material = helper.material as LineMaterial;
+    material.resolution.set(size.width, size.height);
     const targetOpacity = animateOnShow ? 0.35 + 0.65 * easedProgress : 1;
     if (material.opacity !== targetOpacity) {
       material.opacity = targetOpacity;
@@ -292,17 +295,19 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     if (frontFacingOnly && helper) {
       clippingPlaneRef.current.setFromNormalAndCoplanarPoint(cameraDir, worldCenter);
       clippingPlaneRef.current.constant += depthPadding;
-      (helper.material as THREE.LineBasicMaterial).clippingPlanes = [clippingPlaneRef.current];
+      material.clippingPlanes = [clippingPlaneRef.current];
     }
 
-    let positionOffset = 0;
+    outlinePositions.length = 0;
     const pushLine = (startLocal: THREE.Vector3, endLocal: THREE.Vector3) => {
-      outlinePositions[positionOffset++] = startLocal.x;
-      outlinePositions[positionOffset++] = startLocal.y;
-      outlinePositions[positionOffset++] = startLocal.z;
-      outlinePositions[positionOffset++] = endLocal.x;
-      outlinePositions[positionOffset++] = endLocal.y;
-      outlinePositions[positionOffset++] = endLocal.z;
+      outlinePositions.push(
+        startLocal.x,
+        startLocal.y,
+        startLocal.z,
+        endLocal.x,
+        endLocal.y,
+        endLocal.z,
+      );
     };
 
     const cornerSigns: [number, number, number][] = [
@@ -346,14 +351,13 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       // Skip the depth leg so corners stay like a 2D viewfinder even on thick meshes
     });
 
-    if (positionOffset === 0) {
+    if (outlinePositions.length === 0) {
       helper.visible = false;
       return;
     }
 
-    const positionAttribute = helper.geometry.getAttribute('position') as THREE.BufferAttribute;
-    positionAttribute.needsUpdate = true;
-    helper.geometry.setDrawRange(0, positionOffset / 3);
+    (helper.geometry as LineSegmentsGeometry).setPositions(outlinePositions);
+    helper.computeLineDistances();
 
     helper.visible = true;
   });

@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import SceneOverlayHost from '#/components/SceneOverlayHost';
 import CheckPricePanel from '#/components/CheckPricePanel';
 import SEOPanel from '#/components/SEOPanel';
-import LoadDesignButton from '#/components/LoadDesignButton';
 import SceneryToggleButton from '#/components/SceneryToggleButton';
 import ErrorBoundary from '#/components/ErrorBoundary';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
@@ -184,7 +183,6 @@ export default function ConditionalCanvas() {
             </div>
           }
         >
-          <LoadDesignButton label="Load Design" />
           <SceneOverlayHost />
           <CheckPricePanel />
           <SEOPanel />

@@ -30,12 +30,37 @@ const DRAWER_PANEL_SLUGS = new Set<string>([
   'select-emblems',
 ]);
 
+const DRAWER_PANEL_TITLES: Record<string, string> = {
+  'design-menu': 'Menu',
+  'select-size': 'Select Size',
+  'select-material': 'Select Material',
+  'select-border': 'Select Border',
+  inscriptions: 'Inscriptions',
+  'select-motifs': 'Select Motifs',
+  'select-additions': 'Additions',
+  'select-images': 'Images',
+  'select-emblems': 'Select Emblems',
+};
+
 export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const pathname = usePathname();
   const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
   const setIsMobileMenuOpen = useMobileNavStore((s) => s.setOpen);
   const toggleMobileMenu = useMobileNavStore((s) => s.toggle);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+
+  // Whether the current step is an editing sub-panel (canvas must stay visible
+  // beside/above it). The main menu (design-menu) and non-step routes open as a
+  // full-height drawer instead of a canvas-revealing bottom sheet.
+  const designerStepSlug = getDesignerStepSlug(pathname);
+  const useBottomSheet =
+    designerStepSlug != null &&
+    designerStepSlug !== 'design-menu' &&
+    DRAWER_PANEL_SLUGS.has(designerStepSlug);
+  const mobileSheetTitle =
+    designerStepSlug != null
+      ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
+      : 'Designer';
 
   useEffect(() => {
     const handler = () => {
@@ -133,12 +158,22 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     // Show AccountNav only when logged in; show DesignerNav while logged out
     if (isLoggedIn === true) return <AccountNav />;
     // While checking (null) or not logged in → designer sidebar
-    return renderDesignerSidebar(isMobileMenuOpen, setIsMobileMenuOpen);
+    return renderDesignerSidebar(
+      isMobileMenuOpen,
+      setIsMobileMenuOpen,
+      useBottomSheet,
+      mobileSheetTitle,
+    );
   }
 
   if (isDesignerRoute) {
     if (pathname === '/') return null;
-    return renderDesignerSidebar(isMobileMenuOpen, setIsMobileMenuOpen);
+    return renderDesignerSidebar(
+      isMobileMenuOpen,
+      setIsMobileMenuOpen,
+      useBottomSheet,
+      mobileSheetTitle,
+    );
   }
 
   return <GlobalNav items={items} />;
@@ -147,7 +182,15 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
 function renderDesignerSidebar(
   isMobileMenuOpen: boolean,
   setIsMobileMenuOpen: (v: boolean) => void,
+  useBottomSheet: boolean,
+  mobileSheetTitle: string,
 ) {
+  // Main menu / non-step routes open as a full-height drawer (no canvas to
+  // reveal). Editing sub-panels use a compact, canvas-revealing bottom sheet
+  // so the product stays visible while controls scroll inside the sheet.
+  const sheetHeightClass = useBottomSheet
+    ? 'h-[36dvh] max-h-[36dvh]'
+    : 'h-[100dvh]';
   return (
     <>
       {/* Mobile hamburger — always available to open the designer sidebar on
@@ -159,39 +202,44 @@ function renderDesignerSidebar(
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Open navigation"
           aria-expanded={false}
-          className="fixed top-4 left-4 z-[10000] flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white shadow-md backdrop-blur-sm transition-all hover:border-white/40 hover:bg-[#1a1208]/95 md:hidden"
+          className="fixed top-7 left-4 z-[10000] flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#3a2a1c] bg-[#1a1208] text-white shadow-none outline-none ring-0 transition-colors hover:border-[#D4A84F]/55 hover:bg-[#21160d] focus-visible:border-[#D4A84F] focus-visible:ring-2 focus-visible:ring-[#D4A84F]/35 md:hidden"
         >
           <Bars3Icon className="h-5 w-5" aria-hidden="true" />
         </button>
       )}
+      {/* No full-screen backdrop on mobile: the bottom sheet must leave the 3D
+          canvas above it interactive (orbit/tap) while editing. Close via the
+          sheet's ✕. */}
       <div
         className={clsx(
-          'fixed inset-0 z-30 bg-black/70 backdrop-blur-sm transition-opacity duration-300 md:hidden',
+          // Mobile: bottom sheet docked to the bottom edge so the 3D product
+          // stays visible above it (editing sub-panels), or a full-height drawer
+          // for the main menu. Desktop (md+): permanent left column.
+          'fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-lg bg-[#1b1511] shadow-2xl transition-all duration-300 md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:pointer-events-auto md:shadow-none',
           isMobileMenuOpen
-            ? 'pointer-events-auto opacity-100'
-            : 'pointer-events-none opacity-0',
-        )}
-        onClick={() => setIsMobileMenuOpen(false)}
-        aria-hidden="true"
-      />
-      <div
-        className={clsx(
-          'fixed top-0 left-0 z-40 h-full w-[80%] max-w-sm transform bg-white shadow-2xl transition-transform duration-300 md:pointer-events-auto md:z-10 md:flex md:w-[400px] md:max-w-none md:translate-x-0 md:flex-col md:border-r md:border-slate-200 md:bg-white md:opacity-100 md:shadow-none',
-          isMobileMenuOpen
-            ? 'pointer-events-auto translate-x-0 opacity-100'
-            : 'pointer-events-none -translate-x-full opacity-0',
+            ? 'pointer-events-auto translate-y-0'
+            : 'pointer-events-none translate-y-full',
+          sheetHeightClass,
         )}
       >
-        <div className="relative h-full">
+        {/* Sheet top bar (mobile only). */}
+        <div className="day:bg-[#ece7de] flex-none rounded-t-lg bg-[#1b1511] md:hidden">
+          <div className="flex min-h-9 items-center justify-between gap-3 px-4 pt-1.5 pb-0.5">
+            <p className="day:text-gray-800 min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
+              {mobileSheetTitle}
+            </p>
+            <button
+              type="button"
+              className="day:text-black/50 day:hover:text-black flex h-8 w-8 items-center justify-center rounded-full text-white/70 transition-colors hover:text-white"
+              aria-label="Close navigation"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <XMarkIcon className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+        <div className="relative min-h-0 flex-1 overflow-hidden">
           <DesignerNav />
-          <button
-            type="button"
-            className="absolute top-4 right-4 text-white transition-opacity hover:text-white/80 md:hidden"
-            aria-label="Close navigation"
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            <XMarkIcon className="h-6 w-6" />
-          </button>
         </div>
       </div>
     </>

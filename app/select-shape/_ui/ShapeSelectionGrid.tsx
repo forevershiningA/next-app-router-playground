@@ -32,6 +32,14 @@ const petMiniHeadstoneShapeCategories = shapeCategories.filter(
   (category) => category.id === 'traditional',
 );
 
+function formatShapeCount(count: number) {
+  return `${count} shape${count !== 1 ? 's' : ''}`;
+}
+
+function getShapeCtaLabel(isSelected: boolean) {
+  return isSelected ? 'Continue' : 'Select';
+}
+
 const filenameFromCatalogUrl = (url?: string) => url?.split('/').pop() ?? '';
 
 const getPetRockPreviewSrc = (catalogShape: ShapeData) => {
@@ -179,7 +187,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
           <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
           <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
-            <div className="text-center">
+            <div className="text-left sm:text-center">
               <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
                 Select Your Shape
               </h1>
@@ -188,7 +196,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   {productName}
                 </h2>
               )}
-              <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
+              <p className="day:text-gray-600 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
                 Choose from the fixed pet rock shapes available for this laser
                 etched black granite plaque.
               </p>
@@ -214,11 +222,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             </div>
           ) : (
             <>
-              <div className="mb-4 flex items-center justify-between gap-4">
-                <div className="day:text-gray-700 text-sm font-medium text-gray-200">
-                  Showing {catalogShapes.length} shape
-                  {catalogShapes.length !== 1 ? 's' : ''}
-                </div>
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
+                  Pet Rock Shapes · {formatShapeCount(catalogShapes.length)}
+                </h2>
                 <div className="day:text-gray-400 hidden text-xs tracking-[0.16em] text-gray-500 uppercase sm:block">
                   Select one to continue
                 </div>
@@ -241,7 +248,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                       }`}
                     >
-                      <div className="day:bg-gray-100 relative aspect-square w-full overflow-hidden bg-[#101010]">
+                      <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#202020]">
                         <Image
                           src={previewSrc}
                           alt={catalogShape.name}
@@ -277,7 +284,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                             }`}
                           >
                             <span>
-                              {isSelected ? 'Use this shape' : 'Select shape'}
+                              {getShapeCtaLabel(isSelected)}
                             </span>
                             <ArrowRightIcon className="h-4 w-4" />
                           </span>
@@ -332,7 +339,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
         <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
           <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
           <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
-            <div className="text-center">
+            <div className="text-left sm:text-center">
               <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
                 Select Your Shape
               </h1>
@@ -341,7 +348,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   {productName}
                 </h2>
               )}
-              <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
+              <p className="day:text-gray-600 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
                 Choose the shape for your urn. Each shape has its own dimensions
                 and unique character.
               </p>
@@ -368,11 +375,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             </div>
           ) : (
             <>
-              <div className="mb-4 flex items-center justify-between gap-4">
-                <div className="day:text-gray-700 text-sm font-medium text-gray-200">
-                  Showing {catalogShapes.length} shape
-                  {catalogShapes.length !== 1 ? 's' : ''}
-                </div>
+              <div className="mb-6 flex items-center justify-between gap-4">
+                <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
+                  Urn Shapes · {formatShapeCount(catalogShapes.length)}
+                </h2>
                 <div className="day:text-gray-400 hidden text-xs tracking-[0.16em] text-gray-500 uppercase sm:block">
                   Select one to continue
                 </div>
@@ -392,7 +398,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                       }`}
                     >
-                      <div className="day:bg-gray-100 relative aspect-square w-full overflow-hidden bg-[#101010]">
+                      <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#202020]">
                         <Image
                           src={svgPath}
                           alt={catalogShape.name}
@@ -424,7 +430,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                             }`}
                           >
                             <span>
-                              {isSelected ? 'Use this shape' : 'Select shape'}
+                              {getShapeCtaLabel(isSelected)}
                             </span>
                             <ArrowRightIcon className="h-4 w-4" />
                           </span>
@@ -484,6 +490,15 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const visibleShapeCategories = isPetMiniHeadstone
     ? petMiniHeadstoneShapeCategories
     : shapeCategories;
+  const selectedCategoryDetails = visibleShapeCategories.find(
+    (category) => category.id === selectedCategory,
+  );
+  const resultsHeading =
+    selectedCategory === 'all'
+      ? `All Shapes · ${formatShapeCount(filteredShapes.length)}`
+      : `${selectedCategoryDetails?.name ?? 'Shapes'} · ${formatShapeCount(
+          filteredShapes.length,
+        )}`;
 
   return (
     <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -491,7 +506,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
         <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-left sm:text-center">
             <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
               Select Your Shape
             </h1>
@@ -500,7 +515,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 {productName}
               </h2>
             )}
-            <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
+            <p className="day:text-gray-600 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
               {isPetMiniHeadstone
                 ? 'Choose from the traditional basic shapes available for this pet mini headstone.'
                 : 'Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.'}
@@ -513,10 +528,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       <div className="day:border-gray-200 day:bg-white relative border-b border-white/5 bg-gray-900/30">
         <div className="day:hidden absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
-          <div className="flex flex-wrap gap-2">
+          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
+              className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
                 selectedCategory === 'all'
                   ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
                   : 'day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100 border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
@@ -528,7 +543,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
+                className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category.id
                     ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
                     : 'day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100 border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
@@ -599,11 +614,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
           </div>
         ) : (
           <>
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div className="day:text-gray-700 text-sm font-medium text-gray-200">
-                Showing {filteredShapes.length} shape
-                {filteredShapes.length !== 1 ? 's' : ''}
-              </div>
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
+                {resultsHeading}
+              </h2>
               <div className="day:text-gray-400 hidden text-xs tracking-[0.16em] text-gray-500 uppercase sm:block">
                 Select one to continue
               </div>
@@ -632,7 +646,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                         : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                     }`}
                   >
-                    <div className="day:bg-gray-100 relative aspect-square w-full overflow-hidden bg-[#101010]">
+                    <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#202020]">
                       <Image
                         src={shapeUrl}
                         alt={shape.name}
@@ -661,7 +675,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                           }`}
                         >
                           <span>
-                            {isSelected ? 'Use this shape' : 'Select shape'}
+                            {getShapeCtaLabel(isSelected)}
                           </span>
                           <ArrowRightIcon className="h-4 w-4" />
                         </span>

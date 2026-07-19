@@ -396,7 +396,7 @@ export default function CheckPricePanel() {
           </div>
 
           {/* Content - Table */}
-          <div className="check-price-panel__table max-h-[calc(90vh-260px)] overflow-y-auto overflow-x-auto">
+          <div className="check-price-panel__table max-h-[calc(90vh-190px)] overflow-y-auto overflow-x-auto pb-6">
             <table className="w-full border-collapse">
               <thead className="sticky top-0 z-10">
               <tr className="bg-[#1a1508] shadow-[0_1px_0_rgba(212,175,55,0.35)]">
@@ -430,12 +430,11 @@ export default function CheckPricePanel() {
                 <td className="px-6 py-4">
                   <div className="text-sm">
                     <p className="font-semibold text-white/95 mb-1">
-                      Product ID: {activeCatalog.product.id} - {activeCatalog.product.name || 'Headstone'}
+                      {activeCatalog.product.name || 'Headstone'}
                     </p>
                     <p className="text-white/60">
-                      Shape: {shapeName}
-                      <br />
-                      Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}
+                      ID: {activeCatalog.product.id} · Shape: {shapeName} · Material:{' '}
+                      {getCheckPriceMaterialName(headstoneMaterialUrl)}
                       <br />
                       Size: {formatDimensionTriplet(widthMm, heightMm, uprightThickness, unitSystem)}
                     </p>
@@ -456,9 +455,8 @@ export default function CheckPricePanel() {
               {ssBorderPrice > 0 && (
                 <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
                   <td className="px-6 py-4 text-sm text-white/85">
-                    <p>
-                      <strong className="text-white/95">Product ID: 37 - Stainless Steel Border</strong>
-                    </p>
+                    <p className="font-semibold text-white/95">Stainless Steel Border</p>
+                    <p className="text-xs text-white/50">ID: 37</p>
                   </td>
                   <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
                   <td className="px-6 py-4 text-right text-sm text-white/85">
@@ -478,11 +476,16 @@ export default function CheckPricePanel() {
                       <strong className="text-white/95">
                         {(() => {
                           const a = activeCatalog.product.additions.find(a => a.type === 'base');
-                          return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Base'}`;
+                          return a?.name ?? 'Base';
                         })()}
                       </strong>
                       <br />
-                      <span className="text-white/60">Shape: Rectangle</span>
+                      <span className="text-white/50">
+                        {(() => {
+                          const a = activeCatalog.product.additions.find(a => a.type === 'base');
+                          return `ID: ${a?.id ?? '–'} · Shape: Rectangle`;
+                        })()}
+                      </span>
                       <br />
                       <span className="text-white/60">Material: {getCheckPriceMaterialName(baseMaterialUrl)}</span>
                       <br />
@@ -512,11 +515,16 @@ export default function CheckPricePanel() {
                       <strong className="text-white/95">
                         {(() => {
                           const a = activeCatalog.product.additions.find(a => a.type === 'ledger');
-                          return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Ledger'}`;
+                          return a?.name ?? 'Ledger';
                         })()}
                       </strong>
                       <br />
-                      <span className="text-white/60">Shape: Rectangle</span>
+                      <span className="text-white/50">
+                        {(() => {
+                          const a = activeCatalog.product.additions.find(a => a.type === 'ledger');
+                          return `ID: ${a?.id ?? '–'} · Shape: Rectangle`;
+                        })()}
+                      </span>
                       <br />
                       <span className="text-white/60">Material: {getCheckPriceMaterialName(kerbsetMaterialUrl)}</span>
                       <br />
@@ -546,11 +554,16 @@ export default function CheckPricePanel() {
                       <strong className="text-white/95">
                         {(() => {
                           const a = activeCatalog.product.additions.find(a => a.type === 'kerbset');
-                          return `Product ID: ${a?.id ?? '–'} - ${a?.name ?? 'Kerbset'}`;
+                          return a?.name ?? 'Kerbset';
                         })()}
                       </strong>
                       <br />
-                      <span className="text-white/60">Shape: Rectangle</span>
+                      <span className="text-white/50">
+                        {(() => {
+                          const a = activeCatalog.product.additions.find(a => a.type === 'kerbset');
+                          return `ID: ${a?.id ?? '–'} · Shape: Rectangle`;
+                        })()}
+                      </span>
                       <br />
                       <span className="text-white/60">Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}</span>
                       <br />
@@ -738,9 +751,9 @@ export default function CheckPricePanel() {
                     <tr key={`img-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
                       <td className="px-8 py-3 text-sm text-white/85">
                         <p className="font-medium text-white/90">
-                          Product ID: {item.productId} - {item.baseName}
+                          {item.baseName}
                         </p>
-                        <p className="text-xs text-white/50">Type: {item.typeName || 'Image'}</p>
+                        <p className="text-xs text-white/50">ID: {item.productId} · Type: {item.typeName || 'Image'}</p>
                         <p className="text-xs text-white/50">Size: {item.sizeLabel}</p>
                         <p className="text-xs text-white/50">Color Mode: {item.colorDisplay}</p>
                       </td>
@@ -819,14 +832,6 @@ export default function CheckPricePanel() {
           </table>
         </div>
 
-          <div className="check-price-panel__actions flex items-center justify-end gap-3 border-t border-white/10 px-6 py-4">
-            <button
-              onClick={handleClose}
-              className="rounded-full border border-[#d4af37]/65 bg-[#d4af37]/10 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#d4af37]/20 cursor-pointer"
-            >
-              Close
-            </button>
-          </div>
         </div>
       </div>
 

@@ -25,6 +25,12 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 
 interface LoadDesignButtonProps {
   label?: string;
+  /**
+   * 'floating' (default) renders the fixed top-right canvas button.
+   * 'menu' renders an inline full-width button styled for the designer sidebar
+   * main menu.
+   */
+  variant?: 'floating' | 'menu';
 }
 
 /** Tree grouped by category first (used in popup) */
@@ -156,7 +162,7 @@ function sortCategoryEntries(entries: [string, CategoryTree[string]][]): [string
   });
 }
 
-export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignButtonProps) {
+export default function LoadDesignButton({ label = 'Load Design', variant = 'floating' }: LoadDesignButtonProps) {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -703,7 +709,10 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
       <button
         onClick={openModal}
         disabled={loading}
-        className="
+        className={
+          variant === 'menu'
+            ? `inline-flex w-full items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all border-white/20 text-gray-200 hover:border-white/40 hover:bg-white/5 disabled:cursor-wait disabled:opacity-60 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100`
+            : `
           fixed right-4 top-4 z-[100]
           flex items-center gap-2 px-4 py-2.5
           rounded-lg border-2
@@ -711,7 +720,8 @@ export default function LoadDesignButton({ label = 'Load Design' }: LoadDesignBu
           transition-all duration-200
           bg-black/50 border-amber-500/70 text-amber-100 hover:bg-amber-900/30 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 cursor-pointer backdrop-blur-sm
           disabled:cursor-wait disabled:border-amber-500/40 disabled:text-amber-200/70
-        "
+        `
+        }
         aria-label={buttonLabel}
       >
         <DocumentArrowDownIcon className={`h-5 w-5 ${loading ? 'animate-bounce' : ''}`} aria-hidden="true" />

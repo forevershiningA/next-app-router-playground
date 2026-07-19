@@ -1,37 +1,3 @@
-'use client';
-
-import { Suspense, useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
-import { data } from '#/app/_internal/_data';
-import AdditionSelectionGrid from './_ui/AdditionSelectionGrid';
-import { getDesignerStepSlug } from '#/lib/designer-route-state';
-
 export default function Page() {
-  const additions = data.additions;
-  const pathname = usePathname();
-  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-
-    handleResize(); // Set initial value on mount
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  // Only show the full grid on mobile/tablet layouts where the sidebar (and canvas) are hidden.
-  // isDesktop starts as null to avoid flashing the grid on desktop before the effect runs.
-  const showGrid = getDesignerStepSlug(pathname) === 'select-additions' && isDesktop === false;
-
-  if (!showGrid) {
-    return null;
-  }
-
-  return (
-    <Suspense fallback={null}>
-      <AdditionSelectionGrid additions={additions} />
-    </Suspense>
-  );
+  return null;
 }

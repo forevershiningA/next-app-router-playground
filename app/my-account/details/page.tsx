@@ -181,7 +181,7 @@ export default function AccountDetailsPage() {
   const inputClass =
     'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40 day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-500 day:focus:ring-amber-400/40';
   const labelClass = 'block text-xs font-medium text-white/70 mb-1 day:text-gray-600';
-  const fieldValueClass = 'text-sm text-white day:text-gray-900';
+  const fieldValueClass = 'text-sm break-words text-white day:text-gray-900';
   const fieldLabelClass = 'text-xs text-white/55 mb-0.5 day:text-gray-400';
   const emptyClass = 'text-sm text-white/30 day:text-gray-400';
   const btnClass = 'inline-flex items-center gap-1.5 rounded-lg border border-white/30 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/80 hover:bg-white/10 hover:border-white/50 transition day:border-gray-300 day:bg-gray-50 day:text-gray-600 day:hover:bg-gray-100 day:hover:border-gray-400';
@@ -192,7 +192,7 @@ export default function AccountDetailsPage() {
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
         aria-hidden
       />
-      <div className="relative mx-auto w-full max-w-3xl px-10 py-10">
+      <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         {/* Back link */}
         <Link
           href="/my-account"
@@ -202,7 +202,7 @@ export default function AccountDetailsPage() {
           Back to Saved Designs
         </Link>
 
-        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg">
+        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-8">
           <header className="mb-0 pb-6">
             <h1 className="py-[10px] text-3xl font-semibold tracking-tight day:text-gray-900">Account Details</h1>
           </header>
@@ -214,21 +214,23 @@ export default function AccountDetailsPage() {
 
               {/* Personal Details */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-4 flex items-center justify-between gap-3">
                   <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Personal Details</h2>
                   {!editingPersonal && (
                     <button
                       onClick={() => { setEditingPersonal(true); setPersonalMsg(''); }}
-                      className={btnClass}
+                      className={`${btnClass} shrink-0 px-2.5`}
+                      aria-label="Edit personal details"
                     >
-                      <PencilIcon className="h-3.5 w-3.5" /> Edit
+                      <PencilIcon className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only">Edit</span>
                     </button>
                   )}
                 </div>
 
                 {editingPersonal ? (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label className={labelClass}>First Name</label>
                         <input className={inputClass} value={personalForm.firstName} onChange={(e) => setPersonalForm((f) => ({ ...f, firstName: e.target.value }))} />
@@ -264,7 +266,7 @@ export default function AccountDetailsPage() {
                     </div>
                   </div>
                 ) : (
-                  <dl className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
                     <div>
                       <dt className={fieldLabelClass}>First Name</dt>
                       <dd className={profile.firstName ? fieldValueClass : emptyClass}>{profile.firstName || 'Not provided'}</dd>
@@ -303,16 +305,8 @@ export default function AccountDetailsPage() {
 
               {/* Password */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-4">
                   <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Password</h2>
-                  {!editingPassword && (
-                    <button
-                      onClick={() => { setEditingPassword(true); setPasswordMsg(''); }}
-                      className={btnClass}
-                    >
-                      <PencilIcon className="h-3.5 w-3.5" /> Change Password
-                    </button>
-                  )}
                 </div>
 
                 {editingPassword ? (
@@ -347,27 +341,37 @@ export default function AccountDetailsPage() {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-sm tracking-[0.2em] text-white/40 day:text-gray-400">{'\u2022'.repeat(12)}</p>
+                  <div className="space-y-4">
+                    <p className="text-sm tracking-[0.2em] text-white/40 day:text-gray-400">{'\u2022'.repeat(12)}</p>
+                    <button
+                      onClick={() => { setEditingPassword(true); setPasswordMsg(''); }}
+                      className={`${btnClass} w-full justify-center sm:w-auto`}
+                    >
+                      <PencilIcon className="h-3.5 w-3.5" /> Change Password
+                    </button>
+                  </div>
                 )}
               </section>
 
               {/* Business & Invoice */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-4 flex items-center justify-between gap-3">
                   <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Business &amp; Invoice Details</h2>
                   {!editingBusiness && (
                     <button
                       onClick={() => { setEditingBusiness(true); setBusinessMsg(''); }}
-                      className={btnClass}
+                      className={`${btnClass} shrink-0 px-2.5`}
+                      aria-label="Edit business and invoice details"
                     >
-                      <PencilIcon className="h-3.5 w-3.5" /> Edit
+                      <PencilIcon className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only">Edit</span>
                     </button>
                   )}
                 </div>
 
                 {editingBusiness ? (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label className={labelClass}>Trading Name</label>
                         <input className={inputClass} value={businessForm.tradingName || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, tradingName: e.target.value }))} />
@@ -377,7 +381,7 @@ export default function AccountDetailsPage() {
                         <input className={inputClass} value={businessForm.businessName || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, businessName: e.target.value }))} />
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label className={labelClass}>ABN / Tax ID</label>
                         <input className={inputClass} value={businessForm.taxId || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, taxId: e.target.value }))} />
@@ -395,7 +399,7 @@ export default function AccountDetailsPage() {
                       <label className={labelClass}>Street Address</label>
                       <input className={inputClass} value={businessForm.address || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, address: e.target.value }))} />
                     </div>
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                       <div>
                         <label className={labelClass}>City</label>
                         <input className={inputClass} value={businessForm.city || ''} onChange={(e) => setBusinessForm((f) => ({ ...f, city: e.target.value }))} />
@@ -431,7 +435,7 @@ export default function AccountDetailsPage() {
                     </div>
                   </div>
                 ) : (
-                  <dl className="grid grid-cols-2 gap-x-8 gap-y-4">
+                  <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
                     <div>
                       <dt className={fieldLabelClass}>Trading Name</dt>
                       <dd className={businessForm.tradingName ? fieldValueClass : emptyClass}>{businessForm.tradingName || 'Not provided'}</dd>

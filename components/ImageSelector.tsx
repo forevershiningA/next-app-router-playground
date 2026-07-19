@@ -24,6 +24,7 @@ import {
   type ImagePricingMap,
 } from '#/lib/image-pricing';
 import { logger } from '#/lib/logger';
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
 interface ImageSelectorProps {
   onImageSelect?: (imageType: AdditionData) => void;
@@ -37,6 +38,10 @@ const IMAGE_THUMBNAILS: Record<string, string> = {
   '2300': '/jpg/photos/product-vitreous-enamel-image.jpg',
   '2400': '/jpg/photos/plana.jpg',
 };
+
+function getImageTypeLabel(name: string) {
+  return name === 'Vitreous Enamel' ? 'Vitreous\nEnamel' : name;
+}
 
 function normalizeSignedRotation(value: number) {
   if (value >= -180 && value <= 180) {
@@ -1314,7 +1319,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     key={imageType.id}
                     type="button"
                     onClick={() => handleImageTypeSelect(imageType)}
-                    className="group day:border-gray-200 day:bg-white flex min-h-[166px] cursor-pointer flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] text-left shadow-lg shadow-black/15 transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] hover:shadow-[#D7B356]/10"
+                    className="group day:bg-white day:border-gray-200 relative flex min-h-[174px] cursor-pointer flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] text-left shadow-lg shadow-black/15 transition-all hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] hover:shadow-[#D7B356]/10"
                   >
                     <div className="day:bg-gray-100 relative aspect-square w-full overflow-hidden bg-[#0A0A0A]">
                       <Image
@@ -1329,9 +1334,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                         }}
                       />
                     </div>
-                    <div className="flex min-h-[58px] items-start p-3">
-                      <span className="day:text-gray-900 line-clamp-2 flex-1 text-xs leading-snug font-semibold text-white">
-                        {imageType.name}
+                    <div className="flex min-h-[66px] items-start p-3">
+                      <span className="day:text-gray-900 flex-1 whitespace-pre-line text-xs leading-snug font-semibold text-white">
+                        {getImageTypeLabel(imageType.name)}
                       </span>
                     </div>
                   </button>
@@ -1368,6 +1373,32 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
 
           <div className="custom-scrollbar flex-1 overflow-y-auto pr-1">
             <div className="space-y-4">
+              {selectedType && !showCropSection && (
+                <div className="day:border-gray-200 day:bg-white flex items-center gap-3 rounded-lg border border-[#D7B356] bg-[#171717] p-3 shadow-lg shadow-[#D7B356]/10">
+                  <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-white/[0.04]">
+                    <Image
+                      src={
+                        IMAGE_THUMBNAILS[selectedType.id] || '/jpg/photos/m.jpg'
+                      }
+                      alt={selectedType.name}
+                      fill
+                      sizes="56px"
+                      className="object-contain p-1"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="day:text-gray-500 text-[10px] font-semibold tracking-wide text-[#D7B356] uppercase">
+                      Selected
+                    </div>
+                    <div className="day:text-gray-900 whitespace-pre-line text-sm leading-snug font-semibold text-white">
+                      {getImageTypeLabel(selectedType.name)}
+                    </div>
+                  </div>
+                  <CheckCircleIcon className="h-5 w-5 shrink-0 text-[#D7B356]" />
+                </div>
+              )}
+
               {/* Upload Section */}
               {!showCropSection && (
                 <div className="day:border-gray-300 day:bg-white rounded-lg border border-dashed border-white/20 bg-[#171717] p-6 text-center shadow-lg shadow-black/15">

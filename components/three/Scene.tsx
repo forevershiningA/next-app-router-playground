@@ -379,6 +379,8 @@ export default function Scene({
   const setSelectedInscriptionId = useHeadstoneStore((s) => s.setSelectedInscriptionId);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setSelectedMotifId = useHeadstoneStore((s) => s.setSelectedMotifId);
+  const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
+  const setSelectedEmblemId = useHeadstoneStore((s) => s.setSelectedEmblemId);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const isFullMonument = productType === 'full-monument';
@@ -463,6 +465,8 @@ export default function Scene({
       setSelectedInscriptionId(null);
       setSelectedAdditionId(null);
       setSelectedMotifId(null);
+      setSelectedImageId(null);
+      setSelectedEmblemId(null);
     }
   };
 

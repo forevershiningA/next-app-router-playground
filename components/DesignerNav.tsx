@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -33,6 +34,7 @@ import { data } from '#/app/_internal/_data';
 import { loadEmblems } from '#/app/_internal/_emblems-loader';
 import InscriptionEditPanel from './InscriptionEditPanel';
 import SegmentedControl from './ui/SegmentedControl';
+import LoadDesignButton from './LoadDesignButton';
 import MaterialSelector from './MaterialSelector';
 import ShapeSelector from './ShapeSelector';
 import BorderSelector from './BorderSelector';
@@ -54,6 +56,7 @@ import {
   getDesignerStepSlug,
   isDesignerStepSlug,
 } from '#/lib/designer-route-state';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 // Menu items grouped by workflow stage
 const menuGroups = [
@@ -448,6 +451,19 @@ export default function DesignerNav() {
   });
   const [showConvertPanel, setShowConvertPanel] = React.useState(false);
   const [hasCanvasBeenShown, setHasCanvasBeenShown] = React.useState(false);
+  // Mobile Select-Size: which single dimension control is shown at a time.
+  // Desktop shows all cards; on mobile a segmented toggle picks one.
+  const [activeSizeControl, setActiveSizeControl] = React.useState<
+    'width' | 'height' | 'depth'
+  >('width');
+  // Client-mount flag so the mobile step-header portal only renders in the
+  // browser (createPortal needs document). Also lets us read the mobile
+  // drawer open-state to decide when to float the header over the canvas.
+  const [isMounted, setIsMounted] = React.useState(false);
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  const isMobileNavOpen = useMobileNavStore((s) => s.isOpen);
 
   // Accordion section groups — only one open at a time
   const activeGroupIndex = React.useMemo(() => {
@@ -898,6 +914,11 @@ export default function DesignerNav() {
       additionSizes[selectedSizeVariant - 1] ?? additionSizes[0] ?? null;
     const isStatueOrVase =
       activeAddition?.type === 'statue' || activeAddition?.type === 'vase';
+    const activeAdditionDisplayName =
+      activeAddition?.name.replace(
+        /^Applicazione\s+Preghiera/i,
+        'Praying Hands Motif',
+      ) ?? '';
 
     const additionRotation =
       ((activeAdditionOffset?.rotationZ ?? 0) * 180) / Math.PI;
@@ -930,7 +951,7 @@ export default function DesignerNav() {
                       Selected Addition
                     </div>
                     <div className="day:text-gray-900 mt-1 truncate text-sm font-semibold text-white">
-                      {activeAddition.name}
+                      {activeAdditionDisplayName}
                     </div>
                     <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
                       <span className="capitalize">{activeAddition.type}</span>
@@ -950,6 +971,14 @@ export default function DesignerNav() {
                     Clear
                   </button>
                 </div>
+                <button
+                  type="button"
+                  onClick={handleBackToAdditionList}
+                  className="day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200 mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/75 transition-colors hover:border-[#D7B356]/50 hover:text-white"
+                >
+                  <Squares2X2Icon className="h-4 w-4" />
+                  Choose another
+                </button>
               </div>
             )}
 
@@ -957,26 +986,15 @@ export default function DesignerNav() {
               <div className="day:text-gray-500 mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 uppercase">
                 Addition Price
               </div>
-              <div className="day:text-gray-900 text-2xl font-semibold text-[#2EE59D]">
+              <div className="day:text-gray-900 text-2xl font-semibold text-[#f3d48f]">
                 {activeAdditionSize?.retailPrice
                   ? `$${activeAdditionSize.retailPrice.toFixed(2)}`
                   : 'N/A'}
               </div>
             </div>
 
-            <div className="space-y-3">
-              {maxSize <= 1 ? (
-                <div className={additionSectionCardClass}>
-                  <div className="flex items-center justify-between gap-2">
-                    <label className={additionLabelClass}>Size</label>
-                    <div className="day:text-gray-500 text-sm font-semibold text-white/60">
-                      {activeAdditionSize
-                        ? `${activeAdditionSize.width}×${activeAdditionSize.height}mm`
-                        : ''}
-                    </div>
-                  </div>
-                </div>
-              ) : (
+            {maxSize > 1 && (
+              <div className="space-y-3">
                 <div className={additionSectionCardClass}>
                   <div className="flex items-center justify-between gap-2">
                     <label className={additionLabelClass}>Size</label>
@@ -1104,8 +1122,10 @@ export default function DesignerNav() {
                     </div>
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
+            <div className="space-y-3">
               {/* Rotation Slider - Only shown for applications, not for statues/vases */}
               {!isStatueOrVase && (
                 <div className={additionSectionCardClass}>
@@ -2402,9 +2422,24 @@ export default function DesignerNav() {
           { label: 'Base', value: 'base' },
         ];
 
+    const mobileSegmentClass =
+      'p-0.5 [&_button]:py-1.5 [&_button]:text-[13px] md:p-1 md:[&_button]:py-2 md:[&_button]:text-sm';
+    const styleTabClass = (isActive: boolean) =>
+      `flex-1 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
+        isActive
+          ? 'border-[#D7B356]/70 bg-[#D7B356]/12 text-[#f3d48f]'
+          : 'day:border-gray-300 day:text-gray-600 day:hover:bg-white border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white'
+      }`;
+    const dimensionTabClass = (isActive: boolean) =>
+      `relative flex-1 px-1 py-2 text-sm font-semibold transition-colors ${
+        isActive
+          ? 'text-[#f3d48f]'
+          : 'day:text-gray-500 day:hover:text-gray-900 text-white/55 hover:text-white'
+      }`;
     const dimensionCardClass =
-      'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
-    const dimensionHeaderClass = 'flex items-center justify-between gap-2';
+      'min-h-[98px] rounded-lg border border-white/10 bg-[#171717] p-3 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white md:min-h-0 md:p-3.5';
+    const dimensionHeaderClass =
+      'flex min-h-8 items-center justify-between gap-2';
     const dimensionLabelClass =
       'text-sm font-semibold text-slate-100 day:text-gray-800';
     const controlButtonClass =
@@ -2413,15 +2448,46 @@ export default function DesignerNav() {
       'h-8 w-16 rounded-md border bg-white/[0.08] px-2 text-right text-sm font-semibold text-white transition-colors focus:ring-2 focus:outline-none day:bg-gray-100 day:text-gray-900';
     const rangeInputClass =
       'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)]';
+    const rangeBlockClass = 'relative mt-2 h-[31px] md:mt-3 md:h-[35px]';
     const rangeBoundsClass =
-      'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
+      'mt-1 flex h-4 w-full justify-between text-xs leading-4 text-white/35 day:text-gray-400';
+
+    // Which dimension controls exist for the current editing target. Width and
+    // Height always exist; the third (depth) is Thickness or Length depending on
+    // the target.
+    const depthControlLabel =
+      editingObject === 'headstone' && !isPlaque
+        ? 'Thickness'
+        : editingObject === 'base'
+          ? showBase
+            ? 'Thickness'
+            : null
+          : (editingObject === 'ledger' || editingObject === 'kerbset') &&
+              currentDepthMm !== null
+            ? 'Length'
+            : null;
+    const effectiveSizeControl =
+      activeSizeControl === 'depth' && !depthControlLabel
+        ? 'width'
+        : activeSizeControl;
+    // On mobile only the selected dimension card is shown; desktop shows all.
+    const sizeCardVisibility = (control: 'width' | 'height' | 'depth') =>
+      `${effectiveSizeControl === control ? '' : 'hidden'} md:block`;
+    const sizeControlOptions = [
+      { label: 'Width', value: 'width' },
+      { label: 'Height', value: 'height' },
+      ...(depthControlLabel
+        ? [{ label: depthControlLabel, value: 'depth' }]
+        : []),
+    ];
 
     return (
       <div
-        className={`fs-size-panel space-y-4 rounded-lg p-3.5 shadow-xl backdrop-blur-sm ${extraClassName}`}
+        className={`fs-size-panel space-y-3 rounded-lg p-3 shadow-xl backdrop-blur-sm md:space-y-4 md:p-3.5 ${extraClassName}`}
       >
         {!isPlaque && (
           <SegmentedControl
+            className={mobileSegmentClass}
             value={editingObject}
             onChange={(value) => {
               setEditingObject(
@@ -2511,7 +2577,7 @@ export default function DesignerNav() {
                         : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
                     }`}
                   >
-                    Rock Pitch
+                    Rockface
                   </button>
                 </>
               )}
@@ -2522,17 +2588,24 @@ export default function DesignerNav() {
 
         {editingObject === 'headstone' && !isPlaque && (
           <>
-            <SegmentedControl
-              value={headstoneStyle}
-              onChange={(value) =>
-                setHeadstoneStyle(value as 'upright' | 'slant')
-              }
-              options={[
+            <div className="flex gap-2">
+              {[
                 { label: 'Upright', value: 'upright' },
                 { label: 'Slant', value: 'slant' },
-              ]}
-            />
-            <div className="-mx-3.5 border-t border-white/10"></div>
+              ].map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() =>
+                    setHeadstoneStyle(option.value as 'upright' | 'slant')
+                  }
+                  className={styleTabClass(headstoneStyle === option.value)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+            <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
           </>
         )}
 
@@ -2651,8 +2724,34 @@ export default function DesignerNav() {
           })()
         ) : (
           <>
+            {/* Mobile: pick a single dimension to edit (keeps the sheet short so
+                the product stays visible). Desktop shows all cards at once. */}
+            <div className="md:hidden">
+              <div className="flex border-b border-white/10">
+                {sizeControlOptions.map((option) => {
+                  const isActive = effectiveSizeControl === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() =>
+                        setActiveSizeControl(
+                          option.value as 'width' | 'height' | 'depth',
+                        )
+                      }
+                      className={dimensionTabClass(isActive)}
+                    >
+                      {option.label}
+                      {isActive && (
+                        <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#D7B356]" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
             <div
-              className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+              className={`${dimensionCardClass} ${sizeCardVisibility('width')} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
             >
               <div className={dimensionHeaderClass}>
                 <label className={dimensionLabelClass}>Width</label>
@@ -2732,7 +2831,7 @@ export default function DesignerNav() {
                   </span>
                 </div>
               </div>
-              <div className="relative mt-3">
+              <div className={rangeBlockClass}>
                 <input
                   type="range"
                   min={minWidth}
@@ -2751,7 +2850,7 @@ export default function DesignerNav() {
             </div>
 
             <div
-              className={`${dimensionCardClass} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
+              className={`${dimensionCardClass} ${sizeCardVisibility('height')} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
             >
               <div className={dimensionHeaderClass}>
                 <label className={dimensionLabelClass}>Height</label>
@@ -2831,7 +2930,7 @@ export default function DesignerNav() {
                   </span>
                 </div>
               </div>
-              <div className="relative mt-3">
+              <div className={rangeBlockClass}>
                 <input
                   type="range"
                   min={minHeight}
@@ -2852,7 +2951,7 @@ export default function DesignerNav() {
         )}
 
         {editingObject === 'headstone' && !isPlaque && (
-          <div className={dimensionCardClass}>
+          <div className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}>
             <div className={dimensionHeaderClass}>
               <label className={dimensionLabelClass}>Thickness</label>
               <div className="flex items-center justify-end gap-2">
@@ -2966,7 +3065,7 @@ export default function DesignerNav() {
                 <span className="text-sm font-semibold text-white/70">mm</span>
               </div>
             </div>
-            <div className="relative mt-3">
+            <div className={rangeBlockClass}>
               <input
                 type="range"
                 min={minThickness}
@@ -2996,7 +3095,7 @@ export default function DesignerNav() {
         )}
 
         {editingObject === 'base' && showBase && (
-          <div className={dimensionCardClass}>
+          <div className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}>
             <div className={dimensionHeaderClass}>
               <label className={dimensionLabelClass}>Thickness</label>
               <div className="flex items-center justify-end gap-2">
@@ -3070,7 +3169,7 @@ export default function DesignerNav() {
                 <span className="text-sm font-semibold text-white/70">mm</span>
               </div>
             </div>
-            <div className="relative mt-3">
+            <div className={rangeBlockClass}>
               <input
                 type="range"
                 min={minThickness}
@@ -3091,7 +3190,7 @@ export default function DesignerNav() {
         {(editingObject === 'ledger' || editingObject === 'kerbset') &&
           currentDepthMm !== null &&
           setCurrentDepthMm && (
-            <div className={dimensionCardClass}>
+            <div className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}>
               <div className={dimensionHeaderClass}>
                 <label className={dimensionLabelClass}>Length</label>
                 <div className="flex items-center justify-end gap-2">
@@ -3157,7 +3256,7 @@ export default function DesignerNav() {
                   </span>
                 </div>
               </div>
-              <div className="relative mt-3">
+              <div className={rangeBlockClass}>
                 <input
                   type="range"
                   min={minThickness}
@@ -3178,34 +3277,34 @@ export default function DesignerNav() {
     );
   };
 
+  const fullscreenPanelTitle =
+    activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
+      ? 'Background'
+      : menuItems.find((item) => item.slug === activeFullscreenPanel)?.name;
+  const mobileFullscreenPanelTitle =
+    activeFullscreenPanel === 'inscriptions'
+      ? 'Inscriptions'
+      : activeFullscreenPanel === 'select-images'
+        ? 'Images'
+        : activeFullscreenPanel === 'select-additions'
+          ? 'Additions'
+          : activeFullscreenPanel === 'select-size'
+            ? 'Sizing & Base'
+            : fullscreenPanelTitle;
   return (
     <nav
       ref={navRef}
-      className="day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] day:text-[#1a1209] fs-designer-nav flex h-full flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
+      className="day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] day:text-[#1a1209] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
     >
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
-        <div className="flex h-full flex-col">
-          {/* Panel Header — shown on all breakpoints so the mobile drawer
-              mirrors the desktop sidebar (Guided Step, title, Menu/Prev/Next). */}
-          <div className="day:border-gray-200 day:bg-stone-50 relative block border-b border-white/10 bg-[#1b1511] px-5 py-4">
-            {/* Day/night toggle — replaces the floating toggle on mobile; lives
-                inside the sidebar so it no longer overlaps the panel. */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={isDayTheme ? 'Switch to night mode' : 'Switch to day mode'}
-              title={isDayTheme ? 'Night mode' : 'Day mode'}
-              className="day:border-gray-300 day:bg-white/70 day:text-amber-700 absolute top-4 left-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 transition-colors hover:border-white/40 hover:text-white md:hidden"
-            >
-              {isDayTheme ? (
-                <MoonIcon className="h-4 w-4" />
-              ) : (
-                <SunIcon className="h-4 w-4" />
-              )}
-            </button>
+        <div className="flex h-full min-h-0 flex-col">
+          {/* Panel Header — desktop only. On mobile the step header floats over
+              the canvas via a portal (see mobile step-header overlay below) so
+              the bottom sheet holds just the controls. */}
+          <div className="day:border-gray-200 day:bg-stone-50 relative hidden border-b border-white/10 bg-[#1b1511] px-5 py-2.5 md:block md:py-4">
             {/* Row 1: Guided Step label + step badge */}
-            <div className="mb-2 flex items-center justify-center gap-2.5">
+            <div className="mb-1 flex items-center justify-center gap-2.5 md:mb-2">
               <p
                 className="font-playfair-display text-xs tracking-[0.35em] italic"
                 style={{ color: '#aaaaaa' }}
@@ -3225,7 +3324,7 @@ export default function DesignerNav() {
               )}
             </div>
             {/* Row 2: Section title centered */}
-            <h2 className="day:text-gray-900 my-5 text-center font-serif text-3xl font-light tracking-tight text-white">
+            <h2 className="day:text-gray-900 my-2 text-center font-serif text-xl font-light tracking-tight text-white md:my-5 md:text-3xl">
               {activeFullscreenPanel === 'select-material' &&
               (productId === '32' || isUrn)
                 ? 'Background'
@@ -3233,7 +3332,7 @@ export default function DesignerNav() {
                     ?.name}
             </h2>
             {/* Fancy divider */}
-            <div className="my-3 flex items-center gap-3">
+            <div className="my-2 flex items-center gap-3 md:my-3">
               <div className="to-primary/40 h-px flex-1 bg-gradient-to-r from-transparent via-white/20" />
               <div className="bg-primary/50 h-1 w-1 rotate-45" />
               <div className="to-primary/40 h-px flex-1 bg-gradient-to-l from-transparent via-white/20" />
@@ -3333,8 +3432,101 @@ export default function DesignerNav() {
             </div>
           </div>
 
+          {/* Mobile step-header overlay — floats over the canvas at the top so
+              the bottom sheet holds only the controls. Portalled to <body> so it
+              anchors to the viewport (the sheet uses a transform, which would
+              otherwise trap a fixed child). Only rendered while the mobile
+              drawer is open; hidden at md+ where the desktop header is used. */}
+          {isMounted &&
+            isMobileNavOpen &&
+            createPortal(
+              <div className="fixed inset-x-0 top-0 z-[45] border-b border-[#3a2a1c] bg-[#120c08]/90 px-3.5 py-2.5 shadow-xl shadow-black/25 backdrop-blur-md md:hidden">
+                <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2">
+                  <div className="flex min-w-0 items-center gap-1.5">
+                    <button
+                      onClick={handleBackToMenu}
+                      className="inline-flex items-center gap-1 rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f]"
+                    >
+                      <svg
+                        className="h-3 w-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                      Menu
+                    </button>
+                  </div>
+                  <div className="min-w-0 px-1">
+                    <p className="truncate text-center text-[9px] font-semibold tracking-[0.18em] text-white/75 uppercase">
+                      Step{' '}
+                      {currentPanelIndex >= 0
+                        ? `${currentPanelIndex + 1} of ${navigablePanelSlugs.length}`
+                        : ''}
+                    </p>
+                    <p className="mt-0.5 truncate text-center text-xs font-semibold text-white">
+                      {mobileFullscreenPanelTitle}
+                    </p>
+                  </div>
+                  <div className="flex items-center justify-end gap-1.5">
+                    <button
+                      onClick={() =>
+                        prevPanelSlug && handleNavigateToPanel(prevPanelSlug)
+                      }
+                      disabled={!prevPanelSlug}
+                      className="inline-flex items-center gap-1 rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f] disabled:cursor-not-allowed disabled:opacity-30"
+                    >
+                      <svg
+                        className="h-3 w-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                      Prev
+                    </button>
+                    <button
+                      onClick={() =>
+                        nextPanelSlug && handleNavigateToPanel(nextPanelSlug)
+                      }
+                      disabled={!nextPanelSlug || isImageCropActive}
+                      className="inline-flex items-center gap-1 rounded-md border border-[#D7B356]/80 bg-[#D7B356] px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:border-[#E8C96E] hover:bg-[#E8C96E] disabled:cursor-not-allowed disabled:border-[#3a2a1c] disabled:bg-[#1b120c]/80 disabled:text-white disabled:opacity-30"
+                    >
+                      {isImageCropActive ? 'Finish Crop' : 'Next'}
+                      <svg
+                        className="h-3 w-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>,
+              document.body,
+            )}
+
           {/* Panel Content */}
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="min-h-0 flex-1 overflow-y-auto p-3 md:p-4">
             {/* Render content based on activeFullscreenPanel */}
             {activeFullscreenPanel === 'select-size' && renderSelectSizePanel()}
             {activeFullscreenPanel === 'select-shape' &&
@@ -3384,8 +3576,8 @@ export default function DesignerNav() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <div className="h-[calc(100vh-220px)] overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-4 shadow-xl backdrop-blur-sm">
-                    <div className="h-full overflow-y-auto pr-1">
+                  <div className="overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-3 shadow-xl backdrop-blur-sm md:h-[calc(100vh-220px)] md:p-4">
+                    <div className="overflow-y-auto pr-1 md:h-full">
                       <BorderSelector
                         borders={borders}
                         disableInternalScroll
@@ -3801,6 +3993,11 @@ export default function DesignerNav() {
                 )}
               </div>
             )}
+
+            {/* Load a previously saved design */}
+            <div className="mb-5">
+              <LoadDesignButton label="Load Design" variant="menu" />
+            </div>
 
             {showConvertPanel && productId && (
               <div className="day:border-gray-200 day:bg-stone-50 mb-6 rounded-2xl border border-white/15 bg-[#120c08]/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">

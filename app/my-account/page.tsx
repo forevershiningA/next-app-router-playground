@@ -141,7 +141,7 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
     }
   }
 
-  const inputCls = 'w-full rounded-lg bg-white/5 border border-white/15 px-4 py-3 text-white text-sm placeholder-white/25 focus:outline-none focus:border-[#D4A84F]/60 focus:ring-1 focus:ring-[#D4A84F]/30 transition-colors';
+  const inputCls = 'w-full rounded-lg border border-white/18 bg-white/[0.06] px-4 py-3 text-sm text-white placeholder-white/35 transition-colors focus:border-[#D4A84F] focus:outline-none focus:ring-2 focus:ring-[#D4A84F]/35';
 
   return (
     <div className="relative min-h-screen bg-[#050301] text-white flex items-center justify-center px-6">
@@ -154,7 +154,7 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
           <h1 className="text-3xl font-semibold tracking-tight text-white">
             {isReset ? 'Reset Password' : 'My Account'}
           </h1>
-          <p className="text-white/40 text-sm mt-1">Forever Shining Memorial Designs</p>
+          <p className="text-sm mt-1 text-white/55">Forever Shining Memorial Designs</p>
         </div>
 
         {/* Tab switcher — hidden in reset mode */}
@@ -167,7 +167,7 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
                 className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
                   tab === t
                     ? 'bg-[#D4A84F] text-[#1a0f05]'
-                    : 'text-white/50 hover:text-white'
+                    : 'text-white/65 hover:text-white'
                 }`}
               >
                 {t === 'login' ? 'Sign in' : 'Register'}
@@ -177,7 +177,7 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
         )}
 
         {isReset && (
-          <div className="mb-5 space-y-3 text-sm text-white/60 leading-relaxed">
+          <div className="mb-5 space-y-3 text-sm leading-relaxed text-white/70">
             <p>
               If you have lost your password and cannot login, enter your login email
               address into the form below and click the Reset button.
@@ -210,21 +210,21 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5">Email</label>
+            <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">Email</label>
             <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
               className={inputCls} placeholder="you@example.com" autoComplete="email" />
           </div>
 
           {!isReset && (
             <div>
-              <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5">Password</label>
+              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">Password</label>
               <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
                 className={inputCls} placeholder="••••••••" autoComplete={tab === 'login' ? 'current-password' : 'new-password'} />
             </div>
           )}
           {!isReset && tab === 'register' && (
             <div>
-              <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5">Confirm Password</label>
+              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">Confirm Password</label>
               <input type="password" required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
                 className={inputCls} placeholder="••••••••" autoComplete="new-password" />
             </div>
@@ -255,7 +255,7 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
               <button
                 type="button"
                 onClick={enterReset}
-                className="text-xs text-white/50 hover:text-[#D4A84F] transition-colors cursor-pointer"
+                className="cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
               >
                 Forgot your password? Reset it
               </button>
@@ -267,7 +267,7 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
               <button
                 type="button"
                 onClick={exitReset}
-                className="text-xs text-white/50 hover:text-[#D4A84F] transition-colors cursor-pointer"
+                className="cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
               >
                 ← Login to an account
               </button>
@@ -275,9 +275,9 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
           )}
         </form>
 
-        <p className="text-center text-white/30 text-xs mt-8">
+        <p className="mt-8 text-center text-xs text-white/50">
           Need help?{' '}
-          <a href="mailto:support@forevershining.com" className="text-[#D4A84F]/70 hover:text-[#D4A84F]">
+          <a href="mailto:support@forevershining.com" className="text-[#D4A84F] hover:text-[#e8bc5e]">
             Contact support
           </a>
         </p>
@@ -434,14 +434,14 @@ export default function MyAccountPage() {
 
   return (
     <div className="relative min-h-screen bg-[#050301] day:bg-stone-100 text-white day:text-gray-900">
-      <div className="relative mx-auto w-full max-w-7xl px-10 py-10">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         <section
-          className="rounded-[32px] border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white/90 px-10 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl"
+          className="rounded-2xl border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white/90 px-4 py-5 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-6"
           aria-labelledby="saved-designs-heading"
         >
           <header className="mb-6 border-b border-white/5 day:border-gray-200 pb-6">
-            <div className="flex items-start justify-between">
-              <div>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
                 <h2 id="saved-designs-heading" className="text-3xl font-semibold tracking-tight">
                   Saved Designs
                 </h2>
@@ -449,22 +449,6 @@ export default function MyAccountPage() {
                   <UserCircleIcon className="h-5 w-5 text-white/60 day:text-gray-400" aria-hidden />
                   {session.email}
                 </p>
-              </div>
-              <div className="flex items-center gap-2">
-                <Link
-                  href="/my-account/details"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-100 transition"
-                >
-                  <UserCircleIcon className="h-4 w-4 text-white/60 day:text-gray-400" aria-hidden />
-                  Account Details
-                </Link>
-                <Link
-                  href="/my-account/invoice"
-                  className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-100 transition"
-                >
-                  <UserCircleIcon className="h-4 w-4 text-white/60 day:text-gray-400" aria-hidden />
-                  Invoice Details
-                </Link>
               </div>
             </div>
           </header>
@@ -491,7 +475,7 @@ export default function MyAccountPage() {
                   {/* Card Header */}
                   <div className="mb-3">
                     <h3 className="text-lg font-semibold text-white day:text-gray-900">{card.title}</h3>
-                    <div className="mt-1 flex items-center justify-between text-sm text-white/70 day:text-gray-500">
+                    <div className="mt-1 flex flex-col gap-0.5 text-sm text-white/70 day:text-gray-500 min-[360px]:flex-row min-[360px]:items-center min-[360px]:justify-between">
                       <span className="font-medium text-[#D4A84F]">{card.priceLabel}</span>
                       <span className="text-white/50 day:text-gray-400">{card.relativeUpdated}</span>
                     </div>
@@ -502,11 +486,11 @@ export default function MyAccountPage() {
                     {card.description}
                   </p>
 
-                  {/* Action Buttons: Buy | Edit | More */}
-                  <div className="flex items-center gap-2">
+                  {/* Action Buttons */}
+                  <div className="grid grid-cols-[1fr_1fr_auto] items-center gap-2">
                     <Link
                       href={`/my-account/designs/${card.id}/buy`}
-                      className="rounded-lg px-4 py-2 text-xs font-medium text-black transition cursor-pointer text-center"
+                      className="rounded-lg px-3 py-2 text-center text-xs font-medium text-black transition cursor-pointer"
                       style={{ backgroundColor: '#D4A84F' }}
                       onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#C49940')}
                       onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4A84F')}
@@ -517,20 +501,14 @@ export default function MyAccountPage() {
                       type="button"
                       onClick={() => handleEdit(card.id)}
                       disabled={loadingEditId === card.id}
-                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer disabled:opacity-50"
+                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-3 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer disabled:opacity-50"
                     >
                       {loadingEditId === card.id ? 'Loading…' : 'Edit'}
                     </button>
-                    <Link
-                      href={`/my-account/designs/${card.id}`}
-                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer text-center"
-                    >
-                      More
-                    </Link>
-                    <div className="relative ml-auto" ref={openMenuId === card.id ? menuRef : null}>
+                    <div className="relative" ref={openMenuId === card.id ? menuRef : null}>
                       <button
                         type="button"
-                        className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-3 py-2 text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer"
+                        className="flex h-8 w-9 items-center justify-center rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer"
                         onClick={() => setOpenMenuId(openMenuId === card.id ? null : card.id)}
                         aria-label="More options"
                       >
@@ -538,6 +516,13 @@ export default function MyAccountPage() {
                       </button>
                       {openMenuId === card.id && (
                         <div className="absolute right-0 bottom-full mb-1 z-50 w-48 rounded-xl border border-white/10 day:border-gray-200 bg-[#1a1208] day:bg-white shadow-2xl overflow-hidden">
+                          <Link
+                            href={`/my-account/designs/${card.id}`}
+                            className="block w-full px-4 py-2.5 text-left text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
+                            onClick={() => setOpenMenuId(null)}
+                          >
+                            View details
+                          </Link>
                           <button
                             type="button"
                             className="w-full text-left px-4 py-2.5 text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"

@@ -81,13 +81,9 @@ const productCategories: ProductCategory[] = [
 const productGroups: ProductCategory[] = [
   ...productCategories.filter((category) => category.id === 'plaques'),
   ...productCategories.filter((category) => category.id === 'headstones'),
+  ...productCategories.filter((category) => category.id === 'monuments'),
+  ...productCategories.filter((category) => category.id === 'urns'),
   ...productCategories.filter((category) => category.id === 'pet-memorials'),
-  {
-    id: 'other',
-    name: 'Other Products',
-    description: 'Additional memorial products and accessories',
-    icon: '',
-  },
 ];
 
 type ProductGridProps = {
@@ -120,19 +116,24 @@ export default function ProductSelectionGrid({
 
   const groupedProducts = productGroups
     .map((group) => {
-      const groupProducts = filteredProducts.filter((product) => {
-        if (group.id === 'other') {
-          return (
-            product.category !== 'plaques' && product.category !== 'headstones'
-          );
-        }
-
-        return product.category === group.id;
-      });
+      const groupProducts = filteredProducts.filter(
+        (product) => product.category === group.id,
+      );
 
       return { ...group, products: groupProducts };
     })
     .filter((group) => group.products.length > 0);
+
+  const selectedCategoryDetails = productCategories.find(
+    (category) => category.id === selectedCategory,
+  );
+  const productCountLabel = `${filteredProducts.length} product${
+    filteredProducts.length !== 1 ? 's' : ''
+  }`;
+  const resultsHeading =
+    selectedCategory === 'all'
+      ? `All Products · ${productCountLabel}`
+      : `${selectedCategoryDetails?.name ?? 'Products'} · ${productCountLabel}`;
 
   return (
     <div className="day:bg-stone-100 day:bg-none min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
@@ -140,11 +141,11 @@ export default function ProductSelectionGrid({
       <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
         <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
-          <div className="text-center">
+          <div className="text-left sm:text-center">
             <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
               Select Your Memorial Product
             </h1>
-            <p className="day:text-gray-600 mx-auto mt-3 max-w-3xl text-base leading-6 text-gray-200">
+            <p className="day:text-gray-600 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
               Choose from our range of memorial products including headstones,
               plaques, urns and full monuments. Each product is crafted with
               care and precision. Browse our exemplar designs for inspiration,
@@ -158,10 +159,10 @@ export default function ProductSelectionGrid({
       <div className="day:border-gray-200 day:bg-white relative border-b border-white/5 bg-gray-900/30">
         <div className="day:hidden absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
-          <div className="flex flex-wrap gap-2">
+          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
             <button
               onClick={() => setSelectedCategory('all')}
-              className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
+              className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
                 selectedCategory === 'all'
                   ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
                   : 'day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100 border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
@@ -173,7 +174,7 @@ export default function ProductSelectionGrid({
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
-                className={`rounded-full px-5 py-2.5 text-sm font-medium transition-all ${
+                className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
                   selectedCategory === category.id
                     ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
                     : 'day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100 border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10'
@@ -199,11 +200,10 @@ export default function ProductSelectionGrid({
           </div>
         ) : (
           <>
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <div className="day:text-gray-700 text-sm font-medium text-gray-200">
-                Showing {filteredProducts.length} product
-                {filteredProducts.length !== 1 ? 's' : ''}
-              </div>
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <h2 className="day:text-gray-600 text-sm font-medium text-gray-300">
+                {resultsHeading}
+              </h2>
               <div className="day:text-gray-400 hidden text-xs tracking-[0.16em] text-gray-500 uppercase sm:block">
                 Select one to continue
               </div>
@@ -214,22 +214,22 @@ export default function ProductSelectionGrid({
                   key={group.id}
                   aria-labelledby={`product-group-${group.id}`}
                 >
-                  <div className="day:border-gray-200 mb-3 flex items-end justify-between gap-4 border-b border-white/10 pb-2">
+                  <div className="day:border-gray-200 mb-3 border-b border-white/10 pb-2">
                     <div>
                       <h2
                         id={`product-group-${group.id}`}
                         className="day:text-gray-900 text-lg font-semibold text-white"
                       >
-                        {group.name}
+                        {group.name}{' '}
+                        <span className="day:text-gray-500 text-sm font-medium text-gray-300">
+                          ({group.products.length} item
+                          {group.products.length !== 1 ? 's' : ''})
+                        </span>
                       </h2>
-                      <p className="day:text-gray-500 mt-0.5 text-sm text-gray-400">
+                      <p className="day:text-gray-500 mt-0.5 text-sm text-gray-200">
                         {group.description}
                       </p>
                     </div>
-                    <span className="day:text-gray-400 text-xs font-medium tracking-[0.14em] text-gray-500 uppercase">
-                      {group.products.length} item
-                      {group.products.length !== 1 ? 's' : ''}
-                    </span>
                   </div>
 
                   <div className="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
@@ -328,28 +328,6 @@ export default function ProductSelectionGrid({
         )}
       </div>
 
-      {/* Category Info Cards (when category is selected) */}
-      {selectedCategory !== 'all' && (
-        <div className="day:border-gray-200 day:bg-stone-100 border-t border-white/5 bg-gray-900/30">
-          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-            {productCategories
-              .filter((cat) => cat.id === selectedCategory)
-              .map((category) => (
-                <div
-                  key={category.id}
-                  className="day:border-gray-200 day:bg-white rounded-2xl border border-white/10 bg-gradient-to-r from-gray-800/50 to-gray-900/50 p-8 text-center"
-                >
-                  <h2 className="day:text-gray-900 mb-2 font-serif text-2xl font-light text-white">
-                    {category.name}
-                  </h2>
-                  <p className="day:text-gray-600 text-gray-300">
-                    {category.description}
-                  </p>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-17
+**Last Updated:** 2026-07-19
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -58,6 +58,156 @@
 50. [July 4 Product-Prefixed Designer Routes, Home SEO, and Stainless Steel Urns](#current-status-2026-07-04--product-prefixed-designer-routes-home-seo-and-stainless-steel-urns)
 51. [July 8 Pet Bowl SVG Overlays, Saved Design Email Spacing, Memorial Nav, and Showroom Strategy](#current-status-2026-07-08--pet-bowl-svg-overlays-saved-design-email-spacing-memorial-nav-and-showroom-strategy)
 52. [July 17 Mobile Designer Navigation Overhaul](#current-status-2026-07-17--mobile-designer-navigation-overhaul)
+53. [July 18 Mobile App Shell and Homepage Hero Refinements](#current-status-2026-07-18--mobile-app-shell-and-homepage-hero-refinements)
+54. [July 19 Mobile Selection Flow and Account Polish](#current-status-2026-07-19--mobile-selection-flow-and-account-polish)
+
+---
+
+## Current Status (2026-07-19) - Mobile Selection Flow and Account Polish
+
+This session focused on visual QA from `screen.png` across the mobile designer flow, Check Price, and My Account pages. The user is manually checking screenshots and explicitly asked not to use Playwright for these iterations.
+
+### Mobile Product and Shape Selection
+
+- `/select-product` now uses horizontally scrollable category pills on mobile. The active view is clearer: the top result label reads like `All Products · 16 products`, while category sections use grouped titles like `Plaques (5 items)`.
+- Product/category secondary text was brightened for dark-mode readability.
+- `/select-shape` follows the same mobile filter-row pattern and uses `All Shapes · 55 shapes`.
+- Shape cards now distinguish selected vs unselected states more clearly. Selected cards show the selected state/CTA consistently, and silhouettes have stronger contrast in their preview frame.
+
+### Mobile Canvas Header and Bottom Controls
+
+- The closed mobile canvas header is vertically centered: hamburger/menu affordance and product name align cleanly in the dark top bar.
+- The duplicate price was removed from the top header; the bottom control chip remains the main price/dimension affordance.
+- Canvas price color was changed from bright green to the shared soft gold/bronze tone.
+- Dimensions now show an interactive chevron. Keep the chevron aligned with the full size label, preferably as one compact row such as `600 x 600 mm`.
+- The scenery/gallery floating button has safer mobile edge spacing.
+- Tapping empty canvas/background clears selection overlays so users can preview the product without edit brackets.
+- Selection outlines are now thicker and more reliable on mobile:
+  - `components/three/SelectionBox.tsx` uses `LineSegments2` / `LineMaterial` with a `4.5px` width.
+  - `components/three/RotatingBoxOutline.tsx` uses the same fat-line renderer and width for monument part outlines.
+  - Do not rely on native `THREE.LineBasicMaterial.linewidth`; most WebGL implementations ignore it.
+
+### Mobile Drawer Panels
+
+- Select Size now has clearer hierarchy:
+  - Core part uses a segmented control (`Headstone` / `Base`).
+  - Style uses outlined controls (`Upright` / `Slant`).
+  - Dimension properties use text tabs with a gold underline (`Width`, `Height`, `Thickness`).
+- Select Size keeps the slider + minus/value/plus stepper pattern.
+- Inscriptions and Images use shortened mobile headers (`Inscriptions`, `Images`) to avoid truncation.
+- Image option labels can wrap instead of truncating important product names like `Vitreous Enamel`.
+- Select Additions and Select Motifs no longer render their default full-page grid over the 3D canvas on mobile:
+  - `app/select-additions/page.tsx` returns `null`.
+  - `app/select-motifs/page.tsx` returns `null`.
+  - The active mobile experience is the drawer/sheet content from the designer navigation.
+- Addition thumbnails were adjusted away from harsh white preview backgrounds, labels wrap consistently, and Italian `Applicazione Preghiera` labels are presented in English as `Praying Hands Motif`.
+- When an addition is selected, the mobile header no longer includes an extra `List` text button that crushes the centered title. Use in-panel actions such as `Choose another` instead.
+
+### Check Price
+
+- `components/CheckPricePanel.tsx` mobile modal now uses a single close affordance in the top-right; the redundant bottom `Close` button was removed.
+- Modal item names are customer-facing first, with product IDs moved into muted metadata below.
+- The modal scroll area has additional bottom padding so final item details are not clipped by the footer/edge.
+- `/check-price` now shows a prominent estimated total, uses a back arrow instead of a conflicting close/menu model, and keeps price formatting consistent with cents.
+- Full-page Check Price uses the correct base product ID/name instead of reusing the main headstone product ID.
+
+### My Account Mobile
+
+- Account routes now have their own mobile hamburger/drawer via `components/AccountNav.tsx`, matching the desktop account sidebar navigation.
+- The stray mobile day/night switch under the hamburger is hidden on account routes; theme switching belongs in the appropriate menu, not floating over account pages.
+- Account drawer styling was simplified:
+  - regular rows use a consistent icon + text treatment;
+  - the active row uses a subdued background/indicator;
+  - `New Design` can remain a primary action;
+  - `Logout` uses a logout/exit icon, not the same shield icon as Privacy Policy.
+- My Account sign-in/register labels and helper text have higher contrast, and inputs have a visible gold focus state.
+- Saved Designs mobile cards no longer overflow action buttons. `Buy`, `Edit`, and a single overflow icon fit inside the card; redundant `More` text was removed.
+- Saved Designs price/date metadata stacks cleanly on narrow screens.
+- Account Details and Invoice Details use single-column key/value layouts on mobile to avoid long email, phone, and business labels colliding.
+- Details card edit actions are compact icon buttons, and `Change Password` moves below the password value on mobile instead of clipping off-card.
+- Orders empty state removes redundant top header account buttons, includes a simple icon, and adds a `Start Designing` CTA.
+- Privacy Policy body copy uses soft off-white/light gray instead of pure white and has generous bottom padding for long-scroll reading.
+
+### Current Verification
+
+Latest checks run successfully after the July 19 code changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Manual visual QA remains screenshot-driven by the user. Do not use Playwright screenshots unless the user explicitly asks for them.
+
+---
+
+## Current Status (2026-07-18) - Mobile App Shell and Homepage Hero Refinements
+
+This update supersedes parts of the 2026-07-17 mobile step-header notes. The mobile designer no longer uses several separate "floating island" controls over the 3D canvas. The current direction is a calmer app shell: a stable top bar, a docked bottom sheet for open section panels, and the 3D scene framed between them.
+
+### Homepage Hero Mobile Order
+
+`app/_ui/HomeSplash.tsx` was adjusted for mobile conversion hierarchy:
+
+- The hero text is split semantically: `Create the Perfect Tribute` remains the `h1`; `Design a beautiful tribute in real-time 3D - save, share, and order when ready.` is now a paragraph.
+- The global `h1 { padding: 40px 0px; }` in `styles/globals.css` still exists, so the homepage hero heading uses local `!pb-0` / `!mb-0` overrides.
+- Mobile order is now headline, supporting copy, `HeroCanvas`, `Start Your Free Design`, trust block, search.
+- `Start Your Free Design` is narrower on mobile and appears directly after the canvas before the trust/search area.
+- The old `SCROLL` button was removed from the hero CTA block.
+
+### Mobile Select Size Panel
+
+`components/DesignerNav.tsx` and `components/ConditionalNav.tsx` now treat mobile section editing as a compact bottom sheet:
+
+- Editing panels use a docked sheet at `h-[36dvh] max-h-[36dvh]`.
+- The sheet is full-width and uses only subtle `rounded-t-lg` so it reads as part of the app frame instead of a separate floating card.
+- Select Size controls are denser on mobile:
+  - segmented controls use smaller padding/text via `mobileSegmentClass`;
+  - dimension cards use `min-h-[104px]` and reduced padding;
+  - only one dimension card is shown at a time on mobile (`Width`, `Height`, `Thickness`/`Length`), while desktop still shows all cards.
+- The base finish label shown to users is `Rockface`; the internal value remains `rock-pitch` for data compatibility.
+
+### Mobile Header States
+
+There are now two distinct mobile header states:
+
+| State | Component | Current behavior |
+|------|------|------|
+| Section panel closed | `components/MobileHeader.tsx` | Stable full-width dark top bar. Shows the global product context only: hamburger space, product name, and current price on a second line. No section name and no Prev/Next. |
+| Section panel open | `components/DesignerNav.tsx` portal header | Full-width warm dark top bar. Shows `Menu`, centered `Step X of Y` + current task (for Select Size: `Sizing & Base`), and `Prev` / gold `Next`. Day/night is not shown here; keep it in the main menu. |
+
+Important details:
+
+- The closed-state mobile header no longer shows dimensions in the title line. The price is shown below the product name so the hamburger fits fully inside the dark bar.
+- The open-state mobile header is a single full-width bar, not separate floating boxes. This replaced the earlier floating progress capsule.
+- The app keeps `Next` as the primary gold action and `Prev` as neutral.
+- Day/night controls should live in the main menu only, not in the section header.
+
+### Canvas Framing and Rotation Controls
+
+`components/ThreeScene.tsx` and `components/three/FullMonumentFit.tsx` were tuned for mobile:
+
+- Rotation arrows are smaller on mobile (`h-10 w-10`) and raised to `top-[45%]`; desktop keeps `h-12 w-12` at the vertical center.
+- `FullMonumentFit` applies a small mobile vertical target bias so the monument sits slightly higher above the bottom sheet.
+- The rotation arrows remain for now. Do not remove them until touch/drag rotation is confirmed to be obvious enough for mobile users.
+
+### Current UX Decisions
+
+- Closed header = product context only.
+- Open section header = step navigation only.
+- Bottom panel carries the section title and controls.
+- Avoid returning to multiple floating boxes over the sky; use full-width bars for app chrome.
+- The pink `N / 1 Issue` bubble visible in screenshots is the Next.js development indicator, not app UI.
+
+### Verification
+
+Latest verification run:
+
+```bash
+pnpm type-check
+```
+
+Manual visual QA is being done by the user from `screen.png`; do not use Playwright screenshots unless explicitly requested.
 
 ---
 
@@ -110,10 +260,27 @@ The drawer open/close flag was local `useState` in `ConditionalNav`, which preve
 
    Full-page/overlay steps (`select-product`, `select-shape`, `check-price`) are intentionally excluded so the drawer closes and reveals their content. `DesignerNav`'s route-sync effect auto-opens the correct panel via `setActiveFullscreenPanel(currentSlug)`, so keeping the drawer open always shows the right panel.
 
+### Mobile Bottom Sheet + Floating Step-Header (later in this session)
+
+The mobile drawer was reworked so the 3D product stays visible while editing. The **main menu opens as a full-height drawer**, while **editing sub-panels dock to the bottom as a content-fitting sheet** and the step header floats over the canvas.
+
+- **Main menu vs sub-panels** (`components/ConditionalNav.tsx`): a `useBottomSheet` flag is derived from `getDesignerStepSlug(pathname)` — true only for editing steps (`select-size`, `select-material`, `select-border`, `inscriptions`, `select-motifs`, `select-additions`, `select-images`, `select-emblems`), i.e. `DRAWER_PANEL_SLUGS` minus `design-menu`. It is passed into `renderDesignerSidebar(isMobileMenuOpen, setIsMobileMenuOpen, useBottomSheet)`.
+  - `useBottomSheet === false` (main menu / non-step / logged-out account) → **full-height drawer** `h-[100dvh]` (nothing to reveal). The sheet top bar shows only the ✕ close.
+  - `useBottomSheet === true` → **bottom sheet** `h-auto max-h-[40dvh]` docked to `fixed inset-x-0 bottom-0`, so it hugs its content (short panels like Width/Height have no empty space) and caps at 40% of the dynamic viewport height with internal scroll for long grids, leaving the product visible above. `md:` reverts to the permanent 400px left column (`md:h-full md:max-h-none`).
+  - There is **no resize grabber and no snap heights** anymore — an earlier peek/half/full drag handle was removed as unnecessary. There is also **no full-screen backdrop** (removed so the canvas above stays interactive for orbit/tap); close via the ✕ only (no tap-outside-to-close).
+- **Canvas stays interactive**: because the sheet uses a `translate-y` transform, any `position: fixed` descendant anchors to the sheet, not the viewport — this is why the floating header is portalled (below).
+- **Floating mobile step-header** (`components/DesignerNav.tsx`): on mobile the step header (Guided Step _x_ of _y_, panel title, Menu / List / Prev / Next, day/night toggle) does **not** sit inside the sheet — the bottom sheet holds only the controls. It is rendered as a **transparent overlay pinned to the top of the canvas** via `createPortal(headerJSX, document.body)` (portalled to escape the sheet's transform). Key details:
+  - Container: `pointer-events-none fixed inset-x-0 top-0 z-[45] md:hidden` with **no background** — buttons/toggle use `pointer-events-auto` so drags between them still reach the 3D scene.
+  - Legibility uses only a **single subtle `textShadow`** on the title/label (`0 1px 2px rgba(0,0,0,0.55)`). Do **not** stack `drop-shadow`/`drop-shadow-lg` filters plus an inline `textShadow` or a `bg-gradient` scrim — with the title's wide letter-spacing the merged glyph halos read as an ugly dark "box" on blue sky (this was reported and fixed).
+  - Only rendered when `isMounted && isMobileNavOpen` (reads `useMobileNavStore`), and only while `shouldShowFullscreenPanel` is true (so the main menu, which has its own in-drawer header, is unaffected).
+  - The in-flow panel header is now `hidden md:block` (desktop only) and its old `md:hidden` day/night toggle was removed (moved into the overlay). The shared title lives in `const fullscreenPanelTitle`.
+- **One size control at a time on mobile**: `renderSelectSizePanel` shows a `md:hidden` `SegmentedControl` (Width / Height / +Thickness|Length) driven by `activeSizeControl`; inactive cards get `hidden md:block`. Desktop shows all cards.
+- **Load Design in the sidebar**: `LoadDesignButton` gained `variant="menu"` (inline sidebar button) and is rendered in `DesignerNav`'s main-menu CTA area; the floating instance was removed from `ConditionalCanvas.tsx`.
+
 ### Breakpoint & Z-Index Conventions (mobile designer)
 
 - Sidebar permanently visible from `md` (768px); mobile openers/toggles use `md:hidden`.
-- Floating hamburger: `z-[10000]`; `MobileHeader` info bar: `z-[9999]`; drawer backdrop: `z-30`; drawer panel: `z-40` (mobile) / `md:z-10`.
+- Floating hamburger: `z-[10000]`; `MobileHeader` info bar: `z-[9999]`; floating mobile step-header overlay: `z-[45]`; drawer/sheet panel: `z-40` (mobile) / `md:z-10`. (There is no longer a drawer backdrop.)
 - The floating "N" seen bottom-left in screenshots is the **Next.js dev indicator**, not app UI — it does not appear in production.
 
 ### Files Touched
@@ -123,6 +290,8 @@ The drawer open/close flag was local `useState` in `ConditionalNav`, which preve
 - `components/MobileHeader.tsx`
 - `components/ThemeToggle.tsx`
 - `components/DesignerNav.tsx`
+- `components/LoadDesignButton.tsx`
+- `components/ConditionalCanvas.tsx`
 - `app/_ui/HomeSplash.tsx`
 
 ### Verification
@@ -12082,4 +12251,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-08*
+*End of STARTER.md - Last updated: 2026-07-19*

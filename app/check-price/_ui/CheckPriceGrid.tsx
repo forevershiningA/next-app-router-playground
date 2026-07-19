@@ -18,7 +18,7 @@ const GRID_SECTION_EXPANDED_STATE: Record<GridExpandableSection, boolean> = {
   inscriptions: true,
 };
 import { useRouter } from 'next/navigation';
-import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
@@ -146,6 +146,9 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const inscriptionProductId = inscriptionAddition?.id || productId;
   const inscriptionName = inscriptionAddition?.name || 'Inscription';
   const inscriptionFormula = inscriptionAddition?.formula || '';
+  const baseAddition = catalog?.product?.additions?.find(a => a.type === 'base');
+  const baseProductId = baseAddition?.id || '–';
+  const baseProductName = baseAddition?.name || 'Base';
   
   // Get shape name from URL
   const shapeName = shapeUrl 
@@ -391,10 +394,10 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         type="button"
         onClick={handleClosePage}
         className="check-price-grid__close-button fixed top-6 right-6 z-[10002] inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 day:border-gray-300 day:bg-gray-100 day:text-gray-900 day:hover:bg-gray-200"
-        aria-label="Close check price"
+        aria-label="Back to designer"
       >
-        <XMarkIcon className="h-5 w-5" aria-hidden="true" />
-        <span className="hidden sm:inline">Close</span>
+        <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
+        <span className="hidden sm:inline">Back</span>
       </button>
       
       {/* Header Section */}
@@ -417,6 +420,14 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[60%_40%]">
           {/* Left Column - Design Summary */}
           <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
+            <div className="mb-6 rounded-xl border border-[#cfac6c]/30 bg-[#cfac6c]/10 p-4">
+              <p className="text-xs font-semibold tracking-[0.2em] text-[#f3d48f] uppercase day:text-[#8a6829]">
+                Total Estimated Price
+              </p>
+              <p className="mt-1 text-3xl font-semibold text-white day:text-gray-900">
+                ${total.toFixed(2)}
+              </p>
+            </div>
             <h2 className="text-2xl font-serif font-light text-white mb-6 day:text-gray-900">Your Design</h2>
             
             {/* Product Details */}
@@ -424,8 +435,8 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <p className="text-sm text-gray-300 leading-relaxed day:text-gray-600">
-                    <strong className="text-white day:text-gray-900">Product ID: {productId} - {productName}</strong><br />
-                    Shape: {shapeName}<br />
+                    <strong className="text-white day:text-gray-900">{productName}</strong><br />
+                    ID: {productId} · Shape: {shapeName}<br />
                     {isUrnProduct ? (
                       <>Background: {headstoneMaterialName}</>
                     ) : (
@@ -437,7 +448,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl text-white font-semibold day:text-gray-900">${headstonePrice.toFixed(0)}</p>
+                  <p className="text-xl text-white font-semibold day:text-gray-900">${headstonePrice.toFixed(2)}</p>
                 </div>
               </div>
             </div>
@@ -448,13 +459,14 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <p className="text-sm text-gray-300 leading-relaxed day:text-gray-600">
-                      <strong className="text-white day:text-gray-900">Product ID: {productId} - Base</strong><br />
+                      <strong className="text-white day:text-gray-900">{baseProductName}</strong><br />
+                      ID: {baseProductId}<br />
                       Material: {baseMaterialName}<br />
                       Size: {baseWidthMm}mm × {baseHeightMm}mm × {baseThickness}mm
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xl text-white font-semibold day:text-gray-900">${basePrice.toFixed(0)}</p>
+                    <p className="text-xl text-white font-semibold day:text-gray-900">${basePrice.toFixed(2)}</p>
                   </div>
                 </div>
               </div>

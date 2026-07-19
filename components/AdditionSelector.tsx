@@ -23,6 +23,14 @@ type Props = {
   additions: Addition[];
 };
 
+function getAdditionDisplayName(name: string) {
+  if (/^Applicazione\s+Preghiera/i.test(name)) {
+    return 'Praying Hands Motif';
+  }
+
+  return name;
+}
+
 export default function AdditionSelector({ additions }: Props) {
   const [category, setCategory] = useState<(typeof CATEGORY_FILTERS)[number]['id']>('all');
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
@@ -87,6 +95,7 @@ export default function AdditionSelector({ additions }: Props) {
           const isSelected = Boolean(instanceId);
           const dirName = addition.file?.split('/')?.[0] || '';
           const imagePath = `/additions/${dirName}/${addition.image}`;
+          const displayName = getAdditionDisplayName(addition.name);
 
           return (
             <button
@@ -99,13 +108,13 @@ export default function AdditionSelector({ additions }: Props) {
                   : 'border-white/10 bg-[#171717] hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] day:border-gray-200 day:bg-white'
               }`}
             >
-              <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-[#0A0A0A] day:border-gray-200 day:bg-gray-100">
+              <div className="relative aspect-[4/3] w-full overflow-hidden border-b border-white/10 bg-[#E8E3DA] day:border-gray-200 day:bg-gray-100">
                 <Image
                   src={imagePath}
-                  alt={addition.name}
+                  alt={displayName}
                   fill
                   sizes="120px"
-                  className="object-contain p-3 transition-transform duration-300 group-hover:scale-105"
+                  className="object-contain p-2.5 transition-transform duration-300 group-hover:scale-105"
                 />
                 {isSelected && (
                   <div className="absolute top-2 right-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black shadow-md">
@@ -114,8 +123,8 @@ export default function AdditionSelector({ additions }: Props) {
                 )}
               </div>
               <div className="flex min-h-[74px] flex-1 flex-col justify-between gap-2 p-2.5">
-                <span className="line-clamp-2 text-xs font-semibold leading-snug text-white day:text-gray-900">
-                  {addition.name}
+                <span className="text-center text-xs leading-snug font-semibold break-words text-white day:text-gray-900">
+                  {displayName}
                 </span>
                 <span className="text-[11px] font-semibold text-[#D7B356]">
                   {isSelected ? 'Remove' : 'Add'} →

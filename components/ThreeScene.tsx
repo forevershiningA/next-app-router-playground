@@ -288,9 +288,25 @@ function ProductNameHeader() {
             className="cursor-pointer bg-black/80 backdrop-blur-md text-white py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center justify-between w-full hover:bg-black/90 transition-colors"
             style={{ paddingLeft: '1.25rem', paddingRight: '1.725rem' }}
           >
-            <span className="opacity-80 text-sm">{sizeLabel}</span>
+            <span className="flex items-center gap-1.5 text-sm leading-none text-white/80">
+              {sizeLabel}
+              <svg
+                className="h-3.5 w-3.5 text-white/45"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="m6 9 6 6 6-6"
+                />
+              </svg>
+            </span>
             <div className="w-px h-4 bg-white/20"></div>
-            <span className="font-bold text-green-400">{priceLabel}</span>
+            <span className="font-bold text-[#f3d48f]">{priceLabel}</span>
           </button>
         </div>
       )}
@@ -519,10 +535,10 @@ export default function ThreeScene() {
               {/* Left Arrow */}
               <button
                 onClick={rotateLeft}
-                className="absolute left-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-[#cfac6c]/50"
+                className="absolute left-6 top-[45%] flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:left-8 md:top-1/2 md:h-12 md:w-12"
                 aria-label="Rotate left"
               >
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 text-white md:h-6 md:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
               </button>
@@ -530,10 +546,10 @@ export default function ThreeScene() {
               {/* Right Arrow */}
               <button
                 onClick={rotateRight}
-                className="absolute right-8 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-full flex items-center justify-center transition-all hover:scale-110 cursor-pointer shadow-lg hover:shadow-xl hover:shadow-[#cfac6c]/50"
+                className="absolute right-6 top-[45%] flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:right-8 md:top-1/2 md:h-12 md:w-12"
                 aria-label="Rotate right"
               >
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="h-5 w-5 text-white md:h-6 md:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
               </button>

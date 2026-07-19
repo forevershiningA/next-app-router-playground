@@ -104,7 +104,7 @@ export default function SceneryToggleButton() {
   return (
     <div
       ref={ref}
-      className="fixed bottom-6 right-4 z-50 flex flex-col items-end gap-2"
+      className="fixed right-5 bottom-7 z-50 flex flex-col items-end gap-2 md:right-4 md:bottom-6"
     >
       {/* Popover */}
       {open && (

@@ -10,6 +10,9 @@ import * as React from 'react';
 import * as THREE from 'three';
 
 import { useThree, useFrame } from '@react-three/fiber';
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial';
+import { LineSegments2 } from 'three/examples/jsm/lines/LineSegments2';
+import { LineSegmentsGeometry } from 'three/examples/jsm/lines/LineSegmentsGeometry';
 
 
 
@@ -30,6 +33,8 @@ type SelectionBoxProps<T extends THREE.Object3D = THREE.Object3D> = {
   lineLength?: number;
 
 };
+
+const SELECTION_LINE_WIDTH_PX = 4.5;
 
 
 
@@ -107,9 +112,9 @@ function createCornerGeometry(lineLength: number) {
 
 
 
-  const geometry = new THREE.BufferGeometry();
+  const geometry = new LineSegmentsGeometry();
 
-  geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  geometry.setPositions(positions);
 
   return geometry;
 
@@ -123,7 +128,7 @@ export default function SelectionBox<T extends THREE.Object3D = THREE.Object3D>(
 
   visible = true,
 
-  color = 'white',
+  color = '#f3d48f',
 
   pad = 0.01,
 
@@ -135,9 +140,9 @@ export default function SelectionBox<T extends THREE.Object3D = THREE.Object3D>(
 
 }: SelectionBoxProps) {
 
-  const { scene } = useThree();
+  const { scene, size } = useThree();
 
-  const outlineRef = React.useRef<THREE.LineSegments | null>(null);
+  const outlineRef = React.useRef<LineSegments2 | null>(null);
 
   const boxRef = React.useRef(new THREE.Box3());
 
@@ -165,9 +170,11 @@ export default function SelectionBox<T extends THREE.Object3D = THREE.Object3D>(
 
     const geometry = createCornerGeometry(lineLength);
 
-    const material = new THREE.LineBasicMaterial({
+    const material = new LineMaterial({
 
-      color: new THREE.Color(color as any),
+      color: new THREE.Color(color).getHex(),
+
+      linewidth: SELECTION_LINE_WIDTH_PX,
 
       depthTest: !through,
 
@@ -175,17 +182,21 @@ export default function SelectionBox<T extends THREE.Object3D = THREE.Object3D>(
 
       transparent: true,
 
-      opacity: 0.85,
+      opacity: 0.55,
 
       blending: THREE.AdditiveBlending,
 
       toneMapped: false,
 
+      resolution: new THREE.Vector2(size.width, size.height),
+
     });
 
 
 
-    const outline = new THREE.LineSegments(geometry, material);
+    const outline = new LineSegments2(geometry, material);
+
+    outline.computeLineDistances();
 
     outline.renderOrder = renderOrder;
 
@@ -207,7 +218,7 @@ export default function SelectionBox<T extends THREE.Object3D = THREE.Object3D>(
 
     };
 
-  }, [scene, targetReady, color, through, renderOrder, lineLength]);
+  }, [scene, targetReady, color, through, renderOrder, lineLength, size.width, size.height]);
 
 
 
@@ -218,6 +229,8 @@ export default function SelectionBox<T extends THREE.Object3D = THREE.Object3D>(
     const outline = outlineRef.current;
 
     if (!obj || !outline) return;
+
+    (outline.material as LineMaterial).resolution.set(size.width, size.height);
 
 
 

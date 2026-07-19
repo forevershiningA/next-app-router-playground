@@ -480,10 +480,10 @@ export default function HomeSplash() {
         
         {/* Main Content - Flex Grow to Center Vertically */}
         <div className="relative z-10 flex flex-col justify-start flex-grow w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-8 pt-[130px] sm:pt-[116px]">
-          <div className="text-center">
+          <div className="flex flex-col text-center">
             
             {/* Headlines - Emotional benefit prioritized with elegant serif */}
-            <h1 className="text-3xl font-playfair-display tracking-tight sm:text-5xl mb-2 sm:mb-3 leading-tight">
+            <h1 className="order-1 !mb-0 !pb-0 text-3xl font-playfair-display tracking-tight sm:text-5xl leading-tight">
               <span
                 className="inline-block font-semibold text-[2rem] sm:text-5xl mx-auto"
                 style={{ 
@@ -493,19 +493,19 @@ export default function HomeSplash() {
               >
                 Create the Perfect Tribute
               </span>
-              <span
-                className="block font-light text-xl sm:text-3xl mt-4"
-                style={{ 
-                  color: isDayMode ? '#374151' : '#FFFFFF',
-                  textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
-                }}
-              >
-                Design a beautiful tribute in real-time 3D - save, share, and order when ready.
-              </span>
             </h1>
+            <p
+              className="order-2 mx-auto mt-4 max-w-3xl text-xl font-light leading-snug sm:text-3xl"
+              style={{ 
+                color: isDayMode ? '#374151' : '#FFFFFF',
+                textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
+              }}
+            >
+              Design a beautiful tribute in real-time 3D - save, share, and order when ready.
+            </p>
             
             {/* Trust Signals */}
-            <div className="mb-8 flex flex-col items-center gap-3">
+            <div className="order-5 mb-8 mt-4 flex flex-col items-center gap-3">
               <div className="flex items-center gap-1.5">
                 <div className="flex items-center gap-0.5 text-[#d4af37]">
                   {[...Array(5)].map((_, i) => (
@@ -539,7 +539,7 @@ export default function HomeSplash() {
             {/* Hero Search Bar */}
             <form
               onSubmit={handleHeroSearch}
-              className="relative mx-auto mb-8 w-full max-w-xl"
+              className="order-6 relative mx-auto mb-8 w-full max-w-xl"
               role="search"
             >
               <div className="relative flex items-center">
@@ -571,7 +571,7 @@ export default function HomeSplash() {
             </form>
 
             {/* 3D Canvas - TALLER container with overlap layout */}
-            <div className="w-full h-[45vh] sm:h-[49.5vh] min-h-[360px] flex items-center justify-center relative -mt-4 -mb-16 sm:-mb-24 z-0 pointer-events-none">
+            <div className="order-3 w-full h-[34vh] sm:h-[49.5vh] min-h-[280px] sm:min-h-[360px] flex items-center justify-center relative -mt-2 -mb-8 sm:order-5 sm:-mt-4 sm:-mb-24 z-0 pointer-events-none">
               
               {/* Enhanced Visual Effects - Spotlight and atmosphere */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -615,29 +615,17 @@ export default function HomeSplash() {
             </div>
             
             {/* CTAs - z-index ensures they sit ON TOP of canvas bottom area */}
-            <div className="relative z-20 flex flex-col items-center gap-3">
+            <div className="order-4 relative z-20 mb-4 flex flex-col items-center gap-3">
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                 <Link
                   href="/select-product"
-                  className="w-full rounded-lg bg-[#cfac6c] px-10 py-4 text-center text-base font-semibold tracking-wide text-slate-950 transition-colors hover:bg-[#d7b979] sm:w-auto"
+                  className="w-auto rounded-lg bg-[#cfac6c] px-7 py-3.5 text-center text-sm font-semibold tracking-wide text-slate-950 transition-colors hover:bg-[#d7b979] sm:px-10 sm:py-4 sm:text-base"
                   aria-label="Start your free design"
                   style={{ letterSpacing: '0.05em' }}
                 >
                   Start Your Free Design
                 </Link>
               </div>
-
-              <button
-                type="button"
-                onClick={() => {
-                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }}
-                className="mt-2 inline-flex items-center gap-2 rounded-lg border border-white/15 bg-[#171717]/60 px-3 py-1.5 text-xs font-medium tracking-[0.16em] text-white/80 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-300 day:bg-white/70 day:text-gray-600 day:hover:border-gray-400 day:hover:text-gray-800"
-                aria-label="Scroll to how it works section"
-              >
-                SCROLL
-                <span aria-hidden="true" className="text-sm">↓</span>
-              </button>
             </div>
 
           </div>

@@ -209,8 +209,14 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         minTargetY,
         maxTargetY,
       );
+      const mobileVerticalBias =
+        size.width < 768 ? sizeVec.y * (zoomToHeadstone ? 0.08 : 0.04) : 0;
 
-      const target = new THREE.Vector3(center.x, targetY, center.z);
+      const target = new THREE.Vector3(
+        center.x,
+        Math.max(box.min.y + sizeVec.y * 0.25, targetY - mobileVerticalBias),
+        center.z,
+      );
       const camPos = target.clone().addScaledVector(dir, distance);
       const camDist = camPos.distanceTo(target);
 

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   ShoppingBagIcon,
   UserCircleIcon,
-  DocumentDuplicateIcon,
 } from '@heroicons/react/24/outline';
 
 type Order = {
@@ -126,15 +125,14 @@ export default function OrdersPage() {
         aria-hidden
       />
 
-      <div className="relative mx-auto w-full max-w-7xl px-10 py-10">
+      <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         <section
-          className="rounded-[32px] border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white/90 px-10 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl"
+          className="rounded-2xl border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white/90 px-4 py-5 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-6"
           aria-labelledby="your-orders-heading"
         >
               {/* Header */}
               <header className="mb-6 border-b border-white/5 day:border-gray-200 pb-6">
-                <div className="flex items-start justify-between">
-                  <div>
+                <div>
                     <h2 id="your-orders-heading" className="text-3xl font-semibold tracking-tight">
                       Your Orders
                     </h2>
@@ -142,23 +140,6 @@ export default function OrdersPage() {
                       <UserCircleIcon className="h-5 w-5 text-white/60 day:text-gray-400" aria-hidden />
                       {sessionEmail ?? 'View and track your order history'}
                     </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Link
-                      href="/my-account/details"
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100"
-                    >
-                      <UserCircleIcon className="h-4 w-4 text-white/60 day:text-gray-400" aria-hidden />
-                      Account Details
-                    </Link>
-                    <Link
-                      href="/my-account/invoice"
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100"
-                    >
-                      <DocumentDuplicateIcon className="h-4 w-4 text-white/60 day:text-gray-400" aria-hidden />
-                      Invoice Details
-                    </Link>
-                  </div>
                 </div>
               </header>
 
@@ -236,8 +217,20 @@ export default function OrdersPage() {
                   );
                 })}
                 {!orders.length && !loading && (
-                  <div className="col-span-full rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-gray-50 p-10 text-center text-white/70 day:text-gray-500">
-                    No orders yet. Your order history will appear here once you make a purchase.
+                  <div className="col-span-full rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-gray-50 px-5 py-10 text-center text-white/70 day:text-gray-500 sm:p-10">
+                    <ShoppingBagIcon className="mx-auto h-12 w-12 text-[#D4A84F]/80" aria-hidden />
+                    <h3 className="mt-4 text-lg font-semibold text-white day:text-gray-900">
+                      No orders yet
+                    </h3>
+                    <p className="mx-auto mt-2 max-w-sm text-sm">
+                      Your order history will appear here once you make a purchase.
+                    </p>
+                    <Link
+                      href="/design-menu"
+                      className="mt-6 inline-flex items-center justify-center rounded-full bg-[#D4A84F] px-6 py-3 text-sm font-semibold text-black transition hover:bg-[#e0b86a]"
+                    >
+                      Start Designing
+                    </Link>
                   </div>
                 )}
                 {loading && (

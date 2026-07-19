@@ -7,12 +7,12 @@ const privacyHtml = `<p>Forever Shining is committed to providing quality servic
 
 export default function PrivacyPage() {
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white day:bg-stone-100 day:text-gray-900">
+    <div className="relative min-h-screen bg-[#050301] text-[#E5E5EA] day:bg-stone-100 day:text-gray-900">
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
         aria-hidden
       />
-      <div className="relative mx-auto w-full max-w-3xl px-10 py-10">
+      <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         <Link
           href="/my-account"
           className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition day:text-gray-500 day:hover:text-gray-900"
@@ -21,17 +21,17 @@ export default function PrivacyPage() {
           Back to My Account
         </Link>
 
-        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl day:border-gray-200 day:bg-white day:shadow-lg">
+        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 pt-6 pb-32 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:pt-8">
           <header className="mb-6 border-b border-white/10 pb-6 day:border-gray-200">
             <h1 className="text-3xl font-semibold tracking-tight day:text-gray-900">Privacy Policy</h1>
           </header>
 
           <div
             className="prose prose-invert max-w-none
-              prose-p:text-white/75 prose-p:leading-relaxed
-              prose-h4:text-white/90 prose-h4:font-semibold prose-h4:mt-6 prose-h4:mb-2
+              prose-p:text-[#D1D1D6] prose-p:leading-relaxed
+              prose-h4:text-[#F2F2F7] prose-h4:text-lg prose-h4:font-semibold prose-h4:mt-9 prose-h4:mb-3
               prose-a:text-[#D4A84F] prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-white/90
+              prose-strong:text-[#F2F2F7]
               day:prose-invert-none
               day:prose-p:text-gray-600
               day:prose-h4:text-gray-900

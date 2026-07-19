@@ -82,7 +82,7 @@ export default function InvoiceDetailsPage() {
   const inputClass =
     'w-full rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-sm text-white placeholder-white/30 focus:border-[#D4A84F]/60 focus:outline-none focus:ring-1 focus:ring-[#D4A84F]/40 day:border-gray-300 day:bg-white day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-500 day:focus:ring-amber-400/40';
   const labelClass = 'block text-xs font-medium text-white/70 mb-1 day:text-gray-600';
-  const fieldValueClass = 'text-sm text-white day:text-gray-900';
+  const fieldValueClass = 'text-sm break-words text-white day:text-gray-900';
   const fieldLabelClass = 'text-xs text-white/55 mb-0.5 day:text-gray-400';
   const emptyClass = 'text-sm text-white/30 day:text-gray-400';
   const btnClass =
@@ -94,7 +94,7 @@ export default function InvoiceDetailsPage() {
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)] day:hidden"
         aria-hidden
       />
-      <div className="relative mx-auto w-full max-w-3xl px-10 py-10">
+      <div className="relative mx-auto w-full max-w-3xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         <Link
           href="/my-account"
           className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition day:text-gray-500 day:hover:text-gray-900"
@@ -103,7 +103,7 @@ export default function InvoiceDetailsPage() {
           Back to Saved Designs
         </Link>
 
-        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg">
+        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl [scrollbar-color:rgba(212,168,79,0.3)_rgba(255,255,255,0.04)] [scrollbar-width:thin] day:border-gray-200 day:bg-white day:shadow-lg sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-8">
           <header className="mb-0 pb-6">
             <h1 className="py-[10px] text-3xl font-semibold tracking-tight day:text-gray-900">Invoice Details</h1>
           </header>
@@ -114,18 +114,23 @@ export default function InvoiceDetailsPage() {
             <div className="space-y-6">
 
               <section className="rounded-2xl border border-white/10 bg-white/5 p-6 day:border-gray-200 day:bg-gray-50">
-                <div className="mb-4 flex items-center justify-between">
+                <div className="mb-4 flex items-center justify-between gap-3">
                   <h2 className="text-base font-semibold text-white/90 day:text-gray-900">Business Identity</h2>
                   {!editing && (
-                    <button onClick={() => { setEditing(true); setMsg(''); }} className={btnClass}>
-                      <PencilIcon className="h-3.5 w-3.5" /> Edit
+                    <button
+                      onClick={() => { setEditing(true); setMsg(''); }}
+                      className={`${btnClass} shrink-0 px-2.5`}
+                      aria-label="Edit invoice details"
+                    >
+                      <PencilIcon className="h-3.5 w-3.5" />
+                      <span className="sr-only sm:not-sr-only">Edit</span>
                     </button>
                   )}
                 </div>
 
                 {editing ? (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label className={labelClass}>Trading Name</label>
                         <input className={inputClass} value={form.tradingName || ''} onChange={(e) => setForm((f) => ({ ...f, tradingName: e.target.value }))} placeholder="e.g. Acme Co." />
@@ -135,7 +140,7 @@ export default function InvoiceDetailsPage() {
                         <input className={inputClass} value={form.businessName || ''} onChange={(e) => setForm((f) => ({ ...f, businessName: e.target.value }))} placeholder="e.g. Acme Pty Ltd" />
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div>
                         <label className={labelClass}>ABN / Tax ID</label>
                         <input className={inputClass} value={form.taxId || ''} onChange={(e) => setForm((f) => ({ ...f, taxId: e.target.value }))} placeholder="e.g. 12 345 678 901" />
@@ -157,7 +162,7 @@ export default function InvoiceDetailsPage() {
                           <label className={labelClass}>Street Address</label>
                           <input className={inputClass} value={form.address || ''} onChange={(e) => setForm((f) => ({ ...f, address: e.target.value }))} placeholder="123 Example Street" />
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
                           <div>
                             <label className={labelClass}>City</label>
                             <input className={inputClass} value={form.city || ''} onChange={(e) => setForm((f) => ({ ...f, city: e.target.value }))} placeholder="Sydney" />
@@ -197,7 +202,7 @@ export default function InvoiceDetailsPage() {
                   </div>
                 ) : (
                   <div className="space-y-6">
-                    <dl className="grid grid-cols-2 gap-x-8 gap-y-4">
+                    <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
                       <div>
                         <dt className={fieldLabelClass}>Trading Name</dt>
                         <dd className={invoice.tradingName ? fieldValueClass : emptyClass}>{invoice.tradingName || 'Not provided'}</dd>
@@ -214,7 +219,7 @@ export default function InvoiceDetailsPage() {
                         <dt className={fieldLabelClass}>Business Phone</dt>
                         <dd className={invoice.phone ? fieldValueClass : emptyClass}>{invoice.phone || 'Not provided'}</dd>
                       </div>
-                      <div className="col-span-2">
+                      <div className="sm:col-span-2">
                         <dt className={fieldLabelClass}>Website</dt>
                         <dd className={invoice.website ? fieldValueClass : emptyClass}>{invoice.website || 'Not provided'}</dd>
                       </div>
@@ -222,8 +227,8 @@ export default function InvoiceDetailsPage() {
 
                     <div className="border-t border-white/8 pt-4 day:border-gray-200">
                       <p className="mb-3 text-xs font-medium text-white/50 uppercase tracking-widest day:text-gray-400">Billing Address</p>
-                      <dl className="grid grid-cols-2 gap-x-8 gap-y-4">
-                        <div className="col-span-2">
+                      <dl className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-8">
+                        <div className="sm:col-span-2">
                           <dt className={fieldLabelClass}>Street Address</dt>
                           <dd className={invoice.address ? fieldValueClass : emptyClass}>{invoice.address || 'Not provided'}</dd>
                         </div>

@@ -18,6 +18,15 @@ export function ThemeToggle() {
   // mobile, so hide the floating toggle below md there (keep it on md+).
   const insideDesignerSidebarOnMobile =
     isDesignerRoutePath(pathname) && pathname !== '/';
+  const accountRoutePrefixes = [
+    '/my-account',
+    '/orders',
+    '/account',
+    '/privacy',
+  ];
+  const insideAccountSidebarOnMobile = accountRoutePrefixes.some((prefix) =>
+    pathname?.startsWith(prefix),
+  );
 
   return (
     <button
@@ -33,7 +42,7 @@ export function ThemeToggle() {
         hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white
         day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700
         day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800
-        ${insideDesignerSidebarOnMobile ? 'hidden md:flex' : 'flex'}
+        ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile ? 'hidden md:flex' : 'flex'}
       `}
     >
       {isDay ? (
