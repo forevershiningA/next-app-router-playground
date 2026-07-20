@@ -28,7 +28,13 @@ export function EnquiryEmail({
 
       <Text style={paragraph}>
         A design enquiry has been submitted by{' '}
-        <strong>{data.recipientName ?? data.recipientEmail}</strong>.
+        <strong>
+          {data.customerName ??
+            data.recipientName ??
+            data.customerEmail ??
+            data.recipientEmail}
+        </strong>
+        .
       </Text>
 
       {data.productName && (
@@ -38,8 +44,14 @@ export function EnquiryEmail({
       )}
 
       <Text style={detail}>
-        Email: <strong>{data.recipientEmail}</strong>
+        Email: <strong>{data.customerEmail ?? data.recipientEmail}</strong>
       </Text>
+
+      {data.customerPhone && (
+        <Text style={detail}>
+          Phone: <strong>{data.customerPhone}</strong>
+        </Text>
+      )}
 
       <Hr style={hr} />
 
@@ -76,10 +88,7 @@ const detail: React.CSSProperties = {
   margin: '0 0 8px',
 };
 
-const hr: React.CSSProperties = {
-  borderColor: '#e2e8f0',
-  margin: '24px 0',
-};
+const hr: React.CSSProperties = { borderColor: '#e2e8f0', margin: '24px 0' };
 
 const messageLabel: React.CSSProperties = {
   fontSize: '13px',

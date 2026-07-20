@@ -50,12 +50,7 @@ export interface CountryEmailConfig {
   pdfHeader: string;
   pdfHeader2: string;
   // BCC routing
-  bcc: {
-    savedDesigns: string;
-    orders: string;
-    admin: string;
-    always: string;
-  };
+  bcc: { savedDesigns: string; orders: string; admin: string; always: string };
 }
 
 // ---------------------------------------------------------------------------
@@ -111,6 +106,9 @@ export interface EnquiryEmailData extends BaseEmailData {
   screenshotUrl?: string;
   message: string;
   productName?: string;
+  customerEmail?: string;
+  customerName?: string;
+  customerPhone?: string;
 }
 
 export interface RegistrationEmailData extends BaseEmailData {

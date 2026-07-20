@@ -45,9 +45,7 @@ interface InlineImage {
   cid: string;
 }
 
-function dataUriToInlineImage(
-  dataUri: string | undefined,
-): InlineImage | null {
+function dataUriToInlineImage(dataUri: string | undefined): InlineImage | null {
   if (!dataUri) return null;
   const match = dataUri.match(
     /^data:(image\/[a-zA-Z0-9.+-]+);base64,([A-Za-z0-9+/=]+)$/,
@@ -89,16 +87,28 @@ async function renderTemplate(
       element = createElement(SavedDesignEmail, { data, config, translations });
       break;
     case 'order':
-      element = createElement(OrderInvoiceEmail, { data, config, translations });
+      element = createElement(OrderInvoiceEmail, {
+        data,
+        config,
+        translations,
+      });
       break;
     case 'enquiry':
       element = createElement(EnquiryEmail, { data, config, translations });
       break;
     case 'registration':
-      element = createElement(RegistrationEmail, { data, config, translations });
+      element = createElement(RegistrationEmail, {
+        data,
+        config,
+        translations,
+      });
       break;
     case 'password-reset':
-      element = createElement(PasswordResetEmail, { data, config, translations });
+      element = createElement(PasswordResetEmail, {
+        data,
+        config,
+        translations,
+      });
       break;
   }
 
@@ -123,7 +133,7 @@ function getSubject(
     case 'order':
       return `${t('invoice')} - ${data.invoiceNumber} - ${data.recipientEmail}`;
     case 'enquiry':
-      return `${t('enquiry')} - ${data.designName} - ${data.recipientEmail}`;
+      return `${t('enquiry')} - ${data.designName} - ${data.customerEmail ?? data.recipientEmail}`;
     case 'registration':
       return t('customer_registration');
     case 'password-reset':
@@ -135,10 +145,7 @@ function getSubject(
 // BCC resolution
 // ---------------------------------------------------------------------------
 
-function getBcc(
-  data: EmailData,
-  config: CountryEmailConfig,
-): string[] {
+function getBcc(data: EmailData, config: CountryEmailConfig): string[] {
   const bcc: string[] = [config.bcc.always];
 
   switch (data.type) {
@@ -180,10 +187,7 @@ function generateAttachment(
       },
       config,
     );
-    return {
-      filename: `saved-design-${sd.designId}.pdf`,
-      content: pdfBuffer,
-    };
+    return { filename: `saved-design-${sd.designId}.pdf`, content: pdfBuffer };
   }
 
   if (data.type === 'order') {
@@ -205,10 +209,7 @@ function generateAttachment(
       },
       config,
     );
-    return {
-      filename: `invoice-${od.invoiceNumber}.pdf`,
-      content: pdfBuffer,
-    };
+    return { filename: `invoice-${od.invoiceNumber}.pdf`, content: pdfBuffer };
   }
 
   return null;
@@ -266,7 +267,11 @@ export async function sendEmail(data: EmailData): Promise<SendEmailResult> {
     }
 
     // Render template
-    const { html, text } = await renderTemplate(renderData, config, translations);
+    const { html, text } = await renderTemplate(
+      renderData,
+      config,
+      translations,
+    );
     const subject = getSubject(renderData, translations);
 
     // Build mail options.
@@ -326,10 +331,7 @@ export async function sendEmail(data: EmailData): Promise<SendEmailResult> {
     const transporter = getTransporter(data.countryCode);
     const info = await transporter.sendMail(mailOptions);
 
-    return {
-      success: true,
-      messageId: info.messageId,
-    };
+    return { success: true, messageId: info.messageId };
   } catch (error) {
     console.error('[Email] Send failed:', error);
     return {

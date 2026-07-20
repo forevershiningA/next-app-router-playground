@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     if (!projectId) {
       return NextResponse.json(
         { error: 'Project ID is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -35,17 +35,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (!project) {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
     if (project.accountId !== session.accountId && session.role !== 'admin') {
-      return NextResponse.json(
-        { error: 'Project not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Project not found' }, { status: 404 });
     }
 
     const countryCode = 'au';
@@ -62,12 +56,9 @@ export async function POST(request: NextRequest) {
           const expiresAt = new Date();
           expiresAt.setDate(expiresAt.getDate() + SHARE_EXPIRY_DAYS);
 
-          await db.insert(sharedDesigns).values({
-            projectId,
-            shareToken,
-            accessCodeHash,
-            expiresAt,
-          });
+          await db
+            .insert(sharedDesigns)
+            .values({ projectId, shareToken, accessCodeHash, expiresAt });
 
           const reviewUrl = `${baseUrl}/shared/${shareToken}`;
           const payload: SavedDesignEmailData = {
@@ -91,7 +82,11 @@ export async function POST(request: NextRequest) {
           };
 
           const res = await sendEmail(payload);
-          results.push({ to: recipient, success: res.success, error: res.error });
+          results.push({
+            to: recipient,
+            success: res.success,
+            error: res.error,
+          });
         } catch (err: unknown) {
           results.push({
             to: recipient,
@@ -115,13 +110,15 @@ export async function POST(request: NextRequest) {
       designName: project.title,
       screenshotUrl: project.screenshotPath ?? undefined,
       message,
+      customerEmail: session.email,
+      customerName: senderName ?? session.email,
     });
 
     if (!result.success) {
       console.error('[api/share/email] Email send failed:', result.error);
       return NextResponse.json(
         { error: 'Failed to send enquiry email' },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -130,7 +127,7 @@ export async function POST(request: NextRequest) {
     console.error('Error sending email:', error);
     return NextResponse.json(
       { error: 'Failed to send email' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
