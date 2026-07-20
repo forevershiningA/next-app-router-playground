@@ -1925,10 +1925,7 @@ export default function DesignerNav() {
   const handleMenuClick = async (slug: string, e: React.MouseEvent) => {
     if (fullscreenPanelSlugs.has(slug)) {
       e.preventDefault();
-      if (
-        slug === 'select-material' &&
-        canSelectStainlessGraniteBaseMaterial
-      ) {
+      if (slug === 'select-material' && canSelectStainlessGraniteBaseMaterial) {
         setEditingObject('base');
         setSelected('base');
       }
@@ -2504,15 +2501,11 @@ export default function DesignerNav() {
 
         {editingObject === 'base' && (
           <>
-            <div className="day:border-gray-200 day:bg-gray-100 flex gap-1.5 rounded-full border border-[#3A3A3A] bg-[#0A0A0A] p-1">
+            <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setShowBase(false)}
-                className={`flex-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-semibold transition-all duration-200 ${
-                  !showBase
-                    ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                    : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
-                }`}
+                className={styleTabClass(!showBase)}
               >
                 No Base
               </button>
@@ -2525,11 +2518,7 @@ export default function DesignerNav() {
                       setBaseMaterialUrl(STAINLESS_STEEL_BASE_TEX);
                       setShowBase(true);
                     }}
-                    className={`flex-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-semibold transition-all duration-200 ${
-                      isStainlessSteelBase
-                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
-                    }`}
+                    className={styleTabClass(isStainlessSteelBase && showBase)}
                   >
                     Stainless
                   </button>
@@ -2540,11 +2529,7 @@ export default function DesignerNav() {
                       setBaseMaterialUrl(GRANITE_BASE_TEX);
                       setShowBase(true);
                     }}
-                    className={`flex-1 whitespace-nowrap rounded-full px-2.5 py-2 text-sm font-semibold transition-all duration-200 ${
-                      isGraniteBase
-                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
-                    }`}
+                    className={styleTabClass(isGraniteBase && showBase)}
                   >
                     Granite
                   </button>
@@ -2557,11 +2542,9 @@ export default function DesignerNav() {
                       setBaseFinish('default');
                       setShowBase(true);
                     }}
-                    className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
-                      baseFinish === 'default' && showBase
-                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
-                    }`}
+                    className={styleTabClass(
+                      baseFinish === 'default' && showBase,
+                    )}
                   >
                     Polished
                   </button>
@@ -2571,11 +2554,9 @@ export default function DesignerNav() {
                       setBaseFinish('rock-pitch');
                       setShowBase(true);
                     }}
-                    className={`flex-1 rounded-full px-3 py-2 text-sm font-semibold transition-all duration-200 ${
-                      baseFinish === 'rock-pitch' && showBase
-                        ? 'bg-[#D7B356] text-black shadow-lg shadow-[#D7B356]/30'
-                        : 'day:text-gray-500 day:hover:bg-white day:hover:text-gray-900 text-gray-300 hover:bg-[#1A1A1A] hover:text-white'
-                    }`}
+                    className={styleTabClass(
+                      baseFinish === 'rock-pitch' && showBase,
+                    )}
                   >
                     Rockface
                   </button>
@@ -2951,7 +2932,9 @@ export default function DesignerNav() {
         )}
 
         {editingObject === 'headstone' && !isPlaque && (
-          <div className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}>
+          <div
+            className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}
+          >
             <div className={dimensionHeaderClass}>
               <label className={dimensionLabelClass}>Thickness</label>
               <div className="flex items-center justify-end gap-2">
@@ -3095,7 +3078,9 @@ export default function DesignerNav() {
         )}
 
         {editingObject === 'base' && showBase && (
-          <div className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}>
+          <div
+            className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}
+          >
             <div className={dimensionHeaderClass}>
               <label className={dimensionLabelClass}>Thickness</label>
               <div className="flex items-center justify-end gap-2">
@@ -3190,7 +3175,9 @@ export default function DesignerNav() {
         {(editingObject === 'ledger' || editingObject === 'kerbset') &&
           currentDepthMm !== null &&
           setCurrentDepthMm && (
-            <div className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}>
+            <div
+              className={`${dimensionCardClass} ${sizeCardVisibility('depth')}`}
+            >
               <div className={dimensionHeaderClass}>
                 <label className={dimensionLabelClass}>Length</label>
                 <div className="flex items-center justify-end gap-2">
@@ -3559,9 +3546,7 @@ export default function DesignerNav() {
                   <MaterialSelector
                     materials={materials}
                     forceTarget={
-                      canSelectStainlessGraniteBaseMaterial
-                        ? 'base'
-                        : undefined
+                      canSelectStainlessGraniteBaseMaterial ? 'base' : undefined
                     }
                   />
                 </div>
@@ -3916,7 +3901,9 @@ export default function DesignerNav() {
                 <button
                   type="button"
                   onClick={toggleTheme}
-                  aria-label={isDayTheme ? 'Switch to night mode' : 'Switch to day mode'}
+                  aria-label={
+                    isDayTheme ? 'Switch to night mode' : 'Switch to day mode'
+                  }
                   title={isDayTheme ? 'Night mode' : 'Day mode'}
                   className="day:border-gray-300 day:bg-white/70 day:text-amber-700 flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white/70 transition-colors hover:border-white/40 hover:text-white"
                 >
@@ -4352,8 +4339,12 @@ export default function DesignerNav() {
                                       onClick={(e) => {
                                         e.preventDefault();
                                         // Navigate to select-border page to keep canvas visible and show border selector
-                                        if (designerStepSlug !== 'select-border') {
-                                          router.push(designerHref('select-border'));
+                                        if (
+                                          designerStepSlug !== 'select-border'
+                                        ) {
+                                          router.push(
+                                            designerHref('select-border'),
+                                          );
                                         }
                                       }}
                                       onMouseDown={(e) => e.preventDefault()}
@@ -4424,8 +4415,12 @@ export default function DesignerNav() {
                                           setSelected(forcedMaterialTarget);
                                         }
                                         // Navigate to select-material page to keep canvas visible and show material selector
-                                        if (designerStepSlug !== 'select-material') {
-                                          router.push(designerHref('select-material'));
+                                        if (
+                                          designerStepSlug !== 'select-material'
+                                        ) {
+                                          router.push(
+                                            designerHref('select-material'),
+                                          );
                                         }
                                       }}
                                       onMouseDown={(e) => e.preventDefault()}
@@ -4457,9 +4452,7 @@ export default function DesignerNav() {
                                             <MaterialSelector
                                               materials={materials}
                                               disableInternalScroll
-                                              forceTarget={
-                                                forcedMaterialTarget
-                                              }
+                                              forceTarget={forcedMaterialTarget}
                                             />
                                           </div>
                                         </div>

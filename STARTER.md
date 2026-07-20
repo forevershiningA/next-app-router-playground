@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-19
+**Last Updated:** 2026-07-20
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -60,6 +60,44 @@
 52. [July 17 Mobile Designer Navigation Overhaul](#current-status-2026-07-17--mobile-designer-navigation-overhaul)
 53. [July 18 Mobile App Shell and Homepage Hero Refinements](#current-status-2026-07-18--mobile-app-shell-and-homepage-hero-refinements)
 54. [July 19 Mobile Selection Flow and Account Polish](#current-status-2026-07-19--mobile-selection-flow-and-account-polish)
+55. [July 20 Guided Panel Option Styling and Homepage Spacing](#current-status-2026-07-20--guided-panel-option-styling-and-homepage-spacing)
+
+---
+
+## Current Status (2026-07-20) - Guided Panel Option Styling and Homepage Spacing
+
+This session continued screenshot-driven visual QA from `screen.png`. The user explicitly asked not to use Playwright screenshots; validation was limited to TypeScript and user-side visual checking.
+
+### Select Size Option Styling
+
+- `components/DesignerNav.tsx` now uses the same outlined option-button treatment for Base choices that was already used by Headstone style choices.
+- For regular headstones, `No Base`, `Polished`, and `Rockface` now render as a simple `flex gap-2` row using `styleTabClass(...)`, matching `Upright` / `Slant`.
+- Stainless steel base material choices (`Stainless` / `Granite`) also use the same visual pattern.
+- Active base material state is gated by `showBase`, so selecting `No Base` does not leave a material option visually active.
+- The internal base finish value remains unchanged (`default` / `rock-pitch`); only the selector presentation changed.
+
+### Inscription Alignment Styling
+
+- `components/InscriptionEditPanel.tsx` now uses an outlined option-button style for `Left`, `Center`, and `Right` in the Multiple inscription flow.
+- `Single` / `Multiple` remains the filled segmented control; only the alignment row inside the Align card was changed.
+- The existing alignment behavior remains the same: selecting an option updates `textAlign` on the active inscription or seeds `pendingTextAlign` for the next line.
+
+### Homepage Hero Spacing
+
+- `app/_ui/HomeSplash.tsx` adds `md:mb-4` to the hero supporting paragraph:
+  `Design a beautiful tribute in real-time 3D - save, share, and order when ready.`
+- This gives the copy a 16px bottom margin on desktop/tablet widths while leaving mobile spacing unchanged.
+- Avoid broad formatting churn in `HomeSplash.tsx`; keep future edits to the relevant class or block unless a wider cleanup is intentional.
+
+### Current Verification
+
+Latest check run successfully after the July 20 code changes:
+
+```bash
+pnpm exec tsc --noEmit
+```
+
+Manual visual QA remains screenshot-driven by the user. Do not use Playwright screenshots unless the user explicitly asks for them.
 
 ---
 
@@ -82,10 +120,11 @@ This session focused on visual QA from `screen.png` across the mobile designer f
 - Dimensions now show an interactive chevron. Keep the chevron aligned with the full size label, preferably as one compact row such as `600 x 600 mm`.
 - The scenery/gallery floating button has safer mobile edge spacing.
 - Tapping empty canvas/background clears selection overlays so users can preview the product without edit brackets.
-- Selection outlines are now thicker and more reliable on mobile:
-  - `components/three/SelectionBox.tsx` uses `LineSegments2` / `LineMaterial` with a `4.5px` width.
-  - `components/three/RotatingBoxOutline.tsx` uses the same fat-line renderer and width for monument part outlines.
-  - Do not rely on native `THREE.LineBasicMaterial.linewidth`; most WebGL implementations ignore it.
+- Selection outlines use small mesh arms, not fat-line rendering:
+  - A brief `LineSegments2` / `LineMaterial` experiment made mobile thickness work but caused desktop outlines to drift away from the object center. Do not restore that approach without testing desktop rotations and scaled objects.
+  - `components/three/SelectionBox.tsx` now renders corner arms with shared `BoxGeometry` + `MeshBasicMaterial`, removes the Z/depth arm, and uses viewport-specific thickness: desktop `0.0012`, mobile `0.004` below `768px`.
+  - `components/three/RotatingBoxOutline.tsx` uses the same mesh-arm strategy for monument part outlines. Desktop thickness is `0.0012` with min `0.00035`; mobile thickness is `0.004` with min `0.001`.
+  - The current intent is default-looking on desktop and only slightly thicker on mobile. Do not rely on native `THREE.LineBasicMaterial.linewidth`; most WebGL implementations ignore it.
 
 ### Mobile Drawer Panels
 
@@ -12251,4 +12290,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-19*
+*End of STARTER.md - Last updated: 2026-07-20*

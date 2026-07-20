@@ -495,7 +495,7 @@ export default function HomeSplash() {
               </span>
             </h1>
             <p
-              className="order-2 mx-auto mt-4 max-w-3xl text-xl font-light leading-snug sm:text-3xl"
+              className="order-2 mx-auto mt-4 max-w-3xl text-xl font-light leading-snug sm:text-3xl md:mb-4"
               style={{ 
                 color: isDayMode ? '#374151' : '#FFFFFF',
                 textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
