@@ -338,7 +338,7 @@ export default function HomeSplash() {
           </div>
 
           <nav
-            className="hidden flex-1 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs font-medium text-white/85 xl:flex day:text-gray-700"
+            className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs font-medium text-white/85 xl:flex day:text-gray-700"
             aria-label="Memorial product pages"
           >
             <span className="font-semibold tracking-[0.18em] text-[#f3d48f] uppercase day:text-amber-700">
