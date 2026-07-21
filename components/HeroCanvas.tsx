@@ -4,7 +4,6 @@ import React, { useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { 
   OrbitControls, 
-  Environment, 
   PerspectiveCamera,
   ContactShadows,
   useTexture,
@@ -31,7 +30,7 @@ const GraniteMaterial = () => {
     if (texture) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       texture.repeat.set(2, 2);
-      texture.anisotropy = 16; 
+      texture.anisotropy = 4;
     }
   }, [texture]);
   
@@ -118,7 +117,7 @@ const HeroCeramicImage: React.FC<HeroCeramicImageProps> = ({
       photoTexture.colorSpace = THREE.SRGBColorSpace;
       photoTexture.wrapS = THREE.ClampToEdgeWrapping;
       photoTexture.wrapT = THREE.ClampToEdgeWrapping;
-      photoTexture.anisotropy = 16;
+      photoTexture.anisotropy = 4;
       photoTexture.needsUpdate = true;
     }
   }, [photoTexture]);
@@ -129,14 +128,14 @@ const HeroCeramicImage: React.FC<HeroCeramicImageProps> = ({
     const shapes = paths.flatMap((path) => path.toShapes(true));
     if (!shapes.length) return null;
 
-    const photoGeometry = new THREE.ShapeGeometry(shapes, 64);
+    const photoGeometry = new THREE.ShapeGeometry(shapes, 24);
     const ceramicGeometry = new THREE.ExtrudeGeometry(shapes, {
       depth: 0.0046,
       bevelEnabled: true,
       bevelThickness: 0.00115,
       bevelSize: 0.00115,
-      bevelSegments: 4,
-      curveSegments: 64,
+      bevelSegments: 2,
+      curveSegments: 24,
     });
 
     photoGeometry.computeBoundingBox();
@@ -190,8 +189,6 @@ const HeroCeramicImage: React.FC<HeroCeramicImageProps> = ({
         geometry={ceramicGeometry}
         scale={[scaleX * ceramicBorder, scaleY * ceramicBorder, 1]}
         renderOrder={8}
-        castShadow
-        receiveShadow
       >
         <meshStandardMaterial color="#f3f3f3" roughness={0.2} metalness={0.05} />
       </mesh>
@@ -201,8 +198,6 @@ const HeroCeramicImage: React.FC<HeroCeramicImageProps> = ({
         position={[0, 0, 0.0072]}
         scale={[scaleX, scaleY, 1]}
         renderOrder={9}
-        castShadow
-        receiveShadow
       >
         <meshBasicMaterial
           map={photoTexture}
@@ -327,15 +322,15 @@ const HeartHeadstone: React.FC<HeadstoneProps> = ({ width, height, thickness }) 
   const extrudeSettings = useMemo(() => ({
     depth: thickness,
     bevelEnabled: true,
-    bevelSegments: 8,
+    bevelSegments: 4,
     bevelSize: BEVEL_SIZE,
     bevelThickness: BEVEL_SIZE,
-    curveSegments: 48
+    curveSegments: 28
   }), [thickness]);
 
   return (
     <group position={[0, BASE_HEIGHT, 0]}>
-      <mesh position={[0, 0, -thickness / 2]} castShadow receiveShadow>
+      <mesh position={[0, 0, -thickness / 2]}>
         <extrudeGeometry args={[shape, extrudeSettings]} />
         <GraniteMaterial />
       </mesh>
@@ -348,7 +343,7 @@ const Base: React.FC<{ stoneWidth: number }> = ({ stoneWidth }) => {
   const depth = STONE_THICKNESS + 0.3;
 
   return (
-    <mesh position={[0, BASE_HEIGHT / 2, 0]} castShadow receiveShadow>
+    <mesh position={[0, BASE_HEIGHT / 2, 0]}>
       <boxGeometry args={[width, BASE_HEIGHT, depth]} />
       <GraniteMaterial />
     </mesh>
@@ -364,7 +359,6 @@ interface HeroCanvasProps {
 const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
   const groupRef = useRef<THREE.Group>(null);
   const lastInteractionTime = useRef(0);
-  const controlsRef = useRef<any>(null);
   const isAnimatingToTarget = useRef(false);
   
   const { clock } = useThree();
@@ -432,7 +426,7 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
 
           <HeroCeramicImage
             position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.32, textZ + 0.008]}
-            imageUrl="/jpg/photos/vitreous-enamel-image.png"
+            imageUrl="/jpg/photos/vitreous-enamel-image.webp"
             maskPath="/shapes/masks/oval_horizontal.svg"
             width={0.58}
             height={0.74}
@@ -475,12 +469,11 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
         scale={16}
         blur={2.8}
         far={2.5}
-        resolution={1024}
+        resolution={512}
         color="#000000"
       />
       
       <OrbitControls
-        ref={controlsRef}
         enablePan={false}
         enableZoom={false}
         enableRotate={true}
@@ -504,11 +497,12 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
     <div style={{ width: '100%', height: '100%', margin: '0 auto' }}>
       <Canvas
         key="hero-canvas"
-        shadows 
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         gl={{ 
           alpha: true, 
           antialias: true,
+          powerPreference: 'high-performance',
+          stencil: false,
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.1
         }} 
@@ -550,7 +544,6 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
             penumbra={1} 
             intensity={4} 
             color="#ffffff" 
-            castShadow={true} 
           />
 
           <spotLight 
@@ -558,18 +551,12 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
             angle={0.5}
             penumbra={1} 
             intensity={1.5}
-            castShadow
-            shadow-bias={-0.0001}
-            shadow-mapSize-width={2048}
-            shadow-mapSize-height={2048}
             color="#fff5e6"
           />
           
           <pointLight position={[3, 2, 5]} intensity={0.8} color="#e6f2ff" />
           <pointLight position={[0, -1, 3]} intensity={0.3} color="#6B5540" />
           <pointLight position={[0, 1.5, 3.5]} intensity={1.2} color="#ffd700" distance={7} decay={2} />
-
-          <Environment preset="city" />
 
           <SceneContent targetRotation={rotation} />
         </React.Suspense>

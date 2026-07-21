@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-20
+**Last Updated:** 2026-07-21
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -61,6 +61,66 @@
 53. [July 18 Mobile App Shell and Homepage Hero Refinements](#current-status-2026-07-18--mobile-app-shell-and-homepage-hero-refinements)
 54. [July 19 Mobile Selection Flow and Account Polish](#current-status-2026-07-19--mobile-selection-flow-and-account-polish)
 55. [July 20 Guided Panel Option Styling and Homepage Spacing](#current-status-2026-07-20--guided-panel-option-styling-and-homepage-spacing)
+56. [July 21 Homepage Workflow Copy, Header Search, and HeroCanvas Optimization](#current-status-2026-07-21--homepage-workflow-copy-header-search-and-herocanvas-optimization)
+
+---
+
+## Current Status (2026-07-21) - Homepage Workflow Copy, Header Search, and HeroCanvas Optimization
+
+This session focused on the home page hero/workflow layout and reducing the amount of data and GPU work needed by `HeroCanvas`.
+
+### Homepage Hero and Workflow Section
+
+- `app/_ui/HomeSplash.tsx` moved the trust signal out of the hero and into the workflow section.
+- The workflow heading now reads:
+  `Forever Shining guides you, from product choice to final proof`
+- `Trusted by 5,000+ families` now appears directly under that workflow heading with the existing five-star row.
+- The workflow chips now use:
+  `No credit card`, `Live 3D preview`, `Save & share`
+- The old workflow chip set was removed:
+  `Plaques first`, `Live preview`, `Save & share`, `Quote before order`
+- The hero-local trust/chip row and large hero search form were removed, so the hero is visually cleaner.
+- `HeroCanvas` was shifted down by 30px via `translate-y-[30px]` on the hero canvas wrapper.
+- The now-unused `heroHighlights` local array was removed from `HomeSplash.tsx`.
+
+### Header Search
+
+- The desktop top-right navigation no longer shows `Start Designing` or `Browse Designs`.
+- The top-right area now contains only the search field.
+- Search placeholder text is now exactly `Search Designs`.
+- The search field uses the same bordered visual treatment as the former `Browse Designs` button and is narrowed to `w-40`.
+- Mobile drawer CTAs still keep their existing `Start Designing` / `Browse Designs` entries.
+
+### HeroCanvas Optimization
+
+- `components/HeroCanvas.tsx` now uses a new WebP portrait asset:
+  `public/jpg/photos/vitreous-enamel-image.webp`
+- The hero portrait payload changed from:
+  - PNG: `91,638` bytes
+  - WebP: `10,264` bytes
+- Removed Drei `Environment preset="city"` from the hero canvas to avoid that extra environment load.
+- Reduced canvas max DPR from `[1, 2]` to `[1, 1.5]`.
+- Disabled unnecessary stencil buffer with `stencil: false` and set `powerPreference: 'high-performance'`.
+- Reduced `ContactShadows` resolution from `1024` to `512`.
+- Removed real shadow-map setup from the hero canvas lights and removed `shadows` from the `Canvas`, relying on the existing fake/contact shadow treatment.
+- Reduced texture anisotropy from `16` to `4` for the granite and portrait textures.
+- Reduced shape and bevel segment counts:
+  - ceramic photo shape: `64` to `24`
+  - ceramic bevel segments: `4` to `2`
+  - heart bevel segments: `8` to `4`
+  - heart curve segments: `48` to `28`
+- Removed unused `controlsRef`.
+
+### Current Verification
+
+Latest checks run successfully after the July 21 changes:
+
+```bash
+pnpm exec tsc --noEmit --pretty false
+pnpm exec eslint components/HeroCanvas.tsx app/_ui/HomeSplash.tsx
+```
+
+No Playwright screenshots were run in this session.
 
 ---
 
@@ -12290,4 +12350,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-20*
+*End of STARTER.md - Last updated: 2026-07-21*

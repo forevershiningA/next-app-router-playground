@@ -309,12 +309,6 @@ export default function HomeSplash() {
     },
   ];
 
-  const heroHighlights = [
-    { primary: 'Save, edit & share', secondary: 'Your design' },
-    { primary: 'Instant proof', secondary: '& pricing' },
-    { primary: 'Support from', secondary: 'designers' },
-  ];
-
   return (
     <div
       className="min-h-screen"
@@ -372,19 +366,31 @@ export default function HomeSplash() {
           </nav>
 
           {/* Top Right Navigation */}
-          <nav className="hidden shrink-0 items-center gap-6 md:flex">
-            <Link 
-              href="/select-product" 
-              className="rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
+          <nav className="hidden shrink-0 items-center gap-3 md:flex">
+            <form
+              onSubmit={handleHeroSearch}
+              className="relative w-40"
+              role="search"
             >
-              Start Designing
-            </Link>
-            <Link 
-              href="/designs" 
-              className="rounded-lg border border-white/15 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-white"
-            >
-              Browse Designs
-            </Link>
+              <svg
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50 day:text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                aria-hidden="true"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
+              </svg>
+              <input
+                type="text"
+                value={heroSearchQuery}
+                onChange={(e) => setHeroSearchQuery(e.target.value)}
+                placeholder="Search Designs"
+                className="min-h-10 w-full rounded-lg border border-white/15 bg-transparent py-2.5 pl-9 pr-3 text-sm font-semibold text-white placeholder-white/60 transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 focus:border-[#cfac6c]/60 focus:bg-white/5 focus:outline-none day:border-gray-300 day:text-gray-800 day:placeholder-gray-500 day:hover:bg-white day:focus:bg-white"
+                aria-label="Search memorial designs"
+              />
+            </form>
           </nav>
 
           {/* Mobile menu button - only shown below md where the nav/CTAs are hidden */}
@@ -504,74 +510,8 @@ export default function HomeSplash() {
               Design a beautiful tribute in real-time 3D - save, share, and order when ready.
             </p>
             
-            {/* Trust Signals */}
-            <div className="order-5 mb-8 mt-4 flex flex-col items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <div className="flex items-center gap-0.5 text-[#d4af37]">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-4 h-4 sm:w-5 sm:h-5 fill-current" viewBox="0 0 24 24">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  ))}
-                </div>
-                <p 
-                  className="text-md font-semibold"
-                  style={{ 
-                    color: isDayMode ? '#b45309' : '#F8D64F',
-                    textShadow: isDayMode ? 'none' : '0 2px 8px rgba(0,0,0,0.5)'
-                  }}
-                >
-                  Trusted by 5,000+ families
-                </p>
-              </div>
-              <div className="mt-1 flex flex-wrap items-center justify-center gap-2">
-                {['No credit card', 'Live 3D preview', 'Save & share'].map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-lg border border-white/15 bg-white/[0.06] px-3 py-1.5 text-xs font-semibold tracking-wide text-white/90 backdrop-blur-sm day:border-gray-200 day:bg-white day:text-gray-700"
-                  >
-                    {item}
-                  </span>
-                ))}
-              </div>
-            </div>
-            
-            {/* Hero Search Bar */}
-            <form
-              onSubmit={handleHeroSearch}
-              className="order-6 relative mx-auto mb-8 w-full max-w-xl"
-              role="search"
-            >
-              <div className="relative flex items-center">
-                <svg
-                  className="pointer-events-none absolute left-4 h-5 w-5 text-white/50 day:text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
-                </svg>
-                <input
-                  type="text"
-                  value={heroSearchQuery}
-                  onChange={(e) => setHeroSearchQuery(e.target.value)}
-                  placeholder="Search designs - motif, shape, style…"
-                  className="w-full rounded-lg border border-white/15 bg-[#171717]/80 py-3.5 pl-12 pr-28 text-sm font-light text-white placeholder-white/45 backdrop-blur-md transition-colors focus:border-[#cfac6c]/70 focus:bg-[#171717]/95 focus:outline-none focus:ring-1 focus:ring-[#cfac6c]/30 day:border-gray-300 day:bg-white/90 day:text-gray-900 day:placeholder-gray-400 day:focus:border-amber-400 day:focus:ring-amber-300/40"
-                  aria-label="Search memorial designs"
-                />
-                <button
-                  type="submit"
-                  className="absolute right-1.5 rounded-md bg-[#cfac6c] px-5 py-2 text-xs font-semibold tracking-wider text-slate-950 transition-colors hover:bg-[#d7b979]"
-                >
-                  Search
-                </button>
-              </div>
-            </form>
-
             {/* 3D Canvas - TALLER container with overlap layout */}
-            <div className="order-3 w-full h-[34vh] sm:h-[49.5vh] min-h-[280px] sm:min-h-[360px] flex items-center justify-center relative -mt-2 -mb-8 sm:order-5 sm:-mt-4 sm:-mb-24 z-0 pointer-events-none">
+            <div className="order-3 w-full h-[34vh] sm:h-[49.5vh] min-h-[280px] sm:min-h-[360px] flex items-center justify-center relative -mt-2 -mb-8 translate-y-[30px] sm:order-5 sm:-mt-4 sm:-mb-24 z-0 pointer-events-none">
               
               {/* Enhanced Visual Effects - Spotlight and atmosphere */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -644,14 +584,32 @@ export default function HomeSplash() {
                 Designer workflow
               </p>
               <h2 className="mt-3 max-w-2xl font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900">
-                The same guided flow, from first choice to final proof
+                Forever Shining guides you, from product choice to final proof
               </h2>
+              <div className="mt-4 flex items-center gap-1.5">
+                <div className="flex items-center gap-0.5 text-[#d4af37]">
+                  {[...Array(5)].map((_, i) => (
+                    <svg key={i} className="h-4 w-4 fill-current sm:h-5 sm:w-5" viewBox="0 0 24 24">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  ))}
+                </div>
+                <p
+                  className="text-sm font-semibold sm:text-base"
+                  style={{
+                    color: isDayMode ? '#b45309' : '#F8D64F',
+                    textShadow: isDayMode ? 'none' : '0 2px 8px rgba(0,0,0,0.5)'
+                  }}
+                >
+                  Trusted by 5,000+ families
+                </p>
+              </div>
               <p className="mt-4 max-w-xl text-base leading-7 text-gray-300 day:text-gray-600">
                 The home page should set expectations for the actual Designer: compact steps, visible progress, live preview, clear pricing, and simple ways to save or ask for help.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {['Plaques first', 'Live preview', 'Save & share', 'Quote before order'].map((item) => (
+                {['No credit card', 'Live 3D preview', 'Save & share'].map((item) => (
                   <span
                     key={item}
                     className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-medium text-gray-200 day:border-gray-200 day:bg-white day:text-gray-700"
