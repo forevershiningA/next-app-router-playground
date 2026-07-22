@@ -1,5 +1,19 @@
 import { Metadata } from 'next';
-import ProductPageClient from './ProductPageClient';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ChevronRightIcon } from '@heroicons/react/24/outline';
+import MobileNavToggle from '#/components/MobileNavToggle';
+import DesignsTreeNav from '#/components/DesignsTreeNav';
+import {
+  getCategoryDescription,
+  getCategoryTitle,
+  getProductSeoInfo,
+  getSeoReadyDesigns,
+  groupDesignsByCategory,
+  INDEXABLE_PRODUCT_SLUGS,
+  isIndexableCategoryDesignSet,
+} from '#/lib/design-seo';
 
 interface ProductPageProps {
   params: Promise<{
@@ -10,61 +24,11 @@ interface ProductPageProps {
 // Enable ISR - revalidate every 24 hours
 export const revalidate = 86400;
 
-// Helper function to get product type display name and metadata
-function getProductMetadata(productSlug: string) {
-  const productMap: Record<string, {
-    name: string;
-    shortName: string;
-    description: string;
-    type: string;
-  }> = {
-    'traditional-headstone': {
-      name: 'Traditional Engraved Headstone',
-      shortName: 'Traditional Engraved',
-      description: 'Timeless granite memorials with sandblasted inscriptions and hand-painted lettering. Available in Black Granite, Blue Pearl, and 25+ premium stones.',
-      type: 'Headstone'
-    },
-    'laser-etched-headstone': {
-      name: 'Laser-Etched Black Granite Headstone',
-      shortName: 'Laser-Etched',
-      description: 'Photo-realistic laser engraving on polished black granite. Perfect for detailed portraits, landscapes, and custom artwork with exceptional clarity.',
-      type: 'Headstone'
-    },
-    'bronze-plaque': {
-      name: 'Bronze Memorial Plaque',
-      shortName: 'Bronze',
-      description: 'Cast bronze memorial plaques with decorative borders. Weather-resistant finish designed to last 200+ years. Available in rectangle, oval, and circle shapes.',
-      type: 'Plaque'
-    },
-    'laser-etched-plaque': {
-      name: 'Laser-Etched Black Granite Plaque',
-      shortName: 'Laser-Etched Plaque',
-      description: 'Compact memorial plaques with precision laser etching on black granite. Ideal for cremation memorials and garden remembrance.',
-      type: 'Plaque'
-    },
-    'traditional-plaque': {
-      name: 'Traditional Engraved Plaque',
-      shortName: 'Traditional Plaque',
-      description: 'Classic engraved plaques with sandblasted lettering. Elegant memorial markers for cremation niches and memorial walls.',
-      type: 'Plaque'
-    }
-  };
-
-  return productMap[productSlug] || {
-    name: productSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-    shortName: productSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '),
-    description: 'Memorial designs for lasting tributes.',
-    type: 'Memorial'
-  };
-}
-
 export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
   const { productType: productSlug } = await params;
   
-  const productInfo = getProductMetadata(productSlug);
-  const { getAllSavedDesigns } = await import('#/lib/saved-designs-data');
-  const allDesigns = getAllSavedDesigns();
-  const designs = allDesigns.filter(d => d.productSlug === productSlug);
+  const productInfo = getProductSeoInfo(productSlug);
+  const designs = getSeoReadyDesigns().filter((design) => design.productSlug === productSlug);
   
   // Get unique categories
   const categories = Array.from(new Set(designs.map(d => d.category)));
@@ -75,12 +39,12 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
   const title = `${productInfo.name} Designs | Forever Shining`;
 
   // Build description
-  const description = `Browse ${designCount} ${productInfo.shortName.toLowerCase()} designs across ${categoryCount} categories. ${productInfo.description} Fully customizable with inscriptions, verses, motifs, and photos. Free design proofs and fast delivery.`;
+  const description = `Browse ${designCount} ${productInfo.shortName.toLowerCase()} designs across ${categoryCount} categories. ${productInfo.description} Customise inscriptions, verses, motifs and photos online with live preview.`;
 
   // Build keywords
   const keywords = [
     productInfo.name.toLowerCase(),
-    `${productInfo.shortName.toLowerCase()} ${productInfo.type.toLowerCase()}`,
+    `${productInfo.shortName.toLowerCase()} ${productInfo.kind}`,
     `${productInfo.shortName.toLowerCase()} memorial`,
     `${productInfo.shortName.toLowerCase()} designs`,
     'headstone designs',
@@ -127,11 +91,110 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
       title,
       description,
     },
+    robots: INDEXABLE_PRODUCT_SLUGS.has(productSlug)
+      ? undefined
+      : {
+          index: false,
+          follow: true,
+        },
   };
 }
 
 export default async function ProductTypePage({ params }: ProductPageProps) {
   const { productType: productSlug } = await params;
-  
-  return <ProductPageClient productSlug={productSlug} />;
+  const productInfo = getProductSeoInfo(productSlug);
+  const productDesigns = getSeoReadyDesigns().filter((design) => design.productSlug === productSlug);
+
+  if (!productDesigns.length) {
+    notFound();
+  }
+
+  const categoryGroups = groupDesignsByCategory(productDesigns).filter(([, designs]) =>
+    isIndexableCategoryDesignSet(designs),
+  );
+
+  return (
+    <>
+      <MobileNavToggle>
+        <DesignsTreeNav />
+      </MobileNavToggle>
+
+      <main className="bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto min-h-screen md:ml-[400px]">
+        <div className="container mx-auto px-6 md:px-8 py-10 md:py-12 max-w-7xl">
+          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-10" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-slate-900 transition-colors font-light tracking-wide">
+              Home
+            </Link>
+            <ChevronRightIcon className="w-4 h-4" />
+            <Link href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">
+              Memorial Designs
+            </Link>
+            <ChevronRightIcon className="w-4 h-4" />
+            <span className="text-slate-900 font-medium tracking-wide">{productInfo.name}</span>
+          </nav>
+
+          <header className="mb-12 text-center">
+            <h1 className="text-4xl md:text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
+              {productInfo.name} Designs
+            </h1>
+            <div className="w-24 h-px bg-slate-300 mx-auto mb-6" />
+            <p className="text-lg md:text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
+              {productInfo.description} Browse by memorial theme, then personalise a design with names,
+              dates, verses, motifs and photos.
+            </p>
+            <p className="text-sm text-slate-500 mt-4 font-light">
+              {productDesigns.length.toLocaleString()} designs in {categoryGroups.length} strong categories
+            </p>
+          </header>
+
+          <section aria-labelledby="product-categories-heading">
+            <h2 id="product-categories-heading" className="text-2xl font-serif font-light text-slate-900 mb-6">
+              Browse {productInfo.shortName} Themes
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {categoryGroups.map(([category, designs]) => {
+                const preview = designs[0];
+                return (
+                  <Link
+                    key={category}
+                    href={`/designs/${productSlug}/${category}`}
+                    className="group bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-200 hover:border-slate-300"
+                  >
+                    <div className="relative aspect-[4/3] bg-slate-100">
+                      <Image
+                        src={`/screenshots/v2026-3d/${preview.id}_small.png`}
+                        alt={`${getCategoryTitle(category)} ${productInfo.shortName} preview`}
+                        fill
+                        className="object-contain p-4"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                        unoptimized
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="font-serif font-light text-xl text-slate-900 group-hover:text-slate-700 transition-colors mb-2">
+                        {getCategoryTitle(category)}
+                      </h3>
+                      <p className="text-sm text-slate-600 font-light leading-relaxed mb-4">
+                        {getCategoryDescription(category)}
+                      </p>
+                      <div className="flex items-center justify-between gap-4 text-sm">
+                        <span className="text-slate-500 font-light">
+                          {designs.length.toLocaleString()} designs
+                        </span>
+                        <span className="inline-flex items-center text-slate-800 font-light uppercase tracking-wider group-hover:translate-x-1 transition-transform">
+                          View Designs
+                          <ChevronRightIcon className="w-4 h-4 ml-1" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        </div>
+      </main>
+    </>
+  );
 }

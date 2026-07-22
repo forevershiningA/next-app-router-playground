@@ -1,9 +1,12 @@
 import { MetadataRoute } from 'next';
-import fs from 'fs';
-import path from 'path';
-import { getAllSavedDesigns, PRODUCT_STATS } from '#/lib/saved-designs-data';
 import { productSEOData } from '#/lib/seo-templates';
 import { memorialTypePages } from '#/lib/memorial-product-pages';
+import {
+  getSeoReadyDesigns,
+  groupDesignsByCategory,
+  groupDesignsByProduct,
+  MIN_INDEXABLE_CATEGORY_DESIGNS,
+} from '#/lib/design-seo';
 
 const BASE_URL = 'https://forevershining.org';
 
@@ -13,25 +16,9 @@ export const revalidate = 86400;
 // Approximate date the design gallery launched (from GSC indexing chart)
 const SITE_LAUNCH_DATE = new Date('2026-02-13');
 
-/** IDs of designs that have a real screenshot on disk — avoids broken image entries in sitemap */
-function getScreenshotIds(): Set<string> {
-  const dir = path.join(process.cwd(), 'public', 'screenshots', 'v2026-3d');
-  if (!fs.existsSync(dir)) return new Set();
-  return new Set(
-    fs.readdirSync(dir)
-      .filter((f) => f.endsWith('.png') && !f.includes('_small'))
-      .map((f) => f.replace('.png', ''))
-  );
-}
-
 export default function sitemap(): MetadataRoute.Sitemap {
-  const designs = getAllSavedDesigns();
-  const screenshotIds = getScreenshotIds();
-
-  // Only include designs that have a screenshot — skip broken image entries
-  const indexableDesigns = screenshotIds.size > 0
-    ? designs.filter((d) => screenshotIds.has(d.id))
-    : designs;
+  const designs = getSeoReadyDesigns();
+  const productGroups = groupDesignsByProduct(designs);
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -67,7 +54,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Product type pages
-  const productPages: MetadataRoute.Sitemap = Object.keys(PRODUCT_STATS).map((productSlug) => ({
+  const productPages: MetadataRoute.Sitemap = productGroups.map(([productSlug]) => ({
     url: `${BASE_URL}/designs/${productSlug}`,
     lastModified: SITE_LAUNCH_DATE,
     changeFrequency: 'weekly' as const,
@@ -84,15 +71,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
       categoryLatest.set(key, designDate);
     }
   }
-  const categoryPages: MetadataRoute.Sitemap = Array.from(categoryLatest.entries()).map(([key, date]) => ({
-    url: `${BASE_URL}/designs/${key}`,
-    lastModified: date,
-    changeFrequency: 'weekly' as const,
-    priority: 0.7,
-  }));
+  const categoryDesignCounts = new Map<string, number>(
+    productGroups.flatMap(([productSlug, productDesigns]) =>
+      groupDesignsByCategory(productDesigns).map(([category, categoryDesigns]) => [
+        `${productSlug}/${category}`,
+        categoryDesigns.length,
+      ] as const),
+    ),
+  );
+  const categoryPages: MetadataRoute.Sitemap = Array.from(categoryLatest.entries())
+    .filter(([key]) => (categoryDesignCounts.get(key) ?? 0) >= MIN_INDEXABLE_CATEGORY_DESIGNS)
+    .map(([key, date]) => ({
+      url: `${BASE_URL}/designs/${key}`,
+      lastModified: date,
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    }));
 
-  // Individual design pages — only designs with screenshots to avoid broken image entries
-  const designPages: MetadataRoute.Sitemap = indexableDesigns.map((design) => ({
+  // Individual design pages — only curated products with regenerated screenshots
+  const designPages: MetadataRoute.Sitemap = designs.map((design) => ({
     url: `${BASE_URL}/designs/${design.productSlug}/${design.category}/${design.slug}`,
     lastModified: new Date(parseInt(design.id)),
     changeFrequency: 'monthly' as const,
