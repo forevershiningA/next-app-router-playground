@@ -65,6 +65,7 @@
 57. [July 22 Design Gallery SEO Landing Pages](#current-status-2026-07-22--design-gallery-seo-landing-pages)
 58. [July 23 Saved Design Photo Placeholder Screenshot Refresh](#current-status-2026-07-23--saved-design-photo-placeholder-screenshot-refresh)
 59. [July 23 Design Detail and Gallery Visual Refresh](#current-status-2026-07-23--design-detail-and-gallery-visual-refresh)
+60. [July 23 Designs Index Search and CTA Polish](#current-status-2026-07-23--designs-index-search-and-cta-polish)
 
 ---
 
@@ -218,6 +219,47 @@ Visual checks were captured with Playwright for the detail page and listing page
 - `C:\tmp\designs-index-styled.png`
 - `C:\tmp\designs-category-styled.png`
 - `C:\tmp\designs-index-mobile-styled.png`
+
+---
+
+## Current Status (2026-07-23) - Designs Index Search and CTA Polish
+
+This follow-up addressed the UX review of the main `/designs` page while preserving the server-rendered SEO landing-page structure.
+
+### Files Updated
+
+- `app/designs/page.tsx`
+  - Added a prominent server-rendered GET search form that submits to `/designs?q=...`.
+  - Added quick search chips for common intents: Flowers, Religious, Simple, Veteran, Photo, and Heart.
+  - Made the `Open 3D Designer` call-to-action more visible in the main page header.
+  - Standardized product-card image framing with a consistent preview area and more generous image padding.
+  - Added clearer card CTAs (`Browse`) and stronger CTA treatment for popular memorial theme cards.
+  - Kept the canonical no-query `/designs` route fully server-rendered and crawlable; query result pages still use `DesignsPageClient` and remain `noindex`.
+- `components/DesignsTreeNav.tsx`
+  - Increased sidebar navigation contrast and readability for older users.
+  - Strengthened product/category text color, active states, count badges, and icon contrast.
+  - Restyled the sidebar `3D Designer` button as a visible dark CTA.
+
+### UX Notes
+
+- The page now communicates the size of the catalog but also gives users a direct way to search instead of forcing them through product/category navigation.
+- Search remains progressive-enhancement friendly because the form works as a normal GET request.
+- The sidebar still loads client-side tree navigation, but the main SEO content remains available in the initial HTML.
+- Avoid adding a complex faceted filter UI until there is a clearer signal from user behavior; the current lightweight search and quick chips are the safer first step.
+
+### Verification
+
+Commands run successfully after the search and CTA polish:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Playwright visual checks:
+
+- `C:\tmp\designs-index-search-polish-final.png`
+- `C:\tmp\designs-index-search-mobile.png`
 
 ---
 

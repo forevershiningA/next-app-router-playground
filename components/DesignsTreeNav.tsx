@@ -245,12 +245,12 @@ export default function DesignsTreeNav() {
         </Link>
         <div className="h-px bg-slate-200 rounded-full mb-4" />
         <div className="flex items-center justify-between pb-4">
-          <h2 className="text-sm font-medium text-slate-700 uppercase tracking-widest">
+          <h2 className="text-sm font-semibold text-stone-800 uppercase tracking-widest">
             Memorial Designs
           </h2>
           <Link
             href="/"
-            className="px-3 py-1.5 text-slate-600 rounded-lg border border-slate-300 hover:border-slate-400 hover:bg-slate-50 transition-all text-xs font-light tracking-wide"
+            className="rounded-lg border border-stone-950 bg-stone-950 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-[#8a6b1f] hover:bg-[#8a6b1f]"
           >
             3D Designer
           </Link>
@@ -269,21 +269,21 @@ export default function DesignsTreeNav() {
               {/* Product Type Level */}
               <button
                 onClick={() => toggleNode(productKey)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm transition-all ${
+                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-[15px] transition-all ${
                   isActive(productPath) 
-                    ? 'bg-slate-100 text-slate-900 font-semibold' 
-                    : 'text-slate-700 hover:bg-slate-100 font-light'
+                    ? 'bg-stone-100 text-stone-950 font-semibold' 
+                    : 'text-stone-800 hover:bg-stone-100 font-normal'
                 }`}
                 aria-expanded={isProductExpanded}
               >
                 {isProductExpanded ? (
-                  <ChevronDownIcon className="w-4 h-4 flex-shrink-0 opacity-50" />
+                  <ChevronDownIcon className="w-4 h-4 flex-shrink-0 text-stone-600" />
                 ) : (
-                  <ChevronRightIcon className="w-4 h-4 flex-shrink-0 opacity-50" />
+                  <ChevronRightIcon className="w-4 h-4 flex-shrink-0 text-stone-600" />
                 )}
                 <span className="flex-1 text-left">{productLabel}</span>
-                <span className={`text-[11px] px-2 py-0.5 rounded-full font-light ${
-                  isActive(productPath) ? 'bg-slate-200 text-slate-600' : 'bg-slate-100 text-slate-400'
+                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                  isActive(productPath) ? 'bg-stone-200 text-stone-700' : 'bg-stone-100 text-stone-600'
                 }`}>
                   {Object.values(productNode.categories).reduce((sum, cat) => sum + cat.designs.length, 0)}
                 </span>
@@ -302,20 +302,20 @@ export default function DesignsTreeNav() {
                         {/* Category Level */}
                         <button
                           onClick={() => toggleNode(categoryNodeKey)}
-                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all ${
+                          className={`w-full flex items-center gap-2 px-3 py-2 rounded-md text-[14px] transition-all ${
                             isActive(categoryPath) && !pathname?.includes(categoryPath + '/') 
-                              ? 'bg-slate-100 text-slate-900 font-medium' 
-                              : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-light'
+                              ? 'bg-stone-100 text-stone-950 font-semibold' 
+                              : 'text-stone-700 hover:bg-stone-50 hover:text-stone-950 font-normal'
                           }`}
                           aria-expanded={isCategoryExpanded}
                         >
                           {isCategoryExpanded ? (
-                            <ChevronDownIcon className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />
+                            <ChevronDownIcon className="w-3.5 h-3.5 flex-shrink-0 text-stone-500" />
                           ) : (
-                            <ChevronRightIcon className="w-3.5 h-3.5 flex-shrink-0 opacity-40" />
+                            <ChevronRightIcon className="w-3.5 h-3.5 flex-shrink-0 text-stone-500" />
                           )}
                           <span className="flex-1 text-left">{categoryData.name}</span>
-                          <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-100 text-slate-400 font-light">
+                          <span className="text-[11px] px-1.5 py-0.5 rounded bg-stone-100 text-stone-600 font-medium">
                             {categoryData.designs.length}
                           </span>
                         </button>
@@ -333,8 +333,8 @@ export default function DesignsTreeNav() {
                                   href={designPath}
                                   className={`block px-3 py-1.5 rounded-md text-sm leading-relaxed transition-all ${
                                     isDesignActive 
-                                      ? 'border-l-2 border-slate-500 bg-slate-50 text-slate-900 font-semibold pl-[10px]' 
-                                      : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-normal'
+                                      ? 'border-l-2 border-[#8a6b1f] bg-stone-50 text-stone-950 font-semibold pl-[10px]' 
+                                      : 'text-stone-700 hover:bg-stone-50 hover:text-stone-950 font-normal'
                                   }`}
                                 >
                                   <span className="line-clamp-2">{design.title}</span>
