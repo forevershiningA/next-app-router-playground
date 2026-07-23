@@ -14,7 +14,9 @@
  *   node scripts/batch-screenshot.js                       # all designs
  *   node scripts/batch-screenshot.js --category=pets       # one category
  *   node scripts/batch-screenshot.js --ids=123,456,789     # specific IDs
+ *   node scripts/batch-screenshot.js --ids-file=ids.txt    # comma/newline IDs
  *   node scripts/batch-screenshot.js --limit=10            # first N designs
+ *   node scripts/batch-screenshot.js --offset=200 --limit=200
  *   node scripts/batch-screenshot.js --concurrency=2       # parallel tabs
  *   node scripts/batch-screenshot.js --out=screenshots     # custom output dir
  *   node scripts/batch-screenshot.js --dry-run             # list designs only
@@ -34,6 +36,10 @@ const DESIGNS_DATA_PATH = path.join(ROOT, 'lib', 'saved-designs-data.ts');
 const DEFAULT_OUTPUT_DIR = path.join(ROOT, 'public', 'screenshots', 'v2026-3d');
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3001';
 const DESIGNER_PATH = '/select-size';
+const TRANSPARENT_PNG = Buffer.from(
+  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=',
+  'base64',
+);
 
 // Designs that permanently fail (missing viewport dims, corrupt JSON, etc.)
 const KNOWN_FAILURES = new Set([
@@ -76,6 +82,8 @@ function parseArgs() {
     switch (key) {
       case 'category': opts.category = val; break;
       case 'ids': opts.ids = val.split(',').map(s => s.trim()); break;
+      case 'ids-file': opts.idsFile = val; break;
+      case 'offset': opts.offset = Number(val); break;
       case 'limit': opts.limit = Number(val); break;
       case 'concurrency': opts.concurrency = Number(val); break;
       case 'out': opts.outputDir = val; break;
@@ -101,6 +109,8 @@ Usage:
 Options:
   --category=NAME     Filter to a single category slug (e.g. "pets")
   --ids=ID1,ID2,...   Only process specific design IDs
+  --ids-file=PATH     Read specific design IDs from a comma/newline-delimited file
+  --offset=N          Skip the first N matching designs before applying --limit
   --limit=N           Process at most N designs
   --concurrency=N     Number of parallel browser tabs (default: 1)
   --out=DIR           Output directory (default: public/screenshots/v2026-3d)
@@ -129,7 +139,12 @@ function loadDesignIds(opts) {
 
   let candidates = allIds;
 
-  if (opts.ids) {
+  if (opts.idsFile) {
+    const idsPath = path.resolve(ROOT, opts.idsFile);
+    const idsRaw = fs.readFileSync(idsPath, 'utf8');
+    const requested = idsRaw.split(/[\s,]+/).map(s => s.trim()).filter(Boolean);
+    candidates = requested.filter(id => allIds.includes(id));
+  } else if (opts.ids) {
     candidates = opts.ids.filter(id => allIds.includes(id));
   } else if (opts.category) {
     // Parse category for each design — look for category field near the ID
@@ -225,6 +240,14 @@ async function captureDesign(context, designId, opts, workerIdx) {
   const page = await context.newPage();
 
   try {
+    await page.route('https://rawcdn.githack.com/**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'image/png',
+        body: TRANSPARENT_PNG,
+      });
+    });
+
     // Set up route interception BEFORE navigating
     // Intercept design JSON fetches to anonymize inscriptions
     await page.route(/\/(designs|canonical-designs)\/v2026(-p3d)?\/\d+\.json/, async (route) => {
@@ -781,6 +804,9 @@ async function main() {
   // Load design IDs
   let designIds = loadDesignIds(opts);
 
+  if (opts.offset) {
+    designIds = designIds.slice(opts.offset);
+  }
   if (opts.limit) {
     designIds = designIds.slice(0, opts.limit);
   }
@@ -806,12 +832,19 @@ async function main() {
     process.exit(0);
   }
 
-  // Check dev server is running
+  // Check dev server is running. Keep this bounded: a slow/stuck Next render can
+  // otherwise hang here before the first worker log.
+  console.log(`Checking dev server: ${BASE_URL}${DESIGNER_PATH}`);
   try {
-    const res = await fetch(`${BASE_URL}/select-size`);
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 10_000);
+    const res = await fetch(`${BASE_URL}${DESIGNER_PATH}`, { signal: controller.signal });
+    clearTimeout(timer);
     if (!res.ok) throw new Error(`Status ${res.status}`);
   } catch (err) {
     console.error(`\n✗ Dev server not reachable at ${BASE_URL}`);
+    console.error(`  Tried: ${BASE_URL}${DESIGNER_PATH}`);
+    console.error(`  Error: ${err.message}`);
     console.error('  Start it first: pnpm dev');
     process.exit(1);
   }
@@ -893,6 +926,11 @@ async function main() {
     fs.mkdirSync(path.dirname(reportPath), { recursive: true });
     fs.writeFileSync(reportPath, JSON.stringify(results.errors, null, 2));
     console.log(`\nError report saved to: ${reportPath}`);
+  } else {
+    const reportPath = path.join(opts.outputDir, '_errors.json');
+    if (fs.existsSync(reportPath)) {
+      fs.unlinkSync(reportPath);
+    }
   }
 
   process.exit(results.failed > 0 ? 1 : 0);

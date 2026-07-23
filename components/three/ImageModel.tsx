@@ -25,6 +25,59 @@ type Props = {
   coordinateSpace?: 'mm-center';
 };
 
+type ImageTextureInfo = {
+  texture: THREE.Texture;
+  isPlaceholder: boolean;
+};
+
+function createEditPlaceholderTexture() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Could not create placeholder canvas context');
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = '#ffffff';
+  ctx.fillStyle = '#ffffff';
+  ctx.lineWidth = 24;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+
+  // Draw a compact edit glyph matching public/shapes/edit.svg without relying
+  // on browser SVG image decoding inside the WebGL screenshot path.
+  ctx.strokeRect(118, 136, 230, 250);
+  ctx.beginPath();
+  ctx.moveTo(246, 304);
+  ctx.lineTo(338, 212);
+  ctx.lineTo(386, 260);
+  ctx.lineTo(294, 352);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(358, 190);
+  ctx.lineTo(408, 140);
+  ctx.lineTo(456, 188);
+  ctx.lineTo(406, 238);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(232, 366);
+  ctx.lineTo(262, 316);
+  ctx.lineTo(282, 336);
+  ctx.closePath();
+  ctx.fill();
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+  return texture;
+}
+
+function isLegacySavedDesignUpload(imageUrl: string) {
+  return /\/ml\/[^/]+\/saved-designs\/upload\//i.test(imageUrl);
+}
+
 export default function ImageModel({ 
   id, 
   imageUrl, 
@@ -68,7 +121,7 @@ export default function ImageModel({
   const dragPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), []);
   const ledgerPlane = React.useMemo(() => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0), []);
   const fallbackIntersection = React.useMemo(() => new THREE.Vector3(), []);
-  const [textureInfo, setTextureInfo] = React.useState<{ texture: THREE.Texture; aspect: number } | null>(null);
+  const [textureInfo, setTextureInfo] = React.useState<ImageTextureInfo | null>(null);
   const [ceramicBaseData, setCeramicBaseData] = React.useState<{
     geometry: THREE.ExtrudeGeometry;
     flatGeometry: THREE.ShapeGeometry | null;
@@ -93,15 +146,16 @@ export default function ImageModel({
       try {
         const loader = new THREE.TextureLoader();
         loader.crossOrigin = 'anonymous';
-        const PLACEHOLDER_IMAGE = '/jpg/photos/vitreous-enamel-image.png';
-        const candidates = Array.from(new Set([
-          imageUrl,
-          imageUrl.replace(/\/([^/]+)$/, '/$1'),
-          imageUrl
-            .replace(/\/saved-designs\/upload\/(\d{4})\/(\d{2})\/([^/]+)$/i, '/saved-designs/upload/$3')
-            .replace(/\/saved-designs\/upload\/([^/]+)$/i, '/saved-designs/upload/$1'),
-          PLACEHOLDER_IMAGE,
-        ])).filter(Boolean);
+        const shouldUsePlaceholderImmediately = isLegacySavedDesignUpload(imageUrl);
+        const candidates = shouldUsePlaceholderImmediately
+          ? []
+          : Array.from(new Set([
+              imageUrl,
+              imageUrl.replace(/\/([^/]+)$/, '/$1'),
+              imageUrl
+                .replace(/\/saved-designs\/upload\/(\d{4})\/(\d{2})\/([^/]+)$/i, '/saved-designs/upload/$3')
+                .replace(/\/saved-designs\/upload\/([^/]+)$/i, '/saved-designs/upload/$1'),
+            ])).filter(Boolean);
         let loaded: THREE.Texture | null = null;
         for (const candidate of candidates) {
           try {
@@ -112,17 +166,15 @@ export default function ImageModel({
             // try next candidate
           }
         }
-        if (!loaded) throw new Error('No valid image URL candidate resolved');
-        const texture = loaded;
+        const isPlaceholder = !loaded;
+        const texture = loaded ?? createEditPlaceholderTexture();
         if (disposed) {
           texture.dispose();
           return;
         }
 
         activeTexture = texture;
-        const aspect = texture.image.width / texture.image.height || 1;
-
-        setTextureInfo({ texture, aspect });
+        setTextureInfo({ texture, isPlaceholder });
       } catch (error) {
         console.error('[ImageModel] Failed to load image texture', imageUrl, error);
       }
@@ -544,13 +596,16 @@ export default function ImageModel({
     return null;
   }
 
-  const { texture, aspect } = textureInfo;
+  const { texture, isPlaceholder } = textureInfo;
   const unitsPerMeter = headstone?.unitsPerMeter ?? 1000;
   const safeUnitsPerMeter =
     Math.abs(unitsPerMeter) > 1e-6 ? Math.abs(unitsPerMeter) : 1000;
   const mmToLocalUnits = safeUnitsPerMeter / 1000;
   const width = widthMm * mmToLocalUnits;
   const height = heightMm * mmToLocalUnits;
+  const placeholderSize = 55 * mmToLocalUnits;
+  const displayWidth = isPlaceholder ? Math.min(width, height, placeholderSize) : width;
+  const displayHeight = isPlaceholder ? displayWidth : height;
   
   // Get headstone frontZ position (same as motifs/inscriptions)
   const frontZ = headstone?.frontZ ?? 0;
@@ -559,7 +614,7 @@ export default function ImageModel({
   
   // Determine if this image needs a ceramic/enamel base
   // Granite Image (21), YAG Laser (135), and Free Image (137) are flat — no ceramic base
-  const needsCeramicBase = typeId !== 21 && typeId !== 135 && typeId !== 137;
+  const needsCeramicBase = !isPlaceholder && typeId !== 21 && typeId !== 135 && typeId !== 137;
   
   // Ceramic base parameters
   const ceramicDepthMm = 1; // Very thin ceramic layer - just 1mm depth
@@ -575,8 +630,8 @@ export default function ImageModel({
   if (ceramicBaseData) {
     // Scale ceramic to be LARGER than the photo to create visible border
     // Ceramic = photo size + border
-    ceramicScaleX = (width * (1 + borderPercentage)) / ceramicBaseData.svgWidth;
-    ceramicScaleY = (height * (1 + borderPercentage)) / ceramicBaseData.svgHeight;
+    ceramicScaleX = (displayWidth * (1 + borderPercentage)) / ceramicBaseData.svgWidth;
+    ceramicScaleY = (displayHeight * (1 + borderPercentage)) / ceramicBaseData.svgHeight;
     
     // Z scale to get actual 1mm depth
     const avgScale = (ceramicScaleX + ceramicScaleY) / 2;
@@ -667,11 +722,11 @@ export default function ImageModel({
           e.stopPropagation();
         }}
         position={[0, 0, needsCeramicBase ? actualCeramicDepthInUnits + 0.1 * mmToLocalUnits : 0.05 * mmToLocalUnits]}
-        geometry={ceramicBaseData?.flatGeometry ?? planeGeometry}
+        geometry={!isPlaceholder && ceramicBaseData?.flatGeometry ? ceramicBaseData.flatGeometry : planeGeometry}
         scale={
-          ceramicBaseData?.flatGeometry
-            ? [width / ceramicBaseData.svgWidth, -height / ceramicBaseData.svgHeight, 1]
-            : [width, height, 1]
+          !isPlaceholder && ceramicBaseData?.flatGeometry
+            ? [displayWidth / ceramicBaseData.svgWidth, -displayHeight / ceramicBaseData.svgHeight, 1]
+            : [displayWidth, displayHeight, 1]
         }
         renderOrder={999}
         visible={true}
@@ -681,8 +736,8 @@ export default function ImageModel({
           transparent={true}
           side={THREE.DoubleSide}
           opacity={1.0}
-          depthTest={true}
-          depthWrite={true}
+          depthTest={!isPlaceholder}
+          depthWrite={!isPlaceholder}
         />
       </mesh>
       
@@ -690,7 +745,7 @@ export default function ImageModel({
         <SelectionBox
           objectId={id}
           position={new THREE.Vector3(0, 0, needsCeramicBase ? actualCeramicDepthInUnits + 0.5 * mmToLocalUnits : 0.1 * mmToLocalUnits)}
-          bounds={{ width, height }}
+          bounds={{ width: displayWidth, height: displayHeight }}
           rotation={isLedgerSurface ? 0 : rotationZ}
           unitsPerMeter={headstone?.unitsPerMeter ?? 1}
           currentSizeMm={widthMm}

@@ -3,7 +3,7 @@
  * Generate _small.png thumbnails from full-size transparent PNGs.
  *
  * Usage:
- *   node scripts/generate-png-thumbnails.js [--skip-existing] [--width 300] [--concurrency 8]
+ *   node scripts/generate-png-thumbnails.js [--skip-existing] [--ids 123,456] [--width 300] [--concurrency 8]
  *
  * Reads all *.png (excluding *_small.png) from public/screenshots/v2026-3d/
  * and writes {id}_small.png at the specified width, preserving transparency.
@@ -18,6 +18,10 @@ const SCREENSHOT_DIR = path.join(__dirname, '..', 'public', 'screenshots', 'v202
 // Parse CLI args
 const args = process.argv.slice(2);
 const skipExisting = args.includes('--skip-existing');
+const idsIdx = args.indexOf('--ids');
+const requestedIds = idsIdx !== -1 && args[idsIdx + 1]
+  ? new Set(args[idsIdx + 1].split(',').map(id => id.trim()).filter(Boolean))
+  : null;
 const widthIdx = args.indexOf('--width');
 const THUMB_WIDTH = widthIdx !== -1 ? parseInt(args[widthIdx + 1], 10) : 300;
 const concIdx = args.indexOf('--concurrency');
@@ -25,7 +29,11 @@ const CONCURRENCY = concIdx !== -1 ? parseInt(args[concIdx + 1], 10) : 8;
 
 async function main() {
   const allFiles = fs.readdirSync(SCREENSHOT_DIR);
-  const fullPngs = allFiles.filter(f => f.endsWith('.png') && !f.includes('_small'));
+  const fullPngs = allFiles.filter(f => {
+    if (!f.endsWith('.png') || f.includes('_small')) return false;
+    if (!requestedIds) return true;
+    return requestedIds.has(f.replace('.png', ''));
+  });
 
   console.log(`Found ${fullPngs.length} full-size PNGs in ${SCREENSHOT_DIR}`);
   console.log(`Thumbnail width: ${THUMB_WIDTH}px | Concurrency: ${CONCURRENCY} | Skip existing: ${skipExisting}`);

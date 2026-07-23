@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-21
+**Last Updated:** 2026-07-23
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -62,6 +62,186 @@
 54. [July 19 Mobile Selection Flow and Account Polish](#current-status-2026-07-19--mobile-selection-flow-and-account-polish)
 55. [July 20 Guided Panel Option Styling and Homepage Spacing](#current-status-2026-07-20--guided-panel-option-styling-and-homepage-spacing)
 56. [July 21 Homepage Workflow Copy, Header Search, and HeroCanvas Optimization](#current-status-2026-07-21--homepage-workflow-copy-header-search-and-herocanvas-optimization)
+57. [July 22 Design Gallery SEO Landing Pages](#current-status-2026-07-22--design-gallery-seo-landing-pages)
+58. [July 23 Saved Design Photo Placeholder Screenshot Refresh](#current-status-2026-07-23--saved-design-photo-placeholder-screenshot-refresh)
+
+---
+
+## Current Status (2026-07-23) - Saved Design Photo Placeholder Screenshot Refresh
+
+This session fixed the saved-design screenshot/photo placeholder path so migrated photo elements render as the compact white edit icon instead of old static placeholder portraits or missing legacy uploads.
+
+### Issue Found
+
+- The first placeholder fix only treated `/ml/forevershining/saved-designs/upload/...` as a legacy uploaded photo URL.
+- Design `1738727055009` proved the same legacy photo pattern also exists under `/ml/headstonesdesigner/saved-designs/upload/...`.
+- A broader scan found active saved-design photo placeholders across three migrated ML folders:
+  - `forevershining`
+  - `headstonesdesigner`
+  - `bronze-plaque`
+- The active screenshot dataset currently has `3,092` canonical designs, with `1,943` designs containing legacy photo placeholders.
+
+### Implemented Changes
+
+- `components/three/ImageModel.tsx`
+  - Legacy uploaded photo detection now matches any migrated ML folder with `/ml/{folder}/saved-designs/upload/...`.
+  - These legacy uploads immediately use the generated white edit icon texture instead of waiting for stale uploaded image URLs to 404.
+  - Placeholder icons render as a compact square and are depth-test disabled so they stay visible on stone/plaque faces.
+- `scripts/batch-screenshot.js`
+  - Supports `--ids-file=path` for long targeted screenshot lists without hitting command-line length limits.
+  - Still supports `--ids`, `--offset`, `--limit`, and the previous category/full refresh modes.
+  - Stubs the external Drei cloud texture during headless screenshot capture so canvas initialization does not fail when network access is blocked.
+  - Clears stale `_errors.json` on clean runs.
+- `scripts/generate-png-thumbnails.js`
+  - Supports `--ids` for targeted thumbnail regeneration.
+- `scripts/refresh-all-screenshots.ps1`
+  - Added as a helper for controlled chunked screenshot refreshes.
+
+### Regeneration Work Completed
+
+- Confirmed `1738727055009.png` and `1738727055009_small.png` now show the compact white edit icon instead of the old portrait placeholder.
+- Previous affected-list refresh:
+  - `1,110` current `forevershining` photo-placeholder designs targeted.
+  - `1,082` regenerated successfully.
+  - `23` skipped as known failures.
+  - `5` failed because the headstone was not visible in render.
+- Broader follow-up refresh after widening ML-folder detection:
+  - `832` remaining current photo-placeholder designs targeted.
+  - `831` regenerated successfully.
+  - `1` failed because the headstone was not visible in render: `1687980532355`.
+- Thumbnails were regenerated for all existing full-size screenshots:
+  - `3,041` full-size PNG screenshots found.
+  - `3,041` thumbnails recreated.
+  - `0` thumbnail failures.
+
+### Remaining Screenshot Failures
+
+The latest `_errors.json` only contains:
+
+```json
+[
+  {
+    "id": "1687980532355",
+    "error": "Headstone not visible in render"
+  }
+]
+```
+
+Earlier render-visibility failures seen during the first affected refresh were:
+
+- `1667480366612`
+- `1752619990342`
+- `1670405007473`
+- `1673437084641`
+- `1675259335154`
+
+Those failures are unrelated to the white edit-icon placeholder rendering; they are screenshot/camera/viewport visibility cases.
+
+### Useful Files and Commands
+
+- Target lists generated during this work:
+  - `logs/current-affected-photo-design-ids.txt`
+  - `logs/current-affected-photo-design-ids-all-ml.txt`
+  - `logs/current-remaining-photo-design-ids-all-ml.txt`
+- Regenerate one design:
+
+```bash
+$env:BASE_URL='http://localhost:3000'
+node scripts\batch-screenshot.js --ids=1738727055009 --width=1280 --height=960 --render-wait=2000 --timeout=60000
+node scripts\generate-png-thumbnails.js --ids 1738727055009
+```
+
+- Regenerate a targeted ID file:
+
+```bash
+$env:BASE_URL='http://localhost:3000'
+node scripts\batch-screenshot.js --ids-file=logs\current-remaining-photo-design-ids-all-ml.txt --width=1280 --height=960 --render-wait=2000 --timeout=60000 --concurrency=3
+node scripts\generate-png-thumbnails.js
+```
+
+### Verification
+
+Commands run successfully after the placeholder path fix:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+---
+
+## Current Status (2026-07-22) - Design Gallery SEO Landing Pages
+
+This session investigated why `/designs` and its subpages were not behaving like the intended SEO "gold mine", then implemented the structural fixes.
+
+### SEO Findings
+
+- The canonical `/designs` page was forced dynamic and handed nearly all visible content to `DesignsPageClient`, which initially rendered only `Loading memorial designs...`.
+- Product pages (`/designs/[productType]`) and category pages (`/designs/[productType]/[category]`) also depended on client-side `useEffect` imports before exposing their real grids.
+- Category design cards were clickable `<div>` elements using `router.push(...)`, not crawlable `Link`/anchor elements.
+- The sitemap exposed too many weak URLs:
+  - 3,381 `/designs` URLs before the fix.
+  - 245 category combinations, including 131 with fewer than 5 designs and 94 with fewer than 3.
+  - `legacy-*` product buckets were included in sitemap output.
+- Individual design detail pages were already much stronger because they include SSR-visible content, JSON-LD, breadcrumbs, image, specs, and pricing.
+
+### Implemented Changes
+
+- Added `lib/design-seo.ts` as the shared SEO taxonomy/filtering layer.
+  - Defines curated indexable product slugs.
+  - Filters to designs with regenerated `public/screenshots/v2026-3d/*.png` screenshots.
+  - Provides shared product/category labels, descriptions, grouping helpers, and `MIN_INDEXABLE_CATEGORY_DESIGNS = 5`.
+- `app/designs/page.tsx`
+  - Removed `dynamic = 'force-dynamic'`.
+  - Canonical no-query `/designs` now server-renders product collection cards, popular memorial themes, guide links, and real crawlable `Link` anchors.
+  - Query/search traffic (`/designs?q=...`) still uses `DesignsPageClient` and remains noindexed.
+- `app/designs/[productType]/page.tsx`
+  - Replaced the client-loaded canonical view with server-rendered category cards and real links.
+  - Uses shared product SEO copy instead of the old partial hand-written product map.
+  - Non-curated product buckets are noindexed if reached.
+- `app/designs/[productType]/[category]/page.tsx`
+  - Replaced the client-loaded canonical grid with server-rendered design cards.
+  - Design cards are now real `Link` anchors to individual design pages.
+  - Metadata now uses the actual product kind (`headstone`, `plaque`, `monument`, or `memorial`) instead of always saying "Headstone Designs".
+  - Thin category pages under 5 designs are noindexed if reached directly.
+- `app/sitemap.ts`
+  - Uses `getSeoReadyDesigns()` and the same curated product filter as the pages.
+  - Removes `legacy-*` design URLs from sitemap output.
+  - Includes only category pages with at least 5 designs.
+
+### Verification
+
+Commands run successfully after the July 22 SEO changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+pnpm build
+```
+
+Sitemap verification after the fix:
+
+```json
+{
+  "totalUrls": 3101,
+  "designUrls": 3091,
+  "legacyDesignUrls": 0,
+  "petsDesignUrls": 107,
+  "categoryUrls": 112,
+  "detailUrls": 2967
+}
+```
+
+### Deployment Notes
+
+- It is worth deploying this to Vercel before doing more copy/content polish because the main technical SEO blocker has been removed.
+- After deployment, inspect:
+  - `/designs`
+  - `/designs/laser-etched-headstone`
+  - `/designs/laser-etched-headstone/floral-memorial`
+  - `/sitemap.xml`
+- Then resubmit the sitemap in Google Search Console and request indexing for `/designs` plus a few strongest product/category pages.
+- `public/shapes/edit.svg` was present as an unrelated untracked file during this work; it was not touched.
 
 ---
 
@@ -12350,4 +12530,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-21*
+*End of STARTER.md - Last updated: 2026-07-23*
