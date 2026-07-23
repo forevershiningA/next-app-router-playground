@@ -4,6 +4,17 @@ import React from 'react';
 import Link from 'next/link';
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { getRelatedDesigns, getDesignsByCategory, DESIGN_CATEGORIES } from '#/lib/saved-designs-data';
+import {
+  BuildingOffice2Icon,
+  ClipboardDocumentCheckIcon,
+  CurrencyDollarIcon,
+  DocumentTextIcon,
+  PhotoIcon,
+  PencilSquareIcon,
+  ShieldCheckIcon,
+  SparklesIcon,
+  SwatchIcon,
+} from '@heroicons/react/24/outline';
 import { 
   getRegionFromMlDir, 
   LOCALIZED_CONTENT, 
@@ -31,6 +42,22 @@ function formatList(items: string[]): string {
   if (items.length === 1) return items[0];
   if (items.length === 2) return `${items[0]} and ${items[1]}`;
   return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+function ResourceIcon({ icon: Icon }: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>> }) {
+  return (
+    <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-[#d8c487]/60 bg-[#fbfaf5] text-[#9b7a24] transition-colors group-hover:border-[#b8942e] group-hover:bg-[#f6f0dc]">
+      <Icon className="h-5 w-5 stroke-[1.6]" aria-hidden="true" />
+    </div>
+  );
+}
+
+function SectionIcon({ icon: Icon }: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>> }) {
+  return (
+    <span className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-[#d8c487]/60 bg-[#fbfaf5] text-[#9b7a24]">
+      <Icon className="h-4 w-4 stroke-[1.6]" aria-hidden="true" />
+    </span>
+  );
 }
 
 interface DesignContentBlockProps {
@@ -272,11 +299,9 @@ export default function DesignContentBlock({
           <h2 className="text-2xl font-serif font-light text-slate-900 mb-6">Why This Layout Works</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-blue-50/50 rounded-lg p-6 border border-blue-200/50">
-              <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Names, Dates & Verse Fit
+              <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-3">
+                <SectionIcon icon={DocumentTextIcon} />
+                <span>Names, Dates & Verse Fit</span>
               </h3>
               <p className="text-slate-700 text-sm font-light mb-2">
                 This design works best with <strong>{designNotes.verseLength}</strong> inscriptions.
@@ -287,11 +312,9 @@ export default function DesignContentBlock({
             </div>
 
             <div className="bg-purple-50/50 rounded-lg p-6 border border-purple-200/50">
-              <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                </svg>
-                Motif Placement
+              <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-3">
+                <SectionIcon icon={SwatchIcon} />
+                <span>Motif Placement</span>
               </h3>
               <p className="text-slate-700 text-sm font-light">
                 {designNotes.motifGuidance}
@@ -300,11 +323,9 @@ export default function DesignContentBlock({
 
             {designNotes.photoGuidance && (
               <div className="bg-green-50/50 rounded-lg p-6 border border-green-200/50 md:col-span-2">
-                <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-2">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Photo Guidelines
+                <h3 className="font-medium text-slate-900 mb-3 flex items-center gap-3">
+                  <SectionIcon icon={PhotoIcon} />
+                  <span>Photo Guidelines</span>
                 </h3>
                 <p className="text-slate-700 text-sm font-light">
                   {designNotes.photoGuidance}
@@ -338,11 +359,9 @@ export default function DesignContentBlock({
         {/* Compliance Note */}
         <div className="mb-12">
           <div className="bg-amber-50/50 rounded-lg p-8 border border-amber-200/50">
-            <h2 className="text-2xl font-serif font-light text-slate-900 mb-4 flex items-center gap-2">
-              <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-              {compliance.title}
+            <h2 className="text-2xl font-serif font-light text-slate-900 mb-4 flex items-center gap-3">
+              <SectionIcon icon={ShieldCheckIcon} />
+              <span>{compliance.title}</span>
             </h2>
             <p className="text-slate-700 leading-relaxed font-light">
               {compliance.content}
@@ -353,11 +372,9 @@ export default function DesignContentBlock({
         {/* Care & Longevity */}
         <div className="mb-12">
           <div className="bg-slate-50 rounded-lg p-8 border border-slate-200">
-            <h2 className="text-2xl font-serif font-light text-slate-900 mb-4 flex items-center gap-2">
-              <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              {care.title}
+            <h2 className="text-2xl font-serif font-light text-slate-900 mb-4 flex items-center gap-3">
+              <SectionIcon icon={SparklesIcon} />
+              <span>{care.title}</span>
             </h2>
             <p className="text-slate-700 leading-relaxed font-light">
               {care.content}
@@ -486,13 +503,9 @@ export default function DesignContentBlock({
               href="/designs/guide/design-your-own"
               className="flex items-start gap-4 p-4 bg-white rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all group"
             >
-              <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-              </div>
+              <ResourceIcon icon={PencilSquareIcon} />
               <div className="flex-1">
-                <h3 className="font-medium text-slate-900 group-hover:text-blue-600 transition-colors">Design Guide</h3>
+                <h3 className="font-medium text-slate-900 group-hover:text-[#8a6b1f] transition-colors">Design Guide</h3>
                 <p className="text-sm text-slate-600 font-light mt-1">Learn how to customize your memorial design online</p>
               </div>
             </Link>
@@ -501,13 +514,9 @@ export default function DesignContentBlock({
               href="/designs/guide/pricing"
               className="flex items-start gap-4 p-4 bg-white rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all group"
             >
-              <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center group-hover:bg-green-200 transition-colors">
-                <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
+              <ResourceIcon icon={CurrencyDollarIcon} />
               <div className="flex-1">
-                <h3 className="font-medium text-slate-900 group-hover:text-green-600 transition-colors">Pricing Guide</h3>
+                <h3 className="font-medium text-slate-900 group-hover:text-[#8a6b1f] transition-colors">Pricing Guide</h3>
                 <p className="text-sm text-slate-600 font-light mt-1">Understand memorial pricing and what's included</p>
               </div>
             </Link>
@@ -516,13 +525,9 @@ export default function DesignContentBlock({
               href="/designs/guide/cemetery-regulations"
               className="flex items-start gap-4 p-4 bg-white rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all group"
             >
-              <div className="flex-shrink-0 w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center group-hover:bg-amber-200 transition-colors">
-                <svg className="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
+              <ResourceIcon icon={BuildingOffice2Icon} />
               <div className="flex-1">
-                <h3 className="font-medium text-slate-900 group-hover:text-amber-600 transition-colors">Cemetery Regulations</h3>
+                <h3 className="font-medium text-slate-900 group-hover:text-[#8a6b1f] transition-colors">Cemetery Regulations</h3>
                 <p className="text-sm text-slate-600 font-light mt-1">Important information about cemetery compliance</p>
               </div>
             </Link>
@@ -531,13 +536,9 @@ export default function DesignContentBlock({
               href="/designs/guide/buying-guide"
               className="flex items-start gap-4 p-4 bg-white rounded-lg border border-slate-200 hover:border-slate-300 hover:shadow-md transition-all group"
             >
-              <div className="flex-shrink-0 w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center group-hover:bg-purple-200 transition-colors">
-                <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-              </div>
+              <ResourceIcon icon={ClipboardDocumentCheckIcon} />
               <div className="flex-1">
-                <h3 className="font-medium text-slate-900 group-hover:text-purple-600 transition-colors">Buying Guide</h3>
+                <h3 className="font-medium text-slate-900 group-hover:text-[#8a6b1f] transition-colors">Buying Guide</h3>
                 <p className="text-sm text-slate-600 font-light mt-1">Step-by-step guide to ordering your memorial</p>
               </div>
             </Link>

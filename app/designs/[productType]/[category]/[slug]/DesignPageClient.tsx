@@ -13,7 +13,14 @@ import {
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { data } from '#/app/_internal/_data';
-import { ChevronRightIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import {
+  AdjustmentsHorizontalIcon,
+  ArrowPathIcon,
+  ChevronRightIcon,
+  CurrencyDollarIcon,
+  DocumentTextIcon,
+  InformationCircleIcon,
+} from '@heroicons/react/24/outline';
 import { getProductFromId } from '#/lib/product-utils';
 import type { SavedDesignMetadata, DesignCategory } from '#/lib/saved-designs-data';
 import React from 'react';
@@ -41,6 +48,14 @@ function formatMarketingList(items: string[]): string {
   if (items.length === 1) return items[0];
   if (items.length === 2) return `${items[0]} and ${items[1]}`;
   return `${items.slice(0, -1).join(', ')} and ${items[items.length - 1]}`;
+}
+
+function AccordionHeaderIcon({ icon: Icon }: { icon: React.ComponentType<React.SVGProps<SVGSVGElement>> }) {
+  return (
+    <span className="inline-flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-[#d8c487]/60 bg-[#fbfaf5] text-[#9b7a24]">
+      <Icon className="h-4 w-4 stroke-[1.6]" aria-hidden="true" />
+    </span>
+  );
 }
 
 // Helper function to detect if design uses physical coordinates
@@ -284,9 +299,7 @@ function DesignSpecificContent({
         className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
       >
         <h3 className="font-serif font-light text-xl text-slate-900 flex items-center gap-3">
-          <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
+          <AccordionHeaderIcon icon={DocumentTextIcon} />
           <span>About This Design</span>
         </h3>
         <svg 
@@ -452,9 +465,7 @@ function ProductDescription({ productSlug, productId }: { productSlug: string; p
         className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
       >
         <h3 className="font-serif font-light text-xl text-slate-900 flex items-center gap-3">
-          <svg className="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <AccordionHeaderIcon icon={InformationCircleIcon} />
           <span>Product Information</span>
         </h3>
         <svg 
@@ -791,9 +802,7 @@ function PersonalizationOptions({ productId, productSlug }: { productId: string;
         className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
       >
         <h3 className="font-serif font-light text-lg md:text-xl text-slate-900 flex items-center gap-3">
-          <svg className="w-5 h-5 md:w-6 md:h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
-          </svg>
+          <AccordionHeaderIcon icon={AdjustmentsHorizontalIcon} />
           <span>Personalization Options</span>
         </h3>
         <svg 
@@ -3056,56 +3065,95 @@ export default function DesignPageClient({
         maxItems={15}
       />
       
-      <div className="bg-gradient-to-br from-slate-50 via-white to-slate-100 md:ml-[400px] min-h-screen">
-      {/* Breadcrumb and Header - positioned at top */}
-      <div className="border-b border-slate-200 md:border-b relative z-10 bg-white/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 md:px-8 py-3 md:py-6 max-w-7xl">
-          {/* Elegant Breadcrumb - Hidden on mobile, visible on desktop */}
-          <nav className="hidden md:flex items-center gap-2 text-sm text-slate-500 mb-6">
-            <Link href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">Memorial Designs</Link>
+      <div className="bg-[#f7f5f0] md:ml-[400px] min-h-screen">
+      <div className="relative z-10 border-b border-stone-200 bg-[#fdfcf9]">
+        <div className="container mx-auto max-w-7xl px-4 pb-4 pt-20 md:px-8 md:py-8">
+          <nav className="hidden md:flex items-center gap-2 text-sm text-stone-500 mb-7" aria-label="Breadcrumb">
+            <Link href="/designs" className="hover:text-stone-950 transition-colors font-light tracking-wide">Memorial Designs</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <Link href={`/designs/${productSlug}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{productName}</Link>
+            <Link href={`/designs/${productSlug}`} className="hover:text-stone-950 transition-colors font-light tracking-wide">{productName}</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light tracking-wide">{categoryTitle}</Link>
+            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-stone-950 transition-colors font-light tracking-wide">{categoryTitle}</Link>
             <ChevronRightIcon className="w-4 h-4 flex-shrink-0" />
-            <span className="text-slate-900 font-medium tracking-wide truncate">{formattedDesignTitle}</span>
+            <span className="text-stone-950 font-medium tracking-wide truncate">{formattedDesignTitle}</span>
           </nav>
 
-          {/* Mobile Breadcrumb - Compact version showing only current page */}
-          <nav className="md:hidden flex items-center gap-2 text-sm text-slate-500 mb-3">
-            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-slate-900 transition-colors font-light">
+          <nav className="md:hidden flex items-center gap-2 text-sm text-stone-500 mb-4" aria-label="Breadcrumb">
+            <Link href={`/designs/${productSlug}/${category}`} className="hover:text-stone-950 transition-colors font-light">
               <ChevronRightIcon className="w-4 h-4 rotate-180 inline" />
               <span className="ml-1">Back to {categoryTitle}</span>
             </Link>
           </nav>
 
-          {/* Sophisticated Header with Design Specifications */}
-          <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <h1 className="text-2xl md:text-4xl font-serif font-light text-slate-900 tracking-tight mb-2 md:mb-4">
+          <div className="grid gap-7 lg:grid-cols-[minmax(0,1.05fr)_380px] lg:items-start">
+            <section aria-labelledby="design-title">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
+                Customisable memorial design
+              </p>
+              <h1 id="design-title" className="max-w-4xl text-3xl md:text-5xl font-serif font-light text-stone-950 tracking-tight">
                 {formattedDesignTitle}
               </h1>
-              
-              <p className="text-base md:text-lg text-slate-500 font-light mb-3 md:mb-6">
+              <p className="mt-3 text-base md:text-lg text-stone-600 font-light">
                 {categoryTitle} · {simplifiedProductName} {productTypeDisplay}
               </p>
-
-              <p className="max-w-3xl text-sm md:text-base text-slate-700 leading-relaxed font-light mb-4">
+              <p className="mt-5 max-w-3xl text-sm md:text-base text-stone-700 leading-relaxed font-light">
                 {heroSummary}
               </p>
 
-              <div className="flex flex-wrap gap-2 mb-5">
+              <div className="mt-5 flex flex-wrap gap-2">
                 {heroFeatures.map((feature) => (
                   <span
                     key={feature}
-                    className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs md:text-sm text-slate-600"
+                    className="rounded-full border border-stone-200 bg-white/80 px-3 py-1 text-xs md:text-sm text-stone-600"
                   >
                     {feature}
                   </span>
                 ))}
               </div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="mt-7 overflow-hidden rounded-lg border border-stone-200 bg-white">
+                <div className="flex min-h-[360px] items-center justify-center bg-[radial-gradient(circle_at_50%_30%,#ffffff_0%,#f3f0e8_48%,#e6e1d7_100%)] px-4 py-8 md:min-h-[470px]">
+                  <img
+                    src={`/screenshots/v2026-3d/${designId}.png`}
+                    alt={`${formattedDesignTitle} — 3D preview`}
+                    className="max-h-[62vh] w-auto max-w-full object-contain"
+                    loading="eager"
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      const smallSrc = `/screenshots/v2026-3d/${designId}_small.png`;
+                      if (!img.src.endsWith('_small.png')) {
+                        img.src = smallSrc;
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+            </section>
+
+            <aside className="lg:sticky lg:top-6">
+              <div className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-stone-500">
+                  Ready to personalise
+                </p>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div className="rounded-lg bg-stone-50 p-3">
+                    <p className="text-xs text-stone-500">Material</p>
+                    <p className="mt-1 font-medium text-stone-950">{simplifiedProductName}</p>
+                  </div>
+                  <div className="rounded-lg bg-stone-50 p-3">
+                    <p className="text-xs text-stone-500">Shape</p>
+                    <p className="mt-1 font-medium text-stone-950">{shapeDisplayName || 'Standard'}</p>
+                  </div>
+                  <div className="rounded-lg bg-stone-50 p-3">
+                    <p className="text-xs text-stone-500">Text areas</p>
+                    <p className="mt-1 font-medium text-stone-950">{designMetadata.inscriptionCount}</p>
+                  </div>
+                  <div className="rounded-lg bg-stone-50 p-3">
+                    <p className="text-xs text-stone-500">Proof</p>
+                    <p className="mt-1 font-medium text-stone-950">Free</p>
+                  </div>
+                </div>
+
                 <button
                   onClick={() => {
                     if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
@@ -3114,24 +3162,51 @@ export default function DesignPageClient({
                     }
                   }}
                   disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
-                  className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-stone-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Start with this design
+                  {(loading || canonicalLoadState === 'loading') ? (
+                    <>
+                      <div className="w-4 h-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                      Loading design…
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                      Start with this design
+                    </>
+                  )}
                 </button>
                 <a
                   href="#price-guide"
-                  className="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-sm font-medium text-slate-800 transition-colors hover:bg-slate-50"
+                  className="mt-3 inline-flex w-full items-center justify-center rounded-lg border border-stone-300 bg-white px-5 py-3 text-sm font-medium text-stone-800 transition-colors hover:bg-stone-50"
                 >
                   See price guide
                 </a>
+
+                <div className="mt-5 border-t border-stone-200 pt-4">
+                  <ul className="space-y-2 text-sm text-stone-600">
+                    <li className="flex gap-2">
+                      <span className="mt-0.5 text-[#9b7a24]">✓</span>
+                      <span>Change wording, fonts, motifs and photo placement</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="mt-0.5 text-[#9b7a24]">✓</span>
+                      <span>Preview updates in the 3D designer before ordering</span>
+                    </li>
+                    <li className="flex gap-2">
+                      <span className="mt-0.5 text-[#9b7a24]">✓</span>
+                      <span>Request a proof before manufacturing begins</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
-              
-            </div>
+            </aside>
           </div>
         </div>
       </div>
 
-      {/* Rest of content - appears after canvas */}
       <div className="container mx-auto max-w-7xl px-4 md:px-8">
 
       {/* Download Links */}
@@ -3205,53 +3280,8 @@ export default function DesignPageClient({
       )}
 
 
-      {/* 3D Screenshot Preview */}
-      <div className="my-0 md:my-8 mb-8 md:mb-12">
-        <div className="flex items-center justify-center">
-          <img
-            src={`/screenshots/v2026-3d/${designId}.png`}
-            alt={`${formattedDesignTitle} — 3D preview`}
-            className="max-w-full h-auto max-h-[70vh] object-contain"
-            loading="eager"
-            onError={(e) => {
-              const img = e.currentTarget;
-              const smallSrc = `/screenshots/v2026-3d/${designId}_small.png`;
-              if (!img.src.endsWith('_small.png')) {
-                img.src = smallSrc;
-              }
-            }}
-          />
-        </div>
-        <div className="flex justify-center mt-6">
-          <button
-            onClick={() => {
-              if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
-                setLoadingIntoEditor(true);
-                router.push('/select-size');
-              }
-            }}
-            disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
-            className="inline-flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {(loading || canonicalLoadState === 'loading') ? (
-              <>
-                <div className="w-5 h-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                Loading Design…
-              </>
-            ) : (
-              <>
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                </svg>
-                Start with this design
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-
       {/* Design-Specific Content for SEO */}
-      <div className="px-0 md:px-6 pt-4 md:pt-6">
+      <div className="px-0 md:px-6 pt-8 md:pt-10">
         <DesignSpecificContent 
           shapeName={shapeDisplayName || 'Standard'}
           productSlug={productSlug}
@@ -3466,9 +3496,7 @@ function DetailedPriceQuote({ designId, mlDir = 'headstonesdesigner' }: { design
         className="w-full px-4 md:px-6 py-3 md:py-4 flex items-center justify-between hover:bg-slate-50 transition-colors"
       >
         <h3 className="font-serif font-light text-lg md:text-xl text-slate-900 flex items-center gap-3">
-          <svg className="w-5 h-5 md:w-6 md:h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
+          <AccordionHeaderIcon icon={CurrencyDollarIcon} />
           <span>Price Quote</span>
         </h3>
         <svg 

@@ -107,26 +107,28 @@ export default async function DesignsPage({
         <DesignsTreeNav />
       </MobileNavToggle>
 
-      <main className="bg-gradient-to-br from-slate-50 via-white to-slate-100 min-h-screen md:ml-[400px]">
-        <div className="container mx-auto px-6 md:px-8 py-10 md:py-12 max-w-7xl">
-          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-10" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-slate-900 transition-colors font-light tracking-wide">
+      <main className="bg-[#f7f5f0] min-h-screen md:ml-[400px]">
+        <div className="container mx-auto px-4 pb-14 pt-20 md:px-8 md:py-12 max-w-7xl">
+          <nav className="flex items-center gap-2 text-sm text-stone-500 mb-8" aria-label="Breadcrumb">
+            <Link href="/" className="hover:text-stone-950 transition-colors font-light tracking-wide">
               Home
             </Link>
             <ChevronRightIcon className="w-4 h-4" />
-            <span className="text-slate-900 font-medium tracking-wide">Memorial Designs</span>
+            <span className="text-stone-950 font-medium tracking-wide">Memorial Designs</span>
           </nav>
 
-          <header className="mb-12 text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
+          <header className="mb-12 max-w-4xl">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
+              Customisable memorial templates
+            </p>
+            <h1 className="text-4xl md:text-6xl font-serif font-light text-stone-950 mb-5 tracking-tight">
               Memorial Design Collection
             </h1>
-            <div className="w-24 h-px bg-slate-300 mx-auto mb-6" />
-            <p className="text-lg md:text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-stone-600 font-light max-w-3xl leading-relaxed">
               Browse headstone, plaque and monument designs by product, tribute theme, material and finish.
               Each template can be personalised online with inscriptions, motifs, photos and a live preview.
             </p>
-            <p className="text-sm text-slate-500 mt-4 font-light">
+            <p className="text-sm text-stone-500 mt-5 font-light">
               {designs.length.toLocaleString()} design templates across {productGroups.length} curated collections
             </p>
           </header>
@@ -134,10 +136,10 @@ export default async function DesignsPage({
           <section aria-labelledby="design-products-heading" className="mb-16">
             <div className="flex items-end justify-between gap-6 mb-6">
               <div>
-                <h2 id="design-products-heading" className="text-2xl font-serif font-light text-slate-900">
+                <h2 id="design-products-heading" className="text-2xl font-serif font-light text-stone-950">
                   Browse by Product
                 </h2>
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="text-sm text-stone-500 mt-1">
                   Start with the memorial type, then choose a theme and individual layout.
                 </p>
               </div>
@@ -153,9 +155,9 @@ export default async function DesignsPage({
                   <Link
                     key={productSlug}
                     href={`/designs/${productSlug}`}
-                    className="group bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-200 hover:border-slate-300"
+                    className="group overflow-hidden rounded-lg border border-stone-200 bg-white transition-all duration-300 hover:border-[#d8c487] hover:shadow-lg"
                   >
-                    <div className="relative aspect-[4/3] bg-slate-100">
+                    <div className="relative aspect-[4/3] bg-[radial-gradient(circle_at_50%_28%,#ffffff_0%,#f4f0e7_52%,#e6e0d3_100%)]">
                       <Image
                         src={`/screenshots/v2026-3d/${preview.id}_small.png`}
                         alt={`${product.name} design preview`}
@@ -166,17 +168,17 @@ export default async function DesignsPage({
                       />
                     </div>
                     <div className="p-6">
-                      <h3 className="font-serif font-light text-2xl text-slate-900 group-hover:text-slate-700 transition-colors mb-2">
+                      <h3 className="font-serif font-light text-2xl text-stone-950 group-hover:text-[#8a6b1f] transition-colors mb-2">
                         {product.name}
                       </h3>
-                      <p className="text-slate-600 font-light text-sm leading-relaxed mb-5">
+                      <p className="text-stone-600 font-light text-sm leading-relaxed mb-5">
                         {product.description}
                       </p>
                       <div className="flex items-center justify-between gap-4 text-sm">
-                        <span className="text-slate-500 font-light">
+                        <span className="text-stone-500 font-light">
                           {productDesigns.length.toLocaleString()} designs in {categories.size} categories
                         </span>
-                        <span className="inline-flex items-center text-slate-800 font-light uppercase tracking-wider group-hover:translate-x-1 transition-transform">
+                        <span className="inline-flex items-center text-[#8a6b1f] font-light uppercase tracking-wider group-hover:translate-x-1 transition-transform">
                           Explore
                           <ChevronRightIcon className="w-4 h-4 ml-1" />
                         </span>
@@ -189,7 +191,7 @@ export default async function DesignsPage({
           </section>
 
           <section aria-labelledby="design-categories-heading" className="mb-12">
-            <h2 id="design-categories-heading" className="text-2xl font-serif font-light text-slate-900 mb-6">
+            <h2 id="design-categories-heading" className="text-2xl font-serif font-light text-stone-950 mb-6">
               Popular Memorial Themes
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -199,12 +201,12 @@ export default async function DesignsPage({
                   <Link
                     key={category}
                     href={`/designs/${firstDesign.productSlug}/${category}`}
-                    className="group bg-white border border-slate-200 rounded-lg p-5 hover:border-slate-300 hover:shadow-lg transition-all"
+                    className="group bg-white border border-stone-200 rounded-lg p-5 hover:border-[#d8c487] hover:shadow-md transition-all"
                   >
-                    <h3 className="font-serif text-xl font-light text-slate-900 mb-1">
+                    <h3 className="font-serif text-xl font-light text-stone-950 group-hover:text-[#8a6b1f] transition-colors mb-1">
                       {getCategoryTitle(category)}
                     </h3>
-                    <p className="text-sm text-slate-500 font-light">
+                    <p className="text-sm text-stone-500 font-light">
                       {categoryDesigns.length.toLocaleString()} matching designs
                     </p>
                   </Link>
@@ -213,8 +215,8 @@ export default async function DesignsPage({
             </div>
           </section>
 
-          <section className="border-t border-slate-200 pt-10">
-            <h2 className="text-2xl font-serif font-light text-slate-900 mb-4">
+          <section className="border-t border-stone-200 pt-10">
+            <h2 className="text-2xl font-serif font-light text-stone-950 mb-4">
               Design Guides
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -227,7 +229,7 @@ export default async function DesignsPage({
                 <Link
                   key={href}
                   href={href}
-                  className="bg-white border border-slate-200 rounded-lg p-5 text-slate-800 hover:border-slate-300 hover:shadow-lg transition-all"
+                  className="bg-white border border-stone-200 rounded-lg p-5 text-stone-800 hover:border-[#d8c487] hover:shadow-md transition-all"
                 >
                   <span className="font-light">{label}</span>
                 </Link>

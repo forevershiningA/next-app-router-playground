@@ -179,33 +179,35 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <DesignsTreeNav />
       </MobileNavToggle>
 
-      <main className="bg-gradient-to-br from-slate-50 via-white to-slate-100 overflow-y-auto min-h-screen md:ml-[400px]">
-        <div className="container mx-auto px-6 md:px-8 py-10 md:py-12 max-w-7xl">
-          <nav className="flex items-center gap-2 text-sm text-slate-500 mb-10" aria-label="Breadcrumb">
-            <Link href="/designs" className="hover:text-slate-900 transition-colors font-light tracking-wide">
+      <main className="bg-[#f7f5f0] overflow-y-auto min-h-screen md:ml-[400px]">
+        <div className="container mx-auto px-4 pb-14 pt-20 md:px-8 md:py-12 max-w-7xl">
+          <nav className="flex items-center gap-2 text-sm text-stone-500 mb-8" aria-label="Breadcrumb">
+            <Link href="/designs" className="hover:text-stone-950 transition-colors font-light tracking-wide">
               Memorial Designs
             </Link>
             <ChevronRightIcon className="w-4 h-4" />
             <Link
               href={`/designs/${productSlug}`}
-              className="hover:text-slate-900 transition-colors font-light tracking-wide"
+              className="hover:text-stone-950 transition-colors font-light tracking-wide"
             >
               {productInfo.name}
             </Link>
             <ChevronRightIcon className="w-4 h-4" />
-            <span className="text-slate-900 font-medium tracking-wide">{categoryTitle}</span>
+            <span className="text-stone-950 font-medium tracking-wide">{categoryTitle}</span>
           </nav>
 
-          <header className="mb-12 text-center">
-            <h1 className="text-4xl md:text-5xl font-serif font-light text-slate-900 mb-4 tracking-tight">
+          <header className="mb-12 max-w-4xl">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
+              Choose a starting layout
+            </p>
+            <h1 className="text-4xl md:text-6xl font-serif font-light text-stone-950 mb-5 tracking-tight">
               {categoryTitle} {productInfo.shortName} Designs
             </h1>
-            <div className="w-24 h-px bg-slate-300 mx-auto mb-6" />
-            <p className="text-lg md:text-xl text-slate-600 font-light max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-stone-600 font-light max-w-3xl leading-relaxed">
               {categoryDescription} These {productInfo.kind} templates can be personalised with names,
               dates, verses, motifs and photos before ordering.
             </p>
-            <p className="text-sm text-slate-500 mt-4 font-light">
+            <p className="text-sm text-stone-500 mt-5 font-light">
               {designs.length.toLocaleString()} crawlable design templates
             </p>
           </header>
@@ -223,9 +225,9 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                   <Link
                     key={design.id}
                     href={`/designs/${design.productSlug}/${design.category}/${design.slug}`}
-                    className="group bg-white rounded-lg border border-slate-200 overflow-hidden hover:border-slate-300 hover:shadow-xl transition-all duration-300"
+                    className="group overflow-hidden rounded-lg border border-stone-200 bg-white transition-all duration-300 hover:border-[#d8c487] hover:shadow-lg"
                   >
-                    <div className="relative aspect-[4/3] bg-slate-100">
+                    <div className="relative aspect-[4/3] bg-[radial-gradient(circle_at_50%_28%,#ffffff_0%,#f4f0e7_52%,#e6e0d3_100%)]">
                       <Image
                         src={`/screenshots/v2026-3d/${design.id}_small.png`}
                         alt={`${title} memorial design preview`}
@@ -237,24 +239,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
                     </div>
 
                     <div className="p-6">
-                      <h3 className="font-serif font-light text-xl text-slate-900 mb-2 group-hover:text-slate-700 transition-colors">
+                      <h3 className="font-serif font-light text-xl text-stone-950 mb-2 group-hover:text-[#8a6b1f] transition-colors">
                         {title}
                       </h3>
-                      <p className="text-slate-600 font-light text-sm mb-4 leading-relaxed">
+                      <p className="text-stone-600 font-light text-sm mb-4 leading-relaxed">
                         {designDescription(design, productInfo.finish, categoryTitle, productInfo.kind)}
                       </p>
 
                       {motifs.length > 0 && (
-                        <p className="text-sm text-slate-500 font-light mb-4">
+                        <p className="text-sm text-stone-500 font-light mb-4">
                           Motifs: {motifs.join(', ')}
                         </p>
                       )}
 
-                      <div className="flex items-center justify-between gap-4 border-t border-slate-100 pt-4">
-                        <span className="text-xs text-slate-500 font-light">
+                      <div className="flex items-center justify-between gap-4 border-t border-stone-100 pt-4">
+                        <span className="text-xs text-stone-500 font-light">
                           {design.inscriptionCount} inscription {design.inscriptionCount === 1 ? 'area' : 'areas'}
                         </span>
-                        <span className="inline-flex items-center text-slate-700 font-light text-sm uppercase tracking-wider group-hover:translate-x-1 transition-transform">
+                        <span className="inline-flex items-center text-[#8a6b1f] font-light text-sm uppercase tracking-wider group-hover:translate-x-1 transition-transform">
                           View Design
                           <ChevronRightIcon className="w-4 h-4 ml-1" />
                         </span>

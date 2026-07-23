@@ -64,6 +64,7 @@
 56. [July 21 Homepage Workflow Copy, Header Search, and HeroCanvas Optimization](#current-status-2026-07-21--homepage-workflow-copy-header-search-and-herocanvas-optimization)
 57. [July 22 Design Gallery SEO Landing Pages](#current-status-2026-07-22--design-gallery-seo-landing-pages)
 58. [July 23 Saved Design Photo Placeholder Screenshot Refresh](#current-status-2026-07-23--saved-design-photo-placeholder-screenshot-refresh)
+59. [July 23 Design Detail and Gallery Visual Refresh](#current-status-2026-07-23--design-detail-and-gallery-visual-refresh)
 
 ---
 
@@ -167,6 +168,56 @@ Commands run successfully after the placeholder path fix:
 pnpm exec tsc --noEmit
 pnpm lint
 ```
+
+---
+
+## Current Status (2026-07-23) - Design Detail and Gallery Visual Refresh
+
+This session refreshed the public design detail page and the parent `/designs` listing pages so the SEO landing pages feel more intentional and premium after the July 22 crawlability work.
+
+### Files Updated
+
+- `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx`
+  - Reworked the hydrated design detail page into a product-detail layout with warm stone background, breadcrumb, gold eyebrow text, stronger serif title, larger preview area, and a sticky action/spec panel.
+  - Removed the drop shadow from the main design preview image.
+  - Replaced the previous accordion header SVGs with a consistent subtle gold/neutral icon treatment for:
+    - About This Design
+    - Product Information
+    - Price Quote
+    - Personalization Options
+- `components/DesignContentBlock.tsx`
+  - Replaced the bright Helpful Resources icons with quieter Heroicons in a circular gold/stone style.
+  - Applied the same icon treatment to content sections such as Names, Dates & Verse Fit, Motif Placement, Photo Guidelines, Cemetery Compliance, and Care & Longevity.
+- `app/designs/page.tsx`
+- `app/designs/[productType]/page.tsx`
+- `app/designs/[productType]/[category]/page.tsx`
+  - Applied the same warm stone/gold visual language to the parent design index, product category list, and category design grid.
+  - Kept the pages server-rendered with crawlable `Link` cards so the visual refresh does not undo the SEO fixes.
+  - Added mobile top padding so the content starts below the floating mobile menu.
+
+### Design Direction
+
+- Use warm stone page backgrounds (`#f7f5f0`), white/stone panels, subtle borders, and restrained gold accents.
+- Keep design listings editorial and product-focused rather than looking like a generic admin grid.
+- Preserve image legibility with warm radial preview backgrounds and no heavy shadow treatment.
+- Do not introduce client-only grids or router-only card navigation on canonical SEO pages.
+
+### Verification
+
+Commands run successfully after the visual refresh:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Visual checks were captured with Playwright for the detail page and listing pages, including desktop and mobile states:
+
+- `C:\tmp\design-detail-after-15s.png`
+- `C:\tmp\design-detail-mobile-after-padding.png`
+- `C:\tmp\designs-index-styled.png`
+- `C:\tmp\designs-category-styled.png`
+- `C:\tmp\designs-index-mobile-styled.png`
 
 ---
 
