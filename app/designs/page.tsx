@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/MobileNavToggle';
-import DesignsTreeNav from '#/components/DesignsTreeNav';
+import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
 import { PRODUCT_STATS } from '#/lib/saved-designs-data';
 import {
   getCategoryTitle,
@@ -12,9 +12,27 @@ import {
   groupDesignsByCategory,
   groupDesignsByProduct,
 } from '#/lib/design-seo';
-import DesignsPageClient from './DesignsPageClient';
 
 export const revalidate = 86400;
+
+function matchesDesignSearch(
+  design: ReturnType<typeof getSeoReadyDesigns>[number],
+  query: string,
+): boolean {
+  const needle = query.toLowerCase();
+  return [
+    design.title,
+    design.slug,
+    design.productName,
+    design.productSlug,
+    design.category,
+    design.shapeName ?? '',
+    ...design.motifNames,
+  ]
+    .join(' ')
+    .toLowerCase()
+    .includes(needle);
+}
 
 export async function generateMetadata({
   searchParams,
@@ -94,12 +112,149 @@ export default async function DesignsPage({
 }) {
   const { q } = await searchParams;
   if (q?.trim()) {
-    return <DesignsPageClient initialQuery={q} />;
+    const query = q.trim();
+    const designs = getSeoReadyDesigns();
+    const results = designs.filter((design) => matchesDesignSearch(design, query)).slice(0, 120);
+
+    return (
+      <>
+        <MobileNavToggle>
+          <ServerDesignsTreeNav />
+        </MobileNavToggle>
+        <aside
+          className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
+          style={{ width: '400px' }}
+        >
+          <ServerDesignsTreeNav />
+        </aside>
+
+        <main className="min-h-screen bg-[#f7f5f0] md:ml-[400px]">
+          <div className="container mx-auto max-w-7xl px-4 pb-14 pt-20 md:px-8 md:py-12">
+            <nav className="mb-8 flex items-center gap-2 text-sm text-stone-500" aria-label="Breadcrumb">
+              <Link href="/" className="font-light tracking-wide transition-colors hover:text-stone-950">
+                Home
+              </Link>
+              <ChevronRightIcon className="h-4 w-4" />
+              <Link href="/designs" className="font-light tracking-wide transition-colors hover:text-stone-950">
+                Memorial Designs
+              </Link>
+              <ChevronRightIcon className="h-4 w-4" />
+              <span className="font-medium tracking-wide text-stone-950">Search</span>
+            </nav>
+
+            <header className="mb-8 max-w-4xl">
+              <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#9b7a24]">
+                Search memorial designs
+              </p>
+              <h1 className="mb-5 font-serif text-4xl font-light tracking-tight text-stone-950 md:text-6xl">
+                Search Results for &quot;{query}&quot;
+              </h1>
+              <p className="max-w-3xl text-lg font-light leading-relaxed text-stone-700 md:text-xl">
+                Browse matching headstone, plaque and monument templates. Open a design to personalise
+                inscriptions, photos, motifs and layout details.
+              </p>
+              <p className="mt-5 text-sm font-light text-stone-600">
+                {results.length.toLocaleString()} matching designs shown
+              </p>
+            </header>
+
+            <section aria-labelledby="design-search-heading" className="mb-10">
+              <div className="rounded-lg border border-stone-200 bg-white p-4 shadow-sm md:p-5">
+                <h2 id="design-search-heading" className="sr-only">
+                  Search memorial designs
+                </h2>
+                <form action="/designs" method="get" className="flex flex-col gap-3 sm:flex-row">
+                  <label htmlFor="design-search" className="sr-only">
+                    Search by product, theme, motif or style
+                  </label>
+                  <div className="relative flex-1">
+                    <MagnifyingGlassIcon
+                      className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-stone-500"
+                      aria-hidden="true"
+                    />
+                    <input
+                      id="design-search"
+                      name="q"
+                      type="search"
+                      defaultValue={query}
+                      placeholder="Search by flower, religious, photo, veteran, heart..."
+                      className="h-12 w-full rounded-lg border border-stone-300 bg-[#fbfaf7] pl-12 pr-4 text-base text-stone-950 outline-none transition-colors placeholder:text-stone-500 focus:border-[#9b7a24] focus:bg-white"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="inline-flex h-12 items-center justify-center rounded-lg border border-stone-950 bg-stone-950 px-6 text-sm font-medium uppercase tracking-[0.16em] text-white transition-colors hover:border-[#8a6b1f] hover:bg-[#8a6b1f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
+                  >
+                    Search
+                  </button>
+                </form>
+              </div>
+            </section>
+
+            {results.length === 0 ? (
+              <div className="rounded-lg border border-stone-200 bg-white p-8">
+                <p className="text-lg font-light text-stone-700">No designs matched this search.</p>
+                <Link
+                  href="/designs"
+                  className="mt-5 inline-flex rounded-lg border border-stone-950 bg-stone-950 px-5 py-3 text-sm font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-[#8a6b1f] hover:bg-[#8a6b1f]"
+                >
+                  Browse all designs
+                </Link>
+              </div>
+            ) : (
+              <section aria-labelledby="search-results-heading">
+                <h2 id="search-results-heading" className="sr-only">
+                  Matching memorial designs
+                </h2>
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {results.map((design) => {
+                    const categoryTitle = getCategoryTitle(design.category);
+                    const product = getProductSeoInfo(design.productSlug);
+
+                    return (
+                      <Link
+                        key={design.id}
+                        href={`/designs/${design.productSlug}/${design.category}/${design.slug}`}
+                        className="group overflow-hidden rounded-lg border border-stone-200 bg-white transition-all duration-300 hover:border-[#d8c487] hover:shadow-lg"
+                      >
+                        <div className="relative aspect-[4/3] bg-[radial-gradient(circle_at_50%_28%,#ffffff_0%,#f4f0e7_52%,#e6e0d3_100%)]">
+                          <Image
+                            src={`/screenshots/v2026-3d/${design.id}_small.png`}
+                            alt={`${design.title} memorial design preview`}
+                            fill
+                            className="object-contain p-4"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+                          />
+                        </div>
+                        <div className="p-6">
+                          <p className="mb-2 text-xs font-medium uppercase tracking-[0.16em] text-[#8a6b1f]">
+                            {product.shortName}
+                          </p>
+                          <h3 className="mb-2 font-serif text-xl font-light text-stone-950 transition-colors group-hover:text-[#8a6b1f]">
+                            {design.title}
+                          </h3>
+                          <p className="text-sm font-light leading-relaxed text-stone-600">
+                            {categoryTitle} template with {design.inscriptionCount} inscription{' '}
+                            {design.inscriptionCount === 1 ? 'area' : 'areas'}
+                            {design.motifNames.length > 0 ? ` and motifs including ${design.motifNames.slice(0, 3).join(', ')}` : ''}.
+                          </p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+          </div>
+        </main>
+      </>
+    );
   }
 
   const designs = getSeoReadyDesigns();
   const productGroups = groupDesignsByProduct(designs);
   const topCategories = groupDesignsByCategory(designs).slice(0, 12);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://forevershining.org';
   const quickSearches = [
     'flowers',
     'religious',
@@ -109,11 +264,92 @@ export default async function DesignsPage({
     'heart',
   ];
 
+  const faqItems = [
+    {
+      question: 'Can each memorial design be personalised?',
+      answer:
+        'Yes. Each design can be customised with names, dates, inscriptions, verses, motifs, photos, materials and layout adjustments before a proof is prepared for production.',
+    },
+    {
+      question: 'What types of memorials are included in the design gallery?',
+      answer:
+        'The collection includes headstone designs, bronze plaque designs, traditional engraved plaques, laser-etched monuments, pet memorials and other cemetery memorial templates.',
+    },
+    {
+      question: 'Can I preview a headstone or plaque before ordering?',
+      answer:
+        'Yes. Designs can be opened in the online designer to review the layout, personalise the wording and preview the memorial before requesting a proof or placing an order.',
+    },
+  ];
+  const structuredData = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'CollectionPage',
+      name: 'Memorial Design Collection',
+      description:
+        'Browse customisable headstone, plaque and monument designs by product, memorial theme, material and finish.',
+      url: `${baseUrl}/designs`,
+      mainEntity: {
+        '@type': 'ItemList',
+        itemListElement: productGroups.map(([productSlug, productDesigns], index) => {
+          const product = getProductSeoInfo(productSlug);
+          return {
+            '@type': 'ListItem',
+            position: index + 1,
+            name: product.name,
+            url: `${baseUrl}/designs/${productSlug}`,
+            numberOfItems: productDesigns.length,
+          };
+        }),
+      },
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Home',
+          item: baseUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Memorial Designs',
+          item: `${baseUrl}/designs`,
+        },
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.answer,
+        },
+      })),
+    },
+  ];
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}
+      />
       <MobileNavToggle>
-        <DesignsTreeNav />
+        <ServerDesignsTreeNav />
       </MobileNavToggle>
+      <aside
+        className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
+        style={{ width: '400px' }}
+      >
+        <ServerDesignsTreeNav />
+      </aside>
 
       <main className="bg-[#f7f5f0] min-h-screen md:ml-[400px]">
         <div className="container mx-auto px-4 pb-14 pt-20 md:px-8 md:py-12 max-w-7xl">
@@ -215,7 +451,6 @@ export default async function DesignsPage({
                         fill
                         className="object-contain p-6"
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        unoptimized
                       />
                     </div>
                     <div className="flex flex-1 flex-col p-6">
@@ -291,6 +526,43 @@ export default async function DesignsPage({
                   <span className="font-light">{label}</span>
                 </Link>
               ))}
+            </div>
+          </section>
+
+          <section className="mt-14 grid gap-10 border-t border-stone-200 pt-10 lg:grid-cols-[1.15fr_0.85fr]">
+            <div>
+              <h2 className="mb-4 text-2xl font-serif font-light text-stone-950">
+                Custom Memorial Designs for Headstones, Plaques and Monuments
+              </h2>
+              <div className="space-y-4 text-sm font-light leading-7 text-stone-700 md:text-base">
+                <p>
+                  Forever Shining memorial designs are built as practical starting points for families choosing
+                  a personalised cemetery memorial. Browse by product type, tribute theme, material and finish,
+                  then open any layout in the online designer to adjust the inscription, motif placement, photos
+                  and overall balance.
+                </p>
+                <p>
+                  The gallery includes laser-etched black granite headstones, traditional engraved headstones,
+                  bronze memorial plaques, stone plaques, monuments and pet memorials. Each template is designed
+                  to help you compare proportions and wording before a final proof is prepared for manufacture.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h2 className="mb-4 text-2xl font-serif font-light text-stone-950">
+                Memorial Design Questions
+              </h2>
+              <div className="space-y-4">
+                {faqItems.map((item) => (
+                  <details key={item.question} className="rounded-lg border border-stone-200 bg-white p-5">
+                    <summary className="cursor-pointer text-sm font-medium text-stone-950">
+                      {item.question}
+                    </summary>
+                    <p className="mt-3 text-sm font-light leading-6 text-stone-600">{item.answer}</p>
+                  </details>
+                ))}
+              </div>
             </div>
           </section>
         </div>

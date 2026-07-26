@@ -131,6 +131,9 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
 
   // Check if we're on /designs route
   const isDesignsRoute = pathname?.startsWith('/designs');
+  const designRouteParts = pathname?.split('/').filter(Boolean) ?? [];
+  const isSeoDesignsListingRoute =
+    designRouteParts[0] === 'designs' && designRouteParts.length <= 3;
   const isMemorialsRoute = pathname?.startsWith('/memorials');
   const isAdminRoute = pathname?.startsWith('/admin');
 
@@ -139,7 +142,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
 
   const isDesignShareRoute = pathname?.startsWith('/design/');
 
-  if (isAdminRoute || isDesignShareRoute || isMemorialsRoute) {
+  if (isAdminRoute || isDesignShareRoute || isMemorialsRoute || isSeoDesignsListingRoute) {
     return null;
   }
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
 import MobileNavToggle from '#/components/MobileNavToggle';
-import DesignsTreeNav from '#/components/DesignsTreeNav';
+import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
 import {
   getCategoryDescription,
   getCategoryTitle,
@@ -116,8 +116,14 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
   return (
     <>
       <MobileNavToggle>
-        <DesignsTreeNav />
+        <ServerDesignsTreeNav />
       </MobileNavToggle>
+      <aside
+        className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
+        style={{ width: '400px' }}
+      >
+        <ServerDesignsTreeNav />
+      </aside>
 
       <main className="bg-[#f7f5f0] overflow-y-auto min-h-screen md:ml-[400px]">
         <div className="container mx-auto px-4 pb-14 pt-20 md:px-8 md:py-12 max-w-7xl">
@@ -170,7 +176,6 @@ export default async function ProductTypePage({ params }: ProductPageProps) {
                         fill
                         className="object-contain p-4"
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-                        unoptimized
                       />
                     </div>
                     <div className="p-6">
