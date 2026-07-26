@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { createPortal } from 'react-dom';
 import {
   ArrowTopRightOnSquareIcon,
@@ -28,9 +28,9 @@ interface LoadDesignButtonProps {
   /**
    * 'floating' (default) renders the fixed top-right canvas button.
    * 'menu' renders an inline full-width button styled for the designer sidebar
-   * main menu.
+   * main menu. 'nav' renders the compact design gallery nav action.
    */
-  variant?: 'floating' | 'menu';
+  variant?: 'floating' | 'menu' | 'nav';
 }
 
 /** Tree grouped by category first (used in popup) */
@@ -164,6 +164,7 @@ function sortCategoryEntries(entries: [string, CategoryTree[string]][]): [string
 
 export default function LoadDesignButton({ label = 'Load Design', variant = 'floating' }: LoadDesignButtonProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState('');
@@ -180,7 +181,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
 
   const { isLocalhost, hiddenIds, hideDesign, favoriteIds, toggleFavorite } = useHiddenDesigns();
 
-  // Get current product from store for filtering
+  // Get current product from store for filtering in the designer canvas.
   const productId = useHeadstoneStore((s) => s.productId);
 
   const allDesigns = useMemo(() => {
@@ -198,13 +199,25 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
   }, [isOpen, mlIndex.size]);
 
   const hasMLFilters = mlType !== '' || mlStyle !== '' || mlMotif !== '';
+  const routeProductSlug = useMemo(() => {
+    if (!pathname?.startsWith('/designs/')) return null;
+
+    const productSlug = pathname.split('/').filter(Boolean)[1];
+    if (!productSlug || productSlug === 'guide') return null;
+
+    return allDesigns.some((design) => design.productSlug === productSlug) ? productSlug : null;
+  }, [allDesigns, pathname]);
+  const isDesignGalleryRoute = pathname === '/designs' || pathname?.startsWith('/designs/');
 
   const filteredDesigns = useMemo(() => {
     let result = allDesigns;
 
-    // Filter by current product when no search/ML filters are active
+    // Filter by URL product on design gallery pages. On /designs, show all products.
+    // On designer canvas pages, keep the existing current-product behavior.
     const needle = search.trim().toLowerCase();
-    if (!needle && !hasMLFilters && productId) {
+    if (routeProductSlug) {
+      result = result.filter((d) => d.productSlug === routeProductSlug);
+    } else if (!needle && !hasMLFilters && !isDesignGalleryRoute && productId) {
       result = result.filter((d) => d.productId === productId);
     }
 
@@ -237,7 +250,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
     }
 
     return result;
-  }, [allDesigns, search, mlType, mlStyle, mlMotif, mlIndex, hasMLFilters, productId]);
+  }, [allDesigns, search, mlType, mlStyle, mlMotif, mlIndex, hasMLFilters, routeProductSlug, isDesignGalleryRoute, productId]);
 
   const tree = useMemo(() => buildCategoryTree(filteredDesigns), [filteredDesigns]);
   const categoryEntries = useMemo(() => sortCategoryEntries(Object.entries(tree)), [tree]);
@@ -245,14 +258,20 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
 
   const favoriteDesigns = useMemo(() => {
     if (favoriteIds.size === 0) return [];
-    return allDesigns
+    const designs = routeProductSlug
+      ? allDesigns.filter((d) => d.productSlug === routeProductSlug)
+      : !isDesignGalleryRoute && productId
+        ? allDesigns.filter((d) => d.productId === productId)
+        : allDesigns;
+
+    return designs
       .filter((d) => favoriteIds.has(d.id))
       .map((d) => ({
         id: d.id,
         displayTitle: buildDesignTitle(d.shapeName, d.slug),
         metadata: d,
       }));
-  }, [allDesigns, favoriteIds]);
+  }, [allDesigns, favoriteIds, routeProductSlug, isDesignGalleryRoute, productId]);
 
   // Auto-expand Popular when it has designs
   useEffect(() => {
@@ -313,22 +332,89 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
     setIsOpen(false);
   };
 
+  const useGalleryModalStyle = Boolean(isDesignGalleryRoute);
+  const modalClasses = {
+    overlay: useGalleryModalStyle
+      ? 'fixed inset-0 z-[9999] flex items-center justify-center bg-stone-950/35 px-4 py-6 backdrop-blur-sm'
+      : 'fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm',
+    panel: useGalleryModalStyle
+      ? 'relative flex h-[82vh] w-full max-w-5xl flex-col overflow-hidden rounded-lg border border-stone-200 bg-[#f7f5f0] text-stone-950 shadow-2xl'
+      : 'relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10',
+    header: useGalleryModalStyle
+      ? 'relative flex items-center justify-between border-b border-stone-200 bg-white px-6 py-5 md:px-7'
+      : 'relative flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-7',
+    title: useGalleryModalStyle
+      ? 'text-3xl font-serif font-light tracking-tight text-stone-950 md:text-4xl'
+      : 'text-2xl font-serif text-white md:text-[1.75rem]',
+    bodyText: useGalleryModalStyle ? 'text-stone-600' : 'text-white/70',
+    accentText: useGalleryModalStyle ? 'text-[#8a6b1f]' : 'text-[#f3d48f]',
+    closeButton: useGalleryModalStyle
+      ? 'absolute right-4 top-4 rounded-full border border-stone-300 bg-white p-1.5 text-stone-500 transition-colors hover:border-stone-950 hover:text-stone-950 disabled:opacity-40 cursor-pointer'
+      : 'absolute right-4 top-4 rounded-full border border-white/25 bg-black/25 p-1.5 text-white/70 transition-colors hover:border-white/60 hover:text-white disabled:opacity-40 cursor-pointer',
+    searchWrap: useGalleryModalStyle
+      ? 'border-b border-stone-200 bg-white px-6 py-4 md:px-7'
+      : 'border-b border-white/10 px-6 py-4 md:px-7',
+    searchIcon: useGalleryModalStyle ? 'text-stone-500' : 'text-white/40',
+    searchInput: useGalleryModalStyle
+      ? 'w-full rounded-lg border border-stone-300 bg-[#fbfaf7] py-3.5 pl-10 pr-3 text-sm text-stone-950 placeholder:text-stone-500 focus:border-[#9b7a24] focus:bg-white focus:outline-none'
+      : 'w-full rounded-xl border border-white/15 bg-white/[0.03] py-3.5 pl-10 pr-3 text-sm text-white placeholder:text-white/40 focus:border-[#d4af37]/50 focus:outline-none focus:ring-1 focus:ring-[#d4af37]/25',
+    filterButtonBase: useGalleryModalStyle
+      ? 'shrink-0 rounded-lg border p-2.5 transition'
+      : 'shrink-0 rounded-xl border p-2.5 transition',
+    filterButtonActive: useGalleryModalStyle
+      ? 'border-[#9b7a24] bg-[#f7f5f0] text-[#8a6b1f]'
+      : 'border-[#d4af37]/50 bg-[#d4af37]/15 text-[#f3d48f]',
+    filterButtonIdle: useGalleryModalStyle
+      ? 'border-stone-300 bg-[#fbfaf7] text-stone-500 hover:border-stone-950 hover:text-stone-950'
+      : 'border-white/15 bg-white/[0.03] text-white/50 hover:text-white/80',
+    content: useGalleryModalStyle
+      ? 'min-h-0 flex-1 overflow-y-auto px-6 py-4 md:px-7'
+      : 'min-h-0 flex-1 overflow-y-auto px-6 py-4 md:px-7',
+    emptyText: useGalleryModalStyle ? 'text-sm text-stone-600' : 'text-sm text-white/70',
+    categoryPanel: useGalleryModalStyle
+      ? 'rounded-lg border border-stone-200 bg-white shadow-sm'
+      : 'rounded-2xl border border-white/10 bg-white/[0.03]',
+    categoryHeader: useGalleryModalStyle
+      ? 'flex w-full items-center gap-2 px-4 py-3 text-left text-stone-950 cursor-pointer'
+      : 'flex w-full items-center gap-2 px-4 py-3 text-left text-white cursor-pointer',
+    categoryChevronOpen: useGalleryModalStyle ? 'h-4 w-4 text-[#8a6b1f]' : 'h-4 w-4 text-[#d4af37]/70',
+    categoryChevronClosed: useGalleryModalStyle ? 'h-4 w-4 text-stone-500' : 'h-4 w-4 text-white/50',
+    countPill: useGalleryModalStyle
+      ? 'rounded-full border border-stone-200 bg-[#f7f5f0] px-2 py-0.5 text-xs text-stone-600'
+      : 'rounded-full border border-white/10 bg-white/[0.05] px-2 py-0.5 text-xs text-white/70',
+    expandedPanel: useGalleryModalStyle ? 'border-t border-stone-100 p-4' : 'border-t border-white/10 p-4',
+    card: useGalleryModalStyle
+      ? 'group relative flex flex-col overflow-hidden rounded-lg border border-stone-200 bg-white transition-all duration-300 hover:border-[#d8c487] hover:shadow-lg'
+      : 'group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40',
+    thumb: useGalleryModalStyle
+      ? 'relative aspect-[4/3] w-full overflow-hidden bg-[radial-gradient(circle_at_50%_28%,#ffffff_0%,#f4f0e7_52%,#e6e0d3_100%)]'
+      : 'relative aspect-[4/3] w-full overflow-hidden bg-[#cccccc]',
+    cardFooter: useGalleryModalStyle ? 'px-3 py-2 bg-white' : 'px-3 py-2',
+    cardTitle: useGalleryModalStyle ? 'block truncate text-xs font-medium text-stone-900' : 'block truncate text-xs font-medium text-white/90',
+    cardDate: useGalleryModalStyle ? 'mt-0.5 block text-[10px] text-stone-500' : 'mt-0.5 block text-[10px] text-white/35',
+    hoverAction: useGalleryModalStyle
+      ? 'pointer-events-auto rounded-full border border-stone-950 bg-stone-950 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-white shadow-lg transition hover:border-[#8a6b1f] hover:bg-[#8a6b1f] disabled:opacity-50 cursor-pointer'
+      : 'pointer-events-auto rounded-full border-2 border-[#d4af37] bg-black px-4 py-2 text-xs font-semibold tracking-wide text-white shadow-lg backdrop-blur-sm transition hover:bg-[#d4af37]/25 disabled:opacity-50 cursor-pointer',
+  };
+
   const modalContent = !isOpen
     ? null
     : createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm">
-          <div className="relative flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10">
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent"
-            />
-            <div className="relative flex items-center justify-between border-b border-white/10 px-6 py-5 md:px-7">
+        <div className={modalClasses.overlay}>
+          <div className={modalClasses.panel}>
+            {!useGalleryModalStyle && (
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent"
+              />
+            )}
+            <div className={modalClasses.header}>
               <div>
-                <h2 className="text-2xl font-serif text-white md:text-[1.75rem]">Load Design</h2>
-                <p className="mt-1 text-sm leading-relaxed text-white/70">
+                <h2 className={modalClasses.title}>Load Design</h2>
+                <p className={`mt-1 text-sm leading-relaxed ${modalClasses.bodyText}`}>
                   {totalCount.toLocaleString()} designs available
-                  {productId && !search.trim() && !hasMLFilters && filteredDesigns.length > 0 && (
-                    <span className="ml-1 text-[#f3d48f]">
+                  {(routeProductSlug || (!isDesignGalleryRoute && productId)) && !search.trim() && !hasMLFilters && filteredDesigns.length > 0 && (
+                    <span className={`ml-1 ${modalClasses.accentText}`}>
                       · {filteredDesigns[0].productName}
                     </span>
                   )}
@@ -337,31 +423,31 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
               <button
                 onClick={closeModal}
                 disabled={loading}
-                className="absolute right-4 top-4 rounded-full border border-white/25 bg-black/25 p-1.5 text-white/70 transition-colors hover:border-white/60 hover:text-white disabled:opacity-40 cursor-pointer"
+                className={modalClasses.closeButton}
                 aria-label="Close load design dialog"
               >
                 <XMarkIcon className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="border-b border-white/10 px-6 py-4 md:px-7">
+            <div className={modalClasses.searchWrap}>
               <div className="relative flex items-center gap-2">
                 <div className="relative flex-1">
-                  <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/40" />
+                  <MagnifyingGlassIcon className={`pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${modalClasses.searchIcon}`} />
                   <input
                     type="text"
                     value={search}
                     onChange={(event) => setSearch(event.target.value)}
                     placeholder="Search by title, category, product, tags, or ID..."
-                    className="w-full rounded-xl border border-white/15 bg-white/[0.03] py-3.5 pl-10 pr-3 text-sm text-white placeholder:text-white/40 focus:border-[#d4af37]/50 focus:outline-none focus:ring-1 focus:ring-[#d4af37]/25"
+                    className={modalClasses.searchInput}
                   />
                 </div>
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`shrink-0 rounded-xl border p-2.5 transition ${
+                  className={`${modalClasses.filterButtonBase} ${
                     showFilters || hasMLFilters
-                      ? 'border-[#d4af37]/50 bg-[#d4af37]/15 text-[#f3d48f]'
-                      : 'border-white/15 bg-white/[0.03] text-white/50 hover:text-white/80'
+                      ? modalClasses.filterButtonActive
+                      : modalClasses.filterButtonIdle
                   }`}
                   title="ML Filters"
                 >
@@ -371,14 +457,14 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
 
               {/* ML Filter dropdowns */}
               {showFilters && (
-                <div className="mt-3 space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                <div className={useGalleryModalStyle ? 'mt-3 space-y-3 rounded-lg border border-stone-200 bg-[#fbfaf7] p-4' : 'mt-3 space-y-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4'}>
                   <div className="flex items-center gap-2 mb-2">
-                    <SparklesIcon className="h-3.5 w-3.5 text-[#f3d48f]" />
-                    <span className="text-xs text-[#f3d48f]/80 uppercase tracking-wider font-medium">ML Category Filters</span>
+                    <SparklesIcon className={useGalleryModalStyle ? 'h-3.5 w-3.5 text-[#8a6b1f]' : 'h-3.5 w-3.5 text-[#f3d48f]'} />
+                    <span className={useGalleryModalStyle ? 'text-xs text-[#8a6b1f] uppercase tracking-wider font-medium' : 'text-xs text-[#f3d48f]/80 uppercase tracking-wider font-medium'}>ML Category Filters</span>
                     {hasMLFilters && (
                       <button
                         onClick={() => { setMlType(''); setMlStyle(''); setMlMotif(''); }}
-                        className="ml-auto text-xs text-white/50 hover:text-white/80 underline underline-offset-2"
+                        className={useGalleryModalStyle ? 'ml-auto text-xs text-stone-500 hover:text-stone-950 underline underline-offset-2' : 'ml-auto text-xs text-white/50 hover:text-white/80 underline underline-offset-2'}
                       >
                         Clear
                       </button>
@@ -388,7 +474,9 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                     <select
                       value={mlType}
                       onChange={(e) => setMlType(e.target.value)}
-                      className={`rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlType ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
+                      className={useGalleryModalStyle
+                        ? `rounded-lg border px-2 py-2 text-xs focus:border-[#9b7a24] focus:outline-none ${mlType ? 'border-[#9b7a24] bg-white text-[#8a6b1f]' : 'border-stone-300 bg-white text-stone-700'}`
+                        : `rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlType ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
                     >
                       <option value="">All Types</option>
                       {mlCategories.types.map((t) => (
@@ -398,7 +486,9 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                     <select
                       value={mlStyle}
                       onChange={(e) => setMlStyle(e.target.value)}
-                      className={`rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlStyle ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
+                      className={useGalleryModalStyle
+                        ? `rounded-lg border px-2 py-2 text-xs focus:border-[#9b7a24] focus:outline-none ${mlStyle ? 'border-[#9b7a24] bg-white text-[#8a6b1f]' : 'border-stone-300 bg-white text-stone-700'}`
+                        : `rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlStyle ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
                     >
                       <option value="">All Styles</option>
                       {mlCategories.styles.map((s) => (
@@ -408,7 +498,9 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                     <select
                       value={mlMotif}
                       onChange={(e) => setMlMotif(e.target.value)}
-                      className={`rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlMotif ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
+                      className={useGalleryModalStyle
+                        ? `rounded-lg border px-2 py-2 text-xs focus:border-[#9b7a24] focus:outline-none ${mlMotif ? 'border-[#9b7a24] bg-white text-[#8a6b1f]' : 'border-stone-300 bg-white text-stone-700'}`
+                        : `rounded-lg border px-2 py-2 text-xs focus:border-[#d4af37]/60 focus:outline-none [&>option]:bg-neutral-900 [&>option]:text-white ${mlMotif ? 'border-[#d4af37]/50 bg-[#d4af37]/10 text-[#f3d48f]' : 'border-white/15 bg-black/40 text-white'}`}
                     >
                       <option value="">All Motifs</option>
                       {mlCategories.motifs.map((m) => (
@@ -420,29 +512,29 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
               )}
             </div>
 
-            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4 md:px-7">
-              {error ? <p className="mb-3 text-sm text-red-300">{error}</p> : null}
+            <div className={modalClasses.content}>
+              {error ? <p className={useGalleryModalStyle ? 'mb-3 text-sm text-red-700' : 'mb-3 text-sm text-red-300'}>{error}</p> : null}
 
               {/* Popular / Favorites drawer */}
               {favoriteDesigns.length > 0 && !search.trim() && (
-                <div className="mb-3 rounded-2xl border border-[#d4af37]/30 bg-[#d4af37]/5">
+                <div className={useGalleryModalStyle ? 'mb-3 rounded-lg border border-[#d8c487] bg-white shadow-sm' : 'mb-3 rounded-2xl border border-[#d4af37]/30 bg-[#d4af37]/5'}>
                   <button
                     onClick={() => toggleNode('popular')}
-                    className="flex w-full items-center gap-2 px-4 py-3 text-left text-[#f3d48f] cursor-pointer"
+                    className={useGalleryModalStyle ? 'flex w-full items-center gap-2 px-4 py-3 text-left text-[#8a6b1f] cursor-pointer' : 'flex w-full items-center gap-2 px-4 py-3 text-left text-[#f3d48f] cursor-pointer'}
                   >
                     {expandedNodes.has('popular') ? (
-                      <ChevronDownIcon className="h-4 w-4 text-[#d4af37]/70" />
+                      <ChevronDownIcon className={useGalleryModalStyle ? 'h-4 w-4 text-[#8a6b1f]' : 'h-4 w-4 text-[#d4af37]/70'} />
                     ) : (
-                      <ChevronRightIcon className="h-4 w-4 text-[#d4af37]/70" />
+                      <ChevronRightIcon className={useGalleryModalStyle ? 'h-4 w-4 text-[#8a6b1f]' : 'h-4 w-4 text-[#d4af37]/70'} />
                     )}
-                    <StarIconSolid className="h-4 w-4 text-[#d4af37]" />
+                    <StarIconSolid className={useGalleryModalStyle ? 'h-4 w-4 text-[#8a6b1f]' : 'h-4 w-4 text-[#d4af37]'} />
                     <span className="flex-1 text-sm font-medium">Popular</span>
-                    <span className="rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-2 py-0.5 text-xs text-[#f3d48f]/80">
+                    <span className={useGalleryModalStyle ? 'rounded-full border border-stone-200 bg-[#f7f5f0] px-2 py-0.5 text-xs text-stone-600' : 'rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 px-2 py-0.5 text-xs text-[#f3d48f]/80'}>
                       {favoriteDesigns.length}
                     </span>
                   </button>
                   {expandedNodes.has('popular') && (
-                    <div className="border-t border-[#d4af37]/20 p-4">
+                    <div className={useGalleryModalStyle ? 'border-t border-stone-100 p-4' : 'border-t border-[#d4af37]/20 p-4'}>
                       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                         {favoriteDesigns.map((design) => {
                           const ts = Number(design.id);
@@ -452,10 +544,10 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                           return (
                             <div
                               key={design.id}
-                              className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40"
+                              className={modalClasses.card}
                             >
                               {/* Thumbnail */}
-                              <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#cccccc]">
+                              <div className={modalClasses.thumb}>
                                 {design.metadata.preview ? (
                                   <img
                                     src={getPopupPreviewSrc(design.id, design.metadata.preview)}
@@ -489,7 +581,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                                   <button
                                     onClick={() => handleLoadDesign(design.id)}
                                     disabled={loading}
-                                    className="pointer-events-auto rounded-full border-2 border-[#d4af37] bg-black px-4 py-2 text-xs font-semibold tracking-wide text-white shadow-lg backdrop-blur-sm transition hover:bg-[#d4af37]/25 disabled:opacity-50 cursor-pointer"
+                                    className={modalClasses.hoverAction}
                                   >
                                     Open Design
                                   </button>
@@ -522,12 +614,12 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                               </div>
 
                               {/* Card footer */}
-                              <div className="px-3 py-2">
-                                <span className="block truncate text-xs font-medium text-white/90">
+                              <div className={modalClasses.cardFooter}>
+                                <span className={modalClasses.cardTitle}>
                                   {design.displayTitle}
                                 </span>
                                 {dateLabel && (
-                                  <span className="mt-0.5 block text-[10px] text-white/35">
+                                  <span className={modalClasses.cardDate}>
                                     {dateLabel}
                                   </span>
                                 )}
@@ -542,7 +634,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
               )}
 
               {categoryEntries.length === 0 ? (
-                <p className="text-sm text-white/70">No matching designs found.</p>
+                <p className={modalClasses.emptyText}>No matching designs found.</p>
               ) : (
                 <div className="space-y-3">
                   {categoryEntries.map(([categorySlug, categoryNode]) => {
@@ -560,34 +652,34 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                     };
 
                     return (
-                      <div key={categorySlug} className="rounded-2xl border border-white/10 bg-white/[0.03]">
+                      <div key={categorySlug} className={modalClasses.categoryPanel}>
                         {/* Category header */}
                         <button
                           onClick={() => toggleNode(catKey)}
-                          className="flex w-full items-center gap-2 px-4 py-3 text-left text-white cursor-pointer"
+                          className={modalClasses.categoryHeader}
                         >
                           {isCatExpanded ? (
-                            <ChevronDownIcon className="h-4 w-4 text-[#d4af37]/70" />
+                            <ChevronDownIcon className={modalClasses.categoryChevronOpen} />
                           ) : (
-                            <ChevronRightIcon className="h-4 w-4 text-white/50" />
+                            <ChevronRightIcon className={modalClasses.categoryChevronClosed} />
                           )}
                           <span className="flex-1 text-sm font-medium">{categoryNode.categoryLabel}</span>
-                          <span className="rounded-full border border-white/10 bg-white/[0.05] px-2 py-0.5 text-xs text-white/70">
+                          <span className={modalClasses.countPill}>
                             {designs.length}
                           </span>
                         </button>
 
                         {/* Expanded: thumbnail grid */}
                         {isCatExpanded && (
-                          <div className="border-t border-white/10 p-4">
+                          <div className={modalClasses.expandedPanel}>
                             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                               {designs.map((design) => (
                                 <div
                                   key={design.id}
-                                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-black/25 transition-all duration-300 hover:border-[#d4af37]/30 hover:shadow-lg hover:shadow-black/40"
+                                  className={modalClasses.card}
                                 >
                                   {/* Thumbnail */}
-                                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#cccccc]">
+                                  <div className={modalClasses.thumb}>
                                     {design.metadata.preview ? (
                                       <img
                                         src={getPopupPreviewSrc(design.id, design.metadata.preview)}
@@ -621,7 +713,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                                       <button
                                         onClick={() => handleLoadDesign(design.id)}
                                         disabled={loading}
-                                        className="pointer-events-auto rounded-full border-2 border-[#d4af37] bg-black px-4 py-2 text-xs font-semibold tracking-wide text-white shadow-lg backdrop-blur-sm transition hover:bg-[#d4af37]/25 disabled:opacity-50 cursor-pointer"
+                                        className={modalClasses.hoverAction}
                                       >
                                         Open Design
                                       </button>
@@ -668,11 +760,11 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
                                   </div>
 
                                   {/* Card footer */}
-                                  <div className="px-3 py-2">
-                                    <span className="block truncate text-xs font-medium text-white/90">
+                                  <div className={modalClasses.cardFooter}>
+                                    <span className={modalClasses.cardTitle}>
                                       {design.displayTitle}
                                     </span>
-                                    <span className="mt-0.5 block text-[10px] text-white/35">
+                                    <span className={modalClasses.cardDate}>
                                       {formatDate(design.id)}
                                     </span>
                                   </div>
@@ -693,6 +785,20 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
       );
 
   const buttonLabel = loading ? 'Loading...' : label;
+  const buttonClassName =
+    variant === 'menu'
+      ? `inline-flex w-full items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all border-white/20 text-gray-200 hover:border-white/40 hover:bg-white/5 disabled:cursor-wait disabled:opacity-60 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100`
+      : variant === 'nav'
+        ? `inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-950 bg-stone-950 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-[#8a6b1f] hover:bg-[#8a6b1f] disabled:cursor-wait disabled:opacity-60`
+        : `
+          fixed right-4 top-4 z-[100]
+          flex items-center gap-2 px-4 py-2.5
+          rounded-lg border-2
+          font-medium text-sm
+          transition-all duration-200
+          bg-black/50 border-amber-500/70 text-amber-100 hover:bg-amber-900/30 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 cursor-pointer backdrop-blur-sm
+          disabled:cursor-wait disabled:border-amber-500/40 disabled:text-amber-200/70
+        `;
 
   return (
     <>
@@ -709,19 +815,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
       <button
         onClick={openModal}
         disabled={loading}
-        className={
-          variant === 'menu'
-            ? `inline-flex w-full items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all border-white/20 text-gray-200 hover:border-white/40 hover:bg-white/5 disabled:cursor-wait disabled:opacity-60 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100`
-            : `
-          fixed right-4 top-4 z-[100]
-          flex items-center gap-2 px-4 py-2.5
-          rounded-lg border-2
-          font-medium text-sm
-          transition-all duration-200
-          bg-black/50 border-amber-500/70 text-amber-100 hover:bg-amber-900/30 hover:border-amber-400 hover:shadow-lg hover:shadow-amber-500/20 cursor-pointer backdrop-blur-sm
-          disabled:cursor-wait disabled:border-amber-500/40 disabled:text-amber-200/70
-        `
-        }
+        className={buttonClassName}
         aria-label={buttonLabel}
       >
         <DocumentArrowDownIcon className={`h-5 w-5 ${loading ? 'animate-bounce' : ''}`} aria-hidden="true" />

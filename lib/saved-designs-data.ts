@@ -10,6 +10,8 @@
  */
 /* eslint-disable @typescript-eslint/no-require-imports */
 
+import { SAVED_DESIGN_ML_TAGS, type SavedDesignMLTags } from './saved-designs-ml-tags';
+
 export type DesignCategory = 
   | 'biblical-memorial'
   | 'dove-memorial'
@@ -68479,36 +68481,163 @@ export function getDesignUrl(design: SavedDesignMetadata): string {
   return `/designs/${design.productSlug}/${design.category}/${design.slug}`;
 }
 
+function normalizeDesignText(value: string | undefined): string {
+  return (value || '').toLowerCase().replace(/[_-]+/g, ' ').trim();
+}
+
+function tokenizeDesignText(value: string | undefined): Set<string> {
+  const stopWords = new Set(['a', 'an', 'and', 'for', 'in', 'of', 'the', 'to', 'with']);
+  return new Set(
+    normalizeDesignText(value)
+      .split(/[^a-z0-9]+/)
+      .filter((token) => token.length > 2 && !stopWords.has(token))
+  );
+}
+
+function normalizeMotifName(motifName: string): string {
+  const normalized = normalizeDesignText(motifName);
+
+  if (normalized.endsWith('ies') && normalized.length > 4) {
+    return `${normalized.slice(0, -3)}y`;
+  }
+
+  if (normalized.endsWith('es') && normalized.length > 4) {
+    return normalized.slice(0, -2);
+  }
+
+  if (normalized.endsWith('s') && normalized.length > 3) {
+    return normalized.slice(0, -1);
+  }
+
+  return normalized;
+}
+
+function getMotifSet(design: SavedDesignMetadata): Set<string> {
+  return new Set(design.motifNames.map(normalizeMotifName).filter(Boolean));
+}
+
+function getSetOverlapScore(a: Set<string>, b: Set<string>): number {
+  if (a.size === 0 || b.size === 0) return 0;
+
+  let overlap = 0;
+  a.forEach((value) => {
+    if (b.has(value)) overlap += 1;
+  });
+
+  return overlap / Math.max(a.size, b.size);
+}
+
+function getShapeSimilarityScore(a: string | undefined, b: string | undefined): number {
+  const first = normalizeDesignText(a);
+  const second = normalizeDesignText(b);
+
+  if (!first || !second) return 0;
+  if (first === second) return 1;
+
+  const firstTokens = tokenizeDesignText(first);
+  const secondTokens = tokenizeDesignText(second);
+
+  return getSetOverlapScore(firstTokens, secondTokens);
+}
+
+function getAspectRatio(tags: SavedDesignMLTags | undefined): number | null {
+  if (!tags?.width || !tags.height || tags.height === 0) return null;
+  return tags.width / tags.height;
+}
+
+function getMLTagSimilarityScore(
+  currentTags: SavedDesignMLTags | undefined,
+  candidateTags: SavedDesignMLTags | undefined
+): number {
+  if (!currentTags || !candidateTags) return 0;
+
+  let score = 0;
+
+  if (currentTags.motif && candidateTags.motif) {
+    if (currentTags.motif === candidateTags.motif) {
+      score += 12;
+    } else {
+      score += getSetOverlapScore(
+        tokenizeDesignText(currentTags.motif),
+        tokenizeDesignText(candidateTags.motif)
+      ) * 4;
+    }
+  }
+
+  if (currentTags.style && currentTags.style === candidateTags.style) score += 6;
+  if (currentTags.type && currentTags.type === candidateTags.type) score += 5;
+  if (currentTags.orientation && currentTags.orientation === candidateTags.orientation) score += 2;
+
+  score += getShapeSimilarityScore(currentTags.shape, candidateTags.shape) * 6;
+
+  const currentAspect = getAspectRatio(currentTags);
+  const candidateAspect = getAspectRatio(candidateTags);
+  if (currentAspect && candidateAspect) {
+    const aspectDifference = Math.abs(currentAspect - candidateAspect);
+    score += Math.max(0, 3 - aspectDifference * 2);
+  }
+
+  return score;
+}
+
+function getNumericTimestamp(id: string): number {
+  const timestamp = Number(id);
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
 /**
- * Get related designs by various criteria
+ * Get related designs by ranked design similarity.
  */
 export function getRelatedDesigns(
   currentDesign: SavedDesignMetadata,
   limit: number = 6
 ): SavedDesignMetadata[] {
   const designs = Object.values(SAVED_DESIGNS);
-  
-  // Filter out current design and get related ones
-  const related = designs.filter(d => d.id !== currentDesign.id);
-  
-  // Prioritize designs with same product, same category, or similar content
-  const scored = related.map(d => {
-    let score = 0;
-    if (d.productSlug === currentDesign.productSlug) score += 3;
-    if (d.category === currentDesign.category) score += 2;
-    if (d.hasMotifs && currentDesign.hasMotifs) score += 1;
-    if (d.hasPhoto && currentDesign.hasPhoto) score += 1;
-    
-    // Bonus for matching motifs
-    const matchingMotifs = d.motifNames.filter(m => currentDesign.motifNames.includes(m));
-    score += matchingMotifs.length * 0.5;
-    
-    return { design: d, score };
-  });
-  
-  // Sort by score and return top results
+
+  const currentMotifs = getMotifSet(currentDesign);
+  const currentTitleTokens = tokenizeDesignText(currentDesign.title);
+  const currentCategoryTokens = tokenizeDesignText(currentDesign.category);
+  const currentMLTags = SAVED_DESIGN_ML_TAGS[currentDesign.id];
+
+  const scored = designs
+    .filter(d => d.id !== currentDesign.id)
+    .map(d => {
+      let score = 0;
+
+      if (d.productSlug === currentDesign.productSlug) {
+        score += 16;
+      } else if (d.productType === currentDesign.productType) {
+        score += 5;
+      }
+
+      if (d.category === currentDesign.category) score += 14;
+      if (d.mlDir === currentDesign.mlDir) score += 4;
+
+      score += getShapeSimilarityScore(currentDesign.shapeName, d.shapeName) * 10;
+
+      if (d.hasPhoto === currentDesign.hasPhoto) score += 4;
+      if (d.hasMotifs === currentDesign.hasMotifs) score += 3;
+      if (d.hasAdditions === currentDesign.hasAdditions) score += 2;
+      if (d.hasLogo === currentDesign.hasLogo) score += 1;
+
+      const motifOverlapScore = getSetOverlapScore(currentMotifs, getMotifSet(d));
+      score += motifOverlapScore * 8;
+
+      const inscriptionDifference = Math.abs(d.inscriptionCount - currentDesign.inscriptionCount);
+      score += Math.max(0, 5 - inscriptionDifference);
+
+      score += getSetOverlapScore(currentTitleTokens, tokenizeDesignText(d.title)) * 3;
+      score += getSetOverlapScore(currentCategoryTokens, tokenizeDesignText(d.category)) * 2;
+      score += getMLTagSimilarityScore(currentMLTags, SAVED_DESIGN_ML_TAGS[d.id]);
+
+      return { design: d, score };
+    });
+
   return scored
-    .sort((a, b) => b.score - a.score)
+    .sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return getNumericTimestamp(b.design.id) - getNumericTimestamp(a.design.id);
+    })
     .slice(0, limit)
     .map(s => s.design);
 }

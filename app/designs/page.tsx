@@ -132,23 +132,13 @@ export default async function DesignsPage({
             <h1 className="text-4xl md:text-6xl font-serif font-light text-stone-950 mb-5 tracking-tight">
               Memorial Design Collection
             </h1>
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-              <div>
-                <p className="text-lg md:text-xl text-stone-700 font-light max-w-3xl leading-relaxed">
-                  Browse headstone, plaque and monument designs by product, tribute theme, material and finish.
-                  Each template can be personalised online with inscriptions, motifs, photos and a live preview.
-                </p>
-                <p className="text-sm text-stone-600 mt-5 font-light">
-                  {designs.length.toLocaleString()} design templates across {productGroups.length} curated collections
-                </p>
-              </div>
-              <Link
-                href="/"
-                className="inline-flex min-h-12 items-center justify-center rounded-lg bg-stone-950 px-6 text-sm font-medium uppercase tracking-[0.16em] text-white transition-colors hover:bg-[#8a6b1f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-950"
-              >
-                Open 3D Designer
-              </Link>
-            </div>
+            <p className="text-lg md:text-xl text-stone-700 font-light max-w-3xl leading-relaxed">
+              Browse headstone, plaque and monument designs by product, tribute theme, material and finish.
+              Each template can be personalised online with inscriptions, motifs, photos and a live preview.
+            </p>
+            <p className="text-sm text-stone-600 mt-5 font-light">
+              {designs.length.toLocaleString()} design templates across {productGroups.length} curated collections
+            </p>
           </header>
 
           <section aria-labelledby="design-search-heading" className="mb-12">

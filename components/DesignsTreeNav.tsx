@@ -3,8 +3,9 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { ChevronRightIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
+import LoadDesignButton from '#/components/LoadDesignButton';
 import { getAllSavedDesigns } from '#/lib/saved-designs-data';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
@@ -89,6 +90,7 @@ function buildDesignTitle(shapeName: string | undefined, slug: string): string {
 
 export default function DesignsTreeNav() {
   const pathname = usePathname();
+  const router = useRouter();
   const [treeData, setTreeData] = useState<DesignTreeNode[]>([]);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(true);
@@ -198,6 +200,13 @@ export default function DesignsTreeNav() {
     });
   };
 
+  const handleProductSelect = (productKey: string, productPath: string) => {
+    toggleNode(productKey);
+    if (pathname !== productPath) {
+      router.push(productPath);
+    }
+  };
+
   const isActive = (path: string) => {
     return pathname?.startsWith(path);
   };
@@ -248,12 +257,7 @@ export default function DesignsTreeNav() {
           <h2 className="text-sm font-semibold text-stone-800 uppercase tracking-widest">
             Memorial Designs
           </h2>
-          <Link
-            href="/"
-            className="rounded-lg border border-stone-950 bg-stone-950 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-[#8a6b1f] hover:bg-[#8a6b1f]"
-          >
-            3D Designer
-          </Link>
+          <LoadDesignButton label="Load Design" variant="nav" />
         </div>
       </div>
       
@@ -268,7 +272,7 @@ export default function DesignsTreeNav() {
             <div key={productKey}>
               {/* Product Type Level */}
               <button
-                onClick={() => toggleNode(productKey)}
+                onClick={() => handleProductSelect(productKey, productPath)}
                 className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-[15px] transition-all ${
                   isActive(productPath) 
                     ? 'bg-stone-100 text-stone-950 font-semibold' 

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-23
+**Last Updated:** 2026-07-25
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -66,6 +66,120 @@
 58. [July 23 Saved Design Photo Placeholder Screenshot Refresh](#current-status-2026-07-23--saved-design-photo-placeholder-screenshot-refresh)
 59. [July 23 Design Detail and Gallery Visual Refresh](#current-status-2026-07-23--design-detail-and-gallery-visual-refresh)
 60. [July 23 Designs Index Search and CTA Polish](#current-status-2026-07-23--designs-index-search-and-cta-polish)
+61. [July 24 Related Design Ranking with ML Tags](#current-status-2026-07-24--related-design-ranking-with-ml-tags)
+62. [July 25 Designs Load Modal and Sidebar Integration](#current-status-2026-07-25--designs-load-modal-and-sidebar-integration)
+
+---
+
+## Current Status (2026-07-25) - Designs Load Modal and Sidebar Integration
+
+This session moved the finished-design loading workflow into the `/designs` gallery navigation and made the shared load modal adapt to the gallery's light visual style.
+
+### User-Facing Behavior
+
+- On `/designs`, the main-column `Open 3D Designer` / `Load Design` CTA has been removed.
+- The left `DesignsTreeNav` header button now says `Load Design` instead of `3D Designer`.
+- Clicking `Load Design` opens the existing saved-design browser modal.
+- On the root `/designs` page, the modal shows all products grouped by content category.
+- When a product is selected in the left nav, for example `Bronze Plaque`, the nav pushes to `/designs/bronze-plaque`.
+- On product-scoped gallery routes such as `/designs/bronze-plaque`, the load modal filters to that product and keeps text/ML searches inside that product scope.
+
+### Implementation Details
+
+- `components/DesignsTreeNav.tsx`
+  - Imports `LoadDesignButton`.
+  - Replaces the old `Link href="/"` 3D Designer CTA with `<LoadDesignButton label="Load Design" variant="nav" />`.
+  - Product top-level buttons now call `handleProductSelect(productKey, productPath)`, which toggles expansion and navigates to `/designs/{productSlug}`.
+- `components/LoadDesignButton.tsx`
+  - Uses `usePathname()` to detect `/designs` routes.
+  - Derives `routeProductSlug` from `/designs/{productSlug}` only when the slug exists in saved-design metadata.
+  - Keeps the old designer-canvas fallback: outside `/designs`, if no search/ML filters are active and `productId` exists in the headstone store, it filters by current product ID.
+  - Adds `variant="nav"` for the compact sidebar header button.
+  - Modal styling now branches:
+    - `/designs*`: light gallery modal with white/stone surfaces, stone borders, serif title, page-matching search field, white category rows, and gallery thumbnail cards.
+    - non-`/designs`: retains the dark/gold canvas modal style.
+
+### Verification
+
+Commands/checks completed:
+
+```bash
+pnpm exec tsc --noEmit
+```
+
+Playwright checks against `http://127.0.0.1:3000/designs`:
+
+- `/designs` modal: `2320 designs available`
+- selecting `Bronze Plaque` in the left nav navigates to `/designs/bronze-plaque`
+- `/designs/bronze-plaque` modal: `490 designs available · Bronze Plaque`
+- screenshots captured for closed and expanded light modal states:
+  - `C:\tmp\designs-load-modal-light-open.png`
+  - `C:\tmp\designs-load-modal-light-expanded.png`
+
+---
+
+## Current Status (2026-07-24) - Related Design Ranking with ML Tags
+
+This session improved the `/designs/{productSlug}/{category}/{slug}` detail pages' **Similar Designs To Compare** section.
+
+### How Similar Designs Are Selected
+
+- UI section lives in `components/DesignContentBlock.tsx`.
+- It calls `getRelatedDesigns(design, 6)` from `lib/saved-designs-data.ts`.
+- The previous behavior was deterministic, not random, but shallow:
+  - same product slug
+  - same SEO category
+  - both designs having photo/motifs
+  - exact motif-name overlap
+- Because many designs tied on those fields, the final order could feel arbitrary.
+
+### Current Ranking Signals
+
+`getRelatedDesigns()` now scores candidates using:
+
+- same product slug, then same product type fallback
+- same SEO category
+- same ML/source directory (`mlDir`)
+- same or similar shape
+- matching photo, motif, logo, and addition structure
+- normalized motif overlap (`flower` and `flowers` are treated closer)
+- similar inscription count
+- title/category token overlap
+- stable timestamp tie-breaker
+
+### ML Tag Index
+
+- Added `lib/saved-designs-ml-tags.ts`.
+- It is a compact generated lookup from:
+  - `public/ml/forevershining/ml.json`
+  - `public/ml/headstonesdesigner/ml.json`
+- It currently contains 630 source-matched saved-design IDs.
+- It is intentionally compact so design detail pages do not import the full `ml.json` files.
+
+The ML tag score uses:
+
+- `ml_motif` category, e.g. `Flowers`, `Religious`, `Hearts`
+- `ml_style`, e.g. `Bronze`, `Laser Etched Black Granite`
+- `ml_type`, e.g. `Plaque`, `Headstone`
+- ML shape, orientation, and aspect ratio
+
+### TFJS Model Note
+
+- `public/ml/forevershining/my-model.json` and `my-model.weights.bin` are not loaded in the design detail page path.
+- The model is a TFJS classifier with 3 numeric inputs (`ml_type`, `ml_style`, `ml_motif` indices) and 3018 output classes.
+- That model is useful for the smart-search/filter ranking path when all three ML filters are selected, but it is too heavy and too indirect for simple server-side related-design links.
+- For related designs, the readable `ml.json` classification fields are the useful signal.
+
+### Verification
+
+Commands run successfully:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm exec eslint lib\saved-designs-data.ts lib\saved-designs-ml-tags.ts --quiet
+```
+
+Sample checked: an ML-covered `Flowers` landscape plaque now returns other flower-category, landscape plaque designs first where ML tag coverage exists. Designs without ML tag coverage still use the metadata scorer.
 
 ---
 
@@ -239,6 +353,8 @@ This follow-up addressed the UX review of the main `/designs` page while preserv
   - Increased sidebar navigation contrast and readability for older users.
   - Strengthened product/category text color, active states, count badges, and icon contrast.
   - Restyled the sidebar `3D Designer` button as a visible dark CTA.
+
+**Superseded 2026-07-25:** the main-column CTA was removed, and the sidebar `3D Designer` CTA was replaced by `Load Design` opening the saved-design modal. Product selection now routes to `/designs/{productSlug}` and scopes the modal from the URL.
 
 ### UX Notes
 
@@ -5493,6 +5609,12 @@ Full scan of 23,086 designs found 18,090 potentially affected by the regex bug. 
 
 The Load Design popup now filters designs by the **current product ID** (not just broad product type). Previously selecting "Traditional Engraved Headstone" still showed "Laser Etched Black Granite" designs.
 
+**Updated 2026-07-25:** this remains true for non-`/designs` designer/canvas routes. On `/designs`, filtering is route-aware instead:
+
+- `/designs` shows all products by category.
+- `/designs/{productSlug}` filters by `productSlug`.
+- Search and ML filters stay within the selected route product.
+
 #### Implementation
 - `getProductTypeFromId()` in `LoadDesignButton.tsx` maps product IDs to their exact product type
 - Each design in `SAVED_DESIGNS` has a `productId` that is matched against the currently selected product
@@ -9923,9 +10045,24 @@ The ML smart search system provides intelligent filtering and ranking for the `/
 ## Load Design Popup
 
 ### Overview
-The Load Design modal (`components/LoadDesignButton.tsx`) is a searchable category-first browser for all 3,114+ saved designs. It opens from the canvas top-right corner and allows loading any design into the 3D editor. Styled with the HomeSplash dark luxury theme (April 2026): `rounded-3xl` gold-bordered container, gold gradient glow, eyebrow pill badge, gold-accented search/filters, serif title.
+The Load Design modal (`components/LoadDesignButton.tsx`) is a searchable category-first browser for saved designs. It allows loading any selected design into the 3D editor via `loadDesignById()` and then routes to `/design-menu`.
 
-**Product Filtering (2026-04-08):** The popup filters designs by the current product ID — selecting "Traditional Engraved Headstone" only shows headstone designs, not laser-etched or bronze plaque designs. Uses `getProductTypeFromId()` to map product IDs to exact types. Falls back to showing all designs if no product is selected.
+Current entry points:
+
+- Designer canvas/sidebar: `LoadDesignButton` still uses the dark/gold canvas modal style.
+- `/designs` gallery sidebar: `DesignsTreeNav` renders `<LoadDesignButton label="Load Design" variant="nav" />` in the header where the old `3D Designer` link used to be.
+
+**Product Filtering (updated 2026-07-25):**
+
+- On `/designs`, the modal shows all available designs grouped by category.
+- On `/designs/{productSlug}` and deeper gallery routes, the modal derives `routeProductSlug` from the URL and filters to that product. Text search and ML filters remain scoped to that product.
+- Outside `/designs`, the modal keeps the designer-canvas fallback: when no text/ML filters are active and a current `productId` exists in `useHeadstoneStore`, it filters by that product ID.
+- Product selection in `DesignsTreeNav` navigates to `/designs/{productSlug}` before opening/scoping the modal.
+
+**Styling (updated 2026-07-25):**
+
+- `/designs*` routes use a light gallery modal: white/stone surfaces, stone borders, serif title, page-matching search input, white category rows, and gallery-style thumbnail cards.
+- Non-`/designs` routes retain the dark HomeSplash/canvas-style modal: dark panel, gold accents, and dark cards.
 
 ### Tree Structure (Category-First — April 2026)
 Designs are organized in a **single-level collapsible tree** grouped by content category (not product type):
@@ -9944,7 +10081,7 @@ Designs are organized in a **single-level collapsible tree** grouped by content 
 
 **Category sort order** is controlled by `CATEGORY_ORDER` array — curated priority with Pets first, then family categories (mother, father, wife, husband, son, daughter, baby), then themes (memorial, rest-in-peace, in-loving-memory), then religious. Unlisted categories sort alphabetically at end.
 
-**Note:** The `/designs/` SEO catalog pages remain product-first (separate from the popup). Only the Load Design popup uses category-first grouping.
+**Note:** The `/designs/` SEO catalog pages remain product-first for navigation and crawlability. The Load Design popup itself stays category-first; product scope is applied from the route before category grouping.
 
 ### Design Categories (DesignCategory type)
 Defined in `lib/saved-designs-data.ts` as a union type. Current categories:
@@ -9986,7 +10123,7 @@ The "Pets" product (`productSlug: "pets"`, `productId: "135"`) contains **111 de
 ### Features
 
 #### Visual Grid Cards (April 2026)
-Each category expands into a responsive thumbnail grid (`grid-cols-2 sm:grid-cols-3`). Cards use `aspect-[4/3]` containers with `object-contain` on `bg-[#cccccc]` backgrounds for uniform appearance. Date is shown below each title (derived from the 13-digit timestamp ID).
+Each category expands into a responsive thumbnail grid (`grid-cols-2 sm:grid-cols-3`). Cards use `aspect-[4/3]` containers with `object-contain`. On `/designs*`, cards use the gallery's white/stone styling and radial thumbnail backgrounds. On non-gallery designer routes, cards retain the darker modal styling. Date is shown below each title (derived from the 13-digit timestamp ID).
 
 #### Thumbnails (April 2026)
 Thumbnails use `_small.png` files (300px wide, transparent, ~19KB avg, generated by `scripts/generate-png-thumbnails.js`). The `#cccccc` background provides contrast for transparent PNGs. Fallback chain on `<img>` `onError`:
@@ -9996,7 +10133,7 @@ Thumbnails use `_small.png` files (300px wide, transparent, ~19KB avg, generated
 4. Hide image element
 
 #### ML Category Filters
-Three filter dropdowns at the top (Type, Style, Motif) with dark backgrounds and gold (#DEBD68) active state styling.
+Three filter dropdowns at the top (Type, Style, Motif). On `/designs*`, filter controls use light stone/white styling with gold-brown active accents. On non-gallery routes, they retain dark backgrounds and gold active state styling.
 
 #### Popular Drawer
 A collapsible "Popular" drawer at the top of the scroll area displays favorited designs. **Auto-expands by default** when favorites exist (via `useEffect`). Uses the **same thumbnail grid layout** as regular categories (2-3 column responsive grid, aspect-4/3 cards, hover zoom, "Open Design" button). Styled with gold star icon and `primary` color accents.
@@ -10020,6 +10157,7 @@ After clicking "Open Design" on a card, the popup modal closes and a full-screen
 | File | Purpose |
 |------|---------|
 | `components/LoadDesignButton.tsx` | Main popup component with tree, search, filters, icons, 3D screenshot fallback chain |
+| `components/DesignsTreeNav.tsx` | `/designs` left nav; renders the compact `Load Design` header button and navigates product selections to `/designs/{productSlug}` |
 | `lib/useHiddenDesigns.ts` | Shared hook for hidden + favorite design state |
 | `lib/saved-designs-data.ts` | 2.6MB design catalog with `SAVED_DESIGNS`, `DesignCategory`, `DESIGN_CATEGORIES`, `CATEGORY_STATS`, `PRODUCT_STATS` |
 | `app/api/hidden-designs/route.ts` | REST API for hidden design list |
@@ -12623,4 +12761,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-23*
+*End of STARTER.md - Last updated: 2026-07-25*
