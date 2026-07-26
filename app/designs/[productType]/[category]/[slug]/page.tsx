@@ -64,6 +64,45 @@ function getSimplifiedProductType(productName: string): string {
   return productName;
 }
 
+function buildDesignSeoTitle({
+  shapeName,
+  categoryTitle,
+  simplifiedProduct,
+  productTypeDisplay,
+}: {
+  shapeName: string | null;
+  categoryTitle: string;
+  simplifiedProduct: string;
+  productTypeDisplay: string;
+}): string {
+  const productDescriptor =
+    productTypeDisplay === 'Headstone'
+      ? productTypeDisplay
+      : `${simplifiedProduct} ${productTypeDisplay}`;
+
+  return shapeName
+    ? `${shapeName} ${categoryTitle} ${productDescriptor} Design`
+    : `${categoryTitle} ${productDescriptor} Design`;
+}
+
+function buildDesignDescription({
+  seoTitle,
+  phraseFromSlug,
+  motifList,
+}: {
+  seoTitle: string;
+  phraseFromSlug: string | null;
+  motifList: string | null;
+}): string {
+  const motifText = motifList ? ` Features decorative motifs including ${motifList}.` : '';
+  const phraseText = phraseFromSlug ? ` Inspired by the wording "${phraseFromSlug}".` : '';
+  return `${seoTitle}. Personalise this memorial online with inscriptions, photos, motifs and a live 3D preview before proofing and manufacture.${motifText}${phraseText}`;
+}
+
+function truncateMetaDescription(description: string): string {
+  return description.length > 160 ? `${description.substring(0, 157)}...` : description;
+}
+
 interface SavedDesignPageProps {
   params: Promise<{
     productType: string; // Actually productSlug: 'bronze-plaque' | 'laser-etched-headstone' etc.
@@ -121,39 +160,25 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
     ? formatSlugForDisplay(slug.slice(shapeSlugPrefix.length))
     : null;
 
-  // Design-specific page title
-  // e.g. "Curved Gable – May Heavens Eternal Happiness Be Thine | Forever Shining"
-  const pageTitle = shapeDisplay && phraseFromSlug
-    ? `${shapeDisplay} – ${phraseFromSlug} | Forever Shining`
-    : shapeDisplay
-    ? `${shapeDisplay} ${categoryTitle} – ${simplifiedProduct} | Forever Shining`
-    : `${categoryTitle} – ${simplifiedProduct} ${productTypeDisplay} | Forever Shining`;
-
-  const shapeName = shapeDisplay;
-
-  // Build H1 equivalent (used in OpenGraph)
-  const h1Title = shapeDisplay
-    ? `${shapeDisplay} ${categoryTitle} – ${simplifiedProduct}`
-    : `${categoryTitle} – ${simplifiedProduct}${shapeName ? ` (${shapeName})` : ''}`;
-
   // Design-specific meta description using shape, motifs and verse from slug
   const motifList = design.motifNames?.length > 0
     ? design.motifNames.slice(0, 3).join(', ').replace(/,([^,]*)$/, ' and$1')
     : null;
 
-  let description = shapeDisplay
-    ? `${shapeDisplay} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`
-    : `${categoryTitle} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`;
-
-  if (motifList) description += ` with ${motifList}`;
-  description += '.';
-  if (phraseFromSlug) description += ` '${phraseFromSlug}.'`;
-  description += ' Personalise online with live preview.';
-
-  // Ensure description is within 160 chars
-  if (description.length > 160) {
-    description = description.substring(0, 157) + '...';
-  }
+  const seoTitle = buildDesignSeoTitle({
+    shapeName: shapeDisplay,
+    categoryTitle,
+    simplifiedProduct,
+    productTypeDisplay,
+  });
+  const description = truncateMetaDescription(
+    buildDesignDescription({
+      seoTitle,
+      phraseFromSlug,
+      motifList,
+    }),
+  );
+  const pageTitle = `${seoTitle} | Forever Shining`;
 
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
@@ -174,7 +199,7 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
       },
     },
     openGraph: {
-      title: h1Title,
+      title: seoTitle,
       description,
       url: canonicalUrl,
       siteName: 'Forever Shining',
@@ -185,13 +210,13 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
           url: `/screenshots/v2026-3d/${design.id}.png`,
           width: 1200,
           height: 630,
-          alt: `${categoryTitle} design preview`,
+          alt: `${seoTitle} preview`,
         }
       ],
     },
     twitter: {
       card: 'summary_large_image',
-      title: h1Title,
+      title: seoTitle,
       description,
       images: [`/screenshots/v2026-3d/${design.id}.png`],
     },
@@ -240,21 +265,6 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
     ? design.motifNames.slice(0, 3).join(', ').replace(/,([^,]*)$/, ' and$1')
     : null;
 
-  // Description for SSR content
-  let description = shapeName
-    ? `${shapeName} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`
-    : `${categoryTitle} ${simplifiedProduct.toLowerCase()} ${productTypeDisplay.toLowerCase()}`;
-  if (motifList) description += ` with ${motifList}`;
-  description += '.';
-  if (phraseFromSlug) description += ` '${phraseFromSlug}.'`;
-  description += ' Personalise online with live preview.';
-  if (description.length > 160) {
-    description = description.substring(0, 157) + '...';
-  }
-
-  // Build product title for structured data
-  const productTitle = `${categoryTitle} – ${shapeName ? `${shapeName}-Shaped ` : ''}${simplifiedProduct} ${productTypeDisplay}`;
-  
   // Determine material and color
   const material = simplifiedProduct.toLowerCase().includes('granite') ? 'Black granite' : 
                   simplifiedProduct.toLowerCase().includes('bronze') ? 'Bronze' :
@@ -282,13 +292,23 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   const baseUrl = 'https://forevershining.org';
   const canonicalUrl = `${baseUrl}${canonicalPath}`;
   
-  // Human-readable design title matching the client component
-  // e.g. "Cropped Peak – Dedicated Mother" from slug "cropped-peak-dedicated-mother"
-  const formattedH1 = shapeName && phraseFromSlug
+  const formattedH1 = buildDesignSeoTitle({
+    shapeName,
+    categoryTitle,
+    simplifiedProduct,
+    productTypeDisplay,
+  });
+  const shortDesignName = shapeName && phraseFromSlug
     ? `${shapeName} – ${phraseFromSlug}`
     : shapeName
     ? `${shapeName} – ${categoryTitle}`
     : formatSlugForDisplay(slug);
+  const description = buildDesignDescription({
+    seoTitle: formattedH1,
+    phraseFromSlug,
+    motifList,
+  });
+  const productTitle = formattedH1;
 
   // JSON-LD Structured Data
   const structuredData = {
@@ -299,7 +319,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         "@type": "Product",
         "@id": `${canonicalUrl}#product`,
         "name": productTitle,
-        "description": `Design a ${categoryTitle.toLowerCase()} in ${simplifiedProduct.toLowerCase()}. Add inscriptions, verses and motifs with live preview. Fast proofing & delivery.`,
+        "description": description,
         "brand": {
           "@type": "Brand",
           "name": "Forever Shining"
@@ -397,7 +417,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           {
             "@type": "ListItem",
             "position": 5,
-            "name": formattedH1,
+            "name": shortDesignName,
             "item": canonicalUrl
           }
         ]
@@ -409,7 +429,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         "url": `${baseUrl}/screenshots/v2026-3d/${design.id}.png`,
         "contentUrl": `${baseUrl}/screenshots/v2026-3d/${design.id}.png`,
         "name": `${productTitle} Preview`,
-        "description": `Preview of ${categoryTitle.toLowerCase()} design`,
+        "description": `Preview of ${formattedH1.toLowerCase()}`,
         "width": "1200",
         "height": "630"
       },
@@ -513,7 +533,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
               <span aria-hidden="true">›</span>
               <Link href={`/designs/${productSlug}/${category}`}>{categoryTitle}</Link>
               <span aria-hidden="true">›</span>
-              <span>{formattedH1}</span>
+              <span>{shortDesignName}</span>
             </nav>
 
             <h1 className="text-2xl md:text-4xl font-serif font-light text-slate-900 tracking-tight mb-2 md:mb-4">
@@ -534,12 +554,44 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={`/screenshots/v2026-3d/${design.id}.png`}
-            alt={`${categoryTitle} ${simplifiedProduct} ${productTypeDisplay} design preview`}
+            alt={`${formattedH1} preview`}
             width={600}
             height={400}
             className="rounded-lg shadow-md mb-8 max-w-full h-auto"
             loading="eager"
           />
+
+          <section aria-labelledby="about-design-heading" className="mb-8 max-w-3xl">
+            <h2 id="about-design-heading" className="text-xl font-semibold text-slate-800 mb-3">
+              About This Custom Memorial Design
+            </h2>
+            <div className="space-y-3 text-sm leading-7 text-slate-600">
+              <p>
+                This {categoryTitle.toLowerCase()} layout is a starting point for a personalised{' '}
+                {simplifiedProduct.toLowerCase()} {productTypeDisplay.toLowerCase()}. Use it to compare the
+                shape, inscription balance and decorative detail before opening the design tool for final changes.
+              </p>
+              <p>
+                You can adjust the wording, choose memorial fonts, add or remove headstone motifs, upload photos
+                where supported and review a live 3D preview before requesting a proof.
+              </p>
+              <p>
+                Browse more{' '}
+                <Link href={`/designs/${productSlug}/${category}`} className="font-medium text-slate-900 underline underline-offset-4">
+                  {categoryTitle.toLowerCase()} designs
+                </Link>
+                , compare other{' '}
+                <Link href={`/designs/${productSlug}`} className="font-medium text-slate-900 underline underline-offset-4">
+                  {simplifiedProduct.toLowerCase()} templates
+                </Link>
+                , or read the{' '}
+                <Link href="/designs/guide/buying-guide" className="font-medium text-slate-900 underline underline-offset-4">
+                  memorial buying guide
+                </Link>
+                .
+              </p>
+            </div>
+          </section>
 
           {/* Design Specifications */}
           <section aria-labelledby="specs-heading-ssr" className="mb-8">

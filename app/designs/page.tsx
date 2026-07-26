@@ -43,8 +43,8 @@ export async function generateMetadata({
   const hasSearchQuery = Boolean(q?.trim());
   const totalDesigns = Object.values(PRODUCT_STATS).reduce((sum, n) => sum + n, 0);
   
-  const title = 'Memorial Designs - Headstones, Plaques & Monuments | Forever Shining';
-  const description = `Explore ${totalDesigns.toLocaleString()} premium memorial designs including traditional headstones, laser-etched monuments, and bronze plaques. Customize with inscriptions, granite colors, and motifs. View in 3D before ordering.`;
+  const title = 'Custom Headstone & Memorial Designs | Plaques & Monuments | Forever Shining';
+  const description = `Browse ${totalDesigns.toLocaleString()} custom headstone, plaque and memorial designs. Personalise granite, bronze and stainless steel memorials online with inscriptions, motifs, photos and 3D preview.`;
   
   // Generate keywords from actual data
   const keywords = [
@@ -147,10 +147,10 @@ export default async function DesignsPage({
                 Search memorial designs
               </p>
               <h1 className="mb-5 font-serif text-4xl font-light tracking-tight text-stone-950 md:text-6xl">
-                Search Results for &quot;{query}&quot;
+                Custom Headstone & Memorial Design Results for &quot;{query}&quot;
               </h1>
               <p className="max-w-3xl text-lg font-light leading-relaxed text-stone-700 md:text-xl">
-                Browse matching headstone, plaque and monument templates. Open a design to personalise
+                Browse matching custom headstone, plaque and monument templates. Open a design to personalise
                 inscriptions, photos, motifs and layout details.
               </p>
               <p className="mt-5 text-sm font-light text-stone-600">
@@ -285,7 +285,7 @@ export default async function DesignsPage({
     {
       '@context': 'https://schema.org',
       '@type': 'CollectionPage',
-      name: 'Memorial Design Collection',
+              name: 'Custom Headstone & Memorial Designs',
       description:
         'Browse customisable headstone, plaque and monument designs by product, memorial theme, material and finish.',
       url: `${baseUrl}/designs`,
@@ -366,11 +366,11 @@ export default async function DesignsPage({
               Customisable memorial templates
             </p>
             <h1 className="text-4xl md:text-6xl font-serif font-light text-stone-950 mb-5 tracking-tight">
-              Memorial Design Collection
+              Custom Headstone & Memorial Designs
             </h1>
             <p className="text-lg md:text-xl text-stone-700 font-light max-w-3xl leading-relaxed">
-              Browse headstone, plaque and monument designs by product, tribute theme, material and finish.
-              Each template can be personalised online with inscriptions, motifs, photos and a live preview.
+              Browse custom headstone, plaque and monument designs by product, tribute theme, material and finish.
+              Each template can be personalised online with inscriptions, motifs, photos and a live 3D preview.
             </p>
             <p className="text-sm text-stone-600 mt-5 font-light">
               {designs.length.toLocaleString()} design templates across {productGroups.length} curated collections
@@ -537,14 +537,15 @@ export default async function DesignsPage({
               <div className="space-y-4 text-sm font-light leading-7 text-stone-700 md:text-base">
                 <p>
                   Forever Shining memorial designs are built as practical starting points for families choosing
-                  a personalised cemetery memorial. Browse by product type, tribute theme, material and finish,
-                  then open any layout in the online designer to adjust the inscription, motif placement, photos
-                  and overall balance.
+                  a personalised cemetery memorial. Browse custom memorial designs by product type, tribute theme,
+                  material and finish, then open any layout in the online design tool to adjust the inscription,
+                  motif placement, photos and overall balance.
                 </p>
                 <p>
                   The gallery includes laser-etched black granite headstones, traditional engraved headstones,
-                  bronze memorial plaques, stone plaques, monuments and pet memorials. Each template is designed
-                  to help you compare proportions and wording before a final proof is prepared for manufacture.
+                  bronze memorial plaques, stainless steel plaques, stone plaques, monuments and pet memorials.
+                  Each template is designed to help you compare proportions, headstone motifs and wording before
+                  a final proof is prepared for manufacture and delivery.
                 </p>
               </div>
             </div>
