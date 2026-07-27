@@ -132,7 +132,9 @@ a,
 
 @font-face {
   font-family: 'Garamond';
-  src: url('/fonts/Garamond.ttf') format('truetype');
+  src:
+    url('/fonts/Garamond.woff2') format('woff2'),
+    url('/fonts/Garamond.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;

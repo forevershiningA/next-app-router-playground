@@ -181,7 +181,6 @@ export default function HomeSplash() {
   const router = useRouter();
   const [showCanvas, setShowCanvas] = useState(false);
   const [rotation, setRotation] = useState(0);
-  const [isInViewport, setIsInViewport] = useState(true);
   const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
   const [isDayMode, setIsDayMode] = useState(false);
   const [heroSearchQuery, setHeroSearchQuery] = useState('');
@@ -205,38 +204,12 @@ export default function HomeSplash() {
   const closeModal = () => setActiveModal(null);
   const activeModalContent = activeModal ? HASH_MODAL_CONTENT[activeModal] : null;
 
-  // Only show canvas when on home page
   useEffect(() => {
-    // Small delay to ensure any previous canvas is cleaned up
-    const timer = setTimeout(() => {
-      setShowCanvas(true);
-    }, 200);
+    const timeoutId = globalThis.setTimeout(() => setShowCanvas(true), 900);
 
     return () => {
-      clearTimeout(timer);
+      globalThis.clearTimeout(timeoutId);
       setShowCanvas(false);
-    };
-  }, []);
-
-  // Viewport visibility detection
-  useEffect(() => {
-    const heroSection = document.querySelector('[role="banner"]');
-    if (!heroSection) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsInViewport(entry.isIntersecting);
-      },
-      {
-        threshold: 0.1, // Trigger when at least 10% is visible
-        rootMargin: '50px', // Start loading slightly before entering viewport
-      }
-    );
-
-    observer.observe(heroSection);
-
-    return () => {
-      observer.disconnect();
     };
   }, []);
 
@@ -332,6 +305,8 @@ export default function HomeSplash() {
               height={100}
               className="w-full h-auto select-none"
               priority
+              quality={75}
+              sizes="(min-width: 768px) 288px, (min-width: 640px) 224px, 208px"
               draggable={false}
               style={{ userSelect: 'none', pointerEvents: 'none' }}
             />
@@ -421,6 +396,7 @@ export default function HomeSplash() {
                   width={200}
                   height={62}
                   className="h-auto w-40"
+                  sizes="160px"
                 />
                 <button
                   type="button"
@@ -451,6 +427,7 @@ export default function HomeSplash() {
               <div className="mt-6 flex flex-col gap-3">
                 <Link
                   href="/select-product"
+                  prefetch={false}
                   onClick={() => setMobileMenuOpen(false)}
                   className="rounded-lg bg-[#cfac6c] px-5 py-3 text-center text-base font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
                 >
@@ -525,7 +502,7 @@ export default function HomeSplash() {
               
               {/* The Canvas Itself - Re-enable pointer events for the canvas specifically */}
               <div className="w-full h-full pointer-events-auto">
-              {showCanvas && isInViewport ? (
+              {showCanvas ? (
                 <>
                   <HeroCanvas rotation={rotation} />
                   {/* Rotation Controls - Subtle, elegant chevrons */}
@@ -549,7 +526,10 @@ export default function HomeSplash() {
                   </button>
                 </>
               ) : (
-                <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white mx-auto mt-[20vh]" />
+                <div className="relative mx-auto h-full w-full max-w-[520px]" aria-hidden="true">
+                  <div className="absolute left-1/2 top-1/2 h-[58%] w-[42%] -translate-x-1/2 -translate-y-1/2 rounded-t-[42%] rounded-b-lg border border-white/15 bg-gradient-to-b from-stone-600/70 via-stone-800/80 to-stone-950/90 shadow-2xl day:border-gray-300 day:from-stone-200 day:via-stone-300 day:to-stone-500" />
+                  <div className="absolute bottom-[18%] left-1/2 h-[8%] w-[62%] -translate-x-1/2 rounded-lg bg-black/35 blur-xl day:bg-gray-500/25" />
+                </div>
               )}
               </div>
             </div>
@@ -559,6 +539,7 @@ export default function HomeSplash() {
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full">
                 <Link
                   href="/select-product"
+                  prefetch={false}
                   className="w-auto rounded-lg bg-[#cfac6c] px-7 py-3.5 text-center text-sm font-semibold tracking-wide text-slate-950 transition-colors hover:bg-[#d7b979] sm:px-10 sm:py-4 sm:text-base"
                   aria-label="Start your free design"
                   style={{ letterSpacing: '0.05em' }}
@@ -622,6 +603,7 @@ export default function HomeSplash() {
               <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/select-product"
+                  prefetch={false}
                   className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
                 >
                   Start Design Process
@@ -662,7 +644,7 @@ export default function HomeSplash() {
                       <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[#cfac6c]/40 bg-[#cfac6c]/10 text-sm font-semibold text-[#cfac6c]">
                         {`0${index + 1}`}
                       </span>
-                      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-500 day:text-gray-400">
+                      <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-gray-300 day:text-gray-500">
                         {phase.eyebrow}
                       </span>
                     </div>
@@ -708,6 +690,7 @@ export default function HomeSplash() {
             <div className="flex flex-col gap-3 sm:flex-row lg:items-center">
               <Link
                 href="/select-product"
+                prefetch={false}
                 className="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-2.5 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]"
               >
                 Start Design Process
@@ -736,19 +719,19 @@ export default function HomeSplash() {
               </p>
               <div className="mt-6 flex items-center gap-3 text-sm">
                 <a href="https://www.instagram.com/forevershiningaus/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Instagram" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
-                  IG
+                  <span aria-hidden="true">IG</span>
                 </a>
                 <a href="https://www.facebook.com/ForeverShiningAustralia/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Facebook" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
-                  FB
+                  <span aria-hidden="true">FB</span>
                 </a>
                 <a href="https://www.pinterest.com/forevershining1/" target="_blank" rel="noreferrer" aria-label="Forever Shining on Pinterest" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
-                  PI
+                  <span aria-hidden="true">PI</span>
                 </a>
                 <a href="https://twitter.com/ForeverShiningA" target="_blank" rel="noreferrer" aria-label="Forever Shining on X" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
-                  X
+                  <span aria-hidden="true">X</span>
                 </a>
                 <a href="https://www.youtube.com/@forevershining/featured" target="_blank" rel="noreferrer" aria-label="Forever Shining on YouTube" className="w-9 h-9 rounded-full border border-white/20 text-white/80 flex items-center justify-center hover:border-[#d4af37] hover:text-[#d4af37] transition-colors cursor-pointer day:border-gray-300 day:text-gray-500 day:hover:border-amber-500 day:hover:text-amber-600">
-                  YT
+                  <span aria-hidden="true">YT</span>
                 </a>
               </div>
             </div>

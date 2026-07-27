@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-25
+**Last Updated:** 2026-07-27
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -68,6 +68,134 @@
 60. [July 23 Designs Index Search and CTA Polish](#current-status-2026-07-23--designs-index-search-and-cta-polish)
 61. [July 24 Related Design Ranking with ML Tags](#current-status-2026-07-24--related-design-ranking-with-ml-tags)
 62. [July 25 Designs Load Modal and Sidebar Integration](#current-status-2026-07-25--designs-load-modal-and-sidebar-integration)
+63. [July 26 Design Gallery SEO SSR and Deep Page SEO](#current-status-2026-07-26--design-gallery-seo-ssr-and-deep-page-seo)
+64. [July 27 Homepage Lighthouse Follow-up](#current-status-2026-07-27--homepage-lighthouse-follow-up)
+
+---
+
+## Current Status (2026-07-27) - Homepage Lighthouse Follow-up
+
+This session reviewed `lighthouse.json` for the live home page `https://forevershining.org/` and applied a small set of homepage performance/accessibility fixes. The Lighthouse report showed Performance `68`, Accessibility `96`, Best Practices `100`, SEO `100`, with the main issue being very high JavaScript blocking time (`Total Blocking Time: 2170 ms`). LCP was acceptable (`2.1 s`) and CLS was `0`, so the highest-value work is still reducing initial client JavaScript rather than changing layout or SEO metadata.
+
+### Changes Applied
+
+| File | Current Behavior |
+| --- | --- |
+| `app/_ui/HomeSplash.tsx` | `HeroCanvas` no longer mounts immediately on first paint. It now uses a deterministic `setTimeout(..., 900)` before rendering the dynamic 3D canvas, with a same-size static headstone placeholder during the short delay. |
+| `app/_ui/HomeSplash.tsx` | Heavy `/select-product` CTA links on the homepage use `prefetch={false}` to avoid pulling the large designer RSC payload during the home page load. |
+| `app/_ui/HomeSplash.tsx` | Header logo now has explicit `sizes` and uses `quality={75}`. Do not use `quality={60}` unless `next.config.ts` `images.qualities` is expanded; current allowed values are `[75, 90, 100]`. |
+| `app/_ui/HomeSplash.tsx` | Small workflow eyebrow labels were changed from `text-gray-500` to `text-gray-300` in dark mode to fix Lighthouse contrast warnings. |
+| `app/_ui/HomeSplash.tsx` | Footer social short labels (`IG`, `FB`, `PI`, `X`, `YT`) are wrapped in `aria-hidden="true"` so the visible abbreviation no longer conflicts with the full `aria-label`. |
+| `styles/globals.css` | Global CSS font loading now prefers `/fonts/Garamond.woff2` with `/fonts/Garamond.ttf` fallback. |
+| `public/fonts/Garamond.woff2` | New WOFF2 asset generated from the existing `public/fonts/Garamond.ttf`. Size is about `45 KB` versus about `196 KB` for the TTF. |
+| `components/HeroCanvas.tsx` | Important: the Drei/Troika 3D `<Text>` nodes still use `/fonts/Garamond.ttf`. A temporary switch to `.woff2` caused the real canvas to render blank after the placeholder disappeared. Keep 3D text on TTF unless tested with screenshots. |
+
+### HeroCanvas Regression Notes
+
+- The first delayed-loading attempt used `requestIdleCallback` plus an `IntersectionObserver` gate (`showCanvas && isInViewport`). This proved too fragile: the placeholder could remain forever if the observer state did not match expectations.
+- The current implementation intentionally uses a simple timer instead. This still reduces first-paint pressure but guarantees the canvas mounts.
+- Do not use `.woff2` for `components/HeroCanvas.tsx` text fonts without verifying Drei/Troika behavior. The observed failure mode was: static placeholder appears for about one second, then disappears, leaving no visible 3D headstone.
+- The CSS page font can use WOFF2 safely; the 3D geometry text path is a separate concern.
+
+### Remaining Lighthouse Opportunities
+
+- The real remaining performance work is deeper bundle splitting around the home page client component and `HeroCanvas`. `HomeSplash.tsx` is still a large client component, so a stronger future pass should split static sections into server components and isolate the interactive header/search/modal/canvas pieces.
+- The live Lighthouse report also showed a large shared JS execution cost from Next chunks and a large `/select-product?_rsc=...` prefetch. The prefetch part is addressed for the home CTAs; the shared chunk cost will require broader dependency/code-splitting work.
+- `chrome-extension://.../installHook.js` appeared in the Lighthouse report and should be ignored; rerun Lighthouse in a clean browser profile or CI context for reliable numbers.
+
+### Verification
+
+Commands completed successfully after the final fixes:
+
+```bash
+pnpm lint
+pnpm build
+pnpm type-check
+```
+
+Known local smoke-test caveat: attempts to capture a Playwright screenshot against `next start` on port `3001` were inconclusive in the sandbox. The server process accepted connections but the request hung with no logs. Production build and type-check passed; visual verification should be repeated in the normal local browser/dev environment after pulling these changes.
+
+### Files Changed In This Batch
+
+- `app/_ui/HomeSplash.tsx`
+- `components/HeroCanvas.tsx`
+- `styles/globals.css`
+- `public/fonts/Garamond.woff2`
+- `STARTER.md`
+
+### Do Not Regress
+
+- Keep `HeroCanvas` font props on `/fonts/Garamond.ttf`.
+- Keep `next/image` quality values aligned with `next.config.ts` `images.qualities`.
+- Keep `/select-product` homepage CTA prefetch disabled unless `/select-product` is substantially lightened.
+- If changing delayed canvas loading again, prefer a deterministic fallback path over idle/visibility-only gating.
+
+---
+
+## Current Status (2026-07-26) - Design Gallery SEO SSR and Deep Page SEO
+
+This session tightened the `/designs` SEO hub and the individual `/designs/{productSlug}/{category}/{slug}` design detail pages after reviewing live SEO concerns around thin content, client-side loading shells, title/H1 specificity, schema, image SEO, and CDN cache behavior.
+
+### Current SEO Route Behavior
+
+- `/designs`
+  - Server-renders the design hub with crawlable product cards, popular theme links, guide links, a GET search form, FAQ, and supporting SEO copy.
+  - H1 is now `Custom Headstone & Memorial Designs`.
+  - Title is now `Custom Headstone & Memorial Designs | Plaques & Monuments | Forever Shining`.
+  - Meta description targets custom headstone, plaque, memorial designs, granite/bronze/stainless steel materials, inscriptions, motifs, photos, and 3D preview.
+  - Query pages such as `/designs?q=flowers` are still `noindex,follow`, but now render search results server-side instead of importing the old client-only `DesignsPageClient`.
+- `/designs/[productType]`
+  - Uses a server-rendered sidebar and remains a crawlable product collection page.
+- `/designs/[productType]/[category]`
+  - Uses a server-rendered sidebar and remains a crawlable category grid.
+  - Category pages with too few designs still use the existing noindex logic.
+- `/designs/[productType]/[category]/[slug]`
+  - Keeps the heavy interactive `DesignPageClient` because it powers the live designer/detail experience.
+  - Also renders an SSR-visible SEO block before hydration with H1, description, image, specs, price guide, proof/delivery notes, and contextual internal links.
+  - H1/title generation now uses intent-focused names such as `Cropped Peak Religious Memorial Headstone Design | Forever Shining`.
+
+### New / Changed Files
+
+| File | Current Behavior |
+| --- | --- |
+| `components/ServerDesignsTreeNav.tsx` | Server-rendered `/designs` sidebar for public SEO listing pages. Uses native `details/summary`, crawlable `Link`s, and a lightweight `Start Design` link. It intentionally does not import `LoadDesignButton` to avoid pulling the heavy modal/client bundle into SEO listing pages. |
+| `app/designs/layout.tsx` | No longer a client component. The old `useEffect` body-class mutation was removed to reduce unnecessary JS on design routes. |
+| `app/designs/page.tsx` | Server-renders the main hub and server-side search results. Adds `CollectionPage`, `ItemList`, `BreadcrumbList`, and `FAQPage` JSON-LD. Adds bottom SEO copy and FAQ. Removes `unoptimized` from listing images so Next can serve optimized formats. |
+| `app/designs/[productType]/page.tsx` | Uses `ServerDesignsTreeNav` for desktop/mobile listing navigation and removes `unoptimized` from listing images. |
+| `app/designs/[productType]/[category]/page.tsx` | Uses `ServerDesignsTreeNav` for desktop/mobile listing navigation and removes `unoptimized` from listing images. |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | Improves individual design metadata, OpenGraph/Twitter title, Product schema, ImageObject schema, image alt text, and SSR-visible content. Adds `About This Custom Memorial Design` with contextual links to category/product/guide pages. |
+| `components/ConditionalNav.tsx` | Does not render the old global client `DesignsTreeNav` on `/designs`, `/designs/{productSlug}`, or `/designs/{productSlug}/{category}` because those pages now include their own server-rendered sidebar. Deep design pages still keep the client navigation/editor behavior. |
+| `middleware.ts` | Stops setting the `unit_system` cookie on public SEO paths (`/`, `/designs`, `/designs/{productSlug}`, `/designs/{productSlug}/{category}`, `/memorials/*`) to avoid unnecessary `Set-Cookie` and weaker public cache behavior. |
+
+### Important Superseded Notes
+
+- Supersedes the 2026-07-23 note that `/designs?q=...` uses `DesignsPageClient`; search is now server-rendered and still noindexed.
+- Supersedes the 2026-07-23 note that the sidebar loads client-side on canonical SEO listing pages. The listing sidebar is now server-rendered through `ServerDesignsTreeNav`.
+- The 2026-07-25 `LoadDesignButton` modal behavior still exists in `components/DesignsTreeNav.tsx` for client-heavy designer/detail contexts, but public SEO listing pages use the lighter `Start Design` link in `ServerDesignsTreeNav`.
+- Deep design pages still have a large First Load JS bundle because the page includes the interactive designer; this was intentionally not aggressively split in this pass.
+
+### Build / Verification
+
+Commands completed successfully after the SEO changes:
+
+```bash
+pnpm type-check
+pnpm build
+```
+
+Final build output for the key design SEO routes:
+
+| Route | First Load JS |
+| --- | ---: |
+| `/designs` | ~112 kB |
+| `/designs/[productType]` | ~112 kB |
+| `/designs/[productType]/[category]` | ~112 kB |
+| `/designs/[productType]/[category]/[slug]` | ~740 kB |
+
+Notes:
+
+- The listing routes dropped from the earlier ~716 kB client-heavy result to ~112 kB after replacing the client sidebar/search/modal path with server-rendered equivalents.
+- A local `next start` HTTP smoke test could not be completed inside the sandbox because launching `pnpm.exe` in the background hit an `EPERM` issue at `C:\Users\polcr`. TypeScript and production build validation passed.
 
 ---
 
@@ -12761,4 +12889,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-25*
+*End of STARTER.md - Last updated: 2026-07-27*
