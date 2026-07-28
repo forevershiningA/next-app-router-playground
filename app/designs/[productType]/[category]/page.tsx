@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRightIcon } from '@heroicons/react/24/outline';
-import MobileNavToggle from '#/components/MobileNavToggle';
+import DesignsIndexMobileNavToggle from '#/components/DesignsIndexMobileNavToggle';
 import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
 import {
   getCategoryDescription,
@@ -175,14 +175,12 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <>
-      <MobileNavToggle>
-        <ServerDesignsTreeNav />
-      </MobileNavToggle>
+      <DesignsIndexMobileNavToggle />
       <aside
         className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
         style={{ width: '400px' }}
       >
-        <ServerDesignsTreeNav />
+        <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
       </aside>
 
       <main className="bg-[#f7f5f0] overflow-y-auto min-h-screen md:ml-[400px]">
