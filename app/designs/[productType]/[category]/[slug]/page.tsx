@@ -2,7 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { getProductFromId } from '#/lib/product-utils';
-import DesignPageClient from './DesignPageClient';
+import StartSavedDesignButton from './StartSavedDesignButton';
 
 /**
  * Format slug for display - convert kebab-case to Title Case
@@ -741,22 +741,14 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
             <li>✓ Prices inc. GST — no hidden fees</li>
           </ul>
 
-          <a
-            href={canonicalUrl}
-            className="inline-block bg-slate-900 text-white px-6 py-3 rounded-lg font-medium hover:bg-slate-800 transition-colors"
+          <StartSavedDesignButton
+            designId={designId}
+            className="inline-block rounded-lg bg-slate-900 px-6 py-3 font-medium text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Personalise This Design
-          </a>
+          </StartSavedDesignButton>
         </div>
       </div>
-
-      <DesignPageClient
-        productSlug={productSlug}
-        category={category}
-        slug={design.slug}
-        designId={designId}
-        design={design}
-      />
     </>
   );
 }
