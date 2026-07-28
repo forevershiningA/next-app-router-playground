@@ -38,13 +38,15 @@ export async function getMotifCategory(
     if (response.ok) {
       const data = await response.json();
       const allFiles = data.motifs.map((m: any) => m.name);
-      const files = limit > 0 ? allFiles.slice(0, limit) : allFiles;
-      
-      return {
-        files,
-        totalCount: allFiles.length,
-        hasMore: allFiles.length > limit,
-      };
+      if (allFiles.length > 0) {
+        const files = limit > 0 ? allFiles.slice(0, limit) : allFiles;
+
+        return {
+          files,
+          totalCount: allFiles.length,
+          hasMore: allFiles.length > limit,
+        };
+      }
     }
   } catch (error) {
     console.warn(`Database API failed for ${category.name}, falling back to files.txt:`, error);

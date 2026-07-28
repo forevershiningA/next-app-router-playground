@@ -45,6 +45,15 @@ export function useMotifCategory({
 
   // Load initial files
   const loadFiles = useCallback(async () => {
+    if (categoryIndex < 0) {
+      setFiles([]);
+      setTotalCount(0);
+      setHasMore(false);
+      setError(null);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
@@ -62,7 +71,7 @@ export function useMotifCategory({
 
   // Load more files
   const loadMore = useCallback(async () => {
-    if (!hasMore || isLoading) return;
+    if (categoryIndex < 0 || !hasMore || isLoading) return;
 
     setIsLoading(true);
     setError(null);

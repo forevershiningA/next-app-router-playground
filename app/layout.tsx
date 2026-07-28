@@ -13,14 +13,12 @@ import ConditionalNav from '#/components/ConditionalNav';
 import MaterialsLoader from '#/components/MaterialsLoader';
 import ShapesLoader from '#/components/ShapesLoader';
 import BordersLoader from '#/components/BordersLoader';
-import MotifsLoader from '#/components/MotifsLoader';
 import { ThemeProvider } from '#/components/ThemeProvider';
 import { ThemeToggle } from '#/components/ThemeToggle';
 import {
   mapMaterialRecord,
   mapShapeRecord,
   mapBorderRecord,
-  mapMotifRecord,
 } from '#/lib/catalog-mappers';
 
 const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
@@ -57,17 +55,15 @@ export default async function RootLayout({
 
   let rawMaterials: Awaited<ReturnType<typeof catalog.materials.findMany>> = [];
   let rawShapes: Awaited<ReturnType<typeof catalog.shapes.findMany>> = [];
-  let rawMotifs: Awaited<ReturnType<typeof catalog.motifs.findMany>> = [];
 
   // Check if database is configured (skip in development without DATABASE_URL)
   const hasDatabase = Boolean(process.env.DATABASE_URL);
 
   if (hasDatabase) {
     try {
-      [rawMaterials, rawShapes, rawMotifs] = await Promise.all([
+      [rawMaterials, rawShapes] = await Promise.all([
         catalog.materials.findMany({ where: { isActive: true }, limit: 200 }),
         catalog.shapes.findMany({ where: { isActive: true }, limit: 200 }),
-        catalog.motifs.findMany({ where: { isActive: true }, limit: 10000 }),
       ]);
     } catch (error) {
       // Database query failed, will use _data.ts fallbacks below
@@ -85,11 +81,7 @@ export default async function RootLayout({
   const shapes = rawShapes.length > 0
     ? rawShapes.map(mapShapeRecord)
     : internalData.shapes.map(s => ({ id: s.id, name: s.name, category: s.category, image: s.image }));
-  
-  const motifs = rawMotifs.length > 0
-    ? rawMotifs.map(mapMotifRecord)
-    : []; // Motifs will be loaded separately
-  
+
   // Use borders from _data.ts (bronze borders for Bronze Plaque)
   const borders = internalData.borders.map((border) => ({
     id: border.id,
@@ -118,7 +110,6 @@ export default async function RootLayout({
             <MaterialsLoader materials={materials} />
             <ShapesLoader shapes={shapes} />
             <BordersLoader borders={borders} />
-            <MotifsLoader motifs={motifs} />
             <MobileHeader />
             <ConditionalNav items={demos} />
             <MainContent>

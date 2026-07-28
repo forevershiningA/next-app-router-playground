@@ -5,8 +5,15 @@ import {
   useHeadstoneStore,
   type MotifCatalogItem,
 } from '#/lib/headstone-store';
+import { data } from '#/app/_internal/_data';
+import {
+  getMotifSvgPath,
+  getMotifThumbnailPath,
+  type ProductFormula,
+} from '#/lib/motifs';
 import { getMotifCategoryName } from '#/lib/motif-translations';
 import { getMotifCategoryImage } from '#/lib/motif-category-image';
+import { useMotifCategory } from '#/lib/use-motifs';
 
 type MotifCategoryGroup = {
   id: string;
@@ -14,6 +21,7 @@ type MotifCategoryGroup = {
   previewUrl: string | null;
   category: string;
   motifs: MotifCatalogItem[];
+  sourceIndex: number;
 };
 
 interface MotifSelectorPanelProps {
@@ -28,8 +36,19 @@ export default function MotifSelectorPanel({
   );
 
   const categories = useMemo<MotifCategoryGroup[]>(() => {
+    if (motifs.length === 0) {
+      return data.motifs.map((motif, index) => ({
+        id: String(motif.id),
+        name: motif.name,
+        previewUrl: motif.img ?? null,
+        category: motif.src ?? motif.name,
+        motifs: [],
+        sourceIndex: index,
+      }));
+    }
+
     const categoryMap = new Map<string, MotifCategoryGroup>();
-    motifs.forEach((motif) => {
+    motifs.forEach((motif, index) => {
       const categoryId = motif.category ?? 'uncategorized';
       if (!categoryMap.has(categoryId)) {
         categoryMap.set(categoryId, {
@@ -38,6 +57,7 @@ export default function MotifSelectorPanel({
           previewUrl: motif.previewUrl ?? motif.svgUrl ?? null,
           category: motif.category,
           motifs: [],
+          sourceIndex: index,
         });
       }
       categoryMap.get(categoryId)!.motifs.push(motif);
@@ -57,7 +77,6 @@ export default function MotifSelectorPanel({
 
   const selectedCategory =
     categories.find((category) => category.id === selectedCategoryId) ?? null;
-  const individualMotifs = selectedCategory?.motifs ?? [];
 
   const selectedMotifs = useHeadstoneStore((s) => s.selectedMotifs);
   const addMotif = useHeadstoneStore((s) => s.addMotif);
@@ -68,6 +87,23 @@ export default function MotifSelectorPanel({
   const allowsColor = catalog?.product?.color === '1';
   // Use catalog's default color for motif thumbnails so they match the 3D scene
   const motifPreviewColor = catalog?.product?.defaultColor || '#c99d44';
+  const formula: ProductFormula = 'Laser';
+  const shouldUseLazyMotifs = Boolean(selectedCategory && selectedCategory.motifs.length === 0);
+  const {
+    files: lazyMotifFiles,
+    totalCount: lazyMotifTotalCount,
+    hasMore: lazyMotifsHasMore,
+    isLoading: lazyMotifsLoading,
+    error: lazyMotifsError,
+    loadMore: loadMoreLazyMotifs,
+  } = useMotifCategory({
+    categoryIndex: shouldUseLazyMotifs ? selectedCategory?.sourceIndex ?? -1 : -1,
+    formula,
+    initialLimit: 50,
+    loadMoreIncrement: 50,
+  });
+
+  const individualMotifs = selectedCategory?.motifs ?? [];
   const cardClass =
     'group flex min-h-[176px] flex-col overflow-hidden rounded-lg border text-left shadow-lg shadow-black/15 transition-all';
   const inactiveCardClass =
@@ -189,7 +225,104 @@ export default function MotifSelectorPanel({
           </div>
 
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
-            {individualMotifs.length === 0 ? (
+            {shouldUseLazyMotifs ? (
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-xs text-white/60 day:text-gray-500">
+                  <span>
+                    Showing {lazyMotifFiles.length} of {lazyMotifTotalCount} motifs
+                  </span>
+                  {lazyMotifsLoading && <span className="animate-pulse">Loading...</span>}
+                </div>
+                {lazyMotifsError && (
+                  <div className="rounded-lg bg-red-500/20 p-3 text-xs text-red-200 day:text-red-700">
+                    Error loading motifs: {lazyMotifsError.message}
+                  </div>
+                )}
+                {lazyMotifFiles.length === 0 && !lazyMotifsLoading ? (
+                  <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400">
+                    No motifs available in this category yet.
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2.5">
+                    {lazyMotifFiles.map((fileName) => {
+                      const svgPath = getMotifSvgPath(fileName);
+                      const thumbnailPath = getMotifThumbnailPath(fileName);
+                      const isSelected = selectedMotifs.some(
+                        (m) => m.svgPath === svgPath,
+                      );
+
+                      return (
+                        <button
+                          key={fileName}
+                          type="button"
+                          onClick={() => {
+                            if (isSelected) {
+                              const existing = selectedMotifs.find(
+                                (selected) => selected.svgPath === svgPath,
+                              );
+                              if (existing) removeMotif(existing.id);
+                              return;
+                            }
+                            addMotif(svgPath);
+                          }}
+                          className={`${cardClass} ${
+                            isSelected ? selectedCardClass : inactiveCardClass
+                          }`}
+                        >
+                          <div className={previewClass}>
+                            <div className="absolute inset-0 flex items-center justify-center p-4">
+                              {allowsColor ? (
+                                <div
+                                  className="absolute inset-4"
+                                  style={{
+                                    backgroundColor: motifPreviewColor,
+                                    WebkitMaskImage: `url(${thumbnailPath})`,
+                                    maskImage: `url(${thumbnailPath})`,
+                                    WebkitMaskRepeat: 'no-repeat',
+                                    maskRepeat: 'no-repeat',
+                                    WebkitMaskSize: 'contain',
+                                    maskSize: 'contain',
+                                    WebkitMaskPosition: 'center',
+                                    maskPosition: 'center',
+                                  }}
+                                />
+                              ) : (
+                                <img
+                                  src={thumbnailPath}
+                                  alt={fileName}
+                                  className="max-h-full max-w-full object-contain brightness-0 invert"
+                                  loading="lazy"
+                                />
+                              )}
+                            </div>
+                            {isSelected && (
+                              <div className="absolute top-2 right-2 rounded-full bg-[#D7B356] px-2 py-0.5 text-[10px] font-semibold text-black shadow-md">
+                                Added
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex min-h-[42px] flex-1 flex-col justify-center gap-2 p-2.5">
+                            <p className="text-[11px] font-semibold text-[#D7B356]">
+                              {isSelected ? 'Remove' : 'Add'}
+                            </p>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+                {lazyMotifsHasMore && (
+                  <button
+                    type="button"
+                    onClick={loadMoreLazyMotifs}
+                    disabled={lazyMotifsLoading}
+                    className="w-full rounded-lg bg-[#D7B356] px-4 py-2 text-xs font-semibold text-black transition-colors hover:bg-[#e1c46f] disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {lazyMotifsLoading ? 'Loading...' : `Load more (${lazyMotifTotalCount - lazyMotifFiles.length} remaining)`}
+                  </button>
+                )}
+              </div>
+            ) : individualMotifs.length === 0 ? (
               <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400">
                 No motifs available in this category yet.
               </div>
