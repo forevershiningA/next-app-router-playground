@@ -119,13 +119,13 @@ export default async function DesignsPage({
     return (
       <>
         <MobileNavToggle>
-          <ServerDesignsTreeNav />
+          <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
         </MobileNavToggle>
         <aside
           className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
           style={{ width: '400px' }}
         >
-          <ServerDesignsTreeNav />
+          <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
         </aside>
 
         <main className="min-h-screen bg-[#f7f5f0] md:ml-[400px]">
@@ -342,13 +342,13 @@ export default async function DesignsPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}
       />
       <MobileNavToggle>
-        <ServerDesignsTreeNav />
+        <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
       </MobileNavToggle>
       <aside
         className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
         style={{ width: '400px' }}
       >
-        <ServerDesignsTreeNav />
+        <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
       </aside>
 
       <main className="bg-[#f7f5f0] min-h-screen md:ml-[400px]">

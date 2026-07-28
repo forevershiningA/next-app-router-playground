@@ -95,7 +95,13 @@ function buildTreeData(): DesignTreeNode[] {
   });
 }
 
-export default function ServerDesignsTreeNav() {
+interface ServerDesignsTreeNavProps {
+  maxDesignLinksPerCategory?: number;
+}
+
+export default function ServerDesignsTreeNav({
+  maxDesignLinksPerCategory = 40,
+}: ServerDesignsTreeNavProps) {
   const treeData = buildTreeData();
 
   return (
@@ -163,25 +169,27 @@ export default function ServerDesignsTreeNav() {
                         </span>
                       </summary>
 
-                      <div className="mb-1 ml-3 mt-0.5 space-y-0.5 border-l border-slate-100 pl-3">
-                        {categoryData.designs.slice(0, 40).map((design) => (
-                          <Link
-                            key={`${productNode.productSlug}-${categoryKey}-${design.id}`}
-                            href={`/designs/${productNode.productSlug}/${categoryKey}/${design.slug}`}
-                            className="block rounded-md px-3 py-1.5 text-sm font-normal leading-relaxed text-stone-700 transition-all hover:bg-stone-50 hover:text-stone-950"
-                          >
-                            <span className="line-clamp-2">{design.title}</span>
-                          </Link>
-                        ))}
-                        {categoryData.designs.length > 40 ? (
-                          <Link
-                            href={categoryPath}
-                            className="block rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-[#8a6b1f]"
-                          >
-                            View all {categoryData.designs.length} designs
-                          </Link>
-                        ) : null}
-                      </div>
+                      {maxDesignLinksPerCategory > 0 ? (
+                        <div className="mb-1 ml-3 mt-0.5 space-y-0.5 border-l border-slate-100 pl-3">
+                          {categoryData.designs.slice(0, maxDesignLinksPerCategory).map((design) => (
+                            <Link
+                              key={`${productNode.productSlug}-${categoryKey}-${design.id}`}
+                              href={`/designs/${productNode.productSlug}/${categoryKey}/${design.slug}`}
+                              className="block rounded-md px-3 py-1.5 text-sm font-normal leading-relaxed text-stone-700 transition-all hover:bg-stone-50 hover:text-stone-950"
+                            >
+                              <span className="line-clamp-2">{design.title}</span>
+                            </Link>
+                          ))}
+                          {categoryData.designs.length > maxDesignLinksPerCategory ? (
+                            <Link
+                              href={categoryPath}
+                              className="block rounded-md px-3 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-[#8a6b1f]"
+                            >
+                              View all {categoryData.designs.length} designs
+                            </Link>
+                          ) : null}
+                        </div>
+                      ) : null}
                     </details>
                   );
                 })}
