@@ -15,11 +15,10 @@ const MEMORIAL_LINKS = [
   { label: 'Pet Memorials', href: '/memorials/pet-memorials' },
 ] as const;
 
-// FIX 1: Dynamic loader height to match the new responsive container logic
 const HeroCanvas = dynamic(() => import('#/components/HeroCanvas'), {
   ssr: false,
   loading: () => (
-    <div className="mx-auto flex items-center justify-center w-full h-[35vh] min-h-[280px] max-h-[450px]">
+    <div className="flex h-full w-full items-center justify-center" aria-hidden="true">
       <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
     </div>
   ),
@@ -179,7 +178,6 @@ const hasModalLinks = (
 
 export default function HomeSplash() {
   const router = useRouter();
-  const [showCanvas, setShowCanvas] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
   const [isDayMode, setIsDayMode] = useState(false);
@@ -203,15 +201,6 @@ export default function HomeSplash() {
 
   const closeModal = () => setActiveModal(null);
   const activeModalContent = activeModal ? HASH_MODAL_CONTENT[activeModal] : null;
-
-  useEffect(() => {
-    const timeoutId = globalThis.setTimeout(() => setShowCanvas(true), 900);
-
-    return () => {
-      globalThis.clearTimeout(timeoutId);
-      setShowCanvas(false);
-    };
-  }, []);
 
   useEffect(() => {
     if (!activeModal) return;
@@ -502,35 +491,26 @@ export default function HomeSplash() {
               
               {/* The Canvas Itself - Re-enable pointer events for the canvas specifically */}
               <div className="w-full h-full pointer-events-auto">
-              {showCanvas ? (
-                <>
-                  <HeroCanvas rotation={rotation} />
-                  {/* Rotation Controls - Subtle, elegant chevrons */}
-                  <button 
-                    onClick={rotateLeft}
-                    className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
-                    aria-label="Rotate headstone left to view different angles"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                    </svg>
-                  </button>
-                  <button 
-                    onClick={rotateRight}
-                    className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
-                    aria-label="Rotate headstone right to view different angles"
-                  >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </>
-              ) : (
-                <div className="relative mx-auto h-full w-full max-w-[520px]" aria-hidden="true">
-                  <div className="absolute left-1/2 top-1/2 h-[58%] w-[42%] -translate-x-1/2 -translate-y-1/2 rounded-t-[42%] rounded-b-lg border border-white/15 bg-gradient-to-b from-stone-600/70 via-stone-800/80 to-stone-950/90 shadow-2xl day:border-gray-300 day:from-stone-200 day:via-stone-300 day:to-stone-500" />
-                  <div className="absolute bottom-[18%] left-1/2 h-[8%] w-[62%] -translate-x-1/2 rounded-lg bg-black/35 blur-xl day:bg-gray-500/25" />
-                </div>
-              )}
+                <HeroCanvas rotation={rotation} />
+                {/* Rotation Controls - Subtle, elegant chevrons */}
+                <button 
+                  onClick={rotateLeft}
+                  className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
+                  aria-label="Rotate headstone left to view different angles"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button 
+                  onClick={rotateRight}
+                  className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
+                  aria-label="Rotate headstone right to view different angles"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
             </div>
             
