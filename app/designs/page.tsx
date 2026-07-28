@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import MobileNavToggle from '#/components/MobileNavToggle';
+import DesignsIndexMobileNavToggle from '#/components/DesignsIndexMobileNavToggle';
 import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
 import { PRODUCT_STATS } from '#/lib/saved-designs-data';
 import {
@@ -118,9 +118,7 @@ export default async function DesignsPage({
 
     return (
       <>
-        <MobileNavToggle>
-          <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
-        </MobileNavToggle>
+        <DesignsIndexMobileNavToggle />
         <aside
           className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
           style={{ width: '400px' }}
@@ -341,9 +339,7 @@ export default async function DesignsPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData).replace(/</g, '\\u003c') }}
       />
-      <MobileNavToggle>
-        <ServerDesignsTreeNav maxDesignLinksPerCategory={0} />
-      </MobileNavToggle>
+      <DesignsIndexMobileNavToggle />
       <aside
         className="fixed left-0 top-0 z-10 hidden h-full flex-col border-r border-slate-200 md:block"
         style={{ width: '400px' }}
