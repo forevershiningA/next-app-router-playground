@@ -3114,15 +3114,15 @@ export default function DesignPageClient({
               <div className="mt-7 overflow-hidden rounded-lg border border-stone-200 bg-white">
                 <div className="flex min-h-[360px] items-center justify-center bg-[radial-gradient(circle_at_50%_30%,#ffffff_0%,#f3f0e8_48%,#e6e1d7_100%)] px-4 py-8 md:min-h-[470px]">
                   <img
-                    src={`/screenshots/v2026-3d/${designId}.png`}
+                    src={`/screenshots/v2026-3d/${designId}_small.png`}
                     alt={`${formattedDesignTitle} — 3D preview`}
                     className="max-h-[62vh] w-auto max-w-full object-contain"
                     loading="eager"
                     onError={(e) => {
                       const img = e.currentTarget;
-                      const smallSrc = `/screenshots/v2026-3d/${designId}_small.png`;
-                      if (!img.src.endsWith('_small.png')) {
-                        img.src = smallSrc;
+                      const fullSrc = `/screenshots/v2026-3d/${designId}.png`;
+                      if (img.src.endsWith('_small.png')) {
+                        img.src = fullSrc;
                       }
                     }}
                   />

@@ -291,6 +291,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
   const canonicalUrl = `${baseUrl}${canonicalPath}`;
+  const previewScreenshotSrc = `/screenshots/v2026-3d/${design.id}_small.png`;
   
   const formattedH1 = buildDesignSeoTitle({
     shapeName,
@@ -502,7 +503,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
       <link
         rel="preload"
         as="image"
-        href={`/screenshots/v2026-3d/${design.id}.png`}
+        href={previewScreenshotSrc}
         fetchPriority="high"
       />
       
@@ -553,7 +554,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         <div className="container mx-auto px-4 md:px-8 py-8 max-w-7xl">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={`/screenshots/v2026-3d/${design.id}.png`}
+            src={previewScreenshotSrc}
             alt={`${formattedH1} preview`}
             width={600}
             height={400}
