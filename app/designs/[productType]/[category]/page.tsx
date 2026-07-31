@@ -7,6 +7,7 @@ import DesignsIndexMobileNavToggle from '#/components/DesignsIndexMobileNavToggl
 import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
 import {
   getCategoryDescription,
+  getCategorySeoCopy,
   getCategoryTitle,
   getProductSeoInfo,
   getSeoReadyDesigns,
@@ -165,6 +166,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   const productInfo = getProductSeoInfo(productSlug);
   const categoryTitle = getCategoryTitle(category);
   const categoryDescription = getCategoryDescription(category);
+  const categorySeoCopy = getCategorySeoCopy(category);
   const designs = getSeoReadyDesigns()
     .filter((design) => design.productSlug === productSlug && design.category === category)
     .sort((a, b) => formatDesignTitle(a).localeCompare(formatDesignTitle(b)));
@@ -215,6 +217,24 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {designs.length.toLocaleString()} crawlable design templates
             </p>
           </header>
+
+          {categorySeoCopy && (
+            <section aria-labelledby="category-guide-heading" className="mb-12 max-w-4xl">
+              <h2 id="category-guide-heading" className="text-2xl font-serif font-light text-stone-950 mb-4">
+                Choosing {categoryTitle.toLowerCase()} {productInfo.kind} designs
+              </h2>
+              <p className="text-base leading-8 text-stone-600 font-light mb-5">
+                {categorySeoCopy.intro}
+              </p>
+              <ul className="grid gap-3 text-sm leading-7 text-stone-600 md:grid-cols-3">
+                {categorySeoCopy.points.map((point) => (
+                  <li key={point} className="border-l border-[#d8c487] pl-4">
+                    {point}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <section aria-labelledby="category-designs-heading">
             <h2 id="category-designs-heading" className="sr-only">

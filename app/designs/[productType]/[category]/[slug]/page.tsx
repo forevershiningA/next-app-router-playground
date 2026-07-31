@@ -2,6 +2,7 @@ import { notFound, permanentRedirect } from 'next/navigation';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { getProductFromId } from '#/lib/product-utils';
+import { INDEXABLE_PRODUCT_SLUGS } from '#/lib/design-seo';
 import StartSavedDesignButton from './StartSavedDesignButton';
 
 /**
@@ -220,6 +221,12 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
       description,
       images: [`/screenshots/v2026-3d/${design.id}.png`],
     },
+    robots: INDEXABLE_PRODUCT_SLUGS.has(design.productSlug)
+      ? undefined
+      : {
+          index: false,
+          follow: true,
+        },
   };
 }
 

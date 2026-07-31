@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-27
+**Last Updated:** 2026-07-28
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -70,6 +70,71 @@
 62. [July 25 Designs Load Modal and Sidebar Integration](#current-status-2026-07-25--designs-load-modal-and-sidebar-integration)
 63. [July 26 Design Gallery SEO SSR and Deep Page SEO](#current-status-2026-07-26--design-gallery-seo-ssr-and-deep-page-seo)
 64. [July 27 Homepage Lighthouse Follow-up](#current-status-2026-07-27--homepage-lighthouse-follow-up)
+65. [July 28 Lighthouse Performance Follow-up](#current-status-2026-07-28--lighthouse-performance-follow-up)
+
+---
+
+## Current Status (2026-07-28) - Lighthouse Performance Follow-up
+
+This session reviewed live Lighthouse JSON reports for the homepage and design SEO routes, then applied targeted payload and bootup reductions. The main pattern was consistent: public SEO pages were functionally correct, but some routes were shipping too much HTML/RSC or mounting heavy client designer code before the user asked for it.
+
+### Reports Reviewed
+
+| Report | Route | Performance | Key Finding |
+| --- | --- | ---: | --- |
+| `lighthouse5.json` | `/` | 52 | Homepage regressed when `HeroCanvas` loaded too early; LCP and TBT were poor. |
+| `lighthouse6.json` | `/` | 78 | Homepage recovered after delaying `HeroCanvas` and avoiding the static headstone placeholder. |
+| `l1.json` | `/designs` | 57 | The designs index shipped a very large document: about `190 KB` transfer / `3.56 MB` resource. |
+| `l2.json` | `/designs` | 70 | Removing thousands of deep sidebar links cut the document to about `31 KB` transfer / `714 KB` resource. |
+| `l3.json` | `/designs` | 66 | Payload improved further (`26 KB` / `505 KB`), score dipped mostly due Lighthouse TBT variance. |
+| `li1.json` | `/designs/traditional-headstone/biblical-memorial/curved-gable-may-heavens-eternal-happiness-be-thine` | 75 | Individual design page loaded a full `687 KB` PNG as LCP preview. |
+| `li2.json` | same individual design page | 70 | `_small.png` fixed image payload/LCP, but heavy `DesignPageClient` caused very high TBT (`2480 ms`). |
+| `li3.json` | same individual design page | 87 | Deferring `DesignPageClient` until user action cut TBT to `380 ms` and bootup to `2.0 s`. |
+| `light1.json` | `/designs/traditional-headstone/biblical-memorial` | 68 | Category page repeated the `/designs` issue: about `213 KB` transfer / `3.7 MB` document resource. |
+
+### Changes Applied
+
+| File | Current Behavior |
+| --- | --- |
+| `app/_ui/HomeSplash.tsx` | `HeroCanvas` is delayed behind a deterministic client timer and shows a light spinner state instead of rendering a static headstone first. This avoided the visible static-to-3D headstone swap and recovered homepage performance to `78` in `lighthouse6.json`. |
+| `components/ServerDesignsTreeNav.tsx` | Accepts `maxDesignLinksPerCategory`, defaulting to `40` for existing behavior. Passing `0` renders product/category navigation without individual design links. |
+| `app/designs/page.tsx` | Uses `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` on desktop and a lightweight product-only mobile nav. This reduced `/designs` document resource from about `3.56 MB` to about `505-714 KB` in live reports. |
+| `components/DesignsIndexMobileNavToggle.tsx` | Lightweight client mobile navigation for public design index/category routes. It avoids embedding the full server design tree as hidden mobile drawer content. |
+| `app/designs/[productType]/[category]/page.tsx` | Uses the lightweight mobile nav and `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` for the category page. Expected next report: much smaller `document.resourceSize` versus `light1.json`. |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | SSR preview preload/image uses `/screenshots/v2026-3d/{id}_small.png`; full PNG remains in metadata/schema/full-image links. The heavy `DesignPageClient` is no longer rendered on initial page load. |
+| `app/designs/[productType]/[category]/[slug]/StartSavedDesignButton.tsx` | New small client CTA. On click it dynamically imports `loadDesignById`, loads the canonical design into the editor store, then routes to `/select-size`. This keeps SEO pages fast while preserving the personalize flow. |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Hero preview inside the old client detail view now uses `_small.png` with fallback to the full PNG. The component still exists for legacy/detail contexts but is not mounted by the server page on first load. |
+
+### Current Performance Interpretation
+
+- Keep the `/designs` index changes. `l3.json` scored lower than `l2.json`, but nearly every structural metric improved; the score drop was from TBT variance.
+- Keep the individual design page changes. `li3.json` is the strongest checkpoint so far: score `87`, small LCP image, much lower TBT and bootup.
+- Keep using `_small.png` for visible gallery/detail previews. The v2026 screenshot directory has matching full and `_small` PNG counts, and the tested design dropped from a `687 KB` LCP image to about `26 KB`.
+- The category page fix should be verified with `light2.json` after a production build. The expected improvement is a large drop in `/designs/{productSlug}/{category}` `document.resourceSize`.
+
+### Remaining Opportunities
+
+- The global/layout JS chunk is still large in reports (roughly `520 KB` resource on some routes). Future work should investigate global providers/client imports in the app shell, not just individual design pages.
+- Public listing/category pages still render all category cards server-side. If a category remains heavy after the sidebar fix, add server-side pagination or cap first-render cards with crawlable pagination.
+- `saved-designs-data.ts` remains very large and ESLint/Babel warns about deoptimized styling. Longer-term, split generated metadata into smaller route-focused artifacts so public pages do not need to import the full 3k-design object for simple counts/grouping.
+
+### Verification
+
+Commands used successfully during this performance pass:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Full production builds were not repeated in every iteration because local `pnpm build` previously exceeded the tool timeout. Lighthouse comparisons should be made only after deploying a fresh production build.
+
+### Do Not Regress
+
+- Do not remount `DesignPageClient` on the initial individual design page render unless accepting a major TBT/bootup regression.
+- Do not use full `/screenshots/v2026-3d/{id}.png` for visible above-the-fold previews; use `_small.png` and keep the full image for metadata/full-size links.
+- Do not render `ServerDesignsTreeNav` with individual design links on public index/category pages unless the document payload is revalidated.
+- Do not reintroduce the static headstone placeholder before `HeroCanvas`; the current homepage direction is delayed 3D canvas with a neutral loading state.
 
 ---
 

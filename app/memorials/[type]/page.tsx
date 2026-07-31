@@ -52,6 +52,54 @@ const headerMemorialLinks: MemorialTypeSlug[] = [
   'pet-memorials',
 ];
 
+const memorialBuyingGuidance: Record<MemorialTypeSlug, { summary: string; points: string[] }> = {
+  headstones: {
+    summary:
+      'Compare headstone shapes, granite finishes, inscription space and cemetery requirements before starting a design. Upright headstones usually need clear lettering, durable material choices and proportions approved by the cemetery.',
+    points: [
+      'Choose black granite for detailed laser-etched portraits, landscapes and fine artwork.',
+      'Use traditional engraved granite when the priority is classic lettering and long-term readability.',
+      'Check cemetery rules for maximum height, base requirements and permitted accessories before approval.',
+    ],
+  },
+  plaques: {
+    summary:
+      'Memorial plaques are usually chosen for cemetery niches, walls, gardens, cremation memorials and compact grave markers. Compare bronze, stainless steel, laser colour and engraved stone options by finish, size and installation setting.',
+    points: [
+      'Bronze plaques suit formal cemetery markers with raised lettering and decorative borders.',
+      'Laser colour and full colour plaques are stronger choices when a portrait or image-led tribute matters.',
+      'Stainless steel plaques suit modern memorial walls, garden markers and clean reflective finishes.',
+    ],
+  },
+  'full-monuments': {
+    summary:
+      'Full monuments combine an upright memorial with base, ledger, kerb or matching stone components. They need more planning than a single headstone because proportions, installation and cemetery approval all affect the final design.',
+    points: [
+      'Use full monuments when the family wants a larger memorial presence and matching stonework.',
+      'Confirm cemetery rules for kerbs, ledgers, foundations and maximum plot coverage.',
+      'Keep the inscription hierarchy clear so names and dates remain readable across the larger layout.',
+    ],
+  },
+  urns: {
+    summary:
+      'Personalised memorial urns can include vitreous enamel backgrounds, photos, names, dates and symbolic artwork. They are useful when families want a smaller keepsake or cremation memorial with a finished visual design.',
+    points: [
+      'Photo and background choices have the biggest effect on the look of a personalised urn.',
+      'Shorter inscriptions usually work better on curved or compact urn surfaces.',
+      'Match motifs and colours to the person, service theme or family remembrance setting.',
+    ],
+  },
+  'pet-memorials': {
+    summary:
+      'Pet memorials include mini headstones, plaques and rocks for dogs, cats, horses and other companion animals. The best layouts usually keep the pet photo or animal motif prominent while leaving enough space for a short inscription.',
+    points: [
+      'Use pet plaques for compact garden memorials, walls or small remembrance spaces.',
+      'Choose pet mini headstones when the memorial needs a more traditional grave marker shape.',
+      'Horse and companion animal designs work well with landscape artwork, silhouettes and simple wording.',
+    ],
+  },
+};
+
 function productDesignerUrl(productId: string) {
   const slug = getDesignerProductSlug(productId);
   return slug ? `/${slug}/select-shape` : `/select-shape?productId=${productId}`;
@@ -83,16 +131,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const page = getMemorialTypePageData(type);
   const url = `${BASE_URL}/memorials/${type}`;
+  const guidance = memorialBuyingGuidance[type];
 
   return {
     title: `${page.title} | Forever Shining`,
-    description: page.intro,
+    description: guidance ? guidance.summary : page.intro,
     alternates: {
       canonical: url,
     },
     openGraph: {
       title: `${page.title} | Forever Shining`,
-      description: page.intro,
+      description: guidance ? guidance.summary : page.intro,
       url,
       siteName: 'Forever Shining',
       type: 'website',
@@ -108,6 +157,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function productTypeJsonLd(page: ReturnType<typeof getMemorialTypePageData>) {
   const url = `${BASE_URL}/memorials/${page.slug}`;
+  const guidance = memorialBuyingGuidance[page.slug];
+  const description = guidance ? guidance.summary : page.intro;
 
   return {
     '@context': 'https://schema.org',
@@ -117,7 +168,7 @@ function productTypeJsonLd(page: ReturnType<typeof getMemorialTypePageData>) {
         '@id': `${url}#webpage`,
         url,
         name: `${page.title} | Forever Shining`,
-        description: page.intro,
+        description,
         primaryImageOfPage: page.gallery[0]
           ? {
               '@type': 'ImageObject',
@@ -186,6 +237,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
   }
 
   const page = getMemorialTypePageData(type as MemorialTypeSlug);
+  const guidance = memorialBuyingGuidance[page.slug];
 
   return (
     <main className="min-h-screen bg-[#0b0b0b] text-white day:bg-stone-100 day:text-gray-900" data-seo-page="true">
@@ -227,6 +279,26 @@ export default async function MemorialTypePage({ params }: PageProps) {
       </section>
 
       <section className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
+        {guidance && (
+          <section aria-labelledby="buying-guidance-heading" className="mb-10 border-b border-white/10 pb-10 day:border-gray-200">
+            <div className="max-w-4xl">
+              <h2 id="buying-guidance-heading" className="text-2xl font-semibold text-white day:text-gray-900">
+                What to compare before designing
+              </h2>
+              <p className="mt-3 text-base leading-7 text-gray-300 day:text-gray-600">
+                {guidance.summary}
+              </p>
+            </div>
+            <ul className="mt-6 grid gap-4 text-sm leading-7 text-gray-300 md:grid-cols-3 day:text-gray-600">
+              {guidance.points.map((point) => (
+                <li key={point} className="border-l border-[#cfac6c] pl-4">
+                  {point}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
         <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <h2 className="text-2xl font-semibold text-white day:text-gray-900">

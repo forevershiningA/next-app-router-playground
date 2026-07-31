@@ -3,10 +3,10 @@ import HomeSplash from './_ui/HomeSplash';
 
 export const metadata: Metadata = {
   title: {
-    absolute: 'Design & Buy Memorials, Headstones, Plaques & Urns',
+    absolute: 'Forever Shining Memorials | Design Headstones, Plaques & Urns Online',
   },
   description:
-    'Design and buy custom memorials online, including headstones, plaques, full monuments, urns and pet memorials. Preview materials, inscriptions and pricing.',
+    'Forever Shining helps families design and buy custom headstones, plaques, full monuments, urns and pet memorials online with live preview and pricing.',
 };
 
 const businessContacts = [
@@ -191,9 +191,9 @@ const structuredData = {
       '@type': 'WebPage',
       '@id': 'https://forevershining.org#webpage',
       url: 'https://forevershining.org',
-      name: 'Design & Buy Memorials, Headstones, Plaques & Urns',
+      name: 'Forever Shining Memorials | Design Headstones, Plaques & Urns Online',
       description:
-        'Design and buy custom memorials online, including headstones, plaques, full monuments, urns and pet memorials. Preview materials, inscriptions and pricing.',
+        'Forever Shining helps families design and buy custom headstones, plaques, full monuments, urns and pet memorials online with live preview and pricing.',
       isPartOf: {
         '@id': 'https://forevershining.org#website',
       },

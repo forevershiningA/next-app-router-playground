@@ -72,6 +72,21 @@ const nextConfig = {
     },
   },
   // Headers for caching static assets
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'www.forevershining.org',
+          },
+        ],
+        destination: 'https://forevershining.org/:path*',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
