@@ -71,11 +71,11 @@
 63. [July 26 Design Gallery SEO SSR and Deep Page SEO](#current-status-2026-07-26--design-gallery-seo-ssr-and-deep-page-seo)
 64. [July 27 Homepage Lighthouse Follow-up](#current-status-2026-07-27--homepage-lighthouse-follow-up)
 65. [July 28 Lighthouse Performance Follow-up](#current-status-2026-07-28--lighthouse-performance-follow-up)
-66. [August 1 Bronze Plaque Selection, Layering, and Color Fixes](#current-status-2026-08-01--bronze-plaque-selection-layering-and-color-fixes)
+66. [August 1 Bronze Plaque Selection, Check Price, and Unit Toggle](#current-status-2026-08-01--bronze-plaque-selection-check-price-and-unit-toggle)
 
 ---
 
-## Current Status (2026-08-01) - Bronze Plaque Selection, Layering, and Color Fixes
+## Current Status (2026-08-01) - Bronze Plaque Selection, Check Price, and Unit Toggle
 
 This session focused on the bronze plaque designer canvas after manual testing with the sequence: add plaque, add inscription, add image, add motif, then click overlapping elements. The main issues were stale selection outlines, new elements rendering behind older elements, raycast hit order not matching visual order, and `THREE.Color: Unknown color 0xffffff` warnings.
 
@@ -115,6 +115,43 @@ This session focused on the bronze plaque designer canvas after manual testing w
 - Motifs still have an `onClick` handler, but selection now also occurs in `onPointerDown` to match image behavior and avoid stale selection when overlapping meshes are dragged/clicked.
 - Existing saved designs without `layer` should still load, but all such elements share layer `0`; newly added elements get higher layers.
 
+### Check Price and Modal State
+
+This session also simplified Check Price and aligned the bottom canvas price-chip popup with the full Check Price quote style.
+
+| File | Current Behavior |
+| --- | --- |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | Full `/check-price` page now uses a simpler itemized quote table, full-width content, designer-style header, and category chips (`All Items`, primary product type, `Inscriptions`, `Motifs`, `Emblems`, `Images`, `Additions`) that filter the quote rows. |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | Laser/free-inscription products no longer receive the old hardcoded `$50` per inscription. Inscription rows calculate from the store/catalog model and respect `showInscriptionColor` / product `32` free behavior. |
+| `app/check-price/_ui/CheckPriceGrid.tsx` | `Download PDF` uses the My Account PDF path via `captureDesignSnapshot()`, `generateDesignPDF()`, and `buildPdfQuoteFromProject()`. `Save Design` clicks the existing designer save button when available. |
+| `components/CheckPricePanel.tsx` | The bottom canvas price chip still opens `activePanel === 'checkprice'`, but the popup is now the same simplified quote style without the full page top header/filter bar. It renders as a modal over the canvas scene. |
+| `components/CheckPricePanel.tsx` | Modal quote rows are flattened item rows rather than expandable grouped sections. It includes live designer pricing for product/base/ledger/kerbset/inscriptions/motifs/emblems/images/additions. |
+
+Important Check Price notes:
+
+- Keep Check Price pricing tied to the designer store/catalog, not duplicated fixed prices. The Laser Etched Plaque case was the concrete failure: design modal/chip showed free inscriptions, while `/check-price` incorrectly charged `$50` per inscription.
+- `/check-price` still includes the full page header and filter chips. The canvas popup intentionally does not include that top header or filter bar.
+- The PDF/download path should remain aligned with My Account export behavior.
+
+### Unit Toggle State
+
+The easy display-only mm/in toggle was implemented. Internal sizes, positions, catalog values, and pricing calculations remain in millimeters.
+
+| File | Current Behavior |
+| --- | --- |
+| `lib/unit-system.ts` | `formatImperialFromMm()` now rounds up to whole inches with `Math.ceil(inches - 1e-9)`. Example: `23 5/8"` displays as `24"`. Exact whole-inch values such as `12"` stay exact despite floating-point noise. |
+| `lib/use-unit-system.ts` | `useUnitSystem()` is reactive in the current tab. `useSetUnitSystem()` writes `unit_system=metric|imperial` plus `unit_system_user=1`, then dispatches a `unit-system-changed` browser event. |
+| `middleware.ts` | Country-based `unit_system` defaults are still set, but middleware now respects `unit_system_user=1` and does not overwrite the user’s manual mm/in choice on navigation. |
+| `components/ThreeScene.tsx` | Adds a compact `mm / in` toggle in the top-right canvas overlay. The selected chip uses Forever Shining gold `#cfac6c`. |
+| `components/ThreeScene.tsx` | The bottom price chip size label already uses `formatDimensionPair(widthMm, heightMm, unitSystem)`, so it updates immediately when the toggle changes. |
+| `components/CheckPricePanel.tsx` | Modal dimensions already use `formatDimensionPair()` / `formatDimensionTriplet()` in the new quote rows. |
+
+Next session plan for units:
+
+- Extend the mm/in display toggle coverage into all designer panels, especially `select-size`, inscription size controls, image/motif/emblem size controls, and any edit panels that still show raw `mm`.
+- Keep the next pass display-only unless explicitly changing inputs. If adding inch editing later, preserve millimeters internally and convert at input/output boundaries.
+- Audit PDF quote details and saved-design/account quote views for unit labels after panel coverage is done.
+
 ### Verification
 
 Command completed successfully after the selection/raycast changes:
@@ -122,6 +159,22 @@ Command completed successfully after the selection/raycast changes:
 ```bash
 pnpm exec tsc --noEmit
 ```
+
+Additional commands completed successfully after Check Price and unit-toggle changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm exec eslint app/check-price/_ui/CheckPriceGrid.tsx
+pnpm exec eslint components/CheckPricePanel.tsx
+pnpm exec eslint lib/use-unit-system.ts components/ThreeScene.tsx middleware.ts
+pnpm exec eslint lib/unit-system.ts components/ThreeScene.tsx tests/unit/unit-system.test.ts
+pnpm test tests/unit/unit-system.test.ts
+```
+
+Notes:
+
+- Focused eslint passes still report pre-existing warnings in `components/ThreeScene.tsx` when that file is included: unused `PerspectiveCamera`, existing `any` uses, and unused `shouldAnimateFade`. There were no eslint errors from the unit-toggle work.
+- The first sandboxed `pnpm exec vitest run tests/unit/unit-system.test.ts` attempt failed with `EPERM` on `C:\Users\polcr`; rerunning with the normal approved `pnpm test tests/unit/unit-system.test.ts` command passed.
 
 Manual test path to repeat in browser:
 
@@ -131,6 +184,8 @@ Manual test path to repeat in browser:
 4. Add an image; only image outline should show and image should render above inscription.
 5. Add a motif; only motif outline should show and motif should render above image/inscription.
 6. Click the motif while it overlaps the image or inscription; motif should remain/select, not the element behind it.
+7. Click the bottom price chip; the Check Price quote should open as a modal over the canvas.
+8. Toggle `mm / in` in the top-right canvas chip; bottom chip and Check Price modal dimensions should update, with inches rounded up to whole inches.
 
 ### Log Notes
 
@@ -144,6 +199,9 @@ Manual test path to repeat in browser:
 - Do not let selection setters leave another element type selected; the canvas should show one active child outline at a time.
 - Do not pass `0xRRGGBB` strings directly to Three.js color props; normalize to CSS hex first.
 - Do not make selection outlines raycastable.
+- Do not reintroduce fixed `$50` inscription pricing on Check Price; use catalog/store pricing and preserve free inscription products.
+- Do not let middleware overwrite a manual `mm / in` choice once `unit_system_user=1` is set.
+- Do not convert stored dimensions or pricing quantities to inches in the easy display-toggle path; keep mm as canonical.
 
 ---
 

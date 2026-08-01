@@ -32,6 +32,7 @@ import { getMotifCategoryName } from '#/lib/motif-translations';
 import MobileNavToggle from '#/components/MobileNavToggle';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import { logger } from '#/lib/logger';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 // Legacy parity IDs no longer needed — 2D preview removed, all designs use canonical loader
 
@@ -3158,7 +3159,7 @@ export default function DesignPageClient({
                   onClick={() => {
                     if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
                       setLoadingIntoEditor(true);
-                      router.push('/select-size');
+                      router.push(getDesignerProductStepHref('select-size', designMetadata.productId));
                     }
                   }}
                   disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
@@ -3325,7 +3326,7 @@ export default function DesignPageClient({
           onClick={() => {
             if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
               setLoadingIntoEditor(true);
-              router.push('/select-size');
+              router.push(getDesignerProductStepHref('select-size', designMetadata.productId));
             }
           }}
           disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}

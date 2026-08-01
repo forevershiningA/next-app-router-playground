@@ -7,6 +7,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { generateDesignPDF } from '#/lib/pdf-generator';
 import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import { PriceQuoteDisplay } from '#/components/PriceQuoteDisplay';
 
@@ -208,7 +209,7 @@ export default function DesignDetailPage() {
         },
       };
       await applyDesignSnapshot(snapshot);
-      router.push('/select-size');
+      router.push(getDesignerProductStepHref('select-size', snapshot.productId));
     } catch {
       alert('Failed to load design. Please try again.');
       setIsLoadingEdit(false);

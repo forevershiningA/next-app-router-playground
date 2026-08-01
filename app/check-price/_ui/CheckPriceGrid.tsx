@@ -1,41 +1,79 @@
 'use client';
 
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
-
-type GridExpandableSection = 'additions' | 'motifs' | 'emblems' | 'images' | 'inscriptions';
-const GRID_SECTION_COLLAPSED_STATE: Record<GridExpandableSection, boolean> = {
-  additions: false,
-  motifs: false,
-  emblems: false,
-  images: false,
-  inscriptions: false,
-};
-const GRID_SECTION_EXPANDED_STATE: Record<GridExpandableSection, boolean> = {
-  additions: true,
-  motifs: true,
-  emblems: true,
-  images: true,
-  inscriptions: true,
-};
 import { useRouter } from 'next/navigation';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useHeadstoneStore, type Line } from '#/lib/headstone-store';
 import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
-import { calculatePrice, calculatePricePowerLaw, computeQuantity } from '#/lib/xml-parser';
+import { calculatePrice, calculatePricePowerLaw, computeQuantity, type PriceModel } from '#/lib/xml-parser';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
-import ProjectActions from '#/components/ProjectActions';
 import { getCheckPriceMaterialName, isStainlessSteelHeadstoneProduct } from '#/lib/check-price-utils';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
+import { buildPdfQuoteFromProject } from '#/lib/design-quote';
+import { captureDesignSnapshot } from '#/lib/project-serializer';
 
 type CheckPriceGridProps = {
   initialImagePricing?: ImagePricingMap | null;
 };
 
+type QuoteCategory =
+  | 'all'
+  | 'product'
+  | 'base'
+  | 'inscriptions'
+  | 'motifs'
+  | 'emblems'
+  | 'images'
+  | 'additions';
+
+type QuoteRow = {
+  id: string;
+  category: Exclude<QuoteCategory, 'all'>;
+  title: string;
+  details: string[];
+  qty: number | string;
+  unitPrice: number | null;
+  total: number | null;
+};
+
 const toAssetPath = (path?: string | null) =>
   path ? (path.startsWith('/') || path.startsWith('data:') ? path : `/${path}`) : '';
+
+const formatMoney = (value: number | null) =>
+  typeof value === 'number' ? `$${value.toFixed(2)}` : '-';
+
+const getInscriptionColorPriceNote = (color?: string) => {
+  const colorName = data.colors.find((c) => c.hex === color)?.name;
+  if (!colorName) return undefined;
+  return ['Gold Gilding', 'Silver Gilding'].includes(colorName)
+    ? colorName
+    : 'Paint Fill';
+};
+
+const calculateInscriptionLinePrice = (
+  line: Line,
+  inscriptionPriceModel: PriceModel | null,
+) => {
+  if (!inscriptionPriceModel) return 0;
+
+  const quantity = line.sizeMm;
+  const mappedNote = getInscriptionColorPriceNote(line.color);
+  const tier =
+    inscriptionPriceModel.prices.find(
+      (price) =>
+        quantity >= price.startQuantity &&
+        quantity <= price.endQuantity &&
+        price.note === mappedNote,
+    ) ??
+    inscriptionPriceModel.prices.find(
+      (price) => quantity >= price.startQuantity && quantity <= price.endQuantity,
+    );
+
+  if (!tier) return 0;
+  return calculatePrice({ ...inscriptionPriceModel, prices: [tier] }, quantity);
+};
 
 const getInitialReturnPath = () => {
   if (typeof window === 'undefined') return '/select-size';
@@ -53,11 +91,9 @@ const getInitialReturnPath = () => {
 export default function CheckPriceGrid({ initialImagePricing = null }: CheckPriceGridProps) {
   const router = useRouter();
   const [returnPath] = useState(getInitialReturnPath);
+  const [selectedQuoteCategory, setSelectedQuoteCategory] = useState<QuoteCategory>('all');
   const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(initialImagePricing);
   const [imagePricingError, setImagePricingError] = useState<string | null>(null);
-  const [expandedSections, setExpandedSections] = useState<Record<GridExpandableSection, boolean>>({
-    ...GRID_SECTION_COLLAPSED_STATE,
-  });
   const isMountedRef = useRef(true);
   const productId = useHeadstoneStore((s) => s.productId);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
@@ -71,16 +107,6 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const inscriptions = useHeadstoneStore((s) => s.inscriptions);
 
-  const toggleSection = useCallback((section: GridExpandableSection) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  }, []);
-
-  const expandAllSections = useCallback(() => {
-    setExpandedSections({ ...GRID_SECTION_EXPANDED_STATE });
-  }, []);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const heightMm = useHeadstoneStore((s) => s.heightMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
@@ -91,6 +117,8 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const catalog = useHeadstoneStore((s) => s.catalog);
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
+  const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
+  const inscriptionPriceModel = useHeadstoneStore((s) => s.inscriptionPriceModel);
   const isStainlessSteelHeadstone = isStainlessSteelHeadstoneProduct(productId, catalog);
 
   useEffect(() => {
@@ -98,14 +126,6 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
       isMountedRef.current = false;
     };
   }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    window.addEventListener('beforeprint', expandAllSections);
-    return () => {
-      window.removeEventListener('beforeprint', expandAllSections);
-    };
-  }, [expandAllSections]);
 
   const loadImagePricing = useCallback(() => {
     fetchImagePricing()
@@ -126,10 +146,6 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     loadImagePricing();
   }, [initialImagePricing, loadImagePricing]);
 
-  const handleClosePage = () => {
-    router.push(returnPath || '/select-size');
-  };
- 
   // Get product name from catalog
   const productName = catalog?.product?.name || 'Not selected';
   const isUrnProduct = catalog?.product?.type === 'urn' || productId === '2350';
@@ -139,13 +155,11 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   
   const motifProductId = motifAddition?.id || productId;
   const motifName = motifAddition?.name || 'Motif';
-  const motifFormula = motifAddition?.formula || '';
   
   const inscriptionAddition = catalog?.product?.additions?.find(a => a.type === 'inscription');
   
   const inscriptionProductId = inscriptionAddition?.id || productId;
   const inscriptionName = inscriptionAddition?.name || 'Inscription';
-  const inscriptionFormula = inscriptionAddition?.formula || '';
   const baseAddition = catalog?.product?.additions?.find(a => a.type === 'base');
   const baseProductId = baseAddition?.id || '–';
   const baseProductName = baseAddition?.name || 'Base';
@@ -218,12 +232,43 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     }, 0);
   }, [selectedMotifs, motifOffsets, motifPriceModel, catalog]);
   
-  // Calculate real inscription prices (sum of individual inscription prices)
-  const inscriptionPrice = useMemo(() => {
-    const validInscriptions = (inscriptions || []).filter(line => line.text?.trim());
-    const pricePerInscription = validInscriptions.length > 0 ? 50 : 0;
-    return validInscriptions.length * pricePerInscription;
+  const validInscriptions = useMemo(() => {
+    return (inscriptions || []).filter((line) => line.text?.trim());
   }, [inscriptions]);
+
+  // Calculate real inscription prices from the same catalog model used by the designer chip.
+  const inscriptionPrice = useMemo(() => {
+    if (productId === '32' || !showInscriptionColor || !inscriptionPriceModel) {
+      return 0;
+    }
+
+    return validInscriptions.reduce(
+      (total, line) => total + calculateInscriptionLinePrice(line, inscriptionPriceModel),
+      0,
+    );
+  }, [validInscriptions, inscriptionPriceModel, productId, showInscriptionColor]);
+
+  // Get detailed inscription items
+  const inscriptionItems = useMemo(() => {
+    const shouldPriceInscriptions =
+      productId !== '32' && showInscriptionColor && inscriptionPriceModel;
+
+    return validInscriptions.map((line) => {
+      const colorName = data.colors.find((c) => c.hex === line.color)?.name || line.color;
+      
+      return {
+        id: line.id,
+        text: line.text,
+        font: line.font,
+        sizeMm: line.sizeMm,
+        color: line.color,
+        colorName,
+        price: shouldPriceInscriptions
+          ? calculateInscriptionLinePrice(line, inscriptionPriceModel)
+          : 0,
+      };
+    });
+  }, [validInscriptions, inscriptionPriceModel, productId, showInscriptionColor]);
 
   const imageItems = useMemo(() => {
     if (!selectedImages.length) return [];
@@ -291,19 +336,6 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const tax = subtotal * 0.1; // 10% tax
   const total = subtotal + tax;
 
-  const projectPricing = {
-    headstonePrice,
-    basePrice,
-    additionsPrice,
-    motifsPrice,
-    emblemsPrice,
-    inscriptionPrice,
-    imagePriceTotal,
-    subtotal,
-    tax,
-    total,
-  };
-
   // Get detailed addition items
   const additionItems = useMemo(() => {
     return selectedAdditions.map(addId => {
@@ -368,443 +400,394 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     });
   }, [selectedMotifs, motifOffsets, motifPriceModel, catalog, isStainlessSteelHeadstone, headstoneMaterialUrl]);
 
-  // Get detailed inscription items
-  const inscriptionItems = useMemo(() => {
-    const validInscriptions = (inscriptions || []).filter(line => line.text?.trim());
-    const pricePerInscription = validInscriptions.length > 0 ? inscriptionPrice / validInscriptions.length : 0;
-    
-    return validInscriptions.map((line) => {
-      const colorName = data.colors.find((c) => c.hex === line.color)?.name || line.color;
-      
-      return {
-        id: line.id,
-        text: line.text,
-        font: line.font,
-        sizeMm: line.sizeMm,
-        color: line.color,
-        colorName,
-        price: pricePerInscription,
-      };
+  const quoteRows = useMemo<QuoteRow[]>(() => {
+    const rows: QuoteRow[] = [
+      {
+        id: 'product',
+        category: 'product',
+        title: `Product ID: ${productId || '-'} - ${productName}`,
+        details: isUrnProduct
+          ? [
+              `Shape: ${shapeName}`,
+              `Background: ${headstoneMaterialName}`,
+            ]
+          : [
+              `Shape: ${shapeName}`,
+              `Material: ${headstoneMaterialName}`,
+              `Size: ${widthMm} mm x ${heightMm} mm x ${uprightThickness} mm`,
+            ],
+        qty: 1,
+        unitPrice: headstonePrice,
+        total: headstonePrice,
+      },
+    ];
+
+    if (showBase) {
+      rows.push({
+        id: 'base',
+        category: 'base',
+        title: `Product ID: ${baseProductId} - ${baseProductName}`,
+        details: [
+          'Shape: Rectangle',
+          `Material: ${baseMaterialName}`,
+          `Size: ${baseWidthMm} mm x ${baseHeightMm} mm x ${baseThickness} mm`,
+        ],
+        qty: 1,
+        unitPrice: basePrice,
+        total: basePrice,
+      });
+    }
+
+    inscriptionItems.forEach((item) => {
+      const qty = Math.max(1, item.text.trim().length);
+      rows.push({
+        id: `inscription-${item.id}`,
+        category: 'inscriptions',
+        title: `Product ID: ${inscriptionProductId} - ${inscriptionName}`,
+        details: [
+          item.text,
+          `${item.sizeMm}mm ${item.font}, colour: ${item.colorName}`,
+        ],
+        qty,
+        unitPrice: qty > 0 ? item.price / qty : item.price,
+        total: item.price,
+      });
     });
-  }, [inscriptions, inscriptionPrice]);
+
+    motifItems.forEach((item) => {
+      rows.push({
+        id: `motif-${item.id}`,
+        category: 'motifs',
+        title: `Product ID: ${motifProductId} - ${motifName}`,
+        details: [
+          `File: ${item.name}`,
+          `${item.heightMm} mm, ${item.isStainlessSteelMotif ? 'material' : 'colour'}: ${item.colorName}`,
+        ],
+        qty: 1,
+        unitPrice: item.price,
+        total: item.price,
+      });
+    });
+
+    emblemItems.forEach((item) => {
+      rows.push({
+        id: `emblem-${item.id}`,
+        category: 'emblems',
+        title: 'Product ID: 200 - Bronze Emblem',
+        details: [
+          `Emblem: ${item.name}`,
+          `Size: ${item.widthMm} mm x ${item.heightMm} mm`,
+        ],
+        qty: 1,
+        unitPrice: item.price,
+        total: item.price,
+      });
+    });
+
+    imageItems.forEach((item) => {
+      rows.push({
+        id: `image-${item.id}`,
+        category: 'images',
+        title: `Product ID: ${item.productId} - ${item.baseName}`,
+        details: [
+          `Type: ${item.typeName || 'Image'}`,
+          `Size: ${item.sizeLabel}`,
+          `Color Mode: ${item.colorDisplay}`,
+        ],
+        qty: 1,
+        unitPrice: imagePricingData ? item.price : null,
+        total: imagePricingData ? item.price : null,
+      });
+    });
+
+    additionItems.forEach((item) => {
+      rows.push({
+        id: `addition-${item.id}`,
+        category: 'additions',
+        title: `Product ID: ${item.baseId} - ${item.name}`,
+        details: [
+          `Type: ${item.type}`,
+          `Size Variant: ${item.sizeVariant}`,
+        ],
+        qty: 1,
+        unitPrice: 75,
+        total: 75,
+      });
+    });
+
+    return rows;
+  }, [
+    additionItems,
+    baseHeightMm,
+    baseMaterialName,
+    basePrice,
+    baseProductId,
+    baseProductName,
+    baseThickness,
+    baseWidthMm,
+    emblemItems,
+    headstoneMaterialName,
+    headstonePrice,
+    heightMm,
+    imageItems,
+    imagePricingData,
+    inscriptionItems,
+    inscriptionName,
+    inscriptionProductId,
+    isUrnProduct,
+    motifItems,
+    motifName,
+    motifProductId,
+    productId,
+    productName,
+    shapeName,
+    showBase,
+    uprightThickness,
+    widthMm,
+  ]);
+
+  const primaryProductFilterLabel = useMemo(() => {
+    const productType = catalog?.product?.type;
+    if (productType === 'plaque') return 'Plaque';
+    if (productType === 'urn') return 'Urn';
+    if (productType === 'monument') return 'Monument';
+    return 'Headstone';
+  }, [catalog]);
+
+  const quoteCategoryFilters = useMemo(() => {
+    const filters: Array<{ id: QuoteCategory; label: string; count: number }> = [
+      { id: 'all', label: 'All Items', count: quoteRows.length },
+      {
+        id: 'product',
+        label: primaryProductFilterLabel,
+        count: quoteRows.filter((row) => row.category === 'product').length,
+      },
+      { id: 'base', label: 'Base', count: quoteRows.filter((row) => row.category === 'base').length },
+      {
+        id: 'inscriptions',
+        label: 'Inscriptions',
+        count: quoteRows.filter((row) => row.category === 'inscriptions').length,
+      },
+      { id: 'motifs', label: 'Motifs', count: quoteRows.filter((row) => row.category === 'motifs').length },
+      { id: 'emblems', label: 'Emblems', count: quoteRows.filter((row) => row.category === 'emblems').length },
+      { id: 'images', label: 'Images', count: quoteRows.filter((row) => row.category === 'images').length },
+      {
+        id: 'additions',
+        label: 'Additions',
+        count: quoteRows.filter((row) => row.category === 'additions').length,
+      },
+    ];
+
+    return filters.filter((filter) => filter.id === 'all' || filter.count > 0);
+  }, [primaryProductFilterLabel, quoteRows]);
+
+  const visibleQuoteRows = useMemo(() => {
+    if (selectedQuoteCategory === 'all') return quoteRows;
+    return quoteRows.filter((row) => row.category === selectedQuoteCategory);
+  }, [quoteRows, selectedQuoteCategory]);
+
+  const visibleSubtotal = useMemo(() => {
+    if (selectedQuoteCategory === 'all') return subtotal;
+    return visibleQuoteRows.reduce(
+      (sum, row) => sum + (typeof row.total === 'number' ? row.total : 0),
+      0,
+    );
+  }, [selectedQuoteCategory, subtotal, visibleQuoteRows]);
+  const visibleTax = selectedQuoteCategory === 'all' ? tax : visibleSubtotal * 0.1;
+  const visibleTotal = visibleSubtotal + visibleTax;
+
+  useEffect(() => {
+    if (quoteCategoryFilters.some((filter) => filter.id === selectedQuoteCategory)) {
+      return;
+    }
+    setSelectedQuoteCategory('all');
+  }, [quoteCategoryFilters, selectedQuoteCategory]);
+
+  const pricingBreakdown = {
+    headstonePrice,
+    basePrice,
+    additionsPrice,
+    motifsPrice,
+    emblemsPrice,
+    inscriptionPrice,
+    imagePrice: imagePriceTotal,
+    subtotal,
+    tax,
+    total,
+  };
+
+  const handleDownloadPdf = async () => {
+    try {
+      const snapshot = captureDesignSnapshot();
+      const project = {
+        totalPriceCents: Math.round(total * 100),
+        currency: 'AUD',
+        pricingBreakdown,
+        designState: snapshot,
+      };
+      const { generateDesignPDF } = await import('#/lib/pdf-generator');
+      await generateDesignPDF({
+        title: snapshot.metadata?.currentProjectTitle || productName || 'Memorial Design',
+        screenshot: snapshot.metadata?.screenshot || '',
+        priceLabel: formatMoney(total),
+        createdLabel: new Date().toLocaleDateString('en-AU', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        }),
+        description: quoteRows[0]?.title || 'Custom memorial design',
+        productName,
+        quote: buildPdfQuoteFromProject(project),
+      });
+    } catch (error) {
+      console.error('Failed to generate PDF', error);
+      alert('Failed to generate PDF. Please try again.');
+    }
+  };
+
+  const handleSaveDesign = () => {
+    const saveButton = document.querySelector<HTMLButtonElement>(
+      '[data-testid="save-design-nav-btn"]',
+    );
+
+    if (saveButton) {
+      saveButton.click();
+      return;
+    }
+
+    const currentPath =
+      typeof window !== 'undefined'
+        ? `${window.location.pathname}?action=save-design`
+        : returnPath;
+    router.push(currentPath);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 day:bg-none day:bg-white">
-      <button
-        type="button"
-        onClick={handleClosePage}
-        className="check-price-grid__close-button fixed top-6 right-6 z-[10002] inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 day:border-gray-300 day:bg-gray-100 day:text-gray-900 day:hover:bg-gray-200"
-        aria-label="Back to designer"
-      >
-        <ArrowLeftIcon className="h-5 w-5" aria-hidden="true" />
-        <span className="hidden sm:inline">Back</span>
-      </button>
-      
-      {/* Header Section */}
-      <div className="border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm relative overflow-hidden day:bg-none day:bg-gray-50 day:border-gray-200">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 relative">
-          <div className="text-center">
-            <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl day:text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white day:bg-none day:bg-stone-100 day:text-gray-900">
+      <header className="relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm day:border-gray-200 day:bg-white day:bg-none">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent day:hidden" />
+        <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
+          <div className="text-left sm:text-center">
+            <h1 className="font-serif text-3xl font-light tracking-tight text-white day:text-gray-900 sm:text-4xl lg:text-[2.75rem]">
               Check Price
             </h1>
-            <p className="mt-4 text-lg text-gray-300 max-w-3xl mx-auto day:text-gray-600">
-              Review your design selections and get an instant price estimate. Prices update automatically as you customize your memorial.
+            <p className="mx-0 mt-3 max-w-3xl text-base leading-6 text-gray-100 day:text-gray-600 sm:mx-auto">
+              Review your selected product, options and itemised price before saving your design.
             </p>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Content */}
-      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[60%_40%]">
-          {/* Left Column - Design Summary */}
-          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
-            <div className="mb-6 rounded-xl border border-[#cfac6c]/30 bg-[#cfac6c]/10 p-4">
-              <p className="text-xs font-semibold tracking-[0.2em] text-[#f3d48f] uppercase day:text-[#8a6829]">
-                Total Estimated Price
-              </p>
-              <p className="mt-1 text-3xl font-semibold text-white day:text-gray-900">
-                ${total.toFixed(2)}
-              </p>
-            </div>
-            <h2 className="text-2xl font-serif font-light text-white mb-6 day:text-gray-900">Your Design</h2>
-            
-            {/* Product Details */}
-            <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10 day:bg-gray-50 day:border-gray-200">
-              <div className="flex items-start justify-between">
-                <div className="flex-1">
-                  <p className="text-sm text-gray-300 leading-relaxed day:text-gray-600">
-                    <strong className="text-white day:text-gray-900">{productName}</strong><br />
-                    ID: {productId} · Shape: {shapeName}<br />
-                    {isUrnProduct ? (
-                      <>Background: {headstoneMaterialName}</>
-                    ) : (
-                      <>
-                        Material: {headstoneMaterialName}<br />
-                        Size: {widthMm}mm × {heightMm}mm × {uprightThickness}mm
-                      </>
-                    )}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p className="text-xl text-white font-semibold day:text-gray-900">${headstonePrice.toFixed(2)}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Base Details */}
-            {baseMaterialUrl && (
-              <div className="mb-6 p-4 bg-white/5 rounded-lg border border-white/10 day:bg-gray-50 day:border-gray-200">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-300 leading-relaxed day:text-gray-600">
-                      <strong className="text-white day:text-gray-900">{baseProductName}</strong><br />
-                      ID: {baseProductId}<br />
-                      Material: {baseMaterialName}<br />
-                      Size: {baseWidthMm}mm × {baseHeightMm}mm × {baseThickness}mm
-                    </p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xl text-white font-semibold day:text-gray-900">${basePrice.toFixed(2)}</p>
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            <div className="space-y-4">
-              {/* Additions */}
-              {additionItems.length > 0 && (
-                <div className="border-b border-white/5 pb-4 day:border-gray-200">
-                  <div className="flex items-center justify-between gap-4">
-                    <button
-                      type="button"
-                      onClick={() => toggleSection('additions')}
-                      aria-expanded={expandedSections.additions}
-                      className="flex flex-col text-left text-white day:text-gray-900"
-                    >
-                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
-                          {expandedSections.additions ? '−' : '+'}
-                        </span>
-                        Additions
-                      </p>
-                      <p className="text-lg">
-                        {additionItems.length} item{additionItems.length !== 1 ? 's' : ''}
-                      </p>
-                    </button>
-                    <p className="text-xl text-white font-semibold day:text-gray-900">${additionsPrice.toFixed(2)}</p>
-                  </div>
-                  {expandedSections.additions && (
-                    <ul className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
-                      {additionItems.map((item) => (
-                        <li key={item.id} className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            {item.thumbnail && (
-                              <div className="h-10 w-10 overflow-hidden rounded-md border border-gray-400/70 bg-gray-300/90">
-                                <img src={item.thumbnail} alt={item.name} className="h-full w-full object-contain p-1" />
-                              </div>
-                            )}
-                            <div>
-                              <p className="text-white font-medium day:text-gray-900">{item.name}</p>
-                              <p className="text-xs text-gray-400 capitalize day:text-gray-500">
-                                Product ID: {item.baseId} · Type: {item.type} · Size Variant: {item.sizeVariant}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-white font-semibold day:text-gray-900">$75.00</p>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              )}
-
-              {/* Motifs */}
-              <div className="border-b border-white/5 pb-4 day:border-gray-200">
-                <div className="flex items-center justify-between gap-4">
-                  {motifItems.length > 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => toggleSection('motifs')}
-                      aria-expanded={expandedSections.motifs}
-                      className="flex flex-col text-left text-white day:text-gray-900"
-                    >
-                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
-                          {expandedSections.motifs ? '−' : '+'}
-                        </span>
-                        Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
-                      </p>
-                      <p className="text-lg">
-                        {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
-                      </p>
-                    </button>
-                  ) : (
-                    <div>
-                      <p className="text-sm text-gray-400 day:text-gray-500">
-                        Product ID: {motifProductId} - {motifName} {motifFormula && `(${motifFormula})`}
-                      </p>
-                      <p className="text-lg text-white day:text-gray-900">0 motifs</p>
-                    </div>
-                  )}
-                  <p className="text-xl text-white font-semibold day:text-gray-900">${motifsPrice.toFixed(2)}</p>
-                </div>
-                {expandedSections.motifs && motifItems.length > 0 && (
-                  <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
-                    {motifItems.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                          {item.thumbnail && (
-                            <div className="h-10 w-10 overflow-hidden rounded-md border border-gray-400/70 bg-gray-300/90">
-                              <img src={item.thumbnail} alt={item.name} className="h-full w-full object-contain p-1" />
-                            </div>
-                          )}
-                          <div>
-                            <p className="text-white font-medium capitalize day:text-gray-900">{item.name}</p>
-                            <p className="text-xs text-gray-400 day:text-gray-500">
-                              Height: {item.heightMm}mm · {item.isStainlessSteelMotif ? 'Material' : 'Color'}: {item.colorName}
-                            </p>
-                            <p className="text-xs text-gray-500 day:text-gray-400">{item.svgPath}</p>
-                          </div>
-                        </div>
-                        <p className="text-white font-semibold day:text-gray-900">${item.price.toFixed(2)}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Emblems */}
-              {emblemItems.length > 0 && (
-                <div className="border-b border-white/5 pb-4 day:border-gray-200">
-                  <div className="flex items-center justify-between gap-4">
-                    <button
-                      type="button"
-                      onClick={() => toggleSection('emblems')}
-                      aria-expanded={expandedSections.emblems}
-                      className="flex flex-col text-left text-white day:text-gray-900"
-                    >
-                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
-                          {expandedSections.emblems ? '−' : '+'}
-                        </span>
-                        Product ID: 200 - Bronze Emblem ($109.00/unit)
-                      </p>
-                      <p className="text-lg">
-                        {emblemItems.length} emblem{emblemItems.length !== 1 ? 's' : ''}
-                      </p>
-                    </button>
-                    <p className="text-xl text-white font-semibold day:text-gray-900">${emblemsPrice.toFixed(2)}</p>
-                  </div>
-                  {expandedSections.emblems && (
-                    <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
-                      {emblemItems.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between gap-4">
-                          <div className="flex items-center gap-3">
-                            {item.thumbnail && (
-                              <div className="h-10 w-10 overflow-hidden rounded-md border border-gray-400/70 bg-gray-300/90">
-                                <img src={toAssetPath(item.thumbnail)} alt={item.name} className="h-full w-full object-contain p-1" />
-                              </div>
-                            )}
-                            <div>
-                              <p className="text-white font-medium capitalize day:text-gray-900">{item.name}</p>
-                              <p className="text-xs text-gray-400 day:text-gray-500">Size: {item.widthMm}×{item.heightMm}mm</p>
-                            </div>
-                          </div>
-                          <p className="text-white font-semibold day:text-gray-900">${item.price.toFixed(2)}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Images */}
-              {imageItems.length > 0 && (
-                <div className="border-b border-white/5 pb-4 day:border-gray-200">
-                  <div className="flex items-center justify-between gap-4">
-                    <button
-                      type="button"
-                      onClick={() => toggleSection('images')}
-                      aria-expanded={expandedSections.images}
-                      className="flex flex-col text-left text-white day:text-gray-900"
-                    >
-                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
-                          {expandedSections.images ? '−' : '+'}
-                        </span>
-                        Ceramic & Photo Images
-                      </p>
-                      <p className="text-lg">
-                        {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
-                      </p>
-                    </button>
-                    <div className="text-right">
-                      <p className="text-xl text-white font-semibold day:text-gray-900">
-                        {imagePricingData ? `$${imagePriceTotal.toFixed(2)}` : '—'}
-                      </p>
-                      {imagePricingError && (
-                        <p className="mt-1 text-xs text-red-400" role="status" aria-live="assertive">
-                          {imagePricingError}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                  {expandedSections.images && (
-                    <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
-                      {imageItems.map((item) => (
-                        <div key={item.id} className="flex items-center justify-between gap-4">
-                          <div>
-                            <p className="text-white font-medium day:text-gray-900">
-                              Product ID: {item.productId} - {item.baseName}
-                            </p>
-                            <p className="text-xs text-gray-400 day:text-gray-500">Type: {item.typeName || 'Image'}</p>
-                            <p className="text-xs text-gray-400 day:text-gray-500">Size: {item.sizeLabel}</p>
-                            <p className="text-xs text-gray-400 day:text-gray-500">Color Mode: {item.colorDisplay}</p>
-                          </div>
-                          <p className="text-white font-semibold day:text-gray-900">
-                            {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Inscriptions */}
-              <div className="border-b border-white/5 pb-4 day:border-gray-200">
-                <div className="flex items-center justify-between gap-4">
-                  {inscriptionItems.length > 0 ? (
-                    <button
-                      type="button"
-                      onClick={() => toggleSection('inscriptions')}
-                      aria-expanded={expandedSections.inscriptions}
-                      className="flex flex-col text-left text-white day:text-gray-900"
-                    >
-                      <p className="flex items-center gap-2 text-sm text-gray-400 day:text-gray-500">
-                        <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-white/40 text-xs font-semibold day:border-gray-400">
-                          {expandedSections.inscriptions ? '−' : '+'}
-                        </span>
-                        Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
-                      </p>
-                      <p className="text-lg">
-                        {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
-                      </p>
-                    </button>
-                  ) : (
-                    <div>
-                      <p className="text-sm text-gray-400 day:text-gray-500">
-                        Product ID: {inscriptionProductId} - {inscriptionName} {inscriptionFormula && `(${inscriptionFormula})`}
-                      </p>
-                      <p className="text-lg text-white day:text-gray-900">0 inscriptions</p>
-                    </div>
-                  )}
-                  <p className="text-xl text-white font-semibold day:text-gray-900">${inscriptionPrice.toFixed(2)}</p>
-                </div>
-                {expandedSections.inscriptions && inscriptionItems.length > 0 && (
-                  <div className="mt-3 space-y-2 text-sm text-gray-300 day:text-gray-600">
-                    {inscriptionItems.map((item) => (
-                      <div key={item.id} className="flex items-center justify-between gap-4">
-                        <div>
-                          <p className="text-white font-medium day:text-gray-900">{item.text}</p>
-                          <p className="text-xs text-gray-400 day:text-gray-500">Font: {item.font} · Size: {item.sizeMm}mm · Color: {item.colorName}</p>
-                          <p className="text-xs text-gray-500 day:text-gray-400">Line ID: {item.id}</p>
-                        </div>
-                        <p className="text-white font-semibold day:text-gray-900">${item.price.toFixed(2)}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column - Price Summary */}
-          <div className="check-price-grid__card rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
-            <h2 className="text-2xl font-serif font-light text-white mb-6 day:text-gray-900">Price Summary</h2>
-            
-            <div className="space-y-6">
-              {/* Subtotal */}
-              <div className="flex items-center justify-between text-lg">
-                <p className="text-gray-300 day:text-gray-600">Subtotal</p>
-                <p className="text-white font-semibold day:text-gray-900">${subtotal.toFixed(2)}</p>
-              </div>
-
-              {/* Tax */}
-              <div className="flex items-center justify-between text-lg border-b border-white/10 pb-6 day:border-gray-200">
-                <p className="text-gray-300 day:text-gray-600">Tax (10%)</p>
-                <p className="text-white font-semibold day:text-gray-900">${tax.toFixed(2)}</p>
-              </div>
-
-              {/* Total */}
-              <div className="flex items-center justify-between text-2xl border-t border-white/10 pt-6 day:border-gray-200">
-                <p className="text-white font-bold day:text-gray-900">Total</p>
-                <p className="text-[#cfac6c] font-bold">${total.toFixed(2)}</p>
-              </div>
-              <p className="text-right text-xs text-gray-500">Prices shown in USD. Tax is estimated at 10% for preview purposes.</p>
-
-              {/* Action Buttons */}
-              <div className="check-price-grid__actions space-y-4 pt-6">
+      <div className="relative border-b border-white/5 bg-gray-900/30 day:border-gray-200 day:bg-white">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent day:hidden" />
+        <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
+          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+            {quoteCategoryFilters.map((filter) => {
+              const isSelected = filter.id === selectedQuoteCategory;
+              return (
                 <button
-                  className="w-full rounded-full bg-[#cfac6c] px-8 py-4 text-base font-semibold text-slate-900 shadow-lg shadow-[#cfac6c]/20 transition-all hover:scale-105 hover:shadow-[#cfac6c]/30"
+                  key={filter.id}
+                  type="button"
+                  onClick={() => setSelectedQuoteCategory(filter.id)}
+                  className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
+                    isSelected
+                      ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/20'
+                      : 'border border-white/20 text-white hover:border-[#cfac6c]/30 hover:bg-white/10 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100'
+                  }`}
                 >
-                  Request Quote
+                  {filter.label}
+                  {filter.id !== 'all' && filter.count > 1 ? ` (${filter.count})` : ''}
                 </button>
-                <ProjectActions pricing={projectPricing} />
-              </div>
-
-              {/* Notes */}
-              <div className="rounded-xl bg-white/5 p-4 mt-6 day:bg-gray-50">
-                <p className="text-sm text-gray-400 day:text-gray-600">
-                  <strong className="text-white day:text-gray-900">Note:</strong> This is an estimate only. Final pricing will be confirmed upon quote request and may vary based on specific customizations, installation requirements, and location.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Additional Info */}
-        <div className="mt-12 rounded-2xl border border-white/10 bg-gradient-to-br from-gray-800/50 to-gray-900/50 p-8 day:bg-none day:bg-white day:border-gray-200">
-          <h2 className="text-2xl font-serif font-light text-white mb-6 text-center day:text-gray-900">What&apos;s Included</h2>
-          
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            <div className="text-center">
-              <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Professional Design</h3>
-              <p className="text-sm text-gray-400 day:text-gray-600">Expert review of your custom design</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Quality Materials</h3>
-              <p className="text-sm text-gray-400 day:text-gray-600">Premium granite and materials</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Craftsmanship</h3>
-              <p className="text-sm text-gray-400 day:text-gray-600">Skilled artisan workmanship</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl mb-3">✓</div>
-              <h3 className="text-lg font-semibold text-white mb-2 day:text-gray-900">Support</h3>
-              <p className="text-sm text-gray-400 day:text-gray-600">Dedicated customer service</p>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
+
+      <main className="w-full px-4 py-8 sm:px-6 lg:px-8">
+        <div className="overflow-hidden rounded-lg border border-white/10 bg-[#120804] shadow-2xl shadow-black/30 day:border-gray-200 day:bg-white day:shadow-none">
+          <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] border-collapse text-left text-sm">
+            <thead>
+              <tr className="border-b border-white/10 bg-white/[0.03] text-white/55 day:border-gray-200 day:bg-gray-50 day:text-gray-500">
+                <th className="w-[50%] px-4 py-4 font-semibold sm:px-6">Product</th>
+                <th className="w-[10%] px-3 py-4 text-center font-semibold sm:px-6">Qty</th>
+                <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">Price</th>
+                <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">Item Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {visibleQuoteRows.map((row) => (
+                <tr key={row.id} className="border-b border-white/10 align-middle last:border-b-0 day:border-gray-200">
+                  <td className="px-4 py-6 sm:px-6">
+                    <p className="font-semibold text-white day:text-gray-900">{row.title}</p>
+                    {row.details.map((detail) => (
+                      <p key={detail} className="leading-tight text-white/75 day:text-gray-700">
+                        {detail}
+                      </p>
+                    ))}
+                  </td>
+                  <td className="px-3 py-6 text-center text-white/85 day:text-gray-800 sm:px-6">{row.qty}</td>
+                  <td className="px-3 py-6 text-right text-white/60 day:text-gray-500 sm:px-6">{formatMoney(row.unitPrice)}</td>
+                  <td className="px-3 py-6 text-right text-white/75 day:text-gray-600 sm:px-6">{formatMoney(row.total)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          </div>
+
+          {imagePricingError && (
+            <p className="border-t border-white/10 px-6 py-3 text-sm text-red-300 day:border-gray-200 day:text-red-600" role="status">
+              {imagePricingError}
+            </p>
+          )}
+
+          <div className="ml-auto w-full max-w-sm border-t border-white/10 px-6 py-4 text-sm day:border-gray-200">
+            <div className="flex justify-between py-1">
+              <span className="text-white/70 day:text-gray-600">Subtotal</span>
+              <span>{formatMoney(visibleSubtotal)}</span>
+            </div>
+            <div className="flex justify-between py-1">
+              <span className="text-white/70 day:text-gray-600">Tax (10%)</span>
+              <span>{formatMoney(visibleTax)}</span>
+            </div>
+            <div className="mt-2 flex justify-between border-t border-white/10 pt-3 text-base font-semibold day:border-gray-200">
+              <span>Total</span>
+              <span className="text-[#D4A84F]">{formatMoney(visibleTotal)}</span>
+            </div>
+          </div>
+
+          <div className="check-price-actions flex justify-end gap-3 border-t border-white/10 bg-white/[0.03] px-5 py-4 day:border-gray-200 day:bg-gray-50">
+            <button
+              type="button"
+              onClick={handleDownloadPdf}
+              className="rounded-md border border-[#D4A84F]/70 bg-[#D4A84F] px-5 py-2 text-sm font-semibold uppercase tracking-wide text-[#1a1208] shadow-sm transition hover:bg-[#C49940]"
+            >
+              Download PDF
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveDesign}
+              className="rounded-md border border-white/15 bg-white/10 px-5 py-2 text-sm font-semibold uppercase tracking-wide text-white transition hover:bg-white/15 day:border-gray-300 day:bg-white day:text-gray-800 day:hover:bg-gray-100"
+            >
+              Save Design
+            </button>
+          </div>
+        </div>
+      </main>
 
       <style>
         {`
           @media print {
-            .check-price-grid__close-button,
-            .check-price-grid__actions {
+            .check-price-actions {
               display: none !important;
             }
-            .check-price-grid__card {
-              background: #fff !important;
-              border-color: #d1d5db !important;
-              box-shadow: none !important;
+            main {
+              padding: 0 !important;
+            }
+            table {
+              min-width: 0 !important;
+              font-size: 11px !important;
             }
           }
         `}

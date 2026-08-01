@@ -10,7 +10,7 @@ import { calculatePrice, calculatePricePowerLaw, computeQuantity, type CatalogDa
 import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
-import { useUnitSystem } from '#/lib/use-unit-system';
+import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
 import QuickEnquiryModal from '#/components/QuickEnquiryModal';
 
 import {
@@ -42,6 +42,37 @@ function CameraController() {
   }, [controls, camera]);
 
   return null;
+}
+
+function UnitSystemToggle() {
+  const unitSystem = useUnitSystem();
+  const setUnitSystem = useSetUnitSystem();
+
+  return (
+    <div className="absolute right-4 top-4 z-40 flex rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md pointer-events-auto lg:right-6 lg:top-6 lg:z-10">
+      {[
+        { value: 'metric' as const, label: 'mm' },
+        { value: 'imperial' as const, label: 'in' },
+      ].map((option) => {
+        const isActive = unitSystem === option.value;
+        return (
+          <button
+            key={option.value}
+            type="button"
+            onClick={() => setUnitSystem(option.value)}
+            aria-pressed={isActive}
+            className={`h-7 min-w-10 rounded-full px-3 text-xs font-semibold uppercase tracking-wide transition-colors ${
+              isActive
+                ? 'bg-[#cfac6c] text-slate-950'
+                : 'text-white/70 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            {option.label}
+          </button>
+        );
+      })}
+    </div>
+  );
 }
 
 // Product Name Header Component - Apple Studio Look
@@ -243,6 +274,8 @@ function ProductNameHeader() {
 
   return (
     <>
+      <UnitSystemToggle />
+
       {/* Product name + Quick Enquiry — top left stack */}
       <div className="absolute top-6 left-6 z-10 hidden lg:flex flex-col gap-2 items-start">
         {displayProductName && (

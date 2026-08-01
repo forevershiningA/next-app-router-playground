@@ -84,20 +84,16 @@ describe('formatImperialFromMm', () => {
     expect(formatImperialFromMm(304.8)).toBe('12"');
   });
 
-  it('formats fractional inches as reduced fractions', () => {
-    // 25.4 / 2 = 12.7 mm = 0.5" = 1/2"
-    expect(formatImperialFromMm(12.7)).toBe('1/2"');
-    // 25.4 * 0.25 = 6.35 mm = 1/4"
-    expect(formatImperialFromMm(6.35)).toBe('1/4"');
-    // 25.4 * 0.75 = 19.05 mm = 3/4"
-    expect(formatImperialFromMm(19.05)).toBe('3/4"');
+  it('rounds fractional inches up to whole inches', () => {
+    expect(formatImperialFromMm(12.7)).toBe('1"');
+    expect(formatImperialFromMm(6.35)).toBe('1"');
+    expect(formatImperialFromMm(19.05)).toBe('1"');
   });
 
-  it('formats mixed inches and fractions', () => {
-    // 1.5" = 38.1 mm
-    expect(formatImperialFromMm(38.1)).toBe('1 1/2"');
-    // 2.25" = 57.15 mm
-    expect(formatImperialFromMm(57.15)).toBe('2 1/4"');
+  it('rounds mixed inches up to whole inches', () => {
+    expect(formatImperialFromMm(38.1)).toBe('2"');
+    expect(formatImperialFromMm(57.15)).toBe('3"');
+    expect(formatImperialFromMm(23.625 * 25.4)).toBe('24"');
   });
 
   it('handles zero and negative values as zero', () => {

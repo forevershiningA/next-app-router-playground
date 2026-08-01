@@ -17,23 +17,7 @@ export function parseUnitSystemCookie(cookieHeader: string | null | undefined): 
 
 export function formatImperialFromMm(mm: number): string {
   const inches = Math.max(0, mm) / 25.4;
-  const whole = Math.floor(inches);
-  const fraction = inches - whole;
-  const sixteenths = Math.round(fraction * 16);
-
-  if (sixteenths === 0) return `${whole}"`;
-  if (sixteenths === 16) return `${whole + 1}"`;
-
-  let numerator = sixteenths;
-  let denominator = 16;
-  const gcd = (a: number, b: number): number => (b === 0 ? a : gcd(b, a % b));
-  const divisor = gcd(numerator, denominator);
-  numerator /= divisor;
-  denominator /= divisor;
-
-  return whole > 0
-    ? `${whole} ${numerator}/${denominator}"`
-    : `${numerator}/${denominator}"`;
+  return `${Math.ceil(inches - 1e-9)}"`;
 }
 
 export function formatLengthFromMm(mm: number, unitSystem: UnitSystem): string {

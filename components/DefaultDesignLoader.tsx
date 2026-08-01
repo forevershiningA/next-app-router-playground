@@ -39,7 +39,11 @@ export async function loadDesignById(designId: string) {
     if (isDevEnvironment) {
       logger.log(`[loadDesignById] Successfully loaded canonical design ${designId}`);
     }
-    return { success: true, message: 'Design loaded successfully' };
+    return {
+      success: true,
+      message: 'Design loaded successfully',
+      productId: canonicalData.product?.id != null ? String(canonicalData.product.id) : undefined,
+    };
   } catch (error) {
     console.error(`[loadDesignById] Error loading canonical design ${designId}:`, error);
     return { success: false, message: 'Error loading design' };

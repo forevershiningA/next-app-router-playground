@@ -8,18 +8,29 @@ import { data } from '#/app/_internal/_data';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import { calculateImagePrice, fetchImagePricing, type ImagePricingMap } from '#/lib/image-pricing';
 import { getImageSizeOption } from '#/lib/image-size-config';
+import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
 import { calculatePrice, calculatePricePowerLaw, computeQuantity } from '#/lib/xml-parser';
 import {
   getCheckPriceMaterialName,
   getShapeNameFromUrl,
   isStainlessSteelHeadstoneProduct,
   loadCatalogForProduct,
-  SECTION_DEFAULT_STATE,
-  type ExpandableSection,
 } from '#/lib/check-price-utils';
 import type { CatalogData } from '#/lib/xml-parser';
-import { formatDimensionPair, formatDimensionTriplet, formatLengthFromMm } from '#/lib/unit-system';
+import { formatDimensionPair, formatDimensionTriplet } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
+
+type QuoteRow = {
+  id: string;
+  title: string;
+  details: string[];
+  qty: number | string;
+  unitPrice: number | null;
+  total: number | null;
+};
+
+const formatMoney = (value: number | null) =>
+  typeof value === 'number' ? `$${value.toFixed(2)}` : '-';
 
 export default function CheckPricePanel() {
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -28,7 +39,6 @@ export default function CheckPricePanel() {
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
-  const ledgerMaterialUrl = useHeadstoneStore((s) => s.ledgerMaterialUrl);
   const kerbsetMaterialUrl = useHeadstoneStore((s) => s.kerbsetMaterialUrl);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
@@ -41,9 +51,12 @@ export default function CheckPricePanel() {
   const motifCost = useHeadstoneStore((s) => s.motifCost);
   const motifPriceModel = useHeadstoneStore((s) => s.motifPriceModel);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
+  const selectedEmblems = useHeadstoneStore((s) => s.selectedEmblems);
+  const emblemOffsets = useHeadstoneStore((s) => s.emblemOffsets);
+  const emblemCost = useHeadstoneStore((s) => s.emblemCost);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
+  const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const showBase = useHeadstoneStore((s) => s.showBase);
-  const showInscriptionColor = useHeadstoneStore((s) => s.showInscriptionColor);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -58,25 +71,11 @@ export default function CheckPricePanel() {
   const [imagePricingData, setImagePricingData] = useState<ImagePricingMap | null>(null);
   const [imagePricingError, setImagePricingError] = useState<string | null>(null);
   const [resolvedCatalog, setResolvedCatalog] = useState<CatalogData | null>(null);
-  const [expandedSections, setExpandedSections] = useState<Record<ExpandableSection, boolean>>({
-    ...SECTION_DEFAULT_STATE,
-  });
   const isMountedRef = useRef(true);
   const activeCatalog = catalog ?? resolvedCatalog;
   const isStainlessSteelHeadstone = isStainlessSteelHeadstoneProduct(productId, activeCatalog);
 
   const isOpen = activePanel === 'checkprice';
-
-  const toggleSection = useCallback((section: ExpandableSection) => {
-    setExpandedSections((prev) => ({
-      ...prev,
-      [section]: !prev[section],
-    }));
-  }, []);
-
-  const expandAllSections = useCallback(() => {
-    setExpandedSections({ ...SECTION_DEFAULT_STATE });
-  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -105,14 +104,6 @@ export default function CheckPricePanel() {
       isMountedRef.current = false;
     };
   }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    window.addEventListener('beforeprint', expandAllSections);
-    return () => {
-      window.removeEventListener('beforeprint', expandAllSections);
-    };
-  }, [expandAllSections]);
 
   const loadImagePricing = useCallback(() => {
     setImagePricingError(null);
@@ -230,9 +221,10 @@ export default function CheckPricePanel() {
         baseId: baseId,
         name: addition?.name || 'Addition',
         type: addition?.type || 'application',
+        sizeVariant: additionOffsets?.[addId]?.sizeVariant ?? 1,
       };
     });
-  }, [selectedAdditions]);
+  }, [selectedAdditions, additionOffsets]);
 
   const imageItems = useMemo(() => {
     if (!selectedImages.length) return [];
@@ -284,8 +276,8 @@ export default function CheckPricePanel() {
 
   // Calculate total
   const totalPrice = useMemo(() => {
-    return headstonePrice + basePrice + ledgerPrice + kerbsetPrice + inscriptionCost + motifCost + additionsPrice + imagePriceTotal + ssBorderPrice;
-  }, [headstonePrice, basePrice, ledgerPrice, kerbsetPrice, inscriptionCost, motifCost, additionsPrice, imagePriceTotal, ssBorderPrice]);
+    return headstonePrice + basePrice + ledgerPrice + kerbsetPrice + inscriptionCost + motifCost + additionsPrice + imagePriceTotal + ssBorderPrice + emblemCost;
+  }, [headstonePrice, basePrice, ledgerPrice, kerbsetPrice, inscriptionCost, motifCost, additionsPrice, imagePriceTotal, ssBorderPrice, emblemCost]);
 
   // Get detailed motif items
   const motifItems = useMemo(() => {
@@ -342,7 +334,7 @@ export default function CheckPricePanel() {
     const totalChars = inscriptions.reduce((sum, l) => sum + l.text.length, 0);
     const pricePerChar = totalChars > 0 ? inscriptionCost / totalChars : 0;
     
-    return inscriptions.map((line) => {
+    return inscriptions.filter((line) => line.text?.trim()).map((line) => {
       const colorName = data.colors.find((c) => c.hex === line.color)?.name || line.color;
       const charCount = line.text.length;
       const lineTotal = charCount * pricePerChar;
@@ -359,26 +351,235 @@ export default function CheckPricePanel() {
     });
   }, [inscriptions, inscriptionCost]);
 
+  const emblemItems = useMemo(() => {
+    return selectedEmblems.map((emblem) => {
+      const offset = emblemOffsets[emblem.id];
+      const sizeEntry = EMBLEM_SIZES.find((size) => size.variant === (offset?.sizeVariant ?? 3));
+      const sizeMm = sizeEntry?.heightMm ?? 100;
+
+      return {
+        id: emblem.id,
+        name: emblem.emblemId.replace(/^br/, '').replace(/-/g, ' '),
+        widthMm: offset?.widthMm ?? sizeMm,
+        heightMm: offset?.heightMm ?? sizeMm,
+        price: 109,
+      };
+    });
+  }, [selectedEmblems, emblemOffsets]);
+
+  const quoteRows = useMemo<QuoteRow[]>(() => {
+    if (!activeCatalog) return [];
+
+    const rows: QuoteRow[] = [
+      {
+        id: 'product',
+        title: `Product ID: ${activeCatalog.product.id} - ${activeCatalog.product.name || 'Headstone'}`,
+        details: isUrnProduct
+          ? [
+              `Shape: ${shapeName}`,
+              `Background: ${getCheckPriceMaterialName(headstoneMaterialUrl)}`,
+            ]
+          : [
+              `Shape: ${shapeName}`,
+              `Material: ${getCheckPriceMaterialName(headstoneMaterialUrl)}`,
+              `Size: ${formatDimensionTriplet(widthMm, heightMm, uprightThickness, unitSystem)}`,
+            ],
+        qty: 1,
+        unitPrice: headstonePrice,
+        total: headstonePrice,
+      },
+    ];
+
+    if (ssBorderPrice > 0) {
+      rows.push({
+        id: 'stainless-border',
+        title: 'Product ID: 37 - Stainless Steel Border',
+        details: [],
+        qty: 1,
+        unitPrice: ssBorderPrice,
+        total: ssBorderPrice,
+      });
+    }
+
+    if (showBase && basePrice > 0) {
+      const baseAddition = activeCatalog.product.additions.find((addition) => addition.type === 'base');
+      rows.push({
+        id: 'base',
+        title: `Product ID: ${baseAddition?.id ?? '-'} - ${baseAddition?.name ?? 'Base'}`,
+        details: [
+          'Shape: Rectangle',
+          `Material: ${getCheckPriceMaterialName(baseMaterialUrl)}`,
+          `Size: ${formatDimensionTriplet(baseWidthMm, baseHeightMm, baseThickness, unitSystem)}`,
+        ],
+        qty: 1,
+        unitPrice: basePrice,
+        total: basePrice,
+      });
+    }
+
+    if (isFullMonument && ledgerPrice > 0) {
+      const ledgerAddition = activeCatalog.product.additions.find((addition) => addition.type === 'ledger');
+      rows.push({
+        id: 'ledger',
+        title: `Product ID: ${ledgerAddition?.id ?? '-'} - ${ledgerAddition?.name ?? 'Ledger'}`,
+        details: [
+          'Shape: Rectangle',
+          `Material: ${getCheckPriceMaterialName(kerbsetMaterialUrl)}`,
+          `Size: ${formatDimensionTriplet(
+            selectedShape?.lid?.initWidth ?? 0,
+            selectedShape?.lid?.initHeight ?? 0,
+            selectedShape?.lid?.initDepth ?? 0,
+            unitSystem,
+          )}`,
+        ],
+        qty: 1,
+        unitPrice: ledgerPrice,
+        total: ledgerPrice,
+      });
+    }
+
+    if (isFullMonument && kerbsetPrice > 0) {
+      const kerbsetAddition = activeCatalog.product.additions.find((addition) => addition.type === 'kerbset');
+      rows.push({
+        id: 'kerbset',
+        title: `Product ID: ${kerbsetAddition?.id ?? '-'} - ${kerbsetAddition?.name ?? 'Kerbset'}`,
+        details: [
+          'Shape: Rectangle',
+          `Material: ${getCheckPriceMaterialName(headstoneMaterialUrl)}`,
+          `Size: ${formatDimensionTriplet(
+            selectedShape?.kerb?.initWidth ?? 0,
+            selectedShape?.kerb?.initHeight ?? 0,
+            selectedShape?.kerb?.initDepth ?? 0,
+            unitSystem,
+          )}`,
+        ],
+        qty: 1,
+        unitPrice: kerbsetPrice,
+        total: kerbsetPrice,
+      });
+    }
+
+    const inscriptionAddition = activeCatalog.product.additions.find((addition) => addition.type === 'inscription');
+    inscriptionItems.forEach((item) => {
+      const qty = Math.max(1, item.text.trim().length);
+      rows.push({
+        id: `inscription-${item.id}`,
+        title: `Product ID: ${inscriptionAddition?.id ?? activeCatalog.product.id} - ${inscriptionAddition?.name ?? 'Inscription'}`,
+        details: [
+          item.text,
+          `${item.sizeMm}mm ${item.font}, colour: ${item.colorName}`,
+        ],
+        qty,
+        unitPrice: qty > 0 ? item.price / qty : item.price,
+        total: item.price,
+      });
+    });
+
+    const motifAddition = activeCatalog.product.additions.find((addition) => addition.type === 'motif');
+    motifItems.forEach((item) => {
+      rows.push({
+        id: `motif-${item.id}`,
+        title: `Product ID: ${motifAddition?.id ?? activeCatalog.product.id} - ${motifAddition?.name ?? 'Motif'}`,
+        details: [
+          `File: ${item.name}`,
+          `${item.heightMm} mm, ${item.isStainlessSteelMotif ? 'material' : 'colour'}: ${item.colorDisplay}`,
+        ],
+        qty: 1,
+        unitPrice: item.price,
+        total: item.price,
+      });
+    });
+
+    emblemItems.forEach((item) => {
+      rows.push({
+        id: `emblem-${item.id}`,
+        title: 'Product ID: 200 - Bronze Emblem',
+        details: [
+          `Emblem: ${item.name}`,
+          `Size: ${formatDimensionPair(item.widthMm, item.heightMm, unitSystem)}`,
+        ],
+        qty: 1,
+        unitPrice: item.price,
+        total: item.price,
+      });
+    });
+
+    imageItems.forEach((item) => {
+      rows.push({
+        id: `image-${item.id}`,
+        title: `Product ID: ${item.productId} - ${item.baseName}`,
+        details: [
+          `Type: ${item.typeName || 'Image'}`,
+          `Size: ${item.sizeLabel}`,
+          `Color Mode: ${item.colorDisplay}`,
+        ],
+        qty: 1,
+        unitPrice: imagePricingData ? item.price : null,
+        total: imagePricingData ? item.price : null,
+      });
+    });
+
+    additionItems.forEach((item) => {
+      rows.push({
+        id: `addition-${item.id}`,
+        title: `Product ID: ${item.baseId} - ${item.name}`,
+        details: [
+          `Type: ${item.type}`,
+          `Size Variant: ${item.sizeVariant}`,
+        ],
+        qty: 1,
+        unitPrice: 75,
+        total: 75,
+      });
+    });
+
+    return rows;
+  }, [
+    activeCatalog,
+    additionItems,
+    baseHeightMm,
+    baseMaterialUrl,
+    basePrice,
+    baseThickness,
+    baseWidthMm,
+    emblemItems,
+    headstoneMaterialUrl,
+    headstonePrice,
+    heightMm,
+    imageItems,
+    imagePricingData,
+    inscriptionItems,
+    isFullMonument,
+    isUrnProduct,
+    kerbsetMaterialUrl,
+    kerbsetPrice,
+    ledgerPrice,
+    motifItems,
+    selectedShape,
+    shapeName,
+    showBase,
+    ssBorderPrice,
+    unitSystem,
+    uprightThickness,
+    widthMm,
+  ]);
+
   if (!isOpen) return null;
 
   return (
     <OverlayPortal containerId="scene-root">
       <div 
-        className="check-price-panel__overlay pointer-events-auto absolute inset-0 z-50 flex items-center justify-center bg-black/75 px-4 py-6 backdrop-blur-sm"
+        className="check-price-panel__overlay pointer-events-auto absolute inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm"
         onClick={handleClose}
       >
         <div 
-          className="check-price-panel__modal relative w-full max-w-[58rem] max-h-[90vh] overflow-hidden rounded-3xl border border-[#d4af37]/35 bg-gradient-to-b from-[#191108]/95 via-[#120d07]/95 to-[#0a0704]/95 text-white shadow-[0_35px_90px_rgba(0,0,0,0.7)] ring-1 ring-white/10"
+          className="check-price-panel__modal relative flex max-h-[90vh] w-full max-w-[64rem] flex-col overflow-hidden rounded-lg border border-white/10 bg-[#120804] text-white shadow-2xl shadow-black/50 ring-1 ring-white/5"
           onClick={(e) => e.stopPropagation()}
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#d4af37]/18 via-[#d4af37]/6 to-transparent"
-          />
           <button
             type="button"
             onClick={handleClose}
-            className="absolute right-4 top-4 z-10 rounded-full border border-white/25 bg-black/25 p-1.5 text-white/70 transition-colors hover:border-white/60 hover:text-white cursor-pointer"
+            className="absolute right-4 top-4 z-10 rounded-full border border-white/15 bg-white/5 p-1.5 text-white/70 transition-colors hover:border-[#D4A84F]/60 hover:text-white cursor-pointer"
             aria-label="Close dialog"
           >
             <svg className="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -386,452 +587,69 @@ export default function CheckPricePanel() {
             </svg>
           </button>
 
-          <div className="relative border-b border-white/10 px-6 py-5 md:px-7 md:py-6">
-            <h2 className="text-2xl font-serif text-white md:text-[1.75rem]">
-              Your Design Total: <span className="text-[#f3d48f]">${totalPrice.toFixed(2)}</span>
+          <div className="border-b border-white/10 bg-white/[0.03] px-5 py-4 pr-14 md:px-6">
+            <h2 className="font-serif text-2xl font-light text-white md:text-[1.75rem]">
+              Check Price Quote
             </h2>
-            <p className="mt-2 max-w-[62ch] text-sm leading-relaxed text-white/85">
-              Detailed itemization of every component in your memorial design.
+            <p className="mt-1 text-sm text-white/65">
+              Current design itemisation
             </p>
           </div>
 
-          {/* Content - Table */}
-          <div className="check-price-panel__table max-h-[calc(90vh-190px)] overflow-y-auto overflow-x-auto pb-6">
-            <table className="w-full border-collapse">
+          <div className="check-price-panel__table flex-1 overflow-y-auto overflow-x-auto">
+            <table className="w-full min-w-[520px] border-collapse text-left text-sm">
               <thead className="sticky top-0 z-10">
-              <tr className="bg-[#1a1508] shadow-[0_1px_0_rgba(212,175,55,0.35)]">
-                <th className="text-left px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35">
-                  Product
-                </th>
-                <th className="text-center px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35" style={{width: '10%'}}>
-                  Qty
-                </th>
-                <th className="text-right px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35" style={{width: '15%'}}>
-                  Price
-                </th>
-                <th className="text-right px-6 py-3 text-xs font-semibold uppercase tracking-[0.12em] text-[#f3d48f] border-b border-[#d4af37]/35" style={{width: '15%'}}>
-                  Item Total
-                </th>
-              </tr>
-            </thead>
-            {!activeCatalog && (
+                <tr className="border-b border-white/10 bg-[#180c06] text-white/55">
+                  <th className="w-[50%] px-4 py-4 font-semibold sm:px-6">Product</th>
+                  <th className="w-[10%] px-3 py-4 text-center font-semibold sm:px-6">Qty</th>
+                  <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">Price</th>
+                  <th className="w-[20%] px-3 py-4 text-right font-semibold sm:px-6">Item Total</th>
+                </tr>
+              </thead>
               <tbody>
-                <tr>
-                  <td colSpan={4} className="px-6 py-10 text-center text-sm text-[#d7d0c0]">
-                    Loading pricing data...
-                  </td>
-                </tr>
+                {!activeCatalog ? (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-10 text-center text-sm text-white/70">
+                      Loading pricing data...
+                    </td>
+                  </tr>
+                ) : (
+                  quoteRows.map((row) => (
+                    <tr key={row.id} className="border-b border-white/10 align-middle last:border-b-0">
+                      <td className="px-4 py-5 sm:px-6">
+                        <p className="font-semibold text-white">{row.title}</p>
+                        {row.details.map((detail) => (
+                          <p key={detail} className="leading-tight text-white/75">
+                            {detail}
+                          </p>
+                        ))}
+                      </td>
+                      <td className="px-3 py-5 text-center text-white/85 sm:px-6">{row.qty}</td>
+                      <td className="px-3 py-5 text-right text-white/60 sm:px-6">{formatMoney(row.unitPrice)}</td>
+                      <td className="px-3 py-5 text-right text-white/75 sm:px-6">{formatMoney(row.total)}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
-            )}
-            {activeCatalog && (
-            <tbody>
-              {/* Headstone */}
-              <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
-                <td className="px-6 py-4">
-                  <div className="text-sm">
-                    <p className="font-semibold text-white/95 mb-1">
-                      {activeCatalog.product.name || 'Headstone'}
-                    </p>
-                    <p className="text-white/60">
-                      ID: {activeCatalog.product.id} · Shape: {shapeName} · Material:{' '}
-                      {getCheckPriceMaterialName(headstoneMaterialUrl)}
-                      <br />
-                      Size: {formatDimensionTriplet(widthMm, heightMm, uprightThickness, unitSystem)}
-                    </p>
-                  </div>
-                </td>
-                <td className="px-6 py-4 text-center text-sm text-white/85">
-                  1
-                </td>
-                <td className="px-6 py-4 text-right text-sm text-white/85">
-                  ${headstonePrice.toFixed(2)}
-                </td>
-                <td className="px-6 py-4 text-right text-sm text-white/85">
-                  ${headstonePrice.toFixed(2)}
-                </td>
-              </tr>
+            </table>
+          </div>
 
-              {/* Stainless Steel Border (product 32) */}
-              {ssBorderPrice > 0 && (
-                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
-                  <td className="px-6 py-4 text-sm text-white/85">
-                    <p className="font-semibold text-white/95">Stainless Steel Border</p>
-                    <p className="text-xs text-white/50">ID: 37</p>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${ssBorderPrice.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${ssBorderPrice.toFixed(2)}
-                  </td>
-                </tr>
-              )}
+          {imagePricingError && (
+            <p className="border-t border-white/10 px-6 py-3 text-sm text-red-300" role="status">
+              {imagePricingError}
+            </p>
+          )}
 
-              {/* Base */}
-              {showBase && basePrice > 0 && (
-                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
-                  <td className="px-6 py-4 text-sm text-white/85">
-                    <p>
-                      <strong className="text-white/95">
-                        {(() => {
-                          const a = activeCatalog.product.additions.find(a => a.type === 'base');
-                          return a?.name ?? 'Base';
-                        })()}
-                      </strong>
-                      <br />
-                      <span className="text-white/50">
-                        {(() => {
-                          const a = activeCatalog.product.additions.find(a => a.type === 'base');
-                          return `ID: ${a?.id ?? '–'} · Shape: Rectangle`;
-                        })()}
-                      </span>
-                      <br />
-                      <span className="text-white/60">Material: {getCheckPriceMaterialName(baseMaterialUrl)}</span>
-                      <br />
-                      <span className="text-white/60">Size: {formatDimensionTriplet(
-                        baseWidthMm,
-                        baseHeightMm,
-                        baseThickness,
-                        unitSystem,
-                      )}</span>
-                    </p>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${basePrice.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${basePrice.toFixed(2)}
-                  </td>
-                </tr>
-              )}
-
-              {/* Ledger (full-monument only) */}
-              {isFullMonument && ledgerPrice > 0 && (
-                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
-                  <td className="px-6 py-4 text-sm text-white/85">
-                    <p>
-                      <strong className="text-white/95">
-                        {(() => {
-                          const a = activeCatalog.product.additions.find(a => a.type === 'ledger');
-                          return a?.name ?? 'Ledger';
-                        })()}
-                      </strong>
-                      <br />
-                      <span className="text-white/50">
-                        {(() => {
-                          const a = activeCatalog.product.additions.find(a => a.type === 'ledger');
-                          return `ID: ${a?.id ?? '–'} · Shape: Rectangle`;
-                        })()}
-                      </span>
-                      <br />
-                      <span className="text-white/60">Material: {getCheckPriceMaterialName(kerbsetMaterialUrl)}</span>
-                      <br />
-                      <span className="text-white/60">Size: {formatDimensionTriplet(
-                        selectedShape?.lid?.initWidth ?? 0,
-                        selectedShape?.lid?.initHeight ?? 0,
-                        selectedShape?.lid?.initDepth ?? 0,
-                        unitSystem,
-                      )}</span>
-                    </p>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${ledgerPrice.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${ledgerPrice.toFixed(2)}
-                  </td>
-                </tr>
-              )}
-
-              {/* Kerbset (full-monument only) */}
-              {isFullMonument && kerbsetPrice > 0 && (
-                <tr className="border-b border-white/10 transition-colors hover:bg-white/[0.03]">
-                  <td className="px-6 py-4 text-sm text-white/85">
-                    <p>
-                      <strong className="text-white/95">
-                        {(() => {
-                          const a = activeCatalog.product.additions.find(a => a.type === 'kerbset');
-                          return a?.name ?? 'Kerbset';
-                        })()}
-                      </strong>
-                      <br />
-                      <span className="text-white/50">
-                        {(() => {
-                          const a = activeCatalog.product.additions.find(a => a.type === 'kerbset');
-                          return `ID: ${a?.id ?? '–'} · Shape: Rectangle`;
-                        })()}
-                      </span>
-                      <br />
-                      <span className="text-white/60">Material: {getCheckPriceMaterialName(headstoneMaterialUrl)}</span>
-                      <br />
-                      <span className="text-white/60">Size: {formatDimensionTriplet(
-                        selectedShape?.kerb?.initWidth ?? 0,
-                        selectedShape?.kerb?.initHeight ?? 0,
-                        selectedShape?.kerb?.initDepth ?? 0,
-                        unitSystem,
-                      )}</span>
-                    </p>
-                  </td>
-                  <td className="px-6 py-4 text-center text-sm text-white/85">1</td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${kerbsetPrice.toFixed(2)}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm text-white/85">
-                    ${kerbsetPrice.toFixed(2)}
-                  </td>
-                </tr>
-              )}
-
-              {/* Inscriptions */}
-              {inscriptionItems.length > 0 && (
-                <React.Fragment>
-                  <tr className="border-b border-white/10 bg-white/[0.03]">
-                    <td className="px-6 py-4">
-                      <button
-                        type="button"
-                        onClick={() => toggleSection('inscriptions')}
-                        aria-expanded={expandedSections.inscriptions}
-                        className="flex w-full items-center gap-3 text-left text-white/90 cursor-pointer"
-                      >
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
-                          {expandedSections.inscriptions ? '−' : '+'}
-                        </span>
-                        <span>
-                          <span className="block font-semibold text-white/95">Inscriptions</span>
-                          <span className="block text-xs text-white/50">
-                            {inscriptionItems.length} inscription{inscriptionItems.length !== 1 ? 's' : ''}
-                          </span>
-                        </span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center text-sm text-white/85">
-                      {inscriptionItems.length}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm text-white/85">
-                      ${(
-                        inscriptionItems.length > 0
-                          ? inscriptionCost / inscriptionItems.length
-                          : 0
-                      ).toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
-                      ${inscriptionCost.toFixed(2)}
-                    </td>
-                  </tr>
-                  {expandedSections.inscriptions && inscriptionItems.map((item) => (
-                    <tr key={`ins-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
-                      <td className="px-8 py-3 text-sm text-white/85">
-                        <p className="font-medium text-white/90">{item.text || 'Inscription Text'}</p>
-                        <p className="text-xs text-white/50">Font: {item.font} · Size: {formatLengthFromMm(item.sizeMm, unitSystem)}</p>
-                        <div className="mt-1 flex items-center gap-2 text-xs text-white/50">
-                          <span>Color: {item.colorName}</span>
-                          <span
-                            className="inline-block h-3 w-3 rounded border border-white/20"
-                            style={{ backgroundColor: item.color }}
-                          />
-                        </div>
-                      </td>
-                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        ${item.price.toFixed(2)}
-                      </td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        ${item.price.toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-                </React.Fragment>
-              )}
-
-              {/* Decorative Motifs */}
-              {motifItems.length > 0 && (
-                <React.Fragment>
-                  <tr className="border-b border-white/10 bg-white/[0.03]">
-                    <td className="px-6 py-4">
-                      <button
-                        type="button"
-                        onClick={() => toggleSection('motifs')}
-                        aria-expanded={expandedSections.motifs}
-                        className="flex w-full items-center gap-3 text-left text-white/90 cursor-pointer"
-                      >
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
-                          {expandedSections.motifs ? '−' : '+'}
-                        </span>
-                        <span>
-                          <span className="block font-semibold text-white/95">Decorative Motifs</span>
-                          <span className="block text-xs text-white/50">
-                            {motifItems.length} motif{motifItems.length !== 1 ? 's' : ''}
-                          </span>
-                        </span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center text-sm text-white/85">
-                      {motifItems.length}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm text-white/85">
-                      ${(motifCost / motifItems.length).toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
-                      ${motifCost.toFixed(2)}
-                    </td>
-                  </tr>
-                  {expandedSections.motifs && motifItems.map((item) => (
-                    <tr key={`motif-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
-                      <td className="px-8 py-3 text-sm text-white/85">
-                        <p className="font-medium text-white/90 capitalize">{item.name}</p>
-                        <p className="text-xs text-white/50">Height: {formatLengthFromMm(item.heightMm, unitSystem)}</p>
-                        <div className="mt-1 flex items-center gap-2 text-xs text-white/50">
-                          <span>
-                            {item.isStainlessSteelMotif ? 'Material' : 'Color'}: {item.colorDisplay}
-                          </span>
-                          {!item.isStainlessSteelMotif && (
-                            <span
-                              className="inline-block h-3 w-3 rounded border border-white/20"
-                              style={{ backgroundColor: item.color }}
-                            />
-                          )}
-                        </div>
-                      </td>
-                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        ${item.price.toFixed(2)}
-                      </td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        ${item.price.toFixed(2)}
-                      </td>
-                    </tr>
-                  ))}
-                </React.Fragment>
-              )}
-
-              {/* Images */}
-              {imageItems.length > 0 && (
-                <React.Fragment>
-                  <tr className="border-b border-white/10 bg-white/[0.03]">
-                    <td className="px-6 py-4">
-                      <button
-                        type="button"
-                        onClick={() => toggleSection('images')}
-                        aria-expanded={expandedSections.images}
-                        className="flex w-full items-start justify-between text-left text-white/90 cursor-pointer"
-                      >
-                        <span className="flex items-center gap-3">
-                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
-                            {expandedSections.images ? '−' : '+'}
-                          </span>
-                          <span>
-                            <span className="block font-semibold text-white/95">Ceramic & Photo Images</span>
-                            <span className="block text-xs text-white/50">
-                              {imageItems.length} image{imageItems.length !== 1 ? 's' : ''}
-                            </span>
-                          </span>
-                        </span>
-                        <span className="text-xs uppercase text-white/40">Subtotal</span>
-                      </button>
-                      {imagePricingError && (
-                        <p className="mt-2 text-xs text-red-400" role="status" aria-live="assertive">
-                          {imagePricingError}
-                        </p>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 text-center text-sm text-white/85">
-                      {imageItems.length}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm text-white/85">
-                      {imagePricingData ? `$${(imagePriceTotal / imageItems.length).toFixed(2)}` : '—'}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
-                      {imagePricingData ? `$${imagePriceTotal.toFixed(2)}` : '—'}
-                    </td>
-                  </tr>
-                  {expandedSections.images && imageItems.map((item) => (
-                    <tr key={`img-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
-                      <td className="px-8 py-3 text-sm text-white/85">
-                        <p className="font-medium text-white/90">
-                          {item.baseName}
-                        </p>
-                        <p className="text-xs text-white/50">ID: {item.productId} · Type: {item.typeName || 'Image'}</p>
-                        <p className="text-xs text-white/50">Size: {item.sizeLabel}</p>
-                        <p className="text-xs text-white/50">Color Mode: {item.colorDisplay}</p>
-                      </td>
-                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
-                      </td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        {imagePricingData ? `$${item.price.toFixed(2)}` : '—'}
-                      </td>
-                    </tr>
-                  ))}
-                </React.Fragment>
-              )}
-
-              {/* 3D Additions */}
-              {additionItems.length > 0 && (
-                <React.Fragment>
-                  <tr className="border-b border-white/10 bg-white/[0.03]">
-                    <td className="px-6 py-4">
-                      <button
-                        type="button"
-                        onClick={() => toggleSection('additions')}
-                        aria-expanded={expandedSections.additions}
-                        className="flex w-full items-center gap-3 text-left text-white/90 cursor-pointer"
-                      >
-                        <span className="inline-flex h-6 w-6 items-center justify-center rounded-full border border-[#d4af37]/45 bg-[#d4af37]/10 text-xs font-semibold text-[#f3d48f]">
-                          {expandedSections.additions ? '−' : '+'}
-                        </span>
-                        <span>
-                          <span className="block font-semibold text-white/95">3D Additions</span>
-                          <span className="block text-xs text-white/50">
-                            {additionItems.length} addition{additionItems.length !== 1 ? 's' : ''}
-                          </span>
-                        </span>
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 text-center text-sm text-white/85">
-                      {additionItems.length}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm text-white/85">
-                      ${(additionsPrice / additionItems.length).toFixed(2)}
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-[#f3d48f]">
-                      ${additionsPrice.toFixed(2)}
-                    </td>
-                  </tr>
-                  {expandedSections.additions && additionItems.map((item) => (
-                    <tr key={`addition-${item.id}`} className="border-b border-white/5 bg-white/[0.02]">
-                      <td className="px-8 py-3 text-sm text-white/85">
-                        <p className="font-medium text-white/90">{item.name}</p>
-                        <p className="text-xs text-white/50">Type: {item.type}</p>
-                        <p className="text-xs text-white/40">Reference: {item.baseId}</p>
-                      </td>
-                      <td className="px-6 py-3 text-center text-sm text-white/85">1</td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        $75.00
-                      </td>
-                      <td className="px-6 py-3 text-right text-sm text-white/85">
-                        $75.00
-                      </td>
-                    </tr>
-                  ))}
-                </React.Fragment>
-              )}
-
-              {/* Total Row */}
-              <tr className="border-t border-[#d4af37]/50 bg-[#d4af37]/8">
-                <td className="px-6 py-4"></td>
-                <td className="px-6 py-4"></td>
-                <td className="px-6 py-4 text-right text-sm font-semibold uppercase tracking-wider text-[#f3d48f]">Total</td>
-                <td className="px-6 py-4 text-right text-lg font-bold text-white">${totalPrice.toFixed(2)}</td>
-              </tr>
-            </tbody>
-            )}
-          </table>
-        </div>
-
+          <div className="ml-auto w-full max-w-sm border-t border-white/10 px-6 py-4 text-sm">
+            <div className="flex justify-between py-1">
+              <span className="text-white/70">Subtotal</span>
+              <span>{formatMoney(totalPrice)}</span>
+            </div>
+            <div className="mt-2 flex justify-between border-t border-white/10 pt-3 text-base font-semibold">
+              <span>Total</span>
+              <span className="text-[#D4A84F]">{formatMoney(totalPrice)}</span>
+            </div>
+          </div>
         </div>
       </div>
 

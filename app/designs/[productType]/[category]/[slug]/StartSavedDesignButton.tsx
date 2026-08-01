@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 interface StartSavedDesignButtonProps {
   designId: string;
@@ -34,7 +35,7 @@ export default function StartSavedDesignButton({
         return;
       }
 
-      router.push('/select-size');
+      router.push(getDesignerProductStepHref('select-size', result.productId));
     } catch (err) {
       console.error('Failed to start saved design', err);
       setError('Failed to load design');

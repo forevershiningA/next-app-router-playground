@@ -17,6 +17,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 
 const accountLinks = [
   {
@@ -63,6 +64,7 @@ export default function AccountNav() {
   const pathname = usePathname();
   const router = useRouter();
   const resetDesign = useHeadstoneStore((s) => s.resetDesign);
+  const productId = useHeadstoneStore((s) => s.productId);
   const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
   const setIsMobileMenuOpen = useMobileNavStore((s) => s.setOpen);
   const [sessionEmail, setSessionEmail] = useState<string | null>(null);
@@ -95,8 +97,9 @@ export default function AccountNav() {
 
   function handleNewDesign() {
     setIsMobileMenuOpen(false);
+    const selectSizeHref = getDesignerProductStepHref('select-size', productId);
     resetDesign();
-    router.push('/select-size');
+    router.push(selectSizeHref);
   }
 
   async function handleLogout() {

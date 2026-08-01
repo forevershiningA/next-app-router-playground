@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 
 export function EditDesignButton({ projectId }: { projectId: string }) {
@@ -23,7 +24,7 @@ export function EditDesignButton({ projectId }: { projectId: string }) {
         },
       };
       await applyDesignSnapshot(snapshot);
-      router.push('/select-size');
+      router.push(getDesignerProductStepHref('select-size', snapshot.productId));
     } catch {
       alert('Failed to load design. Please try again.');
       setLoading(false);

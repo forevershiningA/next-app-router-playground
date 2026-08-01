@@ -26,13 +26,14 @@ export async function middleware(request: NextRequest) {
     request.headers.get('x-country-code');
   const resolvedUnitSystem = resolveUnitSystemFromCountry(countryHeader);
   const existingUnitSystem = request.cookies.get('unit_system')?.value;
+  const hasUserUnitSystem = request.cookies.get('unit_system_user')?.value === '1';
 
   if (!isProtected) {
     if (isBlocked) {
       return new NextResponse(null, { status: 404 });
     }
     const response = NextResponse.next();
-    if (!isPublicSeoPath(pathname) && existingUnitSystem !== resolvedUnitSystem) {
+    if (!hasUserUnitSystem && !isPublicSeoPath(pathname) && existingUnitSystem !== resolvedUnitSystem) {
       response.cookies.set('unit_system', resolvedUnitSystem, {
         path: '/',
         sameSite: 'lax',
@@ -45,7 +46,7 @@ export async function middleware(request: NextRequest) {
   const session = await verifySessionFromRequest(request);
   if (!session) {
     const unauthorised = NextResponse.json({ error: 'Unauthorised' }, { status: 401 });
-    if (existingUnitSystem !== resolvedUnitSystem) {
+    if (!hasUserUnitSystem && existingUnitSystem !== resolvedUnitSystem) {
       unauthorised.cookies.set('unit_system', resolvedUnitSystem, {
         path: '/',
         sameSite: 'lax',
@@ -56,7 +57,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const response = NextResponse.next();
-  if (existingUnitSystem !== resolvedUnitSystem) {
+  if (!hasUserUnitSystem && existingUnitSystem !== resolvedUnitSystem) {
     response.cookies.set('unit_system', resolvedUnitSystem, {
       path: '/',
       sameSite: 'lax',
