@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-07-28
+**Last Updated:** 2026-08-01
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -71,6 +71,79 @@
 63. [July 26 Design Gallery SEO SSR and Deep Page SEO](#current-status-2026-07-26--design-gallery-seo-ssr-and-deep-page-seo)
 64. [July 27 Homepage Lighthouse Follow-up](#current-status-2026-07-27--homepage-lighthouse-follow-up)
 65. [July 28 Lighthouse Performance Follow-up](#current-status-2026-07-28--lighthouse-performance-follow-up)
+66. [August 1 Bronze Plaque Selection, Layering, and Color Fixes](#current-status-2026-08-01--bronze-plaque-selection-layering-and-color-fixes)
+
+---
+
+## Current Status (2026-08-01) - Bronze Plaque Selection, Layering, and Color Fixes
+
+This session focused on the bronze plaque designer canvas after manual testing with the sequence: add plaque, add inscription, add image, add motif, then click overlapping elements. The main issues were stale selection outlines, new elements rendering behind older elements, raycast hit order not matching visual order, and `THREE.Color: Unknown color 0xffffff` warnings.
+
+### Problems Fixed
+
+| Issue | Resolution |
+| --- | --- |
+| Plaque selection outline was too thick | `components/three/RotatingBoxOutline.tsx` now draws the selection outline with `THREE.LineSegments` / `LineBasicMaterial`, producing a thin 1px-style line instead of thick box geometry. |
+| Plaque outline stayed visible after selecting an inscription/image/motif | `components/three/headstone/HeadstoneAssembly.tsx` now hides headstone/base/ledger/kerbset outlines while any child design element is selected. |
+| Adding a new element did not clear the previous selected element | `lib/headstone-store.ts` now clears competing selected IDs when adding, duplicating, or selecting inscriptions, images, motifs, additions, and emblems. Only one selection outline should be visible at a time. |
+| Newly added image/motif/inscription could render behind older elements | The store now assigns each new/duplicated design element a monotonic `layer`, and render components use that layer for `renderOrder` and a tiny physical lift. |
+| Clicking a motif over an image/inscription selected the element behind it | `components/three/ImageModel.tsx` and `components/three/MotifModel.tsx` now use consistent physical front-surface offsets so the newest visual layer is also the closest raycast hit. Motif selection is also handled on `pointerdown`, matching images. |
+| Console warning: `THREE.Color: Unknown color 0xffffff` | Color values from catalog/XML/store are normalized from `0xffffff` format to `#ffffff` before reaching Three.js color props. |
+
+### Files Changed
+
+| File | Current Behavior |
+| --- | --- |
+| `components/three/RotatingBoxOutline.tsx` | Thin, non-raycastable selection outline. |
+| `components/three/headstone/HeadstoneAssembly.tsx` | Parent plaque/headstone outlines are suppressed when a child element has selection. |
+| `lib/headstone-store.ts` | Central selection exclusivity, color normalization, and `getNextDesignLayer()` layer assignment for inscriptions/images/motifs/emblems. |
+| `lib/headstone-store.types.ts` | Adds optional `layer?: number` to persisted design element types. Existing saved designs are compatible because missing layers default to `0`. |
+| `lib/xml-parser.ts` | Normalizes XML color/default-color attributes from `0xRRGGBB` to `#RRGGBB`. |
+| `components/HeadstoneInscription.tsx` | Accepts `layer`, normalizes text color, applies layered render order/lift, and disables depth writes/tests on text materials for predictable overlay rendering. |
+| `components/three/ImageModel.tsx` | Accepts `layer`, applies render order and physical lift, uses small local photo/selection Z offsets so raycasting follows element layer instead of ceramic/photo depth. |
+| `components/three/MotifModel.tsx` | Accepts `layer`, applies render order and physical lift, disables depth testing on motif materials, and selects motifs on `pointerdown`. |
+| `components/three/headstone/ShapeSwapper.tsx` | Passes layer values into headstone-surface inscriptions, images, and motifs. |
+| `components/three/headstone/HeadstoneBaseAuto.tsx` | Passes layer values into base-surface inscriptions, images, and motifs. |
+| `components/three/headstone/LedgerSurfaceContent.tsx` | Passes layer values into ledger-surface inscriptions, images, and motifs. |
+
+### Important Implementation Notes
+
+- R3F/Three.js click selection is controlled by raycaster intersection distance, not `renderOrder`. If an element is visually on top but physically behind another plane, the click can still select the older element.
+- The current approach keeps visual order and raycast order aligned by using both `renderOrder = 100 + layer` and a small physical `layerLift = layer * 0.0002`.
+- `SelectionBox` helper geometry has `raycast = () => null`; outlines should not intercept clicks.
+- `ImageModel` previously placed the photo mesh far forward in local Z, which could make an older image win raycasts over a newer motif. The image group now owns the layer/front lift, and the photo/selection child meshes use only tiny local offsets.
+- Motifs still have an `onClick` handler, but selection now also occurs in `onPointerDown` to match image behavior and avoid stale selection when overlapping meshes are dragged/clicked.
+- Existing saved designs without `layer` should still load, but all such elements share layer `0`; newly added elements get higher layers.
+
+### Verification
+
+Command completed successfully after the selection/raycast changes:
+
+```bash
+pnpm exec tsc --noEmit
+```
+
+Manual test path to repeat in browser:
+
+1. Open the bronze plaque designer.
+2. Add/select plaque.
+3. Add an inscription; only inscription outline should show.
+4. Add an image; only image outline should show and image should render above inscription.
+5. Add a motif; only motif outline should show and motif should render above image/inscription.
+6. Click the motif while it overlaps the image or inscription; motif should remain/select, not the element behind it.
+
+### Log Notes
+
+- `installHook.js` / React DevTools instrumentation semver messages are from the browser extension/dev tooling, not application code.
+- `THREE.Color: Unknown color 0xffffff` should be fixed by color normalization in `HeadstoneInscription`, `headstone-store`, and `xml-parser`.
+- `WebGLRenderer: Context Lost` during local testing was likely from HMR/dev canvas reloads unless reproducible in a clean production run.
+
+### Do Not Regress
+
+- Do not rely on `renderOrder` alone for overlapping clickable elements. Keep physical layer offsets aligned with render layers.
+- Do not let selection setters leave another element type selected; the canvas should show one active child outline at a time.
+- Do not pass `0xRRGGBB` strings directly to Three.js color props; normalize to CSS hex first.
+- Do not make selection outlines raycastable.
 
 ---
 
@@ -12954,4 +13027,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-07-27*
+*End of STARTER.md - Last updated: 2026-08-01*

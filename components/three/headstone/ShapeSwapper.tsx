@@ -686,6 +686,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                       text={line.text}
                       textAlign={line.textAlign}
                       zBump={zBump}
+                      layer={line.layer}
                     />
                   </React.Suspense>
                 </ErrorBoundary>
@@ -714,6 +715,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                        headstone={api}
                        surface="headstone"
                        index={i}
+                       layer={motifOffsets[motif.id]?.layer}
                      />
                    </React.Suspense>
                  </ErrorBoundary>
@@ -736,6 +738,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
                        surface="headstone"
                        index={i}
                        coordinateSpace={image.coordinateSpace}
+                       layer={image.layer}
                      />
                    </React.Suspense>
                  </ErrorBoundary>

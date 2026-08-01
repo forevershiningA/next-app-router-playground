@@ -36,6 +36,7 @@ type Props = {
   /** When 'mm-center', xPos/yPos are mm offsets from headstone center (Y-up). */
   coordinateSpace?: 'mm-center';
   textAlign?: 'left' | 'center' | 'right';
+  layer?: number;
 };
 
 /* ------------------------------------------------------------------ */
@@ -56,6 +57,14 @@ type TroikaTextMesh = THREE.Mesh & {
 };
 
 const MAX_STAINLESS_BRIDGE_MASKS = 160;
+
+function normalizeThreeColor(color: string) {
+  const trimmed = color.trim();
+  if (/^0x[0-9a-f]{6}$/i.test(trimmed)) {
+    return `#${trimmed.slice(2)}`;
+  }
+  return trimmed;
+}
 
 type BridgeMaskShader = THREE.WebGLProgramParametersWithUniforms & {
   uniforms: {
@@ -270,6 +279,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       surface = 'headstone',
       coordinateSpace,
       textAlign = 'center',
+      layer = 0,
     },
     ref,
   ) => {
@@ -807,25 +817,29 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
     const ledgerScaleZ = ledgerMesh ? ledgerMesh.scale.z : 1;
     const baseMesh = isBaseSurface ? (headstone.mesh.current as THREE.Mesh | null) : null;
 
+    const layerLift = layer * 0.0002;
+    const elementRenderOrder = 100 + layer;
+
     const groupPosition: [number, number, number] = isLedgerSurface
-      ? [pos.x + (xPos ?? 0) * ledgerScaleX, pos.y + zBump, pos.z + (yPos ?? 0) * ledgerScaleZ]
+      ? [pos.x + (xPos ?? 0) * ledgerScaleX, pos.y + zBump + layerLift, pos.z + (yPos ?? 0) * ledgerScaleZ]
       : coordinateSpace === 'mm-center' && surfaceBounds
         ? [
             surfaceBounds.centerX + (xPos ?? 0) * mmToLocalUnits,
             surfaceBounds.centerY + (yPos ?? 0) * mmToLocalUnits,
-            (headstone.frontZ + liftLocal) + zBump,
+            (headstone.frontZ + liftLocal) + zBump + layerLift,
           ]
-        : [pos.x + (xPos ?? 0), pos.y + (yPos ?? 0), pos.z + zBump];
+        : [pos.x + (xPos ?? 0), pos.y + (yPos ?? 0), pos.z + zBump + layerLift];
     const groupRotation: [number, number, number] = isLedgerSurface
       ? [-Math.PI / 2, rotationRad, 0]
       : [0, 0, rotationRad];
-    const renderedTextColor = isBronzePlaque ? '#c7a06a' : color;
+    const renderedTextColor = isBronzePlaque ? '#c7a06a' : normalizeThreeColor(color);
     const textMaterialProps = isBronzePlaque
       ? {
           metalness: 0.9,
           roughness: 0.22,
           envMapIntensity: 2.4,
-          depthWrite: true,
+          depthTest: false,
+          depthWrite: false,
         }
       : (renderedTextColor.toLowerCase().includes('gold') ||
           renderedTextColor.toLowerCase() === '#d4af37' ||
@@ -834,13 +848,15 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           metalness: 1.0,
           roughness: 0.3,
           envMapIntensity: 2.0,
-          depthWrite: true,
+          depthTest: false,
+          depthWrite: false,
         }
       : isStainlessSteelUrn
       ? {
           metalness: 0.2,
           roughness: 0.4,
           envMapIntensity: 1.5,
+          depthTest: false,
           depthWrite: false,
           polygonOffset: true,
           polygonOffsetFactor: -4,
@@ -851,7 +867,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           metalness: 0.2,
           roughness: 0.4,
           envMapIntensity: 1.5,
-          depthWrite: true,
+          depthTest: false,
+          depthWrite: false,
         };
 
     React.useEffect(() => {
@@ -859,6 +876,8 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       stainlessTextMaterial.metalness = textMaterialProps.metalness;
       stainlessTextMaterial.roughness = textMaterialProps.roughness;
       stainlessTextMaterial.envMapIntensity = textMaterialProps.envMapIntensity;
+      stainlessTextMaterial.depthTest = false;
+      stainlessTextMaterial.depthWrite = false;
       stainlessTextMaterial.needsUpdate = true;
     }, [
       renderedTextColor,
@@ -889,7 +908,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
       groupRef.current.position.set(
         bm.position.x + (xPos ?? 0) * mmToLocalUnits,
         bm.position.y + (yPos ?? 0) * mmToLocalUnits,
-        bm.position.z + bm.scale.z / 2 + liftLocal + zBump,
+        bm.position.z + bm.scale.z / 2 + liftLocal + zBump + layerLift,
       );
       groupRef.current.visible = true;
     });
@@ -912,7 +931,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
             position={[0.0012 * units, -0.0012 * units, -0.0006]}
             outlineWidth={0}
             fillOpacity={0.95}
-            renderOrder={-1}
+            renderOrder={elementRenderOrder - 1}
           >
             {text}
           </Text>
@@ -951,7 +970,9 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           material={isStainlessSteelHeadstone ? stainlessTextMaterial : undefined}
           onSync={handleTextSync}
           renderOrder={
-            isStainlessSteelHeadstone || isStainlessSteelUrn ? 80 : undefined
+            isStainlessSteelHeadstone || isStainlessSteelUrn
+              ? Math.max(80, elementRenderOrder)
+              : elementRenderOrder
           }
           // Use onClick for selection; onPointerDown stays for drag init only
           onClick={(e) => {

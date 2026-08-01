@@ -23,6 +23,7 @@ type Props = {
   index?: number;
   surface?: 'headstone' | 'base' | 'ledger';
   coordinateSpace?: 'mm-center';
+  layer?: number;
 };
 
 type ImageTextureInfo = {
@@ -92,6 +93,7 @@ export default function ImageModel({
   index = 0,
   surface = 'headstone',
   coordinateSpace,
+  layer = 0,
 }: Props) {
   const { gl, camera, controls } = useThree();
   const router = useRouter();
@@ -609,8 +611,11 @@ export default function ImageModel({
   
   // Get headstone frontZ position (same as motifs/inscriptions)
   const frontZ = headstone?.frontZ ?? 0;
-  const stackOffset = (index ?? 0) * 0.2; // Slight Z lift per image to prevent z-fighting when overlapping
-  const groupZ = frontZ + stackOffset * mmToLocalUnits;
+  const layerLift = layer * 0.0002;
+  const elementRenderOrder = 100 + layer;
+  const frontSurfaceLift = 0.05 * mmToLocalUnits;
+  const stackOffset = (index ?? 0) * 0.00002; // Stable intra-type lift for legacy designs without layer
+  const groupZ = frontZ + frontSurfaceLift + layerLift + stackOffset;
   
   // Determine if this image needs a ceramic/enamel base
   // Granite Image (21), YAG Laser (135), and Free Image (137) are flat — no ceramic base
@@ -625,7 +630,6 @@ export default function ImageModel({
   let ceramicScaleX = 1;
   let ceramicScaleY = 1;
   let ceramicScaleZ = 1;
-  let actualCeramicDepthInUnits = ceramicDepthUnits;
   
   if (ceramicBaseData) {
     // Scale ceramic to be LARGER than the photo to create visible border
@@ -637,7 +641,6 @@ export default function ImageModel({
     const avgScale = (ceramicScaleX + ceramicScaleY) / 2;
     ceramicScaleZ = avgScale * (ceramicDepthUnits / 2);
     
-    actualCeramicDepthInUnits = 2 * ceramicScaleZ;
   }
 
   const stone = headstone?.mesh?.current as THREE.Mesh | null;
@@ -664,7 +667,7 @@ export default function ImageModel({
     // xPos/yPos are fractional (from worldToLocal on unit-cube mesh); multiply by scale to get meters
     const displayX = ledgerCenterX + (xPos ?? 0) * stone.scale.x;
     const displayZ = ledgerCenterZ + (yPos ?? 0) * stone.scale.z;
-    const ledgerLift = 0.001 + (index ?? 0) * 0.001;
+    const ledgerLift = 0.001 + layerLift + (index ?? 0) * 0.00002;
     groupPosition = [displayX, ledgerTopY + ledgerLift, displayZ];
     groupRotation = [-Math.PI / 2, rotationZ || 0, 0];
   } else if (isBaseSurface) {
@@ -673,7 +676,7 @@ export default function ImageModel({
     const absX = stone.position.x + safeX * stone.scale.x;
     const absY = stone.position.y + safeY * stone.scale.y;
     const baseFrontZ = stone.position.z + stone.scale.z / 2;
-    groupPosition = [absX, absY, baseFrontZ + (index ?? 0) * 0.001];
+    groupPosition = [absX, absY, baseFrontZ + frontSurfaceLift + layerLift + (index ?? 0) * 0.00002];
     groupRotation = [0, 0, rotationZ];
   } else if (coordinateSpace === 'mm-center') {
     // Loaded design: mm offsets from center, positive Y = above center
@@ -686,6 +689,9 @@ export default function ImageModel({
     groupRotation = [0, 0, rotationZ];
   }
 
+  const photoZ = needsCeramicBase ? 0.00008 : 0.00006;
+  const selectionZ = needsCeramicBase ? 0.00012 : 0.0001;
+
   return (
     <group ref={ref} position={groupPosition} rotation={groupRotation}>
       
@@ -696,13 +702,15 @@ export default function ImageModel({
           position={[0, 0, 0]} // Back face at z=0 (parent is at frontZ)
           scale={[ceramicScaleX, -ceramicScaleY, ceramicScaleZ]} // Negative Y to flip SVG coordinate system
           rotation={[0, 0, 0]}
-          renderOrder={997}
+          renderOrder={elementRenderOrder - 1}
         >
           <meshStandardMaterial 
             color="#ffffff"
             roughness={0.2}
             metalness={0.05}
             flatShading={false}
+            depthTest={false}
+            depthWrite={false}
           />
         </mesh>
       )}
@@ -721,14 +729,14 @@ export default function ImageModel({
         onClick={(e) => {
           e.stopPropagation();
         }}
-        position={[0, 0, needsCeramicBase ? actualCeramicDepthInUnits + 0.1 * mmToLocalUnits : 0.05 * mmToLocalUnits]}
+        position={[0, 0, photoZ]}
         geometry={!isPlaceholder && ceramicBaseData?.flatGeometry ? ceramicBaseData.flatGeometry : planeGeometry}
         scale={
           !isPlaceholder && ceramicBaseData?.flatGeometry
             ? [displayWidth / ceramicBaseData.svgWidth, -displayHeight / ceramicBaseData.svgHeight, 1]
             : [displayWidth, displayHeight, 1]
         }
-        renderOrder={999}
+        renderOrder={elementRenderOrder}
         visible={true}
       >
         <meshBasicMaterial 
@@ -736,15 +744,15 @@ export default function ImageModel({
           transparent={true}
           side={THREE.DoubleSide}
           opacity={1.0}
-          depthTest={!isPlaceholder}
-          depthWrite={!isPlaceholder}
+          depthTest={false}
+          depthWrite={false}
         />
       </mesh>
       
       {selected && (
         <SelectionBox
           objectId={id}
-          position={new THREE.Vector3(0, 0, needsCeramicBase ? actualCeramicDepthInUnits + 0.5 * mmToLocalUnits : 0.1 * mmToLocalUnits)}
+          position={new THREE.Vector3(0, 0, selectionZ)}
           bounds={{ width: displayWidth, height: displayHeight }}
           rotation={isLedgerSurface ? 0 : rotationZ}
           unitsPerMeter={headstone?.unitsPerMeter ?? 1}

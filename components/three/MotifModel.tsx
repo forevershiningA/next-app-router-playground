@@ -17,6 +17,7 @@ type Props = {
   headstone?: HeadstoneAPI;
   index?: number;
   surface?: 'headstone' | 'base' | 'ledger';
+  layer?: number;
 };
 
 const MAX_TEXTURE_DIMENSION = 2048;
@@ -103,6 +104,7 @@ export default function MotifModel({
   headstone,
   index = 0,
   surface = 'headstone',
+  layer = 0,
 }: Props) {
   const { gl, camera, controls } = useThree();
   const router = useRouter();
@@ -534,28 +536,36 @@ export default function MotifModel({
     [isLedgerSurface, placeOnLedgerSurface, placeOnVerticalSurface],
   );
 
-  const handleClick = React.useCallback(
-    (e: any) => {
-      e.stopPropagation();
-
+  const selectMotif = React.useCallback(() => {
       setSelectedMotifId(id);
       setActivePanel('motif');
-      
+
       // Open motifs fullscreen panel
       window.dispatchEvent(new CustomEvent('openFullscreenPanel', { detail: { panel: 'select-motifs' } }));
     },
     [id, setSelectedMotifId, setActivePanel]
   );
 
+  const handleClick = React.useCallback(
+    (e: any) => {
+      e.stopPropagation();
+      e.nativeEvent?.stopImmediatePropagation?.();
+      selectMotif();
+    },
+    [selectMotif],
+  );
+
   const handlePointerDown = React.useCallback((e: any) => {
     e.stopPropagation();
+    e.nativeEvent?.stopImmediatePropagation?.();
+    selectMotif();
     setDragging(true);
     const targetElement = e.target as HTMLElement | null;
     if (targetElement && typeof targetElement.setPointerCapture === 'function' && e.pointerId !== undefined) {
       targetElement.setPointerCapture(e.pointerId);
       pointerCaptureTargetRef.current = targetElement;
     }
-  }, []);
+  }, [selectMotif]);
 
   const handlePointerOver = React.useCallback(() => {
     if (gl?.domElement) {
@@ -672,7 +682,12 @@ export default function MotifModel({
   
   const centerX = (bbox.min.x + bbox.max.x) / 2;
   const centerY = (bbox.min.y + bbox.max.y) / 2;
-  const centerZ = headstone.frontZ + 0.02;
+  const unitsPerMeter = Math.abs(headstone.unitsPerMeter) > 1e-6 ? Math.abs(headstone.unitsPerMeter) : 1000;
+  const mmToLocalUnits = unitsPerMeter / 1000;
+  const layerLift = layer * 0.0002;
+  const elementRenderOrder = 100 + layer;
+  const frontSurfaceLift = 0.05 * mmToLocalUnits;
+  const centerZ = headstone.frontZ + frontSurfaceLift + layerLift + (index ?? 0) * 0.00002;
   // For ledger: the mesh is a unit cube (geometry ±0.5) with position+scale applied.
   // Use stone.position/scale to get the real monument-local bounds, not the geometry bbox.
   const ledgerCenterX = stone.position.x;
@@ -701,9 +716,6 @@ export default function MotifModel({
   const offset = motifOffsets[id] ?? defaultOffset;
   const scaledOffsetX = offset.xPos ?? 0;
   const scaledOffsetY = offset.yPos ?? 0;
-
-  const unitsPerMeter = Math.abs(headstone.unitsPerMeter) > 1e-6 ? Math.abs(headstone.unitsPerMeter) : 1000;
-  const mmToLocalUnits = unitsPerMeter / 1000;
 
   const targetHeightMm = offset.heightMm ?? 100;
   const planeHeightUnits = targetHeightMm * mmToLocalUnits;
@@ -753,7 +765,7 @@ export default function MotifModel({
     // Multiply by stone.scale to convert to monument-local meters.
     const displayLedgerX = ledgerCenterX + scaledOffsetX * stone.scale.x;
     const displayLedgerZ = ledgerCenterZ + scaledOffsetY * stone.scale.z;
-    const ledgerLift = 0.001;
+    const ledgerLift = 0.001 + layerLift + (index ?? 0) * 0.00002;
     groupPosition = [displayLedgerX, ledgerTopY + ledgerLift, displayLedgerZ];
     groupRotation = [-Math.PI / 2, offset.rotationZ || 0, 0];
   } else if (isBaseSurface && isMmCenter) {
@@ -761,7 +773,7 @@ export default function MotifModel({
     // Anchor mm offsets to the base mesh's world position.
     const absX = stone.position.x + scaledOffsetX * mmToLocalUnits;
     const absY = stone.position.y + scaledOffsetY * mmToLocalUnits;
-    const baseFrontZ = stone.position.z + stone.scale.z / 2 + 0.001;
+    const baseFrontZ = stone.position.z + stone.scale.z / 2 + 0.001 + layerLift + (index ?? 0) * 0.00002;
     groupPosition = [absX, absY, baseFrontZ];
     groupRotation = [0, 0, offset.rotationZ || 0];
   } else if (isMmCenter) {
@@ -787,6 +799,7 @@ export default function MotifModel({
             scale={[scaleX * 1.035, scaleY * 1.035, 1]}
             position={[0.004, -0.004, -0.001]}
             name={`motif-${id}-contact-shadow`}
+            renderOrder={elementRenderOrder - 2}
           >
             <meshBasicMaterial
               color="#050505"
@@ -794,7 +807,7 @@ export default function MotifModel({
               transparent
               opacity={0.28}
               depthWrite={false}
-              depthTest={true}
+              depthTest={false}
               side={THREE.DoubleSide}
               map={textureInfo.texture}
               alphaTest={0.01}
@@ -813,6 +826,7 @@ export default function MotifModel({
               -raisedThicknessUnits * layer,
             ]}
             name={`motif-${id}-raised-body-${layer}`}
+            renderOrder={elementRenderOrder - 1}
           >
             <meshPhysicalMaterial
               color={stainlessFinish === 'polished' ? '#cbd2d4' : '#bcc5c7'}
@@ -828,7 +842,7 @@ export default function MotifModel({
               transparent
               opacity={0.94}
               depthWrite={false}
-              depthTest={true}
+              depthTest={false}
               side={THREE.DoubleSide}
               alphaTest={0.01}
               polygonOffset
@@ -848,6 +862,7 @@ export default function MotifModel({
           onPointerDown={handlePointerDown}
           onPointerOver={handlePointerOver}
           onPointerOut={handlePointerOut}
+          renderOrder={elementRenderOrder}
         >
           {isStainlessSteelMotif ? (
             <meshPhysicalMaterial
@@ -864,7 +879,7 @@ export default function MotifModel({
               envMapIntensity={stainlessFinish === 'polished' ? 2.9 : 2.6}
               transparent
               depthWrite={false}
-              depthTest={true}
+              depthTest={false}
               side={THREE.DoubleSide}
               alphaTest={0.01}
               polygonOffset
@@ -877,7 +892,7 @@ export default function MotifModel({
               toneMapped={false}
               transparent
               depthWrite={false}
-              depthTest={true}
+              depthTest={false}
               side={THREE.DoubleSide}
               map={textureInfo.texture}
               alphaTest={0.01}

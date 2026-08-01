@@ -153,6 +153,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
                 text={line.text}
                 textAlign={line.textAlign}
                 zBump={zBump}
+                layer={line.layer}
               />
             </React.Suspense>
           );
@@ -168,6 +169,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
               headstone={headstoneApi}
               surface="ledger"
               index={index}
+              layer={motifOffsets[motif.id]?.layer}
             />
           </React.Suspense>
         ))}
@@ -189,6 +191,7 @@ export default function LedgerSurfaceContent({ ledgerRef }: Props) {
               surface="ledger"
               index={index}
               coordinateSpace={image.coordinateSpace}
+              layer={image.layer}
             />
           </React.Suspense>
         ))}

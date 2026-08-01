@@ -17,6 +17,11 @@ import LedgerSurfaceContent from './LedgerSurfaceContent';
 
 export default function HeadstoneAssembly() {
   const selected = useHeadstoneStore((s) => s.selected);
+  const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
+  const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
+  const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
+  const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
+  const selectedEmblemId = useHeadstoneStore((s) => s.selectedEmblemId);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
   const setSelectedInscriptionId = useHeadstoneStore(
@@ -58,6 +63,13 @@ export default function HeadstoneAssembly() {
   const baseOutlineLineLength = isPlaque ? 0.12 : 0.15;
   const baseOutlineThrough = false;
   const baseBottomLift = isPlaque ? 0.002 : 0.006;
+  const hasElementSelection = Boolean(
+    selectedInscriptionId ||
+    selectedAdditionId ||
+    selectedMotifId ||
+    selectedImageId ||
+    selectedEmblemId,
+  );
 
   const ledgerOutlinePad = 0.004;
   const ledgerOutlineDepthPad = 0.002;
@@ -107,7 +119,7 @@ export default function HeadstoneAssembly() {
         {/* Elegant Selection Indicators - Viewfinder Corners */}
         <RotatingBoxOutline
           targetRef={headstoneMeshRef}
-          visible={selected === 'headstone'}
+          visible={selected === 'headstone' && !hasElementSelection}
           color="#ffffff"
           pad={headstoneOutlinePad}
           depthPad={headstoneOutlineDepthPad}
@@ -121,7 +133,7 @@ export default function HeadstoneAssembly() {
 
         <RotatingBoxOutline
           targetRef={baseRef}
-          visible={selected === 'base'}
+          visible={selected === 'base' && !hasElementSelection}
           color="#ffffff"
           pad={baseOutlinePad}
           depthPad={baseOutlineDepthPad}
@@ -181,7 +193,7 @@ export default function HeadstoneAssembly() {
         {showLedger && (
           <RotatingBoxOutline
             targetRef={ledgerRef}
-            visible={selected === 'ledger'}
+            visible={selected === 'ledger' && !hasElementSelection}
             color="#ffffff"
             pad={ledgerOutlinePad}
             depthPad={ledgerOutlineDepthPad}
@@ -206,7 +218,7 @@ export default function HeadstoneAssembly() {
         {showKerbset && (
           <RotatingBoxOutline
             targetRef={kerbsetRef}
-            visible={selected === 'kerbset'}
+            visible={selected === 'kerbset' && !hasElementSelection}
             color="#ffffff"
             pad={kerbsetOutlinePad}
             depthPad={kerbsetOutlineDepthPad}

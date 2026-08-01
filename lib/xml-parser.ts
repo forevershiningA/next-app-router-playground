@@ -92,6 +92,12 @@ const inscriptionDetailsCache = new Map<string, InscriptionDetails | null>();
 let inscriptionsXmlPromise: Promise<string> | null = null;
 let serverDomSupportPromise: Promise<void> | null = null;
 
+function normalizeThreeColorAttribute(value: string | undefined) {
+  if (!value) return undefined;
+  const trimmed = value.trim();
+  return /^0x[0-9a-f]{6}$/i.test(trimmed) ? `#${trimmed.slice(2)}` : trimmed;
+}
+
 async function ensureServerDomSupport() {
   if (typeof window !== 'undefined') {
     return;
@@ -420,8 +426,10 @@ export async function parseCatalogXML(
   const retail = parseFloat(productElement.getAttribute('retail') || '1');
   const formula = productElement.getAttribute('formula') || undefined;
   const border = productElement.getAttribute('border') || '0';
-  const color = productElement.getAttribute('color') || undefined;
-  const defaultColor = productElement.getAttribute('default-color') || undefined;
+  const color = normalizeThreeColorAttribute(productElement.getAttribute('color') || undefined);
+  const defaultColor = normalizeThreeColorAttribute(
+    productElement.getAttribute('default-color') || undefined,
+  );
 
   // Parse shapes (headstone, plaque, full-monument, and urn types)
   const shapes: ShapeData[] = [];

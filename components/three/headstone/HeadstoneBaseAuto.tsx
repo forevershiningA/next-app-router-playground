@@ -573,6 +573,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                   text={line.text}
                   textAlign={line.textAlign}
                   zBump={zBump}
+                  layer={line.layer}
                 />
               </Suspense>
             );
@@ -593,6 +594,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                 headstone={baseAPI}
                 surface="base"
                 index={i}
+                layer={motifOffsets[motif.id]?.layer}
               />
             </Suspense>
           ))}
@@ -616,6 +618,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
                 surface="base"
                 index={i}
                 coordinateSpace={image.coordinateSpace}
+                layer={image.layer}
               />
             </Suspense>
           ))}

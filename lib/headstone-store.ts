@@ -172,10 +172,33 @@ const genId = () => `l-${crypto.randomUUID()}`;
 const genMotifId = () => `motif-${crypto.randomUUID()}`;
 const genEmblemId = () => `emblem-${crypto.randomUUID()}`;
 
+const normalizeThreeColorValue = (color: string) => {
+  const trimmed = color.trim();
+  return /^0x[0-9a-f]{6}$/i.test(trimmed) ? `#${trimmed.slice(2)}` : trimmed;
+};
+
+const getNextDesignLayer = (state: HeadstoneState) => {
+  const inscriptionLayers = state.inscriptions.map((line) => line.layer ?? 0);
+  const imageLayers = state.selectedImages.map((image) => image.layer ?? 0);
+  const motifLayers = Object.values(state.motifOffsets).map((offset) => offset.layer ?? 0);
+  const emblemLayers = Object.values(state.emblemOffsets).map((offset) => offset.layer ?? 0);
+  return Math.max(0, ...inscriptionLayers, ...imageLayers, ...motifLayers, ...emblemLayers) + 1;
+};
+
 export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   catalog: null,
   setCatalog(catalog) {
-    set({ catalog });
+    set({
+      catalog: {
+        ...catalog,
+        product: {
+          ...catalog.product,
+          defaultColor: catalog.product.defaultColor
+            ? normalizeThreeColorValue(catalog.product.defaultColor)
+            : undefined,
+        },
+      },
+    });
   },
 
   materials: [],
@@ -267,6 +290,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       return {
         selectedAdditions: [...s.selectedAdditions, instanceId],
         selectedAdditionId: instanceId,
+        selectedInscriptionId: null,
+        selectedMotifId: null,
+        selectedImageId: null,
+        selectedEmblemId: null,
+        selected: null,
         activePanel: 'addition',
         additionOffsets: {
           ...s.additionOffsets,
@@ -325,7 +353,9 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const { catalog, selected } = state;
     const isLaser = catalog?.product.laser === '1';
     // Use defaultColor from catalog, fallback to white for laser or gold for others
-    const defaultColor = catalog?.product.defaultColor || (isLaser ? '#ffffff' : '#c99d44');
+    const defaultColor = normalizeThreeColorValue(
+      catalog?.product.defaultColor || (isLaser ? '#ffffff' : '#c99d44'),
+    );
     const defaultHeightMm =
       state.motifInitHeight ?? state.motifPriceModel?.initHeight ?? 100;
     
@@ -346,6 +376,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           coordinateSpace: 'offset',
           flipX: false,
           flipY: false,
+          layer: getNextDesignLayer(s),
         },
         target,
         s,
@@ -359,6 +390,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedMotifs: newMotifs,
         motifOffsets: newOffsets,
         selectedMotifId: id, // Auto-select the newly added motif
+        selectedInscriptionId: null,
+        selectedAdditionId: null,
+        selectedImageId: null,
+        selectedEmblemId: null,
+        selected: null,
         activePanel: 'motif', // Open the edit panel instead of closing
       };
     });
@@ -393,7 +429,19 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   // Emblem management (Bronze Plaques)
   selectedEmblems: [],
   selectedEmblemId: null,
-  setSelectedEmblemId: (id) => set({ selectedEmblemId: id }),
+  setSelectedEmblemId: (id) => {
+    set({ selectedEmblemId: id });
+    if (id) {
+      set({
+        selectedInscriptionId: null,
+        selectedAdditionId: null,
+        selectedMotifId: null,
+        selectedImageId: null,
+        selected: null,
+        activePanel: 'emblem' as const,
+      });
+    }
+  },
   emblemRefs: {},
   setEmblemRef: (id, ref) => set((s) => ({ emblemRefs: { ...s.emblemRefs, [id]: ref } })),
   emblemOffsets: {},
@@ -417,6 +465,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           heightMm: sizeEntry.heightMm,
           target,
           coordinateSpace: 'offset',
+          layer: getNextDesignLayer(s),
         },
         target,
         s,
@@ -426,6 +475,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedEmblems: [...s.selectedEmblems, { id, emblemId, imageUrl }],
         emblemOffsets: { ...s.emblemOffsets, [id]: defaultOffset },
         selectedEmblemId: id,
+        selectedInscriptionId: null,
+        selectedAdditionId: null,
+        selectedMotifId: null,
+        selectedImageId: null,
+        selected: null,
         activePanel: 'emblem' as const,
       };
     });
@@ -460,6 +514,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           ...currentOffset,
           xPos: (currentOffset.xPos ?? 0) + deltaX,
           yPos: (currentOffset.yPos ?? 0) + deltaY,
+          layer: getNextDesignLayer(s),
         },
         surface,
         s,
@@ -468,6 +523,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedEmblems: [...s.selectedEmblems, { id: newId, emblemId: emblem.emblemId, imageUrl: emblem.imageUrl }],
         emblemOffsets: { ...s.emblemOffsets, [newId]: duplicatedOffset },
         selectedEmblemId: newId,
+        selectedInscriptionId: null,
+        selectedAdditionId: null,
+        selectedMotifId: null,
+        selectedImageId: null,
+        selected: null,
         activePanel: 'emblem' as const,
       };
     });
@@ -514,10 +574,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           ...image,
           ...ledgerPos,
           target: resolvedTarget,
+          layer: getNextDesignLayer(s),
         },
       ],
       cropCanvasData: null,
       selectedImageId: image.id, // Auto-select the newly added image
+      selectedInscriptionId: null,
+      selectedAdditionId: null,
+      selectedMotifId: null,
+      selectedEmblemId: null,
+      selected: null,
       activePanel: 'image',      // Open the edit panel
     }));
     setTimeout(() => get().calculateImageCost(), 0);
@@ -544,11 +610,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         id: `img-${Date.now()}`,
         xPos: (original.xPos ?? 0) + deltaX,
         yPos: (original.yPos ?? 0) + deltaY,
+        layer: getNextDesignLayer(s),
       };
 
       return {
         selectedImages: [...s.selectedImages, newImage],
         selectedImageId: newImage.id,
+        selectedInscriptionId: null,
+        selectedAdditionId: null,
+        selectedMotifId: null,
+        selectedEmblemId: null,
+        selected: null,
       };
     });
     setTimeout(() => get().calculateImageCost(), 0);
@@ -1433,9 +1505,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Determine color: use catalog defaultColor if available, otherwise use hardcoded defaults
     let color: string;
     if (state.showInscriptionColor === false) {
-      color = state.catalog?.product.defaultColor ?? '#ffffff';
+      color = normalizeThreeColorValue(state.catalog?.product.defaultColor ?? '#ffffff');
     } else {
-      color = patch.color ?? state.catalog?.product.defaultColor ?? '#c99d44';
+      color = normalizeThreeColorValue(
+        patch.color ?? state.catalog?.product.defaultColor ?? '#c99d44',
+      );
     }
     
     // Set target based on currently selected object (headstone or base)
@@ -1457,6 +1531,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       color,
       target,
       textAlign: patch.textAlign ?? 'center',
+      layer: getNextDesignLayer(state),
       ref: React.createRef<Group>(),
     };
     const normalizedLine = withLineSurfaceDimensions(newLine, target, state, true);
@@ -1464,6 +1539,13 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set((s) => ({
       inscriptions: [...s.inscriptions, normalizedLine],
       selectedInscriptionId: id,
+      activeInscriptionText: normalizedLine.text,
+      selected: null,
+      selectedAdditionId: null,
+      selectedMotifId: null,
+      selectedImageId: null,
+      selectedEmblemId: null,
+      activePanel: 'inscription',
     }));
     state.calculateInscriptionCost();
     return id;
@@ -1543,9 +1625,17 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           id: newId,
           ref: React.createRef<Group>(),
           yPos: src.target === 'ledger' ? src.yPos + offset : src.yPos - offset,
+          layer: getNextDesignLayer(s),
         },
       ],
       selectedInscriptionId: newId,
+      activeInscriptionText: src.text,
+      selected: null,
+      selectedAdditionId: null,
+      selectedMotifId: null,
+      selectedImageId: null,
+      selectedEmblemId: null,
+      activePanel: 'inscription',
     }));
     get().calculateInscriptionCost();
     return newId;
@@ -1575,6 +1665,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activeInscriptionText: line.text,
         selectedMotifId: null, // Deselect any motif
         selectedAdditionId: null, // Deselect any addition
+        selectedImageId: null, // Deselect any image
+        selectedEmblemId: null, // Deselect any emblem
         selected: null, // Deselect headstone/base
         activePanel: 'inscription', // Set active panel to inscription
       });
@@ -1584,6 +1676,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activeInscriptionText: '',
         selectedMotifId: null, // Deselect any motif
         selectedAdditionId: null, // Deselect any addition
+        selectedImageId: null, // Deselect any image
+        selectedEmblemId: null, // Deselect any emblem
         selected: null, // Deselect headstone/base
         activePanel: 'inscription', // Set active panel to inscription
       });
@@ -1607,6 +1701,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         activePanel: 'addition',
         selectedInscriptionId: null, // Deselect any inscription
         selectedMotifId: null, // Deselect any motif
+        selectedImageId: null, // Deselect any image
+        selectedEmblemId: null, // Deselect any emblem
         selected: null, // Deselect headstone/base
       });
       // Navigate to select-additions page only when we're in mobile/compact layout
@@ -1719,6 +1815,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         selectedInscriptionId: null, // Deselect any inscription
         selectedAdditionId: null, // Deselect any addition
         selectedImageId: null, // Deselect any image
+        selectedEmblemId: null, // Deselect any emblem
         selected: null, // Deselect headstone/base
       });
       // Navigate to select-motifs page only on mobile to keep canvas visible on desktop
@@ -1746,6 +1843,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
       set({
         selectedAdditionId: null,
         selectedMotifId: null,
+        selectedInscriptionId: null,
+        selectedEmblemId: null,
         selected: null,
       });
     }
@@ -1810,6 +1909,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
             ...currentOffset,
             xPos: (currentOffset.xPos ?? 0) + deltaX,
             yPos: (currentOffset.yPos ?? 0) + deltaY,
+            layer: getNextDesignLayer(s),
           },
           surface,
           s,
@@ -1817,6 +1917,12 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         return {
           motifOffsets: { ...s.motifOffsets, [newId]: duplicatedOffset },
           selectedMotifId: newId,
+          selectedInscriptionId: null,
+          selectedAdditionId: null,
+          selectedImageId: null,
+          selectedEmblemId: null,
+          selected: null,
+          activePanel: 'motif',
         };
       });
     }

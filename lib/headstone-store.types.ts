@@ -81,6 +81,7 @@ export type Line = {
   target?: 'headstone' | 'base' | 'ledger';
   baseWidthMm?: number;
   baseHeightMm?: number;
+  layer?: number;
   /** Horizontal alignment for multi-line inscriptions. Defaults to 'center'. */
   textAlign?: 'left' | 'center' | 'right';
   /** When 'mm-center', xPos/yPos are mm offsets from headstone center (Y-up). */
@@ -222,6 +223,7 @@ export type HeadstoneState = {
       target: 'headstone' | 'base' | 'ledger';
       coordinateSpace?: 'offset' | 'mm-center' | 'absolute';      baseWidthMm?: number;
       baseHeightMm?: number;
+      layer?: number;
     }
   >;
   setEmblemOffset: (id: string, offset: Partial<HeadstoneState['emblemOffsets'][string]>) => void;
@@ -242,6 +244,7 @@ export type HeadstoneState = {
     colorMode?: 'full' | 'bw' | 'sepia';
     target?: 'headstone' | 'base' | 'ledger';
     coordinateSpace?: 'mm-center';
+    layer?: number;
   }>;
   addImage: (image: {
     id: string;
@@ -259,6 +262,7 @@ export type HeadstoneState = {
     colorMode?: 'full' | 'bw' | 'sepia';
     target?: 'headstone' | 'base' | 'ledger';
     coordinateSpace?: 'mm-center';
+    layer?: number;
   }) => void;
   removeImage: (id: string) => void;
   duplicateImage: (id: string) => void;
@@ -415,6 +419,7 @@ export type HeadstoneState = {
       footprintWidth?: number;
       baseWidthMm?: number;
       baseHeightMm?: number;
+      layer?: number;
     }
   >;
 
@@ -439,6 +444,7 @@ export type HeadstoneState = {
       flipY?: boolean;
       baseWidthMm?: number;
       baseHeightMm?: number;
+      layer?: number;
     }
   >;
 

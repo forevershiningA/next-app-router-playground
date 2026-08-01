@@ -37,17 +37,14 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
 };
 
 const OUTLINE_ARM_COUNT = 16;
-const OUTLINE_THICKNESS_RATIO = 0.004;
-const OUTLINE_MIN_THICKNESS = 0.001;
-const DESKTOP_OUTLINE_THICKNESS_RATIO = 0.0012;
-const DESKTOP_OUTLINE_MIN_THICKNESS = 0.00035;
-const MOBILE_BREAKPOINT_PX = 768;
+const OUTLINE_VERTEX_COUNT = OUTLINE_ARM_COUNT * 2;
 
 type OutlineGroup = THREE.Group & {
   userData: {
-    outlineGeometry?: THREE.BoxGeometry;
-    outlineMaterial?: THREE.MeshBasicMaterial;
-    outlineMeshes?: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[];
+    outlineGeometry?: THREE.BufferGeometry;
+    outlineMaterial?: THREE.LineBasicMaterial;
+    outlineLines?: THREE.LineSegments<THREE.BufferGeometry, THREE.LineBasicMaterial>;
+    outlinePositions?: Float32Array;
   };
 };
 
@@ -58,33 +55,33 @@ function createOutlineGroup(
   clippingPlane: THREE.Plane | null,
 ) {
   const group = new THREE.Group() as OutlineGroup;
-  const geometry = new THREE.BoxGeometry(1, 1, 1);
-  const material = new THREE.MeshBasicMaterial({
+  const positions = new Float32Array(OUTLINE_VERTEX_COUNT * 3);
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  geometry.setDrawRange(0, 0);
+
+  const material = new THREE.LineBasicMaterial({
     color: new THREE.Color(color).getHex(),
     depthTest: !through,
     depthWrite: false,
     transparent: true,
     opacity: 1,
+    linewidth: 1,
     toneMapped: false,
     clippingPlanes: clippingPlane ? [clippingPlane] : null,
     clipIntersection: false,
   });
-  const meshes: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial>[] = [];
-
-  for (let index = 0; index < OUTLINE_ARM_COUNT; index++) {
-    const mesh = new THREE.Mesh(geometry, material);
-    mesh.renderOrder = renderOrder;
-    mesh.frustumCulled = false;
-    mesh.raycast = () => null;
-    mesh.visible = false;
-    group.add(mesh);
-    meshes.push(mesh);
-  }
+  const lines = new THREE.LineSegments(geometry, material);
+  lines.renderOrder = renderOrder;
+  lines.frustumCulled = false;
+  lines.raycast = () => null;
+  group.add(lines);
 
   group.renderOrder = renderOrder;
   group.userData.outlineGeometry = geometry;
   group.userData.outlineMaterial = material;
-  group.userData.outlineMeshes = meshes;
+  group.userData.outlineLines = lines;
+  group.userData.outlinePositions = positions;
 
   return group;
 }
@@ -109,7 +106,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   animateOnShow = false,
   animationDuration = 420,
 }: RotatingBoxOutlineProps) {
-  const { gl, size } = useThree();
+  const { gl } = useThree();
   const helperRef = React.useRef<OutlineGroup | null>(null);
   const depthPadding = depthPad ?? pad;
   const {
@@ -193,9 +190,11 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   useFrame((state) => {
     const obj = targetRef.current;
     const helper = helperRef.current;
-    const meshes = helper?.userData.outlineMeshes;
+    const lines = helper?.userData.outlineLines;
+    const positions = helper?.userData.outlinePositions;
+    const geometry = helper?.userData.outlineGeometry;
 
-    if (!helper || !meshes || !obj || !visible) {
+    if (!helper || !lines || !positions || !geometry || !obj || !visible) {
       if (helper) {
         helper.visible = false;
       }
@@ -309,13 +308,6 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
     const lenXLocal = halfWidthLocal * 2 * lineLength;
     const lenYLocal = halfHeightLocal * 2 * lineLength;
-    const isMobileViewport = size.width < MOBILE_BREAKPOINT_PX;
-    const localThickness = Math.max(
-      Math.min(halfWidthLocal, halfHeightLocal) * (
-        isMobileViewport ? OUTLINE_THICKNESS_RATIO : DESKTOP_OUTLINE_THICKNESS_RATIO
-      ),
-      isMobileViewport ? OUTLINE_MIN_THICKNESS : DESKTOP_OUTLINE_MIN_THICKNESS,
-    );
 
     const bottomLiftLocal = axisYLength !== 0 ? bottomLift / axisYLength : bottomLift;
     const frontExtensionLocal = axisZLength !== 0 ? frontExtension / axisZLength : frontExtension;
@@ -340,19 +332,16 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     const setArm = (
       startLocal: THREE.Vector3,
       endLocal: THREE.Vector3,
-      axis: 'x' | 'y',
     ) => {
-      const mesh = meshes[meshIndex++];
-      if (!mesh) return;
+      const offset = meshIndex++ * 6;
+      if (offset + 5 >= positions.length) return;
 
-      endpointTemp.addVectors(startLocal, endLocal).multiplyScalar(0.5);
-      mesh.position.copy(endpointTemp);
-      if (axis === 'x') {
-        mesh.scale.set(Math.abs(endLocal.x - startLocal.x), localThickness, localThickness);
-      } else {
-        mesh.scale.set(localThickness, Math.abs(endLocal.y - startLocal.y), localThickness);
-      }
-      mesh.visible = true;
+      positions[offset] = startLocal.x;
+      positions[offset + 1] = startLocal.y;
+      positions[offset + 2] = startLocal.z;
+      positions[offset + 3] = endLocal.x;
+      positions[offset + 4] = endLocal.y;
+      positions[offset + 5] = endLocal.z;
     };
 
     const cornerSigns: [number, number, number][] = [
@@ -384,19 +373,19 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       if (horizontalScale > 0.0001) {
         endpointTemp.copy(cornerTemp);
         endpointTemp.x -= sx * lenXLocal * horizontalScale;
-        setArm(cornerTemp, endpointTemp, 'x');
+        setArm(cornerTemp, endpointTemp);
       }
 
       if (verticalScale > 0.0001) {
         endpointTemp.copy(cornerTemp);
         endpointTemp.y -= sy * lenYLocal * verticalScale;
-        setArm(cornerTemp, endpointTemp, 'y');
+        setArm(cornerTemp, endpointTemp);
       }
     });
 
-    for (let index = meshIndex; index < meshes.length; index++) {
-      meshes[index].visible = false;
-    }
+    geometry.setDrawRange(0, meshIndex * 2);
+    const positionAttribute = geometry.getAttribute('position') as THREE.BufferAttribute;
+    positionAttribute.needsUpdate = true;
 
     helper.visible = meshIndex > 0;
   });
