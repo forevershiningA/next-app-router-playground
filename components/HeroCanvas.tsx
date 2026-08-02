@@ -4,6 +4,7 @@ import React, { useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber';
 import { 
   OrbitControls, 
+  Environment,
   PerspectiveCamera,
   ContactShadows,
   useTexture,
@@ -12,6 +13,10 @@ import {
 import * as THREE from 'three';
 import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader';
 
+type SvgPath = {
+  toShapes: (isCCW: boolean) => THREE.Shape[];
+};
+
 // --- Constants ---
 const STONE_WIDTH = 2.55; 
 const STONE_HEIGHT = 2.55; 
@@ -19,30 +24,80 @@ const STONE_THICKNESS = 0.44;
 const BASE_HEIGHT = 0.46;
 const BASE_EXTRA_WIDTH = 0.58;
 const BEVEL_SIZE = 0.02;
+const MODEL_SCALE = 0.94;
+const MODEL_Y = -1.04;
+const INTRO_DURATION = 1.15;
+const FRONT_LAYOUT_Y_OFFSET = 0.12;
+
+const easeOutCubic = (value: number) => 1 - Math.pow(1 - value, 3);
+
+function buildBoxGeometryWithScaledUvs(width: number, height: number, depth: number) {
+  const geometry = new THREE.BoxGeometry(width, height, depth);
+  const position = geometry.getAttribute('position');
+  const normal = geometry.getAttribute('normal');
+  const uvs: number[] = [];
+  const visibleFaceRepeatY = 0.2;
+
+  for (let i = 0; i < position.count; i += 1) {
+    const x = position.getX(i);
+    const y = position.getY(i);
+    const z = position.getZ(i);
+    const nx = Math.abs(normal.getX(i));
+    const ny = Math.abs(normal.getY(i));
+    const nz = Math.abs(normal.getZ(i));
+
+    if (ny >= nx && ny >= nz) {
+      const repeatX = visibleFaceRepeatY * (width / depth);
+      uvs.push(((x + width / 2) / width) * repeatX, ((z + depth / 2) / depth) * visibleFaceRepeatY);
+    } else if (nx >= nz) {
+      const repeatX = visibleFaceRepeatY * (depth / height);
+      uvs.push(((z + depth / 2) / depth) * repeatX, ((y + height / 2) / height) * visibleFaceRepeatY);
+    } else {
+      const repeatX = visibleFaceRepeatY * (width / height);
+      uvs.push(((x + width / 2) / width) * repeatX, ((y + height / 2) / height) * visibleFaceRepeatY);
+    }
+  }
+
+  geometry.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+  return geometry;
+}
+
+function fitCanvasText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number, maxSize: number, minSize: number) {
+  let size = maxSize;
+  while (size > minSize) {
+    ctx.font = `bold ${size}px serif`;
+    if (ctx.measureText(text).width <= maxWidth) break;
+    size -= 2;
+  }
+  ctx.font = `bold ${size}px serif`;
+}
 
 // --- Materials & Components ---
 
 // 1. Optimized Granite Material
 const GraniteMaterial = () => {
-  const texture = useTexture('/textures/forever/l/Glory-Black-2.webp');
+  const texture = useTexture('/textures/forever/l/Blue-Pearl.webp');
   
   useMemo(() => {
     if (texture) {
       texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(2, 2);
-      texture.anisotropy = 4;
+      texture.repeat.set(0.2, 0.2);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = 16;
+      texture.needsUpdate = true;
     }
   }, [texture]);
   
   return (
-    <meshStandardMaterial
-      color="#1a1a1a"
+    <meshPhysicalMaterial
+      color="#e6e6e6"
       map={texture}
-      roughness={0.06}
-      metalness={0.12}
-      envMapIntensity={2.0}
-      emissive="#0a0a0a"
-      emissiveIntensity={0.05}
+      roughness={0.7}
+      metalness={0}
+      clearcoat={1}
+      clearcoatRoughness={0.03}
+      envMapIntensity={1.4}
+      reflectivity={0.55}
     />
   );
 };
@@ -68,25 +123,100 @@ const GoldText: React.FC<GoldTextProps> = ({ text, position, fontSize, font, fon
       lineHeight={1.2}
       fontWeight={fontWeight}
       characters="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{};':,./<>? "
-      outlineWidth={0.008}
-      outlineColor="#1a1108"
-      outlineOpacity={0.9}
+      outlineWidth={0.012}
+      outlineColor="#050505"
+      outlineOpacity={1}
       renderOrder={10}
       fillOpacity={1}
     >
       {text}
       <meshStandardMaterial
-        color="#d4af37"
-        emissive="#b8860b"
-        emissiveIntensity={0.4}
-        roughness={0.15}
-        metalness={0.95}
+        color="#ffd36a"
+        emissive="#f2b84b"
+        emissiveIntensity={0.72}
+        roughness={0.22}
+        metalness={0.7}
         toneMapped={false}
         envMapIntensity={1.8}
       />
     </Text>
   );
 };
+
+function InscriptionMesh({
+  text,
+  width = 1.6,
+  height = 0.22,
+  position = [0, 0, 0],
+  textureOverscan = 1,
+}: {
+  text: string;
+  width?: number;
+  height?: number;
+  position?: [number, number, number];
+  textureOverscan?: number;
+}) {
+  const tex = React.useMemo(() => {
+    if (typeof document === 'undefined') return null;
+
+    const scale = 2;
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(512, Math.round(width * 512 * textureOverscan)) * scale;
+    canvas.height = Math.max(128, Math.round(height * 512)) * scale;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#FFDF73';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    const fontSize = Math.floor(canvas.height * 0.65);
+    const horizontalPadding = Math.round(canvas.width * 0.12);
+    fitCanvasText(ctx, text, canvas.width - horizontalPadding * 2, fontSize, Math.floor(canvas.height * 0.36));
+
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 4;
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+    ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.needsUpdate = true;
+    return texture;
+  }, [text, width, height, textureOverscan]);
+
+  React.useEffect(() => {
+    return () => {
+      tex?.dispose();
+    };
+  }, [tex]);
+
+  return (
+    <mesh position={position} renderOrder={2000}>
+      <planeGeometry args={[width, height]} />
+      <meshStandardMaterial
+        map={tex ?? undefined}
+        transparent
+        depthTest
+        depthWrite={false}
+        toneMapped={false}
+        alphaTest={0.05}
+        side={THREE.FrontSide}
+        polygonOffset
+        polygonOffsetFactor={-10}
+        polygonOffsetUnits={-10}
+        color="#FDE895"
+        roughness={0.35}
+        metalness={0.65}
+        emissive="#4a3600"
+        emissiveIntensity={0.7}
+        envMapIntensity={1.2}
+      />
+    </mesh>
+  );
+}
 
 interface GoldMotifProps {
   position: [number, number, number];
@@ -125,7 +255,7 @@ const HeroCeramicImage: React.FC<HeroCeramicImageProps> = ({
   const shapeData = useMemo(() => {
     const paths = svgData?.paths ?? [];
     if (!paths.length) return null;
-    const shapes = paths.flatMap((path) => path.toShapes(true));
+    const shapes = paths.flatMap((path: SvgPath) => path.toShapes(true));
     if (!shapes.length) return null;
 
     const photoGeometry = new THREE.ShapeGeometry(shapes, 24);
@@ -217,7 +347,7 @@ const GoldMotif: React.FC<GoldMotifProps> = ({ position, rotation = [0, 0, 0], s
 
   const geometry = useMemo(() => {
     if (!svgData?.paths?.length) return null;
-    const shapes = svgData.paths.flatMap((path) => path.toShapes(true));
+    const shapes = svgData.paths.flatMap((path: SvgPath) => path.toShapes(true));
     if (!shapes.length) return null;
     const geom = new THREE.ShapeGeometry(shapes);
     geom.center();
@@ -330,7 +460,7 @@ const HeartHeadstone: React.FC<HeadstoneProps> = ({ width, height, thickness }) 
 
   return (
     <group position={[0, BASE_HEIGHT, 0]}>
-      <mesh position={[0, 0, -thickness / 2]}>
+      <mesh position={[0, 0, -thickness / 2]} castShadow receiveShadow>
         <extrudeGeometry args={[shape, extrudeSettings]} />
         <GraniteMaterial />
       </mesh>
@@ -341,11 +471,39 @@ const HeartHeadstone: React.FC<HeadstoneProps> = ({ width, height, thickness }) 
 const Base: React.FC<{ stoneWidth: number }> = ({ stoneWidth }) => {
   const width = stoneWidth + BASE_EXTRA_WIDTH;
   const depth = STONE_THICKNESS + 0.3;
+  const tex = useTexture('/textures/forever/l/Blue-Pearl.webp');
+  const baseTex = useMemo(() => (tex ? tex.clone() : null), [tex]);
+  const geometry = useMemo(() => buildBoxGeometryWithScaledUvs(width, BASE_HEIGHT, depth), [width, depth]);
+
+  useMemo(() => {
+    if (baseTex) {
+      baseTex.wrapS = baseTex.wrapT = THREE.RepeatWrapping;
+      baseTex.repeat.set(1, 1);
+      baseTex.anisotropy = 16;
+      baseTex.colorSpace = THREE.SRGBColorSpace;
+      baseTex.needsUpdate = true;
+    }
+  }, [baseTex]);
+
+  React.useEffect(() => {
+    return () => {
+      baseTex?.dispose();
+      geometry.dispose();
+    };
+  }, [baseTex, geometry]);
 
   return (
-    <mesh position={[0, BASE_HEIGHT / 2, 0]}>
-      <boxGeometry args={[width, BASE_HEIGHT, depth]} />
-      <GraniteMaterial />
+    <mesh geometry={geometry} position={[0, BASE_HEIGHT / 2, 0]} castShadow receiveShadow>
+      <meshPhysicalMaterial
+        map={baseTex ?? undefined}
+        color="#e6e6e6"
+        roughness={0.7}
+        metalness={0}
+        clearcoat={1}
+        clearcoatRoughness={0.03}
+        envMapIntensity={1.4}
+        reflectivity={0.55}
+      />
     </mesh>
   );
 };
@@ -359,6 +517,7 @@ interface HeroCanvasProps {
 const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
   const groupRef = useRef<THREE.Group>(null);
   const lastInteractionTime = useRef(0);
+  const introStartTime = useRef<number | null>(null);
   const isAnimatingToTarget = useRef(false);
   
   const { clock } = useThree();
@@ -372,6 +531,16 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
 
   useFrame((state, delta) => {
     if (!groupRef.current) return;
+
+    if (introStartTime.current === null) {
+      introStartTime.current = state.clock.elapsedTime;
+    }
+
+    const introProgress = Math.min((state.clock.elapsedTime - introStartTime.current) / INTRO_DURATION, 1);
+    const introEase = easeOutCubic(introProgress);
+    const scale = THREE.MathUtils.lerp(0.68, MODEL_SCALE, introEase);
+    groupRef.current.position.set(0, MODEL_Y, 0);
+    groupRef.current.scale.setScalar(scale);
 
     if (isAnimatingToTarget.current) {
       const step = 0.1;
@@ -391,45 +560,52 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
     const AUTO_ROTATE_DELAY = 3;
     
     if (timeSinceInteraction > AUTO_ROTATE_DELAY) {
-      groupRef.current.rotation.y += delta * 0.15;
+      const idleRotation = targetRotation + Math.sin(state.clock.elapsedTime * 0.65) * 0.08;
+      groupRef.current.rotation.y += (idleRotation - groupRef.current.rotation.y) * Math.min(delta * 3, 0.08);
     }
   });
 
   return (
     <>
-      <group ref={groupRef} position={[0, -1.2, 0]}>
+      <group ref={groupRef} position={[0, MODEL_Y, 0]} scale={[0.68, 0.68, 0.68]}>
         <HeartHeadstone width={STONE_WIDTH} height={STONE_HEIGHT} thickness={STONE_THICKNESS} />
         <Base stoneWidth={STONE_WIDTH} />
         
-        <group position={[0, 0, 0]}>
-          <GoldText
-            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.755, textZ]}
-            fontSize={0.11}
+        <group position={[0, FRONT_LAYOUT_Y_OFFSET, 0]}>
+          <InscriptionMesh
             text="In Loving Memory"
-            font="/fonts/Garamond.ttf"
+            width={1.5}
+            height={0.41}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.735, textZ]}
           />
           
-          <GoldText
-            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.655, textZ]}
-            fontSize={0.22}
+          <InscriptionMesh
             text="Margaret Ann Cole"
-            font="/fonts/Garamond.ttf"
-            fontWeight="bold"
+            width={1.75}
+            height={0.53}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.655, textZ]}
           />
           
-          <GoldText
-            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.555, textZ]}
-            fontSize={0.11}
-            text="Her kindness lives on in every life she touched"
-            font="/fonts/Garamond.ttf"
-          />
-
           <HeroCeramicImage
-            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.32, textZ + 0.008]}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.465, textZ + 0.008]}
             imageUrl="/jpg/photos/vitreous-enamel-image.webp"
             maskPath="/shapes/masks/oval_horizontal.svg"
-            width={0.58}
-            height={0.74}
+            width={0.44}
+            height={0.58}
+          />
+
+          <InscriptionMesh
+            text="Her kindness lives on"
+            width={1.5}
+            height={0.28}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.255, textZ]}
+          />
+
+          <InscriptionMesh
+            text="in every life she touched"
+            width={1.95}
+            height={0.28}
+            position={[0, BASE_HEIGHT + STONE_HEIGHT * 0.205, textZ]}
           />
 
           <group
@@ -464,13 +640,13 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
       </group>
       
       <ContactShadows 
-        position={[0, -1.4, 0]}
-        opacity={1}
-        scale={16}
-        blur={2.8}
+        position={[0, -1.22, 0]}
+        opacity={0.38}
+        scale={13}
+        blur={3.6}
         far={2.5}
         resolution={512}
-        color="#000000"
+        color="#15110d"
       />
       
       <OrbitControls
@@ -497,7 +673,8 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
     <div style={{ width: '100%', height: '100%', margin: '0 auto' }}>
       <Canvas
         key="hero-canvas"
-        dpr={[1, 1.5]}
+        shadows
+        dpr={[1, 2]}
         gl={{ 
           alpha: true, 
           antialias: true,
@@ -511,52 +688,22 @@ export default function HeroCanvas({ rotation = 0 }: HeroCanvasProps) {
         <React.Suspense fallback={null}>
           <PerspectiveCamera makeDefault position={[0, 0.4, 5.5]} fov={40} />
           
-          <ambientLight intensity={0.6} />
+          <ambientLight intensity={0.3} color="#ffffff" />
+          <directionalLight position={[0, 2, 5]} intensity={1.2} color="#ffffff" />
           
-          <spotLight
-            position={[0, 6, 2]}
-            angle={0.8}
-            penumbra={0.5}
-            intensity={1.8}
-            color="#ffffff"
-            castShadow={false}
-          />
-
-          <spotLight 
-            position={[-5, 5, -5]} 
-            angle={0.5} 
-            intensity={6} 
-            color="#a0c0ff" 
-            castShadow={false} 
-          />
-
-          <spotLight 
-            position={[5, 5, -5]} 
-            angle={0.5} 
-            intensity={6} 
-            color="#a0c0ff" 
-            castShadow={false} 
-          />
-
-          <spotLight 
-            position={[3, 5, 5]} 
-            angle={0.5} 
-            penumbra={1} 
-            intensity={4} 
-            color="#ffffff" 
-          />
-
-          <spotLight 
-            position={[8, 8, 8]}
-            angle={0.5}
-            penumbra={1} 
+          <directionalLight
+            position={[5, 8, 5]}
             intensity={1.5}
-            color="#fff5e6"
+            color="#fff9f0"
+            castShadow
+            shadow-mapSize-width={2048}
+            shadow-mapSize-height={2048}
+            shadow-bias={-0.0005}
           />
-          
-          <pointLight position={[3, 2, 5]} intensity={0.8} color="#e6f2ff" />
-          <pointLight position={[0, -1, 3]} intensity={0.3} color="#6B5540" />
-          <pointLight position={[0, 1.5, 3.5]} intensity={1.2} color="#ffd700" distance={7} decay={2} />
+
+          <directionalLight position={[-5, 5, 2]} intensity={0.4} color="#a0c0ff" />
+
+          <Environment preset="city" background={false} blur={0.8} />
 
           <SceneContent targetRotation={rotation} />
         </React.Suspense>

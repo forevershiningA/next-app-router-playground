@@ -73,6 +73,100 @@
 65. [July 28 Lighthouse Performance Follow-up](#current-status-2026-07-28--lighthouse-performance-follow-up)
 66. [August 1 Bronze Plaque Selection, Check Price, and Unit Toggle](#current-status-2026-08-01--bronze-plaque-selection-check-price-and-unit-toggle)
 67. [August 2 Design Detail Page Preview, CTA, Quote Accordions, and Region-Neutral Copy](#current-status-2026-08-02--design-detail-page-preview-cta-quote-accordions-and-region-neutral-copy)
+68. [August 2 Homepage HeroCanvas, Discount Headstones Port, and Compassionate Copy](#current-status-2026-08-02--homepage-herocanvas-discount-headstones-port-and-compassionate-copy)
+
+---
+
+## Current Status (2026-08-02) - Homepage HeroCanvas, Discount Headstones Port, and Compassionate Copy
+
+This session focused on the public homepage `/`, especially `components/HeroCanvas.tsx` and the visible "Created from experience" workflow section in `app/_ui/HomeSplash.tsx`.
+
+### Homepage HeroCanvas State
+
+The homepage `HeroCanvas` was rebuilt to follow the stronger visual approach from `discountheadstones/HeroCanvas.tsx`, while keeping it compatible with the Next.js app.
+
+| Area | Current Behavior |
+| --- | --- |
+| Granite material | Uses `/textures/forever/l/Blue-Pearl.webp` with `meshPhysicalMaterial`, `clearcoat`, `clearcoatRoughness`, larger grain, `SRGBColorSpace`, and 16x anisotropy. |
+| Headstone scale | `MODEL_SCALE = 0.94`, `MODEL_Y = -1.04`. The homepage canvas container is larger (`h-[40vh]`, `sm:h-[57vh]`, min heights `330px/430px`). |
+| Entrance animation | The model enters from its own center by scaling `0.68 -> MODEL_SCALE` over `1.15s` with `easeOutCubic`. It no longer slides upward from the bottom of the canvas. |
+| Idle motion | After interaction delay, the model uses a subtle front-facing sway instead of a full spin that turns the memorial away from the user. |
+| Base geometry | Base uses `buildBoxGeometryWithScaledUvs()` so Blue Pearl texture on the box does not look like dense repeated noise. |
+| Text on stone | Front inscriptions use `InscriptionMesh` canvas textures for stronger readability over granite, adapted from Discount Headstones. |
+| Ceramic photo | Ceramic image is smaller and positioned so it does not cover `Margaret Ann Cole`. Current front layout is moved up via `FRONT_LAYOUT_Y_OFFSET = 0.12`. |
+| Lighting | Uses `Environment preset="city"` plus a small set of directional/ambient lights and canvas shadows, adapted from Discount Headstones. |
+
+Current front inscription/photo layout notes:
+
+- `In Loving Memory` and `Margaret Ann Cole` are canvas-text planes.
+- Ceramic photo sits below the name, slightly raised after user review.
+- Epitaph is split into:
+  - `Her kindness lives on`
+  - `in every life she touched`
+- The second epitaph line uses a wider text plane so it renders at the same visual size as the first line.
+
+### Homepage Hero Copy
+
+The hero subtitle was made smaller and split into two lines:
+
+```text
+Design a beautiful tribute in real-time 3D.
+Save, share, and order when ready.
+```
+
+The "Designer workflow" section was rewritten to avoid technical/internal language and to explain the project more compassionately. Current key copy:
+
+- Eyebrow: `Created from experience`
+- Heading: `Forever Shining gently guides you from the first choice to the final proof`
+- Body: mentions that we have been through these decisions ourselves, and that creating a Headstone, Monument, or Plaque should feel calm, clear, and possible for a family to think through together.
+
+Current workflow cards:
+
+| Card | Current Copy Direction |
+| --- | --- |
+| `Start gently` | Begin with a Headstone, Monument, or Plaque and explore without pressure. |
+| `Shape their story` | Add words, photos, motifs, and materials while previewing in 3D. |
+| `Take time to decide` | Save, share with family, review quote, or ask for help. |
+
+Do not reintroduce copy like "The home page should set expectations..." on public UI. That was an internal implementation note and should stay out of customer-facing pages.
+
+### Discount Headstones Reference
+
+The user copied the Discount Headstones source files into `discountheadstones/`. This folder is useful as a local visual/reference implementation for the homepage hero.
+
+Relevant files:
+
+| File | Notes |
+| --- | --- |
+| `discountheadstones/HeroCanvas.tsx` | Source reference for Blue Pearl material, physical material settings, environment lighting, canvas text inscriptions, slow motion, and ready event pattern. |
+| `discountheadstones/HeroDecor.tsx` | Ceramic/photo decor reference. It was fixed locally so React hooks are not called after an early return. |
+| `discountheadstones/global.d.ts` | Now declares `ImportMeta.env.BASE_URL` so copied Vite-style files type-check inside this repo. |
+
+Important compatibility notes:
+
+- Do not copy `import.meta.env.BASE_URL` directly into main Next.js components. Use normal public asset paths such as `/textures/...`.
+- Do not copy `any`-typed SVG path handling into main app code. `components/HeroCanvas.tsx` uses a local `SvgPath` type.
+- Discount Headstones may be a reference folder, not necessarily a routed Next.js feature. Keep main homepage implementation in `components/HeroCanvas.tsx` and `app/_ui/HomeSplash.tsx`.
+
+### Files Changed
+
+| File | Current Behavior |
+| --- | --- |
+| `components/HeroCanvas.tsx` | Homepage 3D memorial uses Blue Pearl physical material, canvas inscriptions, scaled-center entrance, larger model, ceramic photo layout, and natural lighting. |
+| `app/_ui/HomeSplash.tsx` | Homepage subtitle is smaller/two-line; canvas area is larger; workflow copy is compassionate and product-specific. |
+| `discountheadstones/global.d.ts` | Adds `ImportMetaEnv`/`ImportMeta` declarations for the copied Vite files. |
+| `discountheadstones/HeroDecor.tsx` | Hook order fixed by moving hook-using implementation into an inner component rendered only when `photoUrl` exists. |
+
+### Verification
+
+Commands completed successfully after the homepage/Discount Headstones updates:
+
+```bash
+pnpm exec tsc --noEmit --pretty false
+pnpm lint
+```
+
+User preference remains: do not use Playwright for these homepage visual checks unless explicitly requested. The user checks `screen.png` manually.
 
 ---
 

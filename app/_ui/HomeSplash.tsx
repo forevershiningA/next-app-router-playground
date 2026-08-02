@@ -256,27 +256,27 @@ export default function HomeSplash() {
   const compassionPhases = [
     {
       key: 'foundation',
-      eyebrow: 'Product',
-      title: 'Choose Product',
-      summary: 'Select product, shape, and size',
+      eyebrow: 'Begin',
+      title: 'Start gently',
+      summary: 'Choose the memorial that feels right',
       description:
-        'Start with Bronze Plaques, Memorial Plaques, Headstones, or Monuments, then set the core dimensions before personalising.',
+        'Begin with a Headstone, Monument, or Plaque and explore shapes and sizes without pressure while your thoughts are still forming.',
     },
     {
       key: 'tribute',
-      eyebrow: 'Design',
-      title: 'Personalise Layout',
-      summary: 'Add inscriptions, motifs, and photos',
+      eyebrow: 'Remember',
+      title: 'Shape their story',
+      summary: 'Add words, photos, and details with care',
       description:
-        'Use the same guided panels from the Designer to edit wording, imagery, bronze emblems, borders, and material finishes.',
+        'Write the inscription, place a photo, choose motifs and materials, and see each change in 3D before deciding what feels right.',
     },
     {
       key: 'review',
-      eyebrow: 'Review',
-      title: 'Price, Save, and Share',
-      summary: 'Check the quote before ordering',
+      eyebrow: 'Share',
+      title: 'Take time to decide',
+      summary: 'Save, share, and ask for help',
       description:
-        'Review pricing, save the design, send an enquiry, or share a proof with family before committing to production.',
+        'Save a proof, share it with family, review the quote, or send it to us when you are ready for guidance or production.',
     },
   ];
 
@@ -476,27 +476,28 @@ export default function HomeSplash() {
               </span>
             </h1>
             <p
-              className="order-2 mx-auto mt-4 max-w-3xl text-xl font-light leading-snug sm:text-3xl md:mb-4"
+              className="order-2 mx-auto mt-3 max-w-2xl text-base font-light leading-snug sm:text-xl md:mb-6"
               style={{ 
                 color: isDayMode ? '#374151' : '#FFFFFF',
                 textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
               }}
             >
-              Design a beautiful tribute in real-time 3D - save, share, and order when ready.
+              Design a beautiful tribute in real-time 3D.
+              <br />
+              Save, share, and order when ready.
             </p>
             
             {/* 3D Canvas - TALLER container with overlap layout */}
-            <div className="order-3 w-full h-[34vh] sm:h-[49.5vh] min-h-[280px] sm:min-h-[360px] flex items-center justify-center relative -mt-2 -mb-8 translate-y-[30px] sm:order-5 sm:-mt-4 sm:-mb-24 z-0 pointer-events-none">
+            <div className="order-3 w-full h-[40vh] sm:h-[57vh] min-h-[330px] sm:min-h-[430px] flex items-center justify-center relative -mt-2 -mb-10 translate-y-[30px] sm:order-5 sm:-mt-5 sm:-mb-28 z-0 pointer-events-none">
               
-              {/* Enhanced Visual Effects - Spotlight and atmosphere */}
+              {/* Soft product lift without darkening the stone preview */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[70vh] h-[70vh] bg-gradient-radial from-black/70 via-black/35 to-transparent rounded-full blur-3xl"></div>
+                <div className="w-[62vh] h-[62vh] bg-gradient-radial from-white/16 via-white/5 to-transparent rounded-full blur-3xl day:from-white/45 day:via-white/20"></div>
               </div>
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[45vh] h-[45vh] bg-gradient-radial from-amber-900/30 via-amber-950/15 to-transparent rounded-full blur-2xl"></div>
+                <div className="w-[44vh] h-[44vh] bg-gradient-radial from-[#cfac6c]/22 via-[#cfac6c]/8 to-transparent rounded-full blur-2xl"></div>
               </div>
-              {/* Enhanced ground shadow */}
-              <div className="absolute bottom-[15%] left-1/2 -translate-x-1/2 w-[35vh] h-[10vh] bg-black/50 rounded-full pointer-events-none" style={{ filter: 'blur(25px)' }}></div>
+              <div className="absolute bottom-[12%] left-1/2 -translate-x-1/2 w-[30vh] h-[8vh] bg-black/28 rounded-full pointer-events-none" style={{ filter: 'blur(28px)' }}></div>
               
               {/* The Canvas Itself - Re-enable pointer events for the canvas specifically */}
               <div className="w-full h-full pointer-events-auto">
@@ -512,7 +513,7 @@ export default function HomeSplash() {
                   <>
                     <button 
                       onClick={rotateLeft}
-                      className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
+                      className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-270px)] top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
                       aria-label="Rotate headstone left to view different angles"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -521,7 +522,7 @@ export default function HomeSplash() {
                     </button>
                     <button 
                       onClick={rotateRight}
-                      className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-200px)] top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
+                      className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-270px)] top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
                       aria-label="Rotate headstone right to view different angles"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -561,10 +562,10 @@ export default function HomeSplash() {
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
             <div>
               <p className="text-xs font-semibold tracking-[0.28em] text-[#cfac6c] uppercase day:text-amber-700">
-                Designer workflow
+                Created from experience
               </p>
               <h2 className="mt-3 max-w-2xl font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900">
-                Forever Shining guides you, from product choice to final proof
+                Forever Shining gently guides you from the first choice to the final proof
               </h2>
               <div className="mt-4 flex items-center gap-1.5">
                 <div className="flex items-center gap-0.5 text-[#d4af37]">
@@ -585,11 +586,11 @@ export default function HomeSplash() {
                 </p>
               </div>
               <p className="mt-4 max-w-xl text-base leading-7 text-gray-300 day:text-gray-600">
-                The home page should set expectations for the actual Designer: compact steps, visible progress, live preview, clear pricing, and simple ways to save or ask for help.
+                We have been through these decisions ourselves. When grief is already heavy, creating a Headstone, Monument, or Plaque should be calm, clear, and something your family can think through together.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-2">
-                {['No credit card', 'Live 3D preview', 'Save & share'].map((item) => (
+                {['Begin without pressure', 'See every change in 3D', 'Save and share with family'].map((item) => (
                   <span
                     key={item}
                     className="rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm font-medium text-gray-200 day:border-gray-200 day:bg-white day:text-gray-700"
@@ -621,10 +622,10 @@ export default function HomeSplash() {
                 <div className="flex items-center justify-between gap-4">
                   <div>
                     <p className="text-sm font-semibold text-white day:text-gray-900">
-                      Designer steps
+                      A calmer way to create
                     </p>
                     <p className="mt-0.5 text-xs text-gray-400 day:text-gray-500">
-                      Mirrors the left navigation in the design tool
+                      From first idea to a proof your family can review
                     </p>
                   </div>
                   <span className="rounded-lg bg-[#cfac6c]/15 px-2.5 py-1 text-xs font-semibold text-[#cfac6c] day:bg-amber-50 day:text-amber-700">
@@ -661,7 +662,7 @@ export default function HomeSplash() {
               </div>
 
               <div className="border-t border-white/10 px-4 py-3 text-sm text-gray-400 day:border-gray-200 day:text-gray-500">
-                Tip: start with product selection, then the Designer keeps the canvas visible while you move through shape, material, size, inscriptions, motifs, and price.
+                You can move slowly, come back later, and ask us for help at any point. The Designer is here to make a difficult task easier to begin.
               </div>
             </div>
           </div>
