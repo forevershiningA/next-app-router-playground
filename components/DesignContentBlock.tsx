@@ -19,11 +19,6 @@ import {
   getRegionFromMlDir, 
   LOCALIZED_CONTENT, 
   formatDimensionRange,
-  formatPrice,
-  getShippingInfo,
-  getCemeteryComplianceTitle,
-  getLeadTime,
-  type Region
 } from '#/lib/localization';
 
 /**
@@ -192,27 +187,12 @@ export default function DesignContentBlock({
     return specs;
   };
 
-  // Generate compliance notes based on design source (mlDir)
+  // Generate compliance notes without implying one regional market.
   const generateComplianceNote = () => {
-    const complianceTitle = getCemeteryComplianceTitle(region);
-    const shipping = getShippingInfo(region, productType);
-    
-    if (region === 'AU') {
-      return {
-        title: complianceTitle,
-        content: `This ${productType} design complies with typical Australian cemetery regulations. Most Australian cemeteries require ${productType}s to be made of durable materials like granite or bronze, with specific size restrictions varying by cemetery. We recommend checking with your local cemetery office for specific requirements regarding dimensions, foundation requirements, and installation procedures. Many Australian cemeteries require a base or foundation installation, which we can arrange through our network of licensed installers. ${shipping}`
-      };
-    } else if (region === 'US') {
-      return {
-        title: complianceTitle,
-        content: `This memorial design is suitable for most US cemeteries. Cemetery regulations vary by state and individual cemetery. Common requirements include foundation specifications, size restrictions, and material approvals. We recommend confirming specific requirements with your cemetery administration before finalizing your order. ${shipping}`
-      };
-    } else {
-      return {
-        title: complianceTitle,
-        content: `This design meets typical UK churchyard and cemetery requirements. Most UK burial grounds have specific regulations regarding memorial sizes, materials, and inscriptions. The Churchyard Regulations typically restrict height, width, and materials permitted. This design can be adapted to meet your local authority requirements. ${shipping}`
-      };
-    }
+    return {
+      title: 'Cemetery Requirements',
+      content: `This ${productType} design can be adapted to meet local cemetery or churchyard requirements. Regulations vary by location and cemetery, including permitted materials, dimensions, inscription rules, foundations, and installation procedures. We recommend confirming the requirements with your cemetery administration before finalizing your order. Delivery and installation options are confirmed with your quote based on the memorial type and destination.`
+    };
   };
 
   // Generate care and longevity content
@@ -249,8 +229,7 @@ export default function DesignContentBlock({
     const isLaser = material.includes('laser');
     const isBronze = material.includes('bronze');
     const shape = shapeName || 'standard';
-    const leadTimeText = getLeadTime(region, isLaser, isBronze);
-    const shippingText = getShippingInfo(region, productType);
+    const leadTimeText = `Standard production time is ${isBronze ? '3-4 weeks' : '2-3 weeks'}, with express service available where available.`;
     
     const faqs = [
       {
@@ -271,7 +250,7 @@ export default function DesignContentBlock({
       },
       {
         question: "What's the typical lead time and delivery process?",
-        answer: `${leadTimeText} After you finalize your design online, we provide detailed proofs for your approval before manufacturing begins. ${shippingText} Professional installation can be arranged through our network of certified installers. We'll keep you updated throughout the entire process.`
+        answer: `${leadTimeText} After you finalize your design online, we provide detailed proofs for your approval before manufacturing begins. Delivery and installation options are confirmed with your quote based on the memorial type and destination. We'll keep you updated throughout the entire process.`
       }
     ];
     

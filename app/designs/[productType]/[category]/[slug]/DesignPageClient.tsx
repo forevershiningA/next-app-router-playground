@@ -3042,6 +3042,13 @@ export default function DesignPageClient({
     );
   }
 
+  const canStartPersonalising = canonicalLoadState === 'success' || legacyLoadedRef.current;
+  const startPersonalising = () => {
+    if (!canStartPersonalising) return;
+    setLoadingIntoEditor(true);
+    router.push(getDesignerProductStepHref('select-size', designMetadata.productId));
+  };
+
   return (
     <>
       {/* Full-screen loading overlay — shown while navigating to the 3D editor */}
@@ -3115,17 +3122,11 @@ export default function DesignPageClient({
               <div className="mt-7 overflow-hidden rounded-lg border border-stone-200 bg-white">
                 <div className="flex min-h-[360px] items-center justify-center bg-[radial-gradient(circle_at_50%_30%,#ffffff_0%,#f3f0e8_48%,#e6e1d7_100%)] px-4 py-8 md:min-h-[470px]">
                   <img
-                    src={`/screenshots/v2026-3d/${designId}_small.png`}
+                    src={`/screenshots/v2026-3d/${designId}.png`}
                     alt={`${formattedDesignTitle} — 3D preview`}
-                    className="max-h-[62vh] w-auto max-w-full object-contain"
+                    className="h-auto w-auto max-w-full object-contain"
+                    style={{ maxHeight: '45vh' }}
                     loading="eager"
-                    onError={(e) => {
-                      const img = e.currentTarget;
-                      const fullSrc = `/screenshots/v2026-3d/${designId}.png`;
-                      if (img.src.endsWith('_small.png')) {
-                        img.src = fullSrc;
-                      }
-                    }}
                   />
                 </div>
               </div>
@@ -3156,13 +3157,8 @@ export default function DesignPageClient({
                 </div>
 
                 <button
-                  onClick={() => {
-                    if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
-                      setLoadingIntoEditor(true);
-                      router.push(getDesignerProductStepHref('select-size', designMetadata.productId));
-                    }
-                  }}
-                  disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
+                  onClick={startPersonalising}
+                  disabled={!canStartPersonalising}
                   className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-stone-950 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-stone-800 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {(loading || canonicalLoadState === 'loading') ? (
@@ -3323,13 +3319,8 @@ export default function DesignPageClient({
       {/* Sticky Mobile CTA */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 shadow-lg z-40 p-4">
         <button
-          onClick={() => {
-            if (canonicalLoadState === 'success' || legacyLoadedRef.current) {
-              setLoadingIntoEditor(true);
-              router.push(getDesignerProductStepHref('select-size', designMetadata.productId));
-            }
-          }}
-          disabled={canonicalLoadState !== 'success' && !legacyLoadedRef.current}
+          onClick={startPersonalising}
+          disabled={!canStartPersonalising}
           className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition-all font-medium text-center disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {(loading || canonicalLoadState === 'loading') ? (

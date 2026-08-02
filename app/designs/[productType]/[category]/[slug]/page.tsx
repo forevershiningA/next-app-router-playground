@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getProductFromId } from '#/lib/product-utils';
 import { INDEXABLE_PRODUCT_SLUGS } from '#/lib/design-seo';
 import StartSavedDesignButton from './StartSavedDesignButton';
+import DesignPageClient from './DesignPageClient';
 
 /**
  * Format slug for display - convert kebab-case to Title Case
@@ -287,18 +288,10 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   // Generate SKU
   const sku = `FS-${design.productType.toUpperCase()}-${shapeName ? shapeName.toUpperCase().replace(/\s+/g, '-') : 'STANDARD'}-${simplifiedProduct.toUpperCase().replace(/\s+/g, '-')}-${category.toUpperCase()}`;
 
-  // Starting price by product type (AUD) — used for AggregateOffer lowPrice/highPrice
-  const lowPriceAud = simplifiedProduct.toLowerCase().includes('bronze') ? '895' :
-                      simplifiedProduct.toLowerCase().includes('stainless') ? '795' :
-                      design.productType === 'monument' ? '2495' : '695';
-  const highPriceAud = simplifiedProduct.toLowerCase().includes('bronze') ? '4995' :
-                       simplifiedProduct.toLowerCase().includes('stainless') ? '3995' :
-                       design.productType === 'monument' ? '9995' : '3495';
-  
   // Build canonical URL with clean slug
   const baseUrl = 'https://forevershining.org';
   const canonicalUrl = `${baseUrl}${canonicalPath}`;
-  const previewScreenshotSrc = `/screenshots/v2026-3d/${design.id}_small.png`;
+  const previewScreenshotSrc = `/screenshots/v2026-3d/${design.id}.png`;
   
   const formattedH1 = buildDesignSeoTitle({
     shapeName,
@@ -345,53 +338,6 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         "image": [`${baseUrl}/screenshots/v2026-3d/${design.id}.png`],
         "sku": sku,
         "mpn": sku,
-        "offers": {
-          "@type": "AggregateOffer",
-          "priceCurrency": "AUD",
-          "lowPrice": lowPriceAud,
-          "highPrice": highPriceAud,
-          "offerCount": "1",
-          "availability": "https://schema.org/InStock",
-          "url": canonicalUrl,
-          "seller": {
-            "@type": "Organization",
-            "name": "Forever Shining",
-            "url": baseUrl
-          },
-          "hasMerchantReturnPolicy": {
-            "@type": "MerchantReturnPolicy",
-            "applicableCountry": ["AU", "GB", "US", "CA"],
-            "returnPolicyCategory": "https://schema.org/MerchantReturnNotPermitted",
-            "merchantReturnDays": 0
-          },
-          "shippingDetails": {
-            "@type": "OfferShippingDetails",
-            "shippingRate": {
-              "@type": "MonetaryAmount",
-              "value": "0",
-              "currency": "AUD"
-            },
-            "shippingDestination": {
-              "@type": "DefinedRegion",
-              "addressCountry": ["AU", "GB", "US", "CA"]
-            },
-            "deliveryTime": {
-              "@type": "ShippingDeliveryTime",
-              "handlingTime": {
-                "@type": "QuantitativeValue",
-                "minValue": 2,
-                "maxValue": 3,
-                "unitCode": "WEE"
-              },
-              "transitTime": {
-                "@type": "QuantitativeValue",
-                "minValue": 1,
-                "maxValue": 2,
-                "unitCode": "WEE"
-              }
-            }
-          }
-        },
       },
       // BreadcrumbList Schema
       {
@@ -498,7 +444,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
         "name": "What's the typical lead time and delivery process?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": `Standard production time is 2-3 weeks for ${simplifiedProduct.toLowerCase().includes('laser') ? 'laser-etched granite' : simplifiedProduct.toLowerCase().includes('bronze') ? 'bronze' : 'this'} ${productTypeDisplay.toLowerCase()}s, with express 1-week service available. After you finalize your design online, we provide detailed proofs for your approval before manufacturing begins. ${design.mlDir === 'forevershining' ? 'Delivery is included to mainland Australia. For heavy products over 25kg, delivery is to a postal or shipping depot for collection.' : 'Delivery is included within the continental United States.'} Professional installation can be arranged through our network of certified installers. We'll keep you updated throughout the entire process.`
+          "text": `Standard production time is 2-3 weeks for ${simplifiedProduct.toLowerCase().includes('laser') ? 'laser-etched granite' : simplifiedProduct.toLowerCase().includes('bronze') ? 'bronze' : 'this'} ${productTypeDisplay.toLowerCase()}s, with express 1-week service available where available. After you finalize your design online, we provide detailed proofs for your approval before manufacturing begins. Delivery and installation options are confirmed with your quote based on the memorial type and destination. We'll keep you updated throughout the entire process.`
         }
       }
     ]
@@ -563,9 +509,8 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           <img
             src={previewScreenshotSrc}
             alt={`${formattedH1} preview`}
-            width={600}
-            height={400}
-            className="rounded-lg shadow-md mb-8 max-w-full h-auto"
+            className="mx-auto block h-auto w-auto max-w-full rounded-lg shadow-md"
+            style={{ maxHeight: '45vh' }}
             loading="eager"
           />
 
@@ -663,7 +608,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
               </div>
               <div className="flex justify-between px-4 py-3 bg-slate-50">
                 <dt className="text-slate-500 font-medium">Delivery</dt>
-                <dd className="text-slate-900">Included — mainland Australia</dd>
+                <dd className="text-slate-900">Confirmed with quote</dd>
               </div>
             </dl>
           </section>
@@ -672,14 +617,14 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           <section aria-labelledby="price-heading-ssr" className="mb-8">
             <h2 id="price-heading-ssr" className="text-xl font-semibold text-slate-800 mb-1">Price Guide</h2>
             <p className="text-sm text-slate-500 mb-4">
-              Indicative pricing in AUD inc. GST. Exact price generated in the design tool.
+              Indicative components only. Exact pricing is generated in the design tool or confirmed with your quote.
             </p>
             <div className="border border-slate-200 rounded-lg overflow-hidden text-sm bg-white">
               <table className="w-full">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200">
                     <th className="text-left px-4 py-3 font-semibold text-slate-700">Component</th>
-                    <th className="text-right px-4 py-3 font-semibold text-slate-700 w-36">Price (AUD)</th>
+                    <th className="text-right px-4 py-3 font-semibold text-slate-700 w-40">Quote</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -689,7 +634,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
                       {shapeName ? ` — ${shapeName} shape` : ''}
                       {', '}{material.toLowerCase()}, {finish.toLowerCase()}
                     </td>
-                    <td className="px-4 py-3 text-right text-slate-900 font-medium">from ${lowPriceAud}</td>
+                    <td className="px-4 py-3 text-right text-slate-900 font-medium">Calculated in designer</td>
                   </tr>
                   {design.productType === 'monument' && (
                     <tr>
@@ -701,26 +646,26 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
                     <td className="px-4 py-3 text-slate-700">
                       Inscriptions — {design.inscriptionCount} text {design.inscriptionCount === 1 ? 'area' : 'areas'}
                     </td>
-                    <td className="px-4 py-3 text-right text-slate-500">priced per character</td>
+                    <td className="px-4 py-3 text-right text-slate-500">Based on lettering</td>
                   </tr>
                   {design.hasMotifs && (
                     <tr>
                       <td className="px-4 py-3 text-slate-700">
                         Decorative motifs{motifList ? ` — ${motifList}` : ''}
                       </td>
-                      <td className="px-4 py-3 text-right text-slate-500">from $180 each</td>
+                      <td className="px-4 py-3 text-right text-slate-500">Confirmed in quote</td>
                     </tr>
                   )}
                   {design.hasPhoto && (
                     <tr>
                       <td className="px-4 py-3 text-slate-700">Ceramic / enamel photo portrait</td>
-                      <td className="px-4 py-3 text-right text-slate-500">from $350</td>
+                      <td className="px-4 py-3 text-right text-slate-500">Confirmed in quote</td>
                     </tr>
                   )}
                   {design.hasAdditions && (
                     <tr>
                       <td className="px-4 py-3 text-slate-700">3D additions (statues, vases)</td>
-                      <td className="px-4 py-3 text-right text-slate-500">from $75 each</td>
+                      <td className="px-4 py-3 text-right text-slate-500">Confirmed in quote</td>
                     </tr>
                   )}
                   <tr>
@@ -728,12 +673,12 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
                     <td className="px-4 py-3 text-right text-slate-500">Free</td>
                   </tr>
                   <tr>
-                    <td className="px-4 py-3 text-slate-700">Delivery to mainland Australia</td>
-                    <td className="px-4 py-3 text-right text-slate-500">Included</td>
+                    <td className="px-4 py-3 text-slate-700">Delivery and installation options</td>
+                    <td className="px-4 py-3 text-right text-slate-500">Confirmed with quote</td>
                   </tr>
                   <tr className="bg-slate-50 border-t-2 border-slate-300">
-                    <td className="px-4 py-3 text-slate-900 font-semibold">Total (indicative starting price)</td>
-                    <td className="px-4 py-3 text-right text-slate-900 font-semibold">from ${lowPriceAud}</td>
+                    <td className="px-4 py-3 text-slate-900 font-semibold">Total</td>
+                    <td className="px-4 py-3 text-right text-slate-900 font-semibold">Calculated in designer</td>
                   </tr>
                 </tbody>
               </table>
@@ -744,8 +689,8 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
             <li>✓ Live 3D preview — see every change in real time</li>
             <li>✓ Unlimited revisions before you approve</li>
             <li>✓ Free digital proof before manufacturing</li>
-            <li>✓ Delivery included to mainland Australia</li>
-            <li>✓ Prices inc. GST — no hidden fees</li>
+            <li>✓ Delivery options confirmed with your quote</li>
+            <li>✓ Clear itemised pricing before manufacture</li>
           </ul>
 
           <StartSavedDesignButton
@@ -756,6 +701,14 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
           </StartSavedDesignButton>
         </div>
       </div>
+
+      <DesignPageClient
+        productSlug={productSlug}
+        category={category}
+        slug={slug}
+        designId={designId}
+        design={design}
+      />
     </>
   );
 }

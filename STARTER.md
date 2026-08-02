@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-01
+**Last Updated:** 2026-08-02
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -72,6 +72,72 @@
 64. [July 27 Homepage Lighthouse Follow-up](#current-status-2026-07-27--homepage-lighthouse-follow-up)
 65. [July 28 Lighthouse Performance Follow-up](#current-status-2026-07-28--lighthouse-performance-follow-up)
 66. [August 1 Bronze Plaque Selection, Check Price, and Unit Toggle](#current-status-2026-08-01--bronze-plaque-selection-check-price-and-unit-toggle)
+67. [August 2 Design Detail Page Preview, CTA, Quote Accordions, and Region-Neutral Copy](#current-status-2026-08-02--design-detail-page-preview-cta-quote-accordions-and-region-neutral-copy)
+
+---
+
+## Current Status (2026-08-02) - Design Detail Page Preview, CTA, Quote Accordions, and Region-Neutral Copy
+
+This session focused on public design detail pages such as:
+
+`/designs/traditional-headstone/biblical-memorial/curved-gable-may-heavens-eternal-happiness-be-thine`
+
+The important distinction is that these routes have two layers:
+
+- `app/designs/[productType]/[category]/[slug]/page.tsx` renders an SSR-visible SEO fallback.
+- `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` hydrates the richer client page and hides `#design-ssr-content` after mount.
+
+### Problems Fixed
+
+| Issue | Resolution |
+| --- | --- |
+| Main design preview was blurry/oversized | Detail pages now use `/screenshots/v2026-3d/{designId}.png` instead of `{designId}_small.png` for the main preview. The image has `w-auto h-auto max-w-full` and `maxHeight: 45vh`, so it renders at natural size unless it must scale down to fit the first viewport. |
+| Fixed `1200x630` dimensions were wrong for some screenshots | Removed hardcoded width/height from the raw `<img>` tags. Example: `1725769905504.png` is `711x710`, not `1200x630`. Do not assume all regenerated screenshots share one aspect ratio. |
+| Duplicate under-image CTA was no longer needed | The temporary `Personalise This Design` CTA below the main image was removed after the restored client page brought back the existing sidebar/mobile `Start with this design` button. |
+| Client accordions disappeared | `DesignPageClient` had stopped being mounted from `page.tsx`, leaving only the SSR fallback visible. It is now rendered after the SSR fallback again, restoring the Product Description, Price Quote, Personalization Options, and other accordions. |
+| Public copy implied Australia-only supply | Public design detail copy/schema no longer says `AUD`, `GST`, `mainland Australia`, or country-specific delivery. Delivery/install wording is now quote/destination-neutral. |
+| Product JSON-LD implied AUD/shipping regions | Removed the `AggregateOffer` block with `priceCurrency: AUD`, shipping rate, and country-specific shipping details from design detail Product schema. |
+| Hydrated SEO content had region-specific compliance/shipping copy | `components/DesignContentBlock.tsx` now uses generic "Cemetery Requirements" wording and says requirements, delivery, and installation depend on the local cemetery/destination and quote. |
+
+### Files Changed
+
+| File | Current Behavior |
+| --- | --- |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | Renders SSR fallback plus `DesignPageClient`. Main fallback preview uses the full screenshot with natural dimensions and `maxHeight: 45vh`. SSR fallback price/spec copy is quote-neutral and region-neutral. |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Hydrated main preview uses the full screenshot, natural dimensions, and `maxHeight: 45vh`. CTA click logic is shared by sidebar/mobile buttons via `startPersonalising()`. |
+| `components/DesignContentBlock.tsx` | Public cemetery/compliance and lead-time FAQ copy is generic across regions. It no longer imports or uses region-specific shipping/compliance helpers. |
+
+### Price Quote Accordion Notes
+
+- The old-designer price quote was not intentionally removed. It lives in `DetailedPriceQuote` inside `DesignPageClient.tsx`.
+- It fetches pre-anonymized HTML, not raw old-designer HTML:
+  - Desktop: `/ml/{mlDir}/saved-designs/html-anon/{designId}-desktop.html`
+  - Mobile: `/ml/{mlDir}/saved-designs/html-anon/{designId}.html`
+- Raw files under `/ml/{mlDir}/saved-designs/html/` can contain personal names, dates, image filenames, and old footer text such as `Price in Australian dollars... GST... mainland Australia`. Keep public pages on `html-anon/` unless there is a deliberate privacy review.
+- `scripts/anonymize-price-quotes.ts` generates `html-anon/` from `html/` using `lib/inscription-sanitizer.ts`. Run it whenever new public saved designs are added and old-designer quotes should appear.
+- If the Price Quote accordion is missing, check these first:
+  1. `DesignPageClient` is mounted by `page.tsx`.
+  2. The matching `html-anon` file exists for the design ID and `mlDir`.
+  3. The client has hydrated and hidden `#design-ssr-content`.
+  4. `DetailedPriceQuote` is not gated behind failed design/name loading.
+
+### Do Not Regress
+
+- Do not remove `DesignPageClient` from `page.tsx`; without it the page falls back to static SEO content and all accordions disappear.
+- Do not use `_small.png` for the main design detail preview. `_small` remains appropriate for gallery thumbnails, not the detail hero.
+- Do not hardcode preview dimensions like `1200x630`; use natural image dimensions with responsive max constraints.
+- Do not reintroduce `AUD`, `GST`, or `mainland Australia` in public design detail copy/schema unless the page is explicitly country-specific.
+- Do not fetch raw `/saved-designs/html/` quotes on indexable public pages; use `/saved-designs/html-anon/`.
+- Avoid Playwright for quick visual checks unless explicitly requested by the user. The user prefers checking screenshots/browser manually for this page.
+
+### Verification
+
+Commands completed successfully after the design detail changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
 
 ---
 
@@ -232,15 +298,15 @@ This session reviewed live Lighthouse JSON reports for the homepage and design S
 | `app/designs/page.tsx` | Uses `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` on desktop and a lightweight product-only mobile nav. This reduced `/designs` document resource from about `3.56 MB` to about `505-714 KB` in live reports. |
 | `components/DesignsIndexMobileNavToggle.tsx` | Lightweight client mobile navigation for public design index/category routes. It avoids embedding the full server design tree as hidden mobile drawer content. |
 | `app/designs/[productType]/[category]/page.tsx` | Uses the lightweight mobile nav and `ServerDesignsTreeNav maxDesignLinksPerCategory={0}` for the category page. Expected next report: much smaller `document.resourceSize` versus `light1.json`. |
-| `app/designs/[productType]/[category]/[slug]/page.tsx` | SSR preview preload/image uses `/screenshots/v2026-3d/{id}_small.png`; full PNG remains in metadata/schema/full-image links. The heavy `DesignPageClient` is no longer rendered on initial page load. |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | Historical July 28 state: SSR preview used `_small.png` and did not mount `DesignPageClient` initially. Superseded on 2026-08-02 because this removed all client accordions from the public detail page. |
 | `app/designs/[productType]/[category]/[slug]/StartSavedDesignButton.tsx` | New small client CTA. On click it dynamically imports `loadDesignById`, loads the canonical design into the editor store, then routes to `/select-size`. This keeps SEO pages fast while preserving the personalize flow. |
-| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Hero preview inside the old client detail view now uses `_small.png` with fallback to the full PNG. The component still exists for legacy/detail contexts but is not mounted by the server page on first load. |
+| `app/designs/[productType]/[category]/[slug]/DesignPageClient.tsx` | Historical July 28 state used `_small.png` and avoided mounting the component. Superseded on 2026-08-02: the component is mounted again and uses full preview PNGs with natural dimensions plus `maxHeight: 45vh`. |
 
 ### Current Performance Interpretation
 
 - Keep the `/designs` index changes. `l3.json` scored lower than `l2.json`, but nearly every structural metric improved; the score drop was from TBT variance.
-- Keep the individual design page changes. `li3.json` is the strongest checkpoint so far: score `87`, small LCP image, much lower TBT and bootup.
-- Keep using `_small.png` for visible gallery/detail previews. The v2026 screenshot directory has matching full and `_small` PNG counts, and the tested design dropped from a `687 KB` LCP image to about `26 KB`.
+- The July 28 individual design page optimization (`li3.json`) is now partly superseded. It improved Lighthouse, but removing the client detail component hid the public accordions. Current behavior prioritizes functional design detail pages with restored accordions.
+- Keep using `_small.png` for gallery thumbnails. Do not use `_small.png` for the main individual design detail preview; August 2 switched that preview back to the full screenshot to avoid blur.
 - The category page fix should be verified with `light2.json` after a production build. The expected improvement is a large drop in `/designs/{productSlug}/{category}` `document.resourceSize`.
 
 ### Remaining Opportunities
@@ -262,8 +328,8 @@ Full production builds were not repeated in every iteration because local `pnpm 
 
 ### Do Not Regress
 
-- Do not remount `DesignPageClient` on the initial individual design page render unless accepting a major TBT/bootup regression.
-- Do not use full `/screenshots/v2026-3d/{id}.png` for visible above-the-fold previews; use `_small.png` and keep the full image for metadata/full-size links.
+- Historical note: avoiding `DesignPageClient` on individual detail pages improved TBT, but it removed Product Description, Price Quote, and Personalization accordions. As of 2026-08-02, keep `DesignPageClient` mounted unless replacing those accordions with server-rendered equivalents.
+- Do not use full `/screenshots/v2026-3d/{id}.png` for gallery/listing thumbnails. Individual design detail main previews now intentionally use the full PNG with natural dimensions and `maxHeight: 45vh`.
 - Do not render `ServerDesignsTreeNav` with individual design links on public index/category pages unless the document payload is revalidated.
 - Do not reintroduce the static headstone placeholder before `HeroCanvas`; the current homepage direction is delayed 3D canvas with a neutral loading state.
 
@@ -13085,4 +13151,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-01*
+*End of STARTER.md - Last updated: 2026-08-02*
