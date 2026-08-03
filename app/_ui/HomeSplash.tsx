@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { useEffect, useState, MouseEvent } from 'react';
+import { useEffect, useRef, useState, MouseEvent } from 'react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 const MEMORIAL_LINKS = [
@@ -179,6 +179,9 @@ const hasModalLinks = (
 export default function HomeSplash() {
   const router = useRouter();
   const [showHeroCanvas, setShowHeroCanvas] = useState(false);
+  const [heroCanvasReady, setHeroCanvasReady] = useState(false);
+  const [heroCanvasInViewport, setHeroCanvasInViewport] = useState(true);
+  const heroCanvasContainerRef = useRef<HTMLDivElement | null>(null);
   const [rotation, setRotation] = useState(0);
   const [activeModal, setActiveModal] = useState<HashModalKey | null>(null);
   const [isDayMode, setIsDayMode] = useState(false);
@@ -209,6 +212,25 @@ export default function HomeSplash() {
     return () => {
       globalThis.clearTimeout(timeoutId);
     };
+  }, []);
+
+  useEffect(() => {
+    const container = heroCanvasContainerRef.current;
+    if (!container || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const isVisible = entry.isIntersecting;
+        setHeroCanvasInViewport(isVisible);
+        if (!isVisible) {
+          setHeroCanvasReady(false);
+        }
+      },
+      { root: null, threshold: 0.01 },
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
@@ -488,7 +510,10 @@ export default function HomeSplash() {
             </p>
             
             {/* 3D Canvas - TALLER container with overlap layout */}
-            <div className="order-3 w-full h-[40vh] sm:h-[57vh] min-h-[330px] sm:min-h-[430px] flex items-center justify-center relative -mt-2 -mb-10 translate-y-[30px] sm:order-5 sm:-mt-5 sm:-mb-28 z-0 pointer-events-none">
+            <div
+              ref={heroCanvasContainerRef}
+              className="order-3 w-full h-[40vh] sm:h-[57vh] min-h-[330px] sm:min-h-[430px] flex items-center justify-center relative -mt-2 -mb-10 translate-y-[30px] sm:order-5 sm:-mt-5 sm:-mb-28 z-0 pointer-events-none"
+            >
               
               {/* Soft product lift without darkening the stone preview */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -501,15 +526,24 @@ export default function HomeSplash() {
               
               {/* The Canvas Itself - Re-enable pointer events for the canvas specifically */}
               <div className="w-full h-full pointer-events-auto">
-                {showHeroCanvas ? (
-                  <HeroCanvas rotation={rotation} />
-                ) : (
+                {showHeroCanvas && heroCanvasInViewport ? (
+                  <div
+                    className={`h-full w-full transition-all duration-500 ease-out ${heroCanvasReady ? 'opacity-100' : 'opacity-0'}`}
+                    style={{
+                      transform: heroCanvasReady ? 'translateY(0) scale(1)' : 'translateY(8px) scale(0.98)',
+                    }}
+                  >
+                    <HeroCanvas rotation={rotation} onReady={() => setHeroCanvasReady(true)} />
+                  </div>
+                ) : heroCanvasInViewport ? (
                   <div className="flex h-full w-full items-center justify-center" aria-hidden="true">
                     <div className="h-12 w-12 animate-spin rounded-full border-4 border-gray-700 border-t-white" />
                   </div>
+                ) : (
+                  null
                 )}
                 {/* Rotation Controls - Subtle, elegant chevrons */}
-                {showHeroCanvas && (
+                {showHeroCanvas && heroCanvasInViewport && heroCanvasReady && (
                   <>
                     <button 
                       onClick={rotateLeft}
@@ -586,7 +620,7 @@ export default function HomeSplash() {
                 </p>
               </div>
               <p className="mt-4 max-w-xl text-base leading-7 text-gray-300 day:text-gray-600">
-                We have been through these decisions ourselves. When grief is already heavy, creating a Headstone, Monument, or Plaque should be calm, clear, and something your family can think through together.
+                We understand these decisions because we&apos;ve faced them ourselves. During a time of loss, designing a headstone, monument, or plaque should be a thoughtful and reassuring experience—one that is clear, unhurried, and allows families to make meaningful decisions together with confidence.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-2">
