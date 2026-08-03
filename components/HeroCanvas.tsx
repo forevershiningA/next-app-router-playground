@@ -26,10 +26,12 @@ const BASE_EXTRA_WIDTH = 0.58;
 const BEVEL_SIZE = 0.02;
 const MODEL_SCALE = 0.94;
 const MODEL_Y = -1.04;
-const INTRO_DURATION = 1.15;
+const INTRO_START_Y = -1.42;
+const INTRO_START_SCALE = 0.72;
+const INTRO_DURATION = 0.9;
 const FRONT_LAYOUT_Y_OFFSET = 0.12;
 
-const easeOutCubic = (value: number) => 1 - Math.pow(1 - value, 3);
+const easeOutSine = (value: number) => Math.sin((value * Math.PI) / 2);
 
 function buildBoxGeometryWithScaledUvs(width: number, height: number, depth: number) {
   const geometry = new THREE.BoxGeometry(width, height, depth);
@@ -518,11 +520,22 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
   const groupRef = useRef<THREE.Group>(null);
   const lastInteractionTime = useRef(0);
   const introStartTime = useRef<number | null>(null);
+  const introInitialized = useRef(false);
   const isAnimatingToTarget = useRef(false);
   
   const { clock } = useThree();
   
   const textZ = (STONE_THICKNESS / 2) + BEVEL_SIZE + 0.02;
+
+  const setGroupRef = React.useCallback((group: THREE.Group | null) => {
+    groupRef.current = group;
+
+    if (!group || introInitialized.current) return;
+    group.visible = false;
+    group.position.set(0, INTRO_START_Y, 0);
+    group.scale.setScalar(INTRO_START_SCALE);
+    introInitialized.current = true;
+  }, []);
 
   React.useEffect(() => {
     isAnimatingToTarget.current = true;
@@ -537,9 +550,11 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
     }
 
     const introProgress = Math.min((state.clock.elapsedTime - introStartTime.current) / INTRO_DURATION, 1);
-    const introEase = easeOutCubic(introProgress);
-    const scale = THREE.MathUtils.lerp(0.68, MODEL_SCALE, introEase);
-    groupRef.current.position.set(0, MODEL_Y, 0);
+    const introEase = easeOutSine(introProgress);
+    const y = THREE.MathUtils.lerp(INTRO_START_Y, MODEL_Y, introEase);
+    const scale = THREE.MathUtils.lerp(INTRO_START_SCALE, MODEL_SCALE, introEase);
+    groupRef.current.visible = introProgress > 0.015;
+    groupRef.current.position.set(0, y, 0);
     groupRef.current.scale.setScalar(scale);
 
     if (isAnimatingToTarget.current) {
@@ -567,7 +582,12 @@ const SceneContent = ({ targetRotation }: { targetRotation: number }) => {
 
   return (
     <>
-      <group ref={groupRef} position={[0, MODEL_Y, 0]} scale={[0.68, 0.68, 0.68]}>
+      <group
+        ref={setGroupRef}
+        visible={false}
+        position={[0, INTRO_START_Y, 0]}
+        scale={[INTRO_START_SCALE, INTRO_START_SCALE, INTRO_START_SCALE]}
+      >
         <HeartHeadstone width={STONE_WIDTH} height={STONE_HEIGHT} thickness={STONE_THICKNESS} />
         <Base stoneWidth={STONE_WIDTH} />
         

@@ -6,6 +6,8 @@ import { INDEXABLE_PRODUCT_SLUGS } from '#/lib/design-seo';
 import StartSavedDesignButton from './StartSavedDesignButton';
 import DesignPageClient from './DesignPageClient';
 
+const BRONZE_PLAQUE_FINISH = 'Clear lacquer seal over natural aluminium';
+
 /**
  * Format slug for display - convert kebab-case to Title Case
  */
@@ -255,6 +257,8 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
   const product = getProductFromId(design.productId);
   const productName = product?.name || design.productName;
   const simplifiedProduct = getSimplifiedProductType(productName);
+  const isBronzePlaqueDesign =
+    design.productSlug === 'bronze-plaque' || productSlug === 'bronze-plaque' || design.productId === '5';
   const categoryInfo = DESIGN_CATEGORIES[design.category];
   const categoryTitle = categoryInfo?.name || category.split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
   const productTypeDisplay = design.productType.charAt(0).toUpperCase() + design.productType.slice(1);
@@ -282,7 +286,8 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
                simplifiedProduct.toLowerCase().includes('bronze') ? 'Bronze' :
                simplifiedProduct.toLowerCase().includes('stainless') ? 'Silver' : 'Black';
   
-  const finish = simplifiedProduct.toLowerCase().includes('laser') ? 'Laser-etched' :
+  const finish = isBronzePlaqueDesign ? BRONZE_PLAQUE_FINISH :
+                simplifiedProduct.toLowerCase().includes('laser') ? 'Laser-etched' :
                 simplifiedProduct.toLowerCase().includes('traditional') ? 'Traditional engraved' : 'Laser-etched';
   
   // Generate SKU

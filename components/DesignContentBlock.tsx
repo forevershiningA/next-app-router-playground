@@ -21,6 +21,10 @@ import {
   formatDimensionRange,
 } from '#/lib/localization';
 
+const BRONZE_PLAQUE_FINISH = 'Clear lacquer seal over natural aluminium';
+const BRONZE_PLAQUE_FINISH_DESCRIPTION =
+  'To finish, the whole plaque is sealed with a high quality clear lacquer that helps preserve the bright shiny colour of the natural aluminium.';
+
 /**
  * Format shape name for display - convert snake_case or lowercase to Title Case
  */
@@ -76,13 +80,16 @@ export default function DesignContentBlock({
   // Get region and localized content
   const region = getRegionFromMlDir(design.mlDir);
   const locale = LOCALIZED_CONTENT[region];
+  const isBronzePlaqueDesign =
+    productSlug === 'bronze-plaque' || design.productSlug === 'bronze-plaque' || design.productId === '5';
   
   // Generate a unique intro from structured traits instead of raw inscription text.
   // Raw inscriptions often contain personal names and dates, so keep marketing copy privacy-safe.
   const generateIntro = () => {
     const shape = shapeName ? `${shapeName.toLowerCase()} ` : '';
     const material = simplifiedProductName.toLowerCase();
-    const finish = material.includes('laser') ? 'laser-etched' :
+    const finish = isBronzePlaqueDesign ? 'clear lacquer sealed' :
+                   material.includes('laser') ? 'laser-etched' :
                    material.includes('traditional') ? 'traditional engraved' : 'laser-etched';
     const motifDesc = design.motifNames.length > 0
       ? ` with ${formatList(design.motifNames.slice(0, 3))} motif${design.motifNames.length > 1 ? 's' : ''}`
@@ -139,7 +146,8 @@ export default function DesignContentBlock({
                        material.includes('stainless') ? 'Stainless Steel' : 'Black Granite';
     
     // Finish
-    specs['Finish'] = material.includes('laser') ? 'Laser-etched' :
+    specs['Finish'] = isBronzePlaqueDesign ? BRONZE_PLAQUE_FINISH :
+                     material.includes('laser') ? 'Laser-etched' :
                      material.includes('traditional') ? 'Traditional hand-engraved' : 'Laser-etched';
     
     // Dimensions (localized)
@@ -208,7 +216,9 @@ export default function DesignContentBlock({
     } else if (material.includes('bronze')) {
       return {
         title: 'Care & Longevity: Bronze Excellence',
-        content: `Bronze memorials develop a beautiful natural patina over time while maintaining their structural integrity for centuries. Bronze is an incredibly durable alloy that resists corrosion and weathering. Regular cleaning with a soft cloth and mild soap helps maintain the bronze finish. The natural oxidation process creates a protective layer that actually enhances longevity. Professional refinishing services are available to restore the original luster if desired. With proper care, bronze memorials can last 200+ years while maintaining excellent legibility and visual appeal.`
+        content: isBronzePlaqueDesign
+          ? `${BRONZE_PLAQUE_FINISH_DESCRIPTION} Regular cleaning with a soft cloth and mild soap helps maintain the plaque finish, and professional refinishing services are available if the lacquered surface needs renewal over time.`
+          : `Bronze memorials develop a beautiful natural patina over time while maintaining their structural integrity for centuries. Bronze is an incredibly durable alloy that resists corrosion and weathering. Regular cleaning with a soft cloth and mild soap helps maintain the bronze finish. The natural oxidation process creates a protective layer that actually enhances longevity. Professional refinishing services are available to restore the original luster if desired. With proper care, bronze memorials can last 200+ years while maintaining excellent legibility and visual appeal.`
       };
     } else {
       return {
