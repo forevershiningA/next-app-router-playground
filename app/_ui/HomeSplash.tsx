@@ -361,7 +361,7 @@ export default function HomeSplash() {
           </nav>
 
           {/* Top Right Navigation */}
-          <nav className="hidden shrink-0 items-center gap-3 md:flex">
+          <nav className="hidden shrink-0 flex-col items-center gap-1.5 md:flex">
             <form
               onSubmit={handleHeroSearch}
               className="relative w-40"
@@ -386,6 +386,12 @@ export default function HomeSplash() {
                 aria-label="Search memorial designs"
               />
             </form>
+            <Link
+              href="/designs"
+              className="w-40 pl-9 text-left text-sm font-medium leading-5 text-white/40 transition-colors hover:text-[#f3d48f] day:text-gray-500 day:hover:text-amber-700"
+            >
+              Browse Designs
+            </Link>
           </nav>
 
           {/* Mobile menu button - only shown below md where the nav/CTAs are hidden */}
