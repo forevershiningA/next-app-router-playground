@@ -807,8 +807,8 @@ export default function MotifModel({
               transparent
               opacity={0.28}
               depthWrite={false}
-              depthTest={false}
-              side={THREE.DoubleSide}
+              depthTest
+              side={THREE.FrontSide}
               map={textureInfo.texture}
               alphaTest={0.01}
             />
@@ -842,8 +842,8 @@ export default function MotifModel({
               transparent
               opacity={0.94}
               depthWrite={false}
-              depthTest={false}
-              side={THREE.DoubleSide}
+              depthTest
+              side={THREE.FrontSide}
               alphaTest={0.01}
               polygonOffset
               polygonOffsetFactor={-1}
@@ -879,8 +879,8 @@ export default function MotifModel({
               envMapIntensity={stainlessFinish === 'polished' ? 2.9 : 2.6}
               transparent
               depthWrite={false}
-              depthTest={false}
-              side={THREE.DoubleSide}
+              depthTest
+              side={THREE.FrontSide}
               alphaTest={0.01}
               polygonOffset
               polygonOffsetFactor={-1}
@@ -892,8 +892,8 @@ export default function MotifModel({
               toneMapped={false}
               transparent
               depthWrite={false}
-              depthTest={false}
-              side={THREE.DoubleSide}
+              depthTest
+              side={THREE.FrontSide}
               map={textureInfo.texture}
               alphaTest={0.01}
             />

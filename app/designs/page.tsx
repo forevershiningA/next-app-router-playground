@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { ChevronRightIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import DesignsIndexMobileNavToggle from '#/components/DesignsIndexMobileNavToggle';
 import ServerDesignsTreeNav from '#/components/ServerDesignsTreeNav';
+import { data } from '#/app/_internal/_data';
 import { PRODUCT_STATS } from '#/lib/saved-designs-data';
 import {
   getCategoryTitle,
@@ -33,6 +34,10 @@ function matchesDesignSearch(
     .toLowerCase()
     .includes(needle);
 }
+
+const selectProductImageById = new Map(
+  data.products.map((product) => [product.id, product.image] as const),
+);
 
 export async function generateMetadata({
   searchParams,
@@ -433,6 +438,8 @@ export default async function DesignsPage({
                 const product = getProductSeoInfo(productSlug);
                 const categories = new Set(productDesigns.map((design) => design.category));
                 const preview = productDesigns[0];
+                const previewProductId = productSlug === 'pets' ? '8' : preview.productId;
+                const productImage = selectProductImageById.get(previewProductId);
 
                 return (
                   <Link
@@ -442,8 +449,8 @@ export default async function DesignsPage({
                   >
                     <div className="relative aspect-[5/4] bg-[radial-gradient(circle_at_50%_28%,#ffffff_0%,#f4f0e7_52%,#e6e0d3_100%)]">
                       <Image
-                        src={`/screenshots/v2026-3d/${preview.id}_small.png`}
-                        alt={`${product.name} design preview`}
+                        src={productImage ? `/webp/products/${productImage}` : `/screenshots/v2026-3d/${preview.id}_small.png`}
+                        alt={`${product.name} product preview`}
                         fill
                         className="object-contain p-6"
                         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"

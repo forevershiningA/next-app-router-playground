@@ -410,7 +410,6 @@ export default function DesignerNav() {
   const setSelectedAdditionId = useHeadstoneStore(
     (s) => s.setSelectedAdditionId,
   );
-  const setProductId = useHeadstoneStore((s) => s.setProductId);
   const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const urnShapeCode =
@@ -652,8 +651,15 @@ export default function DesignerNav() {
       : null;
   const isImageCropActive =
     activeFullscreenPanel === 'select-images' && Boolean(cropCanvasData);
+  const getPanelDisplayName = React.useCallback(
+    (slug: string | null) =>
+      slug === 'select-material' && (productId === '5' || productId === '32' || isUrn)
+        ? 'Background'
+        : menuItems.find((item) => item.slug === slug)?.name,
+    [productId, isUrn],
+  );
   const nextPanelTitle = nextPanelSlug
-    ? `Go to ${menuItems.find((i) => i.slug === nextPanelSlug)?.name}`
+    ? `Go to ${getPanelDisplayName(nextPanelSlug)}`
     : undefined;
 
   const handleNavigateToPanel = React.useCallback(
@@ -2267,8 +2273,11 @@ export default function DesignerNav() {
 
   const handleConvertProductSelect = (selectedProductId: string) => {
     if (!selectedProductId) return;
-    setProductId(selectedProductId);
     setShowConvertPanel(false);
+    const currentStep = isDesignerStepSlug(designerStepSlug)
+      ? designerStepSlug
+      : 'design-menu';
+    router.replace(getDesignerProductStepHref(currentStep, selectedProductId));
   };
 
   const isSelectProductPage = designerStepSlug === 'select-product';
@@ -3265,9 +3274,7 @@ export default function DesignerNav() {
   };
 
   const fullscreenPanelTitle =
-    activeFullscreenPanel === 'select-material' && (productId === '32' || isUrn)
-      ? 'Background'
-      : menuItems.find((item) => item.slug === activeFullscreenPanel)?.name;
+    getPanelDisplayName(activeFullscreenPanel);
   const mobileFullscreenPanelTitle =
     activeFullscreenPanel === 'inscriptions'
       ? 'Inscriptions'
@@ -3312,11 +3319,7 @@ export default function DesignerNav() {
             </div>
             {/* Row 2: Section title centered */}
             <h2 className="day:text-gray-900 my-2 text-center font-serif text-xl font-light tracking-tight text-white md:my-5 md:text-3xl">
-              {activeFullscreenPanel === 'select-material' &&
-              (productId === '32' || isUrn)
-                ? 'Background'
-                : menuItems.find((item) => item.slug === activeFullscreenPanel)
-                    ?.name}
+              {fullscreenPanelTitle}
             </h2>
             {/* Fancy divider */}
             <div className="my-2 flex items-center gap-3 md:my-3">
@@ -3368,7 +3371,7 @@ export default function DesignerNav() {
                   disabled={!prevPanelSlug}
                   title={
                     prevPanelSlug
-                      ? `Go to ${menuItems.find((i) => i.slug === prevPanelSlug)?.name}`
+                      ? `Go to ${getPanelDisplayName(prevPanelSlug)}`
                       : undefined
                   }
                   className="day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
@@ -3398,7 +3401,7 @@ export default function DesignerNav() {
                       ? 'Add the cropped image to the headstone before continuing'
                       : nextPanelTitle
                   }
-                  className="day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+                  className="animate-guided-next-gold-flash day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   {isImageCropActive ? 'Finish Crop First' : 'Next'}
                   <svg
@@ -3489,7 +3492,7 @@ export default function DesignerNav() {
                         nextPanelSlug && handleNavigateToPanel(nextPanelSlug)
                       }
                       disabled={!nextPanelSlug || isImageCropActive}
-                      className="inline-flex items-center gap-1 rounded-md border border-[#D7B356]/80 bg-[#D7B356] px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:border-[#E8C96E] hover:bg-[#E8C96E] disabled:cursor-not-allowed disabled:border-[#3a2a1c] disabled:bg-[#1b120c]/80 disabled:text-white disabled:opacity-30"
+                      className="animate-guided-next-gold-flash inline-flex items-center gap-1 rounded-md border border-[#D7B356]/80 bg-[#D7B356] px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:border-[#E8C96E] hover:bg-[#E8C96E] disabled:cursor-not-allowed disabled:border-[#3a2a1c] disabled:bg-[#1b120c]/80 disabled:text-white disabled:opacity-30"
                     >
                       {isImageCropActive ? 'Finish Crop' : 'Next'}
                       <svg
@@ -4394,7 +4397,7 @@ export default function DesignerNav() {
                             const materialLabel =
                               canSelectStainlessGraniteBaseMaterial
                                 ? 'Select Material'
-                                : productId === '32' || isUrn
+                                : productId === '5' || productId === '32' || isUrn
                                   ? 'Background'
                                   : item.name;
                             const forcedMaterialTarget =

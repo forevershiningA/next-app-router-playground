@@ -709,7 +709,7 @@ export default function ImageModel({
             roughness={0.2}
             metalness={0.05}
             flatShading={false}
-            depthTest={false}
+            depthTest
             depthWrite={false}
           />
         </mesh>
@@ -742,9 +742,9 @@ export default function ImageModel({
         <meshBasicMaterial 
           map={texture} 
           transparent={true}
-          side={THREE.DoubleSide}
+          side={THREE.FrontSide}
           opacity={1.0}
-          depthTest={false}
+          depthTest
           depthWrite={false}
         />
       </mesh>

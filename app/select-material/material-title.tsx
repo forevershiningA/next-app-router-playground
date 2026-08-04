@@ -20,7 +20,7 @@ export default function MaterialTitle({
   materials: Material[];
   initialName?: string | null;
 }) {
-  const { materialUrl, setMaterialUrl } = useHeadstoneStore();
+  const { materialUrl, setMaterialUrl, productId } = useHeadstoneStore();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const [isDesktop, setIsDesktop] = useState(false);
@@ -94,7 +94,7 @@ export default function MaterialTitle({
 
   return (
     <h1 className="text-xl font-semibold text-gray-300">
-      Select Material{name ? <span> - {name}</span> : null}
+      {productId === '5' ? 'Background' : 'Select Material'}{name ? <span> - {name}</span> : null}
     </h1>
   );
 }

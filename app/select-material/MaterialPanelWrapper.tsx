@@ -11,6 +11,8 @@ export default function MaterialPanelWrapper({ materials }: { materials: Materia
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const productId = useHeadstoneStore((s) => s.productId);
+  const title = productId === '5' ? 'Background' : 'Select Material';
 
   // Close addition panel when this panel mounts
   React.useEffect(() => {
@@ -24,7 +26,7 @@ export default function MaterialPanelWrapper({ materials }: { materials: Materia
   const isOpen = activePanel !== 'addition' && activePanel !== 'motif' && activePanel !== 'inscription';
 
   return (
-    <SceneOverlayController section="material" title="Select Material" isOpen={isOpen}>
+    <SceneOverlayController section="material" title={title} isOpen={isOpen}>
       <div className="mb-3 text-sm leading-relaxed md:text-gray-700">
         Choose a stone material to preview on the headstone.
       </div>

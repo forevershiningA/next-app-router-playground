@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-02
+**Last Updated:** 2026-08-03
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -74,6 +74,114 @@
 66. [August 1 Bronze Plaque Selection, Check Price, and Unit Toggle](#current-status-2026-08-01--bronze-plaque-selection-check-price-and-unit-toggle)
 67. [August 2 Design Detail Page Preview, CTA, Quote Accordions, and Region-Neutral Copy](#current-status-2026-08-02--design-detail-page-preview-cta-quote-accordions-and-region-neutral-copy)
 68. [August 2 Homepage HeroCanvas, Discount Headstones Port, and Compassionate Copy](#current-status-2026-08-02--homepage-herocanvas-discount-headstones-port-and-compassionate-copy)
+69. [August 3 Homepage HeroCanvas Runtime, Bronze Plaque Finish Copy, and dh Cleanup](#current-status-2026-08-03--homepage-herocanvas-runtime-bronze-plaque-finish-copy-and-dh-cleanup)
+
+---
+
+## Current Status (2026-08-03) - Homepage HeroCanvas Runtime, Bronze Plaque Finish Copy, and dh Cleanup
+
+This session refined homepage `HeroCanvas` behavior, corrected bronze plaque finish wording on design detail pages, and resolved a build failure caused by an accidentally included `dh/` Vite app copy.
+
+### Homepage HeroCanvas Current State
+
+Primary files:
+
+| File | Role |
+| --- | --- |
+| `components/HeroCanvas.tsx` | Three.js/R3F hero model, intro slide/scale animation, and `onReady` callback. |
+| `app/_ui/HomeSplash.tsx` | Dynamic mount delay, viewport gating, wrapper fade, rotation controls, and homepage copy. |
+
+Current behavior:
+
+- `HeroCanvas` has an optional `onReady?: () => void` prop.
+- `SceneContent` fires `onReady` once the intro has actually started (`introProgress > 0.015`), avoiding a wrapper fade before the first meaningful canvas frame.
+- The 3D model uses a lower/offscreen-ish intro transform:
+  - `INTRO_START_Y = -1.42`
+  - `INTRO_START_SCALE = 0.72`
+  - `INTRO_DURATION = 0.9`
+  - Final pose remains `MODEL_Y = -1.04`, `MODEL_SCALE = 0.94`
+- Easing uses `easeOutSine`, so the object starts moving immediately rather than lingering at the bottom.
+- Fade-in is now handled like the `dh/src` reference: by a DOM wrapper around the whole canvas, not by traversing Three.js materials and changing material opacity.
+- The wrapper in `HomeSplash` uses `transition-all duration-500 ease-out`, with:
+  - hidden: `opacity-0`, `translateY(8px) scale(0.98)`
+  - visible: `opacity-100`, `translateY(0) scale(1)`
+- Rotation controls are only rendered after `showHeroCanvas && heroCanvasInViewport && heroCanvasReady`.
+
+Viewport/runtime behavior:
+
+- `HomeSplash` uses an `IntersectionObserver` attached to the 3D canvas container.
+- If the canvas container leaves the viewport, `HeroCanvas` is not rendered and `heroCanvasReady` is reset.
+- When it re-enters the viewport, `HeroCanvas` mounts again and the wrapper fade runs again.
+- This is intentional to avoid keeping the R3F canvas active when the hero is offscreen.
+
+Important implementation note:
+
+- Do not reintroduce per-material alpha fading in `HeroCanvas`. It was tried and removed. It is fragile with mixed material types and differs from the `dh/src` reference, where the fade is a DOM wrapper transition.
+- Do not use Playwright for quick homepage visual checks unless explicitly requested. The user prefers manual browser/screenshot review.
+
+### Homepage Copy Update
+
+The "Created from experience" paragraph in `app/_ui/HomeSplash.tsx` now reads:
+
+```text
+We understand these decisions because we've faced them ourselves. During a time of loss, designing a headstone, monument, or plaque should be a thoughtful and reassuring experience—one that is clear, unhurried, and allows families to make meaningful decisions together with confidence.
+```
+
+In JSX, the apostrophe is escaped as `we&apos;ve`.
+
+### Bronze Plaque Finish Copy Fix
+
+Problem:
+
+- Public design detail pages for bronze plaques, for example `/designs/bronze-plaque/memorial/bronze-plaque-cat-dog`, incorrectly showed `Finish - Laser-etched`.
+- The example design is product `5` / `Bronze Plaque`, so the laser wording came from fallback logic, not from the saved design record.
+
+Fix:
+
+| File | Behavior |
+| --- | --- |
+| `app/designs/[productType]/[category]/[slug]/page.tsx` | SSR design table and Product JSON-LD now use the bronze plaque finish override. |
+| `components/DesignContentBlock.tsx` | Hydrated "Sizes, Materials & Options" table and bronze care copy now use the bronze plaque finish override. |
+
+Current bronze plaque finish value:
+
+```text
+Clear lacquer seal over natural aluminium
+```
+
+Care copy now includes the user-provided product description:
+
+```text
+To finish, the whole plaque is sealed with a high quality clear lacquer that helps preserve the bright shiny colour of the natural aluminium.
+```
+
+Do not use `Laser-etched` as the fallback finish for `productSlug === 'bronze-plaque'` or product ID `5`.
+
+### dh Folder / Build Error
+
+`dh/` was an accidentally copied Discount Headstones/Vite source folder and is not part of this Next.js project.
+
+Build failure seen in `build1.txt`:
+
+```text
+./dh/src/App.tsx:274:26
+Type error: Property 'env' does not exist on type 'ImportMeta'.
+const BASE = import.meta.env.BASE_URL;
+```
+
+Resolution:
+
+- Remove `dh/` from the project/build input. Do not edit it as if it were part of the Next app.
+- After `dh/` was removed, `pnpm exec tsc --noEmit` passed.
+- If a future Discount Headstones reference is needed, keep it outside the Next app build or explicitly exclude it from TypeScript/Next build inputs.
+
+### Verification
+
+Latest successful check after removing `dh/` from the build input:
+
+```bash
+pnpm exec tsc --noEmit
+```
 
 ---
 
@@ -13245,4 +13353,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-02*
+*End of STARTER.md - Last updated: 2026-08-03*

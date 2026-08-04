@@ -63,6 +63,11 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const isStainlessSteel = productId === '52';
   const isUrn = catalog?.product.type === 'urn';
   const usesBackgrounds = isFullColourPlaque || isUrn;
+  const headingText = isBronzePlaque
+    ? 'Background'
+    : usesBackgrounds
+      ? 'Select Background'
+      : 'Select Your Material';
   const [bgTab, setBgTab] = useState<'background' | 'color'>('background');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const setIsMaterialChangeLocal = useHeadstoneStore((s) => s.setIsMaterialChange);
@@ -245,7 +250,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
         <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl font-serif font-light tracking-tight text-white sm:text-5xl lg:text-6xl">
-              {usesBackgrounds ? 'Select Background' : 'Select Your Material'}
+              {headingText}
             </h1>
             <p className="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">
               {usesBackgrounds
