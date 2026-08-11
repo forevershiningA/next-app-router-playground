@@ -13,7 +13,6 @@ const graniteMaterials = [
   { id: 7, name: 'Blue Pearl', image: 'Blue-Pearl.webp', category: '2' },
   { id: 8, name: 'Chinese Calca', image: 'Chinese-Calca.webp', category: '2' },
   { id: 9, name: 'Darwin Brown', image: 'Darwin-Brown.webp', category: '2' },
-  { id: 10, name: 'Darwin Brown', image: 'Darwin-Brown.webp', category: '2' },
   { id: 11, name: 'Emerald Pearl', image: 'Emerald-Pearl.webp', category: '2' },
   { id: 12, name: 'English Brown', image: 'English-Brown.webp', category: '2' },
   { id: 13, name: 'G439', image: 'G439.webp', category: '2' },
@@ -50,7 +49,7 @@ export async function POST() {
     console.log('🔄 Clearing existing materials...');
     await db.delete(materials);
 
-    console.log('📦 Inserting 30 granite materials...');
+    console.log('📦 Inserting 29 granite materials...');
     
     for (const material of graniteMaterials) {
       await db.insert(materials).values({
@@ -69,7 +68,7 @@ export async function POST() {
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Successfully seeded 30 granite materials',
+      message: 'Successfully seeded 29 granite materials',
       materials: graniteMaterials.map(m => m.name)
     });
   } catch (error: unknown) {

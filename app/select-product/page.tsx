@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { DOMParser } from '@xmldom/xmldom';
 import ProductSelectionGrid from './_ui/ProductSelectionGrid';
 import db from '#/lib/db';
-import { getProductPriceRanges } from '#/lib/server/product-pricing';
+import { getProductPriceSamples } from '#/lib/server/product-pricing';
 import { getLanguagesData } from '#/lib/server/xml-data';
 
 const PRODUCT_DESCRIPTION_TAGS: Record<string, string> = {
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   const products = db.product.findMany({ limit: 100 });
   const [priceMap, descriptionMap] = await Promise.all([
-    getProductPriceRanges(products.map((product) => product.id)),
+    getProductPriceSamples(products.map((product) => product.id)),
     buildDescriptionMap(products.map((product) => product.id)),
   ]);
 

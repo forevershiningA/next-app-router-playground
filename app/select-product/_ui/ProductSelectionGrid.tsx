@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowRightIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
-import type { ProductPriceRange } from '#/lib/types/pricing';
+import type { ProductPriceSample } from '#/lib/types/pricing';
 import { getDesignerProductSlug } from '#/lib/designer-product-routes';
 
 type ProductCategory = {
@@ -88,7 +88,7 @@ const productGroups: ProductCategory[] = [
 
 type ProductGridProps = {
   products: Product[];
-  priceMap: Record<string, ProductPriceRange | undefined>;
+  priceMap: Record<string, ProductPriceSample | undefined>;
   descriptionMap: Record<string, string | undefined>;
 };
 
@@ -278,25 +278,18 @@ export default function ProductSelectionGrid({
                             {priceRange ? (
                               <div className="day:border-gray-200 day:bg-gray-50 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2">
                                 <p className="day:text-gray-500 text-[11px] font-medium tracking-[0.14em] text-gray-400 uppercase">
-                                  Starting at
+                                  Sample price
                                 </p>
                                 <p className="day:text-gray-900 mt-0.5 text-lg font-semibold text-white">
-                                  {formatPrice(
-                                    priceRange.minPrice,
-                                    priceRange.currency,
-                                  )}
+                                  {formatPrice(priceRange.price, priceRange.currency)}
                                 </p>
                                 <p className="day:text-gray-500 mt-0.5 text-xs text-gray-400">
-                                  Max size up to{' '}
-                                  {formatPrice(
-                                    priceRange.maxPrice,
-                                    priceRange.currency,
-                                  )}
+                                  {priceRange.width} × {priceRange.height} mm
                                 </p>
                               </div>
                             ) : (
                               <p className="day:border-gray-200 day:bg-gray-50 day:text-gray-600 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm text-gray-300">
-                                Configure options to view pricing
+                                Select product to configure options and view pricing
                               </p>
                             )}
 

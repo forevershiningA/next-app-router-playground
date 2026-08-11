@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import ShapeSelectionPage from '#/app/select-shape/page';
 import MaterialSelectionPage from '#/app/select-material/page';
 import SelectBorderPage from '#/app/select-border/page';
+import SelectFasteningPage from '#/app/select-fastening/page';
 import InscriptionsPage from '#/app/inscriptions/page';
 import SelectAdditionsPage from '#/app/select-additions/page';
 import SelectMotifsPage from '#/app/select-motifs/page';
@@ -54,6 +55,8 @@ export default async function ProductDesignerStepPage({
       return <ShapeSelectionPage />;
     case 'select-border':
       return <SelectBorderPage />;
+    case 'select-fastening':
+      return <SelectFasteningPage />;
     case 'select-material':
       return <MaterialSelectionPage />;
     case 'select-size':

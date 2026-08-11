@@ -124,6 +124,8 @@ export type BorderOption = {
   svgUrl?: string | null;
 };
 
+export type FixingType = 'flat-back' | 'lugs-with-studs' | 'screws';
+
 export type MotifCatalogItem = {
   id: string;
   name: string;
@@ -319,6 +321,9 @@ export type HeadstoneState = {
   borderName: string | null;
   setBorderName: (name: string | null) => void;
 
+  fixingType: FixingType;
+  setFixingType: (fixingType: FixingType) => void;
+
   ssCorners: 'rounded' | 'straight';
   setSsCorners: (v: 'rounded' | 'straight') => void;
 
@@ -363,6 +368,12 @@ export type HeadstoneState = {
 
   baseFinish: 'default' | 'rock-pitch';
   setBaseFinish: (finish: 'default' | 'rock-pitch') => void;
+
+  baseOption: 'none' | 'flower-pots';
+  setBaseOption: (option: 'none' | 'flower-pots') => void;
+
+  baseLidFinish: 'black' | 'silver' | 'gold';
+  setBaseLidFinish: (finish: 'black' | 'silver' | 'gold') => void;
 
   headstoneStyle: 'upright' | 'slant';
   setHeadstoneStyle: (style: 'upright' | 'slant') => void;

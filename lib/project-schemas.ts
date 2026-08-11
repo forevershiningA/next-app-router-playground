@@ -83,6 +83,7 @@ export type DesignerSnapshot = {
   productId: string | null;
   shapeUrl: string | null;
   borderName: string | null;
+  fixingType?: 'flat-back' | 'lugs-with-studs' | 'screws';
   showInsetContour?: boolean;
   materialUrl: string | null;
   headstoneMaterialUrl: string | null;
@@ -95,6 +96,8 @@ export type DesignerSnapshot = {
   baseHeightMm: number;
   baseThickness: number;
   baseFinish: 'default' | 'rock-pitch';
+  baseOption?: 'none' | 'flower-pots';
+  baseLidFinish?: 'black' | 'silver' | 'gold';
   headstoneStyle: 'upright' | 'slant';
   uprightThickness: number;
   slantThickness: number;

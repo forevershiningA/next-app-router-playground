@@ -2,6 +2,7 @@ export const DESIGNER_STEP_SLUGS = [
   'select-product',
   'select-shape',
   'select-border',
+  'select-fastening',
   'select-material',
   'select-size',
   'inscriptions',

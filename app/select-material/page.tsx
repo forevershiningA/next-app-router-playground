@@ -14,7 +14,15 @@ export const dynamic = 'force-dynamic';
 export default async function Page() {
   try {
     const rawMaterials = await catalog.materials.findMany({ where: { isActive: true }, limit: 200 });
-    const materials = rawMaterials.map(mapMaterialRecord);
+    const seenMaterialNames = new Set<string>();
+    const materials = rawMaterials
+      .filter((material) => {
+        const name = material.name.trim().toLocaleLowerCase();
+        if (seenMaterialNames.has(name)) return false;
+        seenMaterialNames.add(name);
+        return true;
+      })
+      .map(mapMaterialRecord);
 
     return (
       <Suspense fallback={null}>

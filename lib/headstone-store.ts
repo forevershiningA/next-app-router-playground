@@ -43,6 +43,7 @@ import {
   normalizeTextureUrl,
   type AdditionKind,
   type FixedSize,
+  type FixingType,
   type HeadstoneState,
   type Line,
   type LinePatch,
@@ -60,6 +61,7 @@ export type {
   PanelName,
   Part,
   ShapeOption,
+  FixingType,
 } from '#/lib/headstone-store.types';
 
 const isDesktopViewport = () => {
@@ -691,7 +693,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     // Immediately capture the user's selection so downstream effects know a
     // product has been chosen even while the catalog XML is loading.
     // CRITICAL: Clear the old catalog to prevent showing stale data
-    set({ productId: id, catalog: null });
+    set({ productId: id, catalog: null, fixingType: 'flat-back' });
 
     try {
 
@@ -1249,6 +1251,11 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     set({ borderName: name });
   },
 
+  fixingType: 'flat-back' as FixingType,
+  setFixingType(fixingType) {
+    set({ fixingType });
+  },
+
   ssCorners: 'straight',
   setSsCorners(v) {
     set({ ssCorners: v });
@@ -1348,6 +1355,16 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   baseFinish: 'default',
   setBaseFinish(finish) {
     set({ baseFinish: finish });
+  },
+
+  baseOption: 'none',
+  setBaseOption(option) {
+    set({ baseOption: option });
+  },
+
+  baseLidFinish: 'black',
+  setBaseLidFinish(finish) {
+    set({ baseLidFinish: finish });
   },
 
   headstoneStyle: 'upright',
@@ -2153,6 +2170,8 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
         cropCanvasData: null,
         activePanel: null,
         editingObject: 'headstone',
+        baseOption: 'none',
+        baseLidFinish: 'black',
         showInscriptionColor: true,
         currentProjectId: null,
         currentProjectTitle: null,

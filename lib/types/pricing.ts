@@ -1,5 +1,6 @@
-export type ProductPriceRange = {
-  minPrice: number;
-  maxPrice: number;
+export type ProductPriceSample = {
+  price: number;
+  width: number;
+  height: number;
   currency: string;
 };

@@ -57,6 +57,8 @@ export default function CheckPricePanel() {
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const showBase = useHeadstoneStore((s) => s.showBase);
+  const baseOption = useHeadstoneStore((s) => s.baseOption);
+  const baseLidFinish = useHeadstoneStore((s) => s.baseLidFinish);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -410,6 +412,9 @@ export default function CheckPricePanel() {
           'Shape: Rectangle',
           `Material: ${getCheckPriceMaterialName(baseMaterialUrl)}`,
           `Size: ${formatDimensionTriplet(baseWidthMm, baseHeightMm, baseThickness, unitSystem)}`,
+          ...(baseOption === 'flower-pots'
+            ? [`Flower Pots: ${baseLidFinish === 'black' ? 'Black Lid' : baseLidFinish === 'silver' ? 'Silver Lid' : 'Gold Lid'}`]
+            : []),
         ],
         qty: 1,
         unitPrice: basePrice,

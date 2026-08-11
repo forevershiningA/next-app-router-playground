@@ -49,6 +49,7 @@ const STATUE_DEPTH_SCALE = 0.14;
 const VASE_DEPTH_SCALE = 0.16;
 const HEADSTONE_COLLISION_PADDING = 5 * MM; // 5mm clearance from headstone plane
 const BASE_SURFACE_MARGIN = 10 * MM; // extra inset to keep statues/vases fully on the base
+const TRADITIONAL_REARWARD_ALLOWANCE = 60 * MM;
 
 type Props = {
   id: string; // e.g. "B1134S" or "K0320"
@@ -571,6 +572,9 @@ function AdditionModelInner({
   const headFrontZ = headstone?.frontZ ?? bbox?.max.z ?? 0;
   const supportsDepthDrag = prefersBaseSurface;
   const surfaceMargin = wantsBaseAnchorMargin ? BASE_SURFACE_MARGIN : 0;
+  const rearwardAllowance = isTraditionalEngraved
+    ? TRADITIONAL_REARWARD_ALLOWANCE
+    : 0;
 
   const placeAdditionOnLedger = React.useCallback(
     (clientX: number, clientY: number) => {
@@ -938,6 +942,7 @@ function AdditionModelInner({
           halfDepth,
           headFrontZ,
           HEADSTONE_COLLISION_PADDING,
+          rearwardAllowance,
         );
       }
 
@@ -963,6 +968,7 @@ function AdditionModelInner({
       halfDepth,
       id,
       isLedgerSurface,
+      rearwardAllowance,
       offset,
       placeAdditionOnLedger,
       prefersBaseSurface,
@@ -1131,6 +1137,7 @@ function AdditionModelInner({
       halfDepth,
       headFrontZ,
       HEADSTONE_COLLISION_PADDING,
+      rearwardAllowance,
     );
   }
 

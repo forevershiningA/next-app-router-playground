@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-03
+**Last Updated:** 2026-08-10
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -75,6 +75,148 @@
 67. [August 2 Design Detail Page Preview, CTA, Quote Accordions, and Region-Neutral Copy](#current-status-2026-08-02--design-detail-page-preview-cta-quote-accordions-and-region-neutral-copy)
 68. [August 2 Homepage HeroCanvas, Discount Headstones Port, and Compassionate Copy](#current-status-2026-08-02--homepage-herocanvas-discount-headstones-port-and-compassionate-copy)
 69. [August 3 Homepage HeroCanvas Runtime, Bronze Plaque Finish Copy, and dh Cleanup](#current-status-2026-08-03--homepage-herocanvas-runtime-bronze-plaque-finish-copy-and-dh-cleanup)
+70. [August 8 Product Samples, Bronze Fastening, Emblems, and Saved State](#current-status-2026-08-08--product-samples-bronze-fastening-emblems-and-saved-state)
+71. [August 10 Base Options, Flower Pots, and Traditional Addition Positioning](#current-status-2026-08-10--base-options-flower-pots-and-traditional-addition-positioning)
+
+---
+
+## Current Status (2026-08-10) - Base Options, Flower Pots, and Traditional Addition Positioning
+
+### Traditional Engraved Addition Positioning
+
+Primary files:
+
+| File | Role |
+| --- | --- |
+| `components/three/AdditionModel.tsx` | Applies the product-specific depth allowance when dragging statues and vases on a base. |
+| `lib/addition-utils.ts` | Clamps addition depth movement within the available base range. |
+
+Products whose name contains `Traditional Engraved` allow statues and vases to move an additional `60mm` rearward on the base. This allowance is product-specific; other product families retain their existing movement limits.
+
+### Traditional Material Catalogue Deduplication
+
+`Darwin Brown` was appearing twice in the left-side material selector on `/select-material`. The duplicate was removed from the seed/static sources, and `app/select-material/page.tsx` also defensively deduplicates materials by normalized name before rendering.
+
+### Base Flower Pots Option
+
+Flower Pots are represented as a base configuration choice, not as entries in the additions catalogue or as `AdditionModel` objects.
+
+Primary files:
+
+| File | Role |
+| --- | --- |
+| `components/DesignerNav.tsx` | Shows the Base option selector and conditional lid-finish radio buttons. |
+| `components/CheckPricePanel.tsx` | Lists the selected Flower Pots and lid finish under the existing Base line. |
+| `lib/headstone-store.types.ts` | Defines `baseOption` and `baseLidFinish`. |
+| `lib/headstone-store.ts` | Stores defaults and reset behavior. |
+| `lib/project-schemas.ts` | Defines backward-compatible saved-design fields. |
+| `lib/project-serializer.ts` | Captures and restores the base option and lid finish. |
+
+Current behavior:
+
+- Base option values are `none` and `flower-pots`; the default is `none`.
+- Selecting `Flower Pots` reveals radio buttons for `Black Lid`, `Silver Lid`, and `Gold Lid`.
+- `None` uses a black selector background; `Flower Pots` uses Forever Shining gold (`#d4af37`).
+- Flower Pots do not increase the base price or additions price. Check Price lists the selection as a Base detail, for example `Flower Pots: Gold Lid`.
+- No Flower Pots geometry is rendered yet; this is selection and quote-display state only.
+
+### Verification
+
+```bash
+pnpm exec tsc --noEmit
+```
+
+---
+
+## Current Status (2026-08-08) - Product Samples, Bronze Fastening, Emblems, and Saved State
+
+This session covered the `/select-product` sample-price experience and several Bronze Plaque designer details.
+
+### Select Product Sample Pricing
+
+Primary files:
+
+| File | Role |
+| --- | --- |
+| `app/select-product/page.tsx` | Loads product sample prices and descriptions. |
+| `app/select-product/_ui/ProductSelectionGrid.tsx` | Displays `Sample price`, default dimensions, and the `Select product` CTA. |
+| `lib/server/product-pricing.ts` | Calculates a sample using the first catalog shape's `table.initWidth` and `table.initHeight`. |
+| `lib/server/xml-data.ts` | Reads catalog XML locally and falls back to the deployed public `/xml/catalog-id-{id}.xml` asset. |
+| `lib/types/pricing.ts` | Defines `ProductPriceSample`. |
+
+Current behavior:
+
+- Product cards show a sample price and the product's default `init_width × init_height` dimensions.
+- The label is intentionally `Sample price`, not `Starting at`, because it is an example rather than a guaranteed minimum or final quote.
+- The extra `Configure options for final price` sentence was removed. The visible `Select product` button is the next step.
+- Catalog XML is excluded from serverless function tracing in `next.config.ts`; production pricing therefore uses `NEXT_PUBLIC_APP_URL` or Vercel's `VERCEL_URL` to fetch the public XML asset.
+- Legacy catalogs can have fixed or non-contiguous price tiers. `calculateSamplePrice()` falls back to the nearest valid tier when the exact default quantity has no direct tier.
+- Product `52` uses the existing power-law calculation with a brushed sample finish.
+
+### Bronze Plaque Inscription Rendering
+
+Primary file: `components/HeadstoneInscription.tsx`.
+
+- Bronze plaque text uses the bronze-colored material (`#c7a06a`).
+- The previous dark offset duplicate text layer was removed.
+- Bronze text now has `outlineWidth={0}` so it does not display an artificial black outline that does not represent real bronze lettering.
+
+### Emblem Catalogue
+
+Primary file: `app/_internal/_emblems-loader.ts`.
+
+- `loadEmblems()` filters IDs matching `br<number>l-...` or `br<number>r-...`.
+- Left/right mirrored catalogue duplicates are no longer shown in the Select Emblems sidebar.
+- Users use the existing canvas flip control instead.
+- This filtering affects the shared emblem catalogue used by `app/select-emblems/page.tsx` and `components/DesignerNav.tsx`.
+
+### Bronze Plaque Fastening Type Step
+
+The Bronze Plaque workflow now includes a Bronze-only `select-fastening` step.
+
+Primary files:
+
+| File | Role |
+| --- | --- |
+| `components/FixingSelector.tsx` | Two-column selector used in the left sidebar. |
+| `app/select-fastening/page.tsx` | Direct route placeholder; the actual panel is rendered by `DesignerNav`. |
+| `components/DesignerNav.tsx` | Adds the Setup menu item, guided-panel ordering, and selector panel. |
+| `components/ConditionalNav.tsx` | Keeps the sidebar/bottom sheet open and labels the step `Fastening Type`. |
+| `components/ConditionalCanvas.tsx` | Keeps the 3D canvas visible during the step. |
+| `lib/designer-route-state.ts` | Registers `select-fastening` as a valid designer route. |
+| `app/[productSlug]/[designerStep]/page.tsx` | Resolves the product-prefixed route. |
+| `public/png/fixingsystem/` | Existing option images. |
+
+Options:
+
+- `Flat Back` — `/png/fixingsystem/fixing-flat-back.png`
+- `Lugs with Studs` — `/png/fixingsystem/fixing-lugs-with-studs.png`
+- `Screws (visible from front)` — `/png/fixingsystem/fixing-screws.png`
+
+The step is hidden for every product except product ID `5` (Bronze Plaque), and the options are displayed two per row to fit the left-side menu.
+
+### Fastening State and Saved Designs
+
+Primary files:
+
+- `lib/headstone-store.types.ts` defines `FixingType` and the `fixingType`/`setFixingType` store fields.
+- `lib/headstone-store.ts` defaults to `flat-back` and resets the selection when a product changes.
+- `lib/project-schemas.ts` stores `fixingType` as an optional field for backward compatibility.
+- `lib/project-serializer.ts` captures and restores `fixingType` in project snapshots.
+- `components/DesignerNav.tsx` includes `fixingType` in its direct save payload.
+
+Older saved designs without `fixingType` safely load with the current store value/default.
+
+### Verification
+
+Successful checks after these updates:
+
+```bash
+pnpm type-check
+pnpm exec eslint components/FixingSelector.tsx app/select-fastening/page.tsx lib/designer-route-state.ts lib/headstone-store.types.ts lib/headstone-store.ts components/ConditionalNav.tsx components/ConditionalCanvas.tsx app/[productSlug]/[designerStep]/page.tsx components/DesignerNav.tsx
+```
+
+The ESLint command reports existing warnings in the large navigation/store files but no errors.
 
 ---
 
@@ -13353,4 +13495,4 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-03*
+*End of STARTER.md - Last updated: 2026-08-10*

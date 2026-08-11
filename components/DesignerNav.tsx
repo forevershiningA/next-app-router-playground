@@ -38,6 +38,7 @@ import LoadDesignButton from './LoadDesignButton';
 import MaterialSelector from './MaterialSelector';
 import ShapeSelector from './ShapeSelector';
 import BorderSelector from './BorderSelector';
+import FixingSelector from './FixingSelector';
 import AdditionSelector from './AdditionSelector';
 import MotifSelectorPanel from './MotifSelectorPanel';
 import EmblemOverlayPanel from './EmblemOverlayPanel';
@@ -70,6 +71,12 @@ const menuGroups = [
         name: 'Select Border',
         icon: RectangleStackIcon,
         requiresBorder: true,
+      },
+      {
+        slug: 'select-fastening',
+        name: 'Fastening Type',
+        icon: RectangleStackIcon,
+        requiresBronzePlaque: true,
       },
       { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
       { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
@@ -126,6 +133,7 @@ const fullscreenPanelSlugs = new Set([
   'select-shape',
   'select-material',
   'select-border',
+  'select-fastening',
   'inscriptions',
   'select-images',
   'select-additions',
@@ -355,6 +363,10 @@ export default function DesignerNav() {
   const setBaseHeightMm = useHeadstoneStore((s) => s.setBaseHeightMm);
   const baseFinish = useHeadstoneStore((s) => s.baseFinish);
   const setBaseFinish = useHeadstoneStore((s) => s.setBaseFinish);
+  const baseOption = useHeadstoneStore((s) => s.baseOption);
+  const setBaseOption = useHeadstoneStore((s) => s.setBaseOption);
+  const baseLidFinish = useHeadstoneStore((s) => s.baseLidFinish);
+  const setBaseLidFinish = useHeadstoneStore((s) => s.setBaseLidFinish);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
   const setBaseMaterialUrl = useHeadstoneStore((s) => s.setBaseMaterialUrl);
   const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
@@ -577,6 +589,7 @@ export default function DesignerNav() {
     '/select-motifs',
     '/select-material',
     '/select-border',
+    '/select-fastening',
     '/select-additions',
     '/select-images',
     '/select-emblems',
@@ -614,6 +627,11 @@ export default function DesignerNav() {
         )
           return false;
         if (item.slug === 'select-border' && (!isPlaque || !hasBorder))
+          return false;
+        if (
+          item.slug === 'select-fastening' &&
+          productId !== '5'
+        )
           return false;
         if (
           item.slug === 'select-additions' &&
@@ -2149,10 +2167,13 @@ export default function DesignerNav() {
         slantThickness: state.slantThickness,
         headstoneStyle: state.headstoneStyle,
         baseFinish: state.baseFinish,
+        baseOption: state.baseOption,
+        baseLidFinish: state.baseLidFinish,
         baseWidthMm: state.baseWidthMm,
         baseHeightMm: state.baseHeightMm,
         baseThickness: state.baseThickness,
         borderName: state.borderName,
+        fixingType: state.fixingType,
         showInsetContour: state.showInsetContour,
         showBase: state.showBase,
         inscriptions: state.inscriptions.map((insc) => ({
@@ -2573,6 +2594,62 @@ export default function DesignerNav() {
               )}
             </div>
             <div className="-mx-3.5 border-t border-white/10"></div>
+            <label className="flex items-center justify-between gap-3 text-sm">
+              <span className="text-white/75">Base option</span>
+              <select
+                aria-label="Base option"
+                value={baseOption}
+                onChange={(event) =>
+                  setBaseOption(
+                    event.target.value as 'none' | 'flower-pots',
+                  )
+                }
+                style={{
+                  backgroundColor:
+                    baseOption === 'flower-pots' ? '#d4af37' : '#000000',
+                  color: baseOption === 'flower-pots' ? '#17120a' : '#ffffff',
+                }}
+                className="rounded-md border border-white/10 px-2 py-1.5 text-sm outline-none focus:border-[#D7B356]"
+              >
+                <option value="none" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+                  None
+                </option>
+                <option value="flower-pots" style={{ backgroundColor: '#d4af37', color: '#17120a' }}>
+                  Flower Pots
+                </option>
+              </select>
+            </label>
+            {baseOption === 'flower-pots' && (
+              <fieldset className="space-y-2 text-sm">
+                <legend className="text-white/75">Lid finish</legend>
+                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                  {[
+                    { label: 'Black Lid', value: 'black' },
+                    { label: 'Silver Lid', value: 'silver' },
+                    { label: 'Gold Lid', value: 'gold' },
+                  ].map((option) => (
+                    <label
+                      key={option.value}
+                      className="flex items-center gap-2 text-white/85"
+                    >
+                      <input
+                        type="radio"
+                        name="base-lid-finish"
+                        value={option.value}
+                        checked={baseLidFinish === option.value}
+                        onChange={() =>
+                          setBaseLidFinish(
+                            option.value as 'black' | 'silver' | 'gold',
+                          )
+                        }
+                        className="accent-[#D7B356]"
+                      />
+                      {option.label}
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+            )}
           </>
         )}
 
@@ -3575,6 +3652,13 @@ export default function DesignerNav() {
                   </div>
                 </div>
               ))}
+            {activeFullscreenPanel === 'select-fastening' && (
+              <div className="space-y-6">
+                <div className="overflow-hidden rounded-2xl border border-[#3A3A3A] bg-[#1F1F1F]/95 p-3 shadow-xl backdrop-blur-sm md:p-4">
+                  <FixingSelector />
+                </div>
+              </div>
+            )}
             {activeFullscreenPanel === 'inscriptions' &&
               (isLoadingPanel ? (
                 <div className="flex h-64 items-center justify-center">

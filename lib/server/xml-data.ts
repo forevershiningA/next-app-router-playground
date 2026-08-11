@@ -23,16 +23,40 @@ export const getLanguagesData = cache(async () => {
 
 // Cache catalog XML per product ID
 export const getCatalogData = cache(async (productId: string) => {
+  const filePath = join(process.cwd(), 'public', 'xml', `catalog-id-${productId}.xml`);
+
   try {
-    const xmlPath = join(process.cwd(), 'public', 'xml', `catalog-id-${productId}.xml`);
-    const xmlContent = await readFile(xmlPath, 'utf-8');
-    
-    return xmlContent;
-  } catch (error) {
-    console.error(`Failed to load catalog XML for product ${productId}:`, error);
-    return null;
+    return await readFile(filePath, 'utf-8');
+  } catch {
+    // Serverless deployments may exclude public/xml from the function bundle,
+    // even though the same files remain available as static assets.
+    const appUrl = getAppUrl();
+    if (!appUrl) {
+      console.error(`Failed to load catalog XML for product ${productId}: ${filePath}`);
+      return null;
+    }
+
+    try {
+      const response = await fetch(
+        `${appUrl}/xml/catalog-id-${encodeURIComponent(productId)}.xml`,
+        { next: { revalidate: 86400 } },
+      );
+      if (!response.ok) return null;
+      return await response.text();
+    } catch (error) {
+      console.error(`Failed to fetch catalog XML for product ${productId}:`, error);
+      return null;
+    }
   }
 });
+
+function getAppUrl() {
+  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (configuredUrl) return configuredUrl.replace(/\/$/, '');
+
+  const deploymentUrl = process.env.VERCEL_URL?.trim();
+  return deploymentUrl ? `https://${deploymentUrl}` : null;
+}
 
 // Cache product info XML
 export const getProductInfoXml = cache(async (xmlPath: string) => {

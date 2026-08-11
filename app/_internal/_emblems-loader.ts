@@ -95,7 +95,9 @@ function humanize(id: string): string {
 
 /** Load all emblem entries with thumbnail/image URLs */
 export function loadEmblems(): EmblemEntry[] {
-  return EMBLEM_IDS.map((id) => ({
+  // Left/right artwork is now handled by the canvas flip control. Keep only
+  // the regular catalogue entries so users do not see duplicate emblems.
+  return EMBLEM_IDS.filter((id) => !/^br\d+[lr](?:[-_])/.test(id)).map((id) => ({
     id,
     name: humanize(id),
     thumbnailUrl: `/png/emblems/xs/${id}.png`,

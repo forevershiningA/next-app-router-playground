@@ -70,6 +70,9 @@ export default function ConditionalCanvas() {
   // Show canvas on select-border page (sidebar flow like materials)
   const isSelectBorderPage = designerStepSlug === 'select-border';
 
+  // Show canvas on select-fastening page (Bronze Plaque sidebar flow)
+  const isSelectFasteningPage = designerStepSlug === 'select-fastening';
+
   // Hide canvas on check-price page
   const isCheckPricePage = designerStepSlug === 'check-price';
 
@@ -116,6 +119,7 @@ export default function ConditionalCanvas() {
         !isSelectAdditionsPage &&
         !isSelectMotifsPage &&
         !isSelectBorderPage &&
+        !isSelectFasteningPage &&
         !isDesignMenuPage)
     ) {
       hideOverlay();
@@ -131,6 +135,7 @@ export default function ConditionalCanvas() {
     isSelectAdditionsPage,
     isSelectMotifsPage,
     isSelectBorderPage,
+    isSelectFasteningPage,
     isCheckPricePage,
     isMyAccountPage,
     isAdminPage,
@@ -160,6 +165,7 @@ export default function ConditionalCanvas() {
       !isSelectAdditionsPage &&
       !isSelectMotifsPage &&
       !isSelectBorderPage &&
+      !isSelectFasteningPage &&
       !isDesignMenuPage)
   ) {
     return null;

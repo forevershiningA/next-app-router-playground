@@ -127,9 +127,13 @@ export const clampDepthWithinRange = (
   halfDepth: number,
   headFrontZ: number,
   padding: number,
+  rearwardAllowance = 0,
 ) => {
   const clearance = Math.max(halfDepth, padding);
-  const safeMin = Math.max(range.min + clearance, headFrontZ + clearance);
+  const safeMin = Math.max(
+    range.min + clearance,
+    headFrontZ + clearance - rearwardAllowance,
+  );
   const safeMax = range.max - clearance;
   if (safeMax > safeMin) {
     return Math.max(safeMin, Math.min(safeMax, zValue));

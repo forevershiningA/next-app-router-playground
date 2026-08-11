@@ -920,23 +920,6 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
         rotation={groupRotation}
         visible={coordinateSpace !== 'mm-center' || !!surfaceBounds || (isBaseSurface && !!baseMesh)}
       >
-        {isBronzePlaque && (
-          <Text
-            font={font}
-            color="#21150c"
-            anchorX="center"
-            anchorY="middle"
-            textAlign={textAlign}
-            fontSize={fontSizeUnits}
-            position={[0.0012 * units, -0.0012 * units, -0.0006]}
-            outlineWidth={0}
-            fillOpacity={0.95}
-            renderOrder={elementRenderOrder - 1}
-          >
-            {text}
-          </Text>
-        )}
-
         {/* Main text */}
         <Text
           font={font}
@@ -947,7 +930,7 @@ const HeadstoneInscription = React.forwardRef<THREE.Object3D, Props>(
           fontSize={fontSizeUnits}
           outlineWidth={
             isBronzePlaque
-              ? 0.0015 * units
+              ? 0
               : isTraditionalEngraved ||
                   isPlaque ||
                   isStainlessSteelHeadstone ||

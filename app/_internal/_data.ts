@@ -325,7 +325,6 @@ const materials: Material[] = [
   { id: '7', name: 'Blue Pearl', image: 'Blue-Pearl.webp', category: '2' },
   { id: '8', name: 'Chinese Calca', image: 'Chinese-Calca.webp', category: '2' },
   { id: '9', name: 'Darwin Brown', image: 'Darwin-Brown.webp', category: '2' },
-  { id: '10', name: 'Darwin Brown', image: 'Darwin-Brown.webp', category: '2' },
   {
     id: '11',
     name: 'Emerald Pearl',
