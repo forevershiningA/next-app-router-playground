@@ -3,6 +3,8 @@ import { cache } from 'react';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 
+const DEFAULT_PUBLIC_APP_URL = 'https://forevershining.org';
+
 /**
  * Server-side cached XML/JSON data fetchers
  * These run on the server and cache results across requests
@@ -10,14 +12,30 @@ import { join } from 'path';
 
 // Cache languages XML for 24 hours
 export const getLanguagesData = cache(async () => {
+  const xmlPath = join(process.cwd(), 'public', 'xml', 'us_EN', 'languages24.xml');
+
   try {
-    const xmlPath = join(process.cwd(), 'public', 'xml', 'us_EN', 'languages24.xml');
     const xmlContent = await readFile(xmlPath, 'utf-8');
-    
     return xmlContent;
   } catch (error) {
-    console.error('Failed to load languages XML:', error);
-    return null;
+    const appUrl = getAppUrl();
+    if (!appUrl) {
+      console.error('Failed to load languages XML:', error);
+      return null;
+    }
+
+    try {
+      const response = await fetch(`${appUrl}/xml/us_EN/languages24.xml`, {
+        next: { revalidate: 86400 },
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to fetch languages XML: ${response.status}`);
+      }
+      return await response.text();
+    } catch (fetchError) {
+      console.error('Failed to load languages XML from filesystem and public URL:', fetchError);
+      return null;
+    }
   }
 });
 
@@ -51,11 +69,14 @@ export const getCatalogData = cache(async (productId: string) => {
 });
 
 function getAppUrl() {
-  const configuredUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  const configuredUrl = (
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL
+  )?.trim();
   if (configuredUrl) return configuredUrl.replace(/\/$/, '');
 
   const deploymentUrl = process.env.VERCEL_URL?.trim();
-  return deploymentUrl ? `https://${deploymentUrl}` : null;
+  return deploymentUrl ? `https://${deploymentUrl}` : DEFAULT_PUBLIC_APP_URL;
 }
 
 // Cache product info XML
