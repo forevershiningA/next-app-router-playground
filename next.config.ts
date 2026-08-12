@@ -39,7 +39,6 @@ const nextConfig = {
       'public/textures/**/*',      // 17 MB
       'public/json/firstnames_*.json', // 15 MB
       'public/backgrounds/**/*',   // Large background images
-      'public/xml/**/*',           // Large XML files
       'public/data/**/*',          // Design data
       'node_modules/@img/**/*',    // Sharp dependencies (32 MB)
       'node_modules/@swc/**/*',    // SWC compiler binaries
