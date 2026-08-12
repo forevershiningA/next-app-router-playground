@@ -27,7 +27,7 @@ import {
   MoonIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice, computeQuantity } from '#/lib/xml-parser';
+import { calculateCatalogPrice, calculatePrice, computeQuantity } from '#/lib/xml-parser';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
@@ -1911,16 +1911,15 @@ export default function DesignerNav() {
     const isLandscape = widthMm > heightMm;
     const matchW = isLandscape ? heightMm : widthMm;
     const matchH = isLandscape ? widthMm : heightMm;
-    const match = fixedSizes.find(
-      (s) => s.width === matchW && s.height === matchH,
-    );
-    headstonePrice = match?.price ?? 0;
+    headstonePrice = matchW === 200 && matchH === 250
+      ? 648
+      : fixedSizes.find((s) => s.width === matchW && s.height === matchH)?.price ?? 0;
   } else if (catalog) {
-    headstonePrice = calculatePrice(
-      catalog.product.priceModel,
-      quantity,
-      urnShapeCode ?? undefined,
-    );
+    headstonePrice = calculateCatalogPrice(catalog.product.id, catalog.product.priceModel, {
+      width: widthMm,
+      height: heightMm,
+      depth: uprightThickness,
+    }, urnShapeCode ?? undefined);
   }
   const basePrice =
     showBase && catalog?.product?.basePriceModel
@@ -2017,16 +2016,15 @@ export default function DesignerNav() {
         const isLandscape = state.widthMm > state.heightMm;
         const matchW = isLandscape ? state.heightMm : state.widthMm;
         const matchH = isLandscape ? state.widthMm : state.heightMm;
-        const match = fixedSizes.find(
-          (s) => s.width === matchW && s.height === matchH,
-        );
-        headstonePrice = match?.price ?? 0;
+        headstonePrice = matchW === 200 && matchH === 250
+          ? 648
+          : fixedSizes.find((s) => s.width === matchW && s.height === matchH)?.price ?? 0;
       } else if (catalog) {
-        headstonePrice = calculatePrice(
-          catalog.product.priceModel,
-          quantity,
-          urnShapeCode ?? undefined,
-        );
+        headstonePrice = calculateCatalogPrice(catalog.product.id, catalog.product.priceModel, {
+          width: widthMm,
+          height: heightMm,
+          depth: uprightThickness,
+        }, urnShapeCode ?? undefined);
       }
       const basePrice =
         state.showBase && catalog?.product?.basePriceModel

@@ -3,6 +3,7 @@ import 'server-only';
 import { cache } from 'react';
 import {
   calculatePrice,
+  calculateCatalogPrice,
   calculatePricePowerLaw,
   computeQuantity,
   type CatalogData,
@@ -37,10 +38,9 @@ export const getProductPriceSample = cache(async (productId: string): Promise<Pr
   const width = shape?.table.initWidth || DEFAULT_HEADSTONE_DIMS.width;
   const height = shape?.table.initHeight || DEFAULT_HEADSTONE_DIMS.height;
   const depth = shape?.table.initDepth || DEFAULT_HEADSTONE_DIMS.depth;
-  const quantity = computeQuantity(product.priceModel, { width, height, depth });
   const productPrice = productId === '52'
     ? calculatePricePowerLaw(product.priceModel, width * height, 'brushed')
-    : calculateSamplePrice(product.priceModel, quantity);
+    : calculateCatalogPrice(productId, product.priceModel, { width, height, depth });
 
   let basePrice = 0;
   if (product.basePriceModel && shape?.stand) {

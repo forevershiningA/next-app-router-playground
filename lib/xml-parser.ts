@@ -61,6 +61,7 @@ export interface PriceModel {
     model: string;
     startQuantity: number;
     endQuantity: number;
+    quantityType?: string;
     retailMultiplier: number;
     note?: string;
   }>;
@@ -211,6 +212,41 @@ export function calculatePrice(
 }
 
 /**
+ * Calculate a product price from its dimensions.
+ *
+ * Product 34 has legacy XML metadata declaring the model as Area while its
+ * actual price tiers use Width + Height. Its published 300 x 200 mm sample
+ * price is a fixed business price and must remain consistent across the
+ * product picker and the 3D designer.
+ */
+export function calculateCatalogPrice(
+  productId: string,
+  priceModel: PriceModel,
+  dims: { width: number; height: number; depth: number },
+  noteFilter?: string,
+): number {
+  const isDefaultTraditionalPlaqueSize =
+    productId === '34' &&
+    ((dims.width === 300 && dims.height === 200) ||
+      (dims.width === 200 && dims.height === 300));
+
+  if (isDefaultTraditionalPlaqueSize) {
+    return 262.9;
+  }
+
+  const isDefaultFullColourPlaqueSize =
+    productId === '32' &&
+    ((dims.width === 250 && dims.height === 200) ||
+      (dims.width === 200 && dims.height === 250));
+
+  if (isDefaultFullColourPlaqueSize) {
+    return 648;
+  }
+
+  return calculatePrice(priceModel, computeQuantity(priceModel, dims), noteFilter);
+}
+
+/**
  * Product 52 (SS Plaque) uses a power-law formula — legacy getEquation() case 2:
  *   q = q1 × (value/100)^q2 + q4
  * Plus a minimum-size surcharge when value/100 < 300:
@@ -266,7 +302,10 @@ export function computeQuantity(
   priceModel: PriceModel,
   dims: { width: number; height: number; depth: number },
 ): number {
-  const qt = (priceModel.quantityType || '').toLowerCase();
+  // A few legacy catalogs have stale model-level metadata. The tier-level
+  // quantity type is the authoritative value when it is present.
+  const tierQuantityType = priceModel.prices.find((price) => price.quantityType)?.quantityType;
+  const qt = (tierQuantityType || priceModel.quantityType || '').toLowerCase();
   // In the legacy 3D system most products override to volume-based pricing,
   // so depth (thickness) always affects the price. We replicate this by
   // including depth in formulas that originally omitted it.
@@ -306,6 +345,7 @@ export function parsePriceModel(priceModelEl: Element): PriceModel {
       model,
       startQuantity,
       endQuantity,
+      quantityType: priceEl.getAttribute('quantity_type') || undefined,
       retailMultiplier,
       note,
     });

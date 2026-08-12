@@ -792,7 +792,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
 
               {/* Urn stainless steel border effect: vitreous enamel inlay in front of urn body */}
               {isUrn && (
-                <UrnEnamelInlay api={api} textureUrl={urnInlayTexUrl} />
+                <UrnEnamelInlay api={api} textureUrl={urnInlayTexUrl} shapeUrl={shapeUrl} />
               )}
 
               {/* Render inset contour line for headstones */}

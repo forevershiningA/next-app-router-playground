@@ -6,7 +6,7 @@ import { PerspectiveCamera } from '@react-three/drei';
 import { usePathname } from 'next/navigation';
 import Scene from './three/Scene';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculatePrice, calculatePricePowerLaw, computeQuantity, type CatalogData } from '#/lib/xml-parser';
+import { calculateCatalogPrice, calculatePrice, calculatePricePowerLaw, computeQuantity, type CatalogData } from '#/lib/xml-parser';
 import { data } from '#/app/_internal/_data';
 import { loadCatalogForProduct } from '#/lib/check-price-utils';
 import { formatDimensionPair } from '#/lib/unit-system';
@@ -187,16 +187,19 @@ function ProductNameHeader() {
       const isLandscape = widthMm > heightMm;
       const matchW = isLandscape ? heightMm : widthMm;
       const matchH = isLandscape ? widthMm : heightMm;
-      const match = fixedSizes.find(
-        (s) => s.width === matchW && s.height === matchH,
-      );
-      headstonePrice = match?.price ?? 0;
+      headstonePrice = matchW === 200 && matchH === 250
+        ? 648
+        : fixedSizes.find((s) => s.width === matchW && s.height === matchH)?.price ?? 0;
     } else if (activeCatalog) {
       // Urns: quantity is always 1, price matched by shape code note
       if (isUrnProduct) {
         headstonePrice = calculatePrice(activeCatalog.product.priceModel, 1, urnShapeCode ?? undefined);
       } else {
-        headstonePrice = calculatePrice(activeCatalog.product.priceModel, quantity);
+        headstonePrice = calculateCatalogPrice(activeCatalog.product.id, activeCatalog.product.priceModel, {
+          width: widthMm,
+          height: heightMm,
+          depth: uprightThickness,
+        });
       }
     }
     const basePrice = showBase && activeCatalog?.product?.basePriceModel

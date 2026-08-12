@@ -9,7 +9,81 @@ const BORDER_MM = 20;
 type Props = {
   api: HeadstoneAPI;
   textureUrl: string | null;
+  shapeUrl: string | null;
 };
+
+/**
+ * Offset a sampled contour by a fixed perpendicular distance.
+ * Sharp joins are deliberately bevelled/rounded. An unlimited miter at the
+ * heart cleft or the lower tip creates a long spike and an earcut sliver.
+ */
+function parallelOffsetPolygon(pts: THREE.Vector2[], dist: number): THREE.Vector2[] {
+  const n = pts.length;
+  if (n < 3) return pts;
+
+  let area2 = 0;
+  for (let i = 0; i < n; i++) {
+    const a = pts[i], b = pts[(i + 1) % n];
+    area2 += a.x * b.y - b.x * a.y;
+  }
+  const winding = area2 >= 0 ? 1 : -1;
+  const out: THREE.Vector2[] = [];
+
+  for (let i = 0; i < n; i++) {
+    const prev = pts[(i - 1 + n) % n];
+    const curr = pts[i];
+    const next = pts[(i + 1) % n];
+    const ax = curr.x - prev.x, ay = curr.y - prev.y;
+    const bx = next.x - curr.x, by = next.y - curr.y;
+    const al = Math.hypot(ax, ay), bl = Math.hypot(bx, by);
+    if (al < 1e-8 || bl < 1e-8) { out.push(curr.clone()); continue; }
+
+    const eax = ax / al, eay = ay / al;
+    const ebx = bx / bl, eby = by / bl;
+    const n1 = new THREE.Vector2(-winding * eay, winding * eax);
+    const n2 = new THREE.Vector2(-winding * eby, winding * ebx);
+    const p1 = curr.clone().addScaledVector(n1, dist);
+    const p2 = curr.clone().addScaledVector(n2, dist);
+    const cross = eax * eby - eay * ebx;
+    if (Math.abs(cross) < 1e-8) {
+      const fallback = n1.clone().add(n2);
+      if (fallback.lengthSq() > 1e-12) fallback.normalize().multiplyScalar(dist);
+      else fallback.copy(n1).multiplyScalar(dist);
+      out.push(curr.clone().add(fallback));
+      continue;
+    }
+
+    const dx = p2.x - p1.x, dy = p2.y - p1.y;
+    const t = (dx * eby - dy * ebx) / cross;
+    out.push(new THREE.Vector2(p1.x + eax * t, p1.y + eay * t));
+  }
+  return out;
+}
+
+/** Remove the legacy SVG's tiny three-point flat at the bottom cusp. */
+function collapseHeartBottomCusp(points: THREE.Vector2[]): THREE.Vector2[] {
+  if (points.length < 3) return points;
+  let minY = Infinity, maxY = -Infinity, minX = Infinity, maxX = -Infinity;
+  for (const p of points) {
+    minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+  }
+  const cx = (minX + maxX) / 2;
+  const spanX = maxX - minX;
+  const spanY = maxY - minY;
+  const candidates = points.map((p, i) => i).filter((i) =>
+    Math.abs(points[i].x - cx) < spanX * 0.035 &&
+    points[i].y < minY + spanY * 0.035,
+  );
+  if (candidates.length < 2) return points;
+  const first = Math.min(...candidates);
+  const last = Math.max(...candidates);
+  const tip = new THREE.Vector2(
+    candidates.reduce((sum, i) => sum + points[i].x, 0) / candidates.length,
+    Math.min(...candidates.map((i) => points[i].y)),
+  );
+  return [...points.slice(0, first), tip, ...points.slice(last + 1)];
+}
 
 /**
  * Inset a polygon by `dist` using per-vertex miter-bisector normals.
@@ -54,8 +128,17 @@ function insetPolygon(pts: THREE.Vector2[], dist: number): THREE.Vector2[] {
   // centroid is always inward, preventing the vertex from being ejected outside
   // the outer shape.
   let cx = 0, cy = 0;
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
   for (const p of pts) { cx += p.x; cy += p.y; }
+  for (const p of pts) {
+    minX = Math.min(minX, p.x);
+    maxX = Math.max(maxX, p.x);
+    minY = Math.min(minY, p.y);
+    maxY = Math.max(maxY, p.y);
+  }
   cx /= n; cy /= n;
+  const spanX = Math.max(maxX - minX, 1);
+  const spanY = Math.max(maxY - minY, 1);
 
   const out: THREE.Vector2[] = [];
   for (let i = 0; i < n; i++) {
@@ -94,7 +177,24 @@ function insetPolygon(pts: THREE.Vector2[], dist: number): THREE.Vector2[] {
     const nx = sx / sl, ny = sy / sl;
     const cosH = nx * n1x + ny * n1y;
 
-    if (cosH <= 0) {
+    const isCentralHeartCleft =
+      cosH <= 0 &&
+      Math.abs(curr.x - cx) < spanX * 0.12 &&
+      curr.y > minY + spanY * 0.65;
+
+    if (isCentralHeartCleft) {
+      // The heart's cleft is a reflex corner. Offsetting it with one edge
+      // normal creates the visible deep triangular wedge in the inlay. Join
+      // the two offset edges with a short, shallow quadratic arc instead.
+      const p1 = new THREE.Vector2(curr.x + n1x * dist, curr.y + n1y * dist);
+      const p2 = new THREE.Vector2(curr.x + n2x * dist, curr.y + n2y * dist);
+      const control = new THREE.Vector2(curr.x, curr.y + dist * 0.25);
+      for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+        const a = p1.clone().lerp(control, t);
+        const b = control.clone().lerp(p2, t);
+        out.push(a.lerp(b, t));
+      }
+    } else if (cosH <= 0) {
       // Concave (reflex) vertex — bisector points outward.
       // Fall back to n1 offset to prevent self-intersection void.
       out.push(new THREE.Vector2(curr.x + n1x * dist, curr.y + n1y * dist));
@@ -219,7 +319,7 @@ function removeLoops(pts: THREE.Vector2[]): THREE.Vector2[] {
  * cy = outH/2 centres the inlay mesh on the urn face.
  * z = 0.5 places it just in front of the urn surface.
  */
-export default function UrnEnamelInlay({ api, textureUrl }: Props) {
+export default function UrnEnamelInlay({ api, textureUrl, shapeUrl }: Props) {
   const [tex, setTex] = React.useState<THREE.Texture | null>(null);
 
   const geomData = React.useMemo(() => {
@@ -266,7 +366,11 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
     // Then remove any self-intersecting loops (e.g. the heart's top cleft
     // causes the two approaching offset edges to cross, which makes earcut
     // emit spurious triangles across the whole mesh).
-    const inset = removeLoops(insetPolygon(sampled, borderPU));
+    // The heart SVG contains a genuine cusp at the cleft. Use intersections
+    // of parallel offset edges there so the border remains constant-width.
+    const inset = shapeUrl?.toLowerCase().endsWith('/heart.svg')
+      ? parallelOffsetPolygon(collapseHeartBottomCusp(sampled), borderPU)
+      : removeLoops(insetPolygon(sampled, borderPU));
 
     const shape = new THREE.Shape(inset);
     const geom = new THREE.ShapeGeometry(shape);
@@ -288,7 +392,7 @@ export default function UrnEnamelInlay({ api, textureUrl }: Props) {
     uvAttr.needsUpdate = true;
 
     return { geom, cy, bbW, bbH };
-  }, [api.outlinePoints, api.unitsPerMeter]);
+  }, [api.outlinePoints, api.unitsPerMeter, shapeUrl]);
 
   // Load background texture with TextureLoader (not canvas).
   // After loading, apply "cover" repeat/offset so the texture fills the inlay
