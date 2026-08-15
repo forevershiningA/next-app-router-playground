@@ -1,18 +1,86 @@
 // components/three/headstone/LedgerSlab.tsx
 'use client';
 
-import React, { useRef, useMemo, useLayoutEffect, useEffect, forwardRef, useImperativeHandle, Suspense } from 'react';
+import React, { useRef, useMemo, useEffect, forwardRef, useImperativeHandle, Suspense } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { TEX_BASE, DEFAULT_TEX, LERP_FACTOR, EPSILON } from '#/lib/headstone-constants';
-import { configureGraniteTexture, createPolishedGraniteMaterial } from '#/lib/granite-material';
+import { createPolishedGraniteMaterial, GRANITE_TILE_SIZE_M } from '#/lib/granite-material';
 
 type LedgerSlabProps = {
   onClick?: (e: any) => void;
 };
+
+function createLedgerMaterials(texture: THREE.Texture, width: number, height: number, depth: number) {
+  const createTexture = (repeatX: number, repeatY: number) => {
+    const next = texture.clone();
+    next.colorSpace = THREE.SRGBColorSpace;
+    next.wrapS = next.wrapT = THREE.RepeatWrapping;
+    next.repeat.set(Math.max(1, repeatX), Math.max(1, repeatY));
+    next.anisotropy = 16;
+    next.needsUpdate = true;
+    return next;
+  };
+
+  const sideTexture = createTexture(depth / GRANITE_TILE_SIZE_M, height / GRANITE_TILE_SIZE_M);
+  const topTexture = createTexture(width / GRANITE_TILE_SIZE_M, depth / GRANITE_TILE_SIZE_M);
+  const faceTexture = createTexture(width / GRANITE_TILE_SIZE_M, height / GRANITE_TILE_SIZE_M);
+
+  const horizontal = createPolishedGraniteMaterial({
+    texture: topTexture,
+    envMapIntensity: 2.4,
+    roughness: 0.15,
+    clearcoatRoughness: 0.1,
+  });
+  const side = createPolishedGraniteMaterial({
+    texture: sideTexture,
+    envMapIntensity: 2.4,
+    roughness: 0.15,
+    clearcoatRoughness: 0.1,
+  });
+  side.emissive.set(0xffffff);
+  side.emissiveMap = sideTexture;
+  side.emissiveIntensity = 0.85;
+
+  const face = createPolishedGraniteMaterial({
+    texture: faceTexture,
+    envMapIntensity: 2.4,
+    roughness: 0.15,
+    clearcoatRoughness: 0.1,
+  });
+  face.emissive.set(0xffffff);
+  face.emissiveMap = faceTexture;
+  face.emissiveIntensity = 0.85;
+
+  return {
+    materials: [side, side, horizontal, horizontal, face, face],
+    textures: [sideTexture, topTexture, faceTexture],
+  };
+}
+
+function assignBoxFaceGroups(geometry: THREE.BufferGeometry) {
+  if (!geometry.index) return;
+
+  geometry.clearGroups();
+  const normal = geometry.attributes.normal;
+  const index = geometry.index;
+
+  for (let i = 0; i < index.count; i += 3) {
+    const vertex = index.getX(i);
+    const nx = normal.getX(vertex);
+    const ny = normal.getY(vertex);
+    const nz = normal.getZ(vertex);
+    const materialIndex = Math.abs(nx) > Math.abs(ny) && Math.abs(nx) > Math.abs(nz)
+      ? (nx > 0 ? 0 : 1)
+      : Math.abs(ny) > Math.abs(nx) && Math.abs(ny) > Math.abs(nz)
+        ? (ny > 0 ? 2 : 3)
+        : (nz > 0 ? 4 : 5);
+    geometry.addGroup(i, 3, materialIndex);
+  }
+}
 
 function LedgerMesh({
   texUrl,
@@ -37,35 +105,28 @@ function LedgerMesh({
 }){
   const texture = useTexture(texUrl);
 
-  useLayoutEffect(() => {
-    if (texture) {
-      configureGraniteTexture(texture, { repeatX: 3, repeatY: 1 });
-    }
-  }, [texture]);
-
-  const geometry = useMemo(() => new RoundedBoxGeometry(1, 1, 1, 2, 0.004), []);
-
-  const material = useMemo(
-    () =>
-      createPolishedGraniteMaterial({
-        texture,
-        envMapIntensity: 1.1,
-        roughness: 0.18,
-        clearcoatRoughness: 0.08,
-      }),
-    [texture],
-  );
-
-  useEffect(() => {
-    return () => {
-      material.dispose();
-      geometry.dispose();
-    };
-  }, [geometry, material]);
+  const geometry = useMemo(() => {
+    const next = new RoundedBoxGeometry(1, 1, 1, 2, 0.004);
+    assignBoxFaceGroups(next);
+    return next;
+  }, []);
 
   const w = ledgerWidthMm / 1000;
   const h = ledgerHeightMm / 1000;
   const d = ledgerDepthMm / 1000;
+  const materialSet = useMemo(
+    () => createLedgerMaterials(texture, w, h, d),
+    [texture, w, h, d],
+  );
+
+  useEffect(() => {
+    return () => {
+      [...new Set(materialSet.materials)].forEach((material) => material.dispose());
+      materialSet.textures.forEach((materialTexture) => materialTexture.dispose());
+      geometry.dispose();
+    };
+  }, [geometry, materialSet]);
+
   // Start at base front face: -(uprightThickness/2) + baseThickness (all in metres)
   const standBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
   const kerbH = kerbHeightMm / 1000;
@@ -97,7 +158,7 @@ function LedgerMesh({
     <mesh
       ref={meshRef as React.RefObject<THREE.Mesh>}
       geometry={geometry}
-      material={material}
+      material={materialSet.materials}
       onClick={onClick}
       name="ledger"
     />

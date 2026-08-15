@@ -2,6 +2,7 @@
 import { OrbitControls, Environment, ContactShadows, useTexture, Sparkles } from '@react-three/drei';
 // REMOVED: EffectComposer & DepthOfField (Causing artifacts)
 import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js';
 import HeadstoneAssembly from './headstone/HeadstoneAssembly';
 import SunRays from './SunRays';
 import AtmosphericSky from './AtmosphericSky';
@@ -113,6 +114,7 @@ const GradientBackground = ({ top, bottom }: { top: string; bottom: string }) =>
 
 function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) {
   const gl = useThree((state) => state.gl);
+  const invalidate = useThree((state) => state.invalidate);
   const viewportWidth = useThree((state) => state.size.width);
   const useCompactTextures = viewportWidth < 1024;
   const maxAnisotropy = viewportWidth < 1024 ? 4 : 8;
@@ -165,6 +167,13 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
     if (props.aoMap) props.aoMap.colorSpace = THREE.NoColorSpace;
   }, [props, gl, maxAnisotropy, repeat]);
 
+  // The floor texture resolves independently from the monument geometry.
+  // Requesting another demand-frame lets ContactShadows capture the fully
+  // mounted stone instead of baking an empty scene on its first frame.
+  useEffect(() => {
+    invalidate();
+  }, [invalidate, props]);
+
   return (
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
@@ -182,17 +191,16 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
         />
       </mesh>
       
-      {/* Contact Shadow: Anchors the headstone */}
-      {/* OPTIMIZATION: Reduced resolution and set frames={1} to bake shadow once */}
+      {/* Soft AO-style shadow where granite meets the grass. */}
       <ContactShadows
-        position={[0, 0.02, 0]}
+        position={[0, 0.002, 0]}
         scale={15}
-        blur={2.5}
-        opacity={0.5}
-        far={1.5}
+        blur={1.8}
+        opacity={0.68}
+        far={1.2}
         color="#001100"
         resolution={contactShadowResolution}
-        frames={1}
+        frames={2}
       />
     </group>
   );
@@ -211,7 +219,7 @@ function SimpleGroundFloor({ color }: { color: string }) {
           envMapIntensity={0}
         />
       </mesh>
-      <ContactShadows position={[0, 0.02, 0]} scale={15} blur={2.5} opacity={0.6} far={1.5} color="#001100" resolution={256} frames={1} />
+      <ContactShadows position={[0, 0.002, 0]} scale={15} blur={1.8} opacity={0.68} far={1.2} color="#001100" resolution={256} frames={2} />
     </group>
   );
 }
@@ -273,14 +281,14 @@ function OutbackFloor({ color }: { color: string }) {
         />
       </mesh>
       <ContactShadows
-        position={[0, 0.02, 0]}
+        position={[0, 0.002, 0]}
         scale={15}
-        blur={2.5}
-        opacity={0.5}
-        far={1.5}
+        blur={1.8}
+        opacity={0.68}
+        far={1.2}
         color="#1a0800"
         resolution={contactShadowResolution}
-        frames={1}
+        frames={2}
       />
     </group>
   );
@@ -356,6 +364,137 @@ function OutbackTreeline() {
   );
 }
 
+function MemorialFoundation({
+  width,
+  depth,
+  centerZ,
+}: {
+  width: number;
+  depth: number;
+  centerZ: number;
+}) {
+  const geometry = useMemo(
+    () => new RoundedBoxGeometry(width, 0.1, depth, 4, 0.008),
+    [width, depth],
+  );
+  const concreteTexture = useMemo(() => {
+    const size = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+
+    const pixels = context.createImageData(size, size);
+    const random = lcg(0x4c7a31);
+    for (let i = 0; i < pixels.data.length; i += 4) {
+      const grain = 108 + Math.floor(random() * 24);
+      const aggregate = random() > 0.972 ? (random() > 0.5 ? 38 : -32) : 0;
+      pixels.data[i] = grain + aggregate + 4;
+      pixels.data[i + 1] = grain + aggregate + 3;
+      pixels.data[i + 2] = grain + aggregate;
+      pixels.data[i + 3] = 255;
+    }
+    context.putImageData(pixels, 0, 0);
+    // Larger aggregate marks remain visible at the camera distance where
+    // single-pixel noise would collapse into a flat grey band.
+    for (let i = 0; i < 340; i += 1) {
+      const shade = random() > 0.5 ? 'rgba(62, 63, 59, 0.42)' : 'rgba(174, 173, 166, 0.3)';
+      context.fillStyle = shade;
+      const sizePx = 1 + Math.floor(random() * 4);
+      context.fillRect(
+        Math.floor(random() * size),
+        Math.floor(random() * size),
+        sizePx,
+        sizePx,
+      );
+    }
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+    texture.repeat.set(Math.max(1, width / 0.5), Math.max(1, depth / 0.5));
+    texture.anisotropy = 4;
+    texture.needsUpdate = true;
+    return texture;
+  }, [width, depth]);
+
+  useEffect(() => () => geometry.dispose(), [geometry]);
+  useEffect(() => () => concreteTexture?.dispose(), [concreteTexture]);
+
+  return (
+    <mesh
+      geometry={geometry}
+      // The 100 mm slab top sits 5 mm above grass: thick enough to read as a
+      // proper pad while avoiding z-fighting with the ground plane.
+      position={[0, -0.045, centerZ]}
+      castShadow
+      receiveShadow
+      name="concrete-foundation"
+    >
+      <meshStandardMaterial
+        map={concreteTexture ?? undefined}
+        roughnessMap={concreteTexture ?? undefined}
+        color="#96968e"
+        roughness={0.9}
+        metalness={0}
+        envMapIntensity={0.15}
+      />
+    </mesh>
+  );
+}
+
+function FoundationContactShadow({
+  width,
+  depth,
+  centerZ,
+}: {
+  width: number;
+  depth: number;
+  centerZ: number;
+}) {
+  const texture = useMemo(() => {
+    const size = 256;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+
+    context.clearRect(0, 0, size, size);
+    context.filter = 'blur(18px)';
+    context.fillStyle = 'rgba(0, 0, 0, 0.78)';
+    context.fillRect(34, 34, size - 68, size - 68);
+    context.filter = 'none';
+
+    const next = new THREE.CanvasTexture(canvas);
+    next.colorSpace = THREE.NoColorSpace;
+    next.needsUpdate = true;
+    return next;
+  }, []);
+
+  useEffect(() => () => texture?.dispose(), [texture]);
+
+  return (
+    <mesh
+      position={[0, -0.0085, centerZ]}
+      rotation={[-Math.PI / 2, 0, 0]}
+      renderOrder={1}
+      name="foundation-contact-shadow"
+    >
+      <planeGeometry args={[width + 0.26, depth + 0.26]} />
+      <meshBasicMaterial
+        map={texture ?? undefined}
+        color="#071006"
+        transparent
+        opacity={0.58}
+        depthWrite={false}
+        toneMapped={false}
+      />
+    </mesh>
+  );
+}
+
 export default function Scene({ 
   targetRotation = 0,
   currentRotation,
@@ -426,8 +565,24 @@ export default function Scene({
   const setSelectedEmblemId = useHeadstoneStore((s) => s.setSelectedEmblemId);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
+  const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
+  const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
+  const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const isFullMonument = productType === 'full-monument';
   const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
+  const assemblyZOffset = -(ledgerDepthMm / 1000);
+  // Extend from behind the upright/base to just beyond the kerb's front edge;
+  // a full monument's foundation must support both, not only the grave slab.
+  const foundationRearZ = assemblyZOffset - (uprightThickness / 1000) / 2 - 0.08;
+  const foundationFrontZ =
+    assemblyZOffset -
+    (uprightThickness / 1000) / 2 +
+    baseThickness / 1000 +
+    kerbDepthMm / 1000 +
+    0.08;
+  const foundationCenterZ = (foundationRearZ + foundationFrontZ) / 2;
+  const foundationDepth = foundationFrontZ - foundationRearZ;
 
   // For full monument the whole assembly is shifted back by ledgerDepthMm/1000 in Z.
   // The camera target needs to follow: lower Y (ledger is at ground level, not 3.8m up)
@@ -554,6 +709,22 @@ export default function Scene({
           <Suspense fallback={null}>
             <SunRays />
           </Suspense>
+        )}
+
+        {/* A discreet concrete pad anchors full monuments in the ground. */}
+        {isFullMonument && (
+          <>
+            <FoundationContactShadow
+              width={kerbWidthMm / 1000 + 0.16}
+              depth={foundationDepth}
+              centerZ={foundationCenterZ}
+            />
+            <MemorialFoundation
+              width={kerbWidthMm / 1000 + 0.16}
+              depth={foundationDepth}
+              centerZ={foundationCenterZ}
+            />
+          </>
         )}
 
         {/* Headstone content manages its own suspense boundaries internally */}

@@ -34,7 +34,7 @@ import {
   LERP_FACTOR,
   EPSILON,
 } from '#/lib/headstone-constants';
-import { createPolishedGraniteMaterial } from '#/lib/granite-material';
+import { createPolishedGraniteMaterial, GRANITE_TILE_SIZE_M } from '#/lib/granite-material';
 
 type HeadstoneBaseAutoProps = {
   headstoneObject: React.RefObject<THREE.Object3D>;
@@ -223,18 +223,17 @@ function BaseMesh({
   // 2. Manage the base texture's independent repeat settings.
   useLayoutEffect(() => {
     if (materialTexture) {
-      const textureScale = 0.15;
       materialTexture.repeat.set(
-        dimensions.width / textureScale,
-        dimensions.height / textureScale
+        dimensions.width / GRANITE_TILE_SIZE_M,
+        dimensions.height / GRANITE_TILE_SIZE_M
       );
       sideMaterialTexture.repeat.set(
-        dimensions.depth / textureScale,
-        dimensions.height / textureScale,
+        dimensions.depth / GRANITE_TILE_SIZE_M,
+        dimensions.height / GRANITE_TILE_SIZE_M,
       );
       topMaterialTexture.repeat.set(
-        dimensions.width / textureScale,
-        dimensions.depth / textureScale,
+        dimensions.width / GRANITE_TILE_SIZE_M,
+        dimensions.depth / GRANITE_TILE_SIZE_M,
       );
       materialTexture.needsUpdate = true;
       sideMaterialTexture.needsUpdate = true;
@@ -391,7 +390,11 @@ function BaseMesh({
       fixRoundedBoxUVs(geo);
       return geo;
     }
-    return new THREE.BoxGeometry(1, 1, 1);
+    // A polished base is never a razor-sharp cuboid. This small bevel remains
+    // deliberately restrained so it reads as stonework, not a rounded block.
+    const geo = new RoundedBoxGeometry(1, 1, 1, 4, 0.006);
+    fixRoundedBoxUVs(geo);
+    return geo;
   }, [finish]);
 
   return (

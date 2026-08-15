@@ -79,6 +79,7 @@
 71. [August 10 Base Options, Flower Pots, and Traditional Addition Positioning](#current-status-2026-08-10--base-options-flower-pots-and-traditional-addition-positioning)
 72. [August 14 Designer Canvas Performance and Addition Assets](#current-status-2026-08-14--designer-canvas-performance-and-addition-assets)
 73. [August 15 3D Granite Materials, Selection Outline, and UV Mapping](#current-status-2026-08-15--3d-granite-materials-selection-outline-and-uv-mapping)
+74. [August 15 Full Monument Material, Foundation, and Grounding Follow-up](#current-status-2026-08-15--full-monument-material-foundation-and-grounding-follow-up)
 
 ---
 
@@ -135,6 +136,55 @@ git diff --check
 ```
 
 Existing warnings in these large legacy components remain. User-provided `screen.png` is the visual regression reference; after changing granite material or UV code, verify front, back, and both base sides manually in the live designer.
+
+---
+
+## Current Status (2026-08-15) - Full Monument Material, Foundation, and Grounding Follow-up
+
+This section is the current reference for the full-monument refinements that followed the initial UV work. The user-provided `screen.png` remains the visual acceptance reference.
+
+### One granite scale and a smooth polished finish
+
+Primary files:
+
+| File | Responsibility |
+| --- | --- |
+| `lib/granite-material.ts` | Defines the shared `GRANITE_TILE_SIZE_M = 0.35` physical swatch size and creates polished granite PBR materials. |
+| `components/SvgHeadstone.tsx` | Applies the shared scale to upright front, continuous side strip, and back cap. |
+| `components/three/headstone/HeadstoneBaseAuto.tsx` | Uses independent front/side/top texture clones with physical repeats. |
+| `components/three/headstone/LedgerSlab.tsx`, `KerbsetBorder.tsx` | Use dimension-aware texture clones for every box face. |
+
+- Do not reintroduce random per-tile flips, offsets, or rotations. They made a single selected granite (for example Australian/Chinese Calca) read as unrelated stone across monument parts.
+- The prior fixed `3 × 1` ledger repeat was removed. All granite components use the shared physical tile size, preventing the dense grid on the horizontal ledger and the mismatched grain scale versus the upright.
+- Polished granite deliberately has **no `normalMap` and no source-colour `roughnessMap`**. Reusing the swatch as a roughness map caused dark, high-frequency relief on vertical faces that looked like asphalt/roughcast. Use the material's uniform low roughness plus clearcoat for a smooth polish. Rock-pitch is the intentional exception: it retains its dedicated procedural normal maps.
+- Granite map clones must continue to use sRGB colour space, repeat wrapping, and disposal on cleanup. Never mutate a shared `useTexture()` cache entry.
+
+### Stone edge treatment
+
+- `LedgerSlab` already uses `RoundedBoxGeometry` with a minimal bevel.
+- The normal polished `HeadstoneBaseAuto` path now uses `RoundedBoxGeometry` rather than a razor-sharp `BoxGeometry`; its material groups are reassigned by face normal.
+- Each `KerbsetBorder` bar is generated at its physical dimensions with a 3 mm bevel. Do not scale a unit rounded box for these bars: that makes a circular bevel elliptical. `assignBoxFaceGroups()` keeps vertical, top, and front/back materials correctly assigned after beveling.
+
+### Full-monument concrete foundation and ground contact
+
+Primary file: `components/three/Scene.tsx`.
+
+- `MemorialFoundation` is rendered only for `product.type === 'full-monument'`.
+- It is a 100 mm thick, 8 mm beveled `RoundedBoxGeometry`, with its top 5 mm above the grass plane. This avoids ground z-fighting while leaving an exposed concrete edge.
+- Foundation bounds are derived from the complete assembly: rear edge behind the upright/base, front edge beyond the kerbset, and width `kerbWidth + 160 mm`. Do not size it from the ledger alone: it must also support the base.
+- Concrete uses a small procedural `CanvasTexture` with visible aggregate variation and a high roughness material. Both geometry and dynamically-created texture are disposed on unmount.
+- `FoundationContactShadow` is a stable, blurred, transparent canvas mask at `y = -0.0085`, just above the grass plane. It makes a soft AO-like shadow outside all foundation edges and is independent of the deferred `ContactShadows` capture. The existing `ContactShadows` components on grass/outback remain in place for scene-wide grounding.
+- The attempted instanced 3D grass tufts were removed intentionally: they looked like black spikes/green pebbles in the live scene. Do not restore them without a real blade/alpha asset and dedicated visual validation.
+
+### Verification
+
+Successful after the latest foundation/contact-shadow update:
+
+```bash
+pnpm exec tsc --noEmit
+```
+
+Focused lint checks can report legacy warnings (not errors), notably the unused `shapeUrl` selector in `components/three/Scene.tsx`. After any foundation, ground, or material change, inspect `screen.png` at an oblique angle: confirm the exposed concrete side, shadow around the outer edge, and smooth vertical granite faces.
 
 ---
 

@@ -2,6 +2,10 @@ import * as THREE from 'three';
 
 const DEFAULT_GRANITE_TINT = 0xa6a6a6;
 
+// One physical swatch size for every polished granite component. Keeping this
+// shared prevents a ledger, kerb or base from reading as a different stone.
+export const GRANITE_TILE_SIZE_M = 0.35;
+
 type GraniteTextureOptions = {
   repeatX: number;
   repeatY: number;

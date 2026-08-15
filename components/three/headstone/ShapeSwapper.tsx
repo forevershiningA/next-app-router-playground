@@ -28,6 +28,7 @@ import { logger } from '#/lib/logger';
 import { getThreeTextFontUrl } from '#/lib/font-utils';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
+import { GRANITE_TILE_SIZE_M } from '#/lib/granite-material';
 
 /* --------------------------------- constants -------------------------------- */
 const TEX_BASE = '/textures/forever/l/';
@@ -603,8 +604,8 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
             showStainlessRim={showStainlessRim}
             ssFinish={ssFinish}
             cornerRadius={isStainlessSteel && ssCorners === 'rounded' ? 25 : 0}
-            tileSize={0.35}
-            sideTileSize={0.35}
+            tileSize={GRANITE_TILE_SIZE_M}
+            sideTileSize={GRANITE_TILE_SIZE_M}
             topTileSize={0.35}
             targetHeight={targetHeightForShape}
             targetWidth={targetWidthForShape}
