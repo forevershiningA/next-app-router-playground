@@ -12,6 +12,10 @@ export type StainlessTextureSet = {
   normalMap: THREE.CanvasTexture;
 };
 
+// There are only two generated finishes. Sharing them prevents each stainless
+// motif from doing the same 3 × 512² canvas work and GPU upload.
+const textureSetCache = new Map<StainlessFinish, StainlessTextureSet>();
+
 function seededNoise(x: number, y: number, seed: number) {
   const n = Math.sin(x * 127.1 + y * 311.7 + seed * 74.7) * 43758.5453123;
   return n - Math.floor(n);
@@ -81,6 +85,9 @@ function createStainlessCanvas(
 }
 
 export function createStainlessTextureSet(finish: StainlessFinish): StainlessTextureSet | null {
+  const cached = textureSetCache.get(finish);
+  if (cached) return cached;
+
   const colorCanvas = createStainlessCanvas(finish, 'color');
   const roughnessCanvas = createStainlessCanvas(finish, 'roughness');
   const normalCanvas = createStainlessCanvas(finish, 'normal');
@@ -97,9 +104,11 @@ export function createStainlessTextureSet(finish: StainlessFinish): StainlessTex
     texture.repeat.set(finish === 'polished' ? 3 : 5, finish === 'polished' ? 8 : 16);
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.magFilter = THREE.LinearFilter;
-    texture.anisotropy = 16;
+    texture.anisotropy = 8;
     texture.needsUpdate = true;
   });
 
-  return { colorMap, roughnessMap, normalMap };
+  const textureSet = { colorMap, roughnessMap, normalMap };
+  textureSetCache.set(finish, textureSet);
+  return textureSet;
 }

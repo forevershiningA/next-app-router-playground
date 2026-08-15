@@ -106,7 +106,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   animateOnShow = false,
   animationDuration = 420,
 }: RotatingBoxOutlineProps) {
-  const { gl } = useThree();
+  const { gl, invalidate } = useThree();
   const helperRef = React.useRef<OutlineGroup | null>(null);
   const depthPadding = depthPad ?? pad;
   const {
@@ -151,6 +151,13 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
       gl.localClippingEnabled = prev;
     };
   }, [gl, frontFacingOnly]);
+
+  // This helper updates its geometry imperatively and the designer canvas uses
+  // frameloop="demand". A store-driven selection change therefore needs to
+  // explicitly request its first frame instead of waiting for OrbitControls.
+  React.useEffect(() => {
+    invalidate();
+  }, [invalidate, visible]);
 
   React.useEffect(() => {
     let rafId: number | null = null;
@@ -388,6 +395,11 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
     positionAttribute.needsUpdate = true;
 
     helper.visible = meshIndex > 0;
+
+    // Keep demand rendering alive solely while the reveal animation is active.
+    if (animateOnShow && rawAnimProgress < 1) {
+      state.invalidate();
+    }
   });
 
   return null;

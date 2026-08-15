@@ -548,6 +548,9 @@ async function captureDesign(context, designId, opts, workerIdx) {
     const croppedImages = await page.evaluate(() => {
       const glCanvas = document.querySelector('#scene-root canvas');
       if (!glCanvas) return null;
+      // The production canvas does not preserve every presented frame. Render
+      // immediately before reading pixels so batch capture remains reliable.
+      window.__r3fGL?.render?.(window.__r3fScene, window.__r3fCamera);
       const gl = glCanvas.getContext('webgl2') || glCanvas.getContext('webgl');
       if (!gl) return null;
 

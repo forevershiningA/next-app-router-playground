@@ -2,7 +2,6 @@
 
 import * as THREE from 'three';
 import { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
 
 const vertexShader = `
   varying vec2 vUv;
@@ -56,12 +55,6 @@ export default function SunRays() {
   );
 
   const materialRef = useRef<THREE.ShaderMaterial | null>(null);
-
-  useFrame((_, delta) => {
-    if (materialRef.current) {
-      materialRef.current.uniforms.uTime.value += delta * 1.8;
-    }
-  });
 
   return (
     <group position={[0, 3.5, -6]}>

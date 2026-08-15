@@ -73,7 +73,7 @@ function LedgerMesh({
   const targetPos = useRef(new THREE.Vector3(0, kerbH + h / 2 + EPSILON, standBackZ + d / 2));
   const targetScale = useRef(new THREE.Vector3(w, h, d));
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!meshRef.current) return;
     const newW = ledgerWidthMm / 1000;
     const newH = ledgerHeightMm / 1000;
@@ -82,8 +82,15 @@ function LedgerMesh({
     const newKerbH = kerbHeightMm / 1000;
     targetPos.current.set(0, newKerbH + newH / 2 + EPSILON, newStandBackZ + newD / 2);
     targetScale.current.set(newW, newH, newD);
-    meshRef.current.position.lerp(targetPos.current, LERP_FACTOR);
-    meshRef.current.scale.lerp(targetScale.current, LERP_FACTOR);
+    const stillMoving =
+      meshRef.current.position.distanceToSquared(targetPos.current) > 1e-10 ||
+      meshRef.current.scale.distanceToSquared(targetScale.current) > 1e-10;
+    if (stillMoving) {
+      meshRef.current.position.lerp(targetPos.current, LERP_FACTOR);
+      meshRef.current.scale.lerp(targetScale.current, LERP_FACTOR);
+      state.gl.shadowMap.needsUpdate = true;
+      state.invalidate();
+    }
   });
 
   return (

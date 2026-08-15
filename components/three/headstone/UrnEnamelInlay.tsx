@@ -12,54 +12,6 @@ type Props = {
   shapeUrl: string | null;
 };
 
-/**
- * Offset a sampled contour by a fixed perpendicular distance.
- * Sharp joins are deliberately bevelled/rounded. An unlimited miter at the
- * heart cleft or the lower tip creates a long spike and an earcut sliver.
- */
-function parallelOffsetPolygon(pts: THREE.Vector2[], dist: number): THREE.Vector2[] {
-  const n = pts.length;
-  if (n < 3) return pts;
-
-  let area2 = 0;
-  for (let i = 0; i < n; i++) {
-    const a = pts[i], b = pts[(i + 1) % n];
-    area2 += a.x * b.y - b.x * a.y;
-  }
-  const winding = area2 >= 0 ? 1 : -1;
-  const out: THREE.Vector2[] = [];
-
-  for (let i = 0; i < n; i++) {
-    const prev = pts[(i - 1 + n) % n];
-    const curr = pts[i];
-    const next = pts[(i + 1) % n];
-    const ax = curr.x - prev.x, ay = curr.y - prev.y;
-    const bx = next.x - curr.x, by = next.y - curr.y;
-    const al = Math.hypot(ax, ay), bl = Math.hypot(bx, by);
-    if (al < 1e-8 || bl < 1e-8) { out.push(curr.clone()); continue; }
-
-    const eax = ax / al, eay = ay / al;
-    const ebx = bx / bl, eby = by / bl;
-    const n1 = new THREE.Vector2(-winding * eay, winding * eax);
-    const n2 = new THREE.Vector2(-winding * eby, winding * ebx);
-    const p1 = curr.clone().addScaledVector(n1, dist);
-    const p2 = curr.clone().addScaledVector(n2, dist);
-    const cross = eax * eby - eay * ebx;
-    if (Math.abs(cross) < 1e-8) {
-      const fallback = n1.clone().add(n2);
-      if (fallback.lengthSq() > 1e-12) fallback.normalize().multiplyScalar(dist);
-      else fallback.copy(n1).multiplyScalar(dist);
-      out.push(curr.clone().add(fallback));
-      continue;
-    }
-
-    const dx = p2.x - p1.x, dy = p2.y - p1.y;
-    const t = (dx * eby - dy * ebx) / cross;
-    out.push(new THREE.Vector2(p1.x + eax * t, p1.y + eay * t));
-  }
-  return out;
-}
-
 /** Remove the legacy SVG's tiny three-point flat at the bottom cusp. */
 function collapseHeartBottomCusp(points: THREE.Vector2[]): THREE.Vector2[] {
   if (points.length < 3) return points;
@@ -108,7 +60,11 @@ function collapseHeartBottomCusp(points: THREE.Vector2[]): THREE.Vector2[] {
  *                             (e.g. bottom V-tip and lobe tips).
  * 4. Normal convex:           standard miter.
  */
-function insetPolygon(pts: THREE.Vector2[], dist: number): THREE.Vector2[] {
+function insetPolygon(
+  pts: THREE.Vector2[],
+  dist: number,
+  capCentralCleft = false,
+): THREE.Vector2[] {
   const n = pts.length;
   if (n < 3) return pts;
 
@@ -178,22 +134,22 @@ function insetPolygon(pts: THREE.Vector2[], dist: number): THREE.Vector2[] {
     const cosH = nx * n1x + ny * n1y;
 
     const isCentralHeartCleft =
+      capCentralCleft &&
       cosH <= 0 &&
       Math.abs(curr.x - cx) < spanX * 0.12 &&
       curr.y > minY + spanY * 0.65;
 
     if (isCentralHeartCleft) {
-      // The heart's cleft is a reflex corner. Offsetting it with one edge
-      // normal creates the visible deep triangular wedge in the inlay. Join
-      // the two offset edges with a short, shallow quadratic arc instead.
+      // Keep the legacy front mesh's sharp V, but cap its depth. Intersecting
+      // the two offset edges creates a long reflex miter and the conspicuous
+      // grey wedge seen at the top of the enamel panel.
       const p1 = new THREE.Vector2(curr.x + n1x * dist, curr.y + n1y * dist);
       const p2 = new THREE.Vector2(curr.x + n2x * dist, curr.y + n2y * dist);
-      const control = new THREE.Vector2(curr.x, curr.y + dist * 0.25);
-      for (const t of [0, 0.25, 0.5, 0.75, 1]) {
-        const a = p1.clone().lerp(control, t);
-        const b = control.clone().lerp(p2, t);
-        out.push(a.lerp(b, t));
-      }
+      const towardCenter = new THREE.Vector2(cx - curr.x, cy - curr.y);
+      if (towardCenter.lengthSq() > 1e-12) towardCenter.normalize();
+      else towardCenter.set(0, -1);
+      const tip = curr.clone().addScaledVector(towardCenter, dist * 0.55);
+      out.push(p1, tip, p2);
     } else if (cosH <= 0) {
       // Concave (reflex) vertex — bisector points outward.
       // Fall back to n1 offset to prevent self-intersection void.
@@ -363,14 +319,18 @@ export default function UrnEnamelInlay({ api, textureUrl, shapeUrl }: Props) {
     }
 
     // Per-vertex normal inset → equal visual border on every side of the shape.
-    // Then remove any self-intersecting loops (e.g. the heart's top cleft
-    // causes the two approaching offset edges to cross, which makes earcut
-    // emit spurious triangles across the whole mesh).
-    // The heart SVG contains a genuine cusp at the cleft. Use intersections
-    // of parallel offset edges there so the border remains constant-width.
-    const inset = shapeUrl?.toLowerCase().endsWith('/heart.svg')
-      ? parallelOffsetPolygon(collapseHeartBottomCusp(sampled), borderPU)
-      : removeLoops(insetPolygon(sampled, borderPU));
+    // The heart cleft is concave. An intersection of its two parallel offset
+    // edges is mathematically valid, but produces an exaggerated triangular
+    // miter in the enamel panel. Cap that miter while preserving the sharp V
+    // used by the legacy M3D front mesh.
+    const isHeart = shapeUrl?.toLowerCase().endsWith('/heart.svg');
+    const inset = removeLoops(
+      insetPolygon(
+        isHeart ? collapseHeartBottomCusp(sampled) : sampled,
+        borderPU,
+        isHeart,
+      ),
+    );
 
     const shape = new THREE.Shape(inset);
     const geom = new THREE.ShapeGeometry(shape);

@@ -364,6 +364,7 @@ export default function ThreeScene() {
   const [sceneReady, setSceneReady] = useState(false);
   const [shouldAnimateFade, setShouldAnimateFade] = useState(true);
   const [targetRotation, setTargetRotation] = useState(0);
+  const [isCompactDevice, setIsCompactDevice] = useState(false);
   const currentRotation = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const hasInitiallyLoaded = useRef(false);
@@ -416,6 +417,16 @@ export default function ThreeScene() {
     currentRotation.current = 0;
     setTargetRotation(0);
   }, [shapeUrl]);
+
+  // A full 2x render target is unnecessarily expensive on small/coarse-pointer
+  // devices, where the difference is not perceptible but fragment work is.
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 767px), (pointer: coarse)');
+    const update = () => setIsCompactDevice(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
 
   // Cleanup WebGL context on unmount
   useEffect(() => {
@@ -512,10 +523,15 @@ export default function ThreeScene() {
             <Canvas
               key="main-canvas"
               shadows
-              dpr={[1, 2]}
+              // The designer is predominantly static. Components explicitly
+              // invalidate while an interaction or transition is in progress.
+              frameloop="demand"
+              dpr={isCompactDevice ? [1, 1.25] : [1, 2]}
               gl={{ 
                 alpha: true,
-                preserveDrawingBuffer: true,
+                // Captures render to a short-lived off-screen target instead of
+                // keeping a costly copy of every interactive frame.
+                preserveDrawingBuffer: false,
                 antialias: true,
                 powerPreference: 'high-performance',
                 failIfMajorPerformanceCaveat: false,

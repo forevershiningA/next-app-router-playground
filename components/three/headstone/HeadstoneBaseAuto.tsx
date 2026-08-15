@@ -193,20 +193,54 @@ function BaseMesh({
     return canvas;
   }, [finish]);
 
-  // 2. Manage Base Texture Settings
+  // The upright renders a private clone of its loaded swatch. Do the same for
+  // the base: mutating the shared `useTexture` cache lets another consumer's
+  // repeat/colour-space settings leak into the base material.
+  const materialTexture = useMemo(() => {
+    const texture = baseTexture.clone();
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.anisotropy = 16;
+    texture.needsUpdate = true;
+    return texture;
+  }, [baseTexture]);
+
+  // BoxGeometry uses different physical dimensions for its cap and side UVs.
+  // Keep their repeat transforms independent so narrow sides do not inherit
+  // the base width's repeat count.
+  const sideMaterialTexture = useMemo(() => materialTexture.clone(), [materialTexture]);
+  const topMaterialTexture = useMemo(() => materialTexture.clone(), [materialTexture]);
+
+  useEffect(() => {
+    return () => {
+      materialTexture.dispose();
+      sideMaterialTexture.dispose();
+      topMaterialTexture.dispose();
+    };
+  }, [materialTexture, sideMaterialTexture, topMaterialTexture]);
+
+  // 2. Manage the base texture's independent repeat settings.
   useLayoutEffect(() => {
-    if (baseTexture) {
-      baseTexture.wrapS = THREE.RepeatWrapping;
-      baseTexture.wrapT = THREE.RepeatWrapping;
+    if (materialTexture) {
       const textureScale = 0.15;
-      baseTexture.repeat.set(
+      materialTexture.repeat.set(
         dimensions.width / textureScale,
         dimensions.height / textureScale
       );
-      baseTexture.anisotropy = 16;
-      baseTexture.needsUpdate = true;
+      sideMaterialTexture.repeat.set(
+        dimensions.depth / textureScale,
+        dimensions.height / textureScale,
+      );
+      topMaterialTexture.repeat.set(
+        dimensions.width / textureScale,
+        dimensions.depth / textureScale,
+      );
+      materialTexture.needsUpdate = true;
+      sideMaterialTexture.needsUpdate = true;
+      topMaterialTexture.needsUpdate = true;
     }
-  }, [baseTexture, dimensions.width, dimensions.height]);
+  }, [materialTexture, sideMaterialTexture, topMaterialTexture, dimensions.width, dimensions.height, dimensions.depth]);
 
   // 3. Create Materials
   const materials = useMemo(() => {
@@ -214,7 +248,7 @@ function BaseMesh({
       const isPolished = stainlessFinish === 'polished';
       return new THREE.MeshPhysicalMaterial({
         color: new THREE.Color(isPolished ? 0xffffff : 0xf1f1ec),
-        map: baseTexture,
+        map: materialTexture,
         roughness: isPolished ? 0.14 : 0.38,
         metalness: isPolished ? 0.82 : 0.68,
         clearcoat: isPolished ? 1.0 : 0.55,
@@ -224,10 +258,13 @@ function BaseMesh({
     }
 
     const polishedMaterial = createPolishedGraniteMaterial({
-      texture: baseTexture,
-      envMapIntensity: 1.1,
-      roughness: 0.18,
-      clearcoatRoughness: 0.08,
+      texture: materialTexture,
+      // The updated scene uses a 0.5 environment intensity (the live scene
+      // used 0.8). Preserve the polished base's former reflected fill so its
+      // vertical face does not render much darker than the upright.
+      envMapIntensity: 2.4,
+      roughness: 0.15,
+      clearcoatRoughness: 0.1,
     });
 
     if (finish === 'rock-pitch' && rockNormalCanvas) {
@@ -241,11 +278,13 @@ function BaseMesh({
         tex.needsUpdate = true;
       });
 
-      // Rock Pitch Material Settings - upgraded for realistic granite sparkle
-      const rockColor = 0x444444; 
+      // Keep the rock-pitch faces on the same granite colour scale as the
+      // polished headstone. The normal map supplies the rough-cut detail;
+      // tinting it #444444 made the identical swatch appear almost black.
+      const rockColor = 0xa6a6a6;
       
       const matShort = createPolishedGraniteMaterial({
-        texture: baseTexture,
+        texture: materialTexture,
         color: rockColor,
         normalMap: texShort,
         normalScale: new THREE.Vector2(2.0, 2.0),
@@ -255,7 +294,7 @@ function BaseMesh({
       });
 
       const matLong = createPolishedGraniteMaterial({
-        texture: baseTexture,
+        texture: materialTexture,
         color: rockColor,
         normalMap: texLong,
         normalScale: new THREE.Vector2(2.0, 2.0),
@@ -274,8 +313,34 @@ function BaseMesh({
       ];
     }
 
-    return polishedMaterial;
-  }, [baseTexture, finish, isStainlessSteel, rockNormalCanvas, stainlessFinish]);
+    // The upright's extruded body receives strong fill on every vertical face,
+    // while the separate base box does not. Add the same swatch as a modest
+    // emissive fill to its vertical faces, preserving granite detail without
+    // washing out the naturally lit top surface.
+    const verticalPolishedMaterial = polishedMaterial.clone();
+    verticalPolishedMaterial.map = sideMaterialTexture;
+    verticalPolishedMaterial.emissive.set(0xffffff);
+    verticalPolishedMaterial.emissiveMap = sideMaterialTexture;
+    verticalPolishedMaterial.emissiveIntensity = 0.85;
+
+    const topPolishedMaterial = polishedMaterial.clone();
+    topPolishedMaterial.map = topMaterialTexture;
+
+    const facePolishedMaterial = polishedMaterial.clone();
+    facePolishedMaterial.emissive.set(0xffffff);
+    facePolishedMaterial.emissiveMap = materialTexture;
+    facePolishedMaterial.emissiveIntensity = 0.85;
+
+    // BoxGeometry groups are Right, Left, Top, Bottom, Front, Back.
+    return [
+      verticalPolishedMaterial,
+      verticalPolishedMaterial,
+      topPolishedMaterial,
+      topPolishedMaterial,
+      facePolishedMaterial,
+      facePolishedMaterial,
+    ];
+  }, [finish, isStainlessSteel, materialTexture, sideMaterialTexture, topMaterialTexture, rockNormalCanvas, stainlessFinish]);
 
   // 4. Update Material Repeats - matching slant headstone quality
   useLayoutEffect(() => {
@@ -456,7 +521,7 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       depth: 1,
     });
 
-    useFrame(() => {
+    useFrame((state) => {
       const b = baseRef.current;
       if (!b) return;
 
@@ -510,8 +575,16 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       }
 
       if (!baseSwapping) {
-        b.position.lerp(targetPos.current, LERP_FACTOR);
-        b.scale.lerp(targetScale.current, LERP_FACTOR);
+        const stillMoving =
+          b.position.distanceToSquared(targetPos.current) > 1e-10 ||
+          b.scale.distanceToSquared(targetScale.current) > 1e-10;
+
+        if (stillMoving) {
+          b.position.lerp(targetPos.current, LERP_FACTOR);
+          b.scale.lerp(targetScale.current, LERP_FACTOR);
+          state.gl.shadowMap.needsUpdate = true;
+          state.invalidate();
+        }
       }
 
       b.visible = true;

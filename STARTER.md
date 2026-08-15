@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-10
+**Last Updated:** 2026-08-15
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -77,6 +77,111 @@
 69. [August 3 Homepage HeroCanvas Runtime, Bronze Plaque Finish Copy, and dh Cleanup](#current-status-2026-08-03--homepage-herocanvas-runtime-bronze-plaque-finish-copy-and-dh-cleanup)
 70. [August 8 Product Samples, Bronze Fastening, Emblems, and Saved State](#current-status-2026-08-08--product-samples-bronze-fastening-emblems-and-saved-state)
 71. [August 10 Base Options, Flower Pots, and Traditional Addition Positioning](#current-status-2026-08-10--base-options-flower-pots-and-traditional-addition-positioning)
+72. [August 14 Designer Canvas Performance and Addition Assets](#current-status-2026-08-14--designer-canvas-performance-and-addition-assets)
+73. [August 15 3D Granite Materials, Selection Outline, and UV Mapping](#current-status-2026-08-15--3d-granite-materials-selection-outline-and-uv-mapping)
+
+---
+
+## Current Status (2026-08-15) - 3D Granite Materials, Selection Outline, and UV Mapping
+
+### Demand-rendered selection outline
+
+Primary file: `components/three/RotatingBoxOutline.tsx`.
+
+The designer canvas uses `frameloop="demand"`. The selection outline is created and updated imperatively, so a Zustand selection change alone did not guarantee a canvas render. The outline now:
+
+- calls R3F `invalidate()` whenever its `visible` prop changes, so it appears immediately after clicking a headstone or base;
+- continues to invalidate only while its `animateOnShow` reveal animation is still running.
+
+Do not remove those invalidations unless the outline is made declarative or the canvas is moved back to an always-running frame loop.
+
+### Polished granite base
+
+Primary file: `components/three/headstone/HeadstoneBaseAuto.tsx`.
+
+- The base must never mutate the shared `useTexture` cache. It uses a private sRGB texture clone plus independent clones for side and top/bottom faces, and disposes them on cleanup.
+- Texture repeat is physical per BoxGeometry face:
+  - front/back: `width × height`;
+  - left/right: `depth × height`;
+  - top/bottom: `width × depth`.
+  This prevents narrow base sides from receiving the much larger width-based repeat count.
+- The separate base box receives far less fill on vertical faces than the upright extrusion in the current scene. Its vertical granite materials therefore use the granite map as a modest emissive fill (`0.85`) while retaining `MeshPhysicalMaterial` reflections. The top/bottom remain physically lit without this fill.
+- The polished material is calibrated for the current lower-intensity scene environment (`envMapIntensity: 2.4`, `roughness: 0.15`, `clearcoatRoughness: 0.1`).
+- Rock-pitch remains a separate path. Its rough detail comes from its normal maps; do not use a dark `#444444` granite color multiplier if the intended result is to match the polished granite colour family.
+
+### Upright back texture mapping
+
+Primary file: `components/SvgHeadstone.tsx`.
+
+The upright geometry has three material groups:
+
+| Material index | Surface | Texture repeat basis |
+| --- | --- | --- |
+| 0 | Front cap | width × height |
+| 1 | Continuous narrow sides | perimeter × depth |
+| 2 | Back cap | width × height |
+
+The back previously shared the side texture transform, applying the full perimeter repeat across the back cap and creating obvious vertical tiling. It now has its own cloned map and `width × height` repeat. Every material branch (granite, full-colour, stainless, and urn) returns three materials to support this group layout.
+
+### Verification and follow-up
+
+Focused ESLint checks completed without errors:
+
+```bash
+pnpm exec eslint components/three/RotatingBoxOutline.tsx
+pnpm exec eslint components/three/headstone/HeadstoneBaseAuto.tsx
+pnpm exec eslint components/SvgHeadstone.tsx
+git diff --check
+```
+
+Existing warnings in these large legacy components remain. User-provided `screen.png` is the visual regression reference; after changing granite material or UV code, verify front, back, and both base sides manually in the live designer.
+
+---
+
+## Current Status (2026-08-14) - Designer Canvas Performance and Addition Assets
+
+### Canvas runtime
+
+The designer canvas is now demand-rendered and only invalidates while an interaction or short transition is still active. This avoids an idle 60 FPS render loop.
+
+| File | Current responsibility |
+| --- | --- |
+| `components/ThreeScene.tsx` | Uses R3F `frameloop="demand"`, caps DPR more tightly on compact/coarse-pointer devices, and disables `preserveDrawingBuffer`. |
+| `components/three/Scene.tsx` | Invalidates while auto-rotation converges, avoids automatic static-shadow refreshes, and applies the compact-device scene reductions. |
+| `components/three/headstone/HeadstoneBaseAuto.tsx`, `LedgerSlab.tsx`, `KerbsetBorder.tsx` | End their transition frame loops once the target transform is reached. |
+| `components/three/SunRays.tsx` | Static shader time; it no longer keeps the canvas rendering. |
+| `components/three/AtmosphericSky.tsx` | Compact mode renders only reduced-detail clouds. |
+
+Compact devices use lower environment/contact-shadow resolution, omit sun rays and the non-shadow rim light, use lower-resolution outback terrain textures, and cap texture anisotropy more conservatively. The compact terrain assets are:
+
+- `public/textures/three/outback/red_sand_diff_1k.webp`
+- `public/textures/three/outback/red_sand_nor_gl_1k.webp`
+
+### Captures and texture reuse
+
+- `components/DesignerNav.tsx` captures saved-design images through a temporary render target instead of relying on `preserveDrawingBuffer`; the target is disposed after use.
+- `scripts/batch-screenshot.js` explicitly renders the exposed R3F scene before reading pixels, so it remains compatible with the non-preserved drawing buffer.
+- `lib/stainless-texture.ts` caches the two stainless finish texture sets for the session. Callers must not dispose these shared textures individually.
+- `components/three/MotifModel.tsx` rasterizes motif SVG textures at 1024px desktop / 512px compact, with capped anisotropy.
+
+### Addition GLB asset rule
+
+Addition models are rendered with the external `/additions/<id>/colorMap.webp`; their embedded GLB textures were redundant. `scripts/strip-addition-embedded-textures.mjs` removes those embedded image payloads while preserving the original scene-node hierarchy and material-independent geometry.
+
+- The 77 additions total **66.74 MB → 10.80 MB** after stripping redundant embedded textures (about **84% smaller**).
+- Do **not** run the additions through glTF Transform `meshopt` in the current implementation. Meshopt rewrites some source-node hierarchies, while `components/three/AdditionModel.tsx` depends on the original hierarchy during its per-mesh centering and placement calculations. This caused additions to appear in the sky / at the wrong scale.
+- Keep the normal `useGLTF(glbPath)` loader call in `AdditionModel.tsx`; do not enable Drei Meshopt decoding unless the placement code is redesigned and all source models are validated.
+
+### Verification
+
+Successful static checks after these changes:
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+The user manually tested addition placement. Do not use Playwright for this canvas work unless they explicitly request it.
 
 ---
 
@@ -13495,4 +13600,37 @@ Screenshots captured during refinement:
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-10*
+## Heart Urn Legacy M3D Reference and Inlay Geometry (2026-08-12)
+
+### Legacy model findings
+
+- Reference file: `m3d/heart.m3d`.
+- The file is a proprietary Haxe/Away3D model, not a normal ZIP archive. It has the `WPF0` header, a zlib-compressed payload beginning at byte `26`, an XML metadata block, binary mesh data, and embedded generated Haxe JavaScript.
+- The XML metadata reports the legacy model dimensions as `294 × 307 × 81` (width × height × depth).
+- The binary model contains separate meshes named `border` and `front`. The embedded Haxe executor explicitly stores them as `borderMesh` and `frontMesh`.
+- The `front` mesh is the authoritative legacy reference for the white/enamel face. The current `public/shapes/urns/heart.svg` is only the silhouette source and must not be treated as an exact replacement for the legacy front mesh.
+- The proprietary mesh serialization has been identified but is not yet converted into a reusable SVG/JSON asset. Do not delete `m3d/heart.m3d`; it is the reference needed for a future exact front-mesh extractor.
+
+### Current Three.js implementation
+
+- `components/three/headstone/UrnEnamelInlay.tsx` renders the urn front inlay from `api.outlinePoints`.
+- Heart uses a fixed-distance parallel edge offset rather than whole-shape scaling. Scaling caused a visibly different border width at the top, left, and right sides.
+- The Heart SVG's tiny three-point flat at the bottom cusp is collapsed to one point before offsetting. This prevents the extra `ShapeGeometry`/earcut triangle at the bottom tip.
+- The top cleft must remain a sharp, straight V-style connection. Do not add a rounded arc there: the legacy `front` reference joins the two offset branches at one point.
+- Other urn shapes continue to use the existing `insetPolygon` + `removeLoops` path. Heart-specific handling is isolated behind the `/heart.svg` check.
+- `components/three/headstone/ShapeSwapper.tsx` passes `shapeUrl` into `UrnEnamelInlay` so the Heart-specific geometry path can be selected safely.
+
+### Verification
+
+After the latest Heart geometry changes:
+
+```bash
+& .\node_modules\.bin\tsc.cmd --noEmit
+git diff --check
+```
+
+Both commands pass. Browser rendering still needs to be checked after the next local/deployed preview; `screen.png` remains a user-provided visual reference and must not be reverted.
+
+---
+
+*End of STARTER.md - Last updated: 2026-08-15*

@@ -48,9 +48,14 @@ const SkyMaterial = {
 type AtmosphericSkyProps = {
   showDome?: boolean;
   cloudColor?: string;
+  compact?: boolean;
 };
 
-export default function AtmosphericSky({ showDome = false, cloudColor = '#ffffff' }: AtmosphericSkyProps) {
+export default function AtmosphericSky({
+  showDome = false,
+  cloudColor = '#ffffff',
+  compact = false,
+}: AtmosphericSkyProps) {
   return (
     <group>
       {/* The Sky Dome */}
@@ -79,7 +84,7 @@ export default function AtmosphericSky({ showDome = false, cloudColor = '#ffffff
         <Cloud 
           seed={10} 
           bounds={[60, 8, 60]} 
-          segments={18} 
+          segments={compact ? 8 : 18}
           volume={11} 
           color={cloudColor}
           opacity={0.92} 
@@ -89,14 +94,14 @@ export default function AtmosphericSky({ showDome = false, cloudColor = '#ffffff
         <Cloud 
           seed={24} 
           bounds={[55, 7, 55]} 
-          segments={18} 
+          segments={compact ? 8 : 18}
           volume={10} 
           color={cloudColor} 
           opacity={0.72} 
           position={[10, 12.5, -1]} 
           speed={0.08} 
         />
-        <Cloud 
+        {!compact && <Cloud
           seed={31} 
           bounds={[42, 5, 42]} 
           segments={16} 
@@ -105,8 +110,8 @@ export default function AtmosphericSky({ showDome = false, cloudColor = '#ffffff
           opacity={0.62} 
           position={[-12, 11, 6]} 
           speed={0.09} 
-        />
-        <Cloud 
+        />}
+        {!compact && <Cloud
           seed={44} 
           bounds={[48, 6, 48]} 
           segments={16} 
@@ -115,8 +120,8 @@ export default function AtmosphericSky({ showDome = false, cloudColor = '#ffffff
           opacity={0.58} 
           position={[4, 10.5, 8]} 
           speed={0.11} 
-        />
-        <Cloud 
+        />}
+        {!compact && <Cloud
           seed={57} 
           bounds={[35, 5, 35]} 
           segments={14} 
@@ -125,7 +130,7 @@ export default function AtmosphericSky({ showDome = false, cloudColor = '#ffffff
           opacity={0.5} 
           position={[-6, 13.5, -5]} 
           speed={0.06} 
-        />
+        />}
       </Clouds>
     </group>
   );

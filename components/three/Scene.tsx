@@ -113,6 +113,10 @@ const GradientBackground = ({ top, bottom }: { top: string; bottom: string }) =>
 
 function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) {
   const gl = useThree((state) => state.gl);
+  const viewportWidth = useThree((state) => state.size.width);
+  const useCompactTextures = viewportWidth < 1024;
+  const maxAnisotropy = viewportWidth < 1024 ? 4 : 8;
+  const contactShadowResolution = viewportWidth < 1024 ? 128 : 256;
   
   // Load grass textures from local public folder
   // REMOVED: roughnessMap (was causing "wet/blue" reflective look)
@@ -124,14 +128,24 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
   });
   */
 
-  const props = useTexture({
-    map: '/textures/three/grass/grass_color.webp',
-    normalMap: '/textures/three/grass/grass_normal.webp',
-    aoMap: '/textures/three/grass/grass_ao.webp',
-  });
+  const texturePaths = useMemo(
+    () => ({
+      map: useCompactTextures
+        ? '/textures/three/grass/grass_color_optimized.webp'
+        : '/textures/three/grass/grass_color.webp',
+      normalMap: useCompactTextures
+        ? '/textures/three/grass/grass_normal_optimized.webp'
+        : '/textures/three/grass/grass_normal.webp',
+      aoMap: useCompactTextures
+        ? '/textures/three/grass/grass_ao_optimized.webp'
+        : '/textures/three/grass/grass_ao.webp',
+    }),
+    [useCompactTextures],
+  );
+  const props = useTexture(texturePaths);
 
   useEffect(() => {
-    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 16);
+    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), maxAnisotropy);
 
     [props.map, props.normalMap, props.aoMap].forEach((tex) => {
       if (tex) {
@@ -149,7 +163,7 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
     if (props.map) props.map.colorSpace = THREE.SRGBColorSpace;
     if (props.normalMap) props.normalMap.colorSpace = THREE.NoColorSpace;
     if (props.aoMap) props.aoMap.colorSpace = THREE.NoColorSpace;
-  }, [props, gl, repeat]);
+  }, [props, gl, maxAnisotropy, repeat]);
 
   return (
     <group position={[0, -0.01, 0]}>
@@ -177,7 +191,7 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
         opacity={0.5}
         far={1.5}
         color="#001100"
-        resolution={256}
+        resolution={contactShadowResolution}
         frames={1}
       />
     </group>
@@ -205,16 +219,28 @@ function SimpleGroundFloor({ color }: { color: string }) {
 // Red sand outback ground — CC0 texture from Poly Haven (red_sand)
 function OutbackFloor({ color }: { color: string }) {
   const gl = useThree((state) => state.gl);
+  const viewportWidth = useThree((state) => state.size.width);
+  const useCompactTextures = viewportWidth < 1024;
+  const maxAnisotropy = viewportWidth < 1024 ? 4 : 8;
+  const contactShadowResolution = viewportWidth < 1024 ? 128 : 256;
 
-  const props = useTexture({
-    map: '/textures/three/outback/red_sand_diff_2k.jpg',
-    normalMap: '/textures/three/outback/red_sand_nor_gl_2k.jpg',
-  });
+  const texturePaths = useMemo(
+    () => ({
+      map: useCompactTextures
+        ? '/textures/three/outback/red_sand_diff_1k.webp'
+        : '/textures/three/outback/red_sand_diff_2k.jpg',
+      normalMap: useCompactTextures
+        ? '/textures/three/outback/red_sand_nor_gl_1k.webp'
+        : '/textures/three/outback/red_sand_nor_gl_2k.jpg',
+    }),
+    [useCompactTextures],
+  );
+  const props = useTexture(texturePaths);
 
   const REPEAT_SCALE = 12; // bigger tiles = less visible tiling at close range
 
   useEffect(() => {
-    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), 16);
+    const anisotropy = Math.min(gl.capabilities.getMaxAnisotropy(), maxAnisotropy);
     [props.map, props.normalMap].forEach((tex) => {
       if (tex) {
         tex.wrapS = tex.wrapT = THREE.MirroredRepeatWrapping;
@@ -228,7 +254,7 @@ function OutbackFloor({ color }: { color: string }) {
     });
     if (props.map) props.map.colorSpace = THREE.SRGBColorSpace;
     if (props.normalMap) props.normalMap.colorSpace = THREE.NoColorSpace;
-  }, [props, gl]);
+  }, [props, gl, maxAnisotropy]);
 
   return (
     <group position={[0, -0.01, 0]}>
@@ -253,7 +279,7 @@ function OutbackFloor({ color }: { color: string }) {
         opacity={0.5}
         far={1.5}
         color="#1a0800"
-        resolution={256}
+        resolution={contactShadowResolution}
         frames={1}
       />
     </group>
@@ -349,6 +375,23 @@ export default function Scene({
   const sceneryVariant = useHeadstoneStore((s) => s.sceneryVariant);
   const cfg = SCENERY[sceneryVariant];
 
+  // Camera movement changes the view, not the light or model. Reusing the
+  // spotlight shadow map during orbiting avoids an expensive extra scene pass.
+  // Store changes and active geometry transitions explicitly mark it dirty.
+  useEffect(() => {
+    gl.shadowMap.autoUpdate = false;
+    gl.shadowMap.needsUpdate = true;
+    const unsubscribe = useHeadstoneStore.subscribe(() => {
+      gl.shadowMap.needsUpdate = true;
+    });
+
+    return () => {
+      unsubscribe();
+      gl.shadowMap.autoUpdate = true;
+      gl.shadowMap.needsUpdate = true;
+    };
+  }, [gl]);
+
   // Any mode that suppresses the outdoor scene (screenshot capture or user toggle)
   const noScenery = screenshotMode || hideScenery;
 
@@ -428,7 +471,7 @@ export default function Scene({
 
   // Smooth rotation animation — for full monument, rotate around the orbit target's Z pivot
   // so the monument spins around its visual centre rather than world origin.
-  useFrame(() => {
+  useFrame((state) => {
     if (groupRef.current && currentRotation) {
       const diff = targetRotation - currentRotation.current;
       
@@ -446,6 +489,11 @@ export default function Scene({
           groupRef.current.position.x = -pivotZ * Math.sin(angle);
           groupRef.current.position.z = pivotZ * (1 - Math.cos(angle));
         }
+
+        // Continue a demand-rendered frame loop only while the rotation is
+        // still converging. Once it settles, the canvas becomes idle again.
+        state.gl.shadowMap.needsUpdate = true;
+        state.invalidate();
       }
     }
   });
@@ -471,7 +519,13 @@ export default function Scene({
   };
 
   // SunRays look natural for day scenery; outback daylight is direct — no shafts needed
-  const showSunRays = !is2DMode && !noScenery && !loading && !baseSwapping && sceneryVariant !== 'outback';
+  const showSunRays =
+    !isMobileViewport &&
+    !is2DMode &&
+    !noScenery &&
+    !loading &&
+    !baseSwapping &&
+    sceneryVariant !== 'outback';
 
   return (
     <>
@@ -535,7 +589,11 @@ export default function Scene({
         {/* Outback has a clear open sky — no cartoon clouds */}
         {sceneryVariant !== 'outback' && (
           <Suspense fallback={null}>
-            <AtmosphericSky showDome={false} cloudColor={cfg.cloudColor} />
+            <AtmosphericSky
+              showDome={false}
+              cloudColor={cfg.cloudColor}
+              compact={isMobileViewport}
+            />
           </Suspense>
         )}
         <GradientBackground top={cfg.gradientTop} bottom={cfg.gradientBottom} />
@@ -552,12 +610,24 @@ export default function Scene({
         position={[-10, 12, 12]}
         castShadow
         shadow-bias={-0.0001}
-        shadow-mapSize={[1024, 1024]}
+        shadow-mapSize={isMobileViewport ? [512, 512] : [1024, 1024]}
       />
       {/* Rim light (Back Right) - Separates stone from background */}
-      <spotLight color={cfg.rimColor} intensity={cfg.rimIntensity} position={[5, 5, -5]} distance={30} />
+      {!isMobileViewport && (
+        <spotLight
+          color={cfg.rimColor}
+          intensity={cfg.rimIntensity}
+          position={[5, 5, -5]}
+          distance={30}
+        />
+      )}
 
-      <Environment files="/hdri/spring.hdr" background={false} resolution={512} environmentIntensity={0.5} />
+      <Environment
+        files="/hdri/spring.hdr"
+        background={false}
+        resolution={isMobileViewport ? 128 : 512}
+        environmentIntensity={0.5}
+      />
 
       <OrbitControls
         makeDefault

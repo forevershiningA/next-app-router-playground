@@ -20,7 +20,6 @@ type Props = {
   layer?: number;
 };
 
-const MAX_TEXTURE_DIMENSION = 2048;
 const STAINLESS_MOTIF_PRODUCT_IDS = new Set(['1', '23']);
 const STAINLESS_MOTIF_RAISED_LAYERS = [0.35, 0.7, 1] as const;
 const SILHOUETTE_BACKGROUND_LUMINANCE = 245;
@@ -106,7 +105,11 @@ export default function MotifModel({
   surface = 'headstone',
   layer = 0,
 }: Props) {
-  const { gl, camera, controls } = useThree();
+  const { gl, camera, controls, size } = useThree();
+  // Motifs occupy a relatively small area of the design. 2k colour and alpha
+  // canvases doubled their memory and rasterization cost without visible gain.
+  const textureDimension = size.width < 1024 ? 512 : 1024;
+  const maxTextureAnisotropy = size.width < 1024 ? 4 : 8;
   const router = useRouter();
   const pathname = usePathname();
   
@@ -161,13 +164,6 @@ export default function MotifModel({
   );
 
   React.useEffect(() => () => planeGeometry.dispose(), [planeGeometry]);
-  React.useEffect(() => {
-    return () => {
-      stainlessMaps?.colorMap.dispose();
-      stainlessMaps?.roughnessMap.dispose();
-      stainlessMaps?.normalMap.dispose();
-    };
-  }, [stainlessMaps]);
 
   const raycaster = React.useMemo(() => new THREE.Raycaster(), []);
   const mouse = React.useMemo(() => new THREE.Vector2(), []);
@@ -200,11 +196,11 @@ export default function MotifModel({
         if (!Number.isFinite(width) || width <= 0) width = 1024;
         if (!Number.isFinite(height) || height <= 0) height = 1024;
         const aspect = width / height || 1;
-        let targetHeight = MAX_TEXTURE_DIMENSION;
+        let targetHeight = textureDimension;
         let targetWidth = Math.round(targetHeight * aspect);
-        if (targetWidth > MAX_TEXTURE_DIMENSION) {
-          const scale = MAX_TEXTURE_DIMENSION / targetWidth;
-          targetWidth = MAX_TEXTURE_DIMENSION;
+        if (targetWidth > textureDimension) {
+          const scale = textureDimension / targetWidth;
+          targetWidth = textureDimension;
           targetHeight = Math.round(targetHeight * scale);
         }
         svgElement.setAttribute('width', `${targetWidth}`);
@@ -261,8 +257,12 @@ export default function MotifModel({
           activeTexture.flipY = false;
           activeAlphaTexture.flipY = false;
           if (typeof gl.capabilities.getMaxAnisotropy === 'function') {
-            activeTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
-            activeAlphaTexture.anisotropy = gl.capabilities.getMaxAnisotropy();
+            const anisotropy = Math.min(
+              gl.capabilities.getMaxAnisotropy(),
+              maxTextureAnisotropy,
+            );
+            activeTexture.anisotropy = anisotropy;
+            activeAlphaTexture.anisotropy = anisotropy;
           }
           activeTexture.generateMipmaps = true;
           activeAlphaTexture.generateMipmaps = true;
@@ -303,7 +303,13 @@ export default function MotifModel({
         activeAlphaTexture.dispose();
       }
     };
-  }, [svgPath, gl, isStainlessSteelMotif]);
+  }, [
+    svgPath,
+    gl,
+    isStainlessSteelMotif,
+    maxTextureAnisotropy,
+    textureDimension,
+  ]);
 
 
   const placeOnVerticalSurface = React.useCallback(

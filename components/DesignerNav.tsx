@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import * as THREE from 'three';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -4681,19 +4682,26 @@ function captureBestCanvasScreenshot(): string | null {
   const win = window as unknown as Record<string, unknown>;
   const gl = win.__r3fGL as
     | {
-        render: (s: unknown, c: unknown) => void;
+        render: (s: THREE.Scene, c: THREE.Camera) => void;
+        getRenderTarget: () => THREE.WebGLRenderTarget | null;
+        readRenderTargetPixels: (
+          target: THREE.WebGLRenderTarget,
+          x: number,
+          y: number,
+          width: number,
+          height: number,
+          buffer: Uint8Array,
+        ) => void;
+        setRenderTarget: (target: THREE.WebGLRenderTarget | null) => void;
         domElement: HTMLCanvasElement;
       }
     | undefined;
-  const scene = win.__r3fScene;
-  const camera = win.__r3fCamera;
+  const scene = win.__r3fScene as THREE.Scene | undefined;
+  const camera = win.__r3fCamera as THREE.Camera | undefined;
 
   if (gl && scene && camera) {
     try {
-      // Force render to ensure the drawing buffer has the latest frame
-      gl.render(scene, camera);
-      // encodeCanvasForUpload composites onto a solid background (handles alpha)
-      return encodeCanvasForUpload(gl.domElement);
+      return captureRendererFrame(gl, scene, camera);
     } catch (err) {
       console.warn('R3F screenshot failed, falling back to DOM canvas:', err);
     }
@@ -4728,6 +4736,67 @@ function captureBestCanvasScreenshot(): string | null {
   } catch {
     return null;
   }
+}
+
+function captureRendererFrame(
+  gl: {
+    render: (scene: THREE.Scene, camera: THREE.Camera) => void;
+    getRenderTarget: () => THREE.WebGLRenderTarget | null;
+    readRenderTargetPixels: (
+      target: THREE.WebGLRenderTarget,
+      x: number,
+      y: number,
+      width: number,
+      height: number,
+      buffer: Uint8Array,
+    ) => void;
+    setRenderTarget: (target: THREE.WebGLRenderTarget | null) => void;
+    domElement: HTMLCanvasElement;
+  },
+  scene: THREE.Scene,
+  camera: THREE.Camera,
+): string {
+  const width = gl.domElement.width;
+  const height = gl.domElement.height;
+  if (!width || !height) {
+    throw new Error('Canvas has no drawable size');
+  }
+
+  const target = new THREE.WebGLRenderTarget(width, height, {
+    format: THREE.RGBAFormat,
+    type: THREE.UnsignedByteType,
+    depthBuffer: true,
+    stencilBuffer: false,
+  });
+  target.texture.colorSpace = THREE.SRGBColorSpace;
+  const pixels = new Uint8Array(width * height * 4);
+  const previousTarget = gl.getRenderTarget();
+
+  try {
+    gl.setRenderTarget(target);
+    gl.render(scene, camera);
+    gl.readRenderTargetPixels(target, 0, 0, width, height, pixels);
+  } finally {
+    gl.setRenderTarget(previousTarget);
+    target.dispose();
+  }
+
+  const source = document.createElement('canvas');
+  source.width = width;
+  source.height = height;
+  const context = source.getContext('2d');
+  if (!context) {
+    throw new Error('Unable to create screenshot canvas');
+  }
+
+  const image = context.createImageData(width, height);
+  const rowSize = width * 4;
+  for (let y = 0; y < height; y += 1) {
+    const sourceOffset = (height - y - 1) * rowSize;
+    image.data.set(pixels.subarray(sourceOffset, sourceOffset + rowSize), y * rowSize);
+  }
+  context.putImageData(image, 0, 0);
+  return encodeCanvasForUpload(source);
 }
 
 function encodeCanvasForUpload(source: HTMLCanvasElement): string {

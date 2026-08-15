@@ -77,18 +77,21 @@ function KerbMesh({
 
   const targetGroupY = useRef(centerY);
   const targetGroupZ = useRef(kerbCenterZ);
+  const targetPosition = useRef(new THREE.Vector3(0, centerY, kerbCenterZ));
 
-  useFrame(() => {
+  useFrame((state) => {
     if (!groupRef.current) return;
     const newKD = kerbDepthMm / 1000;
     const newKH = kerbHeightMm / 1000;
     const newStandBackZ = -(uprightThickness / 1000) / 2 + baseThickness / 1000;
     targetGroupY.current = newKH / 2 + EPSILON;
     targetGroupZ.current = newStandBackZ + newKD / 2;
-    groupRef.current.position.lerp(
-      new THREE.Vector3(0, targetGroupY.current, targetGroupZ.current),
-      LERP_FACTOR,
-    );
+    targetPosition.current.set(0, targetGroupY.current, targetGroupZ.current);
+    if (groupRef.current.position.distanceToSquared(targetPosition.current) > 1e-10) {
+      groupRef.current.position.lerp(targetPosition.current, LERP_FACTOR);
+      state.gl.shadowMap.needsUpdate = true;
+      state.invalidate();
+    }
   });
 
   return (

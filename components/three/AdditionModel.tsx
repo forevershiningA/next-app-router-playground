@@ -264,8 +264,8 @@ function AdditionModelInner({
     const tempSize = new THREE.Vector3();
     tempBox.getSize(tempSize);
 
-    // Center the model at origin by moving each mesh individually
-    // This preserves the relative positions of disconnected parts
+    // Center the model at origin by moving each mesh individually.
+    // This preserves the relative positions of disconnected parts.
     const tempCenter = new THREE.Vector3();
     tempBox.getCenter(tempCenter);
     const translateY =
