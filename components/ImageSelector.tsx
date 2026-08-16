@@ -52,6 +52,15 @@ function normalizeSignedRotation(value: number) {
   return normalized;
 }
 
+function snapImageRotation(value: number) {
+  const normalized = normalizeSignedRotation(value);
+  const snapTargets = [-90, 0, 90, 180];
+  const nearest = snapTargets.reduce((best, target) =>
+    Math.abs(target - normalized) < Math.abs(best - normalized) ? target : best,
+  );
+  return Math.abs(nearest - normalized) <= 4 ? nearest : normalized;
+}
+
 export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   // Store hooks
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
@@ -59,6 +68,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
   const activePanel = useHeadstoneStore((s) => s.activePanel);
   const updateImagePosition = useHeadstoneStore((s) => s.updateImagePosition);
+  const updateImageTarget = useHeadstoneStore((s) => s.updateImageTarget);
   const updateImageSize = useHeadstoneStore((s) => s.updateImageSize);
   const updateImageSizeVariant = useHeadstoneStore(
     (s) => s.updateImageSizeVariant,
@@ -113,6 +123,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [feedbackTone, setFeedbackTone] = useState<'error' | 'info'>('error');
   const [updatingImageId, setUpdatingImageId] = useState<string | null>(null);
+  const [nudgeStepMm, setNudgeStepMm] = useState<1 | 5 | 10>(5);
 
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -148,8 +159,6 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)] [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)]';
   const rangeBoundsClass =
     'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
-  const secondaryActionClass =
-    'cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15 day:bg-white day:text-[#8a6a12]';
   const cropSectionClass =
     'rounded-lg border border-white/10 bg-[#171717] p-3 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
   const cropAdjustButtonClass =
@@ -759,6 +768,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     !(showCropSection && updatingImageId)
   ) {
     const imageRotationDeg = selectedImage.rotationZ || 0;
+    const imagePositionStep =
+      selectedImage.coordinateSpace === 'mm-center'
+        ? nudgeStepMm
+        : nudgeStepMm / 1000;
+    const updateSelectedImagePosition = (xPos: number, yPos: number) =>
+      updateImageTarget(
+        selectedImageId,
+        selectedImage.target ?? 'headstone',
+        xPos,
+        yPos,
+        selectedImage.coordinateSpace,
+      );
 
     // Get size configuration for this image type
     const sizeOptions = getImageSizeOptions(selectedImage.typeId);
@@ -1146,15 +1167,57 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             )}
           </div>
 
+          <div className={sectionCardClass}>
+            <label className={labelClass}>Position</label>
+            <button
+              type="button"
+              onClick={() => updateSelectedImagePosition(0, selectedImage.yPos ?? 0)}
+              className="mt-2 mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
+            >
+              <span aria-hidden="true">↔</span>
+              Center horizontally
+            </button>
+            <div className="grid grid-cols-3 place-items-center gap-1">
+              <span />
+              <button type="button" aria-label="Move image up" onClick={() => updateSelectedImagePosition(selectedImage.xPos ?? 0, (selectedImage.yPos ?? 0) + imagePositionStep)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m18 15-6-6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <span />
+              <button type="button" aria-label="Move image left" onClick={() => updateSelectedImagePosition((selectedImage.xPos ?? 0) - imagePositionStep, selectedImage.yPos ?? 0)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <button type="button" onClick={() => setNudgeStepMm((step) => step === 1 ? 5 : step === 5 ? 10 : 1)} className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15">{nudgeStepMm} mm</button>
+              <button type="button" aria-label="Move image right" onClick={() => updateSelectedImagePosition((selectedImage.xPos ?? 0) + imagePositionStep, selectedImage.yPos ?? 0)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <span />
+              <button type="button" aria-label="Move image down" onClick={() => updateSelectedImagePosition(selectedImage.xPos ?? 0, (selectedImage.yPos ?? 0) - imagePositionStep)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <span />
+            </div>
+          </div>
+
           {/* Rotation Slider */}
           <div className={sectionCardClass}>
             <div className="flex items-center justify-between gap-2">
-              <label className={labelClass}>Rotation</label>
+              <div className="flex items-center gap-2">
+                <label className={labelClass}>Rotation</label>
+                {imageRotationDeg !== 0 && (
+                  <button
+                    type="button"
+                    onClick={() => updateImageRotation(selectedImageId, 0)}
+                    className="rounded border border-[#D7B356]/60 px-2 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15"
+                  >
+                    Reset 0°
+                  </button>
+                )}
+              </div>
               <div className="flex items-center justify-end gap-2">
                 <button
                   type="button"
                   onClick={() => {
-                    const newVal = Math.max(-180, imageRotationDeg - 1);
+                    const newVal = snapImageRotation(Math.max(-180, imageRotationDeg - 1));
                     updateImageRotation(selectedImageId, newVal);
                   }}
                   className={controlButtonClass}
@@ -1183,7 +1246,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   onChange={(e) => {
                     updateImageRotation(
                       selectedImageId,
-                      Number(e.target.value),
+                      snapImageRotation(Number(e.target.value)),
                     );
                   }}
                   onBlur={(e) => {
@@ -1199,7 +1262,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    const newVal = Math.min(180, imageRotationDeg + 1);
+                    const newVal = snapImageRotation(Math.min(180, imageRotationDeg + 1));
                     updateImageRotation(selectedImageId, newVal);
                   }}
                   className={controlButtonClass}
@@ -1232,7 +1295,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 step={1}
                 value={imageRotationDeg}
                 onChange={(e) => {
-                  updateImageRotation(selectedImageId, Number(e.target.value));
+                  updateImageRotation(selectedImageId, snapImageRotation(Number(e.target.value)));
                 }}
                 className={rangeInputClass}
               />
@@ -1247,7 +1310,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         <div className="day:border-gray-200 grid grid-cols-3 gap-2 border-t border-white/10 pt-3">
           <button
             type="button"
-            className="cursor-pointer rounded-lg border border-emerald-400/20 bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
+            className="cursor-pointer rounded-lg border border-[#D7B356]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
             onClick={() => {
               setUpdatingImageId(selectedImageId);
               updateFileInputRef.current?.click();
@@ -1257,7 +1320,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           </button>
           <button
             type="button"
-            className={secondaryActionClass}
+            className="day:bg-white day:text-[#8a6a12] cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
             onClick={() => duplicateImage(selectedImageId)}
           >
             Duplicate

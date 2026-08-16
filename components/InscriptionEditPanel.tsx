@@ -58,6 +58,15 @@ export default function InscriptionEditPanel() {
   const [pendingTextAlign, setPendingTextAlign] = React.useState<
     'left' | 'center' | 'right'
   >('center');
+  const [isEditingText, setIsEditingText] = React.useState(false);
+  const [nudgeStepMm, setNudgeStepMm] = React.useState<1 | 5 | 10>(5);
+  const textInputRef = React.useRef<HTMLInputElement | HTMLTextAreaElement>(
+    null,
+  );
+  const finishTextEditing = () => {
+    textInputRef.current?.blur();
+    setIsEditingText(false);
+  };
 
   const currentAlign: 'left' | 'center' | 'right' =
     active?.textAlign ?? pendingTextAlign;
@@ -90,7 +99,7 @@ export default function InscriptionEditPanel() {
   const labelClass =
     'mb-2 block text-sm font-semibold text-slate-100 day:text-gray-800';
   const fieldClass =
-    'w-full rounded-lg border border-white/10 bg-white/[0.08] px-3 py-2 text-sm font-semibold text-white outline-none transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 day:border-gray-300 day:bg-gray-100 day:text-gray-900 day:placeholder:text-gray-400';
+    'w-full rounded-lg border border-white/10 bg-white/[0.08] px-3 py-2 text-sm font-medium text-white outline-none transition-colors focus:border-[#D7B356] focus:ring-2 focus:ring-[#D7B356]/30 day:border-gray-300 day:bg-gray-100 day:text-gray-900 day:placeholder:text-gray-400';
   const controlButtonClass =
     'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
   const numberInputBaseClass =
@@ -99,22 +108,17 @@ export default function InscriptionEditPanel() {
     'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)] [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)]';
   const rangeBoundsClass =
     'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
-  const optionTabClass = (isActive: boolean) =>
-    `flex-1 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
-      isActive
-        ? 'border-[#D7B356]/70 bg-[#D7B356]/12 text-[#f3d48f]'
-        : 'border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white day:border-gray-300 day:text-gray-600 day:hover:bg-white'
-    }`;
-
   const AlignControls = (
-    <div className={sectionCardClass}>
-      <span className={labelClass}>Align</span>
-      <div className="flex gap-2">
+    <div className="flex items-center gap-1 rounded-md border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+      <span className="px-1.5 text-xs font-semibold text-white/60 day:text-gray-600">
+        Align
+      </span>
+      <div className="flex gap-1">
         {(
           [
-            { value: 'left', label: 'Left', glyph: '<' },
-            { value: 'center', label: 'Center', glyph: '=' },
-            { value: 'right', label: 'Right', glyph: '>' },
+            { value: 'left', label: 'Left' },
+            { value: 'center', label: 'Center' },
+            { value: 'right', label: 'Right' },
           ] as const
         ).map((opt) => {
           const isActive = currentAlign === opt.value;
@@ -123,9 +127,12 @@ export default function InscriptionEditPanel() {
               key={opt.value}
               type="button"
               onClick={() => setAlign(opt.value)}
-              className={optionTabClass(isActive)}
+              className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
+                isActive
+                  ? 'bg-[#D7B356] text-slate-900'
+                  : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+              }`}
             >
-              <span className="mr-1">{opt.glyph}</span>
               {opt.label}
             </button>
           );
@@ -246,7 +253,7 @@ export default function InscriptionEditPanel() {
           }`}
           onClick={() => setInputMode('single')}
         >
-          Single
+          Single line
         </button>
         <button
           type="button"
@@ -257,15 +264,22 @@ export default function InscriptionEditPanel() {
           }`}
           onClick={() => setInputMode('multi')}
         >
-          Multiple
+          Multiple lines
         </button>
       </div>
 
       {inputMode === 'single' ? (
         <div className={sectionCardClass}>
-          <label htmlFor="inscriptionTextInput" className={labelClass}>
-            Inscription Text
-          </label>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <label htmlFor="inscriptionTextInput" className="text-sm font-semibold text-slate-100 day:text-gray-800">
+              Inscription Text
+            </label>
+            {isEditingText && (
+              <button type="button" onMouseDown={(event) => event.preventDefault()} onClick={finishTextEditing} className="rounded-md bg-[#D7B356] px-3 py-1.5 text-xs font-semibold text-slate-950 md:hidden">
+                Done
+              </button>
+            )}
+          </div>
           <input
             id="inscriptionTextInput"
             className={`${fieldClass} ${textAlignClass}`}
@@ -276,20 +290,30 @@ export default function InscriptionEditPanel() {
                 updateLine(active.id, { text: e.target.value });
               }
             }}
+            onFocus={() => setIsEditingText(true)}
             placeholder="Type here..."
+            ref={textInputRef as React.RefObject<HTMLInputElement>}
+            spellCheck={false}
+            autoCorrect="off"
           />
         </div>
       ) : (
-        <div className="space-y-3">
-          {AlignControls}
-          <div className={sectionCardClass}>
-            <label htmlFor="inscriptionMultilineInput" className={labelClass}>
-              Inscription Text (multi-line)
+        <div className={sectionCardClass}>
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <label htmlFor="inscriptionMultilineInput" className="text-sm font-semibold text-slate-100 day:text-gray-800">
+              Inscription Text
             </label>
+            {isEditingText && (
+              <button type="button" onMouseDown={(event) => event.preventDefault()} onClick={finishTextEditing} className="rounded-md bg-[#D7B356] px-3 py-1.5 text-xs font-semibold text-slate-950 md:hidden">
+                Done
+              </button>
+            )}
+          </div>
+          <div className="mb-2">{AlignControls}</div>
             <textarea
               id="inscriptionMultilineInput"
               rows={5}
-              className={`${fieldClass} resize-y ${textAlignClass}`}
+              className={`${fieldClass} resize-y ${textAlignClass} [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden`}
               value={multiText}
               onChange={(e) => {
                 const val = e.target.value;
@@ -300,15 +324,18 @@ export default function InscriptionEditPanel() {
                   setActiveInscriptionText(normalized);
                 }
               }}
+              onFocus={() => setIsEditingText(true)}
               placeholder={'In loving memory of\nJohn Smith\n1940 – 2020'}
+              ref={textInputRef as React.RefObject<HTMLTextAreaElement>}
+              spellCheck={false}
+              autoCorrect="off"
             />
-          </div>
         </div>
       )}
 
       {/* Tabs for font and color (only show tabs if color is available) */}
       {showInscriptionColor && (
-        <div className="day:border-gray-200 day:bg-gray-100 flex gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1">
+        <div className="day:border-gray-200 day:bg-gray-100 hidden gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1 md:flex">
           <button
             className={`flex-1 rounded-md px-3 py-2 text-sm font-medium transition-all ${
               activeTab === 'font'
@@ -333,12 +360,35 @@ export default function InscriptionEditPanel() {
       )}
 
       {/* Font Selection */}
-      {(!showInscriptionColor || activeTab === 'font') && (
+      {availableFonts.length > 0 && (
         <div className={sectionCardClass}>
           {!showInscriptionColor && (
             <label className={labelClass}>Select Font</label>
           )}
-          <div className="relative">
+          <div className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:hidden">
+            {availableFonts.map((font) => {
+              const isSelected = (active?.font ?? selectedFont) === font.name;
+              return (
+                <button
+                  key={font.id}
+                  type="button"
+                  onClick={() => {
+                    if (active) updateLine(active.id, { font: font.name });
+                    else setSelectedFont(font.name);
+                  }}
+                  className={`shrink-0 rounded-lg border px-4 py-2 text-sm transition-colors ${
+                    isSelected
+                      ? 'border-2 border-[#D7B356] bg-[#D7B356]/15 text-[#f3d48f]'
+                      : 'border-white/15 bg-white/[0.05] text-white/75'
+                  }`}
+                  style={{ fontFamily: font.name }}
+                >
+                  {font.name}
+                </button>
+              );
+            })}
+          </div>
+          <div className="relative hidden md:block">
             <select
               className={`${fieldClass} appearance-none pr-8`}
               style={{ colorScheme: 'dark' }}
@@ -479,8 +529,71 @@ export default function InscriptionEditPanel() {
             </div>
           </div>
 
-          {/* Rotation Slider */}
+          {/* Position controls — touch-friendly alternative to dragging text. */}
           <div className={sectionCardClass}>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <label className="text-sm font-semibold text-slate-100 day:text-gray-800">
+                Position
+              </label>
+            </div>
+            <button
+              type="button"
+              onClick={() => updateLine(active.id, { xPos: 0 })}
+              className="mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
+            >
+              <span aria-hidden="true">↔</span>
+              Center horizontally
+            </button>
+            <div className="grid grid-cols-3 place-items-center gap-1">
+              <span />
+              <button
+                type="button"
+                aria-label="Move inscription up 5 millimetres"
+                onClick={() => updateLine(active.id, { yPos: (active.yPos ?? 0) + nudgeStepMm })}
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m18 15-6-6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <span />
+              <button
+                type="button"
+                aria-label="Move inscription left 5 millimetres"
+                onClick={() => updateLine(active.id, { xPos: (active.xPos ?? 0) - nudgeStepMm })}
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <button
+                type="button"
+                onClick={() => setNudgeStepMm((step) => step === 1 ? 5 : step === 5 ? 10 : 1)}
+                className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
+                aria-label={`Change movement step, currently ${nudgeStepMm} millimetres`}
+              >
+                {nudgeStepMm} mm
+              </button>
+              <button
+                type="button"
+                aria-label="Move inscription right 5 millimetres"
+                onClick={() => updateLine(active.id, { xPos: (active.xPos ?? 0) + nudgeStepMm })}
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <span />
+              <button
+                type="button"
+                aria-label="Move inscription down 5 millimetres"
+                onClick={() => updateLine(active.id, { yPos: (active.yPos ?? 0) - nudgeStepMm })}
+                className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} aria-hidden="true"><path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
+              </button>
+              <span />
+            </div>
+          </div>
+
+          {/* Rotation Slider */}
+          <div className={`${sectionCardClass} hidden md:block`}>
             <div className="flex items-center justify-between gap-2">
               <label className="day:text-gray-800 text-sm font-semibold text-slate-100">
                 Rotation
@@ -588,7 +701,7 @@ export default function InscriptionEditPanel() {
       )}
 
       {/* Color Selection */}
-      {showInscriptionColor && activeTab === 'color' && active && (
+      {showInscriptionColor && active && (
         <div className={sectionCardClass}>
           {isEngraved && (
             <div className="mb-4 grid grid-cols-2 gap-2">
@@ -619,11 +732,13 @@ export default function InscriptionEditPanel() {
             </div>
           )}
 
-          <div className="grid grid-cols-7 gap-1">
+          <div className="flex gap-2 overflow-x-auto pb-1 md:grid md:grid-cols-7">
             {data.colors.map((color) => (
-              <div
+              <button
                 key={color.id}
-                className={`h-7 w-7 cursor-pointer rounded-md border-2 transition-colors hover:border-[#D7B356] ${
+                type="button"
+                aria-label={`Select ${color.name}`}
+                className={`h-8 w-8 shrink-0 cursor-pointer rounded-full border-2 transition-colors hover:border-[#D7B356] md:h-7 md:w-7 md:rounded-md ${
                   active.color === color.hex
                     ? 'border-[#D7B356] ring-2 ring-[#D7B356]/35'
                     : 'border-white/15'
@@ -643,7 +758,7 @@ export default function InscriptionEditPanel() {
           <div className="grid grid-cols-3 gap-2">
             <button
               type="button"
-              className="cursor-pointer rounded-lg border border-emerald-400/20 bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
+              className="cursor-pointer rounded-lg border border-[#D7B356]/70 bg-transparent px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
               onClick={handleAddNewLine}
             >
               + Add line
@@ -667,7 +782,7 @@ export default function InscriptionEditPanel() {
           <div className="flex justify-end">
             <button
               type="button"
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#D7B356]/70 bg-transparent px-4 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={handleAddMultipleLines}
               disabled={multiText.trim().length === 0}
             >
@@ -679,7 +794,7 @@ export default function InscriptionEditPanel() {
           <div className="flex justify-end">
             <button
               type="button"
-              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700"
+              className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg border border-[#D7B356]/70 bg-transparent px-4 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15"
               onClick={handleAddNewLine}
             >
               <span aria-hidden="true">+</span>

@@ -223,7 +223,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
     return { left, top, width, height };
   }, [cropPx.height, cropPx.width, cropPx.x, cropPx.y, maskFit]);
 
-  const handleMouseDown = (e: React.MouseEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
+  const handlePointerDown = (e: React.PointerEvent, handle: 'move' | 'nw' | 'ne' | 'sw' | 'se') => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -237,7 +237,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
   };
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    const handlePointerMove = (e: PointerEvent) => {
       if (!dragState.isDragging || !previewRef.current) return;
 
       const rect = previewRef.current.getBoundingClientRect();
@@ -365,7 +365,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
       updateCropArea(newCropArea);
     };
 
-    const handleMouseUp = () => {
+    const handlePointerUp = () => {
       setDragState({ 
         isDragging: false, 
         handle: null, 
@@ -376,13 +376,15 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
     };
 
     if (dragState.isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('pointermove', handlePointerMove);
+      window.addEventListener('pointerup', handlePointerUp);
+      window.addEventListener('pointercancel', handlePointerUp);
     }
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerUp);
     };
   }, [allowFreeformHandles, dragState, hasFixedSizes, imageBoxPx.height, imageBoxPx.width, maskBounds, updateCropArea]);
 
@@ -445,7 +447,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
           {/* Crop Area Rectangle with Handles */}
           <div
             ref={cropAreaRef}
-            className="absolute"
+            className="absolute touch-none"
             style={{
               left: `${cropPx.x}px`,
               top: `${cropPx.y}px`,
@@ -479,7 +481,7 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
                   </div>
 
                   <div
-                    className="absolute cursor-move"
+                    className="absolute cursor-move touch-none"
                     style={{ 
                       left: '0',
                       top: '0',
@@ -487,21 +489,21 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
                       height: '100%',
                       pointerEvents: 'auto',
                     }}
-                    onMouseDown={(e) => handleMouseDown(e, 'move')}
+                    onPointerDown={(e) => handlePointerDown(e, 'move')}
                   />
 
                   {handleConfigs.map(({ corner, cursor, left, top }) => (
                     <button
                       key={corner}
                       type="button"
-                      className="absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#D7B356] shadow"
+                      className="absolute h-7 w-7 touch-none -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white bg-[#D7B356] shadow md:h-4 md:w-4"
                       style={{
                         left: `${left}%`,
                         top: `${top}%`,
                         cursor,
                         pointerEvents: 'auto',
                       }}
-                      onMouseDown={(e) => handleMouseDown(e, corner)}
+                      onPointerDown={(e) => handlePointerDown(e, corner)}
                     />
                   ))}
                 </>

@@ -28,14 +28,18 @@ function CameraController() {
   useEffect(() => {
     if (!controls || !camera || hasInitialized.current) return;
 
+    // Mobile leaves room for the bottom controls, so frame the memorial a
+    // little higher in the visible viewport instead of letting its base meet
+    // the sheet edge.
+    const targetY = window.innerWidth < 768 ? 3.55 : 3.8;
     camera.position.set(0, 4.2, CAMERA_3D_POSITION_Z);
-    camera.lookAt(0, 3.8, 0);
+    camera.lookAt(0, targetY, 0);
     camera.updateProjectionMatrix();
 
     if ((controls as any).reset) {
       (controls as any).reset();
     }
-    (controls as any).target.set(0, 3.8, 0);
+    (controls as any).target.set(0, targetY, 0);
     (controls as any).update();
 
     hasInitialized.current = true;
@@ -315,16 +319,16 @@ function ProductNameHeader() {
       {/* Price Pill Floating Bottom Center */}
       {widthMm > 0 && heightMm > 0 && (
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-auto w-[75vw] sm:w-auto"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-auto w-[80vw] sm:w-auto"
         >
           <button
             type="button"
             onClick={() => setActivePanel('checkprice')}
             aria-label="Open check price breakdown"
-            className="cursor-pointer bg-black/80 backdrop-blur-md text-white py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-4 items-center justify-between w-full hover:bg-black/90 transition-colors"
+            className="cursor-pointer bg-black/80 backdrop-blur-md text-white py-3 rounded-full font-mono shadow-xl border border-white/10 flex gap-3 sm:gap-4 items-center justify-between w-full hover:bg-black/90 transition-colors"
             style={{ paddingLeft: '1.25rem', paddingRight: '1.725rem' }}
           >
-            <span className="flex items-center gap-1.5 text-sm leading-none text-white/80">
+            <span className="flex shrink-0 items-center gap-1.5 whitespace-nowrap text-sm leading-none text-white/80">
               {sizeLabel}
               <svg
                 className="h-3.5 w-3.5 text-white/45"
@@ -513,7 +517,7 @@ export default function ThreeScene() {
       {isVisible && (
         <div
           ref={containerRef}
-          className="relative w-full h-screen"
+          className="relative h-dvh w-full"
           style={hideScenery ? { backgroundColor: solidBgColor } : undefined}
         >
           {/* Product Name Overlay (above canvas) */}
@@ -587,7 +591,7 @@ export default function ThreeScene() {
               {/* Left Arrow */}
               <button
                 onClick={rotateLeft}
-                className="absolute left-6 top-[45%] flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:left-8 md:top-1/2 md:h-12 md:w-12"
+                className="absolute left-6 top-[45%] hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:left-8 md:top-1/2 md:flex md:h-12 md:w-12"
                 aria-label="Rotate left"
               >
                 <svg className="h-5 w-5 text-white md:h-6 md:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -598,7 +602,7 @@ export default function ThreeScene() {
               {/* Right Arrow */}
               <button
                 onClick={rotateRight}
-                className="absolute right-6 top-[45%] flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:right-8 md:top-1/2 md:h-12 md:w-12"
+                className="absolute right-6 top-[45%] hidden h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-white/10 shadow-lg backdrop-blur-sm transition-all hover:scale-110 hover:bg-white/20 hover:shadow-xl hover:shadow-[#cfac6c]/50 md:right-8 md:top-1/2 md:flex md:h-12 md:w-12"
                 aria-label="Rotate right"
               >
                 <svg className="h-5 w-5 text-white md:h-6 md:w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -3540,7 +3540,7 @@ export default function DesignerNav() {
                       {mobileFullscreenPanelTitle}
                     </p>
                   </div>
-                  <div className="flex items-center justify-end gap-1.5">
+                  <div className="hidden">
                     <button
                       onClick={() =>
                         prevPanelSlug && handleNavigateToPanel(prevPanelSlug)
@@ -3587,12 +3587,52 @@ export default function DesignerNav() {
                     </button>
                   </div>
                 </div>
+                {currentPanelIndex >= 0 && (
+                  <div className="mt-2 h-0.5 overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className="h-full rounded-full bg-[#D7B356] transition-[width] duration-300"
+                      style={{
+                        width: `${((currentPanelIndex + 1) / navigablePanelSlugs.length) * 100}%`,
+                      }}
+                    />
+                  </div>
+                )}
+              </div>,
+              document.body,
+            )}
+
+          {isMounted &&
+            isMobileNavOpen &&
+            createPortal(
+              <div className="fixed inset-x-0 bottom-0 z-[46] flex gap-2 border-t border-[#3a2a1c] bg-[#120c08]/95 px-3 py-2.5 shadow-[0_-10px_24px_rgba(0,0,0,0.3)] backdrop-blur-md md:hidden">
+                <button
+                  type="button"
+                  onClick={() =>
+                    prevPanelSlug && handleNavigateToPanel(prevPanelSlug)
+                  }
+                  disabled={!prevPanelSlug}
+                  className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-3 text-sm font-semibold text-white disabled:opacity-30"
+                >
+                  <span aria-hidden="true">←</span>
+                  Previous
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    nextPanelSlug && handleNavigateToPanel(nextPanelSlug)
+                  }
+                  disabled={!nextPanelSlug || isImageCropActive}
+                  className="flex min-h-11 flex-[1.35] items-center justify-center gap-1.5 rounded-lg bg-[#D7B356] px-3 text-sm font-semibold text-slate-950 disabled:bg-white/10 disabled:text-white/40"
+                >
+                  {isImageCropActive ? 'Finish crop' : `Next: ${nextPanelTitle ?? 'Continue'}`}
+                  <span aria-hidden="true">→</span>
+                </button>
               </div>,
               document.body,
             )}
 
           {/* Panel Content */}
-          <div className="min-h-0 flex-1 overflow-y-auto p-3 md:p-4">
+          <div className="min-h-0 flex-1 overflow-y-auto p-3 pb-28 md:p-4">
             {/* Render content based on activeFullscreenPanel */}
             {activeFullscreenPanel === 'select-size' && renderSelectSizePanel()}
             {activeFullscreenPanel === 'select-shape' &&
@@ -4014,7 +4054,7 @@ export default function DesignerNav() {
           </div>
 
           {/* Quick Enquiry — pinned below the logo (mobile only; desktop shows in canvas) */}
-          <div className="border-b border-white/10 px-4 py-3 lg:hidden">
+          <div className="hidden">
             <button
               type="button"
               onClick={() => setShowQuickEnquiry(true)}
@@ -4054,7 +4094,7 @@ export default function DesignerNav() {
                 {productId && (isCanvasVisible || hasCanvasBeenShown) && (
                   <button
                     onClick={handleToggleConvertPanel}
-                    className={`inline-flex flex-1 items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all ${
+                    className={`hidden md:inline-flex flex-1 items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all ${
                       showConvertPanel
                         ? 'border-[#f4d07e] bg-white/5 text-[#f4d07e]'
                         : 'border-white/20 text-gray-200 hover:border-white/40 hover:bg-white/5'
@@ -4068,7 +4108,7 @@ export default function DesignerNav() {
             )}
 
             {/* Load a previously saved design */}
-            <div className="mb-5">
+            <div className="mb-5 hidden md:block">
               <LoadDesignButton label="Load Design" variant="menu" />
             </div>
 
@@ -4640,6 +4680,29 @@ export default function DesignerNav() {
                             </React.Fragment>
                           );
                         })}
+                        {group.label === 'Account' && (
+                          <button
+                            type="button"
+                            onClick={() => setShowQuickEnquiry(true)}
+                            className="border-primary/40 bg-primary/10 hover:bg-primary/20 flex w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-base font-light text-white transition-colors lg:hidden"
+                          >
+                            <svg
+                              className="h-5 w-5 shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                              aria-hidden="true"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M8 10h.01M12 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-3 3v-3z"
+                              />
+                            </svg>
+                            <span>Quick Enquiry</span>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>

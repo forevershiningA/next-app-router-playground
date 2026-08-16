@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-15
+**Last Updated:** 2026-08-16
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -80,6 +80,52 @@
 72. [August 14 Designer Canvas Performance and Addition Assets](#current-status-2026-08-14--designer-canvas-performance-and-addition-assets)
 73. [August 15 3D Granite Materials, Selection Outline, and UV Mapping](#current-status-2026-08-15--3d-granite-materials-selection-outline-and-uv-mapping)
 74. [August 15 Full Monument Material, Foundation, and Grounding Follow-up](#current-status-2026-08-15--full-monument-material-foundation-and-grounding-follow-up)
+75. [August 16 Mobile Designer UX and Image Crop Reliability](#current-status-2026-08-16--mobile-designer-ux-and-image-crop-reliability)
+
+---
+
+## Current Status (2026-08-16) — Mobile Designer UX and Image Crop Reliability
+
+### Mobile app shell and navigation
+
+Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `components/ThreeScene.tsx`.
+
+- Editing steps use a fixed `44dvh` mobile bottom sheet with rounded top corners, a visual (non-draggable) handle, a minimal viewport header, and a persistent thumb-reachable Previous/Next bar.
+- The panel content uses `pb-28` so its final controls can scroll above the navigation bar. Do not make action rows `fixed` inside individual editors: they overlay the form content. Keep them in normal document flow.
+- Mobile canvas uses `h-dvh`; the sheet already uses `dvh` units, which handles soft-keyboard viewport changes more reliably than `vh`.
+- Canvas rotation arrows are desktop-only. Mobile relies on native orbit/pinch controls. Camera target is slightly lower on narrow screens so the memorial sits higher above the sheet.
+- `app/select-images/page.tsx` intentionally returns `null`. It previously rendered a legacy “Workflow” marketing page underneath the transparent canvas, causing that content to flash during scene loading and behind Crop Section.
+
+### Inscription mobile editor
+
+Primary file: `components/InscriptionEditPanel.tsx`.
+
+- Single/multiple line labels are explicit. Multiple-line input has a compact Align toolbar above the textarea, without glyph prefixes.
+- Browser spellcheck/autocorrect are disabled for inscription inputs. The mobile Done button lives in the card header and must not be sticky over the textarea.
+- Fonts are direct horizontal chips; colours are direct swatches. Horizontal scrollbar visuals are hidden while touch scrolling remains available.
+- Rotation is desktop-only for inscriptions. Position uses Center horizontally plus an SVG D-pad whose centre toggles `1 / 5 / 10 mm` increments.
+- Inscription positions use the headstone’s local geometry units (normally millimetres), so D-pad increments are passed as whole mm values.
+
+### Images: crop, placement, and rotation
+
+Primary files: `components/CropCanvas.tsx`, `components/ImageSelector.tsx`, `components/three/ImageModel.tsx`, and `lib/headstone-store.ts`.
+
+- `CropCanvas` must use Pointer Events (`pointerdown`, `pointermove`, `pointerup`, `pointercancel`), not mouse-only listeners. Crop mask and handles use `touch-none`; mobile handles are `28px` while desktop handles remain `16px`.
+- Image editor provides Reset 0° and snaps rotation within 4° of `0`, `±90`, and `180` degrees. This is important for portrait ceramics.
+- Image actions Update / Duplicate / Delete use the same visual hierarchy as inscription actions and belong after the editor controls in normal flow.
+- Image placement D-pad preserves both `target` and `coordinateSpace` by calling `updateImageTarget`, rather than `updateImagePosition`. Clearing `coordinateSpace: 'mm-center'` makes a loaded image disappear because its offsets are then interpreted as raw local coordinates.
+- Coordinate units differ from inscriptions: normal image positions are local metres, therefore UI steps must convert mm to metres (`stepMm / 1000`). For `mm-center` images, offsets are already mm and use `stepMm` directly. Do not apply inscription D-pad maths to images without this distinction.
+
+### Verification
+
+After these changes, run:
+
+```bash
+pnpm exec tsc --noEmit --pretty false
+git diff --check
+```
+
+`screen.png` is a user-provided visual reference. It may be modified by the user and should not be reverted.
 
 ---
 
