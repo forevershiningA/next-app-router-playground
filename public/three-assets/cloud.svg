@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 128">
+  <defs>
+    <filter id="blur" x="-30%" y="-50%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="12" />
+    </filter>
+    <radialGradient id="cloud" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="white" stop-opacity="1" />
+      <stop offset="55%" stop-color="white" stop-opacity="0.88" />
+      <stop offset="100%" stop-color="white" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+  <g filter="url(#blur)">
+    <ellipse cx="62" cy="77" rx="52" ry="34" fill="url(#cloud)" />
+    <ellipse cx="112" cy="58" rx="58" ry="42" fill="url(#cloud)" />
+    <ellipse cx="165" cy="70" rx="66" ry="39" fill="url(#cloud)" />
+    <ellipse cx="205" cy="83" rx="40" ry="27" fill="url(#cloud)" />
+  </g>
+</svg>

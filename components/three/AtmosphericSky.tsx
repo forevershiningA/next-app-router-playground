@@ -80,6 +80,7 @@ export default function AtmosphericSky({
       */}
       <Clouds
         material={THREE.MeshStandardMaterial}
+        texture="/three-assets/cloud.svg"
       >
         <Cloud 
           seed={10} 
