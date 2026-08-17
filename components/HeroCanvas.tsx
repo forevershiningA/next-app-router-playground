@@ -730,7 +730,7 @@ export default function HeroCanvas({ rotation = 0, onReady }: HeroCanvasProps) {
 
           <directionalLight position={[-5, 5, 2]} intensity={0.4} color="#a0c0ff" />
 
-          <Environment preset="city" background={false} blur={0.8} />
+          <Environment files="/hdri/spring.hdr" background={false} blur={0.8} />
 
           <SceneContent targetRotation={rotation} onReady={onReady} />
         </React.Suspense>

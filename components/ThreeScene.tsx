@@ -316,10 +316,11 @@ function ProductNameHeader() {
 
       <QuickEnquiryModal isOpen={showQuickEnquiry} onClose={() => setShowQuickEnquiry(false)} />
 
-      {/* Price Pill Floating Bottom Center */}
+      {/* On mobile keep the quote action below the fixed header. The bottom
+          sheet otherwise covers it while editing a design step. */}
       {widthMm > 0 && heightMm > 0 && (
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 pointer-events-auto w-[80vw] sm:w-auto"
+          className="absolute top-[4.75rem] left-1/2 z-40 w-[80vw] -translate-x-1/2 pointer-events-auto md:top-auto md:bottom-8 md:w-auto"
         >
           <button
             type="button"

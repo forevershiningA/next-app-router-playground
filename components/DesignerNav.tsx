@@ -2593,58 +2593,46 @@ export default function DesignerNav() {
               )}
             </div>
             <div className="-mx-3.5 border-t border-white/10"></div>
-            <label className="flex items-center justify-between gap-3 text-sm">
-              <span className="text-white/75">Base option</span>
-              <select
-                aria-label="Base option"
-                value={baseOption}
-                onChange={(event) =>
-                  setBaseOption(
-                    event.target.value as 'none' | 'flower-pots',
-                  )
-                }
-                style={{
-                  backgroundColor:
-                    baseOption === 'flower-pots' ? '#d4af37' : '#000000',
-                  color: baseOption === 'flower-pots' ? '#17120a' : '#ffffff',
-                }}
-                className="rounded-md border border-white/10 px-2 py-1.5 text-sm outline-none focus:border-[#D7B356]"
-              >
-                <option value="none" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+            <fieldset className="space-y-2 text-sm">
+              <legend className="text-white/75">Base option</legend>
+              <div className="flex gap-2" role="group" aria-label="Base option">
+                <button
+                  type="button"
+                  onClick={() => setBaseOption('none')}
+                  className={styleTabClass(baseOption === 'none')}
+                >
                   None
-                </option>
-                <option value="flower-pots" style={{ backgroundColor: '#d4af37', color: '#17120a' }}>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setBaseOption('flower-pots')}
+                  className={styleTabClass(baseOption === 'flower-pots')}
+                >
                   Flower Pots
-                </option>
-              </select>
-            </label>
+                </button>
+              </div>
+            </fieldset>
             {baseOption === 'flower-pots' && (
               <fieldset className="space-y-2 text-sm">
                 <legend className="text-white/75">Lid finish</legend>
-                <div className="flex flex-wrap gap-x-4 gap-y-2">
+                <div className="flex gap-2" role="group" aria-label="Lid finish">
                   {[
                     { label: 'Black Lid', value: 'black' },
                     { label: 'Silver Lid', value: 'silver' },
                     { label: 'Gold Lid', value: 'gold' },
                   ].map((option) => (
-                    <label
+                    <button
                       key={option.value}
-                      className="flex items-center gap-2 text-white/85"
+                      type="button"
+                      onClick={() =>
+                        setBaseLidFinish(
+                          option.value as 'black' | 'silver' | 'gold',
+                        )
+                      }
+                      className={styleTabClass(baseLidFinish === option.value)}
                     >
-                      <input
-                        type="radio"
-                        name="base-lid-finish"
-                        value={option.value}
-                        checked={baseLidFinish === option.value}
-                        onChange={() =>
-                          setBaseLidFinish(
-                            option.value as 'black' | 'silver' | 'gold',
-                          )
-                        }
-                        className="accent-[#D7B356]"
-                      />
                       {option.label}
-                    </label>
+                    </button>
                   ))}
                 </div>
               </fieldset>

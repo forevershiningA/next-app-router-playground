@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-16
+**Last Updated:** 2026-08-17
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -81,6 +81,47 @@
 73. [August 15 3D Granite Materials, Selection Outline, and UV Mapping](#current-status-2026-08-15--3d-granite-materials-selection-outline-and-uv-mapping)
 74. [August 15 Full Monument Material, Foundation, and Grounding Follow-up](#current-status-2026-08-15--full-monument-material-foundation-and-grounding-follow-up)
 75. [August 16 Mobile Designer UX and Image Crop Reliability](#current-status-2026-08-16--mobile-designer-ux-and-image-crop-reliability)
+76. [August 17 Local 3D Assets and Mobile Quote UX](#current-status-2026-08-17--local-3d-assets-and-mobile-quote-ux)
+
+---
+
+## Current Status (2026-08-17) — Local 3D Assets and Mobile Quote UX
+
+### No external CDN dependency for designer clouds and hero HDRI
+
+Primary files: `components/three/AtmosphericSky.tsx`, `public/three-assets/cloud.svg`, and `components/HeroCanvas.tsx`.
+
+- `@react-three/drei`'s default `Clouds` texture points to `rawcdn.githack.com`. That CDN can return `429` and previously caused the mobile designer canvas to fail with `Could not load .../cloud.png`.
+- `AtmosphericSky` must explicitly use the committed local texture: `texture="/three-assets/cloud.svg"`. Do not remove this prop or the default remote URL is used again.
+- `HeroCanvas` must use `files="/hdri/spring.hdr"`, not `preset="city"`. Drei environment presets also load HDRIs from `raw.githack.com`.
+- The main designer scene already uses the local `/hdri/spring.hdr` environment. Remote product images from `www.forevershining.com.au/wp-content/...` are intentional and permitted by `next.config.ts`.
+
+### Base options in the mobile size panel
+
+Primary file: `components/DesignerNav.tsx`.
+
+- Under the `Base` tab, `Base option` is a two-button segmented row: `None` and `Flower Pots`; it replaces the former native `<select>`.
+- When `Flower Pots` is selected, `Lid finish` is a matching three-button row: `Black Lid`, `Silver Lid`, and `Gold Lid`; it replaces radio buttons.
+- Use the local `styleTabClass` helper so these controls remain visually consistent with `No Base`, `Polished`, and `Rockface` and retain accessible button semantics.
+
+### Mobile quote chip and modal layer
+
+Primary files: `components/ThreeScene.tsx`, `components/CheckPricePanel.tsx`, and `components/OverlayPortal.tsx`.
+
+- The price/size chip opens the `checkprice` panel. On mobile it sits below the fixed header at `top-[4.75rem]` (about a 16 px visual gap); on `md+` it remains bottom-centred. Do not put it back behind the mobile bottom sheet.
+- `CheckPricePanel` must render through the dedicated `check-price-modal-root` with `zIndex={11000}`. Rendering it inside `#scene-root` traps it below the mobile `Select Size` sheet, regardless of the modal's own Tailwind `z-*` class.
+- `OverlayPortal` accepts an optional `zIndex` prop (default `1200`) for overlays that need an isolated top-level stacking context.
+
+### Verification
+
+After modifying any of the above:
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+`screen.png` is the current mobile visual regression reference. Confirm the price chip clears the header, the `Check Price Quote` modal covers the entire bottom sheet, and all Flower Pots choices remain visible above the persistent Previous/Next bar.
 
 ---
 
@@ -13729,4 +13770,4 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-15*
+*End of STARTER.md - Last updated: 2026-08-17*

@@ -572,7 +572,7 @@ export default function CheckPricePanel() {
   if (!isOpen) return null;
 
   return (
-    <OverlayPortal containerId="scene-root">
+    <OverlayPortal containerId="check-price-modal-root" zIndex={11000}>
       <div 
         className="check-price-panel__overlay pointer-events-auto absolute inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-6 backdrop-blur-sm"
         onClick={handleClose}

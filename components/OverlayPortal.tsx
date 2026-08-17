@@ -11,9 +11,11 @@ import { createPortal } from 'react-dom';
 export default function OverlayPortal({
   children,
   containerId = 'overlay-root',
+  zIndex = 1200,
 }: {
   children: React.ReactNode;
   containerId?: string;
+  zIndex?: number;
 }) {
   const [el, setEl] = React.useState<HTMLElement | null>(null);
 
@@ -29,12 +31,12 @@ export default function OverlayPortal({
       container.style.position = 'fixed';
       container.style.inset = '0';
       container.style.pointerEvents = 'none';
-      container.style.zIndex = '1200';
+      container.style.zIndex = String(zIndex);
       document.body.appendChild(container);
     }
 
     setEl(container);
-  }, [containerId]);
+  }, [containerId, zIndex]);
 
   if (!el) return null;
 
