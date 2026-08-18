@@ -23,9 +23,14 @@ import { logger } from '#/lib/logger';
 
 function CameraController() {
   const { controls, camera } = useThree();
+  const productType = useHeadstoneStore((state) => state.catalog?.product.type);
   const hasInitialized = useRef(false);
 
   useEffect(() => {
+    // FullMonumentFit owns the camera for full monuments.  Waiting for the
+    // catalog also avoids applying this generic pose during production
+    // hydration, before the product type is available.
+    if (!productType || productType === 'full-monument') return;
     if (!controls || !camera || hasInitialized.current) return;
 
     // Mobile leaves room for the bottom controls, so frame the memorial a
@@ -43,7 +48,7 @@ function CameraController() {
     (controls as any).update();
 
     hasInitialized.current = true;
-  }, [controls, camera]);
+  }, [controls, camera, productType]);
 
   return null;
 }
