@@ -1,13 +1,20 @@
 import { and, desc, eq } from 'drizzle-orm';
 import { db, projects } from '#/lib/db/index';
-import type { DesignerSnapshot, PricingBreakdown, ProjectSummary, ProjectRecordWithState } from '#/lib/project-schemas';
+import type {
+  DesignerSnapshot,
+  PricingBreakdown,
+  ProjectSummary,
+  ProjectRecordWithState,
+} from '#/lib/project-schemas';
 
 const normalizePublicPath = (value: string | null | undefined) =>
   value ? value.replace(/\\/g, '/') : null;
 
 function ensureDb() {
   if (!db) {
-    throw new Error('Database not configured. Please set DATABASE_URL environment variable.');
+    throw new Error(
+      'Database not configured. Please set DATABASE_URL environment variable.',
+    );
   }
   return db;
 }
@@ -18,7 +25,10 @@ function isJsonPathColumnMissing(err: unknown): boolean {
   return msg.includes('json_path') || (err as any)?.code === '42703';
 }
 
-const toSummary = (record: typeof projects.$inferSelect, skipJsonPath = false): ProjectSummary => ({
+const toSummary = (
+  record: typeof projects.$inferSelect,
+  skipJsonPath = false,
+): ProjectSummary => ({
   id: record.id,
   title: record.title,
   status: record.status,
@@ -31,7 +41,9 @@ const toSummary = (record: typeof projects.$inferSelect, skipJsonPath = false): 
   createdAt: record.createdAt.toISOString(),
 });
 
-const withState = (record: typeof projects.$inferSelect): ProjectRecordWithState => ({
+const withState = (
+  record: typeof projects.$inferSelect,
+): ProjectRecordWithState => ({
   ...toSummary(record),
   materialId: record.materialId,
   shapeId: record.shapeId,
@@ -57,14 +69,17 @@ type SaveProjectInput = {
   pricingBreakdown?: PricingBreakdown | null;
 };
 
-export async function saveProjectRecord(input: SaveProjectInput): Promise<ProjectSummary> {
+export async function saveProjectRecord(
+  input: SaveProjectInput,
+): Promise<ProjectSummary> {
   const database = ensureDb();
   const { accountId } = input;
   const title = input.title?.trim() || 'Untitled Design';
   const status = input.status ?? 'draft';
   const currency = input.currency ?? 'AUD';
   const pricingBreakdown = input.pricingBreakdown ?? {};
-  const totalPriceCents = typeof input.totalPriceCents === 'number' ? input.totalPriceCents : null;
+  const totalPriceCents =
+    typeof input.totalPriceCents === 'number' ? input.totalPriceCents : null;
 
   // Shared column values used in both INSERT and UPDATE
   const baseValues = {
@@ -81,7 +96,10 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
     designState: input.designState,
   };
 
-  const withJsonPath = { ...baseValues, jsonPath: normalizePublicPath(input.jsonPath) };
+  const withJsonPath = {
+    ...baseValues,
+    jsonPath: normalizePublicPath(input.jsonPath),
+  };
 
   if (input.projectId) {
     // UPDATE existing project — try with jsonPath, fall back without if column missing
@@ -89,17 +107,29 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
       const [updated] = await database
         .update(projects)
         .set({ ...withJsonPath, updatedAt: new Date() })
-        .where(and(eq(projects.id, input.projectId), eq(projects.accountId, accountId)))
+        .where(
+          and(
+            eq(projects.id, input.projectId),
+            eq(projects.accountId, accountId),
+          ),
+        )
         .returning();
       if (!updated) throw new Error('PROJECT_NOT_FOUND');
       return toSummary(updated);
     } catch (err) {
       if (!isJsonPathColumnMissing(err)) throw err;
-      console.warn('[projects-db] json_path column missing in production DB. Run: ALTER TABLE "projects" ADD COLUMN "json_path" text;');
+      console.warn(
+        '[projects-db] json_path column missing in production DB. Run: ALTER TABLE "projects" ADD COLUMN "json_path" text;',
+      );
       const [updated] = await database
         .update(projects)
         .set({ ...baseValues, updatedAt: new Date() })
-        .where(and(eq(projects.id, input.projectId), eq(projects.accountId, accountId)))
+        .where(
+          and(
+            eq(projects.id, input.projectId),
+            eq(projects.accountId, accountId),
+          ),
+        )
         .returning();
       if (!updated) throw new Error('PROJECT_NOT_FOUND');
       return toSummary(updated, true);
@@ -115,7 +145,9 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
     return toSummary(created);
   } catch (err) {
     if (!isJsonPathColumnMissing(err)) throw err;
-    console.warn('[projects-db] json_path column missing in production DB. Run: ALTER TABLE "projects" ADD COLUMN "json_path" text;');
+    console.warn(
+      '[projects-db] json_path column missing in production DB. Run: ALTER TABLE "projects" ADD COLUMN "json_path" text;',
+    );
     const [created] = await database
       .insert(projects)
       .values({ ...baseValues, pricingBreakdown })
@@ -124,10 +156,26 @@ export async function saveProjectRecord(input: SaveProjectInput): Promise<Projec
   }
 }
 
-export async function listProjectSummaries(accountId: string, limit = 20): Promise<ProjectSummary[]> {
+export async function listProjectSummaries(
+  accountId: string,
+  limit = 20,
+): Promise<ProjectSummary[]> {
   const database = ensureDb();
 
-  const mapRows = (rows: { id: string; title: string; status: string; totalPriceCents: number | null; currency: string | null; screenshotPath: string | null; thumbnailPath: string | null; jsonPath?: string | null; updatedAt: Date; createdAt: Date }[]): ProjectSummary[] =>
+  const mapRows = (
+    rows: {
+      id: string;
+      title: string;
+      status: string;
+      totalPriceCents: number | null;
+      currency: string | null;
+      screenshotPath: string | null;
+      thumbnailPath: string | null;
+      jsonPath?: string | null;
+      updatedAt: Date;
+      createdAt: Date;
+    }[],
+  ): ProjectSummary[] =>
     rows.map((row) => ({
       id: row.id,
       title: row.title,
@@ -183,7 +231,10 @@ export async function listProjectSummaries(accountId: string, limit = 20): Promi
   }
 }
 
-export async function getProjectRecord(projectId: string, accountId: string): Promise<ProjectRecordWithState | null> {
+export async function getProjectRecord(
+  projectId: string,
+  accountId: string,
+): Promise<ProjectRecordWithState | null> {
   const database = ensureDb();
   const record = await database.query.projects.findFirst({
     where: and(eq(projects.id, projectId), eq(projects.accountId, accountId)),
@@ -196,7 +247,25 @@ export async function getProjectRecord(projectId: string, accountId: string): Pr
   return withState(record);
 }
 
-export async function deleteProjectRecord(projectId: string, accountId: string): Promise<boolean> {
+export async function updateProjectTitle(
+  projectId: string,
+  accountId: string,
+  title: string,
+): Promise<ProjectSummary | null> {
+  const database = ensureDb();
+  const [updated] = await database
+    .update(projects)
+    .set({ title: title.trim() || 'Untitled Design', updatedAt: new Date() })
+    .where(and(eq(projects.id, projectId), eq(projects.accountId, accountId)))
+    .returning();
+
+  return updated ? toSummary(updated) : null;
+}
+
+export async function deleteProjectRecord(
+  projectId: string,
+  accountId: string,
+): Promise<boolean> {
   const database = ensureDb();
   const result = await database
     .delete(projects)

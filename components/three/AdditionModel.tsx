@@ -5,6 +5,7 @@ import * as THREE from 'three';
 import { useGLTF, useTexture } from '@react-three/drei';
 import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore, type AdditionKind } from '#/lib/headstone-store';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import type { HeadstoneAPI } from '../SvgHeadstone';
 import { data } from '#/app/_internal/_data';
 import { useRouter, usePathname } from 'next/navigation';
@@ -983,6 +984,10 @@ function AdditionModelInner({
 
       setSelectedAdditionId(id);
       setActivePanel('addition');
+
+      if (window.innerWidth < 768) {
+        useMobileNavStore.getState().setOpen(true);
+      }
 
       // Open additions fullscreen panel
       window.dispatchEvent(

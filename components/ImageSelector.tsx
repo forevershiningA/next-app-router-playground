@@ -149,7 +149,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   }, [cropRotation, setCropRotation]);
 
   const sectionCardClass =
-    'rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
+    'rounded-lg border border-white/10 bg-[#1E1E1E] p-3.5 shadow-lg shadow-black/15 day:border-gray-200 day:bg-white';
   const labelClass = 'text-sm font-semibold text-slate-100 day:text-gray-800';
   const controlButtonClass =
     'flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/10 bg-white/[0.08] text-white transition-colors hover:border-[#D7B356]/50 hover:bg-white/[0.13] day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200';
@@ -814,6 +814,24 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
       const derivedWidth = Math.max(1, Math.round(clampedHeight * aspectRatio));
       updateImageSize(selectedImageId, derivedWidth, clampedHeight);
     };
+    const applyFixedSizeVariant = (variant: number) => {
+      const newSize = Math.min(maxSize, Math.max(1, variant));
+      const dims = sizeOptions[newSize - 1];
+      const selectedImg = selectedImages.find((img) => img.id === selectedImageId);
+      const sizeAspectRatio = selectedImg?.croppedAspectRatio || dims.width / dims.height;
+      updateImageSizeVariant(selectedImageId, newSize);
+      updateImageSize(selectedImageId, dims.height * sizeAspectRatio, dims.height);
+    };
+    const selectedSizeOption = getImageSizeOption(selectedImage.typeId, currentSizeVariant);
+    const pricingProduct = imagePricingData?.[String(selectedImage.typeId)];
+    const imagePrice = pricingProduct
+      ? calculateImagePrice(
+          pricingProduct,
+          selectedSizeOption?.width ?? Math.round(selectedImage.widthMm || 0),
+          selectedSizeOption?.height ?? Math.round(selectedImage.heightMm || 0),
+          selectedImage.colorMode,
+        )
+      : null;
 
     return (
       <div className="space-y-3">
@@ -827,56 +845,33 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
         />
         <div className={sectionCardClass}>
           <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <div className="day:text-gray-400 text-xs font-semibold tracking-[0.18em] text-white/45 uppercase">
-                Selected Image
-              </div>
-              <div className="day:text-gray-900 mt-1 truncate text-sm font-semibold text-white">
-                {selectedImage.typeName}
-              </div>
-              <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
-                {Math.round(selectedImage.widthMm)} ×{' '}
-                {Math.round(selectedImage.heightMm)} mm
-              </div>
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-black/20">
+              <Image src={selectedImage.imageUrl} alt="" fill sizes="48px" className="object-cover" unoptimized />
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedImageId(null);
-                setActivePanel(null);
-              }}
-              className="day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:text-gray-900 shrink-0 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white"
-            >
-              Clear
+            <div className="min-w-0 flex-1">
+              <div className="day:text-gray-400 text-[10px] font-semibold tracking-[0.18em] text-white/45 uppercase">Selected Image</div>
+              <div className="day:text-gray-900 mt-0.5 truncate text-sm font-semibold text-white">{selectedImage.typeName}</div>
+            </div>
+            {imagePrice !== null && <div className="shrink-0 text-sm font-semibold text-[#D7B356]">${imagePrice.toFixed(2)}</div>}
+          </div>
+          <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
+            {hasFixedSizes ? (
+              <select value={currentSizeVariant} onChange={(e) => applyFixedSizeVariant(Number(e.target.value))} className="min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]">
+                {sizeOptions.map((size, index) => (
+                  <option key={size.label} value={index + 1}>
+                    {Math.round(size.height * aspectRatio)} × {size.height} mm
+                  </option>
+                ))}
+              </select>
+            ) : <span className="min-w-0 flex-1 text-sm font-medium text-white/65">{Math.round(selectedImage.widthMm)} × {Math.round(selectedImage.heightMm)} mm</span>}
+            <button type="button" onClick={() => { removeImage(selectedImageId); setSelectedImageId(null); setActivePanel(null); }} aria-label="Remove image" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-red-400/35 text-red-200 transition-colors hover:bg-red-500/15">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.9 12.1A2 2 0 0116.1 21H7.9a2 2 0 01-2-1.9L5 7m4 4v6m6-6v6m-7-10V4h8v3M4 7h16" /></svg>
             </button>
           </div>
         </div>
-
-        {(() => {
-          const product = imagePricingData?.[String(selectedImage.typeId)];
-          const sizeOpt = getImageSizeOption(
-            selectedImage.typeId,
-            currentSizeVariant,
-          );
-          const w = sizeOpt?.width ?? Math.round(selectedImage.widthMm || 0);
-          const h = sizeOpt?.height ?? Math.round(selectedImage.heightMm || 0);
-          const price = product
-            ? calculateImagePrice(product, w, h, selectedImage.colorMode)
-            : null;
-          return price !== null ? (
-            <div className={sectionCardClass}>
-              <div className="day:text-gray-500 mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 uppercase">
-                Image Price
-              </div>
-              <div className="day:text-gray-900 text-2xl font-semibold text-[#2EE59D]">
-                ${price.toFixed(2)}
-              </div>
-            </div>
-          ) : null;
-        })()}
         <div className="space-y-3">
           {/* Size Slider */}
-          <div className={sectionCardClass}>
+          <div className={hasFixedSizes ? 'hidden' : sectionCardClass}>
             {hasFixedSizes ? (
               <>
                 <div className="flex items-center justify-between gap-2">
@@ -1199,7 +1194,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           </div>
 
           {/* Rotation Slider */}
-          <div className={sectionCardClass}>
+          <div className={`${sectionCardClass} hidden md:block`}>
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2">
                 <label className={labelClass}>Rotation</label>
@@ -1435,7 +1430,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
           )}
 
           <div className="custom-scrollbar flex-1 overflow-y-auto pr-1">
-            <div className="space-y-4">
+            <div
+              className={
+                showCropSection ? 'space-y-4 pb-24 md:pb-0' : 'space-y-4'
+              }
+            >
               {selectedType && !showCropSection && (
                 <div className="day:border-gray-200 day:bg-white flex items-center gap-3 rounded-lg border border-[#D7B356] bg-[#171717] p-3 shadow-lg shadow-[#D7B356]/10">
                   <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-white/[0.04]">

@@ -224,7 +224,7 @@ export default function DesignDetailPage() {
         aria-hidden
       />
 
-      <div className="relative mx-auto w-full max-w-5xl px-6 py-10">
+      <div className="relative mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-10">
         {/* Breadcrumb */}
         <nav className="mb-6 flex items-center gap-2 text-sm text-white/50 day:text-gray-400">
           <Link href="/my-account" className="hover:text-[#D4A84F] transition">
@@ -250,28 +250,28 @@ export default function DesignDetailPage() {
           </Link>
         </div>
 
-        <div className="rounded-[32px] border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white px-8 pt-0 pb-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-md backdrop-blur-2xl">
+        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 pt-0 pb-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl day:border-gray-200 day:bg-white day:shadow-md sm:rounded-[32px] sm:px-8 sm:pb-8">
           {/* Header — title left, price right */}
           <div className="mb-[10px] border-b border-white/5 day:border-gray-100 pb-[10px]">
             <div className="flex items-start justify-between gap-4 pb-[10px]">
-              <h1 className="text-2xl font-semibold tracking-tight leading-none">{project.title}</h1>
-              <div className="text-right flex-shrink-0 pt-[30px]">
+              <h1 className="min-w-0 break-words text-2xl font-semibold leading-none tracking-tight">{project.title}</h1>
+              <div className="shrink-0 text-right sm:pt-[30px]">
                 <p className="text-2xl font-bold text-[#D4A84F]">{priceLabel}</p>
-                <p className="mt-0.5 text-xs text-white/40 day:text-gray-400">Created {formatDate(createdDate)}</p>
+                <p className="mt-0.5 whitespace-nowrap text-xs text-white/40 day:text-gray-400">Created {formatDate(createdDate)}</p>
               </div>
             </div>
 
-            {/* Image left, actions right */}
-            <div className="flex items-start gap-6">
+            {/* Preview and actions stack on mobile to avoid horizontal overflow. */}
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
               {/* Thumbnail */}
               <button
                 onClick={() => setImagePreviewOpen(true)}
-                className="group relative inline-block rounded-xl bg-black/40 day:bg-gray-100 cursor-zoom-in overflow-visible flex-shrink-0"
+                className="group relative w-full max-w-sm self-center overflow-visible rounded-xl bg-black/40 day:bg-gray-100 sm:w-auto sm:max-w-[220px] sm:shrink-0"
               >
                 <img
                   src={thumbnail}
                   alt={project.title}
-                  className="h-auto w-auto max-w-[220px] rounded-xl object-contain transition group-hover:opacity-80"
+                  className="aspect-[4/3] h-auto w-full rounded-xl object-cover transition group-hover:opacity-80 sm:w-auto sm:max-w-[220px]"
                 />
                 <div className="absolute inset-0 flex items-center justify-center opacity-0 transition group-hover:opacity-100">
                   <span className="rounded-full bg-black/70 px-3 py-1.5 text-xs text-white">
@@ -280,15 +280,33 @@ export default function DesignDetailPage() {
                 </div>
               </button>
 
-              {/* Right side: share top-right, action buttons bottom */}
-              <div className="flex flex-col justify-between flex-1 self-stretch">
-                {/* Share — collapsed into single button with dropdown */}
-                <div className="flex justify-end">
+              <div className="flex w-full flex-1 flex-col gap-2 sm:self-stretch">
+                {/* Primary actions */}
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                  <button
+                    type="button"
+                    className="order-1 rounded-lg bg-[#D4A84F] px-4 py-3 text-sm font-semibold text-black transition hover:bg-[#C49940] disabled:opacity-50"
+                    onClick={() => router.push(`/my-account/designs/${project.id}/buy`)}
+                  >
+                    Buy Now{priceLabel !== 'Price TBD' ? ` (${priceLabel})` : ''}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleEditDesign}
+                    disabled={isLoadingEdit}
+                    className="order-2 rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10 disabled:opacity-50 day:border-gray-200 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100"
+                  >
+                    {isLoadingEdit ? 'Loading…' : 'Edit Design'}
+                  </button>
+                </div>
+
+                {/* Secondary actions */}
+                <div className="grid grid-cols-3 gap-2">
                   <div className="relative" ref={shareDropdownRef}>
                     <button
                       type="button"
                       onClick={() => setShareDropdownOpen((o) => !o)}
-                      className="flex items-center gap-1.5 rounded-lg border border-white/20 day:border-gray-200 bg-white/10 day:bg-gray-50 px-3 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/20 day:hover:bg-gray-100 cursor-pointer"
+                      className="flex w-full items-center justify-center gap-1 rounded-lg border border-white/20 bg-white/10 px-2 py-2.5 text-[11px] font-medium text-white transition hover:bg-white/20 day:border-gray-200 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 sm:text-xs"
                     >
                       <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -318,41 +336,16 @@ export default function DesignDetailPage() {
                       </div>
                     )}
                   </div>
-                </div>
-
-                {/* Action buttons — bottom: Edit+Buy left, PDF+Delete right */}
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex flex-wrap gap-2">
                     <button
                       type="button"
-                      onClick={handleEditDesign}
-                      disabled={isLoadingEdit}
-                      className="rounded-lg px-4 py-2 text-sm font-medium text-black transition cursor-pointer text-center disabled:opacity-50"
-                      style={{ backgroundColor: '#D4A84F' }}
-                      onMouseEnter={(e) => { if (!isLoadingEdit) (e.currentTarget as HTMLElement).style.backgroundColor = '#C49940'; }}
-                      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4A84F')}
-                    >
-                      {isLoadingEdit ? 'Loading…' : 'Edit Design'}
-                    </button>
-                    <button
-                      type="button"
-                      className="rounded-lg border border-[#D4A84F]/60 px-4 py-2 text-sm font-medium text-[#D4A84F] transition hover:bg-[#D4A84F]/10 cursor-pointer"
-                      onClick={() => router.push(`/my-account/designs/${project.id}/buy`)}
-                    >
-                      Buy Now
-                    </button>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-4 py-2 text-sm font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer"
+                      className="rounded-lg border border-white/20 bg-white/5 px-2 py-2.5 text-[11px] font-medium text-white transition hover:bg-white/10 day:border-gray-200 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 sm:text-xs"
                       onClick={handleExportPDF}
                     >
                       Export PDF
                     </button>
                     <button
                       type="button"
-                      className="rounded-lg border border-red-500/40 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-400 day:text-red-600 transition hover:bg-red-500/20 day:hover:bg-red-50 disabled:opacity-50 cursor-pointer"
+                      className="rounded-lg border border-red-500/40 bg-red-500/10 px-2 py-2.5 text-[11px] font-medium text-red-400 transition hover:bg-red-500/20 disabled:opacity-50 day:text-red-600 day:hover:bg-red-50 sm:text-xs"
                       onClick={handleDelete}
                       disabled={isDeleting}
                     >
@@ -362,7 +355,6 @@ export default function DesignDetailPage() {
                 </div>
               </div>
             </div>
-          </div>
 
           {/* Price quote — auto-height iframe, no nested scroll */}
           <div>

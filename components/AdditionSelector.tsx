@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 type Addition = {
   id: string;
@@ -39,6 +40,7 @@ export default function AdditionSelector({ additions }: Props) {
   const removeAddition = useHeadstoneStore((s) => s.removeAddition);
   const setSelectedAdditionId = useHeadstoneStore((s) => s.setSelectedAdditionId);
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
+  const setMobileNavOpen = useMobileNavStore((s) => s.setOpen);
 
   const filteredAdditions = useMemo(() => {
     if (category === 'all') return additions;
@@ -64,6 +66,9 @@ export default function AdditionSelector({ additions }: Props) {
 
     // addAddition already sets selectedAdditionId and activePanel internally
     addAddition(addition.id);
+    if (addition.type === 'statue' && window.innerWidth < 768) {
+      setMobileNavOpen(false);
+    }
   };
 
   return (

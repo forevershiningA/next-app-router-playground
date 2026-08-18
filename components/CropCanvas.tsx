@@ -389,8 +389,8 @@ function CropCanvasContent({ cropCanvasData }: { cropCanvasData: CropCanvasData 
   }, [allowFreeformHandles, dragState, hasFixedSizes, imageBoxPx.height, imageBoxPx.width, maskBounds, updateCropArea]);
 
   return (
-    <div className="absolute inset-0 bg-[#0A0A0A] day:bg-gray-200 flex items-center justify-center">
-      <div className="w-full h-full max-w-6xl max-h-[90vh] p-8">
+    <div className="absolute inset-x-0 top-0 bottom-[44dvh] flex items-center justify-center bg-[#0A0A0A] day:bg-gray-200 md:bottom-0">
+      <div className="h-full w-full max-w-6xl p-3 md:max-h-[90vh] md:p-8">
         {/* Interactive Crop Preview */}
         <div className="relative w-full h-full bg-gray-900 day:bg-gray-300 rounded-lg overflow-hidden" ref={previewRef}>
           {/* Uploaded Image */}

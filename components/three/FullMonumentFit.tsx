@@ -7,6 +7,7 @@ import * as React from 'react';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import { FULL_MONUMENT_GROUP_NAME, UPRIGHT_ASSEMBLY_NAME } from './constants';
 
 type FullMonumentFitProps = {
@@ -75,6 +76,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
+  const isMobileNavOpen = useMobileNavStore((s) => s.isOpen);
   const selectedInscriptionSurface = useHeadstoneStore((s) =>
     selectedInscriptionId
       ? (s.inscriptions.find((line) => line.id === selectedInscriptionId)?.target ?? 'headstone')
@@ -184,8 +186,13 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const center = box.getCenter(new THREE.Vector3());
       const halfWidth = Math.max(0.2, sizeVec.x / 2);
       const halfHeight = Math.max(0.3, sizeVec.y / 2);
+      const mobileSheetVisible = size.width < 768 && isMobileNavOpen;
 
-      const margin = zoomToHeadstone ? 1.02 : 1.08;
+      // Leave enough vertical room to fit the entire upright, base and statue
+      // in the uncovered portion of a mobile viewport.
+      const margin = mobileSheetVisible
+        ? (zoomToHeadstone ? 1.48 : 1.32)
+        : (zoomToHeadstone ? 1.02 : 1.08);
       const vFov = THREE.MathUtils.degToRad(camera.fov);
       const aspect = Math.max(1e-6, size.width / Math.max(1, size.height));
       const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
@@ -202,19 +209,27 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         ? preferredDirection.clone().normalize()
         : fallbackDirection;
 
-      const minTargetY = box.min.y + sizeVec.y * (zoomToHeadstone ? 0.3 : 0.35);
+      const minTargetY = box.min.y + sizeVec.y * (
+        mobileSheetVisible ? 0.04 : (zoomToHeadstone ? 0.3 : 0.35)
+      );
       const maxTargetY = box.min.y + sizeVec.y * (zoomToHeadstone ? 0.6 : 0.65);
       const targetY = THREE.MathUtils.clamp(
         box.min.y + sizeVec.y * (zoomToHeadstone ? 0.45 : 0.48),
         minTargetY,
         maxTargetY,
       );
-      const mobileVerticalBias =
-        size.width < 768 ? sizeVec.y * (zoomToHeadstone ? 0.08 : 0.04) : 0;
+      // On mobile the editing drawer covers 44% of the viewport. Shift the
+      // framing target down in world space so the monument appears centred in
+      // the uncovered upper portion instead of behind the bottom sheet.
+      const mobileVerticalBias = mobileSheetVisible
+        ? sizeVec.y * (zoomToHeadstone ? 0.46 : 0.4)
+        : size.width < 768
+          ? sizeVec.y * (zoomToHeadstone ? 0.08 : 0.04)
+          : 0;
 
       const target = new THREE.Vector3(
         center.x,
-        Math.max(box.min.y + sizeVec.y * 0.25, targetY - mobileVerticalBias),
+        Math.max(minTargetY, targetY - mobileVerticalBias),
         center.z,
       );
       const camPos = target.clone().addScaledVector(dir, distance);
@@ -359,6 +374,22 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
 
       targetObj.updateWorldMatrix(true, true);
       const box = computeMeshBox(targetObj);
+      const selectedAdditionObject = selectedAdditionId
+        ? scene.getObjectByName(`addition-${selectedAdditionId}`)
+        : null;
+      if (selectedAdditionObject) {
+        const additionBox = computeMeshBox(selectedAdditionObject);
+        if (!additionBox.isEmpty()) box.union(additionBox);
+      }
+      // The upright assembly starts above the base, so its box alone omits
+      // the exact area where base-mounted statues are placed.
+      if (selectedAdditionId) {
+        const baseObject = scene.getObjectByName('base');
+        if (baseObject) {
+          const baseBox = computeMeshBox(baseObject);
+          if (!baseBox.isEmpty()) box.union(baseBox);
+        }
+      }
       if (box.isEmpty()) {
         scheduleRetry();
         return;
@@ -383,8 +414,12 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const currentTarget = controls?.target
         ? controls.target.clone()
         : new THREE.Vector3(0, 0, 0);
+      // The upright assembly can have a different local rotation than the
+      // headstone mesh. Always take the viewing direction from the headstone
+      // itself, otherwise base-mounted statues can be framed from the side.
+      const frontReference = scene.getObjectByName(HEADSTONE_OBJECT_NAME) ?? targetObj;
       const preferredDirection = zoomIn
-        ? getHeadstoneFrontDirection(targetObj)
+        ? getHeadstoneFrontDirection(frontReference)
         : shouldAnimateFromZoomOut
           ? camera.position.clone().sub(currentTarget).normalize()
           : undefined;
@@ -410,7 +445,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     productId, shapeUrl, showLedger, showKerbset, selected, trigger,
     selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
     selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,
-    isMaterialChange, camera, size.width, size.height, controls, invalidate, scene, fitKey,
+    isMaterialChange, isMobileNavOpen, camera, size.width, size.height, controls, invalidate, scene, fitKey,
     shouldFocusHeadstone, shouldFocusBase, shouldZoomIn,
   ]);
 

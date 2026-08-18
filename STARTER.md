@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-17
+**Last Updated:** 2026-08-18
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -82,6 +82,52 @@
 74. [August 15 Full Monument Material, Foundation, and Grounding Follow-up](#current-status-2026-08-15--full-monument-material-foundation-and-grounding-follow-up)
 75. [August 16 Mobile Designer UX and Image Crop Reliability](#current-status-2026-08-16--mobile-designer-ux-and-image-crop-reliability)
 76. [August 17 Local 3D Assets and Mobile Quote UX](#current-status-2026-08-17--local-3d-assets-and-mobile-quote-ux)
+77. [August 18 Mobile Designer, Saved Projects, and Checkout UX](#current-status-2026-08-18--mobile-designer-saved-projects-and-checkout-ux)
+
+---
+
+## Current Status (2026-08-18) — Mobile Designer, Saved Projects, and Checkout UX
+
+### Designer mobile panels and crop flow
+
+Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, `components/CropCanvas.tsx`, `components/ImageSelector.tsx`, `components/MotifSelectorPanel.tsx`, `components/AdditionSelector.tsx`, and `components/three/AdditionModel.tsx`.
+
+- The mobile bottom sheet uses neutral dark surfaces (`#121212` / `#1E1E1E`) and has an explicit close button beside its title. Its content must leave room for the persistent Previous/Finish controls.
+- The crop step is named **Image Crop Section** only in its bottom panel; the upper workflow step remains unchanged. The crop canvas is vertically centred within the viewport area that remains after reserving the panel height.
+- Image cards combine thumbnail, name, price, physical size selector, and trash action. Rotation is intentionally hidden on mobile.
+- Adding a base statue closes the mobile sheet so the complete monument is visible. Selecting the statue opens the relevant panel again. The camera framing must consider the available canvas area, not merely the raw viewport.
+- Addition fallback pricing includes `K0320` and `K2064` in `app/_internal/_additions-loader.ts`; catalog values in `public/xml/au_EN/motifs-biondan.xml` remain the source of truth.
+- Motif category and item views use three tiles per mobile row, with enough bottom padding for the final row. Category labels no longer use separate `Browse` text. Selected motifs expose Duplicate, Remove, Flip X, and Flip Y actions.
+
+### Saved designs and project naming
+
+Primary files: `app/my-account/page.tsx`, `app/api/projects/[id]/route.ts`, and `lib/projects-db.ts`.
+
+- `/my-account` has a visible **+ New Design** action. It resets the Zustand design state before navigating to `/select-product`.
+- Saved-design cards use a full-frame, neutral thumbnail treatment and retain the Buy / Edit / overflow hierarchy.
+- The pencil beside a title opens an inline rename field. `PATCH /api/projects/:id` validates a non-empty title up to 120 characters and persists it through `updateProjectTitle()` scoped to the signed-in account.
+- Card descriptions show physical headstone dimensions when present in the saved snapshot (`Headstone · width × height mm`).
+
+### Checkout and single-project details
+
+Primary files: `app/my-account/designs/[id]/buy/page.tsx`, `app/my-account/designs/[id]/page.tsx`, and `components/PriceQuoteDisplay.tsx`.
+
+- The order form is one column on mobile. Name/email and city/state/postcode only become multi-column at `sm` and above. Inputs include standard `autocomplete` tokens (`name`, `email`, `tel`, `street-address`, address levels, and `postal-code`).
+- Checkout Summary shows Product, free Shipping, and Total. The mobile payment CTA spans the available width.
+- Project-detail actions stack below the preview on mobile: gold Buy Now, secondary Edit Design, then Share / Export PDF / Delete. This prevents the previous horizontal overflow.
+- `PriceQuoteDisplay` shows Subtotal, **Estimated tax (GST 10%)**, and Total immediately below the line-item table, before motif/inscription detail. `buildPdfQuoteFromProject()` derives the GST from the project total when required, so e.g. `$544.48 + $54.45 = $598.93` is explicit.
+- The project detail date is intentionally formatted from the persisted `createdAt` timestamp; do not substitute a mock or client-generated date.
+
+### Verification
+
+After changes in these areas, run:
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+`screen.png` is the visual acceptance reference for the current mobile flows. It is user-provided and must not be reverted.
 
 ---
 
@@ -13770,4 +13816,4 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-17*
+*End of STARTER.md - Last updated: 2026-08-18*

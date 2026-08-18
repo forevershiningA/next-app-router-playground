@@ -17,6 +17,36 @@ const FALLBACK_SIZES: Record<
     notes: string;
   }>
 > = {
+  // motifs-biondan.xml: K0320, white finish (wholesale 96.24 × 2.6).
+  K0320: [
+    {
+      variant: 1,
+      code: 'K0320',
+      width: 95,
+      height: 195,
+      depth: 120,
+      weight: 1,
+      availability: true,
+      wholesalePrice: 96.24,
+      retailPrice: 250.22,
+      notes: 'white',
+    },
+  ],
+  // motifs-biondan.xml: K2064, white finish (wholesale 115.48 × 2.6).
+  K2064: [
+    {
+      variant: 1,
+      code: 'K2064',
+      width: 100,
+      height: 200,
+      depth: 90,
+      weight: 1,
+      availability: true,
+      wholesalePrice: 115.48,
+      retailPrice: 300.25,
+      notes: 'white',
+    },
+  ],
   B1134S: [
     {
       variant: 1,

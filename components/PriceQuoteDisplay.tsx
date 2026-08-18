@@ -30,6 +30,22 @@ export function PriceQuoteDisplay({ quote }: { quote: PDFQuote }) {
         </tbody>
       </table>
 
+      {/* Keep the tax calculation adjacent to the line-item amounts. */}
+      <div className="space-y-1 border-t border-white/10 pt-3 day:border-gray-200">
+        <div className="flex justify-between text-white/60 day:text-gray-500">
+          <span>Subtotal</span>
+          <span>{fmt(subtotal, currency)}</span>
+        </div>
+        <div className="flex justify-between text-white/60 day:text-gray-500">
+          <span>Estimated tax (GST 10%)</span>
+          <span>{fmt(tax, currency)}</span>
+        </div>
+        <div className="flex justify-between text-base font-semibold text-[#D4A84F]">
+          <span>Total</span>
+          <span>{fmt(total, currency)}</span>
+        </div>
+      </div>
+
       {/* Motifs */}
       {motifs.length > 0 && (
         <div>
@@ -103,22 +119,6 @@ export function PriceQuoteDisplay({ quote }: { quote: PDFQuote }) {
           </div>
         </div>
       )}
-
-      {/* Totals */}
-      <div className="border-t border-white/10 day:border-gray-200 pt-3 space-y-1">
-        <div className="flex justify-between text-white/60 day:text-gray-500">
-          <span>Subtotal</span>
-          <span>{fmt(subtotal, currency)}</span>
-        </div>
-        <div className="flex justify-between text-white/60 day:text-gray-500">
-          <span>GST (10%)</span>
-          <span>{fmt(tax, currency)}</span>
-        </div>
-        <div className="flex justify-between text-base font-semibold text-[#D4A84F]">
-          <span>Total</span>
-          <span>{fmt(total, currency)}</span>
-        </div>
-      </div>
 
       {note && <p className="text-xs text-white/30 day:text-gray-400">{note}</p>}
     </div>

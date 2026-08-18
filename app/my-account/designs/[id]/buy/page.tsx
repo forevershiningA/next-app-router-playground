@@ -364,7 +364,7 @@ export default function BuyDesignPage() {
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%),radial-gradient(circle_at_bottom,_rgba(88,144,255,0.18),_transparent_40%)]"
         aria-hidden
       />
-      <div className="relative mx-auto w-full max-w-3xl px-10 py-10">
+      <div className="relative mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-10 lg:px-10">
         <Link
           href={`/my-account/designs/${id}`}
           className="mb-6 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white transition"
@@ -373,7 +373,7 @@ export default function BuyDesignPage() {
           Back to Design
         </Link>
 
-        <div className="rounded-[32px] border border-white/10 bg-[#0c0805]/85 px-10 py-8 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl">
+        <div className="rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-6 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-10 sm:py-8">
           <header className="mb-0 pb-6">
             <h1 className="py-[10px] text-3xl font-semibold tracking-tight">Place Order</h1>
           </header>
@@ -386,56 +386,69 @@ export default function BuyDesignPage() {
               {/* Design Summary */}
               <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
                 <h2 className="mb-4 text-base font-semibold text-white/90">Summary</h2>
-                <div className="flex items-center gap-5">
+                <div className="flex items-start gap-3 sm:gap-5">
                   {preview && (
-                    <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl bg-black/50">
+                    <div className="h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-black/50 sm:h-20 sm:w-20">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={preview}
                         alt={project?.title || 'Design preview'}
-                        className="h-full w-full object-contain p-1"
+                        className="h-full w-full object-cover"
                       />
                     </div>
                   )}
-                  <div className="flex-1 min-w-0">
-                    <p className="truncate text-base font-medium text-white">{project?.title || 'Untitled Design'}</p>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-3">
+                      <p className="min-w-0 break-words text-base font-medium leading-snug text-white">{project?.title || 'Untitled Design'}</p>
+                      {price && (
+                        <p className="shrink-0 text-right text-lg font-bold text-[#D4A84F] sm:text-xl">
+                          {price}
+                        </p>
+                      )}
+                    </div>
                     {project?.description && (
-                      <p className="mt-0.5 truncate text-sm text-white/50">{project.description}</p>
-                    )}
-                  </div>
-                  <div className="flex-shrink-0 text-right">
-                    {price && (
-                      <p className="text-xl font-bold text-[#D4A84F]">
-                        {currencyFormatter.format((project?.totalPriceCents ?? 0) / 100)}
-                      </p>
-                    )}
-                    {!price && (
-                      <p className="text-sm text-white/30">Price TBD</p>
+                      <p className="mt-0.5 break-words text-sm text-white/50">{project.description}</p>
                     )}
                   </div>
                 </div>
+                <dl className="mt-4 space-y-1.5 border-t border-white/10 pt-3 text-sm">
+                  <div className="flex items-center justify-between gap-4 text-white/65">
+                    <dt>Product</dt>
+                    <dd>{price ?? 'Price TBD'}</dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 text-white/65">
+                    <dt>Shipping</dt>
+                    <dd className="font-medium text-white/85">Free</dd>
+                  </div>
+                  <div className="flex items-center justify-between gap-4 pt-1 text-base font-semibold text-white">
+                    <dt>Total</dt>
+                    <dd className="text-[#D4A84F]">{price ?? 'Price TBD'}</dd>
+                  </div>
+                </dl>
               </section>
 
               {/* Shipping Details */}
-              <section className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <section className="rounded-2xl border border-white/10 bg-white/5 p-5 sm:p-6">
                 <h2 className="mb-4 text-base font-semibold text-white/90">Shipping Details</h2>
                 <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="min-w-0">
                       <label className={labelClass}>Full Name {requiredMark}</label>
                       <input
                         className={inputClass}
+                        autoComplete="name"
                         value={form.fullName}
                         onChange={(e) => set('fullName', e.target.value)}
                         placeholder="John Smith"
                         required
                       />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <label className={labelClass}>Email {requiredMark}</label>
                       <input
                         className={inputClass}
                         type="email"
+                        autoComplete="email"
                         value={form.email}
                         onChange={(e) => set('email', e.target.value)}
                         placeholder="john@example.com"
@@ -447,6 +460,8 @@ export default function BuyDesignPage() {
                     <label className={labelClass}>Phone</label>
                     <input
                       className={inputClass}
+                      type="tel"
+                      autoComplete="tel"
                       value={form.phone}
                       onChange={(e) => set('phone', e.target.value)}
                       placeholder="+61 400 000 000"
@@ -456,36 +471,40 @@ export default function BuyDesignPage() {
                     <label className={labelClass}>Street Address {requiredMark}</label>
                     <input
                       className={inputClass}
+                      autoComplete="street-address"
                       value={form.address}
                       onChange={(e) => set('address', e.target.value)}
                       placeholder="123 Example Street"
                       required
                     />
                   </div>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div className="min-w-0">
                       <label className={labelClass}>City {requiredMark}</label>
                       <input
                         className={inputClass}
+                        autoComplete="address-level2"
                         value={form.city}
                         onChange={(e) => set('city', e.target.value)}
                         placeholder="Sydney"
                         required
                       />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <label className={labelClass}>State</label>
                       <input
                         className={inputClass}
+                        autoComplete="address-level1"
                         value={form.state}
                         onChange={(e) => set('state', e.target.value)}
                         placeholder="NSW"
                       />
                     </div>
-                    <div>
-                      <label className={labelClass}>Postcode {requiredMark}</label>
+                    <div className="min-w-0">
+                      <label className={`${labelClass} whitespace-nowrap`}>Postcode {requiredMark}</label>
                       <input
                         className={inputClass}
+                        autoComplete="postal-code"
                         value={form.postcode}
                         onChange={(e) => set('postcode', e.target.value)}
                         placeholder="2000"
@@ -494,13 +513,18 @@ export default function BuyDesignPage() {
                     </div>
                   </div>
                   <div>
-                    <label className={labelClass}>Country</label>
-                    <input
+                    <label className={labelClass}>Country {requiredMark}</label>
+                    <select
                       className={inputClass}
                       value={form.country}
                       onChange={(e) => set('country', e.target.value)}
-                      placeholder="Australia"
-                    />
+                      autoComplete="country-name"
+                      required
+                    >
+                      <option value="Australia">Australia</option>
+                      <option value="New Zealand">New Zealand</option>
+                      <option value="Other">Other</option>
+                    </select>
                   </div>
                 </div>
               </section>
@@ -607,17 +631,17 @@ export default function BuyDesignPage() {
                 </p>
               )}
 
-              <div className="flex items-center gap-4 pt-2">
+              <div className="flex flex-col gap-4 pt-2 sm:flex-row sm:items-center">
                 {form.paymentType !== 'paypal' && (
                   <button
                     type="submit"
                     disabled={placing}
-                    className="rounded-lg bg-[#D4A84F] px-8 py-3 text-sm font-semibold text-black hover:bg-[#e0b86a] disabled:opacity-50 transition"
+                    className="w-full rounded-lg bg-[#D4A84F] px-8 py-3 text-sm font-semibold text-black transition hover:bg-[#e0b86a] disabled:opacity-50 sm:w-auto"
                   >
                     {placing
                       ? 'Processing…'
                       : form.paymentType === 'credit-card'
-                        ? 'Pay with Card →'
+                        ? `Continue to Payment${price ? ` (${price})` : ''}`
                         : 'Place Order'}
                   </button>
                 )}

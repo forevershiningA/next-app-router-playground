@@ -105,7 +105,7 @@ export default function MotifSelectorPanel({
 
   const individualMotifs = selectedCategory?.motifs ?? [];
   const cardClass =
-    'group flex min-h-[176px] flex-col overflow-hidden rounded-lg border text-left shadow-lg shadow-black/15 transition-all';
+    'group flex flex-col overflow-hidden rounded-lg border text-left shadow-lg shadow-black/15 transition-all';
   const inactiveCardClass =
     'border-white/10 bg-[#171717] hover:-translate-y-0.5 hover:border-[#D7B356]/60 hover:bg-white/[0.06] day:border-gray-200 day:bg-white';
   const selectedCardClass =
@@ -143,16 +143,8 @@ export default function MotifSelectorPanel({
     <div className="flex h-full min-h-0 flex-col gap-3">
       {!selectedCategory ? (
         <>
-          <div className="day:border-gray-200 day:bg-gray-100 flex shrink-0 items-center justify-between gap-3 rounded-lg border border-white/10 bg-[#0A0A0A] px-3 py-2.5">
-            <h3 className="day:text-gray-900 text-sm font-semibold text-white">
-              Browse categories
-            </h3>
-            <span className="day:text-gray-500 shrink-0 text-xs font-semibold text-white/45">
-              {categories.length}
-            </span>
-          </div>
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-3 gap-2.5 pb-24">
               {categories.map((category) => {
                 const categoryImgSrc = getMotifCategoryImage({
                   name: category.name,
@@ -194,12 +186,9 @@ export default function MotifSelectorPanel({
                         )}
                       </div>
                     </div>
-                    <div className="flex min-h-[64px] flex-1 flex-col justify-between gap-2 p-2.5">
+                    <div className="flex flex-1 flex-col p-2.5">
                       <p className={titleClass}>
                         {getMotifCategoryName(category.name)}
-                      </p>
-                      <p className="text-[11px] font-semibold text-[#D7B356]">
-                        Browse
                       </p>
                     </div>
                   </button>
@@ -226,7 +215,7 @@ export default function MotifSelectorPanel({
 
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
             {shouldUseLazyMotifs ? (
-              <div className="space-y-2">
+              <div className="space-y-2 pb-24">
                 <div className="flex items-center justify-between text-xs text-white/60 day:text-gray-500">
                   <span>
                     Showing {lazyMotifFiles.length} of {lazyMotifTotalCount} motifs
@@ -243,7 +232,7 @@ export default function MotifSelectorPanel({
                     No motifs available in this category yet.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-2.5">
+                  <div className="grid grid-cols-3 gap-2.5">
                     {lazyMotifFiles.map((fileName) => {
                       const svgPath = getMotifSvgPath(fileName);
                       const thumbnailPath = getMotifThumbnailPath(fileName);
@@ -301,11 +290,6 @@ export default function MotifSelectorPanel({
                               </div>
                             )}
                           </div>
-                          <div className="flex min-h-[42px] flex-1 flex-col justify-center gap-2 p-2.5">
-                            <p className="text-[11px] font-semibold text-[#D7B356]">
-                              {isSelected ? 'Remove' : 'Add'}
-                            </p>
-                          </div>
                         </button>
                       );
                     })}
@@ -327,7 +311,7 @@ export default function MotifSelectorPanel({
                 No motifs available in this category yet.
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2.5">
+              <div className="grid grid-cols-3 gap-2.5 pb-24">
                 {individualMotifs.map((motif, index) => {
                   const svgPath = motif.svgUrl ?? motif.previewUrl;
                   const isSelected = svgPath
@@ -377,11 +361,6 @@ export default function MotifSelectorPanel({
                             Added
                           </div>
                         )}
-                      </div>
-                      <div className="flex min-h-[42px] flex-1 flex-col justify-center gap-2 p-2.5">
-                        <p className="text-[11px] font-semibold text-[#D7B356]">
-                          {isSelected ? 'Remove' : 'Add'}
-                        </p>
                       </div>
                     </button>
                   );

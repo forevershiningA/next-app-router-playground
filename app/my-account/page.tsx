@@ -2,40 +2,37 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { UserCircleIcon } from '@heroicons/react/24/outline';
 
 import type { SavedDesignMetadata } from '#/lib/saved-designs-data';
 import { data } from '#/app/_internal/_data';
 import { applyDesignSnapshot } from '#/lib/project-serializer';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import { useHeadstoneStore } from '#/lib/headstone-store';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import ConfirmModal from '#/components/ConfirmModal';
 import dynamic from 'next/dynamic';
 import { logger } from '#/lib/logger';
 const EmailShareModal = dynamic(() => import('#/components/EmailShareModal'));
 
-type DesignStatus = 'awaiting-approval' | 'ready-to-order' | 'in-production' | 'completed' | 'draft';
+type DesignStatus =
+  | 'awaiting-approval'
+  | 'ready-to-order'
+  | 'in-production'
+  | 'completed'
+  | 'draft';
 
 const statusMeta: Record<DesignStatus, { primaryAction: string }> = {
-  'awaiting-approval': {
-    primaryAction: 'Review proof',
-  },
-  'ready-to-order': {
-    primaryAction: 'Place order',
-  },
-  'in-production': {
-    primaryAction: 'Track order',
-  },
-  completed: {
-    primaryAction: 'Reorder design',
-  },
-  draft: {
-    primaryAction: 'Edit design',
-  },
+  'awaiting-approval': { primaryAction: 'Review proof' },
+  'ready-to-order': { primaryAction: 'Place order' },
+  'in-production': { primaryAction: 'Track order' },
+  completed: { primaryAction: 'Reorder design' },
+  draft: { primaryAction: 'Edit design' },
 };
 
-const commentInstructions = 'Add engraving notes or approval comments before submitting your order.';
+const commentInstructions =
+  'Add engraving notes or approval comments before submitting your order.';
 
 const currencyFormatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -61,11 +58,20 @@ type AccountDesignCard = {
 
 // ─── Login / Register gate ────────────────────────────────────────────────────
 
-function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
+function AuthGate({
+  onLogin,
+  isSavingDesign,
+  onBackToDesign,
+}: {
+  onLogin: (email: string) => void;
+  isSavingDesign: boolean;
+  onBackToDesign?: () => void;
+}) {
   const [tab, setTab] = useState<'login' | 'register'>('login');
   const [isReset, setIsReset] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
@@ -121,7 +127,8 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
     }
     setLoading(true);
     try {
-      const endpoint = tab === 'login' ? '/api/auth/login' : '/api/auth/register';
+      const endpoint =
+        tab === 'login' ? '/api/auth/login' : '/api/auth/register';
       const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -129,9 +136,11 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || (tab === 'login' ? 'Login failed' : 'Registration failed'));
-      }
-      else {
+        setError(
+          data.error ||
+            (tab === 'login' ? 'Login failed' : 'Registration failed'),
+        );
+      } else {
         window.dispatchEvent(new Event('session-changed'));
         onLogin(email);
       }
@@ -142,30 +151,53 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
     }
   }
 
-  const inputCls = 'w-full rounded-lg border border-white/18 bg-white/[0.06] px-4 py-3 text-sm text-white placeholder-white/35 transition-colors focus:border-[#D4A84F] focus:outline-none focus:ring-2 focus:ring-[#D4A84F]/35';
+  const inputCls =
+    'w-full rounded-lg border border-white/18 bg-white/[0.06] px-4 py-3 text-sm text-white placeholder-white/35 transition-colors focus:border-[#D4A84F] focus:outline-none focus:ring-2 focus:ring-[#D4A84F]/35';
 
   return (
-    <div className="relative min-h-screen bg-[#050301] text-white flex items-center justify-center px-6">
+    <div className="relative flex min-h-screen items-center justify-center bg-[#050301] px-6 text-white">
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,160,80,0.18),_transparent_45%)]"
         aria-hidden
       />
       <div className="relative w-full max-w-sm">
         <div className="mb-8">
+          {isSavingDesign && onBackToDesign && !isReset && (
+            <button
+              type="button"
+              onClick={onBackToDesign}
+              className="mb-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#D4A84F] transition-colors hover:text-[#e8bc5e]"
+            >
+              <span aria-hidden="true">←</span>
+              Back to your design
+            </button>
+          )}
           <h1 className="text-3xl font-semibold tracking-tight text-white">
             {isReset ? 'Reset Password' : 'My Account'}
           </h1>
-          <p className="text-sm mt-1 text-white/55">Forever Shining Memorial Designs</p>
+          <p className="mt-1 text-sm text-white/55">
+            Forever Shining Memorial Designs
+          </p>
+          {isSavingDesign && !isReset && (
+            <p className="mt-4 rounded-lg border border-[#D4A84F]/25 bg-[#D4A84F]/10 px-3 py-2.5 text-sm leading-relaxed text-white/80">
+              Sign in or create an account to save your project and access it
+              anytime.
+            </p>
+          )}
         </div>
 
         {/* Tab switcher — hidden in reset mode */}
         {!isReset && (
-          <div className="flex rounded-xl bg-white/5 border border-white/10 p-1 mb-6">
+          <div className="mb-6 flex rounded-xl border border-white/10 bg-white/5 p-1">
             {(['login', 'register'] as const).map((t) => (
               <button
                 key={t}
-                onClick={() => { setTab(t); setError(''); setInfo(''); }}
-                className={`flex-1 py-2 rounded-lg text-sm font-medium transition-colors cursor-pointer ${
+                onClick={() => {
+                  setTab(t);
+                  setError('');
+                  setInfo('');
+                }}
+                className={`flex-1 cursor-pointer rounded-lg py-2 text-sm font-medium transition-colors ${
                   tab === t
                     ? 'bg-[#D4A84F] text-[#1a0f05]'
                     : 'text-white/65 hover:text-white'
@@ -180,27 +212,32 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
         {isReset && (
           <div className="mb-5 space-y-3 text-sm leading-relaxed text-white/70">
             <p>
-              If you have lost your password and cannot login, enter your login email
-              address into the form below and click the Reset button.
+              If you have lost your password and cannot login, enter your login
+              email address into the form below and click the Reset button.
             </p>
             <p>
-              You will be sent an email with instructions on how to reset your login
-              password.
+              You will be sent an email with instructions on how to reset your
+              login password.
             </p>
             <p className="italic">
-              If you do not know your login email, unfortunately we will not be able
-              to recover your account. You will need to{' '}
+              If you do not know your login email, unfortunately we will not be
+              able to recover your account. You will need to{' '}
               <button
                 type="button"
-                onClick={() => { setIsReset(false); setTab('register'); setError(''); setInfo(''); }}
-                className="underline text-[#D4A84F]/80 hover:text-[#D4A84F] cursor-pointer"
+                onClick={() => {
+                  setIsReset(false);
+                  setTab('register');
+                  setError('');
+                  setInfo('');
+                }}
+                className="cursor-pointer text-[#D4A84F]/80 underline hover:text-[#D4A84F]"
               >
                 Register again
               </button>
               . Please{' '}
               <a
                 href="mailto:support@forevershining.com"
-                className="underline text-[#D4A84F]/80 hover:text-[#D4A84F]"
+                className="text-[#D4A84F]/80 underline hover:text-[#D4A84F]"
               >
                 Contact Us
               </a>{' '}
@@ -211,36 +248,80 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">Email</label>
-            <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-              className={inputCls} placeholder="you@example.com" autoComplete="email" />
+            <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+              Email
+            </label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={inputCls}
+              placeholder="you@example.com"
+              autoComplete="email"
+            />
           </div>
 
           {!isReset && (
             <div>
-              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">Password</label>
-              <input type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
-                className={inputCls} placeholder="••••••••" autoComplete={tab === 'login' ? 'current-password' : 'new-password'} />
+              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`${inputCls} pr-16`}
+                  placeholder="••••••••"
+                  autoComplete={
+                    tab === 'login' ? 'current-password' : 'new-password'
+                  }
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((shown) => !shown)}
+                  className="absolute top-1/2 right-3 -translate-y-1/2 text-xs font-semibold text-[#D4A84F] hover:text-[#e8bc5e]"
+                >
+                  {showPassword ? 'Hide' : 'Show'}
+                </button>
+              </div>
             </div>
           )}
           {!isReset && tab === 'register' && (
             <div>
-              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">Confirm Password</label>
-              <input type="password" required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
-                className={inputCls} placeholder="••••••••" autoComplete="new-password" />
+              <label className="mb-1.5 block text-xs tracking-wider text-white/70 uppercase">
+                Confirm Password
+              </label>
+              <input
+                type={showPassword ? 'text' : 'password'}
+                required
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={inputCls}
+                placeholder="••••••••"
+                autoComplete="new-password"
+              />
             </div>
           )}
 
           {error && (
-            <p className="text-red-400/80 text-sm bg-red-500/10 border border-red-500/20 rounded-lg px-4 py-2.5">{error}</p>
+            <p className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-2.5 text-sm text-red-400/80">
+              {error}
+            </p>
           )}
 
           {info && (
-            <p className="text-emerald-300/90 text-sm bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-4 py-2.5">{info}</p>
+            <p className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 px-4 py-2.5 text-sm text-emerald-300/90">
+              {info}
+            </p>
           )}
 
-          <button type="submit" disabled={loading}
-            className="w-full py-3 rounded-lg bg-[#D4A84F] text-[#1a0f05] font-semibold text-sm hover:bg-[#e8bc5e] disabled:opacity-50 disabled:cursor-not-allowed transition-colors mt-2 cursor-pointer"
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-2 w-full cursor-pointer rounded-lg bg-[#D4A84F] py-3 text-sm font-semibold text-[#1a0f05] transition-colors hover:bg-[#e8bc5e] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading
               ? 'Please wait…'
@@ -252,19 +333,20 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
           </button>
 
           {!isReset && tab === 'login' && (
-            <div className="text-center pt-1">
+            <div className="pt-1 text-center">
               <button
                 type="button"
                 onClick={enterReset}
                 className="cursor-pointer text-xs text-white/70 transition-colors hover:text-[#D4A84F]"
               >
-                Forgot your password? Reset it
+                Forgot your password?{' '}
+                <span className="text-[#D4A84F]">Reset it</span>
               </button>
             </div>
           )}
 
           {isReset && (
-            <div className="text-center pt-1">
+            <div className="pt-1 text-center">
               <button
                 type="button"
                 onClick={exitReset}
@@ -278,7 +360,10 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
 
         <p className="mt-8 text-center text-xs text-white/50">
           Need help?{' '}
-          <a href="mailto:support@forevershining.com" className="text-[#D4A84F] hover:text-[#e8bc5e]">
+          <a
+            href="mailto:support@forevershining.com"
+            className="text-[#D4A84F] hover:text-[#e8bc5e]"
+          >
             Contact support
           </a>
         </p>
@@ -291,7 +376,10 @@ function AuthGate({ onLogin }: { onLogin: (email: string) => void }) {
 
 export default function MyAccountPage() {
   const router = useRouter();
-  const [session, setSession] = useState<{ email: string } | null | undefined>(undefined);
+  const searchParams = useSearchParams();
+  const [session, setSession] = useState<{ email: string } | null | undefined>(
+    undefined,
+  );
   const [savedProjects, setSavedProjects] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -301,8 +389,57 @@ export default function MyAccountPage() {
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [shareModalOpen, setShareModalOpen] = useState(false);
   const [shareProjectId, setShareProjectId] = useState<string | null>(null);
-  const [shareProjectTitle, setShareProjectTitle] = useState<string | undefined>(undefined);
-  const [shareProjectScreenshot, setShareProjectScreenshot] = useState<string | undefined>(undefined);
+  const [shareProjectTitle, setShareProjectTitle] = useState<
+    string | undefined
+  >(undefined);
+  const [shareProjectScreenshot, setShareProjectScreenshot] = useState<
+    string | undefined
+  >(undefined);
+  const [editingTitleId, setEditingTitleId] = useState<string | null>(null);
+  const [draftTitle, setDraftTitle] = useState('');
+  const [isSavingTitle, setIsSavingTitle] = useState(false);
+  const resetDesign = useHeadstoneStore((state) => state.resetDesign);
+
+  function handleNewDesign() {
+    resetDesign();
+    router.push('/select-product');
+  }
+
+  async function handleRename(cardId: string) {
+    const title = draftTitle.trim();
+    if (!title) return;
+
+    setIsSavingTitle(true);
+    try {
+      const res = await fetch(`/api/projects/${cardId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title }),
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.message || 'Failed to rename project');
+      setSavedProjects((projects) =>
+        projects.map((project) =>
+          project.id === cardId
+            ? {
+                ...project,
+                title: body.project.title,
+                updatedAt: body.project.updatedAt,
+              }
+            : project,
+        ),
+      );
+      setEditingTitleId(null);
+    } catch (error) {
+      alert(
+        error instanceof Error
+          ? error.message
+          : 'Failed to rename project. Please try again.',
+      );
+    } finally {
+      setIsSavingTitle(false);
+    }
+  }
 
   async function handleEdit(cardId: string) {
     setLoadingEditId(cardId);
@@ -319,7 +456,9 @@ export default function MyAccountPage() {
         },
       };
       await applyDesignSnapshot(snapshot);
-      router.push(getDesignerProductStepHref('select-size', snapshot.productId));
+      router.push(
+        getDesignerProductStepHref('select-size', snapshot.productId),
+      );
     } catch {
       alert('Failed to load design. Please try again.');
       setLoadingEditId(null);
@@ -354,9 +493,12 @@ export default function MyAccountPage() {
     }
     checkSession();
 
-    function onSessionChanged() { checkSession(); }
+    function onSessionChanged() {
+      checkSession();
+    }
     window.addEventListener('session-changed', onSessionChanged);
-    return () => window.removeEventListener('session-changed', onSessionChanged);
+    return () =>
+      window.removeEventListener('session-changed', onSessionChanged);
   }, []);
 
   useEffect(() => {
@@ -387,7 +529,9 @@ export default function MyAccountPage() {
     const cardId = pendingDeleteId;
     if (!cardId) return;
     try {
-      const res = await fetch(`/api/projects?id=${cardId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/projects?id=${cardId}`, {
+        method: 'DELETE',
+      });
       if (res.ok) {
         setSavedProjects((prev) => prev.filter((p) => p.id !== cardId));
       } else {
@@ -403,15 +547,19 @@ export default function MyAccountPage() {
   };
 
   // Convert API projects to design cards
-  const projectCards = savedProjects.map((project) => buildProjectCard(project));
+  const projectCards = savedProjects.map((project) =>
+    buildProjectCard(project),
+  );
   const cards = projectCards;
-  const visibleCards = cards.filter((card) => card.status !== 'awaiting-approval');
+  const visibleCards = cards.filter(
+    (card) => card.status !== 'awaiting-approval',
+  );
 
   // Still checking session
   if (session === undefined) {
     return (
-      <div className="min-h-screen bg-[#050301] flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full border-2 border-[#D4A84F]/30 border-t-[#D4A84F] animate-spin" />
+      <div className="flex min-h-screen items-center justify-center bg-[#050301]">
+        <div className="h-6 w-6 animate-spin rounded-full border-2 border-[#D4A84F]/30 border-t-[#D4A84F]" />
       </div>
     );
   }
@@ -420,6 +568,11 @@ export default function MyAccountPage() {
   if (session === null) {
     return (
       <AuthGate
+        isSavingDesign={Boolean(searchParams.get('returnTo'))}
+        onBackToDesign={() => {
+          const returnTo = searchParams.get('returnTo');
+          if (returnTo) router.push(returnTo);
+        }}
         onLogin={(email) => {
           const params = new URLSearchParams(window.location.search);
           const returnTo = params.get('returnTo');
@@ -434,23 +587,37 @@ export default function MyAccountPage() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#050301] day:bg-stone-100 text-white day:text-gray-900">
+    <div className="day:bg-stone-100 day:text-gray-900 relative min-h-screen bg-[#050301] text-white">
       <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-10 lg:py-10">
         <section
-          className="rounded-2xl border border-white/10 day:border-gray-200 bg-[#0c0805]/85 day:bg-white/90 px-4 py-5 shadow-[0_25px_65px_rgba(0,0,0,0.6)] day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-2xl sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-6"
+          className="day:border-gray-200 day:bg-white/90 day:shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-2xl border border-white/10 bg-[#0c0805]/85 px-4 py-5 shadow-[0_25px_65px_rgba(0,0,0,0.6)] backdrop-blur-2xl sm:rounded-[32px] sm:px-6 lg:px-10 lg:py-6"
           aria-labelledby="saved-designs-heading"
         >
-          <header className="mb-6 border-b border-white/5 day:border-gray-200 pb-6">
+          <header className="day:border-gray-200 mb-6 border-b border-white/5 pb-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
               <div className="min-w-0">
-                <h2 id="saved-designs-heading" className="text-3xl font-semibold tracking-tight">
+                <h2
+                  id="saved-designs-heading"
+                  className="text-3xl font-semibold tracking-tight"
+                >
                   Saved Designs
                 </h2>
-                <p className="mt-3 inline-flex items-center gap-2 text-sm text-white/70 day:text-gray-500">
-                  <UserCircleIcon className="h-5 w-5 text-white/60 day:text-gray-400" aria-hidden />
+                <p className="day:text-gray-500 mt-3 inline-flex items-center gap-2 text-sm text-white/70">
+                  <UserCircleIcon
+                    className="day:text-gray-400 h-5 w-5 text-white/60"
+                    aria-hidden
+                  />
                   {session.email}
                 </p>
               </div>
+              <button
+                type="button"
+                onClick={handleNewDesign}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#D4A84F] px-4 py-2.5 text-sm font-semibold text-[#1a0f05] transition-colors hover:bg-[#e8bc5e]"
+              >
+                <span aria-hidden="true">+</span>
+                New Design
+              </button>
             </div>
           </header>
 
@@ -459,15 +626,15 @@ export default function MyAccountPage() {
               return (
                 <article
                   key={card.id}
-                  className="flex flex-col rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-white p-5 shadow-[0_18px_50px_rgba(0,0,0,0.55)] day:shadow-md backdrop-blur-sm"
+                  className="day:border-gray-200 day:bg-white day:shadow-md flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5 shadow-[0_18px_50px_rgba(0,0,0,0.55)] backdrop-blur-sm"
                 >
                   {/* Preview Image */}
                   <div className="mb-4">
-                    <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-black/50">
+                    <div className="day:border-gray-200 relative aspect-[4/3] w-full overflow-hidden rounded-xl border border-white/10 bg-[#121212]">
                       <img
                         src={card.preview}
                         alt={card.title}
-                        className="h-full w-full object-contain p-2"
+                        className="h-full w-full object-cover"
                         loading="lazy"
                       />
                     </div>
@@ -475,15 +642,69 @@ export default function MyAccountPage() {
 
                   {/* Card Header */}
                   <div className="mb-3">
-                    <h3 className="text-lg font-semibold text-white day:text-gray-900">{card.title}</h3>
-                    <div className="mt-1 flex flex-col gap-0.5 text-sm text-white/70 day:text-gray-500 min-[360px]:flex-row min-[360px]:items-center min-[360px]:justify-between">
-                      <span className="font-medium text-[#D4A84F]">{card.priceLabel}</span>
-                      <span className="text-white/50 day:text-gray-400">{card.relativeUpdated}</span>
+                    {editingTitleId === card.id ? (
+                      <form
+                        className="flex items-center gap-2"
+                        onSubmit={(event) => {
+                          event.preventDefault();
+                          void handleRename(card.id);
+                        }}
+                      >
+                        <input
+                          value={draftTitle}
+                          onChange={(event) =>
+                            setDraftTitle(event.target.value)
+                          }
+                          maxLength={120}
+                          autoFocus
+                          className="day:bg-white day:text-gray-900 min-w-0 flex-1 rounded-md border border-[#D4A84F]/60 bg-black/20 px-2 py-1 text-lg font-semibold text-white ring-0 outline-none"
+                          aria-label="Project name"
+                        />
+                        <button
+                          type="submit"
+                          disabled={isSavingTitle}
+                          className="text-xs font-semibold text-[#D4A84F] disabled:opacity-50"
+                        >
+                          {isSavingTitle ? 'Saving…' : 'Save'}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingTitleId(null)}
+                          className="day:text-gray-500 day:hover:text-gray-900 text-xs text-white/55 hover:text-white"
+                        >
+                          Cancel
+                        </button>
+                      </form>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <h3 className="day:text-gray-900 min-w-0 truncate text-lg font-semibold text-white">
+                          {card.title}
+                        </h3>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDraftTitle(card.title);
+                            setEditingTitleId(card.id);
+                          }}
+                          className="day:text-gray-400 shrink-0 text-sm text-white/45 transition-colors hover:text-[#D4A84F]"
+                          aria-label={`Rename ${card.title}`}
+                        >
+                          ✎
+                        </button>
+                      </div>
+                    )}
+                    <div className="day:text-gray-500 mt-1 flex flex-col gap-0.5 text-sm text-white/70 min-[360px]:flex-row min-[360px]:items-center min-[360px]:justify-between">
+                      <span className="font-medium text-[#D4A84F]">
+                        {card.priceLabel}
+                      </span>
+                      <span className="day:text-gray-400 text-white/50">
+                        {card.relativeUpdated}
+                      </span>
                     </div>
                   </div>
 
                   {/* Description */}
-                  <p className="mb-4 flex-1 text-sm text-white/75 day:text-gray-600 line-clamp-2">
+                  <p className="day:text-gray-600 mb-4 line-clamp-2 flex-1 text-sm text-white/75">
                     {card.description}
                   </p>
 
@@ -491,10 +712,18 @@ export default function MyAccountPage() {
                   <div className="grid grid-cols-[1fr_1fr_auto] items-center gap-2">
                     <Link
                       href={`/my-account/designs/${card.id}/buy`}
-                      className="rounded-lg px-3 py-2 text-center text-xs font-medium text-black transition cursor-pointer"
+                      className="cursor-pointer rounded-lg px-3 py-2 text-center text-xs font-medium text-black transition"
                       style={{ backgroundColor: '#D4A84F' }}
-                      onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#C49940')}
-                      onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.backgroundColor = '#D4A84F')}
+                      onMouseEnter={(e) =>
+                        ((
+                          e.currentTarget as HTMLElement
+                        ).style.backgroundColor = '#C49940')
+                      }
+                      onMouseLeave={(e) =>
+                        ((
+                          e.currentTarget as HTMLElement
+                        ).style.backgroundColor = '#D4A84F')
+                      }
                     >
                       Buy
                     </Link>
@@ -502,101 +731,160 @@ export default function MyAccountPage() {
                       type="button"
                       onClick={() => handleEdit(card.id)}
                       disabled={loadingEditId === card.id}
-                      className="rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 px-3 py-2 text-xs font-medium text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer disabled:opacity-50"
+                      className="day:border-gray-200 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 cursor-pointer rounded-lg border border-white/20 bg-white/5 px-3 py-2 text-xs font-medium text-white transition hover:bg-white/10 disabled:opacity-50"
                     >
                       {loadingEditId === card.id ? 'Loading…' : 'Edit'}
                     </button>
-                    <div className="relative" ref={openMenuId === card.id ? menuRef : null}>
+                    <div
+                      className="relative"
+                      ref={openMenuId === card.id ? menuRef : null}
+                    >
                       <button
                         type="button"
-                        className="flex h-8 w-9 items-center justify-center rounded-lg border border-white/20 day:border-gray-200 bg-white/5 day:bg-gray-50 text-white day:text-gray-700 transition hover:bg-white/10 day:hover:bg-gray-100 cursor-pointer"
-                        onClick={() => setOpenMenuId(openMenuId === card.id ? null : card.id)}
+                        className="day:border-gray-200 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 flex h-8 w-9 cursor-pointer items-center justify-center rounded-lg border border-white/20 bg-white/5 text-white transition hover:bg-white/10"
+                        onClick={() =>
+                          setOpenMenuId(openMenuId === card.id ? null : card.id)
+                        }
                         aria-label="More options"
                       >
                         ⋮
                       </button>
                       {openMenuId === card.id && (
-                        <div className="absolute right-0 bottom-full mb-1 z-50 w-48 rounded-xl border border-white/10 day:border-gray-200 bg-[#1a1208] day:bg-white shadow-2xl overflow-hidden">
+                        <div className="day:border-gray-200 day:bg-white absolute right-0 bottom-full z-50 mb-1 w-48 overflow-hidden rounded-xl border border-white/10 bg-[#1a1208] shadow-2xl">
                           <Link
                             href={`/my-account/designs/${card.id}`}
-                            className="block w-full px-4 py-2.5 text-left text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
+                            className="day:text-gray-700 day:hover:bg-gray-50 block w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
                             onClick={() => setOpenMenuId(null)}
                           >
                             View details
                           </Link>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
+                            className="day:text-gray-700 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
                             onClick={async () => {
                               setOpenMenuId(null);
                               try {
-                                await navigator.clipboard.writeText(window.location.origin + `/my-account/designs/${card.id}`);
+                                await navigator.clipboard.writeText(
+                                  window.location.origin +
+                                    `/my-account/designs/${card.id}`,
+                                );
                                 alert('Link copied to clipboard');
-                              } catch { alert('Could not copy link'); }
+                              } catch {
+                                alert('Could not copy link');
+                              }
                             }}
                           >
                             🔗 Copy Link
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
-                            onClick={() => { setOpenMenuId(null); setShareProjectId(card.id); setShareProjectTitle(card.title); setShareProjectScreenshot(card.preview); setShareModalOpen(true); }}
+                            className="day:text-gray-700 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
+                            onClick={() => {
+                              setOpenMenuId(null);
+                              setShareProjectId(card.id);
+                              setShareProjectTitle(card.title);
+                              setShareProjectScreenshot(card.preview);
+                              setShareModalOpen(true);
+                            }}
                           >
                             ✉️ Email
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition"
-                            onClick={() => { setOpenMenuId(null); const u = window.location.origin + `/my-account/designs/${card.id}`; window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}`, '_blank', 'width=600,height=400'); }}
+                            className="day:text-gray-500 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white/60 transition hover:bg-white/10"
+                            onClick={() => {
+                              setOpenMenuId(null);
+                              const u =
+                                window.location.origin +
+                                `/my-account/designs/${card.id}`;
+                              window.open(
+                                `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(u)}`,
+                                '_blank',
+                                'width=600,height=400',
+                              );
+                            }}
                           >
                             Facebook
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition"
-                            onClick={() => { setOpenMenuId(null); const u = window.location.origin + `/my-account/designs/${card.id}`; window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(u)}&text=${encodeURIComponent('Check out my memorial design: ' + card.title)}`, '_blank', 'width=600,height=400'); }}
+                            className="day:text-gray-500 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white/60 transition hover:bg-white/10"
+                            onClick={() => {
+                              setOpenMenuId(null);
+                              const u =
+                                window.location.origin +
+                                `/my-account/designs/${card.id}`;
+                              window.open(
+                                `https://twitter.com/intent/tweet?url=${encodeURIComponent(u)}&text=${encodeURIComponent('Check out my memorial design: ' + card.title)}`,
+                                '_blank',
+                                'width=600,height=400',
+                              );
+                            }}
                           >
                             Twitter / X
                           </button>
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white/60 day:text-gray-500 hover:bg-white/10 day:hover:bg-gray-50 transition"
-                            onClick={() => { setOpenMenuId(null); const u = window.location.origin + `/my-account/designs/${card.id}`; window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(u)}`, '_blank', 'width=600,height=400'); }}
+                            className="day:text-gray-500 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white/60 transition hover:bg-white/10"
+                            onClick={() => {
+                              setOpenMenuId(null);
+                              const u =
+                                window.location.origin +
+                                `/my-account/designs/${card.id}`;
+                              window.open(
+                                `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(u)}`,
+                                '_blank',
+                                'width=600,height=400',
+                              );
+                            }}
                           >
                             LinkedIn
                           </button>
-                          <div className="border-t border-white/10 day:border-gray-100" />
+                          <div className="day:border-gray-100 border-t border-white/10" />
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-white day:text-gray-700 hover:bg-white/10 day:hover:bg-gray-50 transition"
+                            className="day:text-gray-700 day:hover:bg-gray-50 w-full px-4 py-2.5 text-left text-xs text-white transition hover:bg-white/10"
                             onClick={async () => {
                               setOpenMenuId(null);
                               try {
-                                const detailsRes = await fetch(`/api/projects/${card.id}`);
+                                const detailsRes = await fetch(
+                                  `/api/projects/${card.id}`,
+                                );
                                 if (!detailsRes.ok) {
-                                  throw new Error('Failed to load project details');
+                                  throw new Error(
+                                    'Failed to load project details',
+                                  );
                                 }
                                 const details = await detailsRes.json();
                                 const project = details.project;
-                                const { generateDesignPDF } = await import('#/lib/pdf-generator');
+                                const { generateDesignPDF } = await import(
+                                  '#/lib/pdf-generator'
+                                );
                                 await generateDesignPDF({
                                   title: card.title,
-                                  screenshot: project?.screenshotPath || card.preview,
+                                  screenshot:
+                                    project?.screenshotPath || card.preview,
                                   priceLabel: card.priceLabel,
                                   createdLabel: card.createdLabel,
                                   description: card.description,
                                   productName: card.productName,
-                                  quote: buildPdfQuoteFromProject(project ?? {}),
+                                  quote: buildPdfQuoteFromProject(
+                                    project ?? {},
+                                  ),
                                 });
-                              } catch { alert('Failed to generate PDF. Please try again.'); }
+                              } catch {
+                                alert(
+                                  'Failed to generate PDF. Please try again.',
+                                );
+                              }
                             }}
                           >
                             Download PDF
                           </button>
-                          <div className="border-t border-white/10 day:border-gray-100" />
+                          <div className="day:border-gray-100 border-t border-white/10" />
                           <button
                             type="button"
-                            className="w-full text-left px-4 py-2.5 text-xs text-red-400 day:text-red-600 hover:bg-red-500/10 day:hover:bg-red-50 transition"
+                            className="day:text-red-600 day:hover:bg-red-50 w-full px-4 py-2.5 text-left text-xs text-red-400 transition hover:bg-red-500/10"
                             onClick={() => handleDeleteCard(card.id)}
                           >
                             Delete
@@ -609,22 +897,25 @@ export default function MyAccountPage() {
               );
             })}
             {!visibleCards.length && !isLoading && (
-              <div className="col-span-full rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-gray-50 p-10 text-center text-white/70 day:text-gray-500">
-                No saved designs available yet. Start a new design to see it here.
+              <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 col-span-full rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-white/70">
+                No saved designs available yet. Start a new design to see it
+                here.
               </div>
             )}
             {isLoading && (
-              <div className="col-span-full rounded-2xl border border-white/10 day:border-gray-200 bg-white/5 day:bg-gray-50 p-10 text-center text-white/70 day:text-gray-500">
+              <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 col-span-full rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-white/70">
                 Loading your saved designs...
               </div>
             )}
           </div>
-
         </section>
 
         <ConfirmModal
           isOpen={deleteModalOpen}
-          onClose={() => { setDeleteModalOpen(false); setPendingDeleteId(null); }}
+          onClose={() => {
+            setDeleteModalOpen(false);
+            setPendingDeleteId(null);
+          }}
           onConfirm={performDelete}
           title="Delete design?"
           message="Delete this design? This cannot be undone."
@@ -637,7 +928,12 @@ export default function MyAccountPage() {
           <React.Suspense fallback={null}>
             <EmailShareModal
               isOpen={shareModalOpen}
-              onClose={() => { setShareModalOpen(false); setShareProjectId(null); setShareProjectTitle(undefined); setShareProjectScreenshot(undefined); }}
+              onClose={() => {
+                setShareModalOpen(false);
+                setShareProjectId(null);
+                setShareProjectTitle(undefined);
+                setShareProjectScreenshot(undefined);
+              }}
               projectId={shareProjectId}
               projectTitle={shareProjectTitle}
               senderEmail={session?.email ?? null}
@@ -653,25 +949,32 @@ export default function MyAccountPage() {
 function buildProjectCard(project: any): AccountDesignCard {
   const createdDate = new Date(project.createdAt);
   const updatedDate = new Date(project.updatedAt);
-  
+
   // Get screenshot and thumbnail paths
-  const thumbnail = project.thumbnailPath || project.screenshotPath || '/screen.png';
+  const thumbnail =
+    project.thumbnailPath || project.screenshotPath || '/screen.png';
   const fullScreenshot = project.screenshotPath || '/screen.png';
-  
+
   // Get product name from productId
   const productId = project.designState?.productId;
   logger.log('Full designState:', project.designState);
-  logger.log('Product lookup:', { productId, hasProducts: !!data.products, productsCount: data.products?.length });
-  const product = productId ? data.products.find(p => p.id === productId) : null;
+  logger.log('Product lookup:', {
+    productId,
+    hasProducts: !!data.products,
+    productsCount: data.products?.length,
+  });
+  const product = productId
+    ? data.products.find((p) => p.id === productId)
+    : null;
   logger.log('Found product:', product);
   const productName = product?.name || 'Custom memorial design';
   logger.log('Final productName:', productName);
-  
+
   return {
     id: project.id,
     title: project.title || 'Untitled Design',
     productName: productName,
-    priceLabel: project.totalPriceCents 
+    priceLabel: project.totalPriceCents
       ? currencyFormatter.format(project.totalPriceCents / 100)
       : 'Price TBD',
     createdLabel: formatDate(createdDate),
@@ -681,7 +984,8 @@ function buildProjectCard(project: any): AccountDesignCard {
     htmlQuotePath: `/saved-designs/html/${new Date(project.createdAt).getFullYear()}/${String(new Date(project.createdAt).getMonth() + 1).padStart(2, '0')}/design_${project.id}.html`,
     description: buildProjectDescription(project),
     status: (project.status || 'draft') as DesignStatus,
-    primaryActionLabel: statusMeta[(project.status || 'draft') as DesignStatus].primaryAction,
+    primaryActionLabel:
+      statusMeta[(project.status || 'draft') as DesignStatus].primaryAction,
     destinationUrl: `/select-product?projectId=${project.id}`, // Load design back into editor
   };
 }
@@ -696,6 +1000,16 @@ function decodeHtmlEntities(str: string): string {
 }
 
 function buildProjectDescription(project: any): string {
+  const widthMm = project.designState?.widthMm;
+  const heightMm = project.designState?.heightMm;
+  if (
+    Number.isFinite(widthMm) &&
+    Number.isFinite(heightMm) &&
+    widthMm > 0 &&
+    heightMm > 0
+  ) {
+    return `Headstone · ${widthMm} × ${heightMm} mm`;
+  }
   const inscriptions = project.designState?.inscriptions || [];
   if (inscriptions.length > 0) {
     const texts = inscriptions.map((i: any) => i.text).filter(Boolean);
@@ -759,7 +1073,10 @@ function buildDesignCards(designs: SavedDesignMetadata[]): AccountDesignCard[] {
 function deriveDesignStatus(design: SavedDesignMetadata): DesignStatus {
   const tailDigits = Number(design.id.slice(-2));
 
-  if ((design.hasMotifs || design.hasAdditions) && design.inscriptionCount >= 1) {
+  if (
+    (design.hasMotifs || design.hasAdditions) &&
+    design.inscriptionCount >= 1
+  ) {
     return 'awaiting-approval';
   }
 
@@ -843,7 +1160,9 @@ function computePriceLabel(design: SavedDesignMetadata, index: number): string {
 
   const base = baseMap[design.productType] ?? 1200;
   const variationSeed = Number(design.id.slice(-3));
-  const variation = Number.isFinite(variationSeed) ? variationSeed * 3 : (index + 1) * 150;
+  const variation = Number.isFinite(variationSeed)
+    ? variationSeed * 3
+    : (index + 1) * 150;
   const total = Math.round(base + variation);
 
   return currencyFormatter.format(total);
@@ -869,9 +1188,12 @@ function truncateText(value: string, limit: number): string {
   return `${value.slice(0, limit).trim()}…`;
 }
 
-
 function getFallbackCards(): AccountDesignCard[] {
-  const fallbackStatuses: DesignStatus[] = ['ready-to-order', 'in-production', 'completed'];
+  const fallbackStatuses: DesignStatus[] = [
+    'ready-to-order',
+    'in-production',
+    'completed',
+  ];
   return [1, 2, 3].map((index) => {
     const status = fallbackStatuses[index % fallbackStatuses.length];
     const statusInfo = statusMeta[status];
@@ -890,4 +1212,3 @@ function getFallbackCards(): AccountDesignCard[] {
     };
   });
 }
-

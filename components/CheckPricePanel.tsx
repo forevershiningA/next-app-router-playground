@@ -202,12 +202,6 @@ export default function CheckPricePanel() {
     return calculatePrice(pm, quantity);
   }, [isFullMonument, activeCatalog, selectedShape, widthMm]);
 
-  // Calculate additions price
-  const additionsPrice = useMemo(() => {
-    // Each addition costs $75 (example price)
-    return selectedAdditions.length * 75;
-  }, [selectedAdditions]);
-
   // Get addition details
   const additionItems = useMemo(() => {
     return selectedAdditions.map(addId => {
@@ -218,15 +212,23 @@ export default function CheckPricePanel() {
         : addId;
       
       const addition = data.additions.find(a => a.id === baseId);
+      const sizeVariant = Math.max(1, Math.round(additionOffsets?.[addId]?.sizeVariant ?? 1));
+      const size = addition?.sizes?.[sizeVariant - 1] ?? addition?.sizes?.[0];
       return {
         id: addId,
         baseId: baseId,
         name: addition?.name || 'Addition',
         type: addition?.type || 'application',
-        sizeVariant: additionOffsets?.[addId]?.sizeVariant ?? 1,
+        sizeVariant,
+        price: size?.retailPrice ?? 0,
       };
     });
   }, [selectedAdditions, additionOffsets]);
+
+  const additionsPrice = useMemo(
+    () => additionItems.reduce((total, item) => total + item.price, 0),
+    [additionItems],
+  );
 
   const imageItems = useMemo(() => {
     if (!selectedImages.length) return [];
@@ -533,8 +535,8 @@ export default function CheckPricePanel() {
           `Size Variant: ${item.sizeVariant}`,
         ],
         qty: 1,
-        unitPrice: 75,
-        total: 75,
+        unitPrice: item.price,
+        total: item.price,
       });
     });
 

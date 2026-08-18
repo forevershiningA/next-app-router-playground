@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import * as THREE from 'three';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   CubeIcon,
@@ -420,6 +421,7 @@ export default function DesignerNav() {
     (s) => s.selectedInscriptionId,
   );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
+  const additionCost = useHeadstoneStore((s) => s.additionCost);
   const setSelectedAdditionId = useHeadstoneStore(
     (s) => s.setSelectedAdditionId,
   );
@@ -512,12 +514,26 @@ export default function DesignerNav() {
   // Auto-open save modal when returning from login with ?action=save-design
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('action') === 'save-design') {
+    if (params.get('action') !== 'save-design') return;
+
+    let cancelled = false;
+    const openAfterSessionCheck = async () => {
+      const res = await fetch('/api/auth/session');
+      if (cancelled) return;
+
       params.delete('action');
       const qs = params.toString();
       window.history.replaceState({}, '', pathname + (qs ? `?${qs}` : ''));
-      setShowSaveDesignModal(true);
-    }
+
+      if (res.ok) {
+        setShowSaveDesignModal(true);
+      }
+    };
+
+    void openAfterSessionCheck();
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
   useEffect(() => {
@@ -944,6 +960,11 @@ export default function DesignerNav() {
         /^Applicazione\s+Preghiera/i,
         'Praying Hands Motif',
       ) ?? '';
+    const activeAdditionPrice = activeAdditionSize?.retailPrice ??
+      (selectedAdditions.length === 1 ? additionCost : null);
+    const activeAdditionImagePath = activeAddition
+      ? `/additions/${activeAddition.file?.split('/')[0] ?? ''}/${activeAddition.image}`
+      : null;
 
     const additionRotation =
       ((activeAdditionOffset?.rotationZ ?? 0) * 180) / Math.PI;
@@ -970,53 +991,17 @@ export default function DesignerNav() {
           <div className="space-y-3">
             {activeAddition && (
               <div className={additionSectionCardClass}>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <div className="day:text-gray-400 text-xs font-semibold tracking-[0.18em] text-white/45 uppercase">
-                      Selected Addition
-                    </div>
-                    <div className="day:text-gray-900 mt-1 truncate text-sm font-semibold text-white">
-                      {activeAdditionDisplayName}
-                    </div>
-                    <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
-                      <span className="capitalize">{activeAddition.type}</span>
-                      {activeAdditionSize
-                        ? ` · ${activeAdditionSize.width} × ${activeAdditionSize.height} mm`
-                        : ''}
-                    </div>
+                <div className="flex items-center gap-3">
+                  {activeAdditionImagePath && <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-white"><Image src={activeAdditionImagePath} alt="" fill sizes="56px" className="object-contain p-1" /></div>}
+                  <div className="min-w-0 flex-1">
+                    <div className="day:text-gray-400 text-[10px] font-semibold tracking-[0.18em] text-white/45 uppercase">Selected Addition</div>
+                    <div className="day:text-gray-900 mt-0.5 truncate text-sm font-semibold text-white">{activeAdditionDisplayName}</div>
+                    <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45"><span className="capitalize">{activeAddition.type}</span></div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSelectedAdditionId(null);
-                      setActivePanel(null);
-                    }}
-                    className="day:border-gray-200 day:bg-gray-100 day:text-gray-600 day:hover:text-gray-900 shrink-0 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white"
-                  >
-                    Clear
-                  </button>
+                  <div className="shrink-0 text-sm font-semibold text-[#D7B356]">{activeAdditionPrice === null ? 'Included' : `+$${activeAdditionPrice.toFixed(2)}`}</div>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleBackToAdditionList}
-                  className="day:border-gray-200 day:bg-gray-100 day:text-gray-700 day:hover:bg-gray-200 mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/75 transition-colors hover:border-[#D7B356]/50 hover:text-white"
-                >
-                  <Squares2X2Icon className="h-4 w-4" />
-                  Choose another
-                </button>
               </div>
             )}
-
-            <div className={additionSectionCardClass}>
-              <div className="day:text-gray-500 mb-1 text-xs font-semibold tracking-[0.2em] text-white/45 uppercase">
-                Addition Price
-              </div>
-              <div className="day:text-gray-900 text-2xl font-semibold text-[#f3d48f]">
-                {activeAdditionSize?.retailPrice
-                  ? `$${activeAdditionSize.retailPrice.toFixed(2)}`
-                  : 'N/A'}
-              </div>
-            </div>
 
             {maxSize > 1 && (
               <div className="space-y-3">
@@ -1388,15 +1373,10 @@ export default function DesignerNav() {
       'fs-range h-1.5 w-full cursor-pointer appearance-none rounded-full bg-gradient-to-r from-[#D7B356] to-[#E4C778] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-yellow-300 [&::-webkit-slider-thumb]:h-[20px] [&::-webkit-slider-thumb]:w-[20px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-[#171717] [&::-webkit-slider-thumb]:bg-[#D7B356] [&::-webkit-slider-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)] [&::-webkit-slider-thumb]:transition-shadow [&::-webkit-slider-thumb]:hover:shadow-[0_0_12px_rgba(215,179,86,0.55),0_0_0_3px_rgba(0,0,0,0.25)] [&::-moz-range-thumb]:h-[20px] [&::-moz-range-thumb]:w-[20px] [&::-moz-range-thumb]:appearance-none [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-[#171717] [&::-moz-range-thumb]:bg-[#D7B356] [&::-moz-range-thumb]:shadow-[0_0_8px_rgba(215,179,86,0.35),0_0_0_3px_rgba(0,0,0,0.25)]';
     const rangeBoundsClass =
       'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
-    const secondaryActionClass =
-      'cursor-pointer rounded-lg border border-[#D7B356]/60 bg-[#171717] px-3 py-2 text-sm font-semibold text-[#F2D58B] transition-colors hover:bg-[#D7B356]/15 day:bg-white day:text-[#8a6a12]';
-    const destructiveActionClass =
-      'cursor-pointer rounded-lg border border-red-500/50 bg-[#171717] px-3 py-2 text-sm font-semibold text-red-200 transition-colors hover:bg-red-500/15 day:bg-white day:text-red-700';
-
     return (
       <div className="flex h-full flex-col gap-4">
         {hasActiveMotif ? (
-          <div className="flex min-h-0 flex-1 flex-col gap-3">
+          <div className="flex min-h-[calc(44dvh-128px)] flex-1 flex-col gap-3 md:min-h-0">
             <div className="custom-scrollbar min-h-0 flex-1 space-y-3 overflow-y-auto pr-1">
               <div className={sectionCardClass}>
                 <div className="flex items-start justify-between gap-3">
@@ -1433,31 +1413,19 @@ export default function DesignerNav() {
                       </div>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    className="day:border-gray-200 day:text-gray-600 day:hover:text-gray-900 shrink-0 rounded-md border border-white/10 px-2.5 py-1.5 text-xs font-semibold text-white/70 transition-colors hover:border-[#D7B356]/50 hover:text-white"
-                    onClick={() => {
-                      setSelectedMotifId(null);
-                      setActivePanel(null);
-                    }}
-                  >
-                    Clear
-                  </button>
+                  {motifPriceValue !== null && (
+                    <span className="shrink-0 text-sm font-semibold text-[#D7B356]">
+                      +${motifPriceValue.toFixed(2)}
+                    </span>
+                  )}
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
+                  <button type="button" onClick={() => selectedMotifId && duplicateMotif(selectedMotifId)} className="rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50">Duplicate</button>
+                  <button type="button" onClick={() => { if (selectedMotifId) removeMotif(selectedMotifId); setSelectedMotifId(null); setActivePanel(null); }} className="rounded-md border border-red-400/35 px-3 py-2 text-xs font-semibold text-red-200 transition-colors hover:bg-red-500/15">Remove</button>
+                  <button type="button" onClick={() => selectedMotifId && setMotifOffset(selectedMotifId, { ...activeOffset, flipX: !activeOffset.flipX })} className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50">Flip X</button>
+                  <button type="button" onClick={() => selectedMotifId && setMotifOffset(selectedMotifId, { ...activeOffset, flipY: !activeOffset.flipY })} className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50">Flip Y</button>
                 </div>
               </div>
-
-              {motifPriceValue !== null && (
-                <div className={sectionCardClass}>
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="day:text-gray-800 text-sm font-semibold text-slate-100">
-                      Motif price
-                    </span>
-                    <span className="text-xl font-semibold text-[#2EE59D]">
-                      ${motifPriceValue.toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-              )}
 
               <div className={`${sectionCardClass} space-y-2`}>
                 <div className="flex items-center justify-between gap-3">
@@ -1779,35 +1747,11 @@ export default function DesignerNav() {
               )}
             </div>
 
-            <div className="day:border-gray-200 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
-              <button
-                type="button"
-                className={secondaryActionClass}
-                onClick={() =>
-                  selectedMotifId && duplicateMotif(selectedMotifId)
-                }
-              >
-                Duplicate
-              </button>
-              <button
-                type="button"
-                className={destructiveActionClass}
-                onClick={() => {
-                  if (selectedMotifId) {
-                    removeMotif(selectedMotifId);
-                    setSelectedMotifId(null);
-                    setActivePanel(null);
-                  }
-                }}
-              >
-                Delete
-              </button>
-            </div>
           </div>
         ) : null}
 
         {showMotifCatalog && (
-          <div className="day:border-gray-200 day:bg-white min-h-0 flex-1 overflow-hidden rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15">
+          <div className="day:border-gray-200 day:bg-white min-h-[calc(44dvh-128px)] flex-1 overflow-hidden rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 md:min-h-0">
             <MotifSelectorPanel motifs={motifCatalog} />
           </div>
         )}
@@ -3352,7 +3296,7 @@ export default function DesignerNav() {
   return (
     <nav
       ref={navRef}
-      className="day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] day:text-[#1a1209] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
+      className="day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] day:text-[#1a1209] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-[#121212] text-white"
     >
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
