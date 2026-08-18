@@ -375,6 +375,14 @@ function AuthGate({
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function MyAccountPage() {
+  return (
+    <React.Suspense fallback={null}>
+      <MyAccountContent />
+    </React.Suspense>
+  );
+}
+
+function MyAccountContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [session, setSession] = useState<{ email: string } | null | undefined>(

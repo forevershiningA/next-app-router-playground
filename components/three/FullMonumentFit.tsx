@@ -270,6 +270,11 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
 
       if (controls?.target) {
         controls.target.copy(pose.target);
+        // Use the fitted camera distance as the baseline so the limits stay
+        // appropriate for every full-monument size.
+        const fittedDistance = pose.position.distanceTo(pose.target);
+        controls.minDistance = fittedDistance * 0.6;
+        controls.maxDistance = fittedDistance * 2;
         controls.update?.();
       }
 

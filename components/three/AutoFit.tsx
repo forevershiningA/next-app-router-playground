@@ -107,6 +107,10 @@ export default function AutoFit({
 
     if (controls?.target) {
       controls.target.copy(toTgt);
+      // Keep the user within a useful inspection range relative to the
+      // automatically fitted view: 40% closer or 100% farther away.
+      controls.minDistance = dist * 0.6;
+      controls.maxDistance = dist * 2;
       controls.update?.();
     }
 
