@@ -813,7 +813,10 @@ export default function Scene({
         panSpeed={0.8}
         minPolarAngle={isFullMonument ? Math.PI / 6 : Math.PI / 3.5}
         maxPolarAngle={Math.PI / 2 - 0.05}
-        target={orbitTarget}
+        // FullMonumentFit animates both camera position and target when an
+        // upright/base is selected. A declarative fixed target here can win a
+        // later React commit and produce a final-frame snap back to the plot.
+        target={isFullMonument ? undefined : orbitTarget}
       />
     </>
   );

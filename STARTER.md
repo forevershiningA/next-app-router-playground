@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-18
+**Last Updated:** 2026-08-19
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -83,6 +83,38 @@
 75. [August 16 Mobile Designer UX and Image Crop Reliability](#current-status-2026-08-16--mobile-designer-ux-and-image-crop-reliability)
 76. [August 17 Local 3D Assets and Mobile Quote UX](#current-status-2026-08-17--local-3d-assets-and-mobile-quote-ux)
 77. [August 18 Mobile Designer, Saved Projects, and Checkout UX](#current-status-2026-08-18--mobile-designer-saved-projects-and-checkout-ux)
+78. [August 19 Full Monument Camera and Advanced Setup Actions](#current-status-2026-08-19--full-monument-camera-and-advanced-setup-actions)
+
+---
+
+## Current Status (2026-08-19) — Full Monument Camera and Advanced Setup Actions
+
+### Full Monument camera ownership and zoom limits
+
+Primary files: `components/three/FullMonumentFit.tsx`, `components/three/Scene.tsx`, and `components/three/AutoFit.tsx`.
+
+- The designer canvas uses `frameloop="demand"`. During a `FullMonumentFit` camera transition, temporarily use `setFrameloop('always')`; restore `demand` when it completes or is cancelled. This keeps the zoom-to-upright animation smooth without making the whole designer continuously render.
+- `FullMonumentFit` owns both the camera position and `OrbitControls.target` for full monuments. `Scene.tsx` must therefore pass `target={undefined}` to `OrbitControls` when `isFullMonument` is true. Passing the fixed plot `orbitTarget` at the same time can overwrite the animated target in a later React commit and create a final-frame snap when selecting Headstone or Base.
+- At the last animation frame, the interpolated pose is already exact. Do not call `applyPose()` again: its `OrbitControls.update()` can reapply cached spherical state and visibly correct the camera. Only update `minDistance` and `maxDistance` at that point.
+- Orbit zoom-out is intentionally capped at `1.5 ×` the automatically fitted distance (previously `2 ×`) in both `AutoFit` and `FullMonumentFit`. The minimum remains `0.6 ×`.
+
+### Setup menu advanced actions
+
+Primary files: `components/DesignerNav.tsx`, `components/LoadDesignButton.tsx`, and `components/ConditionalNav.tsx`.
+
+- The mobile/desktop designer navigation uses a warm, low-contrast brown/graphite gradient, rather than a flat `#121212` surface. Keep the outer mobile drawer and its top bar on the matching `#1b1511` surface.
+- `Convert Design` and `Load Design` are no longer top-level CTAs. They live after the normal Setup items behind an **Advanced** checkbox, which defaults to unchecked.
+- Disabling Advanced also closes an open Convert Design panel. Convert Design remains visible when Advanced is open but disabled until a product and canvas are available; Load Design remains available.
+- These two advanced actions intentionally use the same left-aligned icon/text layout as normal navigation links, with only a faint background treatment to indicate they are optional.
+
+### Verification
+
+After changes in these areas, run:
+
+```bash
+pnpm type-check
+git diff --check
+```
 
 ---
 

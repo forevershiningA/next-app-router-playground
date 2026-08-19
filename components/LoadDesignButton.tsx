@@ -787,7 +787,7 @@ export default function LoadDesignButton({ label = 'Load Design', variant = 'flo
   const buttonLabel = loading ? 'Loading...' : label;
   const buttonClassName =
     variant === 'menu'
-      ? `inline-flex w-full items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all border-white/20 text-gray-200 hover:border-white/40 hover:bg-white/5 disabled:cursor-wait disabled:opacity-60 day:border-gray-300 day:text-gray-700 day:hover:bg-gray-100`
+      ? `inline-flex w-full items-center justify-start gap-3 rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-left text-base font-light text-gray-200 transition-all hover:border-white/20 hover:bg-white/10 disabled:cursor-wait disabled:opacity-60 day:border-gray-300 day:bg-stone-50 day:text-gray-700 day:hover:bg-gray-100`
       : variant === 'nav'
         ? `inline-flex items-center justify-center gap-1.5 rounded-lg border border-stone-950 bg-stone-950 px-3 py-2 text-xs font-medium uppercase tracking-[0.14em] text-white transition-colors hover:border-[#8a6b1f] hover:bg-[#8a6b1f] disabled:cursor-wait disabled:opacity-60`
         : `

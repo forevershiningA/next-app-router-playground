@@ -52,12 +52,13 @@ type CameraPose = {
 };
 
 export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
-  const { camera, controls, size, invalidate, scene } = useThree() as {
+  const { camera, controls, size, invalidate, scene, setFrameloop } = useThree() as {
     camera: THREE.PerspectiveCamera;
     controls?: any;
     size: { width: number; height: number };
     invalidate: () => void;
     scene: THREE.Scene;
+    setFrameloop: (mode: 'always' | 'demand' | 'never') => void;
   };
 
   const ledgerDepthMm   = useHeadstoneStore((s) => s.ledgerDepthMm);
@@ -274,7 +275,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         // appropriate for every full-monument size.
         const fittedDistance = pose.position.distanceTo(pose.target);
         controls.minDistance = fittedDistance * 0.6;
-        controls.maxDistance = fittedDistance * 2;
+        // Permit only half of the previous zoom-out headroom (2× → 1.5×).
+        controls.maxDistance = fittedDistance * 1.5;
         controls.update?.();
       }
 
@@ -300,6 +302,11 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       const startNear = camera.near;
       const startFar = camera.far;
       const startTime = performance.now();
+
+      // The canvas normally renders on demand. Keep it live just while the
+      // camera is interpolating; relying on one invalidate per manual RAF can
+      // coalesce frames under load and make the final pose appear as a jump.
+      setFrameloop('always');
 
       const step = (now: number) => {
         const progress = Math.min(1, (now - startTime) / CAMERA_ANIMATION_MS);
@@ -331,7 +338,16 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         }
 
         animationFrameRef.current = null;
-        applyPose(pose);
+        // At progress === 1 the pose above is already exact. Applying it
+        // again and calling OrbitControls.update() can re-apply its cached
+        // spherical state, causing a visible final-frame camera correction.
+        // Only finish configuring the interaction limits here.
+        if (controls?.target) {
+          const fittedDistance = pose.position.distanceTo(pose.target);
+          controls.minDistance = fittedDistance * 0.6;
+          controls.maxDistance = fittedDistance * 1.5;
+        }
+        setFrameloop('demand');
       };
 
       animationFrameRef.current = window.requestAnimationFrame(step);
@@ -443,6 +459,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         window.cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
       }
+      setFrameloop('demand');
     };
   }, [
     ledgerDepthMm, kerbDepthMm, kerbWidthMm, kerbHeightMm,
@@ -450,7 +467,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     productId, shapeUrl, showLedger, showKerbset, selected, trigger,
     selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
     selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,
-    isMaterialChange, isMobileNavOpen, camera, size.width, size.height, controls, invalidate, scene, fitKey,
+    isMaterialChange, isMobileNavOpen, camera, size.width, size.height, controls, invalidate, scene, setFrameloop, fitKey,
     shouldFocusHeadstone, shouldFocusBase, shouldZoomIn,
   ]);
 

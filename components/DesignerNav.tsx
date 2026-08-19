@@ -29,7 +29,11 @@ import {
   MoonIcon,
 } from '@heroicons/react/24/outline';
 import { useHeadstoneStore } from '#/lib/headstone-store';
-import { calculateCatalogPrice, calculatePrice, computeQuantity } from '#/lib/xml-parser';
+import {
+  calculateCatalogPrice,
+  calculatePrice,
+  computeQuantity,
+} from '#/lib/xml-parser';
 import { calculateMotifPrice } from '#/lib/motif-pricing';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { data } from '#/app/_internal/_data';
@@ -464,6 +468,7 @@ export default function DesignerNav() {
     setSelectedMotifId,
   });
   const [showConvertPanel, setShowConvertPanel] = React.useState(false);
+  const [showAdvancedActions, setShowAdvancedActions] = React.useState(false);
   const [hasCanvasBeenShown, setHasCanvasBeenShown] = React.useState(false);
   // Mobile Select-Size: which single dimension control is shown at a time.
   // Desktop shows all cards; on mobile a segmented toggle picks one.
@@ -645,11 +650,7 @@ export default function DesignerNav() {
           return false;
         if (item.slug === 'select-border' && (!isPlaque || !hasBorder))
           return false;
-        if (
-          item.slug === 'select-fastening' &&
-          productId !== '5'
-        )
-          return false;
+        if (item.slug === 'select-fastening' && productId !== '5') return false;
         if (
           item.slug === 'select-additions' &&
           (catalog?.product?.laser === '1' ||
@@ -688,7 +689,8 @@ export default function DesignerNav() {
     activeFullscreenPanel === 'select-images' && Boolean(cropCanvasData);
   const getPanelDisplayName = React.useCallback(
     (slug: string | null) =>
-      slug === 'select-material' && (productId === '5' || productId === '32' || isUrn)
+      slug === 'select-material' &&
+      (productId === '5' || productId === '32' || isUrn)
         ? 'Background'
         : menuItems.find((item) => item.slug === slug)?.name,
     [productId, isUrn],
@@ -960,7 +962,8 @@ export default function DesignerNav() {
         /^Applicazione\s+Preghiera/i,
         'Praying Hands Motif',
       ) ?? '';
-    const activeAdditionPrice = activeAdditionSize?.retailPrice ??
+    const activeAdditionPrice =
+      activeAdditionSize?.retailPrice ??
       (selectedAdditions.length === 1 ? additionCost : null);
     const activeAdditionImagePath = activeAddition
       ? `/additions/${activeAddition.file?.split('/')[0] ?? ''}/${activeAddition.image}`
@@ -992,13 +995,33 @@ export default function DesignerNav() {
             {activeAddition && (
               <div className={additionSectionCardClass}>
                 <div className="flex items-center gap-3">
-                  {activeAdditionImagePath && <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-white"><Image src={activeAdditionImagePath} alt="" fill sizes="56px" className="object-contain p-1" /></div>}
+                  {activeAdditionImagePath && (
+                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-white">
+                      <Image
+                        src={activeAdditionImagePath}
+                        alt=""
+                        fill
+                        sizes="56px"
+                        className="object-contain p-1"
+                      />
+                    </div>
+                  )}
                   <div className="min-w-0 flex-1">
-                    <div className="day:text-gray-400 text-[10px] font-semibold tracking-[0.18em] text-white/45 uppercase">Selected Addition</div>
-                    <div className="day:text-gray-900 mt-0.5 truncate text-sm font-semibold text-white">{activeAdditionDisplayName}</div>
-                    <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45"><span className="capitalize">{activeAddition.type}</span></div>
+                    <div className="day:text-gray-400 text-[10px] font-semibold tracking-[0.18em] text-white/45 uppercase">
+                      Selected Addition
+                    </div>
+                    <div className="day:text-gray-900 mt-0.5 truncate text-sm font-semibold text-white">
+                      {activeAdditionDisplayName}
+                    </div>
+                    <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
+                      <span className="capitalize">{activeAddition.type}</span>
+                    </div>
                   </div>
-                  <div className="shrink-0 text-sm font-semibold text-[#D7B356]">{activeAdditionPrice === null ? 'Included' : `+$${activeAdditionPrice.toFixed(2)}`}</div>
+                  <div className="shrink-0 text-sm font-semibold text-[#D7B356]">
+                    {activeAdditionPrice === null
+                      ? 'Included'
+                      : `+$${activeAdditionPrice.toFixed(2)}`}
+                  </div>
                 </div>
               </div>
             )}
@@ -1420,10 +1443,52 @@ export default function DesignerNav() {
                   )}
                 </div>
                 <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
-                  <button type="button" onClick={() => selectedMotifId && duplicateMotif(selectedMotifId)} className="rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50">Duplicate</button>
-                  <button type="button" onClick={() => { if (selectedMotifId) removeMotif(selectedMotifId); setSelectedMotifId(null); setActivePanel(null); }} className="rounded-md border border-red-400/35 px-3 py-2 text-xs font-semibold text-red-200 transition-colors hover:bg-red-500/15">Remove</button>
-                  <button type="button" onClick={() => selectedMotifId && setMotifOffset(selectedMotifId, { ...activeOffset, flipX: !activeOffset.flipX })} className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50">Flip X</button>
-                  <button type="button" onClick={() => selectedMotifId && setMotifOffset(selectedMotifId, { ...activeOffset, flipY: !activeOffset.flipY })} className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50">Flip Y</button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      selectedMotifId && duplicateMotif(selectedMotifId)
+                    }
+                    className="rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
+                  >
+                    Duplicate
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (selectedMotifId) removeMotif(selectedMotifId);
+                      setSelectedMotifId(null);
+                      setActivePanel(null);
+                    }}
+                    className="rounded-md border border-red-400/35 px-3 py-2 text-xs font-semibold text-red-200 transition-colors hover:bg-red-500/15"
+                  >
+                    Remove
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      selectedMotifId &&
+                      setMotifOffset(selectedMotifId, {
+                        ...activeOffset,
+                        flipX: !activeOffset.flipX,
+                      })
+                    }
+                    className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
+                  >
+                    Flip X
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      selectedMotifId &&
+                      setMotifOffset(selectedMotifId, {
+                        ...activeOffset,
+                        flipY: !activeOffset.flipY,
+                      })
+                    }
+                    className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
+                  >
+                    Flip Y
+                  </button>
                 </div>
               </div>
 
@@ -1746,7 +1811,6 @@ export default function DesignerNav() {
                 </div>
               )}
             </div>
-
           </div>
         ) : null}
 
@@ -1856,15 +1920,18 @@ export default function DesignerNav() {
     const isLandscape = widthMm > heightMm;
     const matchW = isLandscape ? heightMm : widthMm;
     const matchH = isLandscape ? widthMm : heightMm;
-    headstonePrice = matchW === 200 && matchH === 250
-      ? 648
-      : fixedSizes.find((s) => s.width === matchW && s.height === matchH)?.price ?? 0;
+    headstonePrice =
+      matchW === 200 && matchH === 250
+        ? 648
+        : (fixedSizes.find((s) => s.width === matchW && s.height === matchH)
+            ?.price ?? 0);
   } else if (catalog) {
-    headstonePrice = calculateCatalogPrice(catalog.product.id, catalog.product.priceModel, {
-      width: widthMm,
-      height: heightMm,
-      depth: uprightThickness,
-    }, urnShapeCode ?? undefined);
+    headstonePrice = calculateCatalogPrice(
+      catalog.product.id,
+      catalog.product.priceModel,
+      { width: widthMm, height: heightMm, depth: uprightThickness },
+      urnShapeCode ?? undefined,
+    );
   }
   const basePrice =
     showBase && catalog?.product?.basePriceModel
@@ -1961,15 +2028,18 @@ export default function DesignerNav() {
         const isLandscape = state.widthMm > state.heightMm;
         const matchW = isLandscape ? state.heightMm : state.widthMm;
         const matchH = isLandscape ? state.widthMm : state.heightMm;
-        headstonePrice = matchW === 200 && matchH === 250
-          ? 648
-          : fixedSizes.find((s) => s.width === matchW && s.height === matchH)?.price ?? 0;
+        headstonePrice =
+          matchW === 200 && matchH === 250
+            ? 648
+            : (fixedSizes.find((s) => s.width === matchW && s.height === matchH)
+                ?.price ?? 0);
       } else if (catalog) {
-        headstonePrice = calculateCatalogPrice(catalog.product.id, catalog.product.priceModel, {
-          width: widthMm,
-          height: heightMm,
-          depth: uprightThickness,
-        }, urnShapeCode ?? undefined);
+        headstonePrice = calculateCatalogPrice(
+          catalog.product.id,
+          catalog.product.priceModel,
+          { width: widthMm, height: heightMm, depth: uprightThickness },
+          urnShapeCode ?? undefined,
+        );
       }
       const basePrice =
         state.showBase && catalog?.product?.basePriceModel
@@ -2559,7 +2629,11 @@ export default function DesignerNav() {
             {baseOption === 'flower-pots' && (
               <fieldset className="space-y-2 text-sm">
                 <legend className="text-white/75">Lid finish</legend>
-                <div className="flex gap-2" role="group" aria-label="Lid finish">
+                <div
+                  className="flex gap-2"
+                  role="group"
+                  aria-label="Lid finish"
+                >
                   {[
                     { label: 'Black Lid', value: 'black' },
                     { label: 'Silver Lid', value: 'silver' },
@@ -3281,8 +3355,7 @@ export default function DesignerNav() {
     );
   };
 
-  const fullscreenPanelTitle =
-    getPanelDisplayName(activeFullscreenPanel);
+  const fullscreenPanelTitle = getPanelDisplayName(activeFullscreenPanel);
   const mobileFullscreenPanelTitle =
     activeFullscreenPanel === 'inscriptions'
       ? 'Inscriptions'
@@ -3296,7 +3369,7 @@ export default function DesignerNav() {
   return (
     <nav
       ref={navRef}
-      className="day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] day:text-[#1a1209] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-[#121212] text-white"
+      className="day:from-[#f5f0ea] day:via-[#ede8e0] day:to-[#e8e3d8] day:text-[#1a1209] fs-designer-nav flex h-full min-h-0 flex-col overflow-hidden bg-gradient-to-br from-[#3d2817] via-[#2a1f14] to-[#1a1410] text-white"
     >
       {/* Full-Screen Panel Overlay */}
       {shouldShowFullscreenPanel ? (
@@ -3556,7 +3629,9 @@ export default function DesignerNav() {
                   disabled={!nextPanelSlug || isImageCropActive}
                   className="flex min-h-11 flex-[1.35] items-center justify-center gap-1.5 rounded-lg bg-[#D7B356] px-3 text-sm font-semibold text-slate-950 disabled:bg-white/10 disabled:text-white/40"
                 >
-                  {isImageCropActive ? 'Finish crop' : `Next: ${nextPanelTitle ?? 'Continue'}`}
+                  {isImageCropActive
+                    ? 'Finish crop'
+                    : `Next: ${nextPanelTitle ?? 'Continue'}`}
                   <span aria-hidden="true">→</span>
                 </button>
               </div>,
@@ -4012,7 +4087,7 @@ export default function DesignerNav() {
           {/* Menu Items */}
           <div className="flex-1 space-y-6 overflow-y-auto px-5 py-6 md:space-y-0 md:p-4">
             {/* Primary/Secondary CTAs */}
-            {(hasCustomizations || productId) && (
+            {hasCustomizations && (
               <div className="mb-5 flex flex-col gap-3 sm:flex-row">
                 {hasCustomizations && (
                   <button
@@ -4023,26 +4098,8 @@ export default function DesignerNav() {
                     <span>New Design</span>
                   </button>
                 )}
-                {productId && (isCanvasVisible || hasCanvasBeenShown) && (
-                  <button
-                    onClick={handleToggleConvertPanel}
-                    className={`hidden md:inline-flex flex-1 items-center justify-center gap-3 rounded-lg border px-4 py-3 text-base font-light transition-all ${
-                      showConvertPanel
-                        ? 'border-[#f4d07e] bg-white/5 text-[#f4d07e]'
-                        : 'border-white/20 text-gray-200 hover:border-white/40 hover:bg-white/5'
-                    }`}
-                  >
-                    <Squares2X2Icon className="h-5 w-5" />
-                    <span>Convert&nbsp;Design</span>
-                  </button>
-                )}
               </div>
             )}
-
-            {/* Load a previously saved design */}
-            <div className="mb-5 hidden md:block">
-              <LoadDesignButton label="Load Design" variant="menu" />
-            </div>
 
             {showConvertPanel && productId && (
               <div className="day:border-gray-200 day:bg-stone-50 mb-6 rounded-2xl border border-white/15 bg-[#120c08]/90 p-4 shadow-[0_12px_30px_rgba(0,0,0,0.35)] backdrop-blur">
@@ -4452,7 +4509,9 @@ export default function DesignerNav() {
                             const materialLabel =
                               canSelectStainlessGraniteBaseMaterial
                                 ? 'Select Material'
-                                : productId === '5' || productId === '32' || isUrn
+                                : productId === '5' ||
+                                    productId === '32' ||
+                                    isUrn
                                   ? 'Background'
                                   : item.name;
                             const forcedMaterialTarget =
@@ -4612,6 +4671,50 @@ export default function DesignerNav() {
                             </React.Fragment>
                           );
                         })}
+                        {group.label === 'Setup' && (
+                          <>
+                            <label className="flex w-full cursor-pointer items-center gap-3 rounded-lg border border-white/10 bg-white/[0.035] px-4 py-3 text-left text-base font-light text-gray-200 transition-colors hover:border-white/20 hover:bg-white/10">
+                              <input
+                                type="checkbox"
+                                checked={showAdvancedActions}
+                                onChange={(event) => {
+                                  const isEnabled = event.target.checked;
+                                  setShowAdvancedActions(isEnabled);
+                                  if (!isEnabled) setShowConvertPanel(false);
+                                }}
+                                className="h-4 w-4 rounded border-white/30 bg-transparent accent-[#D7B356]"
+                              />
+                              <span className="flex-1">Advanced</span>
+                              <span className="text-xs text-white/35">
+                                Optional tools
+                              </span>
+                            </label>
+                            {showAdvancedActions && (
+                              <>
+                                <button
+                                  type="button"
+                                  onClick={handleToggleConvertPanel}
+                                  disabled={
+                                    !productId ||
+                                    !(isCanvasVisible || hasCanvasBeenShown)
+                                  }
+                                  className={`flex w-full cursor-pointer items-center gap-3 rounded-lg border px-4 py-3 text-left text-base font-light transition-all ${
+                                    showConvertPanel
+                                      ? 'border-[#D7B356]/40 bg-[#D7B356]/10 text-[#f3d48f]'
+                                      : 'border-white/10 bg-white/[0.035] text-gray-200 hover:border-white/20 hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40'
+                                  }`}
+                                >
+                                  <Squares2X2Icon className="h-5 w-5" />
+                                  <span>Convert Design</span>
+                                </button>
+                                <LoadDesignButton
+                                  label="Load Design"
+                                  variant="menu"
+                                />
+                              </>
+                            )}
+                          </>
+                        )}
                         {group.label === 'Account' && (
                           <button
                             type="button"
@@ -4788,7 +4891,10 @@ function captureRendererFrame(
   const rowSize = width * 4;
   for (let y = 0; y < height; y += 1) {
     const sourceOffset = (height - y - 1) * rowSize;
-    image.data.set(pixels.subarray(sourceOffset, sourceOffset + rowSize), y * rowSize);
+    image.data.set(
+      pixels.subarray(sourceOffset, sourceOffset + rowSize),
+      y * rowSize,
+    );
   }
   context.putImageData(image, 0, 0);
   return encodeCanvasForUpload(source);

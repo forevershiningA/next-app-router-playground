@@ -224,7 +224,7 @@ function renderDesignerSidebar(
           // Mobile: bottom sheet docked to the bottom edge so the 3D product
           // stays visible above it (editing sub-panels), or a full-height drawer
           // for the main menu. Desktop (md+): permanent left column.
-          'fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#121212] shadow-2xl transition-all duration-300 md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:pointer-events-auto md:shadow-none',
+          'fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:pointer-events-auto md:shadow-none',
           isMobileMenuOpen
             ? 'pointer-events-auto translate-y-0'
             : 'pointer-events-none translate-y-full',
@@ -232,7 +232,7 @@ function renderDesignerSidebar(
         )}
       >
         {/* Sheet top bar (mobile only). */}
-        <div className="day:bg-[#ece7de] flex-none rounded-t-lg bg-[#121212] md:hidden">
+        <div className="day:bg-[#ece7de] flex-none rounded-t-lg bg-[#1b1511] md:hidden">
           <div className="mx-auto mt-2 h-1 w-10 rounded-full bg-white/25" aria-hidden="true" />
           <div className="flex min-h-9 items-center gap-3 px-4 pt-1.5 pb-0.5">
             <p className="day:text-gray-800 min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
