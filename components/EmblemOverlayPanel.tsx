@@ -4,8 +4,11 @@ import React, { useCallback } from 'react';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
 import { EMBLEM_SIZES } from '#/app/_internal/_emblems-loader';
+import { formatDimensionPair } from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 export default function EmblemOverlayPanel() {
+  const unitSystem = useUnitSystem();
   const selectedEmblemId = useHeadstoneStore((s) => s.selectedEmblemId);
   const setSelectedEmblemId = useHeadstoneStore((s) => s.setSelectedEmblemId);
   const selectedEmblems = useHeadstoneStore((s) => s.selectedEmblems);
@@ -100,7 +103,7 @@ export default function EmblemOverlayPanel() {
 
         {/* Size slider (fixed sizes) */}
         <TailwindSlider
-          label={`Size ${activeOffset.widthMm ?? ''}×${activeOffset.heightMm ?? ''}mm`}
+          label={`Size ${formatDimensionPair(activeOffset.widthMm ?? 0, activeOffset.heightMm ?? 0, unitSystem)}`}
           value={activeOffset.sizeVariant}
           min={1}
           max={EMBLEM_SIZES.length}

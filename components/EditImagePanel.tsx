@@ -4,8 +4,11 @@ import React, { useCallback } from 'react';
 import SceneOverlayController from '#/components/SceneOverlayController';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import TailwindSlider from '#/ui/TailwindSlider';
+import { formatLengthFromMm } from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 export default function EditImagePanel() {
+  const unitSystem = useUnitSystem();
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
   const selectedImages = useHeadstoneStore((s) => s.selectedImages);
@@ -71,7 +74,7 @@ export default function EditImagePanel() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs text-white/60">Horizontal (X)</label>
-              <span className="text-xs text-white/80">{activeImage.xPos.toFixed(1)} mm</span>
+              <span className="text-xs text-white/80">{activeImage.xPos < 0 ? '-' : ''}{formatLengthFromMm(Math.abs(activeImage.xPos), unitSystem)}</span>
             </div>
             <TailwindSlider
               label="X"
@@ -80,6 +83,7 @@ export default function EditImagePanel() {
               min={-200}
               max={200}
               step={1}
+              unit="mm"
             />
           </div>
 
@@ -87,7 +91,7 @@ export default function EditImagePanel() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs text-white/60">Vertical (Y)</label>
-              <span className="text-xs text-white/80">{activeImage.yPos.toFixed(1)} mm</span>
+              <span className="text-xs text-white/80">{activeImage.yPos < 0 ? '-' : ''}{formatLengthFromMm(Math.abs(activeImage.yPos), unitSystem)}</span>
             </div>
             <TailwindSlider
               label="Y"
@@ -96,6 +100,7 @@ export default function EditImagePanel() {
               min={-200}
               max={200}
               step={1}
+              unit="mm"
             />
           </div>
         </div>
@@ -108,7 +113,7 @@ export default function EditImagePanel() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs text-white/60">Width</label>
-              <span className="text-xs text-white/80">{activeImage.widthMm.toFixed(0)} mm</span>
+              <span className="text-xs text-white/80">{formatLengthFromMm(activeImage.widthMm, unitSystem)}</span>
             </div>
             <TailwindSlider
               label="W"
@@ -120,6 +125,7 @@ export default function EditImagePanel() {
               min={20}
               max={300}
               step={1}
+              unit="mm"
             />
           </div>
 
@@ -127,7 +133,7 @@ export default function EditImagePanel() {
           <div>
             <div className="flex items-center justify-between mb-2">
               <label className="text-xs text-white/60">Height</label>
-              <span className="text-xs text-white/80">{activeImage.heightMm.toFixed(0)} mm</span>
+              <span className="text-xs text-white/80">{formatLengthFromMm(activeImage.heightMm, unitSystem)}</span>
             </div>
             <TailwindSlider
               label="H"
@@ -139,6 +145,7 @@ export default function EditImagePanel() {
               min={20}
               max={300}
               step={1}
+              unit="mm"
             />
           </div>
         </div>

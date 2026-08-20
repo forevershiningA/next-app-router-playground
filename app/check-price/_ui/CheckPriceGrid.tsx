@@ -13,6 +13,7 @@ import { getCheckPriceMaterialName, isStainlessSteelHeadstoneProduct } from '#/l
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
 import { buildPdfQuoteFromProject } from '#/lib/design-quote';
 import { captureDesignSnapshot } from '#/lib/project-serializer';
+import { getFixingTypeLabel } from '#/lib/fixing-type';
 
 type CheckPriceGridProps = {
   initialImagePricing?: ImagePricingMap | null;
@@ -96,6 +97,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
   const [imagePricingError, setImagePricingError] = useState<string | null>(null);
   const isMountedRef = useRef(true);
   const productId = useHeadstoneStore((s) => s.productId);
+  const fixingType = useHeadstoneStore((s) => s.fixingType);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const headstoneMaterialUrl = useHeadstoneStore((s) => s.headstoneMaterialUrl);
   const baseMaterialUrl = useHeadstoneStore((s) => s.baseMaterialUrl);
@@ -415,6 +417,9 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
               `Shape: ${shapeName}`,
               `Material: ${headstoneMaterialName}`,
               `Size: ${widthMm} mm x ${heightMm} mm x ${uprightThickness} mm`,
+              ...(productId === '5'
+                ? [`Fixing: ${getFixingTypeLabel(fixingType)}`]
+                : []),
             ],
         qty: 1,
         unitPrice: headstonePrice,
@@ -526,6 +531,7 @@ export default function CheckPriceGrid({ initialImagePricing = null }: CheckPric
     baseThickness,
     baseWidthMm,
     emblemItems,
+    fixingType,
     headstoneMaterialName,
     headstonePrice,
     heightMm,

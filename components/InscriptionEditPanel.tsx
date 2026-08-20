@@ -7,10 +7,25 @@ import {
   getDefaultInscriptionFont,
   isStainlessHeadstoneProduct,
 } from '#/lib/stencil-fonts';
+import {
+  displayLengthValueFromMm,
+  getLengthUnitLabel,
+  lengthValueToMm,
+} from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 const FONTS = data.fonts;
 
 export default function InscriptionEditPanel() {
+  const unitSystem = useUnitSystem();
+  const displayMm = React.useCallback(
+    (value: number) => displayLengthValueFromMm(value, unitSystem),
+    [unitSystem],
+  );
+  const inputToMm = React.useCallback(
+    (value: number) => lengthValueToMm(value, unitSystem),
+    [unitSystem],
+  );
   const lines = useHeadstoneStore((s) => s.inscriptions);
   const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
   const duplicateInscription = useHeadstoneStore((s) => s.duplicateInscription);
@@ -457,15 +472,15 @@ export default function InscriptionEditPanel() {
                 </button>
                 <input
                   type="number"
-                  min={inscriptionMinHeight}
-                  max={inscriptionMaxHeight}
+                  min={displayMm(inscriptionMinHeight)}
+                  max={displayMm(inscriptionMaxHeight)}
                   step={1}
-                  value={active.sizeMm ?? 30}
+                  value={displayMm(active.sizeMm ?? 30)}
                   onChange={(e) =>
-                    updateLine(active.id, { sizeMm: Number(e.target.value) })
+                    updateLine(active.id, { sizeMm: inputToMm(Number(e.target.value)) })
                   }
                   onBlur={(e) => {
-                    const val = Number(e.target.value);
+                    const val = inputToMm(Number(e.target.value));
                     if (val < inscriptionMinHeight) {
                       updateLine(active.id, { sizeMm: inscriptionMinHeight });
                     } else if (val > inscriptionMaxHeight) {
@@ -506,25 +521,25 @@ export default function InscriptionEditPanel() {
                   </svg>
                 </button>
                 <span className="day:text-gray-600 text-sm font-semibold text-white/70">
-                  mm
+                  {getLengthUnitLabel(unitSystem)}
                 </span>
               </div>
             </div>
             <div className="relative mt-3">
               <input
                 type="range"
-                min={inscriptionMinHeight}
-                max={inscriptionMaxHeight}
+                min={displayMm(inscriptionMinHeight)}
+                max={displayMm(inscriptionMaxHeight)}
                 step={1}
-                value={active.sizeMm ?? 30}
+                value={displayMm(active.sizeMm ?? 30)}
                 onChange={(e) =>
-                  updateLine(active.id, { sizeMm: Number(e.target.value) })
+                  updateLine(active.id, { sizeMm: inputToMm(Number(e.target.value)) })
                 }
                 className={rangeInputClass}
               />
               <div className={rangeBoundsClass}>
-                <span>{inscriptionMinHeight}mm</span>
-                <span>{inscriptionMaxHeight}mm</span>
+                <span>{displayMm(inscriptionMinHeight)}{getLengthUnitLabel(unitSystem)}</span>
+                <span>{displayMm(inscriptionMaxHeight)}{getLengthUnitLabel(unitSystem)}</span>
               </div>
             </div>
           </div>

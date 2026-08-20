@@ -9,7 +9,9 @@ function readUnitSystemCookie(): UnitSystem {
   const fromCookie = parseUnitSystemCookie(
     typeof document === 'undefined' ? null : document.cookie,
   );
-  return fromCookie ?? 'metric';
+  // A visitor without a saved preference starts in inches. Once they use the
+  // toggle, useSetUnitSystem persists the selected unit in a long-lived cookie.
+  return fromCookie ?? 'imperial';
 }
 
 export function useUnitSystem(): UnitSystem {

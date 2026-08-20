@@ -8,6 +8,8 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
 import type { ProductPriceSample } from '#/lib/types/pricing';
 import { getDesignerProductSlug } from '#/lib/designer-product-routes';
+import { formatDimensionPair } from '#/lib/unit-system';
+import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
 
 type ProductCategory = {
   id: string;
@@ -99,6 +101,8 @@ export default function ProductSelectionGrid({
 }: ProductGridProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const router = useRouter();
+  const unitSystem = useUnitSystem();
+  const setUnitSystem = useSetUnitSystem();
   const setProductId = useHeadstoneStore((s) => s.setProductId);
   const currentProductId = useHeadstoneStore((s) => s.productId);
 
@@ -141,6 +145,29 @@ export default function ProductSelectionGrid({
       <div className="day:border-gray-200 day:bg-white day:bg-none relative overflow-hidden border-b border-white/10 bg-gradient-to-r from-gray-900/50 to-gray-800/50 backdrop-blur-sm">
         <div className="day:hidden absolute inset-0 bg-gradient-to-br from-[#cfac6c]/5 via-transparent to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-6 lg:px-8">
+          <div className="absolute top-4 right-6 flex rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md day:border-gray-200 day:bg-white/90 lg:right-8">
+            {[
+              { value: 'metric' as const, label: 'MM' },
+              { value: 'imperial' as const, label: 'IN' },
+            ].map((option) => {
+              const isActive = unitSystem === option.value;
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => setUnitSystem(option.value)}
+                  aria-pressed={isActive}
+                  className={`h-7 min-w-10 rounded-full px-3 text-xs font-semibold tracking-wide transition-colors ${
+                    isActive
+                      ? 'bg-[#cfac6c] text-slate-950'
+                      : 'text-white/70 hover:bg-white/10 hover:text-white day:text-gray-600 day:hover:bg-gray-100'
+                  }`}
+                >
+                  {option.label}
+                </button>
+              );
+            })}
+          </div>
           <div className="text-left sm:text-center">
             <h1 className="day:text-gray-900 font-serif text-3xl font-light tracking-tight text-white sm:text-4xl lg:text-[2.75rem]">
               Select Your Memorial Product
@@ -284,7 +311,11 @@ export default function ProductSelectionGrid({
                                   {formatPrice(priceRange.price, priceRange.currency)}
                                 </p>
                                 <p className="day:text-gray-500 mt-0.5 text-xs text-gray-400">
-                                  {priceRange.width} × {priceRange.height} mm
+                                  {formatDimensionPair(
+                                    priceRange.width,
+                                    priceRange.height,
+                                    unitSystem,
+                                  )}
                                 </p>
                               </div>
                             ) : (

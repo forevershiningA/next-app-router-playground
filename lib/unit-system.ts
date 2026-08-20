@@ -20,6 +20,27 @@ export function formatImperialFromMm(mm: number): string {
   return `${Math.ceil(inches - 1e-9)}"`;
 }
 
+/**
+ * Converts a millimetre value to the whole-number value shown by designer
+ * controls. Imperial controls intentionally use the same upward rounding as
+ * the dimension labels, so the canvas never advertises a smaller size.
+ */
+export function displayLengthValueFromMm(mm: number, unitSystem: UnitSystem): number {
+  if (unitSystem === 'imperial') {
+    return Math.ceil(Math.max(0, mm) / 25.4 - 1e-9);
+  }
+  return Math.round(mm);
+}
+
+/** Converts a value entered in the active unit system back to millimetres. */
+export function lengthValueToMm(value: number, unitSystem: UnitSystem): number {
+  return unitSystem === 'imperial' ? value * 25.4 : value;
+}
+
+export function getLengthUnitLabel(unitSystem: UnitSystem): 'mm' | 'in' {
+  return unitSystem === 'imperial' ? 'in' : 'mm';
+}
+
 export function formatLengthFromMm(mm: number, unitSystem: UnitSystem): string {
   if (unitSystem === 'imperial') {
     return formatImperialFromMm(mm);

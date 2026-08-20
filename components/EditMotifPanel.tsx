@@ -143,7 +143,7 @@ export default function EditMotifPanel() {
 
         <div className="space-y-4">
           <TailwindSlider
-            label="Height (mm)"
+            label="Height"
             value={activeOffset.heightMm ?? initHeight}
             min={minHeight}
             max={maxHeight}

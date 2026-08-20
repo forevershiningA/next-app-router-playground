@@ -53,7 +53,12 @@ import ImageSelector from './ImageSelector';
 import SaveDesignModal from './SaveDesignModal';
 import QuickEnquiryModal from './QuickEnquiryModal';
 import ConfirmModal from './ConfirmModal';
-import { formatDimensionPair } from '#/lib/unit-system';
+import {
+  displayLengthValueFromMm,
+  formatDimensionPair,
+  getLengthUnitLabel,
+  lengthValueToMm,
+} from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 import { useTheme } from './ThemeProvider';
 import { logger } from '#/lib/logger';
@@ -329,6 +334,15 @@ function useDesignerNavPanelState({
 
 export default function DesignerNav() {
   const unitSystem = useUnitSystem();
+  const displayLength = React.useCallback(
+    (valueMm: number) => displayLengthValueFromMm(valueMm, unitSystem),
+    [unitSystem],
+  );
+  const displayLengthToMm = React.useCallback(
+    (value: number) => lengthValueToMm(value, unitSystem),
+    [unitSystem],
+  );
+  const lengthUnit = getLengthUnitLabel(unitSystem);
   const pathname = usePathname();
   const designerStepSlug = getDesignerStepSlug(pathname);
   const router = useRouter();
@@ -1597,13 +1611,13 @@ export default function DesignerNav() {
                 <div className="relative">
                   <input
                     type="range"
-                    min={minHeight}
-                    max={maxHeight}
+                    min={displayLength(minHeight)}
+                    max={displayLength(maxHeight)}
                     step={1}
-                    value={activeOffset.heightMm ?? initHeight}
+                    value={displayLength(activeOffset.heightMm ?? initHeight)}
                     onChange={(e) => {
                       if (!selectedMotifId) return;
-                      const clampedValue = clampHeight(Number(e.target.value));
+                      const clampedValue = clampHeight(displayLengthToMm(Number(e.target.value)));
                       setMotifOffset(selectedMotifId, {
                         ...activeOffset,
                         heightMm: clampedValue,
@@ -1612,8 +1626,8 @@ export default function DesignerNav() {
                     className={rangeInputClass}
                   />
                   <div className={rangeBoundsClass}>
-                    <span>{minHeight}mm</span>
-                    <span>{maxHeight}mm</span>
+                    <span>{displayLength(minHeight)}{lengthUnit}</span>
+                    <span>{displayLength(maxHeight)}{lengthUnit}</span>
                   </div>
                 </div>
               </div>
@@ -2854,13 +2868,13 @@ export default function DesignerNav() {
                   </button>
                   <input
                     type="number"
-                    min={minWidth}
-                    max={maxWidth}
-                    step={10}
-                    value={currentWidthMm}
-                    onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
+                    min={displayLength(minWidth)}
+                    max={displayLength(maxWidth)}
+                    step={unitSystem === 'imperial' ? 1 : 10}
+                    value={displayLength(currentWidthMm)}
+                    onChange={(e) => setCurrentWidthMm(displayLengthToMm(Number(e.target.value)))}
                     onBlur={(e) => {
-                      const val = Number(e.target.value);
+                      const val = displayLengthToMm(Number(e.target.value));
                       if (val < minWidth) {
                         setCurrentWidthMm(minWidth);
                       } else if (val > maxWidth) {
@@ -2899,24 +2913,24 @@ export default function DesignerNav() {
                     </svg>
                   </button>
                   <span className="text-sm font-semibold text-white/70">
-                    mm
+                    {lengthUnit}
                   </span>
                 </div>
               </div>
               <div className={rangeBlockClass}>
                 <input
                   type="range"
-                  min={minWidth}
-                  max={maxWidth}
-                  step={10}
-                  value={currentWidthMm}
-                  onChange={(e) => setCurrentWidthMm(Number(e.target.value))}
+                  min={displayLength(minWidth)}
+                  max={displayLength(maxWidth)}
+                  step={unitSystem === 'imperial' ? 1 : 10}
+                  value={displayLength(currentWidthMm)}
+                  onChange={(e) => setCurrentWidthMm(displayLengthToMm(Number(e.target.value)))}
                   disabled={editingObject === 'base' && !showBase}
                   className={rangeInputClass}
                 />
                 <div className={rangeBoundsClass}>
-                  <span>{minWidth}mm</span>
-                  <span>{maxWidth}mm</span>
+                  <span>{displayLength(minWidth)}{lengthUnit}</span>
+                  <span>{displayLength(maxWidth)}{lengthUnit}</span>
                 </div>
               </div>
             </div>
@@ -2953,13 +2967,13 @@ export default function DesignerNav() {
                   </button>
                   <input
                     type="number"
-                    min={minHeight}
-                    max={maxHeight}
-                    step={10}
-                    value={currentHeightMm}
-                    onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
+                    min={displayLength(minHeight)}
+                    max={displayLength(maxHeight)}
+                    step={unitSystem === 'imperial' ? 1 : 10}
+                    value={displayLength(currentHeightMm)}
+                    onChange={(e) => setCurrentHeightMm(displayLengthToMm(Number(e.target.value)))}
                     onBlur={(e) => {
-                      const val = Number(e.target.value);
+                      const val = displayLengthToMm(Number(e.target.value));
                       if (val < minHeight) {
                         setCurrentHeightMm(minHeight);
                       } else if (val > maxHeight) {
@@ -2998,24 +3012,24 @@ export default function DesignerNav() {
                     </svg>
                   </button>
                   <span className="text-sm font-semibold text-white/70">
-                    mm
+                    {lengthUnit}
                   </span>
                 </div>
               </div>
               <div className={rangeBlockClass}>
                 <input
                   type="range"
-                  min={minHeight}
-                  max={maxHeight}
-                  step={10}
-                  value={currentHeightMm}
-                  onChange={(e) => setCurrentHeightMm(Number(e.target.value))}
+                  min={displayLength(minHeight)}
+                  max={displayLength(maxHeight)}
+                  step={unitSystem === 'imperial' ? 1 : 10}
+                  value={displayLength(currentHeightMm)}
+                  onChange={(e) => setCurrentHeightMm(displayLengthToMm(Number(e.target.value)))}
                   disabled={editingObject === 'base' && !showBase}
                   className={rangeInputClass}
                 />
                 <div className={rangeBoundsClass}>
-                  <span>{minHeight}mm</span>
-                  <span>{maxHeight}mm</span>
+                  <span>{displayLength(minHeight)}{lengthUnit}</span>
+                  <span>{displayLength(maxHeight)}{lengthUnit}</span>
                 </div>
               </div>
             </div>
@@ -3136,22 +3150,22 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-semibold text-white/70">mm</span>
+                <span className="text-sm font-semibold text-white/70">{lengthUnit}</span>
               </div>
             </div>
             <div className={rangeBlockClass}>
               <input
                 type="range"
-                min={minThickness}
-                max={maxThickness}
-                step={10}
+                min={displayLength(minThickness)}
+                max={displayLength(maxThickness)}
+                step={unitSystem === 'imperial' ? 1 : 10}
                 value={
-                  headstoneStyle === 'upright'
+                  displayLength(headstoneStyle === 'upright'
                     ? uprightThickness
-                    : slantThickness
+                    : slantThickness)
                 }
                 onChange={(e) => {
-                  const newValue = Number(e.target.value);
+                  const newValue = displayLengthToMm(Number(e.target.value));
                   if (headstoneStyle === 'upright') {
                     setUprightThickness(newValue);
                   } else {
@@ -3161,8 +3175,8 @@ export default function DesignerNav() {
                 className={rangeInputClass}
               />
               <div className={rangeBoundsClass}>
-                <span>{minThickness}mm</span>
-                <span>{maxThickness}mm</span>
+                <span>{displayLength(minThickness)}{lengthUnit}</span>
+                <span>{displayLength(maxThickness)}{lengthUnit}</span>
               </div>
             </div>
           </div>
@@ -3242,22 +3256,22 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-semibold text-white/70">mm</span>
+                <span className="text-sm font-semibold text-white/70">{lengthUnit}</span>
               </div>
             </div>
             <div className={rangeBlockClass}>
               <input
                 type="range"
-                min={minThickness}
-                max={maxThickness}
-                step={10}
-                value={baseThickness}
-                onChange={(e) => setBaseThickness(Number(e.target.value))}
+                min={displayLength(minThickness)}
+                max={displayLength(maxThickness)}
+                step={unitSystem === 'imperial' ? 1 : 10}
+                value={displayLength(baseThickness)}
+                onChange={(e) => setBaseThickness(displayLengthToMm(Number(e.target.value)))}
                 className={rangeInputClass}
               />
               <div className={rangeBoundsClass}>
-                <span>{minThickness}mm</span>
-                <span>{maxThickness}mm</span>
+                <span>{displayLength(minThickness)}{lengthUnit}</span>
+                <span>{displayLength(maxThickness)}{lengthUnit}</span>
               </div>
             </div>
           </div>
@@ -3330,23 +3344,23 @@ export default function DesignerNav() {
                     </svg>
                   </button>
                   <span className="text-sm font-semibold text-white/70">
-                    mm
+                    {lengthUnit}
                   </span>
                 </div>
               </div>
               <div className={rangeBlockClass}>
                 <input
                   type="range"
-                  min={minThickness}
-                  max={maxThickness}
-                  step={10}
-                  value={currentDepthMm}
-                  onChange={(e) => setCurrentDepthMm(Number(e.target.value))}
+                  min={displayLength(minThickness)}
+                  max={displayLength(maxThickness)}
+                  step={unitSystem === 'imperial' ? 1 : 10}
+                  value={displayLength(currentDepthMm)}
+                  onChange={(e) => setCurrentDepthMm(displayLengthToMm(Number(e.target.value)))}
                   className={rangeInputClass}
                 />
                 <div className={rangeBoundsClass}>
-                  <span>{minThickness}mm</span>
-                  <span>{maxThickness}mm</span>
+                  <span>{displayLength(minThickness)}{lengthUnit}</span>
+                  <span>{displayLength(maxThickness)}{lengthUnit}</span>
                 </div>
               </div>
             </div>

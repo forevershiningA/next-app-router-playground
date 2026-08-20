@@ -19,6 +19,7 @@ import {
 import type { CatalogData } from '#/lib/xml-parser';
 import { formatDimensionPair, formatDimensionTriplet } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
+import { getFixingTypeLabel } from '#/lib/fixing-type';
 
 type QuoteRow = {
   id: string;
@@ -63,6 +64,7 @@ export default function CheckPricePanel() {
   const setActivePanel = useHeadstoneStore((s) => s.setActivePanel);
   const productId = useHeadstoneStore((s) => s.productId);
   const borderName = useHeadstoneStore((s) => s.borderName);
+  const fixingType = useHeadstoneStore((s) => s.fixingType);
   const fixedSizes = useHeadstoneStore((s) => s.fixedSizes);
   const unitSystem = useUnitSystem();
   const fallbackProductId = useMemo(
@@ -387,6 +389,9 @@ export default function CheckPricePanel() {
               `Shape: ${shapeName}`,
               `Material: ${getCheckPriceMaterialName(headstoneMaterialUrl)}`,
               `Size: ${formatDimensionTriplet(widthMm, heightMm, uprightThickness, unitSystem)}`,
+              ...(productId === '5'
+                ? [`Fixing: ${getFixingTypeLabel(fixingType)}`]
+                : []),
             ],
         qty: 1,
         unitPrice: headstonePrice,
@@ -550,6 +555,7 @@ export default function CheckPricePanel() {
     baseThickness,
     baseWidthMm,
     emblemItems,
+    fixingType,
     headstoneMaterialUrl,
     headstonePrice,
     heightMm,
@@ -562,6 +568,7 @@ export default function CheckPricePanel() {
     kerbsetPrice,
     ledgerPrice,
     motifItems,
+    productId,
     selectedShape,
     shapeName,
     showBase,
