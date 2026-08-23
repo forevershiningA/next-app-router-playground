@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Bars3Icon } from '@heroicons/react/24/outline';
 import {
   getMemorialTypePageData,
   isMemorialTypeSlug,
@@ -10,6 +11,7 @@ import {
 } from '#/lib/memorial-product-pages';
 import { getDesignerProductSlug } from '#/lib/designer-product-routes';
 import MemorialHeaderGallery from './MemorialHeaderGallery';
+import MemorialThemeToggle from './MemorialThemeToggle';
 
 type PageProps = {
   params: Promise<{ type: string }>;
@@ -240,7 +242,7 @@ export default async function MemorialTypePage({ params }: PageProps) {
   const guidance = memorialBuyingGuidance[page.slug];
 
   return (
-    <main className="min-h-screen bg-[#0b0b0b] text-white day:bg-stone-100 day:text-gray-900" data-seo-page="true">
+    <main className="min-h-screen bg-[#0b0b0b] text-white day:bg-stone-100 day:text-gray-900" data-seo-page="true" data-memorials-page="true">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productTypeJsonLd(page)) }}
@@ -249,28 +251,39 @@ export default async function MemorialTypePage({ params }: PageProps) {
       <PublicHeader activeType={page.slug} />
 
       <section className="border-b border-white/10 bg-[#111] day:border-gray-200 day:bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-7 lg:px-8">
-          <nav className="mb-5 text-sm text-gray-400 day:text-gray-500" aria-label="Breadcrumb">
-            <Link href="/" className="hover:text-white day:hover:text-gray-900">
-              Home
-            </Link>
-            <span className="mx-2" aria-hidden="true">
-              /
-            </span>
-            <span>{page.title}</span>
-          </nav>
+        <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 sm:py-7 lg:px-8">
+          <div className="mb-3 flex items-center justify-between gap-4 sm:mb-5">
+            <nav className="text-sm text-gray-400 day:text-gray-500" aria-label="Breadcrumb">
+              <Link href="/" className="hover:text-white day:hover:text-gray-900">
+                Home
+              </Link>
+              <span className="mx-2" aria-hidden="true">
+                /
+              </span>
+              <span>{page.title}</span>
+            </nav>
+            <div className="sm:hidden">
+              <MemorialThemeToggle />
+            </div>
+          </div>
 
-          <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
-            <div className="flex flex-col gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#cfac6c]">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-2 lg:items-start">
+            <div className="flex flex-col gap-2 sm:gap-3">
+              <p className="m-0 text-xs font-semibold uppercase tracking-[0.24em] text-[#cfac6c]">
                 Product type
               </p>
-              <h1 className="max-w-3xl font-serif text-4xl leading-none text-white sm:text-5xl day:text-gray-900">
+              <h1 className="m-0 p-0 max-w-3xl font-serif text-4xl leading-none text-white sm:text-5xl day:text-gray-900">
                 {page.title}
               </h1>
-              <p className="max-w-3xl text-base leading-7 text-gray-300 day:text-gray-600">
+              <p className="m-0 max-w-3xl text-base leading-7 text-gray-300 day:text-gray-600">
                 {page.intro}
               </p>
+              <Link
+                href="#choose-product"
+                className="inline-flex min-h-12 items-center justify-center rounded-lg bg-[#cfac6c] px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] sm:hidden"
+              >
+                Browse Models
+              </Link>
             </div>
 
             <MemorialHeaderGallery title={page.title} images={page.gallery} />
@@ -299,83 +312,38 @@ export default async function MemorialTypePage({ params }: PageProps) {
           </section>
         )}
 
-        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-white day:text-gray-900">
-              Choose a product
-            </h2>
-            <p className="mt-1 text-sm text-gray-400 day:text-gray-600">
-              Each card opens the Designer with that product selected.
-            </p>
-          </div>
-          <Link
-            href="/select-product"
-            className="inline-flex min-h-10 items-center justify-center rounded-lg border border-white/15 px-4 py-2 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-white"
-          >
-            View all products
-          </Link>
+        <div id="choose-product" className="mb-5 scroll-mt-5">
+          <h2 className="text-2xl font-semibold text-white day:text-gray-900">
+            Choose a product
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {page.products.map((product) => (
-            <Link
+            <article
               key={product.id}
-              href={productDesignerUrl(product.id)}
               className="group flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-all hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10 day:border-gray-200 day:bg-white"
             >
-              <div className="relative aspect-[4/3] border-b border-white/10 bg-[#101010] day:border-gray-200 day:bg-gray-50">
+              <div className="relative aspect-[5/4] border-b border-white/10 bg-[#101010] day:border-gray-200 day:bg-gray-50 sm:aspect-[4/3]">
                 <Image
                   src={`/webp/products/${product.image}`}
                   alt={product.displayName}
                   fill
-                  className="object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover transition-transform duration-300 group-hover:scale-105 sm:object-contain sm:p-5"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
               </div>
 
-              <div className="flex flex-1 flex-col gap-3 p-4">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#cfac6c]">
-                    Product ID {product.id}
-                  </p>
-                  <h3 className="mt-1 text-lg font-semibold text-white day:text-gray-900">
-                    {product.displayName}
-                  </h3>
-                </div>
-
-                <p className="text-sm leading-6 text-gray-300 day:text-gray-600">
+              <div className="flex flex-1 flex-col gap-4 p-4">
+                <p className="text-[15px] leading-6 text-gray-300 day:text-gray-600">
                   {product.description}
                 </p>
 
-                {product.sizeText ? (
-                  <p className="rounded-lg border border-white/10 bg-white/[0.03] p-3 text-xs leading-5 text-gray-400 day:border-gray-200 day:bg-gray-50 day:text-gray-600">
-                    {product.sizeText}
-                  </p>
-                ) : null}
-
-                {product.shapes.length > 0 ? (
-                  <div>
-                    <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">
-                      Catalog shapes
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {product.shapes.slice(0, 5).map((shape) => (
-                        <span
-                          key={`${product.id}-${shape.name}-${shape.code}`}
-                          className="rounded-lg border border-white/10 px-2 py-1 text-xs text-gray-300 day:border-gray-200 day:text-gray-700"
-                        >
-                          {shape.code || shape.name}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ) : null}
-
-                <span className="mt-auto inline-flex min-h-10 items-center justify-center rounded-lg bg-[#cfac6c] px-4 py-2 text-sm font-semibold text-slate-950 transition-colors group-hover:bg-[#d7b979]">
-                  Open in Designer
-                </span>
+                <Link href={productDesignerUrl(product.id)} className="mt-auto inline-flex min-h-11 items-center justify-center rounded-lg bg-[#cfac6c] px-4 py-2 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]">
+                  Design Your Own
+                </Link>
               </div>
-            </Link>
+            </article>
           ))}
         </div>
       </section>
@@ -416,8 +384,8 @@ function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
     'border-[#cfac6c]/70 bg-[#cfac6c]/15 text-[#f3d48f] day:border-[#cfac6c] day:bg-[#fff7e6] day:text-gray-950';
 
   return (
-    <header className="border-b border-white/10 bg-[#0b0b0b]/95 day:border-gray-200 day:bg-white">
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-3 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+    <header className="relative z-20 border-b border-white/10 bg-[#0b0b0b]/95 day:border-gray-200 day:bg-white">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
         <Link href="/" className="block w-40 sm:w-44" aria-label="Forever Shining home">
           <Image
             src="/ico/forever-transparent-logo.png"
@@ -428,7 +396,7 @@ function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
             priority
           />
         </Link>
-        <nav className="flex flex-wrap items-center gap-2 text-sm">
+        <nav className="hidden flex-wrap items-center gap-2 text-sm sm:flex">
           <Link href="/" className="rounded-lg border border-white/10 px-3 py-2 text-gray-200 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-200 day:text-gray-700 day:hover:bg-gray-50">
             Home
           </Link>
@@ -449,6 +417,34 @@ function PublicHeader({ activeType }: { activeType: MemorialTypeSlug }) {
             Start Designing
           </Link>
         </nav>
+
+        <details className="relative mr-12 sm:hidden">
+          <summary className="flex cursor-pointer list-none items-center gap-2 rounded-lg border border-white/15 px-3 py-2 text-sm font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-gray-50 [&::-webkit-details-marker]:hidden">
+            <Bars3Icon className="h-5 w-5" aria-hidden="true" />
+            Menu
+          </summary>
+          <nav className="absolute right-0 top-full mt-2 flex w-56 flex-col gap-1 rounded-lg border border-white/10 bg-[#111] p-2 shadow-xl day:border-gray-200 day:bg-white" aria-label="Memorial product pages">
+            <Link href="/" className="rounded-md px-3 py-2 text-sm text-gray-200 transition-colors hover:bg-white/5 hover:text-white day:text-gray-700 day:hover:bg-gray-50">
+              Home
+            </Link>
+            {headerMemorialLinks.map((slug) => {
+              const isActive = slug === activeType;
+              return (
+                <Link
+                  key={slug}
+                  href={`/memorials/${slug}`}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`rounded-md px-3 py-2 text-sm transition-colors ${isActive ? 'bg-[#cfac6c]/15 text-[#f3d48f] day:bg-[#fff7e6] day:text-gray-950' : 'text-gray-200 hover:bg-white/5 hover:text-white day:text-gray-700 day:hover:bg-gray-50'}`}
+                >
+                  {memorialTypePages[slug].navLabel}
+                </Link>
+              );
+            })}
+            <Link href="/select-product" className="mt-1 rounded-md bg-[#cfac6c] px-3 py-2 text-center text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979]">
+              Start Designing
+            </Link>
+          </nav>
+        </details>
       </div>
     </header>
   );

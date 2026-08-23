@@ -27,6 +27,10 @@ export function ThemeToggle() {
   const insideAccountSidebarOnMobile = accountRoutePrefixes.some((prefix) =>
     pathname?.startsWith(prefix),
   );
+  // On the home page, the mobile control is placed alongside the
+  // "Created from experience" heading instead of covering the hero.
+  const insideHomeSectionOnMobile = pathname === '/';
+  const insideMemorialsOnMobile = pathname?.startsWith('/memorials');
 
   return (
     <button
@@ -34,7 +38,8 @@ export function ThemeToggle() {
       aria-label={isDay ? 'Switch to night mode' : 'Switch to day mode'}
       title={isDay ? 'Night mode' : 'Day mode'}
       className={`
-        fixed top-5 left-5 z-[9999]
+        fixed top-5 z-[9999]
+        ${insideMemorialsOnMobile ? 'right-5 left-auto md:left-5 md:right-auto' : 'left-5'}
         h-9 w-9 items-center justify-center
         rounded-full border shadow-md
         transition-all duration-200
@@ -42,7 +47,7 @@ export function ThemeToggle() {
         hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white
         day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700
         day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800
-        ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile ? 'hidden md:flex' : 'flex'}
+        ${insideDesignerSidebarOnMobile || insideAccountSidebarOnMobile || insideHomeSectionOnMobile || insideMemorialsOnMobile ? 'hidden md:flex' : 'flex'}
       `}
     >
       {isDay ? (

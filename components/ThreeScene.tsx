@@ -95,6 +95,11 @@ function ProductNameHeader() {
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
   const baseThickness = useHeadstoneStore((s) => s.baseThickness);
+  const ledgerWidthMm = useHeadstoneStore((s) => s.ledgerWidthMm);
+  const ledgerHeightMm = useHeadstoneStore((s) => s.ledgerHeightMm);
+  const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
+  const kerbHeightMm = useHeadstoneStore((s) => s.kerbHeightMm);
+  const editingObject = useHeadstoneStore((s) => s.editingObject);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const inscriptionCost = useHeadstoneStore((s) => s.inscriptionCost);
@@ -261,9 +266,31 @@ function ProductNameHeader() {
     headstoneMaterialUrl,
   ]);
 
+  const activeDimension = useMemo(() => {
+    switch (editingObject) {
+      case 'base':
+        return { label: 'Base', widthMm: baseWidthMm, heightMm: baseHeightMm };
+      case 'ledger':
+        return { label: 'Ledger', widthMm: ledgerWidthMm, heightMm: ledgerHeightMm };
+      case 'kerbset':
+        return { label: 'Kerbset', widthMm: kerbWidthMm, heightMm: kerbHeightMm };
+      default:
+        return { label: 'Headstone', widthMm, heightMm };
+    }
+  }, [
+    editingObject,
+    baseWidthMm,
+    baseHeightMm,
+    ledgerWidthMm,
+    ledgerHeightMm,
+    kerbWidthMm,
+    kerbHeightMm,
+    widthMm,
+    heightMm,
+  ]);
   const sizeLabel = useMemo(
-    () => formatDimensionPair(widthMm, heightMm, unitSystem),
-    [widthMm, heightMm, unitSystem],
+    () => `${activeDimension.label} · ${formatDimensionPair(activeDimension.widthMm, activeDimension.heightMm, unitSystem)}`,
+    [activeDimension, unitSystem],
   );
   const displayShapeName = useMemo(() => {
     if (selectedShape?.name) {
@@ -323,7 +350,7 @@ function ProductNameHeader() {
 
       {/* On mobile keep the quote action below the fixed header. The bottom
           sheet otherwise covers it while editing a design step. */}
-      {widthMm > 0 && heightMm > 0 && (
+      {activeDimension.widthMm > 0 && activeDimension.heightMm > 0 && (
         <div
           className="absolute top-[4.75rem] left-1/2 z-40 w-[80vw] -translate-x-1/2 pointer-events-auto md:top-auto md:bottom-8 md:w-auto"
         >

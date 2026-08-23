@@ -49,13 +49,13 @@ export default function MemorialHeaderGallery({ title, images }: MemorialHeaderG
           </a>
         </div>
 
-        <div className="grid grid-cols-3 gap-2">
+        <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 sm:grid sm:grid-cols-3 sm:gap-2 sm:overflow-visible sm:pb-0" aria-label="Swipe through memorial gallery">
           {images.slice(0, 3).map((image) => (
             <button
               key={image.src}
               type="button"
               onClick={() => setActiveImage(image)}
-              className="group relative aspect-square overflow-hidden rounded-lg border border-white/10 bg-[#151515] text-left transition-colors hover:border-[#cfac6c]/70 focus:outline-none focus:ring-2 focus:ring-[#cfac6c] day:border-gray-200 day:bg-white"
+              className="group relative aspect-[4/3] w-[82%] shrink-0 snap-start overflow-hidden rounded-lg border border-white/10 bg-[#151515] text-left transition-colors hover:border-[#cfac6c]/70 focus:outline-none focus:ring-2 focus:ring-[#cfac6c] sm:aspect-square sm:w-auto sm:shrink day:border-gray-200 day:bg-white"
               aria-label={`Open ${image.alt}`}
             >
               <Image
@@ -63,7 +63,7 @@ export default function MemorialHeaderGallery({ title, images }: MemorialHeaderG
                 alt={image.alt}
                 fill
                 className="object-cover transition-transform duration-300 group-hover:scale-105"
-                sizes="(max-width: 1024px) 30vw, 150px"
+                sizes="(max-width: 640px) 82vw, (max-width: 1024px) 30vw, 150px"
               />
             </button>
           ))}

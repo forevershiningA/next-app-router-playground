@@ -73,6 +73,8 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const showLedger      = useHeadstoneStore((s) => s.showLedger);
   const showKerbset     = useHeadstoneStore((s) => s.showKerbset);
   const selected        = useHeadstoneStore((s) => s.selected);
+  const editingObject   = useHeadstoneStore((s) => s.editingObject);
+  const activePanel     = useHeadstoneStore((s) => s.activePanel);
   const selectedInscriptionId = useHeadstoneStore((s) => s.selectedInscriptionId);
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const selectedMotifId = useHeadstoneStore((s) => s.selectedMotifId);
@@ -101,18 +103,19 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const animationFrameRef = React.useRef<number | null>(null);
   const hasAppliedInitialPoseRef = React.useRef(false);
-  const shouldFocusHeadstone =
-    selected === 'headstone' ||
-    selectedInscriptionSurface === 'headstone' ||
-    selectedAdditionSurface === 'headstone' ||
-    selectedMotifSurface === 'headstone' ||
-    selectedImageSurface === 'headstone';
-  const shouldFocusBase =
-    selected === 'base' ||
-    selectedInscriptionSurface === 'base' ||
-    selectedAdditionSurface === 'base' ||
-    selectedMotifSurface === 'base' ||
-    selectedImageSurface === 'base';
+  // The size-panel tabs set `editingObject` immediately; `selected` is a
+  // canvas-selection state and may not update on routes other than /select-size.
+  // Content selection takes precedence. An empty inscription editor has no
+  // selected line yet, but it still needs a close, readable upright view.
+  // Otherwise frame the active size-panel tab.
+  const focusedSurface =
+    selectedInscriptionSurface ??
+    selectedAdditionSurface ??
+    selectedMotifSurface ??
+    selectedImageSurface ??
+    (activePanel === 'inscription' ? 'headstone' : editingObject);
+  const shouldFocusHeadstone = focusedSurface === 'headstone';
+  const shouldFocusBase = focusedSurface === 'base';
   // Zoom in for headstone or base (both are on the upright assembly)
   const shouldZoomIn = shouldFocusHeadstone || shouldFocusBase;
   const lastSelectedRef = React.useRef(shouldZoomIn);
@@ -192,8 +195,12 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       // Leave enough vertical room to fit the entire upright, base and statue
       // in the uncovered portion of a mobile viewport.
       const margin = mobileSheetVisible
-        ? (zoomToHeadstone ? 1.48 : 1.32)
-        : (zoomToHeadstone ? 1.02 : 1.08);
+        ? (zoomToHeadstone ? 1.48 : 1.5)
+        // Ledger and kerbset are edited in the context of the full plot.
+        // Reserve a generous border around the complete monument so its
+        // front kerb never falls outside the camera after coming from the
+        // close headstone framing.
+        : (zoomToHeadstone ? 1.02 : 1.3);
       const vFov = THREE.MathUtils.degToRad(camera.fov);
       const aspect = Math.max(1e-6, size.width / Math.max(1, size.height));
       const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
@@ -364,6 +371,11 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
         return;
       }
 
+      // Every tab change uses the same interpolation path. In particular,
+      // Headstone/Base → Ledger/Kerbset must zoom back to the full plot rather
+      // than replacing the camera pose in a single frame. `animateToPose()`
+      // temporarily switches the demand-rendered canvas to `always`, so the
+      // transition cannot be lost while React applies the tab state update.
       animateToPose(pose);
       lastAppliedBoxRef.current = box.clone();
       lastZoomModeRef.current = zoomToHeadstone;
@@ -464,7 +476,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   }, [
     ledgerDepthMm, kerbDepthMm, kerbWidthMm, kerbHeightMm,
     heightMm, baseHeightMm, uprightThickness,
-    productId, shapeUrl, showLedger, showKerbset, selected, trigger,
+    productId, shapeUrl, showLedger, showKerbset, selected, editingObject, activePanel, trigger,
     selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
     selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,
     isMaterialChange, isMobileNavOpen, camera, size.width, size.height, controls, invalidate, scene, setFrameloop, fitKey,

@@ -1,6 +1,8 @@
 // AtmosphericSky.tsx
 import * as THREE from 'three';
 import { Clouds, Cloud } from '@react-three/drei';
+import { useThree } from '@react-three/fiber';
+import { useEffect } from 'react';
 
 const SkyMaterial = {
   uniforms: {
@@ -56,6 +58,19 @@ export default function AtmosphericSky({
   cloudColor = '#ffffff',
   compact = false,
 }: AtmosphericSkyProps) {
+  const invalidate = useThree((state) => state.invalidate);
+
+  // Clouds fill their instanced mesh in a frame callback. The main canvas is
+  // demand-rendered, so schedule one follow-up frame after mount; otherwise
+  // the first captured frame can contain only empty cloud instances.
+  useEffect(() => {
+    const firstFrame = requestAnimationFrame(() => {
+      invalidate();
+      requestAnimationFrame(invalidate);
+    });
+    return () => cancelAnimationFrame(firstFrame);
+  }, [invalidate]);
+
   return (
     <group>
       {/* The Sky Dome */}
@@ -80,57 +95,62 @@ export default function AtmosphericSky({
       */}
       <Clouds
         material={THREE.MeshStandardMaterial}
-        texture="/three-assets/cloud.svg"
+        texture="/three-assets/cloud.png"
       >
-        <Cloud 
+        <Cloud
           seed={10} 
-          bounds={[60, 8, 60]} 
+          bounds={[26, 0.75, 16]}
           segments={compact ? 8 : 18}
-          volume={11} 
+          volume={7.5}
           color={cloudColor}
-          opacity={0.92} 
-          position={[0, 11, -8]} 
-          speed={0.12} 
+          opacity={0.76}
+          fade={35}
+          position={[-12, 4.3, -22]}
+          speed={0.05}
         />
         <Cloud 
           seed={24} 
-          bounds={[55, 7, 55]} 
+          bounds={[22, 0.65, 14]}
           segments={compact ? 8 : 18}
-          volume={10} 
+          volume={6.6}
           color={cloudColor} 
-          opacity={0.72} 
-          position={[10, 12.5, -1]} 
-          speed={0.08} 
+          opacity={0.58}
+          fade={35}
+          position={[13, 4.45, -26]}
+          speed={0.035}
         />
         {!compact && <Cloud
           seed={31} 
-          bounds={[42, 5, 42]} 
+          bounds={[18, 0.55, 12]}
           segments={16} 
-          volume={8} 
+          volume={5.5}
           color={cloudColor} 
-          opacity={0.62} 
-          position={[-12, 11, 6]} 
-          speed={0.09} 
+          opacity={0.44}
+          fade={35}
+          position={[-24, 4.15, -18]}
+          speed={0.04}
         />}
         {!compact && <Cloud
           seed={44} 
-          bounds={[48, 6, 48]} 
+          bounds={[20, 0.6, 12]}
           segments={16} 
-          volume={9} 
+          volume={5.8}
           color={cloudColor} 
-          opacity={0.58} 
-          position={[4, 10.5, 8]} 
-          speed={0.11} 
+          opacity={0.4}
+          fade={35}
+          position={[22, 4.25, -20]}
+          speed={0.04}
         />}
         {!compact && <Cloud
           seed={57} 
-          bounds={[35, 5, 35]} 
+          bounds={[16, 0.45, 10]}
           segments={14} 
-          volume={7} 
+          volume={4.8}
           color={cloudColor} 
-          opacity={0.5} 
-          position={[-6, 13.5, -5]} 
-          speed={0.06} 
+          opacity={0.3}
+          fade={35}
+          position={[0, 4.55, -32]}
+          speed={0.025}
         />}
       </Clouds>
     </group>

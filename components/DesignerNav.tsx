@@ -438,6 +438,9 @@ export default function DesignerNav() {
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
+  const setSelectedInscriptionId = useHeadstoneStore(
+    (s) => s.setSelectedInscriptionId,
+  );
   const selectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const additionCost = useHeadstoneStore((s) => s.additionCost);
   const setSelectedAdditionId = useHeadstoneStore(
@@ -617,6 +620,7 @@ export default function DesignerNav() {
   // Show Select Size panel when on select-size page
   const isSelectSizePage = designerStepSlug === 'select-size';
   const isSelectAdditionsPage = designerStepSlug === 'select-additions';
+  const didApplyInitialInscriptionTargetRef = React.useRef(false);
 
   // Determine if canvas is visible (on pages with 3D scene)
   const canvasVisiblePages = [
@@ -915,6 +919,37 @@ export default function DesignerNav() {
     setDismissedPanelSlug,
     setPanelSource,
   ]);
+
+  // A new inscription belongs on the upright by default. Size-panel state can
+  // otherwise leave Kerbset/Base selected when the user enters this step.
+  // Preserve the target when an existing inscription is already being edited.
+  useEffect(() => {
+    if (designerStepSlug !== 'inscriptions') {
+      didApplyInitialInscriptionTargetRef.current = false;
+      return;
+    }
+
+    if (didApplyInitialInscriptionTargetRef.current) return;
+    didApplyInitialInscriptionTargetRef.current = true;
+
+    if (selectedInscriptionId) return;
+
+    setEditingObject('headstone');
+    setSelected('headstone');
+  }, [
+    designerStepSlug,
+    selectedInscriptionId,
+    setEditingObject,
+    setSelected,
+  ]);
+
+  // The image step is a new editing context. Leaving text handles visible
+  // there implies that the inscription is still being edited.
+  useEffect(() => {
+    if (designerStepSlug === 'select-images' && selectedInscriptionId) {
+      setSelectedInscriptionId(null);
+    }
+  }, [designerStepSlug, selectedInscriptionId, setSelectedInscriptionId]);
 
   useEffect(() => {
     if (
@@ -2537,7 +2572,7 @@ export default function DesignerNav() {
 
     return (
       <div
-        className={`fs-size-panel space-y-3 rounded-lg p-3 shadow-xl backdrop-blur-sm md:space-y-4 md:p-3.5 ${extraClassName}`}
+        className={`fs-size-panel flex flex-col gap-3 rounded-lg p-3 shadow-xl backdrop-blur-sm md:gap-4 md:p-3.5 ${extraClassName}`}
       >
         {!isPlaque && (
           <SegmentedControl
@@ -2557,7 +2592,7 @@ export default function DesignerNav() {
         )}
 
         {editingObject === 'base' && (
-          <>
+          <div className="contents">
             <div className="flex gap-2">
               <button
                 type="button"
@@ -2620,7 +2655,9 @@ export default function DesignerNav() {
                 </>
               )}
             </div>
-            <div className="-mx-3.5 border-t border-white/10"></div>
+            <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
+            <div className="order-last space-y-3 md:order-none">
+              <div className="-mx-3.5 border-t border-white/10"></div>
             <fieldset className="space-y-2 text-sm">
               <legend className="text-white/75">Base option</legend>
               <div className="flex gap-2" role="group" aria-label="Base option">
@@ -2669,7 +2706,8 @@ export default function DesignerNav() {
                 </div>
               </fieldset>
             )}
-          </>
+            </div>
+          </div>
         )}
 
         {editingObject === 'headstone' && !isPlaque && (
@@ -3645,7 +3683,15 @@ export default function DesignerNav() {
                 >
                   {isImageCropActive
                     ? 'Finish crop'
-                    : `Next: ${nextPanelTitle ?? 'Continue'}`}
+                    : designerStepSlug === 'select-images' && selectedImages.length === 0
+                      ? 'Skip / Next'
+                      : nextPanelSlug === 'inscriptions'
+                      ? 'Next: Inscriptions'
+                      : nextPanelSlug === 'select-images'
+                        ? 'Next: Images'
+                        : nextPanelSlug === 'select-additions'
+                          ? 'Next: Additions'
+                          : `Next: ${nextPanelTitle ?? 'Continue'}`}
                   <span aria-hidden="true">→</span>
                 </button>
               </div>,
@@ -3653,7 +3699,13 @@ export default function DesignerNav() {
             )}
 
           {/* Panel Content */}
-          <div className="min-h-0 flex-1 overflow-y-auto p-3 pb-28 md:p-4">
+          <div
+            className={`min-h-0 flex-1 overflow-y-auto p-3 md:p-4 ${
+              activeFullscreenPanel === 'select-size' && editingObject !== 'base'
+                ? 'pb-3'
+                : 'pb-28'
+            }`}
+          >
             {/* Render content based on activeFullscreenPanel */}
             {activeFullscreenPanel === 'select-size' && renderSelectSizePanel()}
             {activeFullscreenPanel === 'select-shape' &&

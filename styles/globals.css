@@ -322,6 +322,15 @@ h1 {
   margin: 0px;
 }
 
+/* Memorial type pages use compact, content-led headings. */
+[data-memorials-page] h1 {
+  padding: 0;
+}
+
+html:has([data-memorials-page]) {
+  scroll-behavior: smooth;
+}
+
 @keyframes rotate {
   to {
     transform: rotate(360deg);

@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-19
+**Last Updated:** 2026-08-23
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -84,6 +84,131 @@
 76. [August 17 Local 3D Assets and Mobile Quote UX](#current-status-2026-08-17--local-3d-assets-and-mobile-quote-ux)
 77. [August 18 Mobile Designer, Saved Projects, and Checkout UX](#current-status-2026-08-18--mobile-designer-saved-projects-and-checkout-ux)
 78. [August 19 Full Monument Camera and Advanced Setup Actions](#current-status-2026-08-19--full-monument-camera-and-advanced-setup-actions)
+79. [August 20 Units, Product Pricing, and Bronze Plaque Fixing](#current-status-2026-08-20--units-product-pricing-and-bronze-plaque-fixing)
+80. [August 21 Meadow, Clouds, and Full Monument Camera Investigation](#current-status-2026-08-21--meadow-clouds-and-full-monument-camera-investigation)
+81. [August 22 Designer Flow: Camera, Inscriptions, and Images](#current-status-2026-08-22--designer-flow-camera-inscriptions-and-images)
+82. [August 23 Mobile Memorial Pages and Home Hero](#current-status-2026-08-23--mobile-memorial-pages-and-home-hero)
+
+---
+
+## Current Status (2026-08-22) — Designer Flow: Camera, Inscriptions, and Images
+
+### Camera, top bar, and size panel
+
+Primary files: `components/three/FullMonumentFit.tsx`, `components/ThreeScene.tsx`, and `components/DesignerNav.tsx`.
+
+- Switching the size-panel target between **Headstone**, **Base**, **Ledger**, and **Kerbset** must use `FullMonumentFit`'s animated pose transition. Do not reintroduce an immediate pose when leaving the close view: it causes the visible rigid camera jump.
+- During a camera animation, switch the R3F Canvas from `frameloop="demand"` to `always`, then restore `demand` on completion/cancellation. This is required for smooth transitions without permanently rendering the static designer.
+- The black price pill identifies the currently edited part and displays that part's dimensions; it must not continue showing headstone dimensions while Base/Ledger/Kerbset is being edited.
+- On mobile, Base finish buttons stay above its sliders. Base-specific options that need more room remain after the sliders with sufficient bottom padding above the persistent navigation bar.
+
+### Inscriptions
+
+Primary files: `components/InscriptionEditPanel.tsx`, `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, and `components/HeadstoneInscription.tsx`.
+
+- On the first entry to `/inscriptions`, select **Headstone** as the default inscription target, unless an existing inscription was deliberately selected.
+- The editor has one auto-growing `textarea`; there is no separate single-line/multiple-line mode. It starts at approximately three lines high, and alignment controls share its label row.
+- Inscription tabs (pills) and `+ Add Inscription` form a single horizontally scrollable row inside the editor. Do not place the add action in a second mobile-sheet header row: that pushes font controls out of view.
+- Font and Size form one visual typography card. Font options use a horizontally scrollable, hidden-scrollbar rail on mobile; Size is joined beneath it by a divider.
+- The D-pad is unit-aware: metric users cycle `1 / 5 / 10 mm`; imperial users cycle `¼ / ½ / 1 in`. The Position module offers both horizontal (`xPos: 0`) and vertical (`yPos: 0`) centring.
+- Gold and Silver Gilding use explicit active-card styling. The custom colour rail remains touch-scrollable with hidden system scrollbars, and the selected swatch has a high-contrast gold ring.
+- `SelectionBox` handles are currently intentionally visible while an inscription is selected for direct manipulation. Entering `/select-images` clears `selectedInscriptionId`, so text handles do not leak into the photo workflow.
+
+### Images
+
+Primary files: `components/ImageSelector.tsx` and `components/DesignerNav.tsx`.
+
+- A photo is optional. With no added image, the primary mobile CTA is **`Skip / Next →`**. After an image is added it becomes **`Next: Additions →`**.
+- Image type selection opens the existing upload/crop flow; the selected type then has an upload action and is represented on the 3D model after cropping is completed.
+- `ImageSelector` loads image pricing from `public/xml/en_EN/images.xml` through `lib/image-pricing.ts`. Prices depend on image type, selected physical size, and finish; do not display invented fixed `From` prices without a product-specific pricing rule.
+- The portrait thumbnails are source images. Any white vertical element baked into a thumbnail must be corrected in its source asset, not hidden with an arbitrary crop that could remove portrait content.
+
+### Local Three.js cloud texture and WebGL
+
+Primary file: `components/three/AtmosphericSky.tsx`.
+
+- Drei `Clouds` uses the committed local raster texture `public/three-assets/cloud.png`, not `cloud.svg`. The SVG was capable of reaching WebGL before reliable bitmap decode and produced `WebGL: INVALID_VALUE: texSubImage2D: bad image data` on `/inscriptions`.
+- Keep the PNG local; this avoids both that upload issue and a runtime remote texture request. `cloud.svg` is retained only as source/reference material.
+
+### Verification
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+`screen.png` is user-provided visual acceptance evidence. Never overwrite it while testing.
+
+---
+
+## Current Status (2026-08-21) — Meadow, Clouds, and Full Monument Camera Investigation
+
+### Meadow and sky
+
+Primary files: `components/three/Scene.tsx` and `components/three/AtmosphericSky.tsx`.
+
+- The accepted meadow appearance is the original `GrassFloor` configuration: `SCENERY.day.grassColor` is `#4a6e28`, `GRASS_NORMAL_SCALE` is `1.2`, and `grassRepeat` is `144`. Do not reintroduce the experimental lighter tint, roughness map, or lower repeat without new visual approval; they made the meadow look oversaturated compared with the user-provided `screen.png`.
+- Clouds use the committed local asset `public/three-assets/cloud.png`. This avoids Drei's remote default cloud texture and reliably provides bitmap data to WebGL.
+- The designer Canvas uses `frameloop="demand"`. `AtmosphericSky` explicitly invalidates two frames after mounting because Drei `Clouds` populate their instanced mesh in a frame callback. Without a follow-up frame, the initial frame can contain no cloud instances.
+- The visible sky is a narrow horizon strip in the current Full Monument framing. Cloud groups are therefore positioned close to camera height and at distance, rather than high above the monument. **Visual acceptance is still pending:** the user reported that clouds were not visible after the first adjustment.
+
+### Full Monument camera — unresolved visual issue
+
+**Superseded on 2026-08-22:** the current transition implementation animates all Headstone/Base/Ledger/Kerbset changes; see the newer status entry above.
+
+Primary file: `components/three/FullMonumentFit.tsx`.
+
+- Selecting `Headstone`, `Ledger`, or `Kerbset` in the size panel changes Zustand's `editingObject`. It does not reliably change the canvas-only `selected` state on every route.
+- `FullMonumentFit` derives its framing mode from a selected inscription/addition/motif/image surface when present; otherwise it uses `editingObject`. `headstone` and `base` use the close upright view; `ledger` and `kerbset` target `FULL_MONUMENT_GROUP_NAME`.
+- Full-plot framing has a larger desktop margin (`1.3`) and mobile-sheet margin (`1.5`). It applies its pose immediately when leaving the close upright view, while the Headstone/Base transition remains animated. This avoids a demand-frame animation being cancelled before its final pose.
+- **Important: user still reports no visible zoom-out after these changes. Do not claim this is fixed.** The next investigation must identify what overwrites the fitted camera pose (or whether the active tab's store change is not reaching the R3F scene). Avoid Playwright for this issue: the user explicitly requested that it not be used.
+
+### Verification
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+---
+
+## Current Status (2026-08-20) — Units, Product Pricing, and Bronze Plaque Fixing
+
+### MM / IN preference and dimension formatting
+
+Primary files: `lib/unit-system.ts`, `lib/use-unit-system.ts`, `ui/TailwindSlider.tsx`, `components/DesignerNav.tsx`, `components/InscriptionEditPanel.tsx`, `components/EditImagePanel.tsx`, `components/EditMotifPanel.tsx`, and `components/EmblemOverlayPanel.tsx`.
+
+- Dimensions are always stored internally in millimetres. The unit setting affects only display values and user input, preventing a unit toggle from changing the physical design.
+- New visitors default to **IN**. `useUnitSystem()` falls back to `imperial` when no `unit_system` cookie exists.
+- A deliberate MM / IN change uses `useSetUnitSystem()` to persist `unit_system` and `unit_system_user` cookies for one year. The preference is shared by the designer Canvas and other client-side views.
+- Use `formatLengthFromMm`, `formatDimensionPair`, and `formatDimensionTriplet` for non-editable labels. Imperial formatting uses whole inches rounded **up** (`Math.ceil`); do not introduce a competing rounding rule.
+- `TailwindSlider` treats `unit="mm"` as a physical-length control. In IN mode it presents whole-inch bounds/values, converts user input back to mm, and preserves the original mm-based state contract.
+- Raw sizing sliders in `DesignerNav` use `displayLengthValueFromMm()` / `lengthValueToMm()` for the same conversion. Degree, percentage, scale, and size-variant controls must not be converted.
+
+### Select Product sample prices
+
+Primary file: `app/select-product/_ui/ProductSelectionGrid.tsx`.
+
+- `/select-product` has its own MM / IN switch in the header. It reads/writes the same global cookie preference as the Canvas.
+- The `Sample price` dimension line must use `formatDimensionPair(priceRange.width, priceRange.height, unitSystem)`, not an inline `mm` string.
+
+### Bronze Plaque fixing
+
+Primary files: `components/FixingSelector.tsx`, `lib/fixing-type.ts`, `components/CheckPricePanel.tsx`, and `app/check-price/_ui/CheckPriceGrid.tsx`.
+
+- Bronze Plaque is product ID `5`. Its fixing selection is stored as `fixingType`: `flat-back`, `lugs-with-studs`, or `screws`. Selecting a product resets it to `flat-back`.
+- `getFixingTypeLabel()` in `lib/fixing-type.ts` is the shared presentation mapping. Use it instead of duplicating labels in quote views.
+- For product `5`, include `Fixing: <label>` in the main product-row details in both the canvas `CheckPricePanel` modal and the `/check-price` grid.
+- Fixing currently has no standalone price in catalog pricing; it is informational in the quote and must not alter the total unless a pricing model is introduced.
+
+### Verification
+
+```bash
+pnpm exec tsc --noEmit
+git diff --check
+```
+
+`screen.png` is user-provided visual acceptance evidence for the Bronze Plaque fastening flow. Do not revert or overwrite it.
 
 ---
 
@@ -13848,4 +13973,37 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 
 ---
 
-*End of STARTER.md - Last updated: 2026-08-18*
+*End of STARTER.md - Last updated: 2026-08-21*
+
+---
+
+## Current Status (2026-08-23) — Mobile Memorial Pages and Home Hero
+
+### Public memorial product pages
+
+Primary files: `app/memorials/[type]/page.tsx`, `app/memorials/[type]/MemorialHeaderGallery.tsx`, `app/memorials/[type]/MemorialThemeToggle.tsx`, `components/ThemeToggle.tsx`, and `styles/globals.css`.
+
+- All public memorial category URLs share the dynamic route `/memorials/[type]` (including Headstones, Plaques, Full Monuments, Urns, and Pet Memorials). Mobile visual decisions in this route apply to every category.
+- On mobile, `PublicHeader` uses a compact native `details` menu. Do not restore the old wrapped row of category chips: it consumed too much of the first viewport. Desktop keeps the full inline navigation.
+- The global floating `ThemeToggle` is hidden below `md` on memorial routes. `MemorialThemeToggle` is rendered beside the breadcrumb instead; keep it there so it neither overlaps the logo nor competes with the Menu button. Desktop retains the global fixed toggle.
+- The hero CTA is **Browse Models** and links to `#choose-product`; memorial pages use smooth scrolling to this anchor. The intended funnel is: category context → real-gallery inspiration → buying guidance → product choice. Do not move the product grid above gallery or guidance.
+- `MemorialHeaderGallery` is a horizontally swipeable, snap-aligned carousel on mobile with a visible next-image peek. It reverts to the three-column thumbnail grid at `sm` and above. It deliberately has no custom arrow buttons; interaction is touch swipe or horizontal scroll.
+- Product cards on these public pages are intentionally minimal: product image, product description, and the single **Design Your Own** CTA. Do not reintroduce product ID, title, dimensions, shape tags, an extra `View all products` link, or helper copy under `Choose a product` without a new UX decision.
+- Mobile product images use a more prominent `object-cover` treatment; desktop continues to use contained images with padding. This is intentional to make memorial details legible on narrow screens.
+- `styles/globals.css` has a broad legacy `h1 { padding: 40px 0; }` rule. Memorial route roots carry `data-memorials-page`, which scopes an override to remove this padding. Keep that scope; removing the global rule can alter unrelated pages.
+
+### Home page mobile hero
+
+Primary files: `app/_ui/HomeSplash.tsx` and `components/ThemeToggle.tsx`.
+
+- The home hero no longer forces viewport height on mobile; it ends shortly below **Start Your Free Design**. From `sm` upward it remains full viewport height.
+- On mobile home, the floating theme toggle is hidden and an inline version appears alongside **Created from experience**. The Forever Shining logo is left-aligned.
+
+### Verification
+
+```bash
+pnpm exec eslint 'app/memorials/[type]/page.tsx' 'app/memorials/[type]/MemorialHeaderGallery.tsx' 'app/memorials/[type]/MemorialThemeToggle.tsx' components/ThemeToggle.tsx
+git diff --check
+```
+
+`screen.png` is user-provided visual acceptance evidence. Never overwrite it during testing.

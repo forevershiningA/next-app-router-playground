@@ -5,7 +5,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useEffect, useRef, useState, MouseEvent } from 'react';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, MoonIcon, SunIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useTheme } from '#/components/ThemeProvider';
 
 const MEMORIAL_LINKS = [
   { label: 'Headstones', href: '/memorials/headstones' },
@@ -178,6 +179,7 @@ const hasModalLinks = (
 
 export default function HomeSplash() {
   const router = useRouter();
+  const { theme, toggleTheme } = useTheme();
   const [showHeroCanvas, setShowHeroCanvas] = useState(false);
   const [heroCanvasReady, setHeroCanvasReady] = useState(false);
   const [heroCanvasInViewport, setHeroCanvasInViewport] = useState(true);
@@ -309,13 +311,13 @@ export default function HomeSplash() {
     >
       
       {/* Hero Section - Full Viewport Layout */}
-      <div className="relative min-h-screen flex flex-col overflow-hidden" role="banner">
+      <div className="relative flex min-h-0 flex-col overflow-hidden sm:min-h-screen" role="banner">
         
         {/* Responsive Header - Absolute top */}
         <header className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between gap-5 px-4 py-3 sm:px-6 sm:py-4" style={{ caretColor: 'transparent' }}>
-          {/* Logo - Responsive width, centered on mobile */}
+          {/* Logo - Responsive width, aligned left */}
           <div 
-            className="w-52 sm:w-56 md:w-72 transition-all mx-auto md:mx-0 select-none pointer-events-none" 
+            className="w-52 sm:w-56 md:w-72 transition-all mx-0 select-none pointer-events-none"
             style={{ caretColor: 'transparent', userSelect: 'none' }}
           >
             <Image 
@@ -601,9 +603,20 @@ export default function HomeSplash() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8">
           <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-start">
             <div>
-              <p className="text-xs font-semibold tracking-[0.28em] text-[#cfac6c] uppercase day:text-amber-700">
-                Created from experience
-              </p>
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-xs font-semibold tracking-[0.28em] text-[#cfac6c] uppercase day:text-amber-700">
+                  Created from experience
+                </p>
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  aria-label={theme === 'day' ? 'Switch to night mode' : 'Switch to day mode'}
+                  title={theme === 'day' ? 'Night mode' : 'Day mode'}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/20 bg-[#1a1208]/80 text-white/60 shadow-md backdrop-blur-sm transition-all duration-200 hover:border-white/40 hover:bg-[#1a1208]/95 hover:text-white day:border-[#D7B356]/50 day:bg-white/90 day:text-amber-700 day:hover:border-[#D7B356]/80 day:hover:bg-white day:hover:text-amber-800 md:hidden"
+                >
+                  {theme === 'day' ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
+                </button>
+              </div>
               <h2 className="mt-3 max-w-2xl font-serif text-3xl leading-tight text-white sm:text-4xl day:text-gray-900">
                 Forever Shining gently guides you from the first choice to the final proof
               </h2>

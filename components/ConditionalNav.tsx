@@ -65,9 +65,8 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     designerStepSlug === 'select-images' && isImageCropActive
       ? 'Image Crop Section'
       : designerStepSlug != null
-      ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
-      : 'Designer';
-
+       ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
+       : 'Designer';
   useEffect(() => {
     const handler = () => {
       if (typeof window === 'undefined') {
