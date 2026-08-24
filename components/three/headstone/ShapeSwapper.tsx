@@ -144,10 +144,15 @@ function PreloadTexture({
 export interface ShapeSwapperProps {
   tabletRef: React.RefObject<THREE.Object3D>;
   headstoneMeshRef?: React.RefObject<THREE.Mesh>;
+  fitTargetRef?: React.RefObject<THREE.Object3D>;
 }
 
 /* ----------------------------------- main ----------------------------------- */
-export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapperProps) {
+export default function ShapeSwapper({
+  tabletRef,
+  headstoneMeshRef,
+  fitTargetRef,
+}: ShapeSwapperProps) {
   const { invalidate, controls, camera } = useThree();
   const router = useRouter();
 
@@ -169,6 +174,7 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
   const selected = useHeadstoneStore((s) => s.selected);
   const setSelected = useHeadstoneStore((s) => s.setSelected);
   const setEditingObject = useHeadstoneStore((s) => s.setEditingObject);
+  const editingObject = useHeadstoneStore((s) => s.editingObject);
   const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const slantThickness = useHeadstoneStore((s) => s.slantThickness);
@@ -810,7 +816,11 @@ export default function ShapeSwapper({ tabletRef, headstoneMeshRef }: ShapeSwapp
           <FullMonumentFit trigger={fitTick} />
         ) : (
           <AutoFit
-            target={tabletRef}
+            target={
+              pathname === '/select-size' && editingObject === 'headstone'
+                ? (resolvedHeadstoneMeshRef as React.RefObject<THREE.Object3D>)
+                : (fitTargetRef ?? tabletRef)
+            }
             anchor={resolvedHeadstoneMeshRef as React.RefObject<THREE.Object3D>}
             margin={1.20}
             pad={0}

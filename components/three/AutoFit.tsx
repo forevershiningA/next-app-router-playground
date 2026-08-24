@@ -4,7 +4,9 @@
 import * as React from 'react';
 import * as THREE from 'three';
 import { useThree } from '@react-three/fiber';
+import { usePathname } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 type Props = {
   target: React.RefObject<THREE.Object3D>; // tablet/upright ONLY (no base/ground)
@@ -37,7 +39,18 @@ export default function AutoFit({
   // if you drive size from a store, keep these so refits happen on changes
   const heightMm = useHeadstoneStore((s: any) => s.heightMm);
   const widthMm = useHeadstoneStore((s: any) => s.widthMm);
+  const baseWidthMm = useHeadstoneStore((s: any) => s.baseWidthMm);
+  const baseHeightMm = useHeadstoneStore((s: any) => s.baseHeightMm);
+  const baseThickness = useHeadstoneStore((s: any) => s.baseThickness);
   const showBase = useHeadstoneStore((s: any) => s.showBase);
+  const editingObject = useHeadstoneStore((s: any) => s.editingObject);
+  const pathname = usePathname();
+  const isSizeSheetVisible = pathname === '/select-size' && size.width < 768;
+  const isMobileHeadstoneSizeSelection =
+    isSizeSheetVisible && editingObject === 'headstone';
+  const isSizeAdjustmentCompact = useMobileNavStore(
+    (s) => s.isSizeAdjustmentCompact,
+  );
 
   const lastDims = React.useRef({ h: heightMm, w: widthMm });
   const animId = React.useRef<number | null>(null);
@@ -87,12 +100,31 @@ export default function AutoFit({
       toTgt.y = THREE.MathUtils.clamp(toTgt.y, minTargetY, maxTargetY);
     }
 
+    // The size sheet uses the lower 44% of a phone screen. Pull the focal
+    // point slightly down so the memorial is composed in the remaining area,
+    // and leave extra room around it so the base stays above the sheet.
+    if (isSizeSheetVisible) {
+      toTgt.y -= sphere.radius * (
+        isMobileHeadstoneSizeSelection
+          ? (isSizeAdjustmentCompact ? 0.42 : 0.74)
+          : (isSizeAdjustmentCompact ? 0.26 : 0.52)
+      );
+    }
+
     const vFov = THREE.MathUtils.degToRad(camera.fov);
     const aspect = Math.max(1e-6, size.width / Math.max(1, size.height));
     const hFov = 2 * Math.atan(Math.tan(vFov / 2) * aspect);
     const dY = sphere.radius / Math.tan(vFov / 2);
     const dX = sphere.radius / Math.tan(hFov / 2);
-    const dist = Math.max(dX, dY) * Math.max(1, margin) + pad;
+    // A headstone is a tall, narrow object. In the size step it is already
+    // framed independently of the base, so a tighter mobile margin uses the
+    // otherwise empty side space without changing ledger or base framing.
+    const sheetMargin = isSizeSheetVisible
+      ? isMobileHeadstoneSizeSelection
+        ? (isSizeAdjustmentCompact ? 0.88 : 1.08)
+        : (isSizeAdjustmentCompact ? 1.2 : 1.85)
+      : 1;
+    const dist = Math.max(dX, dY) * Math.max(1, margin) * sheetMargin + pad;
 
     const dir = new THREE.Vector3(0, 0, 1); // Front view
     dir.normalize();
@@ -122,7 +154,21 @@ export default function AutoFit({
     camera.updateProjectionMatrix();
     invalidate();
     return true;
-  }, [target, anchor, camera, size.width, size.height, margin, pad, controls, showBase, invalidate]);
+  }, [
+    target,
+    anchor,
+    camera,
+    size.width,
+    size.height,
+    margin,
+    pad,
+    controls,
+    showBase,
+    invalidate,
+    isSizeSheetVisible,
+    isMobileHeadstoneSizeSelection,
+    isSizeAdjustmentCompact,
+  ]);
 
   /** Compute a deterministic pose given current camera view direction. */
   React.useLayoutEffect(() => {
@@ -155,7 +201,16 @@ export default function AutoFit({
         retryTimer.current = null;
       }
     };
-  }, [fitCamera, trigger, heightMm, widthMm]);
+  }, [
+    fitCamera,
+    trigger,
+    heightMm,
+    widthMm,
+    baseWidthMm,
+    baseHeightMm,
+    baseThickness,
+    showBase,
+  ]);
 
   return null;
 }

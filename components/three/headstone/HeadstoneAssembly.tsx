@@ -114,7 +114,11 @@ export default function HeadstoneAssembly() {
   return (
     <group ref={monumentGroupRef} position={[0, 0, zGroupOffset]}>
       <group ref={assemblyRef} position={[0, showBase && !isNonRectangularPlaque ? (urnHasOvalBase ? 0.01 : isUrn ? 0 : baseHeightMeters) : 0, 0]}>
-        <ShapeSwapper tabletRef={tabletRef} headstoneMeshRef={headstoneMeshRef} />
+        <ShapeSwapper
+          tabletRef={tabletRef}
+          headstoneMeshRef={headstoneMeshRef}
+          fitTargetRef={assemblyRef}
+        />
 
         {/* Elegant Selection Indicators - Viewfinder Corners */}
         <RotatingBoxOutline

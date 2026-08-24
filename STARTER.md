@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-23
+**Last Updated:** 2026-08-24
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -88,6 +88,40 @@
 80. [August 21 Meadow, Clouds, and Full Monument Camera Investigation](#current-status-2026-08-21--meadow-clouds-and-full-monument-camera-investigation)
 81. [August 22 Designer Flow: Camera, Inscriptions, and Images](#current-status-2026-08-22--designer-flow-camera-inscriptions-and-images)
 82. [August 23 Mobile Memorial Pages and Home Hero](#current-status-2026-08-23--mobile-memorial-pages-and-home-hero)
+83. [August 24 Mobile Size Sheet and Headstone Camera](#current-status-2026-08-24--mobile-size-sheet-and-headstone-camera)
+
+---
+
+## Current Status (2026-08-24) — Mobile Size Sheet and Headstone Camera
+
+### Mobile `/select-size` sheet
+
+Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
+
+- On mobile, `/select-size` opens as a fixed bottom sheet. Its normal height is `44dvh`; its compact height is `26dvh`.
+- `useMobileNavStore` owns `isSizeAdjustmentCompact` and `setSizeAdjustmentCompact`. Reset compact mode when leaving `/select-size` or switching to desktop (`>= 768px`). Do not add a competing local state, otherwise the sheet and its contents can become out of sync.
+- Starting interaction with any size range input enters compact mode. The compact panel keeps only the active dimension card (label, minus/value/plus controls, range input, and bounds); product target, base, style, and dimension tabs are hidden.
+- The sheet handle toggles both ways: in normal mode it collapses the panel; in compact mode it restores the complete panel. In compact mode, hide only the sheet header and persistent **Previous / Next** bar. The global mobile step/menu header must remain visible.
+- Switching Headstone/Base/Ledger/Kerbset or another dimension must return the sheet to normal mode before applying the change. The fixed-size plaque range follows the same compact interaction, while its price card is hidden only in compact mode.
+
+### Mobile camera composition in the size step
+
+Primary files: `components/three/AutoFit.tsx`, `components/three/FullMonumentFit.tsx`, and `components/three/headstone/ShapeSwapper.tsx`.
+
+- `ShapeSwapper` targets the isolated headstone mesh in `/select-size` when `editingObject === 'headstone'`; all other standard products use the usual fit target. Preserve this distinction when adjusting composition.
+- `AutoFit` detects a mobile Headstone sizing selection and uses a tighter fit plus a stronger upward composition shift than Base/Ledger/Kerbset. Current mobile headstone sheet multipliers are `1.08` (normal sheet) and `0.88` (compact sheet), with vertical target shifts `0.74` and `0.42` radii respectively. These values deliberately reclaim horizontal whitespace while keeping the stone above the panel.
+- `FullMonumentFit` retains separate framing for close upright/headstone work versus full-plot Ledger/Kerbset work. Its mobile Headstone margins are tighter (`1.32` normal, `1.02` compact); do not apply them to Ledger or Kerbset because the full plot must stay visible.
+- Both fit components depend on `isSizeAdjustmentCompact`, so camera framing recomputes whenever the sheet changes height. Keep camera animation / `frameloop` ownership in `FullMonumentFit`; do not introduce a second camera controller for this state.
+- **Visual acceptance remains pending:** the user reported that an earlier headstone tightening did not visibly reduce left/right whitespace. The latest stronger `AutoFit` adjustment above has type-checked but must be verified manually on a phone-sized viewport before further tuning.
+
+### Verification
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+Do not use Playwright for this visual work: the user explicitly checks the UI manually. `screen.png` is user-provided evidence; never overwrite it.
 
 ---
 

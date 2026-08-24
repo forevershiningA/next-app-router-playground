@@ -186,7 +186,7 @@ export default function ProductSelectionGrid({
       <div className="day:border-gray-200 day:bg-white relative border-b border-white/5 bg-gray-900/30">
         <div className="day:hidden absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
-          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pr-12 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${

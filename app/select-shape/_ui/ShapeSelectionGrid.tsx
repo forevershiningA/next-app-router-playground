@@ -44,16 +44,10 @@ const filenameFromCatalogUrl = (url?: string) => url?.split('/').pop() ?? '';
 
 const getPetRockPreviewSrc = (catalogShape: ShapeData) => {
   const filename = filenameFromCatalogUrl(catalogShape.url);
-  if (
-    catalogShape.code === 'Bowl-Cat' ||
-    filename === 'pet_bowl_cat.jpg'
-  ) {
+  if (catalogShape.code === 'Bowl-Cat' || filename === 'pet_bowl_cat.jpg') {
     return '/shapes/headstones/cat_bowl_a.svg';
   }
-  if (
-    catalogShape.code === 'Bowl' ||
-    filename === 'bowl.jpg'
-  ) {
+  if (catalogShape.code === 'Bowl' || filename === 'bowl.jpg') {
     return '/shapes/headstones/pet_bowl_a.svg';
   }
   return filename
@@ -63,16 +57,10 @@ const getPetRockPreviewSrc = (catalogShape: ShapeData) => {
 
 const getPetRockShapeUrl = (catalogShape: ShapeData) => {
   const filename = filenameFromCatalogUrl(catalogShape.url);
-  if (
-    catalogShape.code === 'Bowl-Cat' ||
-    filename === 'pet_bowl_cat.jpg'
-  ) {
+  if (catalogShape.code === 'Bowl-Cat' || filename === 'pet_bowl_cat.jpg') {
     return '/shapes/headstones/pet_bowl_outline.svg?petRock=cat';
   }
-  if (
-    catalogShape.code === 'Bowl' ||
-    filename === 'bowl.jpg'
-  ) {
+  if (catalogShape.code === 'Bowl' || filename === 'bowl.jpg') {
     return '/shapes/headstones/pet_bowl_outline.svg?petRock=dog';
   }
   return filename
@@ -162,6 +150,11 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     if (isNonRectangularBronzeShape) {
       setBorderName('Border 4');
     }
+  };
+
+  const handleSelectedShapeContinue = () => {
+    if (!currentShapeUrl) return;
+
     if (isFullColourPlaque || isStainlessSteelPlaque) {
       router.push(designerHref('select-material'));
       openPanel('select-material');
@@ -283,9 +276,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                                 : 'bg-transparent text-[#cfac6c] group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30'
                             }`}
                           >
-                            <span>
-                              {getShapeCtaLabel(isSelected)}
-                            </span>
+                            <span>{getShapeCtaLabel(isSelected)}</span>
                             <ArrowRightIcon className="h-4 w-4" />
                           </span>
                         </div>
@@ -429,9 +420,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                                 : 'bg-transparent text-[#cfac6c] group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30'
                             }`}
                           >
-                            <span>
-                              {getShapeCtaLabel(isSelected)}
-                            </span>
+                            <span>{getShapeCtaLabel(isSelected)}</span>
                             <ArrowRightIcon className="h-4 w-4" />
                           </span>
                         </div>
@@ -528,7 +517,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       <div className="day:border-gray-200 day:bg-white relative border-b border-white/5 bg-gray-900/30">
         <div className="day:hidden absolute inset-0 bg-gradient-to-r from-transparent via-[#cfac6c]/3 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-3.5 lg:px-8">
-          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+          <div className="-mx-6 flex snap-x gap-2 overflow-x-auto px-6 pr-12 [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 [&::-webkit-scrollbar]:hidden">
             <button
               onClick={() => setSelectedCategory('all')}
               className={`shrink-0 snap-start rounded-full px-5 py-2.5 text-sm font-medium whitespace-nowrap transition-all ${
@@ -557,7 +546,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       </div>
 
       {/* Shapes Grid */}
-      <div className="mx-auto max-w-7xl px-6 py-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 pt-6 pb-28 sm:py-6 lg:px-8">
         {selectedCategory === 'custom' ? (
           /* Custom Upload Section */
           <div className="py-10">
@@ -646,12 +635,12 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                         : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                     }`}
                   >
-                    <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[#202020]">
+                    <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_35%_20%,#4a4a4a_0%,#2b2b2b_44%,#151515_100%)]">
                       <Image
                         src={shapeUrl}
                         alt={shape.name}
                         fill
-                        className="day:brightness-100 day:invert-0 object-contain p-8 brightness-0 invert-[60%] transition-transform duration-300 group-hover:scale-105"
+                        className="day:brightness-100 day:invert-0 object-contain p-8 brightness-0 drop-shadow-[0_8px_6px_rgba(0,0,0,0.55)] invert-[68%] transition-transform duration-300 group-hover:scale-105"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
                       />
                       {isSelected && (
@@ -666,20 +655,6 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                       <h3 className="day:text-gray-900 line-clamp-2 min-h-10 text-center text-base leading-tight font-semibold text-white">
                         {shape.name}
                       </h3>
-                      <div className="mt-auto pt-1">
-                        <span
-                          className={`inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] px-3 py-2 text-sm font-semibold transition-all duration-200 ${
-                            isSelected
-                              ? 'bg-[#cfac6c] text-slate-900 shadow-lg shadow-[#cfac6c]/30'
-                              : 'bg-transparent text-[#cfac6c] group-hover:bg-[#cfac6c] group-hover:text-slate-900 group-hover:shadow-lg group-hover:shadow-[#cfac6c]/30'
-                          }`}
-                        >
-                          <span>
-                            {getShapeCtaLabel(isSelected)}
-                          </span>
-                          <ArrowRightIcon className="h-4 w-4" />
-                        </span>
-                      </div>
                     </div>
                   </button>
                 );
@@ -688,6 +663,20 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
           </>
         )}
       </div>
+
+      {selectedCategory !== 'custom' && (
+        <div className="fixed right-0 bottom-0 left-0 z-20 border-t border-white/10 bg-[#121212]/95 px-6 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur sm:hidden">
+          <button
+            type="button"
+            onClick={handleSelectedShapeContinue}
+            disabled={!currentShapeUrl}
+            className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] disabled:cursor-not-allowed disabled:bg-white/15 disabled:text-white/45"
+          >
+            Continue with this shape
+            <ArrowRightIcon className="h-4 w-4" />
+          </button>
+        </div>
+      )}
 
       {/* Category Info Cards (when category is selected) */}
       {selectedCategory !== 'all' && selectedCategory !== 'custom' && (

@@ -7,7 +7,10 @@ import DesignsTreeNav from '#/components/DesignsTreeNav';
 import DesignerNav from '#/components/DesignerNav';
 import AccountNav from '#/components/AccountNav';
 import { type DemoCategory } from '#/lib/db';
-import { isDesignerRoutePath, getDesignerStepSlug } from '#/lib/designer-route-state';
+import {
+  isDesignerRoutePath,
+  getDesignerStepSlug,
+} from '#/lib/designer-route-state';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import clsx from 'clsx';
@@ -50,6 +53,12 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
   const setIsMobileMenuOpen = useMobileNavStore((s) => s.setOpen);
   const toggleMobileMenu = useMobileNavStore((s) => s.toggle);
+  const isSizeAdjustmentCompact = useMobileNavStore(
+    (s) => s.isSizeAdjustmentCompact,
+  );
+  const setSizeAdjustmentCompact = useMobileNavStore(
+    (s) => s.setSizeAdjustmentCompact,
+  );
   const isImageCropActive = useHeadstoneStore((s) => Boolean(s.cropCanvasData));
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
@@ -65,8 +74,14 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     designerStepSlug === 'select-images' && isImageCropActive
       ? 'Image Crop Section'
       : designerStepSlug != null
-       ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
-       : 'Designer';
+        ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
+        : 'Designer';
+  const isFixedSizeSheet = designerStepSlug === 'select-size';
+  useEffect(() => {
+    if (designerStepSlug !== 'select-size') {
+      setSizeAdjustmentCompact(false);
+    }
+  }, [designerStepSlug, setSizeAdjustmentCompact]);
   useEffect(() => {
     const handler = () => {
       if (typeof window === 'undefined') {
@@ -88,11 +103,22 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       }
       if (window.innerWidth >= 768) {
         setIsMobileMenuOpen(false);
+        setSizeAdjustmentCompact(false);
       }
     };
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [setIsMobileMenuOpen, setSizeAdjustmentCompact]);
+
+  useEffect(() => {
+    if (designerStepSlug !== 'select-size' || typeof window === 'undefined') {
+      return;
+    }
+
+    if (window.innerWidth < 768) {
+      setIsMobileMenuOpen(true);
+    }
+  }, [designerStepSlug, setIsMobileMenuOpen]);
 
   useEffect(() => {
     // Keep the mobile drawer open while navigating between in-drawer designer
@@ -103,7 +129,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     }
     const timeout = window.setTimeout(() => setIsMobileMenuOpen(false), 0);
     return () => window.clearTimeout(timeout);
-  }, [pathname]);
+  }, [pathname, setIsMobileMenuOpen]);
 
   // Check session when on account routes so we can show the right sidebar
   const accountRoutePrefixes = [
@@ -147,7 +173,12 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
 
   const isDesignShareRoute = pathname?.startsWith('/design/');
 
-  if (isAdminRoute || isDesignShareRoute || isMemorialsRoute || isSeoDesignsListingRoute) {
+  if (
+    isAdminRoute ||
+    isDesignShareRoute ||
+    isMemorialsRoute ||
+    isSeoDesignsListingRoute
+  ) {
     return null;
   }
 
@@ -171,6 +202,9 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       setIsMobileMenuOpen,
       useBottomSheet,
       mobileSheetTitle,
+      isFixedSizeSheet,
+      isSizeAdjustmentCompact,
+      setSizeAdjustmentCompact,
     );
   }
 
@@ -181,6 +215,9 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       setIsMobileMenuOpen,
       useBottomSheet,
       mobileSheetTitle,
+      isFixedSizeSheet,
+      isSizeAdjustmentCompact,
+      setSizeAdjustmentCompact,
     );
   }
 
@@ -192,11 +229,16 @@ function renderDesignerSidebar(
   setIsMobileMenuOpen: (v: boolean) => void,
   useBottomSheet: boolean,
   mobileSheetTitle: string,
+  isFixedSizeSheet: boolean,
+  isSizeAdjustmentCompact: boolean,
+  setSizeAdjustmentCompact: (v: boolean) => void,
 ) {
   // Main menu / non-step routes open as a full-height drawer (no canvas to
   // reveal). Editing sub-panels use a compact, canvas-revealing bottom sheet
   // so the product stays visible while controls scroll inside the sheet.
-  const sheetHeightClass = useBottomSheet
+  const sheetHeightClass = isFixedSizeSheet && isSizeAdjustmentCompact
+    ? 'h-[26dvh] max-h-[26dvh]'
+    : useBottomSheet
     ? 'h-[44dvh] max-h-[44dvh]'
     : 'h-[100dvh]';
   return (
@@ -210,7 +252,7 @@ function renderDesignerSidebar(
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Open navigation"
           aria-expanded={false}
-          className="fixed top-7 left-4 z-[10000] flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#3a2a1c] bg-[#1a1208] text-white shadow-none outline-none ring-0 transition-colors hover:border-[#D4A84F]/55 hover:bg-[#21160d] focus-visible:border-[#D4A84F] focus-visible:ring-2 focus-visible:ring-[#D4A84F]/35 md:hidden"
+          className="fixed top-7 left-4 z-[10000] flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#3a2a1c] bg-[#1a1208] text-white shadow-none ring-0 transition-colors outline-none hover:border-[#D4A84F]/55 hover:bg-[#21160d] focus-visible:border-[#D4A84F] focus-visible:ring-2 focus-visible:ring-[#D4A84F]/35 md:hidden"
         >
           <Bars3Icon className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -223,30 +265,58 @@ function renderDesignerSidebar(
           // Mobile: bottom sheet docked to the bottom edge so the 3D product
           // stays visible above it (editing sub-panels), or a full-height drawer
           // for the main menu. Desktop (md+): permanent left column.
-          'fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:pointer-events-auto md:shadow-none',
+          'fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 md:pointer-events-auto md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:shadow-none',
           isMobileMenuOpen
             ? 'pointer-events-auto translate-y-0'
             : 'pointer-events-none translate-y-full',
           sheetHeightClass,
         )}
       >
-        {/* Sheet top bar (mobile only). */}
-        <div className="day:bg-[#ece7de] flex-none rounded-t-lg bg-[#1b1511] md:hidden">
-          <div className="mx-auto mt-2 h-1 w-10 rounded-full bg-white/25" aria-hidden="true" />
-          <div className="flex min-h-9 items-center gap-3 px-4 pt-1.5 pb-0.5">
-            <p className="day:text-gray-800 min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
-              {mobileSheetTitle}
-            </p>
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close panel"
-              className="ml-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/15 text-lg leading-none text-white/70 transition-colors hover:border-[#D7B356]/60 hover:bg-white/5 hover:text-white"
-            >
-              ×
-            </button>
+        {/* The compact slider mode deliberately leaves only an expand handle,
+            so no header competes with the 3D preview. */}
+        {isFixedSizeSheet && isSizeAdjustmentCompact ? (
+          <button
+            type="button"
+            onClick={() => setSizeAdjustmentCompact(false)}
+            aria-label="Expand size controls"
+            className="mx-auto mt-2 mb-1 block h-4 w-16 flex-none rounded-full p-1.5 md:hidden"
+          >
+            <span className="block h-1 w-full rounded-full bg-white/35" />
+          </button>
+        ) : (
+          <div className="day:bg-[#ece7de] flex-none rounded-t-lg bg-[#1b1511] md:hidden">
+            {isFixedSizeSheet ? (
+              <button
+                type="button"
+                onClick={() => setSizeAdjustmentCompact(true)}
+                aria-label="Collapse size controls"
+                className="mx-auto mt-2 block h-4 w-16 rounded-full p-1.5"
+              >
+                <span className="block h-1 w-full rounded-full bg-white/25" />
+              </button>
+            ) : (
+              <div
+                className="mx-auto mt-2 h-1 w-10 rounded-full bg-white/25"
+                aria-hidden="true"
+              />
+            )}
+            <div className="flex min-h-9 items-center gap-3 px-4 pt-1.5 pb-0.5">
+              <p className="day:text-gray-800 min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
+                {mobileSheetTitle}
+              </p>
+              {!isFixedSizeSheet && (
+                <button
+                  type="button"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  aria-label="Close panel"
+                  className="ml-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/15 text-lg leading-none text-white/70 transition-colors hover:border-[#D7B356]/60 hover:bg-white/5 hover:text-white"
+                >
+                  ×
+                </button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div className="relative min-h-0 flex-1 overflow-hidden">
           <DesignerNav />
         </div>

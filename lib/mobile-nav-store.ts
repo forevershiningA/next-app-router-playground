@@ -10,10 +10,14 @@ type MobileNavState = {
   isOpen: boolean;
   setOpen: (value: boolean) => void;
   toggle: () => void;
+  isSizeAdjustmentCompact: boolean;
+  setSizeAdjustmentCompact: (value: boolean) => void;
 };
 
 export const useMobileNavStore = create<MobileNavState>((set) => ({
   isOpen: false,
   setOpen: (value) => set({ isOpen: value }),
   toggle: () => set((s) => ({ isOpen: !s.isOpen })),
+  isSizeAdjustmentCompact: false,
+  setSizeAdjustmentCompact: (value) => set({ isSizeAdjustmentCompact: value }),
 }));

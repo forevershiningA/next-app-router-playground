@@ -1631,6 +1631,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const faceMat = new THREE.MeshPhysicalMaterial({ 
       ...common, 
       map: clonedFaceMap,
+      emissive: new THREE.Color(0xffffff),
+      emissiveMap: clonedFaceMap,
+      // A restrained fill retains the grain of black granite on smaller
+      // screens, where the mobile scene intentionally omits the desktop rim
+      // light for performance.
+      emissiveIntensity: isSlant ? 0.1 : 0.16,
       clearcoat: 1.0,
       clearcoatRoughness: isSlant ? 0.05 : 0.08,
       polygonOffset: true,

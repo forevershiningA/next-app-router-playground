@@ -435,6 +435,13 @@ export default function DesignerNav() {
   const isGraniteBase = showBase && !isStainlessSteelBase;
   const canSelectStainlessGraniteBaseMaterial =
     isStainlessSteelHeadstone && isGraniteBase && editingObject === 'base';
+  const mustShowMaterialStep = productId === '124';
+  const shouldHideMaterialStep =
+    !mustShowMaterialStep &&
+    ((catalog?.product?.laser === '1' &&
+      !canSelectStainlessGraniteBaseMaterial) ||
+      (isStainlessSteelHeadstone &&
+        !canSelectStainlessGraniteBaseMaterial));
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
@@ -500,6 +507,12 @@ export default function DesignerNav() {
     setIsMounted(true);
   }, []);
   const isMobileNavOpen = useMobileNavStore((s) => s.isOpen);
+  const isSizeAdjustmentCompact = useMobileNavStore(
+    (s) => s.isSizeAdjustmentCompact,
+  );
+  const setSizeAdjustmentCompact = useMobileNavStore(
+    (s) => s.setSizeAdjustmentCompact,
+  );
 
   // Accordion section groups — only one open at a time
   const activeGroupIndex = React.useMemo(() => {
@@ -658,13 +671,7 @@ export default function DesignerNav() {
         // save-design is always included as the final guided step
         if (item.slug === 'save-design') return true;
         if (!fullscreenPanelSlugs.has(item.slug)) return false;
-        if (
-          item.slug === 'select-material' &&
-          ((catalog?.product?.laser === '1' &&
-            !canSelectStainlessGraniteBaseMaterial) ||
-            (isStainlessSteelHeadstone &&
-              !canSelectStainlessGraniteBaseMaterial))
-        )
+        if (item.slug === 'select-material' && shouldHideMaterialStep)
           return false;
         if (item.slug === 'select-border' && (!isPlaque || !hasBorder))
           return false;
@@ -691,6 +698,7 @@ export default function DesignerNav() {
     productId,
     isStainlessSteelHeadstone,
     canSelectStainlessGraniteBaseMaterial,
+    shouldHideMaterialStep,
   ]);
 
   const currentSlugFromPathname = designerStepSlug ?? '';
@@ -936,12 +944,7 @@ export default function DesignerNav() {
 
     setEditingObject('headstone');
     setSelected('headstone');
-  }, [
-    designerStepSlug,
-    selectedInscriptionId,
-    setEditingObject,
-    setSelected,
-  ]);
+  }, [designerStepSlug, selectedInscriptionId, setEditingObject, setSelected]);
 
   // The image step is a new editing context. Leaving text handles visible
   // there implies that the inscription is still being edited.
@@ -1652,7 +1655,9 @@ export default function DesignerNav() {
                     value={displayLength(activeOffset.heightMm ?? initHeight)}
                     onChange={(e) => {
                       if (!selectedMotifId) return;
-                      const clampedValue = clampHeight(displayLengthToMm(Number(e.target.value)));
+                      const clampedValue = clampHeight(
+                        displayLengthToMm(Number(e.target.value)),
+                      );
                       setMotifOffset(selectedMotifId, {
                         ...activeOffset,
                         heightMm: clampedValue,
@@ -1661,8 +1666,14 @@ export default function DesignerNav() {
                     className={rangeInputClass}
                   />
                   <div className={rangeBoundsClass}>
-                    <span>{displayLength(minHeight)}{lengthUnit}</span>
-                    <span>{displayLength(maxHeight)}{lengthUnit}</span>
+                    <span>
+                      {displayLength(minHeight)}
+                      {lengthUnit}
+                    </span>
+                    <span>
+                      {displayLength(maxHeight)}
+                      {lengthUnit}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -2516,7 +2527,13 @@ export default function DesignerNav() {
     const styleTabClass = (isActive: boolean) =>
       `flex-1 rounded-md border px-3 py-1.5 text-sm font-medium transition-colors ${
         isActive
-          ? 'border-[#D7B356]/70 bg-[#D7B356]/12 text-[#f3d48f]'
+          ? 'border-white/20 bg-white/[0.12] text-white shadow-inner shadow-black/20'
+          : 'day:border-gray-300 day:text-gray-600 day:hover:bg-white border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white'
+      }`;
+    const headstoneStyleTabClass = (isActive: boolean) =>
+      `flex-1 rounded-md border px-3 py-1.5 text-sm font-semibold transition-colors ${
+        isActive
+          ? 'border-[#e4c778] bg-[#d7b356] text-[#1a1308] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]'
           : 'day:border-gray-300 day:text-gray-600 day:hover:bg-white border-white/12 text-white/60 hover:border-white/25 hover:bg-white/[0.06] hover:text-white'
       }`;
     const dimensionTabClass = (isActive: boolean) =>
@@ -2540,6 +2557,15 @@ export default function DesignerNav() {
     const rangeBlockClass = 'relative mt-2 h-[31px] md:mt-3 md:h-[35px]';
     const rangeBoundsClass =
       'mt-1 flex h-4 w-full justify-between text-xs leading-4 text-white/35 day:text-gray-400';
+    const startCompactSizeAdjustment = () => {
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        setSizeAdjustmentCompact(true);
+      }
+    };
+    const compactSizeRangeProps = {
+      onFocus: startCompactSizeAdjustment,
+      onPointerDown: startCompactSizeAdjustment,
+    };
 
     // Which dimension controls exist for the current editing target. Width and
     // Height always exist; the third (depth) is Thickness or Length depending on
@@ -2572,13 +2598,14 @@ export default function DesignerNav() {
 
     return (
       <div
-        className={`fs-size-panel flex flex-col gap-3 rounded-lg p-3 shadow-xl backdrop-blur-sm md:gap-4 md:p-3.5 ${extraClassName}`}
+        className={`fs-size-panel flex flex-col rounded-lg p-3 shadow-xl backdrop-blur-sm md:gap-4 md:p-3.5 ${isSizeAdjustmentCompact ? 'gap-1.5' : 'gap-3'} ${extraClassName}`}
       >
-        {!isPlaque && (
+        {!isSizeAdjustmentCompact && !isPlaque && (
           <SegmentedControl
             className={mobileSegmentClass}
             value={editingObject}
             onChange={(value) => {
+              setSizeAdjustmentCompact(false);
               setEditingObject(
                 value as 'headstone' | 'base' | 'ledger' | 'kerbset',
               );
@@ -2591,7 +2618,7 @@ export default function DesignerNav() {
           />
         )}
 
-        {editingObject === 'base' && (
+        {!isSizeAdjustmentCompact && editingObject === 'base' && (
           <div className="contents">
             <div className="flex gap-2">
               <button
@@ -2658,59 +2685,65 @@ export default function DesignerNav() {
             <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
             <div className="order-last space-y-3 md:order-none">
               <div className="-mx-3.5 border-t border-white/10"></div>
-            <fieldset className="space-y-2 text-sm">
-              <legend className="text-white/75">Base option</legend>
-              <div className="flex gap-2" role="group" aria-label="Base option">
-                <button
-                  type="button"
-                  onClick={() => setBaseOption('none')}
-                  className={styleTabClass(baseOption === 'none')}
-                >
-                  None
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setBaseOption('flower-pots')}
-                  className={styleTabClass(baseOption === 'flower-pots')}
-                >
-                  Flower Pots
-                </button>
-              </div>
-            </fieldset>
-            {baseOption === 'flower-pots' && (
               <fieldset className="space-y-2 text-sm">
-                <legend className="text-white/75">Lid finish</legend>
+                <legend className="text-white/75">Base option</legend>
                 <div
                   className="flex gap-2"
                   role="group"
-                  aria-label="Lid finish"
+                  aria-label="Base option"
                 >
-                  {[
-                    { label: 'Black Lid', value: 'black' },
-                    { label: 'Silver Lid', value: 'silver' },
-                    { label: 'Gold Lid', value: 'gold' },
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() =>
-                        setBaseLidFinish(
-                          option.value as 'black' | 'silver' | 'gold',
-                        )
-                      }
-                      className={styleTabClass(baseLidFinish === option.value)}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
+                  <button
+                    type="button"
+                    onClick={() => setBaseOption('none')}
+                    className={styleTabClass(baseOption === 'none')}
+                  >
+                    None
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBaseOption('flower-pots')}
+                    className={styleTabClass(baseOption === 'flower-pots')}
+                  >
+                    Flower Pots
+                  </button>
                 </div>
               </fieldset>
-            )}
+              {baseOption === 'flower-pots' && (
+                <fieldset className="space-y-2 text-sm">
+                  <legend className="text-white/75">Lid finish</legend>
+                  <div
+                    className="flex gap-2"
+                    role="group"
+                    aria-label="Lid finish"
+                  >
+                    {[
+                      { label: 'Black Lid', value: 'black' },
+                      { label: 'Silver Lid', value: 'silver' },
+                      { label: 'Gold Lid', value: 'gold' },
+                    ].map((option) => (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() =>
+                          setBaseLidFinish(
+                            option.value as 'black' | 'silver' | 'gold',
+                          )
+                        }
+                        className={styleTabClass(
+                          baseLidFinish === option.value,
+                        )}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </fieldset>
+              )}
             </div>
           </div>
         )}
 
-        {editingObject === 'headstone' && !isPlaque && (
+        {!isSizeAdjustmentCompact && editingObject === 'headstone' && !isPlaque && (
           <>
             <div className="flex gap-2">
               {[
@@ -2723,7 +2756,9 @@ export default function DesignerNav() {
                   onClick={() =>
                     setHeadstoneStyle(option.value as 'upright' | 'slant')
                   }
-                  className={styleTabClass(headstoneStyle === option.value)}
+                  className={headstoneStyleTabClass(
+                    headstoneStyle === option.value,
+                  )}
                 >
                   {option.label}
                 </button>
@@ -2763,14 +2798,16 @@ export default function DesignerNav() {
             };
             return (
               <div className="space-y-4">
-                <div className="rounded-xl border border-white/15 bg-white/5 p-4">
-                  <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
-                    Plaque Price
+                {!isSizeAdjustmentCompact && (
+                  <div className="rounded-xl border border-white/15 bg-white/5 p-4">
+                    <div className="mb-1 text-xs tracking-[0.2em] text-white/60 uppercase">
+                      Plaque Price
+                    </div>
+                    <div className="text-2xl font-semibold text-white">
+                      ${activeSize.price.toFixed(2)}
+                    </div>
                   </div>
-                  <div className="text-2xl font-semibold text-white">
-                    ${activeSize.price.toFixed(2)}
-                  </div>
-                </div>
+                )}
 
                 <div className={dimensionCardClass}>
                   <div className={dimensionHeaderClass}>
@@ -2831,6 +2868,7 @@ export default function DesignerNav() {
                       step={1}
                       value={selectedIndex}
                       onChange={(e) => applySize(parseInt(e.target.value, 10))}
+                      {...compactSizeRangeProps}
                       className={rangeInputClass}
                     />
                     <div className={rangeBoundsClass}>
@@ -2850,7 +2888,7 @@ export default function DesignerNav() {
           <>
             {/* Mobile: pick a single dimension to edit (keeps the sheet short so
                 the product stays visible). Desktop shows all cards at once. */}
-            <div className="md:hidden">
+            {!isSizeAdjustmentCompact && <div className="md:hidden">
               <div className="flex border-b border-white/10">
                 {sizeControlOptions.map((option) => {
                   const isActive = effectiveSizeControl === option.value;
@@ -2858,11 +2896,12 @@ export default function DesignerNav() {
                     <button
                       key={option.value}
                       type="button"
-                      onClick={() =>
+                      onClick={() => {
+                        setSizeAdjustmentCompact(false);
                         setActiveSizeControl(
                           option.value as 'width' | 'height' | 'depth',
-                        )
-                      }
+                        );
+                      }}
                       className={dimensionTabClass(isActive)}
                     >
                       {option.label}
@@ -2873,7 +2912,7 @@ export default function DesignerNav() {
                   );
                 })}
               </div>
-            </div>
+            </div>}
             <div
               className={`${dimensionCardClass} ${sizeCardVisibility('width')} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
             >
@@ -2910,7 +2949,11 @@ export default function DesignerNav() {
                     max={displayLength(maxWidth)}
                     step={unitSystem === 'imperial' ? 1 : 10}
                     value={displayLength(currentWidthMm)}
-                    onChange={(e) => setCurrentWidthMm(displayLengthToMm(Number(e.target.value)))}
+                    onChange={(e) =>
+                      setCurrentWidthMm(
+                        displayLengthToMm(Number(e.target.value)),
+                      )
+                    }
                     onBlur={(e) => {
                       const val = displayLengthToMm(Number(e.target.value));
                       if (val < minWidth) {
@@ -2962,13 +3005,22 @@ export default function DesignerNav() {
                   max={displayLength(maxWidth)}
                   step={unitSystem === 'imperial' ? 1 : 10}
                   value={displayLength(currentWidthMm)}
-                  onChange={(e) => setCurrentWidthMm(displayLengthToMm(Number(e.target.value)))}
+                  onChange={(e) =>
+                    setCurrentWidthMm(displayLengthToMm(Number(e.target.value)))
+                  }
                   disabled={editingObject === 'base' && !showBase}
+                  {...compactSizeRangeProps}
                   className={rangeInputClass}
                 />
                 <div className={rangeBoundsClass}>
-                  <span>{displayLength(minWidth)}{lengthUnit}</span>
-                  <span>{displayLength(maxWidth)}{lengthUnit}</span>
+                  <span>
+                    {displayLength(minWidth)}
+                    {lengthUnit}
+                  </span>
+                  <span>
+                    {displayLength(maxWidth)}
+                    {lengthUnit}
+                  </span>
                 </div>
               </div>
             </div>
@@ -3009,7 +3061,11 @@ export default function DesignerNav() {
                     max={displayLength(maxHeight)}
                     step={unitSystem === 'imperial' ? 1 : 10}
                     value={displayLength(currentHeightMm)}
-                    onChange={(e) => setCurrentHeightMm(displayLengthToMm(Number(e.target.value)))}
+                    onChange={(e) =>
+                      setCurrentHeightMm(
+                        displayLengthToMm(Number(e.target.value)),
+                      )
+                    }
                     onBlur={(e) => {
                       const val = displayLengthToMm(Number(e.target.value));
                       if (val < minHeight) {
@@ -3061,13 +3117,24 @@ export default function DesignerNav() {
                   max={displayLength(maxHeight)}
                   step={unitSystem === 'imperial' ? 1 : 10}
                   value={displayLength(currentHeightMm)}
-                  onChange={(e) => setCurrentHeightMm(displayLengthToMm(Number(e.target.value)))}
+                  onChange={(e) =>
+                    setCurrentHeightMm(
+                      displayLengthToMm(Number(e.target.value)),
+                    )
+                  }
                   disabled={editingObject === 'base' && !showBase}
+                  {...compactSizeRangeProps}
                   className={rangeInputClass}
                 />
                 <div className={rangeBoundsClass}>
-                  <span>{displayLength(minHeight)}{lengthUnit}</span>
-                  <span>{displayLength(maxHeight)}{lengthUnit}</span>
+                  <span>
+                    {displayLength(minHeight)}
+                    {lengthUnit}
+                  </span>
+                  <span>
+                    {displayLength(maxHeight)}
+                    {lengthUnit}
+                  </span>
                 </div>
               </div>
             </div>
@@ -3188,7 +3255,9 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-semibold text-white/70">{lengthUnit}</span>
+                <span className="text-sm font-semibold text-white/70">
+                  {lengthUnit}
+                </span>
               </div>
             </div>
             <div className={rangeBlockClass}>
@@ -3197,11 +3266,11 @@ export default function DesignerNav() {
                 min={displayLength(minThickness)}
                 max={displayLength(maxThickness)}
                 step={unitSystem === 'imperial' ? 1 : 10}
-                value={
-                  displayLength(headstoneStyle === 'upright'
+                value={displayLength(
+                  headstoneStyle === 'upright'
                     ? uprightThickness
-                    : slantThickness)
-                }
+                    : slantThickness,
+                )}
                 onChange={(e) => {
                   const newValue = displayLengthToMm(Number(e.target.value));
                   if (headstoneStyle === 'upright') {
@@ -3210,11 +3279,18 @@ export default function DesignerNav() {
                     setSlantThickness(newValue);
                   }
                 }}
+                {...compactSizeRangeProps}
                 className={rangeInputClass}
               />
               <div className={rangeBoundsClass}>
-                <span>{displayLength(minThickness)}{lengthUnit}</span>
-                <span>{displayLength(maxThickness)}{lengthUnit}</span>
+                <span>
+                  {displayLength(minThickness)}
+                  {lengthUnit}
+                </span>
+                <span>
+                  {displayLength(maxThickness)}
+                  {lengthUnit}
+                </span>
               </div>
             </div>
           </div>
@@ -3294,7 +3370,9 @@ export default function DesignerNav() {
                     />
                   </svg>
                 </button>
-                <span className="text-sm font-semibold text-white/70">{lengthUnit}</span>
+                <span className="text-sm font-semibold text-white/70">
+                  {lengthUnit}
+                </span>
               </div>
             </div>
             <div className={rangeBlockClass}>
@@ -3304,12 +3382,21 @@ export default function DesignerNav() {
                 max={displayLength(maxThickness)}
                 step={unitSystem === 'imperial' ? 1 : 10}
                 value={displayLength(baseThickness)}
-                onChange={(e) => setBaseThickness(displayLengthToMm(Number(e.target.value)))}
+                onChange={(e) =>
+                  setBaseThickness(displayLengthToMm(Number(e.target.value)))
+                }
+                {...compactSizeRangeProps}
                 className={rangeInputClass}
               />
               <div className={rangeBoundsClass}>
-                <span>{displayLength(minThickness)}{lengthUnit}</span>
-                <span>{displayLength(maxThickness)}{lengthUnit}</span>
+                <span>
+                  {displayLength(minThickness)}
+                  {lengthUnit}
+                </span>
+                <span>
+                  {displayLength(maxThickness)}
+                  {lengthUnit}
+                </span>
               </div>
             </div>
           </div>
@@ -3393,12 +3480,21 @@ export default function DesignerNav() {
                   max={displayLength(maxThickness)}
                   step={unitSystem === 'imperial' ? 1 : 10}
                   value={displayLength(currentDepthMm)}
-                  onChange={(e) => setCurrentDepthMm(displayLengthToMm(Number(e.target.value)))}
+                  onChange={(e) =>
+                    setCurrentDepthMm(displayLengthToMm(Number(e.target.value)))
+                  }
+                  {...compactSizeRangeProps}
                   className={rangeInputClass}
                 />
                 <div className={rangeBoundsClass}>
-                  <span>{displayLength(minThickness)}{lengthUnit}</span>
-                  <span>{displayLength(maxThickness)}{lengthUnit}</span>
+                  <span>
+                    {displayLength(minThickness)}
+                    {lengthUnit}
+                  </span>
+                  <span>
+                    {displayLength(maxThickness)}
+                    {lengthUnit}
+                  </span>
                 </div>
               </div>
             </div>
@@ -3660,6 +3756,7 @@ export default function DesignerNav() {
 
           {isMounted &&
             isMobileNavOpen &&
+            !isSizeAdjustmentCompact &&
             createPortal(
               <div className="fixed inset-x-0 bottom-0 z-[46] flex gap-2 border-t border-[#3a2a1c] bg-[#120c08]/95 px-3 py-2.5 shadow-[0_-10px_24px_rgba(0,0,0,0.3)] backdrop-blur-md md:hidden">
                 <button
@@ -3683,15 +3780,16 @@ export default function DesignerNav() {
                 >
                   {isImageCropActive
                     ? 'Finish crop'
-                    : designerStepSlug === 'select-images' && selectedImages.length === 0
+                    : designerStepSlug === 'select-images' &&
+                        selectedImages.length === 0
                       ? 'Skip / Next'
                       : nextPanelSlug === 'inscriptions'
-                      ? 'Next: Inscriptions'
-                      : nextPanelSlug === 'select-images'
-                        ? 'Next: Images'
-                        : nextPanelSlug === 'select-additions'
-                          ? 'Next: Additions'
-                          : `Next: ${nextPanelTitle ?? 'Continue'}`}
+                        ? 'Next: Inscriptions'
+                        : nextPanelSlug === 'select-images'
+                          ? 'Next: Images'
+                          : nextPanelSlug === 'select-additions'
+                            ? 'Next: Additions'
+                            : `Next: ${nextPanelTitle ?? 'Continue'}`}
                   <span aria-hidden="true">→</span>
                 </button>
               </div>,
@@ -3701,7 +3799,8 @@ export default function DesignerNav() {
           {/* Panel Content */}
           <div
             className={`min-h-0 flex-1 overflow-y-auto p-3 md:p-4 ${
-              activeFullscreenPanel === 'select-size' && editingObject !== 'base'
+              activeFullscreenPanel === 'select-size' &&
+              editingObject !== 'base'
                 ? 'pb-3'
                 : 'pb-28'
             }`}
@@ -4337,10 +4436,7 @@ export default function DesignerNav() {
                           // Hide "Select Material" for laser etched products and stainless steel headstones
                           if (
                             item.slug === 'select-material' &&
-                            ((catalog?.product?.laser === '1' &&
-                              !canSelectStainlessGraniteBaseMaterial) ||
-                              (isStainlessSteelHeadstone &&
-                                !canSelectStainlessGraniteBaseMaterial))
+                            shouldHideMaterialStep
                           ) {
                             return null;
                           }

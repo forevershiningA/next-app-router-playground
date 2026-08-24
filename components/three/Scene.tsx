@@ -783,6 +783,13 @@ export default function Scene({
         shadow-bias={-0.0001}
         shadow-mapSize={isMobileViewport ? [512, 512] : [1024, 1024]}
       />
+      {isMobileViewport && (
+        <directionalLight
+          color="#e8f1ff"
+          intensity={0.7}
+          position={[4, 5, 8]}
+        />
+      )}
       {/* Rim light (Back Right) - Separates stone from background */}
       {!isMobileViewport && (
         <spotLight
