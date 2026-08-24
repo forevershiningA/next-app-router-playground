@@ -1,342 +1,140 @@
-# DYO - Design Your Own Headstone
+# Forever Shining — Memorial Designer
 
-**Design & Buy Headstones Online - A Step-by-Step Guide for Families**
+Forever Shining is a Next.js application for designing and ordering personalised memorials online. It combines an interactive 3D designer with a crawlable catalogue of headstones, plaques, monuments, urns and pet memorials.
 
-An interactive 3D web application that allows families to design custom memorial headstones online with real-time visualization, material selection, laser etching, and personalized inscriptions.
+The public site is served at [forevershining.org](https://forevershining.org).
 
-**Live Demo**: [https://forevershining.org//](https://forevershining.org/)
+## What is included
 
-![DYO Screenshot](screen.jpg)
+- Interactive 3D memorial designer: shape, material, size, inscriptions, motifs, images, additions, borders and emblems.
+- Product, gallery and SEO landing pages for memorial designs.
+- Saved designs, accounts, orders, quotes and supplier workflows.
+- PostgreSQL persistence through Drizzle ORM.
+- Stripe checkout, email delivery and optional remote upload proxy.
+- Technical SEO: canonical URLs, `www` to apex redirect, robots, sitemap, structured data and Open Graph metadata.
 
-## Overview
+## Technology
 
-DYO (Design Your Own) is a comprehensive online headstone design platform that guides families through the complete customization process. From selecting shapes and materials to adding laser-etched photos and inscriptions, the application provides an intuitive, visual experience with instant 3D rendering.
+- Next.js 15, App Router, React 19 and TypeScript
+- Three.js, React Three Fiber and Drei
+- Zustand and React Context for application state
+- Tailwind CSS 4 and Heroicons
+- PostgreSQL, Drizzle ORM and `postgres`
+- Zod, Stripe and Nodemailer
+- pnpm, ESLint, Prettier, Vitest and Playwright
 
-## Recent Updates (November 2025)
+## Requirements
 
-### Motif Sizing & Design Format Compatibility
+- Node.js 18 or newer (Node 22 is used in CI)
+- pnpm 8 or newer
+- PostgreSQL for account, order and catalogue features
 
-**Fixed critical rendering issues for saved designs:**
+## Local development
 
-- **Dual Format Support**: Implemented detection and handling for both old MM-based and new ratio-based design formats
-  - Old format: Motifs sized in physical millimeters with `height` field
-  - New format: Motifs sized using viewport ratios with `ratio` and `dpr` fields
-  
-- **Canvas Dimension Logic**: 
-  - MM-based designs use original canvas dimensions (707×476px)
-  - Ratio-based designs use cropped screenshot dimensions (1066×1077px)
-  
-- **Accurate Motif Scaling**: Fixed motif sizing calculations to correctly handle both formats
-  - MM-based: `mm × px/mm ratio`
-  - Ratio-based: `viewBox × ratio × DPR`
+Install dependencies and create a local environment file:
 
-- **Screenshot Processing**: Added automated scripts for cropping and metadata generation
-  - `scripts/crop-screenshots.js` - Auto-crop white space from screenshots
-  - `scripts/generate-screenshot-metadata.js` - Generate crop dimension metadata
-
-- **Bug Fixes**: Resolved rendering issues in legacy designs (e.g., "Gods Garden" design)
-
-See [MOTIF_SIZING_FIX_2025_01_29.md](MOTIF_SIZING_FIX_2025_01_29.md) for detailed technical documentation.
-
-## Key Features
-
-### 🎨 **Interactive 3D Design Studio**
-- Real-time 3D visualization using Three.js and React Three Fiber
-- 2D and 3D camera modes for detailed viewing
-- Smooth animations and transitions between design stages
-- WebGL-based rendering with optimized performance
-
-### 📐 **Comprehensive Customization**
-
-**Shapes & Styles**
-- Wide range of headstone shapes (Serpentine, Ogee, Gothic, Curved Gable, and more)
-- Support for custom shapes upon request
-- SVG-based shape system for precision rendering
-- Universal coordinate system for accurate motif placement
-
-**Materials**
-- 30+ premium granite and stone materials
-- High-quality textures including:
-  - Imperial Red
-  - Blue Pearl
-  - Emerald Pearl
-  - White Carrara
-  - Chinese Calca
-  - And many more
-
-**Size Selection**
-- Dimensions: 300mm to 1200mm (width & height)
-- 1mm precision increments
-- Automatic thickness calculation based on dimensions
-- Cemetery regulation compliance guidance
-
-**Inscriptions**
-- Multiple font options (10+ professional fonts)
-- 34+ color choices including gold and silver gilding
-- Custom text placement and rotation
-- Font size control (5mm - 1200mm)
-- Real-time preview with accurate positioning
-
-**Motifs & Decorations**
-- 100+ decorative motifs (religious symbols, flowers, nature, etc.)
-- Precise positioning with coordinate system
-- Scale and rotation controls
-- Color customization (black, white, gold, silver)
-- Support for both overlay and carved rendering styles
-
-**Additions & Embellishments**
-- 3D decorative applications (angels, crosses, religious figures)
-- Vases and statues
-- Laser-etched images and photos
-- Position, scale, and rotation controls
-
-## Technology Stack
-
-### Frontend
-- **Framework**: Next.js 15.5.2 (App Router)
-- **React**: 19.1.1
-- **3D Graphics**: 
-  - Three.js 0.180.0
-  - React Three Fiber 9.3.0
-  - React Three Drei 10.7.4
-- **Styling**: Tailwind CSS 4.1.13
-- **State Management**: Zustand 5.0.8
-- **UI Components**: Flowbite 3.1.2, Heroicons
-- **Animations**: use-count-up for dynamic counters
-
-### Development
-- **TypeScript**: 5.9.2
-- **Build Tool**: Next.js with Turbopack
-- **Package Manager**: pnpm
-- **Code Formatting**: Prettier with Tailwind plugin
-- **Image Processing**: Sharp 0.33.5 (for screenshot cropping)
-
-### Content & Validation
-- **MDX Support**: @next/mdx for documentation pages
-- **Validation**: Zod 4.1.5
-- **Date Handling**: date-fns 4.1.0
-- **Pricing**: dinero.js for currency calculations
-
-## Getting Started
-
-### Prerequisites
-- Node.js 18+ 
-- pnpm (recommended) or npm
-
-### Installation
-
-1. Clone the repository:
-```sh
-git clone https://github.com/yourusername/next-dyo.git
-cd next-dyo
-```
-
-2. Install dependencies:
 ```sh
 pnpm install
+Copy-Item .env.local.example .env.local
 ```
 
-3. Create environment file:
-```sh
-cp .env.local.example .env.local
-```
+Set at least `DATABASE_URL` and `SESSION_SECRET` in `.env.local`, then start the app:
 
-4. Start the development server:
 ```sh
 pnpm dev
 ```
 
-5. Open your browser:
-```
-http://localhost:3000
-```
+Open [http://localhost:3000](http://localhost:3000).
 
-### Production Build
+The public designer can run with local fallback data when the database is unavailable. Database-backed account, order and catalogue functions require a working PostgreSQL connection.
+
+## Environment variables
+
+Do not commit `.env.local` or production credentials. Use `.env.local.example` as the starting point.
+
+| Variable                                                        | Required for                      | Notes                                               |
+| --------------------------------------------------------------- | --------------------------------- | --------------------------------------------------- |
+| `DATABASE_URL`                                                  | Database-backed features          | PostgreSQL connection string used by Drizzle.       |
+| `SESSION_SECRET`                                                | Authentication and shared designs | Use a long, random production secret.               |
+| `NEXT_PUBLIC_SITE_URL`                                          | Checkout and password reset links | Public deployment URL.                              |
+| `NEXT_PUBLIC_BASE_URL`                                          | Canonical and share URLs          | Normally `https://forevershining.org`.              |
+| `STRIPE_SECRET_KEY`                                             | Stripe checkout                   | Server-only Stripe secret key.                      |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`                            | Stripe checkout UI                | Public Stripe key.                                  |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` | Transactional email               | Country-specific SMTP variables are also supported. |
+| `UPLOAD_REMOTE_URL`, `UPLOAD_REMOTE_SECRET`                     | Remote upload proxy               | Optional production integration.                    |
+
+Generate a session secret, for example:
 
 ```sh
-pnpm build
-pnpm start
+openssl rand -hex 32
 ```
 
-## Project Structure
+## Common commands
 
-```
-next-dyo/
-├── app/                          # Next.js App Router pages
-│   ├── additions/               # 3D additions & embellishments
-│   ├── designs/                 # Saved design gallery & viewer
-│   ├── inscriptions/            # Text customization
-│   ├── products/                # Product pages & templates
-│   ├── select-material/         # Material/texture selection
-│   ├── select-shape/            # Shape selection
-│   ├── select-size/             # Size configuration
-│   └── layout.tsx               # Root layout with 3D scene
-├── components/                   # React components
-│   ├── three/                   # Three.js components
-│   ├── system/                  # System components
-│   ├── ThreeScene.tsx           # Main 3D scene
-│   ├── SceneOverlayHost.tsx     # Overlay management
-│   └── HeadstoneInscription.tsx # Text rendering
-├── contexts/                     # React contexts
-│   └── DesignContext.tsx        # Design state management
-├── lib/                         # Core logic & utilities
-│   ├── headstone-store.ts       # Zustand state management
-│   ├── headstone-constants.ts   # Configuration constants
-│   ├── scene-overlay-store.ts   # Overlay state
-│   ├── svg-generator.ts         # SVG rendering for saved designs
-│   └── db.ts                    # Data layer
-├── public/                      # Static assets
-│   ├── textures/                # Material textures
-│   ├── shapes/                  # SVG headstone shapes
-│   │   └── motifs/              # Decorative motif SVGs
-│   ├── ml/                      # Saved designs database
-│   │   ├── bronze-plaque/       # Bronze plaque designs
-│   │   ├── forevershining/      # Forever Shining designs
-│   │   └── headstonesdesigner/  # Headstone designer designs
-│   └── additions/               # 3D models (.glb)
-├── scripts/                     # Utility scripts
-│   ├── crop-screenshots.js      # Auto-crop design screenshots
-│   └── generate-screenshot-metadata.js # Generate crop metadata
-├── legacy_extracted/            # Legacy DYO codebase reference
-└── styles/                      # Global styles
+```sh
+pnpm dev             # Start the development server
+pnpm build           # Create a production build
+pnpm start           # Start the production server
+pnpm type-check      # Run TypeScript without emitting files
+pnpm lint            # Run ESLint
+pnpm format:check    # Verify formatting
+pnpm validate        # Run type-check, lint and formatting checks
+pnpm test            # Run Vitest tests
+pnpm test:e2e        # Run Playwright end-to-end tests
 ```
 
-## Design Process
+Database commands:
 
-### Step-by-Step Guide
+```sh
+pnpm db:generate       # Generate Drizzle migrations
+pnpm db:migrate        # Apply migrations
+pnpm db:push           # Push the schema directly
+pnpm db:studio         # Open Drizzle Studio
+pnpm db:seed-materials # Seed material data
+pnpm db:seed-shapes    # Seed shape data
+pnpm db:seed-sizes     # Seed size data
+```
 
-1. **Select Shape**: Choose from traditional to contemporary headstone shapes
-2. **Choose Material**: Browse 30+ granite and stone options with high-res previews
-3. **Set Size**: Define dimensions within cemetery regulations (300mm-1200mm)
-4. **Add Inscriptions**: Personalize with names, dates, and memorial text
-5. **Select Colors**: Choose from 34+ colors including gold/silver gilding
-6. **Add Decorations**: Enhance with 3D applications, vases, or statues
-7. **Review & Order**: View final design in 3D before ordering
+## Application map
 
-### Laser-Etched vs Traditional Engraved
+```text
+app/
+  page.tsx                         Homepage and public structured data
+  select-product/ … check-price/   Guided design flow
+  designs/                         Searchable, indexable design catalogue
+  memorials/                       Public memorial-type landing pages
+  products/                        Product SEO pages
+  my-account/                      Accounts, saved designs and purchases
+  admin/                           Internal order and catalogue workflows
+  api/                             Route handlers
+components/three/                  React Three Fiber scene and models
+lib/                               Pricing, auth, data loading, SEO and utilities
+lib/db/                            Drizzle schema and database client
+public/                            Textures, SVGs, models, screenshots and static data
+scripts/                           Database seeds, conversion and maintenance tools
+```
 
-**Laser-Etched**
-- Photographic quality detail
-- Unlimited design complexity
-- Perfect for portraits and images
-- Modern aesthetic
-- Available on dark materials
+The App Router uses `#/*` as a path alias for the project root. Server Components are the default; interactive UI and all Three.js code run in Client Components.
 
-**Traditional Engraved**
-- Classic carved appearance
-- Hand-cut depth and texture
-- Timeless elegance
-- Works on all materials
-- Optional color fill
+## SEO and public catalogue
 
-## Headstone Sizes & Regulations
+The indexable catalogue lives under `/designs/[productType]/[category]/[slug]`. It uses canonical URLs on `https://forevershining.org`, emits structured data and is included in `app/sitemap.ts` when a design has a valid screenshot and belongs to an approved product set.
 
-Standard size ranges:
-- **Width**: 300mm - 1200mm
-- **Height**: 300mm - 1200mm
-- **Thickness**: Automatically calculated
-  - 300mm square: 40mm thick
-  - 600mm square: 60mm thick
-  - 1200mm square: 100mm thick
+`www.forevershining.org` permanently redirects to `forevershining.org`. Keep the apex domain configured as the primary domain in the hosting provider as well.
 
-**Important**: Cemetery regulations vary by location. Always verify allowable dimensions, materials, and installation requirements with your cemetery before finalizing your design.
+## CI
 
-For non-standard sizes, contact us directly - we can produce custom dimensions beyond the online system.
+GitHub Actions runs on pushes and pull requests targeting `main`:
 
-## Costs & Timeline
-
-Pricing factors:
-- Base material and size
-- Inscription characters and gilding
-- Laser etching complexity
-- Additional decorations
-- Installation requirements
-
-Real-time pricing is displayed in the application header as you design.
-
-Contact us for detailed quotes and shipping timelines to your location worldwide.
-
-## Photo Preparation for Laser Etching
-
-For best laser etching results:
-- High-resolution images (minimum 300 DPI)
-- Clear facial details and good contrast
-- JPEG or PNG format
-- Upload during the design process
-- Our team will optimize for engraving
-
-## Worldwide Installation
-
-We provide:
-- Global shipping
-- Installation coordination
-- Cemetery liaison services
-- Warranty and support
-- Maintenance guidance
-
-## FAQs
-
-**Can I order custom shapes?**
-Yes, custom shapes are available upon request. Contact us with your design ideas.
-
-**How long does production take?**
-Typical timeline is 4-8 weeks depending on customization complexity and location.
-
-**Do you ship internationally?**
-Yes, we ship worldwide and can coordinate installation in most countries.
-
-**Can I save my design and return later?**
-Your design is automatically saved in your browser session. For long-term storage, create an account.
-
-**What file formats do you accept for photos?**
-We accept JPEG, PNG, and high-resolution image formats for laser etching.
-
-**Are there restrictions on inscriptions?**
-You can add any appropriate text. We'll review all designs before production.
-
-## Browser Support
-
-- Chrome 90+ (Recommended)
-- Firefox 88+
-- Safari 14+
-- Edge 90+
-
-WebGL support required for 3D visualization.
+1. `pnpm type-check`
+2. `pnpm lint`
+3. `pnpm format:check`
+4. `pnpm build`
 
 ## Contributing
 
-This is a proprietary application. For bugs or feature requests, please contact our support team.
-
-## Scripts
-
-```sh
-pnpm dev                    # Start development server
-pnpm build                  # Build for production
-pnpm start                  # Start production server
-pnpm prettier               # Format code
-node scripts/crop-screenshots.js              # Crop design screenshots
-node scripts/generate-screenshot-metadata.js  # Generate crop metadata
-```
-
-## Support & Contact
-
-- **Website**: [Forever Shining](https://www.forevershining.com.au)
-- **Laser Etched Headstones**: [Product Page](https://www.forevershining.com.au/memorial-products/headstones/laser-etched-black-granite-headstone/)
-- **Traditional Engraved**: [Product Page](https://www.forevershining.com.au/memorial-products/headstones/traditional-engraved-headstone/)
-- **Contact**: [Get in Touch](https://www.forevershining.com.au/contact/)
-
-## Learn More
-
-- **Headstone Design Guide**: Explore styles and materials
-- **Cemetery Regulations**: Understand local requirements
-- **Material Care**: Maintenance and cleaning guides
-- **Installation Process**: What to expect
-- **Memorial Planning**: Comprehensive family guide
+Use pnpm, keep TypeScript strict, and run `pnpm validate` before opening a pull request. Avoid committing environment files, database exports, generated build output and customer-uploaded assets.
 
 ## License
 
-Proprietary - All rights reserved. See [license.md](license.md) for details.
-
----
-
-Built with ❤️ for families creating lasting memorials.
+Proprietary. All rights reserved; see [license.md](license.md).
