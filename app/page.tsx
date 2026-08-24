@@ -7,6 +7,17 @@ export const metadata: Metadata = {
   },
   description:
     'Forever Shining helps families design and buy custom headstones, plaques, full monuments, urns and pet memorials online with live preview and pricing.',
+  alternates: {
+    canonical: 'https://forevershining.org',
+  },
+  openGraph: {
+    title: 'Forever Shining Memorials | Design Headstones, Plaques & Urns Online',
+    description:
+      'Design and buy custom headstones, plaques, monuments, urns and pet memorials online with a live preview and pricing.',
+    url: 'https://forevershining.org',
+    siteName: 'Forever Shining',
+    type: 'website',
+  },
 };
 
 const businessContacts = [

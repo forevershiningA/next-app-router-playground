@@ -82,6 +82,22 @@ function designDescription(
   return descriptions[hash % descriptions.length];
 }
 
+function getCategorySearchTitle(
+  category: string,
+  productKind: ReturnType<typeof getProductSeoInfo>['kind'],
+  fallback: string,
+): string {
+  if (category === 'butterfly-memorial' && productKind === 'headstone') {
+    return 'Butterfly Headstone Designs';
+  }
+
+  if (category === 'floral-memorial' && productKind === 'headstone') {
+    return 'Flower Headstone Engraving Designs';
+  }
+
+  return fallback;
+}
+
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { productType: productSlug, category } = await params;
 
@@ -98,7 +114,12 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   const categoryDesc = getCategoryDescription(category);
 
   // Build title
-  const title = `${categoryTitle} ${productInfo.shortName} Designs | Forever Shining`;
+  const searchTitle = getCategorySearchTitle(
+    category,
+    productInfo.kind,
+    `${categoryTitle} ${productInfo.shortName} Designs`,
+  );
+  const title = `${searchTitle} | Forever Shining`;
 
   // Build description
   const description = `Browse ${designCount} ${categoryTitle.toLowerCase()} ${productInfo.kind} designs in ${productInfo.finish}. ${categoryDesc} Customise online with inscriptions, motifs, photos and live preview.`;

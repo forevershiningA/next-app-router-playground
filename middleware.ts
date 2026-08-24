@@ -18,6 +18,14 @@ function isPublicSeoPath(pathname: string): boolean {
 }
 
 export async function middleware(request: NextRequest) {
+  const host = request.headers.get('host')?.split(':')[0]?.toLowerCase();
+  if (host === 'www.forevershining.org') {
+    const canonicalUrl = request.nextUrl.clone();
+    canonicalUrl.protocol = 'https:';
+    canonicalUrl.host = 'forevershining.org';
+    return NextResponse.redirect(canonicalUrl, 308);
+  }
+
   const { pathname } = request.nextUrl;
   const isProtected = PROTECTED_API.some((r) => pathname.startsWith(r));
   const isBlocked = BLOCKED_PATHS.test(pathname);
