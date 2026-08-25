@@ -33,12 +33,14 @@ import {
   CAMERA_FAR,
 } from '#/lib/headstone-constants';
 import { logger } from '#/lib/logger';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 function CameraController() {
   const { controls, camera } = useThree();
   const pathname = usePathname();
   const productType = useHeadstoneStore((state) => state.catalog?.product.type);
   const hasInitialized = useRef(false);
+  const isSelectSizeStep = getDesignerStepSlug(pathname) === 'select-size';
 
   useEffect(() => {
     // FullMonumentFit owns the camera for full monuments.  Waiting for the
@@ -46,7 +48,7 @@ function CameraController() {
     // hydration, before the product type is available.
     // The sizing step owns its camera through AutoFit so the active element
     // remains centred above the mobile configuration sheet.
-    if (pathname === '/select-size' || !productType || productType === 'full-monument') return;
+    if (isSelectSizeStep || !productType || productType === 'full-monument') return;
     if (!controls || !camera || hasInitialized.current) return;
 
     // Mobile leaves room for the bottom controls, so frame the memorial a
@@ -64,7 +66,7 @@ function CameraController() {
     (controls as any).update();
 
     hasInitialized.current = true;
-  }, [controls, camera, pathname, productType]);
+  }, [controls, camera, isSelectSizeStep, productType]);
 
   return null;
 }
@@ -103,6 +105,7 @@ function UnitSystemToggle() {
 // Product Name Header Component - Apple Studio Look
 function ProductNameHeader() {
   const pathname = usePathname();
+  const isSelectSizeStep = getDesignerStepSlug(pathname) === 'select-size';
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
@@ -427,7 +430,7 @@ function ProductNameHeader() {
       {activeDimension.widthMm > 0 && activeDimension.heightMm > 0 && (
           <div
             className={`pointer-events-auto absolute top-[4.75rem] left-1/2 z-40 w-[80vw] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
-              pathname === '/select-size' ? 'hidden md:block' : ''
+              isSelectSizeStep ? 'hidden md:block' : ''
             }`}
           >
             <button
@@ -470,6 +473,7 @@ export default function ThreeScene() {
   const hideScenery = useHeadstoneStore((s) => s.hideScenery);
   const solidBgColor = useHeadstoneStore((s) => s.solidBgColor);
   const pathname = usePathname();
+  const isSelectSizeStep = getDesignerStepSlug(pathname) === 'select-size';
   const isDesignsPage = pathname?.startsWith('/designs/');
 
   const [isVisible, setIsVisible] = useState(true);
@@ -497,7 +501,7 @@ export default function ThreeScene() {
 
   // Fade in/out on /select-size page
   useEffect(() => {
-    if (pathname === '/select-size') {
+    if (isSelectSizeStep) {
       if (
         !hasPlayedSelectSizeFade.current &&
         !sceneHasEverBeenReadyRef.current
@@ -518,7 +522,7 @@ export default function ThreeScene() {
     }
 
     previousPathRef.current = pathname ?? null;
-  }, [pathname]);
+  }, [pathname, isSelectSizeStep]);
 
   const rotateLeft = () => {
     setTargetRotation((prev) => prev - Math.PI / 6); // -30 degrees

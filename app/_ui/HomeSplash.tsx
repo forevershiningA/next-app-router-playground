@@ -416,30 +416,35 @@ export default function HomeSplash() {
               onClick={() => setMobileMenuOpen(false)}
               aria-hidden="true"
             />
-            <div className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto border-b border-[#d4af37]/25 bg-[#0d0a06]/95 px-5 pt-4 pb-6 shadow-2xl backdrop-blur-md day:border-gray-200 day:bg-white/95">
-              <div className="flex items-center justify-between">
-                <Image
-                  src="/ico/forever-transparent-logo.png"
-                  alt="Forever Shining"
-                  width={200}
-                  height={62}
-                  className="h-auto w-40"
-                  sizes="160px"
-                />
+            <div className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto border-b border-[#d4af37]/25 bg-[#0d0a06]/95 pb-6 shadow-2xl backdrop-blur-md day:border-gray-200 day:bg-white/95">
+              {/* Match the home header so the logo and close button stay in
+                  exactly the same place when the mobile menu opens. */}
+              <div className="flex items-center justify-between gap-5 px-4 py-3">
+                <div className="w-52 select-none pointer-events-none">
+                  <Image
+                    src="/ico/forever-transparent-logo.png"
+                    alt="Forever Shining"
+                    width={320}
+                    height={100}
+                    className="h-auto w-full select-none"
+                    sizes="208px"
+                    draggable={false}
+                  />
+                </div>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-lg border border-white/15 p-2 text-white/80 transition-colors hover:border-[#cfac6c]/60 hover:text-white day:border-gray-300 day:text-gray-700"
+                  className="shrink-0 rounded-lg border border-white/15 bg-white/[0.06] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/60 day:border-gray-300 day:bg-white/70 day:text-gray-800"
                   aria-label="Close menu"
                 >
                   <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
 
-              <p className="mt-6 px-1 text-[11px] font-semibold tracking-[0.24em] text-[#f3d48f] uppercase day:text-amber-700">
+              <p className="mt-6 px-5 text-[11px] font-semibold tracking-[0.24em] text-[#f3d48f] uppercase day:text-amber-700">
                 Memorials
               </p>
-              <nav className="mt-2 flex flex-col" aria-label="Memorial product pages">
+              <nav className="mt-2 flex flex-col px-5" aria-label="Memorial product pages">
                 {MEMORIAL_LINKS.map((link) => (
                   <Link
                     key={link.href}
@@ -452,7 +457,7 @@ export default function HomeSplash() {
                 ))}
               </nav>
 
-              <div className="mt-6 flex flex-col gap-3">
+              <div className="mt-6 flex flex-col gap-3 px-5">
                 <Link
                   href="/select-product"
                   prefetch={false}

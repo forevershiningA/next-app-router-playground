@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { DOMParser } from '@xmldom/xmldom';
 import { data, type Product } from '#/app/_internal/_data';
+import { orderProductsForDisplay } from '#/lib/product-display-order';
 
 export type MemorialTypeSlug =
   | 'headstones'
@@ -320,12 +321,18 @@ function getCatalogShapes(productId: string): ProductShapeSummary[] {
 
 function productsForConfig(config: PageConfig) {
   if (config.productIds) {
-    return config.productIds
-      .map((id) => data.products.find((product) => product.id === id))
-      .filter((product): product is Product => Boolean(product));
+    return orderProductsForDisplay(
+      config.productIds
+        .map((id) => data.products.find((product) => product.id === id))
+        .filter((product): product is Product => Boolean(product)),
+    );
   }
 
-  return data.products.filter((product) => config.categoryIds.includes(product.category));
+  return orderProductsForDisplay(
+    data.products.filter((product) =>
+      config.categoryIds.includes(product.category),
+    ),
+  );
 }
 
 export function getMemorialTypePageData(slug: MemorialTypeSlug): MemorialTypePageData {

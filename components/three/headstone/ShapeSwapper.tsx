@@ -817,7 +817,8 @@ export default function ShapeSwapper({
         ) : (
           <AutoFit
             target={
-              pathname === '/select-size' && editingObject === 'headstone'
+              getDesignerStepSlug(pathname) === 'select-size' &&
+              editingObject === 'headstone'
                 ? (resolvedHeadstoneMeshRef as React.RefObject<THREE.Object3D>)
                 : (fitTargetRef ?? tabletRef)
             }

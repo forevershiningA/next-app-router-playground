@@ -8,6 +8,7 @@ import { useHeadstoneStore } from '#/lib/headstone-store';
 import { Product } from '#/lib/db';
 import type { ProductPriceSample } from '#/lib/types/pricing';
 import { getDesignerProductSlug } from '#/lib/designer-product-routes';
+import { orderProductsForDisplay } from '#/lib/product-display-order';
 import { formatDimensionPair } from '#/lib/unit-system';
 import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
 
@@ -124,7 +125,7 @@ export default function ProductSelectionGrid({
         (product) => product.category === group.id,
       );
 
-      return { ...group, products: groupProducts };
+      return { ...group, products: orderProductsForDisplay(groupProducts) };
     })
     .filter((group) => group.products.length > 0);
 

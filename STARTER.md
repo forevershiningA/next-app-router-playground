@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-24
+**Last Updated:** 2026-08-25
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -89,6 +89,7 @@
 81. [August 22 Designer Flow: Camera, Inscriptions, and Images](#current-status-2026-08-22--designer-flow-camera-inscriptions-and-images)
 82. [August 23 Mobile Memorial Pages and Home Hero](#current-status-2026-08-23--mobile-memorial-pages-and-home-hero)
 83. [August 24 Mobile Size Sheet and Headstone Camera](#current-status-2026-08-24--mobile-size-sheet-and-headstone-camera)
+84. [August 25 Mobile UI, Product Ordering, and Product-Route Camera Fit](#current-status-2026-08-25--mobile-ui-product-ordering-and-product-route-camera-fit)
 
 ---
 
@@ -109,10 +110,11 @@ Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, an
 Primary files: `components/three/AutoFit.tsx`, `components/three/FullMonumentFit.tsx`, and `components/three/headstone/ShapeSwapper.tsx`.
 
 - `ShapeSwapper` targets the isolated headstone mesh in `/select-size` when `editingObject === 'headstone'`; all other standard products use the usual fit target. Preserve this distinction when adjusting composition.
-- `AutoFit` detects a mobile Headstone sizing selection and uses a tighter fit plus a stronger upward composition shift than Base/Ledger/Kerbset. Current mobile headstone sheet multipliers are `1.08` (normal sheet) and `0.88` (compact sheet), with vertical target shifts `0.74` and `0.42` radii respectively. These values deliberately reclaim horizontal whitespace while keeping the stone above the panel.
+- `AutoFit` detects a mobile Headstone sizing selection and uses a tighter fit plus a stronger upward composition shift than Base/Ledger/Kerbset. Current mobile headstone sheet multipliers are `0.82` (normal sheet) and `0.88` (compact sheet), with vertical target shifts `0.74` and `0.42` radii respectively. These values deliberately reclaim horizontal whitespace while keeping the stone above the panel.
 - `FullMonumentFit` retains separate framing for close upright/headstone work versus full-plot Ledger/Kerbset work. Its mobile Headstone margins are tighter (`1.32` normal, `1.02` compact); do not apply them to Ledger or Kerbset because the full plot must stay visible.
 - Both fit components depend on `isSizeAdjustmentCompact`, so camera framing recomputes whenever the sheet changes height. Keep camera animation / `frameloop` ownership in `FullMonumentFit`; do not introduce a second camera controller for this state.
-- **Visual acceptance remains pending:** the user reported that an earlier headstone tightening did not visibly reduce left/right whitespace. The latest stronger `AutoFit` adjustment above has type-checked but must be verified manually on a phone-sized viewport before further tuning.
+- Product-prefixed routes (for example `/traditional-engraved-headstone/select-size`) must be treated as the same designer step as `/select-size`. Use `getDesignerStepSlug(pathname) === 'select-size'`, not exact pathname matching. Exact checks caused the generic camera controller to overwrite `AutoFit` and left the mobile price pill visible on product-prefixed size routes.
+- The close mobile framing was verified for both `/select-size` and `/traditional-engraved-headstone/select-size` at `390×844`.
 
 ### Verification
 
@@ -172,6 +174,49 @@ git diff --check
 ```
 
 `screen.png` is user-provided visual acceptance evidence. Never overwrite it while testing.
+
+---
+
+## Current Status (2026-08-25) — Mobile UI, Product Ordering, and Product-Route Camera Fit
+
+### Home mobile menu
+
+Primary file: `app/_ui/HomeSplash.tsx`.
+
+- The open mobile menu header must share the exact geometry of the home header: `px-4 py-3`, a `w-52` logo wrapper, and the same 320×100 logo image sizing.
+- The close button uses the hamburger button's matching 40px treatment (border, translucent background, padding, and icon size). This keeps the logo and action in the same screen positions when the drawer opens.
+
+### Product ordering
+
+Primary files: `lib/product-display-order.ts`, `app/select-product/_ui/ProductSelectionGrid.tsx`, and `lib/memorial-product-pages.ts`.
+
+- `orderProductsForDisplay()` is the single ordering policy for public product lists. In the `headstones` category it promotes product IDs `4`, `124`, and `22` in this order: **Laser Etched Black Granite Headstone**, **Traditional Engraved Headstone**, then **Laser Etched Mini Headstones**. All remaining products retain their existing relative order.
+- Apply this helper in both the product picker and `productsForConfig()` so `/select-product` and `/memorials/headstones` cannot drift apart.
+
+### Shape picker CTA
+
+Primary file: `app/select-shape/_ui/ShapeSelectionGrid.tsx`.
+
+- **Continue with this shape** is a persistent bottom CTA at every breakpoint, not only below `sm`.
+- On desktop it starts at `left: 400px` (`md:left-[400px]`) to avoid the permanent designer navigation. The grid retains `pb-28` at `sm` and above so the final cards cannot be obscured by the fixed bar.
+
+### Mobile camera on product-prefixed size routes
+
+Primary files: `components/three/AutoFit.tsx`, `components/ThreeScene.tsx`, and `components/three/headstone/ShapeSwapper.tsx`.
+
+- Always derive the active designer step with `getDesignerStepSlug(pathname)`. Do not use `pathname === '/select-size'`: product-prefixed routes bypass that condition.
+- For the mobile Headstone size step, `AutoFit` uses the normal-sheet multiplier `0.82` and compact-sheet multiplier `0.88`; this is the accepted close framing.
+- `CameraController` must yield to `AutoFit` for any `select-size` step, and `ShapeSwapper` must select the isolated headstone target on any of those routes. `ProductNameHeader` likewise hides its mobile price pill during the size step.
+
+### Verification
+
+```bash
+pnpm exec eslint app/select-shape/_ui/ShapeSelectionGrid.tsx
+pnpm exec eslint components/three/AutoFit.tsx components/ThreeScene.tsx components/three/headstone/ShapeSwapper.tsx
+git diff --check
+```
+
+The affected Three.js files have pre-existing ESLint warnings, but no ESLint errors. Visual verification succeeded at `390×844` for both generic and product-prefixed size routes. Never overwrite the user-provided `screen.png` while testing.
 
 ---
 

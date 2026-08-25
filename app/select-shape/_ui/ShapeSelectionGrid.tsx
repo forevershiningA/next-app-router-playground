@@ -546,7 +546,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       </div>
 
       {/* Shapes Grid */}
-      <div className="mx-auto max-w-7xl px-6 pt-6 pb-28 sm:py-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 pt-6 pb-28 sm:pt-6 sm:pb-28 lg:px-8">
         {selectedCategory === 'custom' ? (
           /* Custom Upload Section */
           <div className="py-10">
@@ -665,7 +665,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       </div>
 
       {selectedCategory !== 'custom' && (
-        <div className="fixed right-0 bottom-0 left-0 z-20 border-t border-white/10 bg-[#121212]/95 px-6 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur sm:hidden">
+        <div className="fixed right-0 bottom-0 left-0 z-20 border-t border-white/10 bg-[#121212]/95 px-6 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur md:left-[400px]">
           <button
             type="button"
             onClick={handleSelectedShapeContinue}

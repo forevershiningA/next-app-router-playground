@@ -7,6 +7,7 @@ import { useThree } from '@react-three/fiber';
 import { usePathname } from 'next/navigation';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
+import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 type Props = {
   target: React.RefObject<THREE.Object3D>; // tablet/upright ONLY (no base/ground)
@@ -45,7 +46,8 @@ export default function AutoFit({
   const showBase = useHeadstoneStore((s: any) => s.showBase);
   const editingObject = useHeadstoneStore((s: any) => s.editingObject);
   const pathname = usePathname();
-  const isSizeSheetVisible = pathname === '/select-size' && size.width < 768;
+  const isSizeSheetVisible =
+    getDesignerStepSlug(pathname) === 'select-size' && size.width < 768;
   const isMobileHeadstoneSizeSelection =
     isSizeSheetVisible && editingObject === 'headstone';
   const isSizeAdjustmentCompact = useMobileNavStore(
@@ -121,7 +123,7 @@ export default function AutoFit({
     // otherwise empty side space without changing ledger or base framing.
     const sheetMargin = isSizeSheetVisible
       ? isMobileHeadstoneSizeSelection
-        ? (isSizeAdjustmentCompact ? 0.88 : 1.08)
+        ? (isSizeAdjustmentCompact ? 0.88 : 0.82)
         : (isSizeAdjustmentCompact ? 1.2 : 1.85)
       : 1;
     const dist = Math.max(dX, dY) * Math.max(1, margin) * sheetMargin + pad;
