@@ -89,7 +89,7 @@
 81. [August 22 Designer Flow: Camera, Inscriptions, and Images](#current-status-2026-08-22--designer-flow-camera-inscriptions-and-images)
 82. [August 23 Mobile Memorial Pages and Home Hero](#current-status-2026-08-23--mobile-memorial-pages-and-home-hero)
 83. [August 24 Mobile Size Sheet and Headstone Camera](#current-status-2026-08-24--mobile-size-sheet-and-headstone-camera)
-84. [August 25 Mobile UI, Product Ordering, and Product-Route Camera Fit](#current-status-2026-08-25--mobile-ui-product-ordering-and-product-route-camera-fit)
+84. [August 25 Mobile UI, Product Ordering, Camera Fit, and Check Price](#current-status-2026-08-25--mobile-ui-product-ordering-camera-fit-and-check-price)
 
 ---
 
@@ -109,8 +109,8 @@ Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, an
 
 Primary files: `components/three/AutoFit.tsx`, `components/three/FullMonumentFit.tsx`, and `components/three/headstone/ShapeSwapper.tsx`.
 
-- `ShapeSwapper` targets the isolated headstone mesh in `/select-size` when `editingObject === 'headstone'`; all other standard products use the usual fit target. Preserve this distinction when adjusting composition.
-- `AutoFit` detects a mobile Headstone sizing selection and uses a tighter fit plus a stronger upward composition shift than Base/Ledger/Kerbset. Current mobile headstone sheet multipliers are `0.82` (normal sheet) and `0.88` (compact sheet), with vertical target shifts `0.74` and `0.42` radii respectively. These values deliberately reclaim horizontal whitespace while keeping the stone above the panel.
+- `ShapeSwapper` targets the isolated headstone mesh in `/select-size` when `editingObject` is `headstone` or `base`; all other standard products use the usual fit target. This keeps the mobile Headstone and Base tabs at the same camera scale.
+- `AutoFit` detects a mobile Headstone or Base sizing selection and uses a tighter fit plus a stronger upward composition shift than Ledger/Kerbset. Current mobile headstone/base sheet multipliers are `0.82` (normal sheet) and `0.88` (compact sheet), with vertical target shifts `0.74` and `0.42` radii respectively. These values deliberately reclaim horizontal whitespace while keeping the stone above the panel.
 - `FullMonumentFit` retains separate framing for close upright/headstone work versus full-plot Ledger/Kerbset work. Its mobile Headstone margins are tighter (`1.32` normal, `1.02` compact); do not apply them to Ledger or Kerbset because the full plot must stay visible.
 - Both fit components depend on `isSizeAdjustmentCompact`, so camera framing recomputes whenever the sheet changes height. Keep camera animation / `frameloop` ownership in `FullMonumentFit`; do not introduce a second camera controller for this state.
 - Product-prefixed routes (for example `/traditional-engraved-headstone/select-size`) must be treated as the same designer step as `/select-size`. Use `getDesignerStepSlug(pathname) === 'select-size'`, not exact pathname matching. Exact checks caused the generic camera controller to overwrite `AutoFit` and left the mobile price pill visible on product-prefixed size routes.
@@ -177,7 +177,7 @@ git diff --check
 
 ---
 
-## Current Status (2026-08-25) — Mobile UI, Product Ordering, and Product-Route Camera Fit
+## Current Status (2026-08-25) — Mobile UI, Product Ordering, Camera Fit, and Check Price
 
 ### Home mobile menu
 
@@ -205,14 +205,25 @@ Primary file: `app/select-shape/_ui/ShapeSelectionGrid.tsx`.
 Primary files: `components/three/AutoFit.tsx`, `components/ThreeScene.tsx`, and `components/three/headstone/ShapeSwapper.tsx`.
 
 - Always derive the active designer step with `getDesignerStepSlug(pathname)`. Do not use `pathname === '/select-size'`: product-prefixed routes bypass that condition.
-- For the mobile Headstone size step, `AutoFit` uses the normal-sheet multiplier `0.82` and compact-sheet multiplier `0.88`; this is the accepted close framing.
-- `CameraController` must yield to `AutoFit` for any `select-size` step, and `ShapeSwapper` must select the isolated headstone target on any of those routes. `ProductNameHeader` likewise hides its mobile price pill during the size step.
+- For the mobile Headstone and Base size tabs, `AutoFit` uses the normal-sheet multiplier `0.82` and compact-sheet multiplier `0.88`; this is the accepted close framing.
+- On every mobile designer step, `CameraController` must yield to `AutoFit`, and `ShapeSwapper` must select the isolated headstone target. This intentionally retains the accepted close Headstone/Base framing from `select-size` for `/inscriptions` and later mobile editor steps. Desktop retains its normal camera controller behavior.
+- Do not reset `OrbitControls` to a generic pose while moving from `select-size` to another mobile designer step: that can either discard the accepted close composition or leave the Headstone outside the viewport. `ProductNameHeader` still hides its mobile price pill only during the size step.
+- Inscription heights remain stored in millimetres. In the imperial inscription Size control, use `formatImperialFractionFromMm()` rather than the general dimension formatter: it displays the nearest `1/8 in` (for example `1 1/2`) and the slider plus/minus controls use the same `3.175 mm` step. The field also accepts decimal, fractional, and mixed-inch input and converts it back to millimetres.
+
+### Check Price on mobile and units
+
+Primary file: `components/CheckPricePanel.tsx`.
+
+- Preserve the saved-design quote's four-column structure — **Product**, **Qty**, **Price**, and **Item Total** — at every breakpoint. On mobile the table is `table-fixed` with 55% / 15% / 15% / 15% columns, compact cell padding, and wrapped content. Do not reintroduce a `min-width` or horizontal overflow: `min-w-[520px]` caused the mobile quote to scroll sideways.
+- Check Price is a presentation layer: all source dimensions remain millimetres, but every visible dimension must respect `unitSystem`. In particular, Images must derive their label with `formatDimensionPair(widthMm, heightMm, unitSystem)` even when the selected image variant provides an mm label in `image-size-config.ts`.
+- Inscription quote rows must not concatenate `${sizeMm}mm`. In imperial mode use `formatImperialFractionFromMm(sizeMm)` and append `in`, matching the editable inscription Size control; metric mode displays rounded millimetres.
 
 ### Verification
 
 ```bash
 pnpm exec eslint app/select-shape/_ui/ShapeSelectionGrid.tsx
 pnpm exec eslint components/three/AutoFit.tsx components/ThreeScene.tsx components/three/headstone/ShapeSwapper.tsx
+pnpm type-check
 git diff --check
 ```
 

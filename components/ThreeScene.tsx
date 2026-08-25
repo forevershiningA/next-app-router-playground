@@ -36,11 +36,14 @@ import { logger } from '#/lib/logger';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
 function CameraController() {
-  const { controls, camera } = useThree();
+  const { controls, camera, size } = useThree();
   const pathname = usePathname();
   const productType = useHeadstoneStore((state) => state.catalog?.product.type);
   const hasInitialized = useRef(false);
+  const wasSelectSizeStep = useRef(false);
   const isSelectSizeStep = getDesignerStepSlug(pathname) === 'select-size';
+  const isMobileDesignerStep =
+    getDesignerStepSlug(pathname) !== null && size.width < 768;
 
   useEffect(() => {
     // FullMonumentFit owns the camera for full monuments.  Waiting for the
@@ -48,8 +51,16 @@ function CameraController() {
     // hydration, before the product type is available.
     // The sizing step owns its camera through AutoFit so the active element
     // remains centred above the mobile configuration sheet.
-    if (isSelectSizeStep || !productType || productType === 'full-monument') return;
-    if (!controls || !camera || hasInitialized.current) return;
+    if (isMobileDesignerStep) {
+      wasSelectSizeStep.current = true;
+      return;
+    }
+    if (!controls || !camera || !productType || productType === 'full-monument') return;
+    if (hasInitialized.current && !wasSelectSizeStep.current) return;
+
+    if ((controls as any).reset) {
+      (controls as any).reset();
+    }
 
     // Mobile leaves room for the bottom controls, so frame the memorial a
     // little higher in the visible viewport instead of letting its base meet
@@ -59,14 +70,12 @@ function CameraController() {
     camera.lookAt(0, targetY, 0);
     camera.updateProjectionMatrix();
 
-    if ((controls as any).reset) {
-      (controls as any).reset();
-    }
     (controls as any).target.set(0, targetY, 0);
     (controls as any).update();
 
     hasInitialized.current = true;
-  }, [controls, camera, isSelectSizeStep, productType]);
+    wasSelectSizeStep.current = false;
+  }, [controls, camera, isMobileDesignerStep, productType]);
 
   return null;
 }

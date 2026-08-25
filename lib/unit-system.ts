@@ -20,6 +20,20 @@ export function formatImperialFromMm(mm: number): string {
   return `${Math.ceil(inches - 1e-9)}"`;
 }
 
+/** Formats a millimetre measurement as the nearest eighth of an inch. */
+export function formatImperialFractionFromMm(mm: number): string {
+  const denominator = 8;
+  const eighths = Math.round((Math.max(0, mm) / 25.4) * denominator);
+  const whole = Math.floor(eighths / denominator);
+  const numerator = eighths % denominator;
+
+  if (numerator === 0) return String(whole);
+
+  const divisor = numerator === 4 ? 4 : numerator % 2 === 0 ? 2 : 1;
+  const fraction = `${numerator / divisor}/${denominator / divisor}`;
+  return whole === 0 ? fraction : `${whole} ${fraction}`;
+}
+
 /**
  * Converts a millimetre value to the whole-number value shown by designer
  * controls. Imperial controls intentionally use the same upward rounding as

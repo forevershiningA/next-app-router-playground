@@ -46,10 +46,11 @@ export default function AutoFit({
   const showBase = useHeadstoneStore((s: any) => s.showBase);
   const editingObject = useHeadstoneStore((s: any) => s.editingObject);
   const pathname = usePathname();
-  const isSizeSheetVisible =
-    getDesignerStepSlug(pathname) === 'select-size' && size.width < 768;
-  const isMobileHeadstoneSizeSelection =
-    isSizeSheetVisible && editingObject === 'headstone';
+  const isMobileDesignerStep =
+    getDesignerStepSlug(pathname) !== null && size.width < 768;
+  const isMobileUprightOrBaseSizeSelection =
+    isMobileDesignerStep &&
+    (editingObject === 'headstone' || editingObject === 'base');
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
   );
@@ -105,9 +106,9 @@ export default function AutoFit({
     // The size sheet uses the lower 44% of a phone screen. Pull the focal
     // point slightly down so the memorial is composed in the remaining area,
     // and leave extra room around it so the base stays above the sheet.
-    if (isSizeSheetVisible) {
+    if (isMobileDesignerStep) {
       toTgt.y -= sphere.radius * (
-        isMobileHeadstoneSizeSelection
+        isMobileUprightOrBaseSizeSelection
           ? (isSizeAdjustmentCompact ? 0.42 : 0.74)
           : (isSizeAdjustmentCompact ? 0.26 : 0.52)
       );
@@ -121,8 +122,8 @@ export default function AutoFit({
     // A headstone is a tall, narrow object. In the size step it is already
     // framed independently of the base, so a tighter mobile margin uses the
     // otherwise empty side space without changing ledger or base framing.
-    const sheetMargin = isSizeSheetVisible
-      ? isMobileHeadstoneSizeSelection
+    const sheetMargin = isMobileDesignerStep
+      ? isMobileUprightOrBaseSizeSelection
         ? (isSizeAdjustmentCompact ? 0.88 : 0.82)
         : (isSizeAdjustmentCompact ? 1.2 : 1.85)
       : 1;
@@ -167,8 +168,8 @@ export default function AutoFit({
     controls,
     showBase,
     invalidate,
-    isSizeSheetVisible,
-    isMobileHeadstoneSizeSelection,
+    isMobileDesignerStep,
+    isMobileUprightOrBaseSizeSelection,
     isSizeAdjustmentCompact,
   ]);
 

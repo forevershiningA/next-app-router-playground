@@ -8,9 +8,8 @@ import {
   isStainlessHeadstoneProduct,
 } from '#/lib/stencil-fonts';
 import {
-  displayLengthValueFromMm,
+  formatImperialFractionFromMm,
   getLengthUnitLabel,
-  lengthValueToMm,
 } from '#/lib/unit-system';
 import { useUnitSystem } from '#/lib/use-unit-system';
 
@@ -18,14 +17,6 @@ const FONTS = data.fonts;
 
 export default function InscriptionEditPanel() {
   const unitSystem = useUnitSystem();
-  const displayMm = React.useCallback(
-    (value: number) => displayLengthValueFromMm(value, unitSystem),
-    [unitSystem],
-  );
-  const inputToMm = React.useCallback(
-    (value: number) => lengthValueToMm(value, unitSystem),
-    [unitSystem],
-  );
   const lines = useHeadstoneStore((s) => s.inscriptions);
   const updateLineStore = useHeadstoneStore((s) => s.updateInscription);
   const addInscriptionLine = useHeadstoneStore((s) => s.addInscriptionLine);
@@ -51,6 +42,18 @@ export default function InscriptionEditPanel() {
   const isEngraved = catalog?.product.formula === 'Engraved';
 
   const active = lines.find((l) => l.id === selectedInscriptionId) ?? null;
+  const inscriptionSizeStepMm = unitSystem === 'imperial' ? 25.4 / 8 : 1;
+  const inscriptionSizeMm = active?.sizeMm ?? 30;
+  const formatInscriptionSize = React.useCallback(
+    (value: number) =>
+      unitSystem === 'imperial'
+        ? formatImperialFractionFromMm(value)
+        : String(Math.round(value)),
+    [unitSystem],
+  );
+  const [sizeInputValue, setSizeInputValue] = React.useState(() =>
+    formatInscriptionSize(inscriptionSizeMm),
+  );
   const defaultFont = getDefaultInscriptionFont(productId, catalog);
   const usesStencilFonts = isStainlessHeadstoneProduct(productId, catalog);
   const availableFonts = React.useMemo(
@@ -106,6 +109,35 @@ export default function InscriptionEditPanel() {
       setSelectedFont(defaultFont);
     }
   }, [active?.font, availableFonts, defaultFont, selectedFont]);
+
+  React.useEffect(() => {
+    setSizeInputValue(formatInscriptionSize(inscriptionSizeMm));
+  }, [active?.id, formatInscriptionSize, inscriptionSizeMm]);
+
+  const parseInscriptionSizeInput = React.useCallback(
+    (value: string): number | null => {
+      const normalized = value.trim().replace(',', '.');
+      if (!normalized) return null;
+
+      if (unitSystem === 'metric') {
+        const millimetres = Number(normalized);
+        return Number.isFinite(millimetres) ? millimetres : null;
+      }
+
+      const match = normalized.match(/^(?:(\d+(?:\.\d+)?)\s+)?(\d+)\/(\d+)$/);
+      if (match) {
+        const whole = Number(match[1] ?? 0);
+        const numerator = Number(match[2]);
+        const denominator = Number(match[3]);
+        if (denominator === 0) return null;
+        return (whole + numerator / denominator) * 25.4;
+      }
+
+      const inches = Number(normalized);
+      return Number.isFinite(inches) ? inches * 25.4 : null;
+    },
+    [unitSystem],
+  );
 
   const setAlign = useCallback(
     (value: 'left' | 'center' | 'right') => {
@@ -387,12 +419,14 @@ export default function InscriptionEditPanel() {
                   onClick={() => {
                     const newVal = Math.max(
                       inscriptionMinHeight,
-                      (active.sizeMm ?? 30) - 1,
+                      inscriptionSizeMm - inscriptionSizeStepMm,
                     );
                     updateLine(active.id, { sizeMm: newVal });
                   }}
                   className={controlButtonClass}
-                  aria-label="Decrease size by 1mm"
+                  aria-label={`Decrease size by ${
+                    unitSystem === 'imperial' ? '1/8 inch' : '1mm'
+                  }`}
                 >
                   <svg
                     className="h-4 w-4"
@@ -409,21 +443,18 @@ export default function InscriptionEditPanel() {
                   </svg>
                 </button>
                 <input
-                  type="number"
-                  min={displayMm(inscriptionMinHeight)}
-                  max={displayMm(inscriptionMaxHeight)}
-                  step={1}
-                  value={displayMm(active.sizeMm ?? 30)}
-                  onChange={(e) =>
-                    updateLine(active.id, { sizeMm: inputToMm(Number(e.target.value)) })
-                  }
+                  type="text"
+                  inputMode="decimal"
+                  value={sizeInputValue}
+                  onChange={(e) => setSizeInputValue(e.target.value)}
                   onBlur={(e) => {
-                    const val = inputToMm(Number(e.target.value));
-                    if (val < inscriptionMinHeight) {
-                      updateLine(active.id, { sizeMm: inscriptionMinHeight });
-                    } else if (val > inscriptionMaxHeight) {
-                      updateLine(active.id, { sizeMm: inscriptionMaxHeight });
-                    }
+                    const valueMm = parseInscriptionSizeInput(e.target.value);
+                    const clampedValue = Math.min(
+                      inscriptionMaxHeight,
+                      Math.max(inscriptionMinHeight, valueMm ?? inscriptionSizeMm),
+                    );
+                    updateLine(active.id, { sizeMm: clampedValue });
+                    setSizeInputValue(formatInscriptionSize(clampedValue));
                   }}
                   className={`${numberInputBaseClass} ${
                     (active.sizeMm ?? 30) < inscriptionMinHeight ||
@@ -437,12 +468,14 @@ export default function InscriptionEditPanel() {
                   onClick={() => {
                     const newVal = Math.min(
                       inscriptionMaxHeight,
-                      (active.sizeMm ?? 30) + 1,
+                      inscriptionSizeMm + inscriptionSizeStepMm,
                     );
                     updateLine(active.id, { sizeMm: newVal });
                   }}
                   className={controlButtonClass}
-                  aria-label="Increase size by 1mm"
+                  aria-label={`Increase size by ${
+                    unitSystem === 'imperial' ? '1/8 inch' : '1mm'
+                  }`}
                 >
                   <svg
                     className="h-4 w-4"
@@ -466,18 +499,18 @@ export default function InscriptionEditPanel() {
             <div className="relative mt-3">
               <input
                 type="range"
-                min={displayMm(inscriptionMinHeight)}
-                max={displayMm(inscriptionMaxHeight)}
-                step={1}
-                value={displayMm(active.sizeMm ?? 30)}
+                min={inscriptionMinHeight}
+                max={inscriptionMaxHeight}
+                step={inscriptionSizeStepMm}
+                value={inscriptionSizeMm}
                 onChange={(e) =>
-                  updateLine(active.id, { sizeMm: inputToMm(Number(e.target.value)) })
+                  updateLine(active.id, { sizeMm: Number(e.target.value) })
                 }
                 className={rangeInputClass}
               />
               <div className={rangeBoundsClass}>
-                <span>{displayMm(inscriptionMinHeight)}{getLengthUnitLabel(unitSystem)}</span>
-                <span>{displayMm(inscriptionMaxHeight)}{getLengthUnitLabel(unitSystem)}</span>
+                <span>{formatInscriptionSize(inscriptionMinHeight)}{getLengthUnitLabel(unitSystem)}</span>
+                <span>{formatInscriptionSize(inscriptionMaxHeight)}{getLengthUnitLabel(unitSystem)}</span>
               </div>
             </div>
           </div>

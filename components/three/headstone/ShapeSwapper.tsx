@@ -153,7 +153,7 @@ export default function ShapeSwapper({
   headstoneMeshRef,
   fitTargetRef,
 }: ShapeSwapperProps) {
-  const { invalidate, controls, camera } = useThree();
+  const { invalidate, controls, camera, size } = useThree();
   const router = useRouter();
 
   const internalHeadstoneMeshRef = React.useRef<THREE.Mesh | null>(null);
@@ -239,6 +239,8 @@ export default function ShapeSwapper({
   const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const loading = useHeadstoneStore((s) => s.loading);
   const pathname = usePathname();
+  const isMobileDesignerStep =
+    getDesignerStepSlug(pathname) !== null && size.width < 768;
   const setLoading = useHeadstoneStore((s) => s.setLoading);
   const productId = useHeadstoneStore((s) => s.productId);
   const catalog = useHeadstoneStore((s) => s.catalog);
@@ -817,8 +819,8 @@ export default function ShapeSwapper({
         ) : (
           <AutoFit
             target={
-              getDesignerStepSlug(pathname) === 'select-size' &&
-              editingObject === 'headstone'
+              isMobileDesignerStep &&
+              (editingObject === 'headstone' || editingObject === 'base')
                 ? (resolvedHeadstoneMeshRef as React.RefObject<THREE.Object3D>)
                 : (fitTargetRef ?? tabletRef)
             }
