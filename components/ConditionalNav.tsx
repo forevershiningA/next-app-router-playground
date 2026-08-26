@@ -52,6 +52,8 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const pathname = usePathname();
   const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
   const setIsMobileMenuOpen = useMobileNavStore((s) => s.setOpen);
+  const pendingMobilePanel = useMobileNavStore((s) => s.pendingPanel);
+  const setPendingMobilePanel = useMobileNavStore((s) => s.setPendingPanel);
   const toggleMobileMenu = useMobileNavStore((s) => s.toggle);
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
@@ -119,6 +121,25 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       setIsMobileMenuOpen(true);
     }
   }, [designerStepSlug, setIsMobileMenuOpen]);
+
+  useEffect(() => {
+    if (
+      !pendingMobilePanel ||
+      pendingMobilePanel !== designerStepSlug ||
+      typeof window === 'undefined' ||
+      window.innerWidth >= 768
+    ) {
+      return;
+    }
+
+    setIsMobileMenuOpen(true);
+    setPendingMobilePanel(null);
+  }, [
+    designerStepSlug,
+    pendingMobilePanel,
+    setIsMobileMenuOpen,
+    setPendingMobilePanel,
+  ]);
 
   useEffect(() => {
     // Keep the mobile drawer open while navigating between in-drawer designer

@@ -9,6 +9,8 @@ import { create } from 'zustand';
 type MobileNavState = {
   isOpen: boolean;
   setOpen: (value: boolean) => void;
+  pendingPanel: string | null;
+  setPendingPanel: (panel: string | null) => void;
   toggle: () => void;
   isSizeAdjustmentCompact: boolean;
   setSizeAdjustmentCompact: (value: boolean) => void;
@@ -17,6 +19,8 @@ type MobileNavState = {
 export const useMobileNavStore = create<MobileNavState>((set) => ({
   isOpen: false,
   setOpen: (value) => set({ isOpen: value }),
+  pendingPanel: null,
+  setPendingPanel: (panel) => set({ pendingPanel: panel }),
   toggle: () => set((s) => ({ isOpen: !s.isOpen })),
   isSizeAdjustmentCompact: false,
   setSizeAdjustmentCompact: (value) => set({ isSizeAdjustmentCompact: value }),

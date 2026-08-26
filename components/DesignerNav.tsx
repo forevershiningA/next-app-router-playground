@@ -221,6 +221,20 @@ function useDesignerNavPanelState({
       window.removeEventListener('openFullscreenPanel', handleOpenPanel);
   }, []);
 
+  useEffect(() => {
+    if (typeof window === 'undefined' || !designerStepSlug) return;
+
+    const pendingPanel = sessionStorage.getItem(
+      'designer:pending-fullscreen-panel',
+    );
+    if (pendingPanel !== designerStepSlug) return;
+
+    sessionStorage.removeItem('designer:pending-fullscreen-panel');
+    setActiveFullscreenPanel(pendingPanel);
+    setDismissedPanelSlug(null);
+    setPanelSource('canvas');
+  }, [designerStepSlug]);
+
   const toggleSection = (slug: string) => {
     setExpandedSections((prev) => ({ ...prev, [slug]: !prev[slug] }));
   };
@@ -440,8 +454,7 @@ export default function DesignerNav() {
     !mustShowMaterialStep &&
     ((catalog?.product?.laser === '1' &&
       !canSelectStainlessGraniteBaseMaterial) ||
-      (isStainlessSteelHeadstone &&
-        !canSelectStainlessGraniteBaseMaterial));
+      (isStainlessSteelHeadstone && !canSelectStainlessGraniteBaseMaterial));
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
@@ -2743,30 +2756,32 @@ export default function DesignerNav() {
           </div>
         )}
 
-        {!isSizeAdjustmentCompact && editingObject === 'headstone' && !isPlaque && (
-          <>
-            <div className="flex gap-2">
-              {[
-                { label: 'Upright', value: 'upright' },
-                { label: 'Slant', value: 'slant' },
-              ].map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() =>
-                    setHeadstoneStyle(option.value as 'upright' | 'slant')
-                  }
-                  className={headstoneStyleTabClass(
-                    headstoneStyle === option.value,
-                  )}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-            <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
-          </>
-        )}
+        {!isSizeAdjustmentCompact &&
+          editingObject === 'headstone' &&
+          !isPlaque && (
+            <>
+              <div className="flex gap-2">
+                {[
+                  { label: 'Upright', value: 'upright' },
+                  { label: 'Slant', value: 'slant' },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() =>
+                      setHeadstoneStyle(option.value as 'upright' | 'slant')
+                    }
+                    className={headstoneStyleTabClass(
+                      headstoneStyle === option.value,
+                    )}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+              <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
+            </>
+          )}
 
         {/* Fixed size slider for Full Colour Plaque (product 32) */}
         {catalog?.product?.id === '32' &&
@@ -2888,31 +2903,33 @@ export default function DesignerNav() {
           <>
             {/* Mobile: pick a single dimension to edit (keeps the sheet short so
                 the product stays visible). Desktop shows all cards at once. */}
-            {!isSizeAdjustmentCompact && <div className="md:hidden">
-              <div className="flex border-b border-white/10">
-                {sizeControlOptions.map((option) => {
-                  const isActive = effectiveSizeControl === option.value;
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => {
-                        setSizeAdjustmentCompact(false);
-                        setActiveSizeControl(
-                          option.value as 'width' | 'height' | 'depth',
-                        );
-                      }}
-                      className={dimensionTabClass(isActive)}
-                    >
-                      {option.label}
-                      {isActive && (
-                        <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#D7B356]" />
-                      )}
-                    </button>
-                  );
-                })}
+            {!isSizeAdjustmentCompact && (
+              <div className="md:hidden">
+                <div className="flex border-b border-white/10">
+                  {sizeControlOptions.map((option) => {
+                    const isActive = effectiveSizeControl === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => {
+                          setSizeAdjustmentCompact(false);
+                          setActiveSizeControl(
+                            option.value as 'width' | 'height' | 'depth',
+                          );
+                        }}
+                        className={dimensionTabClass(isActive)}
+                      >
+                        {option.label}
+                        {isActive && (
+                          <span className="absolute inset-x-2 bottom-0 h-0.5 rounded-full bg-[#D7B356]" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>}
+            )}
             <div
               className={`${dimensionCardClass} ${sizeCardVisibility('width')} ${editingObject === 'base' && !showBase ? 'pointer-events-none opacity-50' : ''}`}
             >
@@ -3789,7 +3806,9 @@ export default function DesignerNav() {
                           ? 'Next: Images'
                           : nextPanelSlug === 'select-additions'
                             ? 'Next: Additions'
-                            : `Next: ${nextPanelTitle ?? 'Continue'}`}
+                            : nextPanelSlug === 'select-size'
+                              ? 'Next: Select Size'
+                              : `Next: ${nextPanelTitle ?? 'Continue'}`}
                   <span aria-hidden="true">→</span>
                 </button>
               </div>,

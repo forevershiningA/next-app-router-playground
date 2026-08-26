@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-25
+**Last Updated:** 2026-08-26
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -90,6 +90,7 @@
 82. [August 23 Mobile Memorial Pages and Home Hero](#current-status-2026-08-23--mobile-memorial-pages-and-home-hero)
 83. [August 24 Mobile Size Sheet and Headstone Camera](#current-status-2026-08-24--mobile-size-sheet-and-headstone-camera)
 84. [August 25 Mobile UI, Product Ordering, Camera Fit, and Check Price](#current-status-2026-08-25--mobile-ui-product-ordering-camera-fit-and-check-price)
+85. [August 26 Traditional Engraved Headstone Shape-to-Material Flow](#current-status-2026-08-26--traditional-engraved-headstone-shape-to-material-flow)
 
 ---
 
@@ -14097,3 +14098,32 @@ git diff --check
 ```
 
 `screen.png` is user-provided visual acceptance evidence. Never overwrite it during testing.
+
+---
+
+## Current Status (2026-08-26) — Traditional Engraved Headstone Shape-to-Material Flow
+
+### Required workflow
+
+Primary files: `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
+
+- Product ID `124` is **Traditional Engraved Headstone**. After its shape is confirmed, the next route must be `/traditional-engraved-headstone/select-material`; do not send this product directly to `select-size`.
+- Apply the same rule in both shape picker variants: the full-page grid (`ShapeSelectionGrid`) and the in-designer selector (`ShapeSelector`). Custom SVG uploads in the full-page picker follow the same flow.
+- The material route must open its material controls automatically. `ShapeSelectionGrid` stores the intended fullscreen panel in `sessionStorage` (`designer:pending-fullscreen-panel`); `DesignerNav` consumes it after the target route becomes active. This avoids losing the open-panel event during navigation.
+- On mobile, do **not** open the drawer before the route transition: it briefly shows the main menu while the material route loads. `useMobileNavStore.pendingPanel` carries the target panel, and `ConditionalNav` opens the bottom sheet only once `getDesignerStepSlug(pathname)` equals that pending panel.
+- The mobile material sheet's primary bottom CTA, when the next step is size, is exactly **`Next: Select Size`**. It continues to navigate to the existing `select-size` step.
+
+### Shape-card layout
+
+Primary files: `app/select-shape/_ui/ShapeSelectionGrid.tsx` and `components/ShapeSelector.tsx`.
+
+- Shape names must use their natural content height. Do not restore `min-h-10` on full-page card headings or `h-12` on the sidebar selector labels; those fixed heights created unnecessary blank space for one-line names.
+
+### Verification
+
+```bash
+pnpm exec eslint lib/mobile-nav-store.ts app/select-shape/_ui/ShapeSelectionGrid.tsx components/ConditionalNav.tsx components/DesignerNav.tsx components/ShapeSelector.tsx
+git diff --check
+```
+
+The ESLint run has no errors; `DesignerNav.tsx` has pre-existing warnings. `screen.png` remains user-provided visual acceptance evidence and must not be overwritten.

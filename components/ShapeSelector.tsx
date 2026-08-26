@@ -79,6 +79,7 @@ export default function ShapeSelector({
   const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
   const productId = useHeadstoneStore((s) => s.productId);
   const isPetRock = productId === '135';
+  const isTraditionalEngravedHeadstone = productId === '124';
   const designerHref = (
     stepSlug: Parameters<typeof getDesignerProductStepHref>[0],
   ) => getDesignerProductStepHref(stepSlug, productId);
@@ -179,7 +180,7 @@ export default function ShapeSelector({
                     </div>
                   )}
                 </div>
-                <div className="flex h-12 items-center justify-center p-2">
+                <div className="flex items-center justify-center p-2">
                   <div
                     className={`line-clamp-2 text-center text-xs ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}
                   >
@@ -209,7 +210,7 @@ export default function ShapeSelector({
       return;
     }
     setShapeUrl(shapeUrl);
-    if (isFullColourPlaque) {
+    if (isFullColourPlaque || isTraditionalEngravedHeadstone) {
       router.push(designerHref('select-material'));
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
@@ -313,7 +314,7 @@ export default function ShapeSelector({
               </div>
 
               {/* Shape Name */}
-              <div className="flex h-12 items-center justify-center p-2">
+              <div className="flex items-center justify-center p-2">
                 <div
                   className={`line-clamp-2 text-center text-xs ${isSelected ? 'text-[#D7B356]' : 'text-slate-200'}`}
                 >

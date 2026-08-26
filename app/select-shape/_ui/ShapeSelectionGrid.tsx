@@ -15,6 +15,7 @@ import { data } from '#/app/_internal/_data';
 import type { ShapeData } from '#/lib/xml-parser';
 import { putSerpentineFirst } from '#/lib/shape-ordering';
 import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
+import { useMobileNavStore } from '#/lib/mobile-nav-store';
 
 type ShapeCategory = { id: string; name: string; description: string };
 
@@ -98,6 +99,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     (catalog === null && fallbackProduct?.category === 'urns');
   const isFullColourPlaque = catalog?.product?.id === '32';
   const isStainlessSteelPlaque = productId === '52';
+  const isTraditionalEngravedHeadstone = productId === '124';
   const isStainlessSteelHeadstone =
     productId === '1' ||
     productId === '23' ||
@@ -109,6 +111,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
 
   const openPanel = (panel: string) => {
     if (typeof window !== 'undefined') {
+      sessionStorage.setItem('designer:pending-fullscreen-panel', panel);
+      if (window.innerWidth < 768) {
+        useMobileNavStore.getState().setPendingPanel(panel);
+      }
       window.dispatchEvent(
         new CustomEvent('openFullscreenPanel', { detail: { panel } }),
       );
@@ -155,7 +161,11 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const handleSelectedShapeContinue = () => {
     if (!currentShapeUrl) return;
 
-    if (isFullColourPlaque || isStainlessSteelPlaque) {
+    if (
+      isFullColourPlaque ||
+      isStainlessSteelPlaque ||
+      isTraditionalEngravedHeadstone
+    ) {
       router.push(designerHref('select-material'));
       openPanel('select-material');
     } else if (isStainlessSteelHeadstone) {
@@ -261,7 +271,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                         )}
                       </div>
                       <div className="flex flex-1 flex-col gap-2.5 p-3.5">
-                        <h3 className="day:text-gray-900 line-clamp-2 min-h-10 text-center text-base leading-tight font-semibold text-white">
+                        <h3 className="day:text-gray-900 line-clamp-2 text-center text-base leading-tight font-semibold text-white">
                           {catalogShape.name}
                         </h3>
                         <p className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2 text-center text-xs text-gray-400">
@@ -303,7 +313,11 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       reader.onload = (e) => {
         const svgDataUrl = e.target?.result as string;
         setShapeUrl(svgDataUrl);
-        if (isFullColourPlaque || isStainlessSteelPlaque) {
+        if (
+          isFullColourPlaque ||
+          isStainlessSteelPlaque ||
+          isTraditionalEngravedHeadstone
+        ) {
           router.push(designerHref('select-material'));
           openPanel('select-material');
         } else if (isStainlessSteelHeadstone) {
@@ -405,7 +419,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                         )}
                       </div>
                       <div className="flex flex-1 flex-col gap-2.5 p-3.5">
-                        <h3 className="day:text-gray-900 line-clamp-2 min-h-10 text-center text-base leading-tight font-semibold text-white">
+                        <h3 className="day:text-gray-900 line-clamp-2 text-center text-base leading-tight font-semibold text-white">
                           {catalogShape.name}
                         </h3>
                         <p className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-2 text-center text-xs text-gray-400">
@@ -652,7 +666,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                     </div>
 
                     <div className="flex flex-1 flex-col gap-2.5 p-3.5">
-                      <h3 className="day:text-gray-900 line-clamp-2 min-h-10 text-center text-base leading-tight font-semibold text-white">
+                      <h3 className="day:text-gray-900 line-clamp-2 text-center text-base leading-tight font-semibold text-white">
                         {shape.name}
                       </h3>
                     </div>
