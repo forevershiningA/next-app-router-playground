@@ -85,7 +85,7 @@ function UnitSystemToggle() {
   const setUnitSystem = useSetUnitSystem();
 
   return (
-    <div className="pointer-events-auto absolute top-4 right-4 z-40 flex rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md lg:top-6 lg:right-6 lg:z-10">
+    <div className="pointer-events-auto absolute top-6 right-6 z-10 hidden rounded-full border border-white/10 bg-black/55 p-1 shadow-lg backdrop-blur-md lg:flex">
       {[
         { value: 'metric' as const, label: 'mm' },
         { value: 'imperial' as const, label: 'in' },
@@ -349,7 +349,7 @@ function ProductNameHeader() {
   ]);
   const sizeLabel = useMemo(
     () =>
-      `${activeDimension.label} · ${formatDimensionPair(activeDimension.widthMm, activeDimension.heightMm, unitSystem)}`,
+      `${activeDimension.label} · ${formatDimensionPair(activeDimension.widthMm, activeDimension.heightMm, unitSystem).replace(/\s*×\s*/g, '×')}`,
     [activeDimension, unitSystem],
   );
   const displayShapeName = useMemo(() => {
@@ -438,7 +438,7 @@ function ProductNameHeader() {
           sheet otherwise covers it while editing a design step. */}
       {activeDimension.widthMm > 0 && activeDimension.heightMm > 0 && (
           <div
-            className={`pointer-events-auto absolute top-[4.75rem] left-1/2 z-40 w-[80vw] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
+            className={`pointer-events-auto absolute top-[4.75rem] left-1/2 z-40 w-[calc(100vw-2rem)] -translate-x-1/2 md:top-auto md:bottom-8 md:w-auto ${
               isSelectSizeStep ? 'hidden md:block' : ''
             }`}
           >
@@ -446,10 +446,9 @@ function ProductNameHeader() {
               type="button"
               onClick={() => setActivePanel('checkprice')}
               aria-label="Open check price breakdown"
-              className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-full border border-white/10 bg-black/80 py-3 font-mono text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4"
-              style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem' }}
+              className="flex w-full cursor-pointer items-center justify-between gap-1.5 rounded-full border border-white/10 bg-black/80 px-4 py-3 font-mono text-base text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4 md:px-5"
             >
-              <span className="flex min-w-0 flex-1 items-center gap-1.5 text-sm leading-none text-white/80">
+              <span className="flex min-w-0 flex-1 items-center gap-1 text-sm leading-none text-white/80 md:gap-1.5">
                 <span className="truncate">{sizeLabel}</span>
                 <svg
                   className="h-3.5 w-3.5 shrink-0 text-white/45"

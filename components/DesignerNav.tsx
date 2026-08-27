@@ -56,10 +56,11 @@ import ConfirmModal from './ConfirmModal';
 import {
   displayLengthValueFromMm,
   formatDimensionPair,
+  formatImperialFractionFromMm,
   getLengthUnitLabel,
   lengthValueToMm,
 } from '#/lib/unit-system';
-import { useUnitSystem } from '#/lib/use-unit-system';
+import { useSetUnitSystem, useUnitSystem } from '#/lib/use-unit-system';
 import { useTheme } from './ThemeProvider';
 import { logger } from '#/lib/logger';
 import { DEFAULT_TEX, TEX_BASE } from '#/lib/headstone-store.types';
@@ -348,6 +349,7 @@ function useDesignerNavPanelState({
 
 export default function DesignerNav() {
   const unitSystem = useUnitSystem();
+  const setUnitSystem = useSetUnitSystem();
   const displayLength = React.useCallback(
     (valueMm: number) => displayLengthValueFromMm(valueMm, unitSystem),
     [unitSystem],
@@ -555,8 +557,11 @@ export default function DesignerNav() {
   const handleBackToMenu = React.useCallback(() => {
     setCropCanvasData(null);
     closeFullscreenPanel();
+    if (designerStepSlug && designerStepSlug !== 'design-menu') {
+      sessionStorage.setItem('designer:return-from-menu', pathname);
+    }
     router.push(designerHref('design-menu'));
-  }, [closeFullscreenPanel, designerHref, router, setCropCanvasData]);
+  }, [closeFullscreenPanel, designerHref, designerStepSlug, pathname, router, setCropCanvasData]);
   const [showSaveDesignModal, setShowSaveDesignModal] = React.useState(false);
   const [showNewDesignConfirm, setShowNewDesignConfirm] = React.useState(false);
   const [isSavingDesign, setIsSavingDesign] = React.useState(false);
@@ -621,6 +626,7 @@ export default function DesignerNav() {
   const [isSizeExpanded, setIsSizeExpanded] = React.useState(false);
   const [showCanvas, setShowCanvas] = React.useState(false);
   const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
+  const [motifHeightStepIndex, setMotifHeightStepIndex] = React.useState(0);
 
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
@@ -1434,6 +1440,44 @@ export default function DesignerNav() {
         : null;
     const clampHeight = (value: number) =>
       Math.min(maxHeight, Math.max(minHeight, value));
+    const formatMotifHeight = (valueMm: number) =>
+      unitSystem === 'imperial'
+        ? formatImperialFractionFromMm(valueMm)
+        : String(Math.round(valueMm));
+    const parseMotifHeight = (value: string) => {
+      const normalized = value.trim().replace(',', '.');
+      if (!normalized) return null;
+      if (unitSystem === 'metric') {
+        const millimetres = Number(normalized);
+        return Number.isFinite(millimetres) ? millimetres : null;
+      }
+      const fraction = normalized.match(
+        /^(?:(\d+(?:\.\d+)?)\s+)?(\d+)\/(\d+)$/,
+      );
+      if (fraction) {
+        const whole = Number(fraction[1] ?? 0);
+        const numerator = Number(fraction[2]);
+        const denominator = Number(fraction[3]);
+        if (denominator === 0) return null;
+        return (whole + numerator / denominator) * 25.4;
+      }
+      const inches = Number(normalized);
+      return Number.isFinite(inches) ? inches * 25.4 : null;
+    };
+    const motifHeightSteps =
+      unitSystem === 'imperial'
+        ? [
+            { label: '1/8 in', mm: 25.4 / 8 },
+            { label: '1/4 in', mm: 25.4 / 4 },
+            { label: '1/2 in', mm: 25.4 / 2 },
+          ]
+        : [
+            { label: '1 mm', mm: 1 },
+            { label: '5 mm', mm: 5 },
+            { label: '10 mm', mm: 10 },
+          ];
+    const motifHeightStep =
+      motifHeightSteps[motifHeightStepIndex] ?? motifHeightSteps[0];
     const showMotifCatalog =
       activeFullscreenPanel === 'select-motifs' &&
       (forceMotifCatalog || !hasActiveMotif);
@@ -1500,7 +1544,9 @@ export default function DesignerNav() {
                         {motifName}
                       </div>
                       <div className="day:text-gray-500 mt-0.5 text-xs text-white/45">
-                        {motifSurface} · {activeOffset.heightMm ?? initHeight}mm
+                        {motifSurface} ·{' '}
+                        {formatMotifHeight(activeOffset.heightMm ?? initHeight)}
+                        {lengthUnit}
                       </div>
                     </div>
                   </div>
@@ -1571,7 +1617,8 @@ export default function DesignerNav() {
                       onClick={() => {
                         if (!selectedMotifId) return;
                         const newVal = clampHeight(
-                          (activeOffset.heightMm ?? initHeight) - 1,
+                          (activeOffset.heightMm ?? initHeight) -
+                            motifHeightStep.mm,
                         );
                         setMotifOffset(selectedMotifId, {
                           ...activeOffset,
@@ -1579,7 +1626,7 @@ export default function DesignerNav() {
                         });
                       }}
                       className={controlButtonClass}
-                      aria-label="Decrease height by 1mm"
+                      aria-label={`Decrease height by ${motifHeightStep.label}`}
                     >
                       <svg
                         className="h-4 w-4"
@@ -1596,16 +1643,16 @@ export default function DesignerNav() {
                       </svg>
                     </button>
                     <input
-                      type="number"
-                      min={minHeight}
-                      max={maxHeight}
-                      step={1}
-                      value={activeOffset.heightMm ?? initHeight}
+                      type="text"
+                      inputMode="decimal"
+                      value={formatMotifHeight(
+                        activeOffset.heightMm ?? initHeight,
+                      )}
                       onChange={(e) => {
                         if (!selectedMotifId) return;
-                        const clampedValue = clampHeight(
-                          Number(e.target.value),
-                        );
+                        const parsedValue = parseMotifHeight(e.target.value);
+                        if (parsedValue === null) return;
+                        const clampedValue = clampHeight(parsedValue);
                         setMotifOffset(selectedMotifId, {
                           ...activeOffset,
                           heightMm: clampedValue,
@@ -1613,9 +1660,9 @@ export default function DesignerNav() {
                       }}
                       onBlur={(e) => {
                         if (!selectedMotifId) return;
-                        const clampedValue = clampHeight(
-                          Number(e.target.value),
-                        );
+                        const parsedValue = parseMotifHeight(e.target.value);
+                        if (parsedValue === null) return;
+                        const clampedValue = clampHeight(parsedValue);
                         setMotifOffset(selectedMotifId, {
                           ...activeOffset,
                           heightMm: clampedValue,
@@ -1633,7 +1680,8 @@ export default function DesignerNav() {
                       onClick={() => {
                         if (!selectedMotifId) return;
                         const newVal = clampHeight(
-                          (activeOffset.heightMm ?? initHeight) + 1,
+                          (activeOffset.heightMm ?? initHeight) +
+                            motifHeightStep.mm,
                         );
                         setMotifOffset(selectedMotifId, {
                           ...activeOffset,
@@ -1641,7 +1689,7 @@ export default function DesignerNav() {
                         });
                       }}
                       className={controlButtonClass}
-                      aria-label="Increase height by 1mm"
+                      aria-label={`Increase height by ${motifHeightStep.label}`}
                     >
                       <svg
                         className="h-4 w-4"
@@ -1658,21 +1706,37 @@ export default function DesignerNav() {
                       </svg>
                     </button>
                     <span className="day:text-gray-600 text-sm font-semibold text-white/60">
-                      mm
+                      {lengthUnit}
                     </span>
                   </div>
+                </div>
+                <div className="grid grid-cols-3 gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+                  {motifHeightSteps.map((step, index) => (
+                    <button
+                      key={step.label}
+                      type="button"
+                      onClick={() => setMotifHeightStepIndex(index)}
+                      className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
+                        motifHeightStepIndex === index
+                          ? 'bg-[#D7B356] text-slate-900 shadow-sm'
+                          : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+                      }`}
+                    >
+                      {step.label}
+                    </button>
+                  ))}
                 </div>
                 <div className="relative">
                   <input
                     type="range"
-                    min={displayLength(minHeight)}
-                    max={displayLength(maxHeight)}
-                    step={1}
-                    value={displayLength(activeOffset.heightMm ?? initHeight)}
+                    min={minHeight}
+                    max={maxHeight}
+                    step={motifHeightStep.mm}
+                    value={activeOffset.heightMm ?? initHeight}
                     onChange={(e) => {
                       if (!selectedMotifId) return;
                       const clampedValue = clampHeight(
-                        displayLengthToMm(Number(e.target.value)),
+                        Number(e.target.value),
                       );
                       setMotifOffset(selectedMotifId, {
                         ...activeOffset,
@@ -1683,11 +1747,11 @@ export default function DesignerNav() {
                   />
                   <div className={rangeBoundsClass}>
                     <span>
-                      {displayLength(minHeight)}
+                      {formatMotifHeight(minHeight)}
                       {lengthUnit}
                     </span>
                     <span>
-                      {displayLength(maxHeight)}
+                      {formatMotifHeight(maxHeight)}
                       {lengthUnit}
                     </span>
                   </div>
@@ -3680,8 +3744,8 @@ export default function DesignerNav() {
             isMobileNavOpen &&
             createPortal(
               <div className="fixed inset-x-0 top-0 z-[45] border-b border-[#3a2a1c] bg-[#120c08]/90 px-3.5 py-2.5 shadow-xl shadow-black/25 backdrop-blur-md md:hidden">
-                <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2">
-                  <div className="flex min-w-0 items-center gap-1.5">
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+                  <div className="flex min-w-0 items-center justify-start gap-1.5">
                     <button
                       onClick={handleBackToMenu}
                       className="inline-flex items-center gap-1 rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f]"
@@ -3713,51 +3777,27 @@ export default function DesignerNav() {
                       {mobileFullscreenPanelTitle}
                     </p>
                   </div>
-                  <div className="hidden">
-                    <button
-                      onClick={() =>
-                        prevPanelSlug && handleNavigateToPanel(prevPanelSlug)
-                      }
-                      disabled={!prevPanelSlug}
-                      className="inline-flex items-center gap-1 rounded-md border border-[#3a2a1c] bg-[#1b120c]/80 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:border-[#D7B356]/45 hover:bg-[#24170f] disabled:cursor-not-allowed disabled:opacity-30"
-                    >
-                      <svg
-                        className="h-3 w-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 19l-7-7 7-7"
-                        />
-                      </svg>
-                      Prev
-                    </button>
-                    <button
-                      onClick={() =>
-                        nextPanelSlug && handleNavigateToPanel(nextPanelSlug)
-                      }
-                      disabled={!nextPanelSlug || isImageCropActive}
-                      className="animate-guided-next-gold-flash inline-flex items-center gap-1 rounded-md border border-[#D7B356]/80 bg-[#D7B356] px-2.5 py-1.5 text-xs font-semibold text-black transition-colors hover:border-[#E8C96E] hover:bg-[#E8C96E] disabled:cursor-not-allowed disabled:border-[#3a2a1c] disabled:bg-[#1b120c]/80 disabled:text-white disabled:opacity-30"
-                    >
-                      {isImageCropActive ? 'Finish Crop' : 'Next'}
-                      <svg
-                        className="h-3 w-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
+                  <div className="flex justify-end">
+                    <div className="flex rounded-full border border-white/10 bg-black/35 p-0.5">
+                      {[
+                        { value: 'metric' as const, label: 'mm' },
+                        { value: 'imperial' as const, label: 'in' },
+                      ].map((option) => (
+                        <button
+                          key={option.value}
+                          type="button"
+                          onClick={() => setUnitSystem(option.value)}
+                          aria-pressed={unitSystem === option.value}
+                          className={`h-7 min-w-9 rounded-full px-2 text-[10px] font-semibold tracking-wide uppercase transition-colors ${
+                            unitSystem === option.value
+                              ? 'bg-[#cfac6c] text-slate-950'
+                              : 'text-white/65 hover:bg-white/10 hover:text-white'
+                          }`}
+                        >
+                          {option.label}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 {currentPanelIndex >= 0 && (

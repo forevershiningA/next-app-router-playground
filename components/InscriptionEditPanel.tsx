@@ -39,7 +39,6 @@ export default function InscriptionEditPanel() {
   const isEngraved = catalog?.product.formula === 'Engraved';
 
   const active = lines.find((l) => l.id === selectedInscriptionId) ?? null;
-  const inscriptionSizeStepMm = unitSystem === 'imperial' ? 25.4 / 8 : 1;
   const inscriptionSizeMm = active?.sizeMm ?? 30;
   const formatInscriptionSize = React.useCallback(
     (value: number) =>
@@ -70,7 +69,21 @@ export default function InscriptionEditPanel() {
     'left' | 'center' | 'right'
   >('center');
   const [isEditingText, setIsEditingText] = React.useState(false);
+  const [sizeStepIndex, setSizeStepIndex] = React.useState(0);
   const [nudgeStepIndex, setNudgeStepIndex] = React.useState(1);
+  const sizeSteps =
+    unitSystem === 'imperial'
+      ? [
+          { label: '1/8 in', mm: 25.4 / 8 },
+          { label: '1/4 in', mm: 25.4 / 4 },
+          { label: '1/2 in', mm: 25.4 / 2 },
+        ]
+      : [
+          { label: '1 mm', mm: 1 },
+          { label: '5 mm', mm: 5 },
+          { label: '10 mm', mm: 10 },
+        ];
+  const inscriptionSizeStep = sizeSteps[sizeStepIndex] ?? sizeSteps[0];
   const nudgeSteps =
     unitSystem === 'imperial'
       ? [
@@ -167,33 +180,42 @@ export default function InscriptionEditPanel() {
   const rangeBoundsClass =
     'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
   const AlignControls = (
-    <div className="grid w-full grid-cols-[auto_repeat(3,minmax(0,1fr))] items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
-      <span className="px-2 text-xs font-semibold text-white/60 day:text-gray-600">
-        Align
-      </span>
-      {(
-        [
-          { value: 'left', label: 'Left' },
-          { value: 'center', label: 'Center' },
-          { value: 'right', label: 'Right' },
-        ] as const
-      ).map((opt) => {
-        const isActive = currentAlign === opt.value;
-        return (
-          <button
-            key={opt.value}
-            type="button"
-            onClick={() => setAlign(opt.value)}
-            className={`w-full rounded-md px-2 py-1.5 text-center text-xs font-medium transition-colors ${
-              isActive
-                ? 'bg-[#D7B356] text-slate-900 shadow-sm'
-                : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
-            }`}
-          >
-            {opt.label}
-          </button>
-        );
-      })}
+    <div className="flex w-full items-center justify-between gap-2 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+      <div className="grid min-w-0 flex-1 grid-cols-3 gap-1">
+        {(
+          [
+            { value: 'left', label: 'Left' },
+            { value: 'center', label: 'Center' },
+            { value: 'right', label: 'Right' },
+          ] as const
+        ).map((opt) => {
+          const isActive = currentAlign === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setAlign(opt.value)}
+              className={`w-full rounded-md px-2 py-1.5 text-center text-xs font-medium transition-colors ${
+                isActive
+                  ? 'bg-[#D7B356] text-slate-900 shadow-sm'
+                  : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+              }`}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+      {isEditingText && (
+        <button
+          type="button"
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={finishTextEditing}
+          className="shrink-0 rounded-md bg-[#D7B356] px-3 py-1.5 text-xs font-semibold text-slate-950 md:hidden"
+        >
+          Done
+        </button>
+      )}
     </div>
   );
 
@@ -222,16 +244,7 @@ export default function InscriptionEditPanel() {
   return (
     <div className="space-y-3">
       <div className={sectionCardClass}>
-        <div className="mb-2 space-y-2">
-          {AlignControls}
-          {isEditingText && (
-            <div className="flex justify-end md:hidden">
-              <button type="button" onMouseDown={(event) => event.preventDefault()} onClick={finishTextEditing} className="rounded-md bg-[#D7B356] px-3 py-1.5 text-xs font-semibold text-slate-950 md:hidden">
-                Done
-              </button>
-            </div>
-          )}
-        </div>
+        <div className="mb-2">{AlignControls}</div>
         <textarea
           id="inscriptionTextInput"
           rows={3}
@@ -255,7 +268,7 @@ export default function InscriptionEditPanel() {
               text: selectedInscriptionId ? '' : activeInscriptionText,
             })
           }
-          className="mt-2 inline-flex items-center gap-1 rounded-lg border border-[#D7B356]/70 px-2.5 py-1.5 text-xs font-semibold text-[#f3d48f] transition-colors hover:bg-[#D7B356]/15"
+          className="mt-2 flex w-full items-center justify-center gap-2 rounded-lg border border-[#D7B356] bg-[#D7B356] px-4 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#E4C778]"
         >
           <span aria-hidden="true">+</span>
           Add Inscription
@@ -363,14 +376,12 @@ export default function InscriptionEditPanel() {
                   onClick={() => {
                     const newVal = Math.max(
                       inscriptionMinHeight,
-                      inscriptionSizeMm - inscriptionSizeStepMm,
+                      inscriptionSizeMm - inscriptionSizeStep.mm,
                     );
                     updateLine(active.id, { sizeMm: newVal });
                   }}
                   className={controlButtonClass}
-                  aria-label={`Decrease size by ${
-                    unitSystem === 'imperial' ? '1/8 inch' : '1mm'
-                  }`}
+                  aria-label={`Decrease size by ${inscriptionSizeStep.label}`}
                 >
                   <svg
                     className="h-4 w-4"
@@ -412,14 +423,12 @@ export default function InscriptionEditPanel() {
                   onClick={() => {
                     const newVal = Math.min(
                       inscriptionMaxHeight,
-                      inscriptionSizeMm + inscriptionSizeStepMm,
+                      inscriptionSizeMm + inscriptionSizeStep.mm,
                     );
                     updateLine(active.id, { sizeMm: newVal });
                   }}
                   className={controlButtonClass}
-                  aria-label={`Increase size by ${
-                    unitSystem === 'imperial' ? '1/8 inch' : '1mm'
-                  }`}
+                  aria-label={`Increase size by ${inscriptionSizeStep.label}`}
                 >
                   <svg
                     className="h-4 w-4"
@@ -440,12 +449,28 @@ export default function InscriptionEditPanel() {
                 </span>
               </div>
             </div>
+            <div className="mt-2 grid grid-cols-3 gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+              {sizeSteps.map((step, index) => (
+                <button
+                  key={step.label}
+                  type="button"
+                  onClick={() => setSizeStepIndex(index)}
+                  className={`rounded-md px-2 py-1.5 text-xs font-medium transition-colors ${
+                    sizeStepIndex === index
+                      ? 'bg-[#D7B356] text-slate-900 shadow-sm'
+                      : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+                  }`}
+                >
+                  {step.label}
+                </button>
+              ))}
+            </div>
             <div className="relative mt-3">
               <input
                 type="range"
                 min={inscriptionMinHeight}
                 max={inscriptionMaxHeight}
-                step={inscriptionSizeStepMm}
+                step={inscriptionSizeStep.mm}
                 value={inscriptionSizeMm}
                 onChange={(e) =>
                   updateLine(active.id, { sizeMm: Number(e.target.value) })

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { GlobalNav } from '#/ui/global-nav';
 import DesignsTreeNav from '#/components/DesignsTreeNav';
 import DesignerNav from '#/components/DesignerNav';
@@ -50,6 +50,7 @@ const DRAWER_PANEL_TITLES: Record<string, string> = {
 
 export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const pathname = usePathname();
+  const router = useRouter();
   const isMobileMenuOpen = useMobileNavStore((s) => s.isOpen);
   const setIsMobileMenuOpen = useMobileNavStore((s) => s.setOpen);
   const pendingMobilePanel = useMobileNavStore((s) => s.pendingPanel);
@@ -78,6 +79,18 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
     designerStepSlug != null &&
     designerStepSlug !== 'design-menu' &&
     DRAWER_PANEL_SLUGS.has(designerStepSlug);
+  const closeMobileDesignerMenu = () => {
+    if (designerStepSlug === 'design-menu') {
+      const returnPath = sessionStorage.getItem('designer:return-from-menu');
+      if (returnPath && getDesignerStepSlug(returnPath) !== 'design-menu') {
+        sessionStorage.removeItem('designer:return-from-menu');
+        setIsMobileMenuOpen(true);
+        router.replace(returnPath);
+        return;
+      }
+    }
+    setIsMobileMenuOpen(false);
+  };
   const mobileSheetTitle =
     designerStepSlug === 'select-images' && isImageCropActive
       ? 'Image Crop Section'
@@ -122,19 +135,14 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   }, [setIsMobileMenuOpen, setSizeAdjustmentCompact]);
 
   useEffect(() => {
-    if (
-      (designerStepSlug !== 'select-size' &&
-        designerStepSlug !== 'select-material' &&
-        designerStepSlug !== 'select-motifs') ||
-      typeof window === 'undefined'
-    ) {
+    if (!useBottomSheet || typeof window === 'undefined') {
       return;
     }
 
     if (window.innerWidth < 768) {
       setIsMobileMenuOpen(true);
     }
-  }, [designerStepSlug, setIsMobileMenuOpen]);
+  }, [useBottomSheet, designerStepSlug, setIsMobileMenuOpen]);
 
   useEffect(() => {
     if (
@@ -242,6 +250,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       setSizeAdjustmentCompact,
       isBottomSheetCollapsed,
       setBottomSheetCollapsed,
+      closeMobileDesignerMenu,
     );
   }
 
@@ -257,6 +266,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       setSizeAdjustmentCompact,
       isBottomSheetCollapsed,
       setBottomSheetCollapsed,
+      closeMobileDesignerMenu,
     );
   }
 
@@ -273,11 +283,12 @@ function renderDesignerSidebar(
   setSizeAdjustmentCompact: (v: boolean) => void,
   isBottomSheetCollapsed: boolean,
   setBottomSheetCollapsed: (v: boolean) => void,
+  closeMobileDesignerMenu: () => void,
 ) {
   // Main menu / non-step routes open as a full-height drawer (no canvas to
   // reveal). Editing sub-panels use a compact, canvas-revealing bottom sheet
   // so the product stays visible while controls scroll inside the sheet.
-  const sheetHeightClass = isBottomSheetCollapsed
+  const sheetHeightClass = useBottomSheet && isBottomSheetCollapsed
     ? 'h-[52px] max-h-[52px]'
     : isFixedSizeSheet && isSizeAdjustmentCompact
     ? 'h-[26dvh] max-h-[26dvh]'
@@ -348,9 +359,17 @@ function renderDesignerSidebar(
               <button
                 type="button"
                 className="block w-full cursor-pointer text-left"
-                aria-expanded={!isBottomSheetCollapsed}
-                aria-label={`${isBottomSheetCollapsed ? 'Expand' : 'Collapse'} ${mobileSheetTitle} panel`}
-                onClick={() => setBottomSheetCollapsed(!isBottomSheetCollapsed)}
+                aria-expanded={useBottomSheet ? !isBottomSheetCollapsed : undefined}
+                aria-label={
+                  useBottomSheet
+                    ? `${isBottomSheetCollapsed ? 'Expand' : 'Collapse'} ${mobileSheetTitle} panel`
+                    : `Close ${mobileSheetTitle}`
+                }
+                onClick={() =>
+                  useBottomSheet
+                    ? setBottomSheetCollapsed(!isBottomSheetCollapsed)
+                    : closeMobileDesignerMenu()
+                }
               >
                 <span
                   className="mx-auto mt-2 block h-4 w-16 rounded-full p-1.5"
@@ -370,7 +389,7 @@ function renderDesignerSidebar(
         <div
           className={clsx(
             'relative min-h-0 flex-1 overflow-hidden',
-            isBottomSheetCollapsed && 'hidden md:block',
+            useBottomSheet && isBottomSheetCollapsed && 'hidden md:block',
           )}
         >
           <DesignerNav />

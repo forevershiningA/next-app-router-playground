@@ -73,7 +73,7 @@ export default function AdditionSelector({ additions }: Props) {
 
   return (
     <div className="flex h-full min-h-0 flex-col gap-3">
-      <div className="flex shrink-0 gap-1.5 rounded-lg border border-white/10 bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
+      <div className="grid shrink-0 grid-cols-[0.85fr_1fr_0.85fr_1.35fr] gap-1.5 overflow-hidden rounded-lg border border-white/10 bg-[#0A0A0A] p-1 day:border-gray-200 day:bg-gray-100">
         {CATEGORY_FILTERS.map((filter) => {
           const isActive = category === filter.id;
           return (
@@ -81,7 +81,7 @@ export default function AdditionSelector({ additions }: Props) {
               key={filter.id}
               type="button"
               onClick={() => setCategory(filter.id)}
-              className={`min-w-0 flex-1 rounded-md px-2.5 py-2 text-xs font-semibold transition-all ${
+              className={`min-w-0 overflow-hidden rounded-md px-1.5 py-2 text-[11px] font-semibold transition-all sm:px-2.5 sm:text-xs ${
                 isActive
                   ? 'bg-[#D7B356] text-black shadow-md'
                   : 'text-slate-300 hover:bg-slate-800 hover:text-white day:text-gray-500 day:hover:bg-white day:hover:text-gray-900'

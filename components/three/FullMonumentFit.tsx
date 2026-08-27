@@ -83,6 +83,11 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
   );
+  const isBottomSheetCollapsed = useMobileNavStore(
+    (s) => s.isBottomSheetCollapsed,
+  );
+  const isMobileSheetCompact =
+    isSizeAdjustmentCompact || isBottomSheetCollapsed;
   const selectedInscriptionSurface = useHeadstoneStore((s) =>
     selectedInscriptionId
       ? (s.inscriptions.find((line) => line.id === selectedInscriptionId)?.target ?? 'headstone')
@@ -198,7 +203,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       // Leave enough vertical room to fit the entire upright, base and statue
       // in the uncovered portion of a mobile viewport.
       const margin = mobileSheetVisible
-        ? (isSizeAdjustmentCompact
+        ? (isMobileSheetCompact
           ? (zoomToHeadstone ? 1.02 : 1.15)
           : (zoomToHeadstone ? 1.32 : 1.5))
         // Ledger and kerbset are edited in the context of the full plot.
@@ -235,7 +240,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
       // framing target down in world space so the monument appears centred in
       // the uncovered upper portion instead of behind the bottom sheet.
       const mobileVerticalBias = mobileSheetVisible
-        ? sizeVec.y * (isSizeAdjustmentCompact
+        ? sizeVec.y * (isMobileSheetCompact
           ? (zoomToHeadstone ? 0.24 : 0.2)
           : (zoomToHeadstone ? 0.46 : 0.4))
         : size.width < 768
@@ -486,7 +491,7 @@ export default function FullMonumentFit({ trigger }: FullMonumentFitProps) {
     productId, shapeUrl, showLedger, showKerbset, selected, editingObject, activePanel, trigger,
     selectedInscriptionId, selectedAdditionId, selectedMotifId, selectedImageId,
     selectedInscriptionSurface, selectedAdditionSurface, selectedMotifSurface, selectedImageSurface,
-    isMaterialChange, isMobileNavOpen, isSizeAdjustmentCompact, camera, size.width, size.height, controls, invalidate, scene, setFrameloop, fitKey,
+    isMaterialChange, isMobileNavOpen, isMobileSheetCompact, camera, size.width, size.height, controls, invalidate, scene, setFrameloop, fitKey,
     shouldFocusHeadstone, shouldFocusBase, shouldZoomIn,
   ]);
 

@@ -725,7 +725,61 @@ export default function CheckPricePanel() {
           </div>
 
           <div className="check-price-panel__table flex-1 overflow-x-hidden overflow-y-auto">
-            <table className="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
+            <div className="divide-y divide-white/10 md:hidden print:hidden">
+              {!activeCatalog ? (
+                <div className="px-5 py-10 text-center text-sm text-white/70">
+                  Loading pricing data...
+                </div>
+              ) : (
+                quoteRows.map((row) => (
+                  <article key={row.id} className="bg-white/[0.015]">
+                    <div className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3 px-4 py-4">
+                      <span className="text-xs font-semibold text-white/50">
+                        Product
+                      </span>
+                      <div className="min-w-0 text-xs">
+                        <p className="font-semibold leading-snug text-white">
+                          {row.title}
+                        </p>
+                        {row.details.map((detail) => (
+                          <p
+                            key={detail}
+                            className="mt-0.5 leading-snug break-words text-white/65"
+                          >
+                            {detail}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+                    {[
+                      { label: 'Qty', value: String(row.qty) },
+                      { label: 'Price', value: formatMoney(row.unitPrice) },
+                      { label: 'Item Total', value: formatMoney(row.total) },
+                    ].map((item) => (
+                      <div
+                        key={item.label}
+                        className="grid grid-cols-[4.75rem_minmax(0,1fr)] gap-3 border-t border-white/10 px-4 py-2.5 text-xs"
+                      >
+                        <span className="font-semibold text-white/50">
+                          {item.label}
+                        </span>
+                        <span
+                          className={`whitespace-nowrap ${
+                            item.label === 'Item Total'
+                              ? 'font-semibold text-[#D4A84F]'
+                              : 'text-white/80'
+                          }`}
+                        >
+                          {item.value}
+                        </span>
+                      </div>
+                    ))}
+                  </article>
+                ))
+              )}
+            </div>
+
+            <table className="hidden w-full table-fixed border-collapse text-left text-xs md:table sm:text-sm print:table">
               <thead className="sticky top-0 z-10">
                 <tr className="border-b border-white/10 bg-[#180c06] text-white/55">
                   <th className="w-[55%] px-3 py-3 font-semibold sm:px-6 sm:py-4">

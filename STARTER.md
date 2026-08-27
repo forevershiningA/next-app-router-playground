@@ -14143,13 +14143,17 @@ Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, an
 - `useMobileNavStore.isBottomSheetCollapsed` is the single source of truth for generic-sheet collapse state. Reset it when the active designer step changes. Keep `/select-size` on its separate `isSizeAdjustmentCompact` behaviour because that compact mode also changes which sizing controls are rendered.
 - The generic top bar uses the same handle geometry and spacing as the size sheet: a `64px × 16px` handle hit area with the centred grey indicator. Keep the hit area above the content layer so the indicator itself does not intercept the toggle click.
 - Hide the fixed mobile **Previous / Next** navigation while the generic sheet is collapsed, but keep the collapsed top bar visible.
-- Direct mobile entry or browser refresh must open the appropriate panel on `select-size`, `select-material`, and `select-motifs`, including product-prefixed routes. This also covers **Back to My Design** returning from authentication to `select-motifs`.
+- Direct mobile entry or browser refresh must open every route that uses a bottom sheet, including `inscriptions`, `select-images`, `select-additions`, and product-prefixed routes. This also covers **Back to My Design** returning from authentication to `select-motifs`.
+- `AutoFit` and `FullMonumentFit` treat either `isSizeAdjustmentCompact` or `isBottomSheetCollapsed` as a compact mobile viewport. Collapsing and restoring any bottom sheet must therefore refit both the distance and vertical camera target, not only change the panel height.
+- The full-height `design-menu` must never use the generic `52px` collapsed state. Before navigating to it, `DesignerNav` stores the complete source pathname in `sessionStorage` under `designer:return-from-menu`. Closing Menu replaces the route with that pathname, preserving both the previous step and product prefix; for example, `/traditional-engraved-headstone/select-images` returns to that exact step.
 
 ### Step labels, additions layout, and price chip
 
 - When the next step is motifs, the mobile CTA label is **`Next: Motifs`**. From motifs to the authentication/save flow it is **`Next: Save Design`**.
 - On mobile `/select-additions`, the catalogue wrapper has a viewport-relative minimum height so its scrollable image list reaches the fixed CTA area instead of ending early and leaving an empty band.
-- The mobile size/price chip keeps the price on one line and prevents it from shrinking. The size side may truncate when space is limited; the decimal part of the price must remain inside the chip.
+- The additions category rail uses proportionally sized grid columns and `overflow-hidden`: the longer **Applications** label receives more width and cannot paint outside the rounded container.
+- The mobile size/price chip keeps the price on one line and prevents it from shrinking. It uses `calc(100vw - 2rem)`, `16px` horizontal padding, compact internal gaps, and no spaces around `×`, allowing labels such as `600×600 mm` to fit while retaining 14px dimension text and 16px price text.
+- The mobile step header is a symmetric `1fr / auto / 1fr` grid: **Menu** on the left, the genuinely viewport-centred **STEP X OF Y** block in the middle, and the **MM / IN** switch on the right. The separate canvas unit switch is desktop-only. `MobileHeader` contains the same unit switch when the bottom sheet is not open.
 
 ### Inscription editor layout
 
@@ -14157,14 +14161,29 @@ Primary file: `components/InscriptionEditPanel.tsx`.
 
 - Do not render inscription chips at the top of the editor; they consume scarce sheet height and duplicate selection context.
 - The redundant **Inscription Text** label is removed. The textarea is followed immediately by **`+ Add Inscription`**.
-- The **Align** control spans the full available width as an equal four-column row: label, Left, Center, and Right. Its active option uses the same compact selected-state treatment as the surrounding editor controls.
-- On mobile, **Done** sits below the alignment row so it does not reduce the alignment control's width.
+- The alignment row has no redundant **Align** label. Left, Center, and Right occupy the left portion; while the textarea is focused, **Done** appears on the right in the same row and calls `blur()` to dismiss the virtual keyboard without moving the content below it.
+- **`+ Add Inscription`** is a full-width gold primary action.
+- Inscription Size offers selectable `1/8 in`, `1/4 in`, and `1/2 in` increments in imperial mode (`1 mm`, `5 mm`, and `10 mm` in metric). The selected increment drives minus, plus, and the range input; stored values remain millimetres.
+
+### Motif and image units
+
+Primary files: `components/DesignerNav.tsx` and `components/ImageSelector.tsx`.
+
+- Motif Height respects the active unit system in the selected-item summary, editable value, unit suffix, slider bounds, and controls. Imperial values use nearest-eighth formatting and selectable `1/8 in`, `1/4 in`, and `1/2 in` increments; metric uses `1 mm`, `5 mm`, and `10 mm`.
+- Image fixed-size options and selected-image dimensions use fractional inches in imperial mode. Flexible image height, slider bounds, and position nudge labels also follow the active unit system. The store continues to use millimetres and `mm-center` coordinates internally.
+
+### Mobile Check Price quote
+
+Primary file: `components/CheckPricePanel.tsx`. Related but independent output files: `lib/pdf-generator.ts`, `lib/design-quote.ts`, and `lib/email/templates/components/QuoteTable.tsx`.
+
+- On mobile, do not squeeze Product, Qty, Price, and Item Total into four columns. Each quote item uses the legacy-inspired stacked layout: a full-width Product/details block followed by separate labelled Qty, Price, and Item Total rows. Monetary values use `whitespace-nowrap`, and Item Total receives the gold emphasis.
+- Desktop retains the four-column table. The responsive modal markup is screen-only; PDF generation and React Email use separate renderers and were deliberately not changed. Keep the information order consistent across all three outputs even when their layouts differ.
 
 ### Verification
 
 ```bash
-pnpm exec eslint components/ConditionalNav.tsx components/DesignerNav.tsx components/ThreeScene.tsx components/InscriptionEditPanel.tsx lib/mobile-nav-store.ts
+pnpm exec eslint components/AdditionSelector.tsx components/CheckPricePanel.tsx components/ConditionalNav.tsx components/DesignerNav.tsx components/ImageSelector.tsx components/InscriptionEditPanel.tsx components/MobileHeader.tsx components/ThreeScene.tsx components/three/AutoFit.tsx components/three/FullMonumentFit.tsx lib/mobile-nav-store.ts
 git diff --check
 ```
 
-The targeted ESLint runs have no errors; existing warnings in `DesignerNav.tsx` and `ThreeScene.tsx` are unrelated. `screen.png` remains the user-provided visual reference and must not be overwritten.
+The targeted ESLint runs have no errors; existing warnings in the legacy designer components are unrelated. `screen.png` remains the user-provided visual reference and must not be overwritten.

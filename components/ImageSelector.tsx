@@ -25,6 +25,11 @@ import {
 } from '#/lib/image-pricing';
 import { logger } from '#/lib/logger';
 import { CheckCircleIcon } from '@heroicons/react/24/outline';
+import {
+  formatImperialFractionFromMm,
+  getLengthUnitLabel,
+} from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 interface ImageSelectorProps {
   onImageSelect?: (imageType: AdditionData) => void;
@@ -62,6 +67,43 @@ function snapImageRotation(value: number) {
 }
 
 export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
+  const unitSystem = useUnitSystem();
+  const lengthUnit = getLengthUnitLabel(unitSystem);
+  const formatImageLength = useCallback(
+    (valueMm: number) =>
+      unitSystem === 'imperial'
+        ? formatImperialFractionFromMm(valueMm)
+        : String(Math.round(valueMm)),
+    [unitSystem],
+  );
+  const formatImageSize = useCallback(
+    (widthMm: number, heightMm: number) =>
+      `${formatImageLength(widthMm)} × ${formatImageLength(heightMm)} ${lengthUnit}`,
+    [formatImageLength, lengthUnit],
+  );
+  const parseImageLength = useCallback(
+    (value: string): number | null => {
+      const normalized = value.trim().replace(',', '.');
+      if (!normalized) return null;
+      if (unitSystem === 'metric') {
+        const millimetres = Number(normalized);
+        return Number.isFinite(millimetres) ? millimetres : null;
+      }
+      const fraction = normalized.match(
+        /^(?:(\d+(?:\.\d+)?)\s+)?(\d+)\/(\d+)$/,
+      );
+      if (fraction) {
+        const whole = Number(fraction[1] ?? 0);
+        const numerator = Number(fraction[2]);
+        const denominator = Number(fraction[3]);
+        if (denominator === 0) return null;
+        return (whole + numerator / denominator) * 25.4;
+      }
+      const inches = Number(normalized);
+      return Number.isFinite(inches) ? inches * 25.4 : null;
+    },
+    [unitSystem],
+  );
   // Store hooks
   const selectedImageId = useHeadstoneStore((s) => s.selectedImageId);
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
@@ -123,7 +165,21 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const [feedbackTone, setFeedbackTone] = useState<'error' | 'info'>('error');
   const [updatingImageId, setUpdatingImageId] = useState<string | null>(null);
-  const [nudgeStepMm, setNudgeStepMm] = useState<1 | 5 | 10>(5);
+  const [nudgeStepIndex, setNudgeStepIndex] = useState(1);
+  const nudgeSteps =
+    unitSystem === 'imperial'
+      ? [
+          { label: '1/8 in', mm: 25.4 / 8 },
+          { label: '1/4 in', mm: 25.4 / 4 },
+          { label: '1/2 in', mm: 25.4 / 2 },
+        ]
+      : [
+          { label: '1 mm', mm: 1 },
+          { label: '5 mm', mm: 5 },
+          { label: '10 mm', mm: 10 },
+        ];
+  const nudgeStep = nudgeSteps[nudgeStepIndex] ?? nudgeSteps[1];
+  const nudgeStepMm = nudgeStep.mm;
 
   const catalog = useHeadstoneStore((s) => s.catalog);
   const productId = useHeadstoneStore((s) => s.productId);
@@ -859,11 +915,11 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               <select value={currentSizeVariant} onChange={(e) => applyFixedSizeVariant(Number(e.target.value))} className="min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]">
                 {sizeOptions.map((size, index) => (
                   <option key={size.label} value={index + 1}>
-                    {Math.round(size.height * aspectRatio)} × {size.height} mm
+                    {formatImageSize(size.height * aspectRatio, size.height)}
                   </option>
                 ))}
               </select>
-            ) : <span className="min-w-0 flex-1 text-sm font-medium text-white/65">{Math.round(selectedImage.widthMm)} × {Math.round(selectedImage.heightMm)} mm</span>}
+            ) : <span className="min-w-0 flex-1 text-sm font-medium text-white/65">{formatImageSize(selectedImage.widthMm, selectedImage.heightMm)}</span>}
             <button type="button" onClick={() => { removeImage(selectedImageId); setSelectedImageId(null); setActivePanel(null); }} aria-label="Remove image" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-red-400/35 text-red-200 transition-colors hover:bg-red-500/15">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.9 12.1A2 2 0 0116.1 21H7.9a2 2 0 01-2-1.9L5 7m4 4v6m6-6v6m-7-10V4h8v3M4 7h16" /></svg>
             </button>
@@ -1073,7 +1129,10 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     <button
                       type="button"
                       onClick={() =>
-                        applyFlexibleHeight(currentFlexibleHeight - 10)
+                        applyFlexibleHeight(
+                          currentFlexibleHeight -
+                            (unitSystem === 'imperial' ? 25.4 / 8 : 10),
+                        )
                       }
                       className={controlButtonClass}
                       aria-label="Decrease height"
@@ -1093,20 +1152,18 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       </svg>
                     </button>
                     <input
-                      type="number"
-                      min={flexibleMinHeight}
-                      max={flexibleMaxHeight}
-                      step={1}
-                      value={currentFlexibleHeight}
+                      type="text"
+                      inputMode="decimal"
+                      value={formatImageLength(currentFlexibleHeight)}
                       onChange={(e) => {
-                        const val = Number(e.target.value);
-                        if (!Number.isNaN(val)) {
+                        const val = parseImageLength(e.target.value);
+                        if (val !== null) {
                           applyFlexibleHeight(val);
                         }
                       }}
                       onBlur={(e) => {
-                        const val = Number(e.target.value);
-                        if (Number.isNaN(val)) {
+                        const val = parseImageLength(e.target.value);
+                        if (val === null) {
                           applyFlexibleHeight(flexibleInitHeight);
                         } else {
                           applyFlexibleHeight(val);
@@ -1115,12 +1172,15 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                       className={`${numberInputBaseClass} w-20`}
                     />
                     <span className="day:text-gray-600 text-sm font-semibold text-white/70">
-                      mm
+                      {lengthUnit}
                     </span>
                     <button
                       type="button"
                       onClick={() =>
-                        applyFlexibleHeight(currentFlexibleHeight + 10)
+                        applyFlexibleHeight(
+                          currentFlexibleHeight +
+                            (unitSystem === 'imperial' ? 25.4 / 8 : 10),
+                        )
                       }
                       className={controlButtonClass}
                       aria-label="Increase height"
@@ -1146,7 +1206,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     type="range"
                     min={flexibleMinHeight}
                     max={flexibleMaxHeight}
-                    step={1}
+                    step={unitSystem === 'imperial' ? 25.4 / 8 : 1}
                     value={currentFlexibleHeight}
                     onChange={(e) =>
                       applyFlexibleHeight(Number(e.target.value))
@@ -1154,8 +1214,8 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                     className={rangeInputClass}
                   />
                   <div className={rangeBoundsClass}>
-                    <span>{flexibleMinHeight} mm</span>
-                    <span>{flexibleMaxHeight} mm</span>
+                    <span>{formatImageLength(flexibleMinHeight)} {lengthUnit}</span>
+                    <span>{formatImageLength(flexibleMaxHeight)} {lengthUnit}</span>
                   </div>
                 </div>
               </>
@@ -1181,7 +1241,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
               <button type="button" aria-label="Move image left" onClick={() => updateSelectedImagePosition((selectedImage.xPos ?? 0) - imagePositionStep, selectedImage.yPos ?? 0)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m15 18-6-6 6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </button>
-              <button type="button" onClick={() => setNudgeStepMm((step) => step === 1 ? 5 : step === 5 ? 10 : 1)} className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15">{nudgeStepMm} mm</button>
+              <button type="button" onClick={() => setNudgeStepIndex((index) => (index + 1) % nudgeSteps.length)} className="rounded px-1.5 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15">{nudgeStep.label}</button>
               <button type="button" aria-label="Move image right" onClick={() => updateSelectedImagePosition((selectedImage.xPos ?? 0) + imagePositionStep, selectedImage.yPos ?? 0)} className={`${controlButtonClass} active:scale-90 active:bg-[#D7B356]/20`}>
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5}><path d="m9 18 6-6-6-6" strokeLinecap="round" strokeLinejoin="round" /></svg>
               </button>
@@ -1899,7 +1959,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                             {img.typeName}
                           </div>
                           <div className="day:text-gray-500 text-xs text-gray-400">
-                            {img.widthMm} × {img.heightMm} mm
+                            {formatImageSize(img.widthMm, img.heightMm)}
                           </div>
                         </div>
                       </div>

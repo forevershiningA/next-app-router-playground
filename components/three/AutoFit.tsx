@@ -54,6 +54,11 @@ export default function AutoFit({
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
   );
+  const isBottomSheetCollapsed = useMobileNavStore(
+    (s) => s.isBottomSheetCollapsed,
+  );
+  const isMobileSheetCompact =
+    isSizeAdjustmentCompact || isBottomSheetCollapsed;
 
   const lastDims = React.useRef({ h: heightMm, w: widthMm });
   const animId = React.useRef<number | null>(null);
@@ -109,8 +114,8 @@ export default function AutoFit({
     if (isMobileDesignerStep) {
       toTgt.y -= sphere.radius * (
         isMobileUprightOrBaseSizeSelection
-          ? (isSizeAdjustmentCompact ? 0.42 : 0.74)
-          : (isSizeAdjustmentCompact ? 0.26 : 0.52)
+          ? (isMobileSheetCompact ? 0.42 : 0.74)
+          : (isMobileSheetCompact ? 0.26 : 0.52)
       );
     }
 
@@ -124,8 +129,8 @@ export default function AutoFit({
     // otherwise empty side space without changing ledger or base framing.
     const sheetMargin = isMobileDesignerStep
       ? isMobileUprightOrBaseSizeSelection
-        ? (isSizeAdjustmentCompact ? 0.88 : 0.82)
-        : (isSizeAdjustmentCompact ? 1.2 : 1.85)
+        ? (isMobileSheetCompact ? 0.88 : 0.82)
+        : (isMobileSheetCompact ? 1.2 : 1.85)
       : 1;
     const dist = Math.max(dX, dY) * Math.max(1, margin) * sheetMargin + pad;
 
@@ -170,7 +175,7 @@ export default function AutoFit({
     invalidate,
     isMobileDesignerStep,
     isMobileUprightOrBaseSizeSelection,
-    isSizeAdjustmentCompact,
+    isMobileSheetCompact,
   ]);
 
   /** Compute a deterministic pose given current camera view direction. */
