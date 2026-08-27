@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-26
+**Last Updated:** 2026-08-27
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -91,6 +91,7 @@
 83. [August 24 Mobile Size Sheet and Headstone Camera](#current-status-2026-08-24--mobile-size-sheet-and-headstone-camera)
 84. [August 25 Mobile UI, Product Ordering, Camera Fit, and Check Price](#current-status-2026-08-25--mobile-ui-product-ordering-camera-fit-and-check-price)
 85. [August 26 Traditional Engraved Headstone Shape-to-Material Flow](#current-status-2026-08-26--traditional-engraved-headstone-shape-to-material-flow)
+86. [August 27 Mobile Designer Bottom Sheets and Inscription Editor](#current-status-2026-08-27--mobile-designer-bottom-sheets-and-inscription-editor)
 
 ---
 
@@ -14108,6 +14109,7 @@ git diff --check
 Primary files: `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
 
 - Product ID `124` is **Traditional Engraved Headstone**. After its shape is confirmed, the next route must be `/traditional-engraved-headstone/select-material`; do not send this product directly to `select-size`.
+- Resolve this product from either the Zustand `productId` or `catalog.product.id`. During desktop catalog hydration those values can briefly differ; relying on only `productId` can incorrectly skip the material step.
 - Apply the same rule in both shape picker variants: the full-page grid (`ShapeSelectionGrid`) and the in-designer selector (`ShapeSelector`). Custom SVG uploads in the full-page picker follow the same flow.
 - The material route must open its material controls automatically. `ShapeSelectionGrid` stores the intended fullscreen panel in `sessionStorage` (`designer:pending-fullscreen-panel`); `DesignerNav` consumes it after the target route becomes active. This avoids losing the open-panel event during navigation.
 - On mobile, do **not** open the drawer before the route transition: it briefly shows the main menu while the material route loads. `useMobileNavStore.pendingPanel` carries the target panel, and `ConditionalNav` opens the bottom sheet only once `getDesignerStepSlug(pathname)` equals that pending panel.
@@ -14127,3 +14129,42 @@ git diff --check
 ```
 
 The ESLint run has no errors; `DesignerNav.tsx` has pre-existing warnings. `screen.png` remains user-provided visual acceptance evidence and must not be overwritten.
+
+---
+
+## Current Status (2026-08-27) — Mobile Designer Bottom Sheets and Inscription Editor
+
+### Generic mobile bottom sheets
+
+Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
+
+- The generic mobile designer panel now follows the interaction established by `/select-size`: tapping anywhere on its top bar, including the small grey handle, collapses or restores the panel.
+- The generic sheet has no separate **X** close button. Its collapsed state is a `52px`-high visible tab; never hide the entire sheet when collapsing it, because the top bar is the affordance used to restore it.
+- `useMobileNavStore.isBottomSheetCollapsed` is the single source of truth for generic-sheet collapse state. Reset it when the active designer step changes. Keep `/select-size` on its separate `isSizeAdjustmentCompact` behaviour because that compact mode also changes which sizing controls are rendered.
+- The generic top bar uses the same handle geometry and spacing as the size sheet: a `64px × 16px` handle hit area with the centred grey indicator. Keep the hit area above the content layer so the indicator itself does not intercept the toggle click.
+- Hide the fixed mobile **Previous / Next** navigation while the generic sheet is collapsed, but keep the collapsed top bar visible.
+- Direct mobile entry or browser refresh must open the appropriate panel on `select-size`, `select-material`, and `select-motifs`, including product-prefixed routes. This also covers **Back to My Design** returning from authentication to `select-motifs`.
+
+### Step labels, additions layout, and price chip
+
+- When the next step is motifs, the mobile CTA label is **`Next: Motifs`**. From motifs to the authentication/save flow it is **`Next: Save Design`**.
+- On mobile `/select-additions`, the catalogue wrapper has a viewport-relative minimum height so its scrollable image list reaches the fixed CTA area instead of ending early and leaving an empty band.
+- The mobile size/price chip keeps the price on one line and prevents it from shrinking. The size side may truncate when space is limited; the decimal part of the price must remain inside the chip.
+
+### Inscription editor layout
+
+Primary file: `components/InscriptionEditPanel.tsx`.
+
+- Do not render inscription chips at the top of the editor; they consume scarce sheet height and duplicate selection context.
+- The redundant **Inscription Text** label is removed. The textarea is followed immediately by **`+ Add Inscription`**.
+- The **Align** control spans the full available width as an equal four-column row: label, Left, Center, and Right. Its active option uses the same compact selected-state treatment as the surrounding editor controls.
+- On mobile, **Done** sits below the alignment row so it does not reduce the alignment control's width.
+
+### Verification
+
+```bash
+pnpm exec eslint components/ConditionalNav.tsx components/DesignerNav.tsx components/ThreeScene.tsx components/InscriptionEditPanel.tsx lib/mobile-nav-store.ts
+git diff --check
+```
+
+The targeted ESLint runs have no errors; existing warnings in `DesignerNav.tsx` and `ThreeScene.tsx` are unrelated. `screen.png` remains the user-provided visual reference and must not be overwritten.

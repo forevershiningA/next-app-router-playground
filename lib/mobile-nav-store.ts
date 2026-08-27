@@ -14,6 +14,8 @@ type MobileNavState = {
   toggle: () => void;
   isSizeAdjustmentCompact: boolean;
   setSizeAdjustmentCompact: (value: boolean) => void;
+  isBottomSheetCollapsed: boolean;
+  setBottomSheetCollapsed: (value: boolean) => void;
 };
 
 export const useMobileNavStore = create<MobileNavState>((set) => ({
@@ -24,4 +26,6 @@ export const useMobileNavStore = create<MobileNavState>((set) => ({
   toggle: () => set((s) => ({ isOpen: !s.isOpen })),
   isSizeAdjustmentCompact: false,
   setSizeAdjustmentCompact: (value) => set({ isSizeAdjustmentCompact: value }),
+  isBottomSheetCollapsed: false,
+  setBottomSheetCollapsed: (value) => set({ isBottomSheetCollapsed: value }),
 }));

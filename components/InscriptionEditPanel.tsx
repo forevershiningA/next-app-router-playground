@@ -25,9 +25,6 @@ export default function InscriptionEditPanel() {
   const selectedInscriptionId = useHeadstoneStore(
     (s) => s.selectedInscriptionId,
   );
-  const setSelectedInscriptionId = useHeadstoneStore(
-    (s) => s.setSelectedInscriptionId,
-  );
   const inscriptionMinHeight = useHeadstoneStore((s) => s.inscriptionMinHeight);
   const inscriptionMaxHeight = useHeadstoneStore((s) => s.inscriptionMaxHeight);
   const activeInscriptionText = useHeadstoneStore(
@@ -170,35 +167,33 @@ export default function InscriptionEditPanel() {
   const rangeBoundsClass =
     'mt-1 flex w-full justify-between text-xs text-white/35 day:text-gray-400';
   const AlignControls = (
-    <div className="flex items-center gap-1 rounded-md border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
-      <span className="px-1.5 text-xs font-semibold text-white/60 day:text-gray-600">
+    <div className="grid w-full grid-cols-[auto_repeat(3,minmax(0,1fr))] items-center gap-1 rounded-lg border border-white/10 bg-white/[0.04] p-1 day:border-gray-200 day:bg-gray-100">
+      <span className="px-2 text-xs font-semibold text-white/60 day:text-gray-600">
         Align
       </span>
-      <div className="flex gap-1">
-        {(
-          [
-            { value: 'left', label: 'Left' },
-            { value: 'center', label: 'Center' },
-            { value: 'right', label: 'Right' },
-          ] as const
-        ).map((opt) => {
-          const isActive = currentAlign === opt.value;
-          return (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => setAlign(opt.value)}
-              className={`rounded px-2 py-1 text-xs font-medium transition-colors ${
-                isActive
-                  ? 'bg-[#D7B356] text-slate-900'
-                  : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
-              }`}
-            >
-              {opt.label}
-            </button>
-          );
-        })}
-      </div>
+      {(
+        [
+          { value: 'left', label: 'Left' },
+          { value: 'center', label: 'Center' },
+          { value: 'right', label: 'Right' },
+        ] as const
+      ).map((opt) => {
+        const isActive = currentAlign === opt.value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => setAlign(opt.value)}
+            className={`w-full rounded-md px-2 py-1.5 text-center text-xs font-medium transition-colors ${
+              isActive
+                ? 'bg-[#D7B356] text-slate-900 shadow-sm'
+                : 'text-white/60 hover:bg-white/10 hover:text-white day:text-gray-600'
+            }`}
+          >
+            {opt.label}
+          </button>
+        );
+      })}
     </div>
   );
 
@@ -226,79 +221,16 @@ export default function InscriptionEditPanel() {
 
   return (
     <div className="space-y-3">
-      {lines.length > 0 && (
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {lines.map((line, index) => {
-          const isActive = line.id === selectedInscriptionId;
-          const preview = line.text.trim().replace(/\s+/g, ' ');
-
-          return (
-            <div
-              key={line.id}
-              className={`flex shrink-0 items-center gap-1 rounded-lg border px-1 py-1 text-xs font-semibold transition-colors ${
-                isActive
-                  ? 'border-[#D7B356] bg-[#D7B356]/15 text-[#f3d48f]'
-                  : 'border-white/15 bg-white/[0.05] text-white/70 hover:border-white/30 hover:text-white'
-              }`}
-            >
-              <button
-                type="button"
-                onClick={() => setSelectedInscriptionId(line.id)}
-                className="max-w-36 truncate rounded px-2 py-1"
-                aria-pressed={isActive}
-              >
-                {preview ? `Inscription ${index + 1}: ${preview}` : `Inscription ${index + 1}`}
-              </button>
-              <button
-                type="button"
-                onClick={() => deleteInscription(line.id)}
-                className="inline-flex h-6 w-6 items-center justify-center rounded text-base leading-none text-current/70 transition-colors hover:bg-white/10 hover:text-white"
-                aria-label={`Delete inscription ${index + 1}`}
-              >
-                ×
-              </button>
-            </div>
-          );
-          })}
-          <button
-            type="button"
-            onClick={() =>
-              addInscriptionLine({ text: selectedInscriptionId ? '' : activeInscriptionText })
-            }
-            className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-[#D7B356]/70 px-2.5 py-1.5 text-xs font-semibold text-[#f3d48f] transition-colors hover:bg-[#D7B356]/15"
-          >
-            <span aria-hidden="true">+</span>
-            Add Inscription
-          </button>
-        </div>
-      )}
-
-      {lines.length === 0 && (
-        <div className="flex overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <button
-            type="button"
-            onClick={() => addInscriptionLine({ text: activeInscriptionText })}
-            className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-[#D7B356]/70 px-2.5 py-1.5 text-xs font-semibold text-[#f3d48f] transition-colors hover:bg-[#D7B356]/15"
-          >
-            <span aria-hidden="true">+</span>
-            Add Inscription
-          </button>
-        </div>
-      )}
-
       <div className={sectionCardClass}>
-        <div className="mb-2 flex items-center gap-2">
-          <label htmlFor="inscriptionTextInput" className="text-sm font-semibold text-slate-100 day:text-gray-800">
-            Inscription Text
-          </label>
-          <div className="ml-auto flex items-center gap-2">
-            {AlignControls}
-            {isEditingText && (
+        <div className="mb-2 space-y-2">
+          {AlignControls}
+          {isEditingText && (
+            <div className="flex justify-end md:hidden">
               <button type="button" onMouseDown={(event) => event.preventDefault()} onClick={finishTextEditing} className="rounded-md bg-[#D7B356] px-3 py-1.5 text-xs font-semibold text-slate-950 md:hidden">
                 Done
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <textarea
           id="inscriptionTextInput"
@@ -316,6 +248,18 @@ export default function InscriptionEditPanel() {
           spellCheck={false}
           autoCorrect="off"
         />
+        <button
+          type="button"
+          onClick={() =>
+            addInscriptionLine({
+              text: selectedInscriptionId ? '' : activeInscriptionText,
+            })
+          }
+          className="mt-2 inline-flex items-center gap-1 rounded-lg border border-[#D7B356]/70 px-2.5 py-1.5 text-xs font-semibold text-[#f3d48f] transition-colors hover:bg-[#D7B356]/15"
+        >
+          <span aria-hidden="true">+</span>
+          Add Inscription
+        </button>
       </div>
 
       {/* Tabs for font and color (only show tabs if color is available) */}

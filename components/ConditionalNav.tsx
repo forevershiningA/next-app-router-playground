@@ -61,6 +61,12 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const setSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.setSizeAdjustmentCompact,
   );
+  const isBottomSheetCollapsed = useMobileNavStore(
+    (s) => s.isBottomSheetCollapsed,
+  );
+  const setBottomSheetCollapsed = useMobileNavStore(
+    (s) => s.setBottomSheetCollapsed,
+  );
   const isImageCropActive = useHeadstoneStore((s) => Boolean(s.cropCanvasData));
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
@@ -84,6 +90,9 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       setSizeAdjustmentCompact(false);
     }
   }, [designerStepSlug, setSizeAdjustmentCompact]);
+  useEffect(() => {
+    setBottomSheetCollapsed(false);
+  }, [designerStepSlug, setBottomSheetCollapsed]);
   useEffect(() => {
     const handler = () => {
       if (typeof window === 'undefined') {
@@ -113,7 +122,12 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   }, [setIsMobileMenuOpen, setSizeAdjustmentCompact]);
 
   useEffect(() => {
-    if (designerStepSlug !== 'select-size' || typeof window === 'undefined') {
+    if (
+      (designerStepSlug !== 'select-size' &&
+        designerStepSlug !== 'select-material' &&
+        designerStepSlug !== 'select-motifs') ||
+      typeof window === 'undefined'
+    ) {
       return;
     }
 
@@ -226,6 +240,8 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       isFixedSizeSheet,
       isSizeAdjustmentCompact,
       setSizeAdjustmentCompact,
+      isBottomSheetCollapsed,
+      setBottomSheetCollapsed,
     );
   }
 
@@ -239,6 +255,8 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
       isFixedSizeSheet,
       isSizeAdjustmentCompact,
       setSizeAdjustmentCompact,
+      isBottomSheetCollapsed,
+      setBottomSheetCollapsed,
     );
   }
 
@@ -253,11 +271,15 @@ function renderDesignerSidebar(
   isFixedSizeSheet: boolean,
   isSizeAdjustmentCompact: boolean,
   setSizeAdjustmentCompact: (v: boolean) => void,
+  isBottomSheetCollapsed: boolean,
+  setBottomSheetCollapsed: (v: boolean) => void,
 ) {
   // Main menu / non-step routes open as a full-height drawer (no canvas to
   // reveal). Editing sub-panels use a compact, canvas-revealing bottom sheet
   // so the product stays visible while controls scroll inside the sheet.
-  const sheetHeightClass = isFixedSizeSheet && isSizeAdjustmentCompact
+  const sheetHeightClass = isBottomSheetCollapsed
+    ? 'h-[52px] max-h-[52px]'
+    : isFixedSizeSheet && isSizeAdjustmentCompact
     ? 'h-[26dvh] max-h-[26dvh]'
     : useBottomSheet
     ? 'h-[44dvh] max-h-[44dvh]'
@@ -315,30 +337,42 @@ function renderDesignerSidebar(
               >
                 <span className="block h-1 w-full rounded-full bg-white/25" />
               </button>
+            ) : null}
+            {isFixedSizeSheet ? (
+              <div className="min-h-9 px-4 pt-1.5 pb-0.5">
+                <p className="day:text-gray-800 min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
+                  {mobileSheetTitle}
+                </p>
+              </div>
             ) : (
-              <div
-                className="mx-auto mt-2 h-1 w-10 rounded-full bg-white/25"
-                aria-hidden="true"
-              />
-            )}
-            <div className="flex min-h-9 items-center gap-3 px-4 pt-1.5 pb-0.5">
-              <p className="day:text-gray-800 min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
-                {mobileSheetTitle}
-              </p>
-              {!isFixedSizeSheet && (
-                <button
-                  type="button"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  aria-label="Close panel"
-                  className="ml-auto inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-white/15 text-lg leading-none text-white/70 transition-colors hover:border-[#D7B356]/60 hover:bg-white/5 hover:text-white"
+              <button
+                type="button"
+                className="block w-full cursor-pointer text-left"
+                aria-expanded={!isBottomSheetCollapsed}
+                aria-label={`${isBottomSheetCollapsed ? 'Expand' : 'Collapse'} ${mobileSheetTitle} panel`}
+                onClick={() => setBottomSheetCollapsed(!isBottomSheetCollapsed)}
+              >
+                <span
+                  className="mx-auto mt-2 block h-4 w-16 rounded-full p-1.5"
+                  aria-hidden="true"
                 >
-                  ×
-                </button>
-              )}
-            </div>
+                  <span className="block h-1 w-full rounded-full bg-white/25" />
+                </span>
+                <span className="block min-h-9 px-4 pt-1.5 pb-0.5">
+                  <span className="day:text-gray-800 block min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
+                    {mobileSheetTitle}
+                  </span>
+                </span>
+              </button>
+            )}
           </div>
         )}
-        <div className="relative min-h-0 flex-1 overflow-hidden">
+        <div
+          className={clsx(
+            'relative min-h-0 flex-1 overflow-hidden',
+            isBottomSheetCollapsed && 'hidden md:block',
+          )}
+        >
           <DesignerNav />
         </div>
       </div>

@@ -99,7 +99,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     (catalog === null && fallbackProduct?.category === 'urns');
   const isFullColourPlaque = catalog?.product?.id === '32';
   const isStainlessSteelPlaque = productId === '52';
-  const isTraditionalEngravedHeadstone = productId === '124';
+  const isTraditionalEngravedHeadstone =
+    productId === '124' || catalog?.product?.id === '124';
   const isStainlessSteelHeadstone =
     productId === '1' ||
     productId === '23' ||

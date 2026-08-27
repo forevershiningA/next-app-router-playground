@@ -446,13 +446,13 @@ function ProductNameHeader() {
               type="button"
               onClick={() => setActivePanel('checkprice')}
               aria-label="Open check price breakdown"
-              className="flex w-full cursor-pointer items-center justify-between gap-3 rounded-full border border-white/10 bg-black/80 py-3 font-mono text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4"
-              style={{ paddingLeft: '1.25rem', paddingRight: '1.725rem' }}
+              className="flex w-full cursor-pointer items-center justify-between gap-2 rounded-full border border-white/10 bg-black/80 py-3 font-mono text-white shadow-xl backdrop-blur-md transition-colors hover:bg-black/90 sm:gap-4"
+              style={{ paddingLeft: '1.25rem', paddingRight: '1.25rem' }}
             >
-              <span className="flex shrink-0 items-center gap-1.5 text-sm leading-none whitespace-nowrap text-white/80">
-                {sizeLabel}
+              <span className="flex min-w-0 flex-1 items-center gap-1.5 text-sm leading-none text-white/80">
+                <span className="truncate">{sizeLabel}</span>
                 <svg
-                  className="h-3.5 w-3.5 text-white/45"
+                  className="h-3.5 w-3.5 shrink-0 text-white/45"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -466,8 +466,10 @@ function ProductNameHeader() {
                   />
                 </svg>
               </span>
-              <div className="h-4 w-px bg-white/20"></div>
-              <span className="font-bold text-[#f3d48f]">{priceLabel}</span>
+              <div className="h-4 w-px shrink-0 bg-white/20"></div>
+              <span className="shrink-0 whitespace-nowrap font-bold text-[#f3d48f]">
+                {priceLabel}
+              </span>
             </button>
           </div>
         )}

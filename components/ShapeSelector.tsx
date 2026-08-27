@@ -72,6 +72,7 @@ export default function ShapeSelector({
   const isFullColourPlaque = useHeadstoneStore(
     (s) => s.catalog?.product?.id === '32',
   );
+  const catalogProductId = useHeadstoneStore((s) => s.catalog?.product?.id);
   const catalogShapes = useHeadstoneStore(
     (s) => s.catalog?.product.shapes ?? [],
   );
@@ -79,7 +80,9 @@ export default function ShapeSelector({
   const setShowInsetContour = useHeadstoneStore((s) => s.setShowInsetContour);
   const productId = useHeadstoneStore((s) => s.productId);
   const isPetRock = productId === '135';
-  const isTraditionalEngravedHeadstone = productId === '124';
+  const isTraditionalEngravedHeadstone =
+    productId === '124' ||
+    catalogProductId === '124';
   const designerHref = (
     stepSlug: Parameters<typeof getDesignerProductStepHref>[0],
   ) => getDesignerProductStepHref(stepSlug, productId);

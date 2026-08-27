@@ -523,6 +523,9 @@ export default function DesignerNav() {
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
   );
+  const isBottomSheetCollapsed = useMobileNavStore(
+    (s) => s.isBottomSheetCollapsed,
+  );
   const setSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.setSizeAdjustmentCompact,
   );
@@ -1376,7 +1379,7 @@ export default function DesignerNav() {
         ) : null}
 
         {showAdditionCatalog && !hasActiveAddition && (
-          <div className="day:border-gray-200 day:bg-white min-h-0 flex-1 rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15">
+          <div className="day:border-gray-200 day:bg-white min-h-[calc(44dvh-148px)] flex-1 rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 md:min-h-0">
             <AdditionSelector additions={additionsList} />
           </div>
         )}
@@ -3774,6 +3777,7 @@ export default function DesignerNav() {
           {isMounted &&
             isMobileNavOpen &&
             !isSizeAdjustmentCompact &&
+            !isBottomSheetCollapsed &&
             createPortal(
               <div className="fixed inset-x-0 bottom-0 z-[46] flex gap-2 border-t border-[#3a2a1c] bg-[#120c08]/95 px-3 py-2.5 shadow-[0_-10px_24px_rgba(0,0,0,0.3)] backdrop-blur-md md:hidden">
                 <button
@@ -3806,6 +3810,10 @@ export default function DesignerNav() {
                           ? 'Next: Images'
                           : nextPanelSlug === 'select-additions'
                             ? 'Next: Additions'
+                            : nextPanelSlug === 'select-motifs'
+                              ? 'Next: Motifs'
+                              : nextPanelSlug === 'save-design'
+                                ? 'Next: Save Design'
                             : nextPanelSlug === 'select-size'
                               ? 'Next: Select Size'
                               : `Next: ${nextPanelTitle ?? 'Continue'}`}
