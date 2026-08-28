@@ -159,9 +159,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     }
   };
 
-  const handleSelectedShapeContinue = () => {
-    if (!currentShapeUrl) return;
-
+  const continueWithSelectedShape = () => {
     if (
       isFullColourPlaque ||
       isStainlessSteelPlaque ||
@@ -176,6 +174,16 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     } else {
       router.push(designerHref('select-size'));
     }
+  };
+
+  const handleSelectedShapeContinue = () => {
+    if (!currentShapeUrl) return;
+    continueWithSelectedShape();
+  };
+
+  const handleShapeContinue = (shape: Shape) => {
+    handleShapeSelect(shape);
+    continueWithSelectedShape();
   };
 
   // Pet rock shapes come from catalog XML. They are fixed-size plaque shapes,
@@ -640,38 +648,54 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                   : `/shapes/headstones/${shape.image}`;
                 const isSelected = currentShapeUrl === shapeUrl;
                 return (
-                  <button
+                  <article
                     key={shape.id}
-                    onClick={() => handleShapeSelect(shape)}
-                    aria-pressed={isSelected}
-                    className={`group day:bg-white relative flex h-full cursor-pointer flex-col overflow-hidden rounded-lg border bg-[#171717] text-left transition-all ${
+                    className={`group day:bg-white relative flex h-full flex-col overflow-hidden rounded-lg border bg-[#171717] transition-all ${
                       isSelected
                         ? 'border-[#cfac6c] shadow-lg shadow-[#cfac6c]/20'
                         : 'day:border-gray-200 day:hover:border-[#cfac6c]/60 border-white/12 hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10'
                     }`}
                   >
-                    <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_35%_20%,#4a4a4a_0%,#2b2b2b_44%,#151515_100%)]">
-                      <Image
-                        src={shapeUrl}
-                        alt={shape.name}
-                        fill
-                        className="day:brightness-100 day:invert-0 object-contain p-8 brightness-0 drop-shadow-[0_8px_6px_rgba(0,0,0,0.55)] invert-[68%] transition-transform duration-300 group-hover:scale-105"
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                      />
-                      {isSelected && (
-                        <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
-                          <CheckCircleIcon className="h-4 w-4" />
-                          Selected
-                        </span>
-                      )}
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleShapeSelect(shape)}
+                      aria-pressed={isSelected}
+                      className="flex w-full flex-1 cursor-pointer flex-col text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c]"
+                    >
+                      <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_35%_20%,#4a4a4a_0%,#2b2b2b_44%,#151515_100%)]">
+                        <Image
+                          src={shapeUrl}
+                          alt={shape.name}
+                          fill
+                          className="day:brightness-100 day:invert-0 object-contain p-8 brightness-0 drop-shadow-[0_8px_6px_rgba(0,0,0,0.55)] invert-[68%] transition-transform duration-300 group-hover:scale-105"
+                          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        />
+                        {isSelected && (
+                          <span className="absolute top-3 right-3 inline-flex items-center gap-1 rounded-full bg-[#cfac6c] px-2.5 py-1 text-xs font-semibold text-slate-950 shadow-lg">
+                            <CheckCircleIcon className="h-4 w-4" />
+                            Selected
+                          </span>
+                        )}
+                      </div>
 
-                    <div className="flex flex-1 flex-col gap-2.5 p-3.5">
-                      <h3 className="day:text-gray-900 line-clamp-2 text-center text-base leading-tight font-semibold text-white">
-                        {shape.name}
-                      </h3>
+                      <div className="flex flex-1 flex-col gap-2.5 p-3.5">
+                        <h3 className="day:text-gray-900 line-clamp-2 text-center text-base leading-tight font-semibold text-white">
+                          {shape.name}
+                        </h3>
+                      </div>
+                    </button>
+
+                    <div className="hidden px-3.5 pb-3.5 md:block">
+                      <button
+                        type="button"
+                        onClick={() => handleShapeContinue(shape)}
+                        className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-[#cfac6c] px-3 py-2 text-sm font-semibold text-[#cfac6c] transition-all hover:bg-[#cfac6c] hover:text-slate-900 hover:shadow-lg hover:shadow-[#cfac6c]/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#cfac6c]"
+                      >
+                        Continue
+                        <ArrowRightIcon className="h-4 w-4" />
+                      </button>
                     </div>
-                  </button>
+                  </article>
                 );
               })}
             </div>
@@ -680,14 +704,14 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       </div>
 
       {selectedCategory !== 'custom' && (
-        <div className="fixed right-0 bottom-0 left-0 z-20 border-t border-white/10 bg-[#121212]/95 px-6 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur md:left-[400px]">
+        <div className="fixed right-0 bottom-0 left-0 z-20 border-t border-white/10 bg-[#121212]/95 px-6 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur md:hidden">
           <button
             type="button"
             onClick={handleSelectedShapeContinue}
             disabled={!currentShapeUrl}
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] disabled:cursor-not-allowed disabled:bg-white/15 disabled:text-white/45"
           >
-            Continue with this shape
+            Continue
             <ArrowRightIcon className="h-4 w-4" />
           </button>
         </div>

@@ -344,15 +344,19 @@ export default async function MemorialTypePage({ params }: PageProps) {
               key={product.id}
               className="group day:border-gray-200 day:bg-white flex h-full flex-col overflow-hidden rounded-lg border border-white/10 bg-[#171717] transition-all hover:-translate-y-0.5 hover:border-[#cfac6c]/60 hover:shadow-lg hover:shadow-[#cfac6c]/10"
             >
-              <div className="day:border-gray-200 day:bg-gray-50 relative aspect-[5/4] border-b border-white/10 bg-[#101010] sm:aspect-[4/3]">
+              <Link
+                href={productDesignerUrl(product.id)}
+                aria-label={`Design your own ${product.displayName}`}
+                className="day:border-gray-200 day:bg-gray-50 relative block aspect-[5/4] overflow-hidden border-b border-white/10 bg-[#101010] focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c] sm:aspect-[4/3]"
+              >
                 <Image
                   src={`/webp/products/${product.image}`}
-                  alt={product.displayName}
+                  alt=""
                   fill
                   className="object-cover transition-transform duration-300 group-hover:scale-105 sm:object-contain sm:p-5"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 />
-              </div>
+              </Link>
 
               <div className="flex flex-1 flex-col gap-4 p-4">
                 <h3 className="day:text-gray-900 text-xl font-semibold text-white">

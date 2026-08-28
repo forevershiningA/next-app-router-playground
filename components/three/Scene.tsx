@@ -669,6 +669,7 @@ export default function Scene({
   const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
   const isFullMonument = productType === 'full-monument';
   const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
+  const isUrn = productType === 'urn';
   const assemblyZOffset = -(ledgerDepthMm / 1000);
   // Extend from behind the upright/base to just beyond the kerb's front edge;
   // a full monument's foundation must support both, not only the grave slab.
@@ -687,7 +688,7 @@ export default function Scene({
     ? -(uprightThickness / 1000) / 2 + contactDepth / 2
     : 0;
   const hasStandaloneHeadstoneFoundation =
-    !isFullMonument && !isPlaque && showBase && contactWidth > 0 && contactDepth > 0;
+    !isFullMonument && !isPlaque && !isUrn && showBase && contactWidth > 0 && contactDepth > 0;
 
   // For full monument the whole assembly is shifted back by ledgerDepthMm/1000 in Z.
   // The camera target needs to follow: lower Y (ledger is at ground level, not 3.8m up)
