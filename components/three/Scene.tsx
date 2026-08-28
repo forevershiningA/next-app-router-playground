@@ -23,7 +23,7 @@ function lcg(seed: number) {
 // --- SCENERY CONFIGS ---
 const SCENERY = {
   day: {
-    grassColor:       '#4a6e28',
+    grassColor:       '#9aaa72',
     fogColor:         '#dcebf5',
     fogColor2:        '#ADCCE7',
     bgSky:            '#A8C9E6',
@@ -36,7 +36,7 @@ const SCENERY = {
     sparklesSpeed:    0.3,
     sparklesOpacity:  0.4,
     sparklesPosition: [0, 1, 0] as [number, number, number],
-    cloudColor:       '#ffffff',
+    cloudColor:       '#edf1ec',
     ambientColor:     '#ffffff',
     ambientIntensity: 0.6,
     hemiSky:          '#fff8e7',
@@ -74,7 +74,7 @@ const SCENERY = {
   },
 } as const;
 
-const GRASS_NORMAL_SCALE = new THREE.Vector2(1.2, 1.2);
+const GRASS_NORMAL_SCALE = new THREE.Vector2(0.72, 0.72);
 const OUTBACK_NORMAL_SCALE = new THREE.Vector2(0.4, 0.4);
 
 // --- COMPONENTS ---
@@ -113,6 +113,7 @@ const GradientBackground = ({ top, bottom }: { top: string; bottom: string }) =>
 };
 
 function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) {
+  const materialRef = useRef<THREE.MeshStandardMaterial>(null);
   const gl = useThree((state) => state.gl);
   const invalidate = useThree((state) => state.invalidate);
   const viewportWidth = useThree((state) => state.size.width);
@@ -167,6 +168,46 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
     if (props.aoMap) props.aoMap.colorSpace = THREE.NoColorSpace;
   }, [props, gl, maxAnisotropy, repeat]);
 
+  // Break up the obvious texture grid with broad, world-space colour variation.
+  // This keeps the meadow to one material/draw call and costs no extra texture sample.
+  useEffect(() => {
+    const material = materialRef.current;
+    if (!material) return;
+
+    material.onBeforeCompile = (shader) => {
+      shader.vertexShader = shader.vertexShader
+        .replace(
+          '#include <common>',
+          '#include <common>\nvarying vec3 vGrassWorldPosition;',
+        )
+        .replace(
+          '#include <worldpos_vertex>',
+          '#include <worldpos_vertex>\nvGrassWorldPosition = (modelMatrix * vec4(transformed, 1.0)).xyz;',
+        );
+      shader.fragmentShader = shader.fragmentShader
+        .replace(
+          '#include <common>',
+          '#include <common>\nvarying vec3 vGrassWorldPosition;',
+        )
+        .replace(
+          '#include <tonemapping_fragment>',
+          `
+            float grassMacro =
+              sin(vGrassWorldPosition.x * 0.42 + vGrassWorldPosition.z * 0.19) * 0.5 +
+              sin(vGrassWorldPosition.z * 0.31 - vGrassWorldPosition.x * 0.13) * 0.3 +
+              sin((vGrassWorldPosition.x + vGrassWorldPosition.z) * 0.08) * 0.2;
+            float grassLuma = dot(gl_FragColor.rgb, vec3(0.299, 0.587, 0.114));
+            gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(grassLuma), 0.12);
+            gl_FragColor.rgb *= 0.96 + grassMacro * 0.08;
+            #include <tonemapping_fragment>
+          `,
+        );
+    };
+    material.customProgramCacheKey = () => 'meadow-warm-multiscale-v2';
+    material.needsUpdate = true;
+    invalidate();
+  }, [invalidate]);
+
   // The floor texture resolves independently from the monument geometry.
   // Requesting another demand-frame lets ContactShadows capture the fully
   // mounted stone instead of baking an empty scene on its first frame.
@@ -178,7 +219,8 @@ function GrassFloor({ color, repeat = 28 }: { color: string; repeat?: number }) 
     <group position={[0, -0.01, 0]}>
       <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[300, 300]} />
-        <meshStandardMaterial 
+        <meshStandardMaterial
+          ref={materialRef}
           map={props.map}
           normalMap={props.normalMap}
           aoMap={props.aoMap}
@@ -364,6 +406,55 @@ function OutbackTreeline() {
   );
 }
 
+// A subtle, low silhouette band breaks the perfectly straight meadow horizon
+// without loading a tree model or adding per-object draw calls.
+function MeadowHorizon() {
+  const SHRUB_COUNT = 128;
+  const shrubRef = useRef<THREE.InstancedMesh>(null);
+
+  const shrubMatrices = useMemo(() => {
+    const rng = lcg(103);
+    const dummy = new THREE.Object3D();
+    const result: THREE.Matrix4[] = [];
+
+    for (let i = 0; i < SHRUB_COUNT; i++) {
+      const angle = (i / SHRUB_COUNT) * Math.PI * 2 + rng() * 0.09;
+      const radius = 50 + rng() * 24;
+      const height = 0.28 + rng() * 0.8;
+      const width = 1.25 + rng() * 2.1;
+      dummy.position.set(
+        Math.cos(angle) * radius,
+        height * 0.5,
+        Math.sin(angle) * radius,
+      );
+      dummy.scale.set(width, height, width * (0.55 + rng() * 0.28));
+      dummy.rotation.y = rng() * Math.PI * 2;
+      dummy.updateMatrix();
+      result.push(dummy.matrix.clone());
+    }
+
+    return result;
+  }, []);
+
+  useEffect(() => {
+    if (!shrubRef.current) return;
+    shrubMatrices.forEach((matrix, index) => shrubRef.current!.setMatrixAt(index, matrix));
+    shrubRef.current.instanceMatrix.needsUpdate = true;
+  }, [shrubMatrices]);
+
+  return (
+    <instancedMesh ref={shrubRef} args={[undefined, undefined, SHRUB_COUNT]}>
+      <sphereGeometry args={[1, 8, 5]} />
+      <meshStandardMaterial
+        color="#566643"
+        roughness={1}
+        metalness={0}
+        envMapIntensity={0}
+      />
+    </instancedMesh>
+  );
+}
+
 function MemorialFoundation({
   width,
   depth,
@@ -448,10 +539,14 @@ function FoundationContactShadow({
   width,
   depth,
   centerZ,
+  padding = 0.26,
+  opacity = 0.58,
 }: {
   width: number;
   depth: number;
   centerZ: number;
+  padding?: number;
+  opacity?: number;
 }) {
   const texture = useMemo(() => {
     const size = 256;
@@ -482,12 +577,12 @@ function FoundationContactShadow({
       renderOrder={1}
       name="foundation-contact-shadow"
     >
-      <planeGeometry args={[width + 0.26, depth + 0.26]} />
+      <planeGeometry args={[width + padding, depth + padding]} />
       <meshBasicMaterial
         map={texture ?? undefined}
         color="#071006"
         transparent
-        opacity={0.58}
+        opacity={opacity}
         depthWrite={false}
         toneMapped={false}
       />
@@ -564,6 +659,9 @@ export default function Scene({
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
   const setSelectedEmblemId = useHeadstoneStore((s) => s.setSelectedEmblemId);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
+  const widthMm = useHeadstoneStore((s) => s.widthMm);
+  const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const showBase = useHeadstoneStore((s) => s.showBase);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
   const kerbDepthMm = useHeadstoneStore((s) => s.kerbDepthMm);
@@ -583,6 +681,13 @@ export default function Scene({
     0.08;
   const foundationCenterZ = (foundationRearZ + foundationFrontZ) / 2;
   const foundationDepth = foundationFrontZ - foundationRearZ;
+  const contactWidth = (showBase ? baseWidthMm : widthMm) / 1000;
+  const contactDepth = (showBase ? baseThickness : uprightThickness) / 1000;
+  const contactCenterZ = showBase
+    ? -(uprightThickness / 1000) / 2 + contactDepth / 2
+    : 0;
+  const hasStandaloneHeadstoneFoundation =
+    !isFullMonument && !isPlaque && showBase && contactWidth > 0 && contactDepth > 0;
 
   // For full monument the whole assembly is shifted back by ledgerDepthMm/1000 in Z.
   // The camera target needs to follow: lower Y (ledger is at ground level, not 3.8m up)
@@ -597,7 +702,7 @@ export default function Scene({
   const isMobileViewport = viewportWidth < 1024;
   // Keep the meadow texture density stable across products so the floor does
   // not change character when switching between headstones and plaques.
-  const grassRepeat = 144;
+  const grassRepeat = 180;
 
   // Outback needs fog pushed further so the red dirt stretches to the treeline
   const fogSettings = sceneryVariant === 'outback'
@@ -655,22 +760,20 @@ export default function Scene({
 
   const DRAG_DESELECT_THRESHOLD = 4;
 
-  const handleCanvasClick = (e: ThreeEvent<PointerEvent>) => {
+  const handleSceneryClick = (e: ThreeEvent<MouseEvent>) => {
     // Ignore drag gestures (OrbitControls rotation/pan)
     if (e.delta > DRAG_DESELECT_THRESHOLD) {
       return;
     }
 
-    // Only deselect if clicking on empty space (not on any 3D object)
-    if (e.eventObject === e.object) {
-      setSelected(null);
-      setEditingObject('headstone');
-      setSelectedInscriptionId(null);
-      setSelectedAdditionId(null);
-      setSelectedMotifId(null);
-      setSelectedImageId(null);
-      setSelectedEmblemId(null);
-    }
+    e.stopPropagation();
+    setSelected(null);
+    setEditingObject('headstone');
+    setSelectedInscriptionId(null);
+    setSelectedAdditionId(null);
+    setSelectedMotifId(null);
+    setSelectedImageId(null);
+    setSelectedEmblemId(null);
   };
 
   // SunRays look natural for day scenery; outback daylight is direct — no shafts needed
@@ -697,7 +800,7 @@ export default function Scene({
       <mesh
         position={[0, 0, 0]}
         rotation={[-Math.PI / 2, 0, 0]}
-        onClick={handleCanvasClick}
+        onClick={handleSceneryClick}
       >
         <planeGeometry args={[200, 200]} />
         <meshBasicMaterial transparent opacity={0} side={THREE.DoubleSide} />
@@ -727,11 +830,38 @@ export default function Scene({
           </>
         )}
 
+        {/* Use the same concrete pad and grounding shadow as Full Monuments. */}
+        {hasStandaloneHeadstoneFoundation && (
+          <>
+            <FoundationContactShadow
+              width={contactWidth + 0.16}
+              depth={contactDepth + 0.16}
+              centerZ={contactCenterZ}
+            />
+            <MemorialFoundation
+              width={contactWidth + 0.16}
+              depth={contactDepth + 0.16}
+              centerZ={contactCenterZ}
+            />
+          </>
+        )}
+
+        {/* Products without a granite base still receive a compact contact shadow. */}
+        {!isFullMonument && !hasStandaloneHeadstoneFoundation && contactWidth > 0 && contactDepth > 0 && (
+          <FoundationContactShadow
+            width={contactWidth}
+            depth={contactDepth}
+            centerZ={contactCenterZ}
+            padding={0.12}
+            opacity={0.5}
+          />
+        )}
+
         {/* Headstone content manages its own suspense boundaries internally */}
         <HeadstoneAssembly />
         
         {/* TEXTURED FLOOR — hidden in no-scenery modes via visible prop */}
-        <group visible={!noScenery}>
+        <group visible={!noScenery} onClick={handleSceneryClick}>
           {sceneryVariant === 'outback' ? (
             <Suspense fallback={<SimpleGroundFloor color={cfg.grassColor} />}>
               <OutbackFloor color={cfg.grassColor} />
@@ -741,13 +871,14 @@ export default function Scene({
               <GrassFloor color={cfg.grassColor} repeat={grassRepeat} />
             </Suspense>
           )}
-          {/* Horizon treeline — outback only */}
+          {/* A thin silhouette band keeps the horizon from reading as a hard line. */}
           {sceneryVariant === 'outback' && <OutbackTreeline />}
+          {sceneryVariant === 'day' && <MeadowHorizon />}
         </group>
       </group>
 
       {/* Sparkles / clouds / sky gradient — toggle visibility directly on the group */}
-      <group visible={!is2DMode && !noScenery}>
+      <group visible={!is2DMode && !noScenery} onClick={handleSceneryClick}>
         <Sparkles
           count={cfg.sparklesCount}
           scale={cfg.sparklesScale}

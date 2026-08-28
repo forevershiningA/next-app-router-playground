@@ -619,6 +619,13 @@ export default function ShapeSwapper({
             targetWidth={targetWidthForShape}
             sourceSvgOverlayUrl={bowlArtworkOverlayUrl ?? (isCustomUploadedShape ? resolvedUrl : null)}
             preserveTop={preserveTopForShape}
+            bevel={
+              isFixedHeadstoneAsset &&
+              !isPlaque &&
+              !isUrn &&
+              !isStainlessSteel &&
+              headstoneStyle !== 'slant'
+            }
             showEdges={false}
             headstoneStyle={headstoneStyle}
             slantThickness={slantThickness}

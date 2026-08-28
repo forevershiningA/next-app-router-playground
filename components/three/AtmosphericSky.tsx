@@ -99,22 +99,22 @@ export default function AtmosphericSky({
       >
         <Cloud
           seed={10} 
-          bounds={[26, 0.75, 16]}
+          bounds={[23, 0.7, 15]}
           segments={compact ? 8 : 18}
           volume={7.5}
           color={cloudColor}
-          opacity={0.76}
+          opacity={0.42}
           fade={35}
           position={[-12, 4.3, -22]}
           speed={0.05}
         />
         <Cloud 
           seed={24} 
-          bounds={[22, 0.65, 14]}
+          bounds={[20, 0.6, 13]}
           segments={compact ? 8 : 18}
           volume={6.6}
           color={cloudColor} 
-          opacity={0.58}
+          opacity={0.32}
           fade={35}
           position={[13, 4.45, -26]}
           speed={0.035}
@@ -125,7 +125,7 @@ export default function AtmosphericSky({
           segments={16} 
           volume={5.5}
           color={cloudColor} 
-          opacity={0.44}
+          opacity={0.24}
           fade={35}
           position={[-24, 4.15, -18]}
           speed={0.04}
@@ -136,7 +136,7 @@ export default function AtmosphericSky({
           segments={16} 
           volume={5.8}
           color={cloudColor} 
-          opacity={0.4}
+          opacity={0.2}
           fade={35}
           position={[22, 4.25, -20]}
           speed={0.04}
@@ -147,9 +147,9 @@ export default function AtmosphericSky({
           segments={14} 
           volume={4.8}
           color={cloudColor} 
-          opacity={0.3}
+          opacity={0.12}
           fade={35}
-          position={[0, 4.55, -32]}
+          position={[0, 5.5, -36]}
           speed={0.025}
         />}
       </Clouds>

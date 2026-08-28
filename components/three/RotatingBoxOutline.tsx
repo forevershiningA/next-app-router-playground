@@ -32,6 +32,8 @@ type RotatingBoxOutlineProps<T extends THREE.Object3D = THREE.Object3D> = {
   bottomLift?: number;
   /** Animate corner arms when the outline first becomes visible */
   animateOnShow?: boolean;
+  /** Final opacity of the outline once any reveal animation completes */
+  opacity?: number;
   /** Duration of the show animation in milliseconds */
   animationDuration?: number;
 };
@@ -104,6 +106,7 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
   frontFacingOnly = false,
   bottomLift = 0,
   animateOnShow = false,
+  opacity = 1,
   animationDuration = 420,
 }: RotatingBoxOutlineProps) {
   const { gl, invalidate } = useThree();
@@ -240,7 +243,9 @@ export default function RotatingBoxOutline<T extends THREE.Object3D = THREE.Obje
 
     const material = helper.userData.outlineMaterial;
     if (material) {
-      const targetOpacity = animateOnShow ? 0.35 + 0.65 * easedProgress : 1;
+      const targetOpacity = animateOnShow
+        ? opacity * (0.35 + 0.65 * easedProgress)
+        : opacity;
       if (material.opacity !== targetOpacity) {
         material.opacity = targetOpacity;
       }

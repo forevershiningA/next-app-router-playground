@@ -627,14 +627,17 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   // 2. Clone Textures (FIX: Enable Mipmaps and correct Filtering)
   const activeFace = blobFaceTexture ?? textures.face;
-  const [clonedFaceMap, clonedSideMap, clonedBackMap] = useMemo(() => {
+  const [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap] = useMemo(() => {
     const f = activeFace.clone();
     const s = ('side' in textures) ? (textures as { face: THREE.Texture; side: THREE.Texture }).side.clone() : null;
     // The back is a cap (width × height), not part of the side perimeter.
     // It needs independent repeat values from the continuous side strip.
     const b = s?.clone() ?? null;
+    const fd = activeFace.clone();
+    const sd = ('side' in textures) ? (textures as { face: THREE.Texture; side: THREE.Texture }).side.clone() : null;
+    const bd = sd?.clone() ?? null;
     
-    [f, s, b].forEach(t => {
+    [f, s, b, fd, sd, bd].forEach(t => {
       if (!t) return;
       t.wrapS = t.wrapT = THREE.RepeatWrapping;
       t.minFilter = THREE.LinearMipmapLinearFilter; 
@@ -643,8 +646,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       t.generateMipmaps = true;
       t.needsUpdate = true;
     });
+
+    [fd, sd, bd].forEach((texture) => {
+      if (texture) texture.colorSpace = THREE.NoColorSpace;
+    });
     
-    return [f, s, b] as const;
+    return [f, s, b, fd, sd, bd] as const;
   }, [activeFace, 'side' in textures ? textures.side : null]);
 
   // 2a. Dispose cloned textures on cleanup
@@ -653,8 +660,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       clonedFaceMap.dispose();
       clonedSideMap?.dispose();
       clonedBackMap?.dispose();
+      faceDetailMap.dispose();
+      sideDetailMap?.dispose();
+      backDetailMap?.dispose();
     };
-  }, [clonedFaceMap, clonedSideMap, clonedBackMap]);
+  }, [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap]);
 
   // 2b. Generate Rock Pitch Normal Map for Slant Headstones
   const rockNormalCanvas = useMemo(() => {
@@ -1479,22 +1489,32 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     clonedFaceMap.repeat.set(repFaceX, repFaceY);
     clonedFaceMap.needsUpdate = true;
+    faceDetailMap.repeat.set(repFaceX, repFaceY);
+    faceDetailMap.needsUpdate = true;
 
     if (clonedSideMap) {
       clonedSideMap.repeat.set(repSideX, repSideY);
       clonedSideMap.needsUpdate = true;
+    }
+    if (sideDetailMap) {
+      sideDetailMap.repeat.set(repSideX, repSideY);
+      sideDetailMap.needsUpdate = true;
     }
 
     if (clonedBackMap) {
       clonedBackMap.repeat.set(repBackX, repBackY);
       clonedBackMap.needsUpdate = true;
     }
+    if (backDetailMap) {
+      backDetailMap.repeat.set(repBackX, repBackY);
+      backDetailMap.needsUpdate = true;
+    }
     
     if (headstoneStyle === 'slant' && rockNormalTexture) {
       rockNormalTexture.repeat.set(1, 1);
       rockNormalTexture.needsUpdate = true;
     }
-  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, clonedBackMap, headstoneStyle, rockNormalTexture]);
+  }, [dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap, headstoneStyle, rockNormalTexture]);
 
   const stainlessFinishForMaps = isUrn ? 'brushed' : ssFinish;
   const stainlessMaps = useMemo(
@@ -1631,12 +1651,17 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const faceMat = new THREE.MeshPhysicalMaterial({ 
       ...common, 
       map: clonedFaceMap,
+      // Let the granite grain affect the surface response instead of reading
+      // as a flat print. Reusing the colour map avoids another texture fetch.
+      bumpMap: faceDetailMap,
+      bumpScale: isSlant ? 0.05 : 0.16,
+      roughnessMap: faceDetailMap,
       emissive: new THREE.Color(0xffffff),
       emissiveMap: clonedFaceMap,
       // A restrained fill retains the grain of black granite on smaller
       // screens, where the mobile scene intentionally omits the desktop rim
       // light for performance.
-      emissiveIntensity: isSlant ? 0.1 : 0.16,
+      emissiveIntensity: isSlant ? 0.04 : 0.055,
       clearcoat: 1.0,
       clearcoatRoughness: isSlant ? 0.05 : 0.08,
       polygonOffset: true,
@@ -1649,6 +1674,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       ? new THREE.MeshPhysicalMaterial({ 
           ...common, 
           map: clonedSideMap,
+          bumpMap: isSlant ? undefined : sideDetailMap,
+          bumpScale: isSlant ? undefined : 0.2,
+          roughnessMap: isSlant ? undefined : sideDetailMap,
+          roughness: isSlant ? 0.1 : 0.24,
+          envMapIntensity: isSlant ? 1.7 : 0.85,
           ...(isSlant && rockNormalTexture ? {
             normalMap: rockNormalTexture,
             normalScale: new THREE.Vector2(2.5, 2.5),
@@ -1677,6 +1707,11 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       ? new THREE.MeshPhysicalMaterial({
           ...common,
           map: clonedBackMap,
+          bumpMap: isSlant ? undefined : backDetailMap,
+          bumpScale: isSlant ? undefined : 0.16,
+          roughnessMap: isSlant ? undefined : backDetailMap,
+          roughness: isSlant ? 0.1 : 0.22,
+          envMapIntensity: isSlant ? 1.7 : 0.9,
           clearcoat: 1.0,
           clearcoatRoughness: isSlant ? 0.05 : 0.08,
           polygonOffset: true,
@@ -1686,7 +1721,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       : sideMat;
 
     return [faceMat, sideMat, backMat];
-  }, [clonedFaceMap, clonedSideMap, clonedBackMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, showStainlessRim, ssFinish, stainlessMaps]);
+  }, [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, showStainlessRim, ssFinish, stainlessMaps]);
 
   // 5a. Dispose geometries and materials on cleanup
   React.useEffect(() => {

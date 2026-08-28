@@ -124,12 +124,14 @@ export default function HeadstoneAssembly() {
         <RotatingBoxOutline
           targetRef={headstoneMeshRef}
           visible={selected === 'headstone' && !hasElementSelection}
-          color="#ffffff"
-          pad={headstoneOutlinePad}
+          color="#e3e7e6"
+          pad={Math.min(headstoneOutlinePad, 0.003)}
           depthPad={headstoneOutlineDepthPad}
           frontExtension={headstoneFrontExtension}
           through={headstoneOutlineThrough}
-          lineLength={headstoneOutlineLineLength}
+          lineLength={Math.min(headstoneOutlineLineLength, 0.1)}
+          frontFacingOnly
+          opacity={0.76}
           bottomLift={headstoneBottomLift}
           animateOnShow
           animationDuration={520}
@@ -138,11 +140,13 @@ export default function HeadstoneAssembly() {
         <RotatingBoxOutline
           targetRef={baseRef}
           visible={selected === 'base' && !hasElementSelection}
-          color="#ffffff"
-          pad={baseOutlinePad}
+          color="#e3e7e6"
+          pad={Math.min(baseOutlinePad, 0.0025)}
           depthPad={baseOutlineDepthPad}
           through={baseOutlineThrough}
-          lineLength={baseOutlineLineLength}
+          lineLength={Math.min(baseOutlineLineLength, 0.1)}
+          frontFacingOnly
+          opacity={0.76}
           bottomLift={baseBottomLift}
           animateOnShow
           animationDuration={520}

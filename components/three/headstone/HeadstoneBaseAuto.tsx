@@ -211,35 +211,59 @@ function BaseMesh({
   // the base width's repeat count.
   const sideMaterialTexture = useMemo(() => materialTexture.clone(), [materialTexture]);
   const topMaterialTexture = useMemo(() => materialTexture.clone(), [materialTexture]);
+  const faceDetailTexture = useMemo(() => {
+    const texture = materialTexture.clone();
+    texture.colorSpace = THREE.NoColorSpace;
+    return texture;
+  }, [materialTexture]);
+  const sideDetailTexture = useMemo(() => {
+    const texture = sideMaterialTexture.clone();
+    texture.colorSpace = THREE.NoColorSpace;
+    return texture;
+  }, [sideMaterialTexture]);
+  const topDetailTexture = useMemo(() => {
+    const texture = topMaterialTexture.clone();
+    texture.colorSpace = THREE.NoColorSpace;
+    return texture;
+  }, [topMaterialTexture]);
 
   useEffect(() => {
     return () => {
       materialTexture.dispose();
       sideMaterialTexture.dispose();
       topMaterialTexture.dispose();
+      faceDetailTexture.dispose();
+      sideDetailTexture.dispose();
+      topDetailTexture.dispose();
     };
-  }, [materialTexture, sideMaterialTexture, topMaterialTexture]);
+  }, [materialTexture, sideMaterialTexture, topMaterialTexture, faceDetailTexture, sideDetailTexture, topDetailTexture]);
 
   // 2. Manage the base texture's independent repeat settings.
   useLayoutEffect(() => {
     if (materialTexture) {
       materialTexture.repeat.set(
-        dimensions.width / GRANITE_TILE_SIZE_M,
-        dimensions.height / GRANITE_TILE_SIZE_M
+        Math.max(1, dimensions.width / GRANITE_TILE_SIZE_M),
+        Math.max(1, dimensions.height / GRANITE_TILE_SIZE_M),
       );
       sideMaterialTexture.repeat.set(
-        dimensions.depth / GRANITE_TILE_SIZE_M,
-        dimensions.height / GRANITE_TILE_SIZE_M,
+        Math.max(1, dimensions.depth / GRANITE_TILE_SIZE_M),
+        Math.max(1, dimensions.height / GRANITE_TILE_SIZE_M),
       );
       topMaterialTexture.repeat.set(
-        dimensions.width / GRANITE_TILE_SIZE_M,
-        dimensions.depth / GRANITE_TILE_SIZE_M,
+        Math.max(1, dimensions.width / GRANITE_TILE_SIZE_M),
+        Math.max(1, dimensions.depth / GRANITE_TILE_SIZE_M),
       );
+      faceDetailTexture.repeat.copy(materialTexture.repeat);
+      sideDetailTexture.repeat.copy(sideMaterialTexture.repeat);
+      topDetailTexture.repeat.copy(topMaterialTexture.repeat);
       materialTexture.needsUpdate = true;
       sideMaterialTexture.needsUpdate = true;
       topMaterialTexture.needsUpdate = true;
+      faceDetailTexture.needsUpdate = true;
+      sideDetailTexture.needsUpdate = true;
+      topDetailTexture.needsUpdate = true;
     }
-  }, [materialTexture, sideMaterialTexture, topMaterialTexture, dimensions.width, dimensions.height, dimensions.depth]);
+  }, [materialTexture, sideMaterialTexture, topMaterialTexture, faceDetailTexture, sideDetailTexture, topDetailTexture, dimensions.width, dimensions.height, dimensions.depth]);
 
   // 3. Create Materials
   const materials = useMemo(() => {
@@ -258,12 +282,16 @@ function BaseMesh({
 
     const polishedMaterial = createPolishedGraniteMaterial({
       texture: materialTexture,
-      // The updated scene uses a 0.5 environment intensity (the live scene
-      // used 0.8). Preserve the polished base's former reflected fill so its
-      // vertical face does not render much darker than the upright.
-      envMapIntensity: 2.4,
-      roughness: 0.15,
-      clearcoatRoughness: 0.1,
+      // A low base receives materially less direct light than the upright.
+      // Keep the swatch un-tinted here so identical granite selections retain
+      // the same perceived brightness across both parts.
+      color: 0xffffff,
+      envMapIntensity: 1.1,
+      roughness: 0.18,
+      clearcoatRoughness: 0.08,
+      bumpMap: faceDetailTexture,
+      bumpScale: 0.004,
+      roughnessMap: faceDetailTexture,
     });
 
     if (finish === 'rock-pitch' && rockNormalCanvas) {
@@ -318,17 +346,28 @@ function BaseMesh({
     // washing out the naturally lit top surface.
     const verticalPolishedMaterial = polishedMaterial.clone();
     verticalPolishedMaterial.map = sideMaterialTexture;
+    verticalPolishedMaterial.bumpMap = sideDetailTexture;
+    verticalPolishedMaterial.roughnessMap = sideDetailTexture;
+    verticalPolishedMaterial.bumpScale = 0.005;
+    verticalPolishedMaterial.roughness = 0.18;
+    verticalPolishedMaterial.envMapIntensity = 1.1;
     verticalPolishedMaterial.emissive.set(0xffffff);
     verticalPolishedMaterial.emissiveMap = sideMaterialTexture;
-    verticalPolishedMaterial.emissiveIntensity = 0.85;
+    verticalPolishedMaterial.emissiveIntensity = 0.18;
 
     const topPolishedMaterial = polishedMaterial.clone();
     topPolishedMaterial.map = topMaterialTexture;
+    topPolishedMaterial.bumpMap = topDetailTexture;
+    topPolishedMaterial.roughnessMap = topDetailTexture;
+    topPolishedMaterial.bumpScale = 0.003;
+    topPolishedMaterial.roughness = 0.18;
 
     const facePolishedMaterial = polishedMaterial.clone();
+    facePolishedMaterial.bumpMap = faceDetailTexture;
+    facePolishedMaterial.roughnessMap = faceDetailTexture;
     facePolishedMaterial.emissive.set(0xffffff);
     facePolishedMaterial.emissiveMap = materialTexture;
-    facePolishedMaterial.emissiveIntensity = 0.85;
+    facePolishedMaterial.emissiveIntensity = 0.18;
 
     // BoxGeometry groups are Right, Left, Top, Bottom, Front, Back.
     return [
@@ -339,7 +378,7 @@ function BaseMesh({
       facePolishedMaterial,
       facePolishedMaterial,
     ];
-  }, [finish, isStainlessSteel, materialTexture, sideMaterialTexture, topMaterialTexture, rockNormalCanvas, stainlessFinish]);
+  }, [finish, isStainlessSteel, materialTexture, sideMaterialTexture, topMaterialTexture, faceDetailTexture, sideDetailTexture, topDetailTexture, rockNormalCanvas, stainlessFinish]);
 
   // 4. Update Material Repeats - matching slant headstone quality
   useLayoutEffect(() => {

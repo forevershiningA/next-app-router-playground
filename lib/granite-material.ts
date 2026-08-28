@@ -22,6 +22,9 @@ type PolishedGraniteMaterialOptions = {
   clearcoatRoughness?: number;
   normalMap?: THREE.Texture | null;
   normalScale?: THREE.Vector2;
+  bumpMap?: THREE.Texture | null;
+  bumpScale?: number;
+  roughnessMap?: THREE.Texture | null;
 };
 
 export function configureGraniteTexture(
@@ -46,6 +49,9 @@ export function createPolishedGraniteMaterial({
   clearcoatRoughness = 0.08,
   normalMap,
   normalScale,
+  bumpMap,
+  bumpScale,
+  roughnessMap,
 }: PolishedGraniteMaterialOptions) {
   const optionalNormalProps =
     normalMap && normalScale
@@ -62,6 +68,9 @@ export function createPolishedGraniteMaterial({
     envMapIntensity,
     clearcoat,
     clearcoatRoughness,
+    bumpMap: bumpMap ?? null,
+    bumpScale: bumpScale ?? 1,
+    roughnessMap: roughnessMap ?? null,
     ...optionalNormalProps,
   });
 }

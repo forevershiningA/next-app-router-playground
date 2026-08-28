@@ -14187,3 +14187,50 @@ git diff --check
 ```
 
 The targeted ESLint runs have no errors; existing warnings in the legacy designer components are unrelated. `screen.png` remains the user-provided visual reference and must not be overwritten.
+
+---
+
+## Current Status (2026-08-28) — 3D Meadow Scene, Grounding, and Selection Polish
+
+### Interaction and selection
+
+Primary file: `components/three/Scene.tsx`.
+
+- Clicking scenery now clears the selected headstone/base and editable-element selections. The same handler is attached to the invisible ground hit-plane, the textured ground group, and the sky/cloud group, so clicks on grass, sky, or clouds behave consistently.
+- The handler ignores drag gestures (`delta > 4`) so rotating or panning with `OrbitControls` does not deselect an object.
+
+### Product grounding and granite consistency
+
+Primary files: `components/three/Scene.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, `components/SvgHeadstone.tsx`, and `lib/granite-material.ts`.
+
+- Standalone Headstones that have a Base use the same visible concrete pad and soft contact-shadow approach as Full Monuments. The pad extends `80 mm` around the Base and is intentionally absent for products without a granite base.
+- Granite maps now influence bump and roughness response on the upright and Base. Detail-map clones use `NoColorSpace`; do not reuse the sRGB albedo texture directly as a linear detail map.
+- Base texture repeats are clamped to at least one full tile on every axis. This is important for low bases: a repeat below `1` used to stretch one dark strip of a granite swatch across the entire front face.
+- Base shading includes a universal brightness compensation because a low base receives less direct light than the upright. Keep the visual check focused on matching the same selected granite across Headstone and Base; top faces may still appear naturally lighter because of their orientation.
+
+### Meadow environment
+
+Primary files: `components/three/Scene.tsx`, `components/three/AtmosphericSky.tsx`, `components/three/SunRays.tsx`, and `components/ThreeScene.tsx`.
+
+- Meadow grass is less saturated and has lower normal-map strength. Its material applies broad world-space colour variation in `onBeforeCompile`, keeping the scene to one ground material/draw call while reducing visible texture tiling.
+- `MeadowHorizon` is a single instanced mesh of low, irregular shrub silhouettes. It exists solely to break the straight grass/sky boundary; keep it subtle, dark, wide, and low. Do not restore the earlier cone-shaped tree silhouettes.
+- Meadow clouds use a muted off-white and lower opacity. The central cloud is weaker and further away so inscriptions and the headstone retain a quiet background.
+- SunRays remain a Forever Shining brand cue. They are intentionally warm gold-white, but now use lower opacity, fewer/broader rays, and a source offset toward the upper-right. Do not remove them merely as scenery noise.
+- The main 3D canvas has a light CSS photographic correction (`contrast(1.14) saturate(1.07) brightness(0.99)`) to restore black point and colour separation without affecting HTML UI overlays.
+
+### Selection outline
+
+Primary files: `components/three/RotatingBoxOutline.tsx` and `components/three/headstone/HeadstoneAssembly.tsx`.
+
+- `RotatingBoxOutline` accepts an `opacity` prop. Headstone and Base outlines use shorter arms, smaller padding, muted off-white, and `opacity={0.76}`.
+- Those outlines use `frontFacingOnly`, which hides projected rear corners that previously appeared detached above the top edge in perspective.
+
+### Verification and visual acceptance
+
+```bash
+pnpm exec tsc --noEmit
+pnpm exec eslint components/ThreeScene.tsx components/three/AtmosphericSky.tsx components/three/RotatingBoxOutline.tsx components/three/Scene.tsx components/three/SunRays.tsx components/three/headstone/HeadstoneAssembly.tsx components/three/headstone/HeadstoneBaseAuto.tsx components/SvgHeadstone.tsx lib/granite-material.ts
+git diff --check
+```
+
+The TypeScript and diff checks pass. Targeted ESLint runs have only pre-existing warnings in legacy components. `screen.png` is user-provided visual acceptance evidence and must not be overwritten during testing.
