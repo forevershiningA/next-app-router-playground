@@ -1,6 +1,9 @@
 import * as THREE from 'three';
 
-const DEFAULT_GRANITE_TINT = 0xa6a6a6;
+// Do not darken a correctly decoded sRGB granite swatch. The texture itself
+// carries the stone's colour; a neutral multiplier keeps its rendered value
+// aligned with the material selector preview.
+export const POLISHED_GRANITE_TINT = 0xffffff;
 
 // One physical swatch size for every polished granite component. Keeping this
 // shared prevents a ledger, kerb or base from reading as a different stone.
@@ -41,7 +44,7 @@ export function configureGraniteTexture(
 
 export function createPolishedGraniteMaterial({
   texture,
-  color = DEFAULT_GRANITE_TINT,
+  color = POLISHED_GRANITE_TINT,
   roughness = 0.18,
   metalness = 0,
   envMapIntensity = 1.1,

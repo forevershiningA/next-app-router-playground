@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-27
+**Last Updated:** 2026-08-29
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -92,6 +92,7 @@
 84. [August 25 Mobile UI, Product Ordering, Camera Fit, and Check Price](#current-status-2026-08-25--mobile-ui-product-ordering-camera-fit-and-check-price)
 85. [August 26 Traditional Engraved Headstone Shape-to-Material Flow](#current-status-2026-08-26--traditional-engraved-headstone-shape-to-material-flow)
 86. [August 27 Mobile Designer Bottom Sheets and Inscription Editor](#current-status-2026-08-27--mobile-designer-bottom-sheets-and-inscription-editor)
+87. [August 29 Granite Colour-Space and Preview Brightness Alignment](#current-status-2026-08-29--granite-colour-space-and-preview-brightness-alignment)
 
 ---
 
@@ -199,8 +200,8 @@ Primary files: `lib/product-display-order.ts`, `app/select-product/_ui/ProductSe
 
 Primary file: `app/select-shape/_ui/ShapeSelectionGrid.tsx`.
 
-- **Continue with this shape** is a persistent bottom CTA at every breakpoint, not only below `sm`.
-- On desktop it starts at `left: 400px` (`md:left-[400px]`) to avoid the permanent designer navigation. The grid retains `pb-28` at `sm` and above so the final cards cannot be obscured by the fixed bar.
+- On desktop (`md` and above), every standard shape card has its own **Continue** button below the name. Clicking the card itself only selects the shape; clicking its CTA selects that card and navigates to the appropriate next step.
+- The fixed bottom **Continue** CTA is mobile-only (`md:hidden`) and stays disabled until a shape is selected. Do not nest the card CTA inside the shape-selection button; cards use an `article` with two sibling buttons to preserve valid interactive HTML.
 
 ### Mobile camera on product-prefixed size routes
 
@@ -14206,7 +14207,7 @@ Primary files: `components/three/Scene.tsx`, `components/three/headstone/Headsto
 - Standalone Headstones that have a Base use the same visible concrete pad and soft contact-shadow approach as Full Monuments. The pad extends `80 mm` around the Base and is intentionally absent for products without a granite base.
 - Granite maps now influence bump and roughness response on the upright and Base. Detail-map clones use `NoColorSpace`; do not reuse the sRGB albedo texture directly as a linear detail map.
 - Base texture repeats are clamped to at least one full tile on every axis. This is important for low bases: a repeat below `1` used to stretch one dark strip of a granite swatch across the entire front face.
-- Base shading includes a universal brightness compensation because a low base receives less direct light than the upright. Keep the visual check focused on matching the same selected granite across Headstone and Base; top faces may still appear naturally lighter because of their orientation.
+- Base and upright front faces use the same restrained emissive fill (`0.055`) and bump response (`0.16`) for polished granite. Keep this parity when changing either material; top faces may still appear naturally lighter because of their orientation.
 
 ### Meadow environment
 
@@ -14216,7 +14217,7 @@ Primary files: `components/three/Scene.tsx`, `components/three/AtmosphericSky.ts
 - `MeadowHorizon` is a single instanced mesh of low, irregular shrub silhouettes. It exists solely to break the straight grass/sky boundary; keep it subtle, dark, wide, and low. Do not restore the earlier cone-shaped tree silhouettes.
 - Meadow clouds use a muted off-white and lower opacity. The central cloud is weaker and further away so inscriptions and the headstone retain a quiet background.
 - SunRays remain a Forever Shining brand cue. They are intentionally warm gold-white, but now use lower opacity, fewer/broader rays, and a source offset toward the upper-right. Do not remove them merely as scenery noise.
-- The main 3D canvas has a light CSS photographic correction (`contrast(1.14) saturate(1.07) brightness(0.99)`) to restore black point and colour separation without affecting HTML UI overlays.
+- The main 3D canvas deliberately has no CSS `filter`. Global contrast/saturation/brightness adjustment made material comparisons unreliable because it altered the rendered image rather than a single material.
 
 ### Selection outline
 
@@ -14234,3 +14235,32 @@ git diff --check
 ```
 
 The TypeScript and diff checks pass. Targeted ESLint runs have only pre-existing warnings in legacy components. `screen.png` is user-provided visual acceptance evidence and must not be overwritten during testing.
+
+### Related public-page and product-flow decisions (2026-08-28)
+
+- In `app/memorials/[type]/page.tsx`, each product image links to the same `productDesignerUrl(product.id)` destination as that card's **Design Your Own** CTA. Keep the image link and CTA destination aligned.
+- Urns do not receive the standalone Headstone concrete foundation. `hasStandaloneHeadstoneFoundation` in `components/three/Scene.tsx` must continue to exclude urn products; their compact contact shadow remains sufficient.
+- In the standard shape picker, the desktop card CTA and the mobile sticky CTA both use the label **Continue**, matching the urn flow. Urn cards retain their existing direct, whole-card selection action and visual CTA treatment.
+
+---
+
+## Current Status (2026-08-29) — Granite Colour-Space and Preview Brightness Alignment
+
+### Same granite must render the same on the upright and Base
+
+Primary files: `components/SvgHeadstone.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, and `lib/granite-material.ts`.
+
+- Granite colour/albedo maps on both `SvgHeadstone` and `HeadstoneBaseAuto` must use `THREE.SRGBColorSpace`. The matching cloned detail maps used for bump and roughness must use `THREE.NoColorSpace`. Treating the upright albedo clone as linear made the exact same swatch appear brighter and less saturated than on the Base.
+- `POLISHED_GRANITE_TINT` is the shared neutral (`0xffffff`) material multiplier. Do not restore the previous grey tint (`0xa6a6a6`): it darkened both correctly decoded granite maps well below the selector thumbnail, notably Blue Pearl.
+- The selector thumbnail is the visual brightness reference for the raw granite swatch. Verify a large front-facing Headstone and Base with the same selected material after changing colour space, tint, texture loading, or PBR maps.
+- Base and Headstone are lit by the same scene ambient, hemisphere, sun, rim, and HDRI lights. If their matching swatches diverge, inspect per-material texture colour space, tint, emissive settings, bump/roughness maps, and UV/repeat settings before adding object-specific lights.
+- The Base's front/back polished material matches the upright face for colour multiplier, roughness (`0.18`), environment intensity (`1.1`), clearcoat roughness (`0.08`), emissive intensity (`0.055`), and bump scale (`0.16`). Its top remains orientation-dependent and may catch a real specular highlight.
+
+### Verification
+
+```bash
+pnpm exec eslint components/SvgHeadstone.tsx components/three/headstone/HeadstoneBaseAuto.tsx lib/granite-material.ts
+git diff --check
+```
+
+Targeted ESLint has no errors; legacy warnings may remain. `screen.png` is user-provided visual acceptance evidence and must not be overwritten.

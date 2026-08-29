@@ -11,6 +11,7 @@ import * as BufferGeometryUtils from 'three/examples/jsm/utils/BufferGeometryUti
 import { Edges, Line as DreiLine, useTexture } from '@react-three/drei';
 import { Line } from '#/lib/headstone-store';
 import { createStainlessTextureSet, type StainlessFinish } from '#/lib/stainless-texture';
+import { POLISHED_GRANITE_TINT } from '#/lib/granite-material';
 
 const DEFAULT_FACE_FALLBACK = '/textures/forever/l/Imperial-Red.webp';
 
@@ -645,6 +646,13 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       (t as any).anisotropy = 16;
       t.generateMipmaps = true;
       t.needsUpdate = true;
+    });
+
+    // Match the base material: granite photographs are colour maps and must
+    // be decoded as sRGB. Leaving the clone in the loader default makes the
+    // same swatch appear brighter and less saturated on the headstone.
+    [f, s, b].forEach((texture) => {
+      if (texture) texture.colorSpace = THREE.SRGBColorSpace;
     });
 
     [fd, sd, bd].forEach((texture) => {
@@ -1641,7 +1649,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     // Match the calibrated polished granite response used across the monument parts.
     const common = {
-      color: new THREE.Color(isSlant ? 0x444444 : 0xa6a6a6),
+      color: new THREE.Color(isSlant ? 0x444444 : POLISHED_GRANITE_TINT),
       roughness: isSlant ? 0.08 : 0.18,
       metalness: 0.0,
       side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,

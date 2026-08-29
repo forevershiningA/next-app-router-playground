@@ -34,7 +34,11 @@ import {
   LERP_FACTOR,
   EPSILON,
 } from '#/lib/headstone-constants';
-import { createPolishedGraniteMaterial, GRANITE_TILE_SIZE_M } from '#/lib/granite-material';
+import {
+  createPolishedGraniteMaterial,
+  GRANITE_TILE_SIZE_M,
+  POLISHED_GRANITE_TINT,
+} from '#/lib/granite-material';
 
 type HeadstoneBaseAutoProps = {
   headstoneObject: React.RefObject<THREE.Object3D>;
@@ -282,15 +286,16 @@ function BaseMesh({
 
     const polishedMaterial = createPolishedGraniteMaterial({
       texture: materialTexture,
-      // A low base receives materially less direct light than the upright.
-      // Keep the swatch un-tinted here so identical granite selections retain
-      // the same perceived brightness across both parts.
-      color: 0xffffff,
+      // Match the headstone's calibrated granite colour multiplier so the
+      // same swatch has the same baseline brightness on both parts.
+      color: POLISHED_GRANITE_TINT,
       envMapIntensity: 1.1,
       roughness: 0.18,
       clearcoatRoughness: 0.08,
       bumpMap: faceDetailTexture,
-      bumpScale: 0.004,
+      // Match the upright face so the same granite grain produces the same
+      // surface response on the base's front and back faces.
+      bumpScale: 0.16,
       roughnessMap: faceDetailTexture,
     });
 
@@ -340,10 +345,9 @@ function BaseMesh({
       ];
     }
 
-    // The upright's extruded body receives strong fill on every vertical face,
-    // while the separate base box does not. Add the same swatch as a modest
-    // emissive fill to its vertical faces, preserving granite detail without
-    // washing out the naturally lit top surface.
+    // Match the upright's restrained emissive fill on the base's vertical
+    // faces. A stronger fill makes identical granite swatches read noticeably
+    // brighter on the base than on the headstone.
     const verticalPolishedMaterial = polishedMaterial.clone();
     verticalPolishedMaterial.map = sideMaterialTexture;
     verticalPolishedMaterial.bumpMap = sideDetailTexture;
@@ -353,7 +357,7 @@ function BaseMesh({
     verticalPolishedMaterial.envMapIntensity = 1.1;
     verticalPolishedMaterial.emissive.set(0xffffff);
     verticalPolishedMaterial.emissiveMap = sideMaterialTexture;
-    verticalPolishedMaterial.emissiveIntensity = 0.18;
+    verticalPolishedMaterial.emissiveIntensity = 0.055;
 
     const topPolishedMaterial = polishedMaterial.clone();
     topPolishedMaterial.map = topMaterialTexture;
@@ -367,7 +371,7 @@ function BaseMesh({
     facePolishedMaterial.roughnessMap = faceDetailTexture;
     facePolishedMaterial.emissive.set(0xffffff);
     facePolishedMaterial.emissiveMap = materialTexture;
-    facePolishedMaterial.emissiveIntensity = 0.18;
+    facePolishedMaterial.emissiveIntensity = 0.055;
 
     // BoxGeometry groups are Right, Left, Top, Bottom, Front, Back.
     return [

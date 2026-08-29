@@ -715,9 +715,6 @@ export default function ThreeScene() {
                 background: 'transparent',
                 width: '100%',
                 height: '100%',
-                // A light photographic "auto tone" pass: restore the black
-                // point and colour separation lost to the broad outdoor fill.
-                filter: 'contrast(1.14) saturate(1.07) brightness(0.99)',
               }}
               className={isDesignsPage ? 'canvas-with-border' : ''}
             >
