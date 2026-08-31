@@ -59,7 +59,7 @@ export default function SelectionBox({
   animationDuration = DEFAULT_ANIMATION_DURATION_MS,
 }: Props) {
   const threeContext = useThree();
-  const { camera, gl, controls } = threeContext;
+  const { camera, gl, controls, invalidate } = threeContext;
   
   // Determine if this is a 2D object (flat on headstone surface)
   const is2DObject = objectType === 'inscription' || 
@@ -85,9 +85,14 @@ export default function SelectionBox({
     usesSubtleOutlineRef.current = usesSubtleOutline;
   }, [usesSubtleOutline]);
   const shouldShowHandles = !usesSubtleOutline;
-  const outlineColor = usesSubtleOutline ? 0xf8f5ee : 0x2196F3;
-  const outlineLineWidth = usesSubtleOutline ? 1.5 : 3;
-  const baseOutlineOpacity = usesSubtleOutline ? 0.9 : 1;
+  // Motif selection sits almost coplanar with the memorial surface. Rendering
+  // its outline above the surface prevents the depth buffer from hiding it
+  // immediately after a new motif is added.
+  const renderMotifOutlineAboveSurface = objectType === 'motif';
+  // A gold outline remains legible on both the light canvas and dark granite.
+  const outlineColor = objectType === 'motif' ? 0xd7b356 : usesSubtleOutline ? 0xf8f5ee : 0x2196F3;
+  const outlineLineWidth = objectType === 'motif' ? 2.5 : usesSubtleOutline ? 1.5 : 3;
+  const baseOutlineOpacity = objectType === 'motif' ? 1 : usesSubtleOutline ? 0.9 : 1;
   const handleColor = shouldShowHandles ? 0x2196F3 : outlineColor;
 
   // Calculate handle positions - ensure minimum spacing (MUST be before useEffect)
@@ -130,6 +135,13 @@ export default function SelectionBox({
       setAnimationProgress(1);
     }
   }, [objectId, animateOnShow]);
+
+  // The designer canvas renders on demand. Selecting a motif changes Zustand
+  // state but does not necessarily cause a WebGL frame, so explicitly paint
+  // the newly mounted outline immediately.
+  React.useEffect(() => {
+    invalidate();
+  }, [invalidate, objectId]);
 
   const worldPos = React.useMemo(() => new THREE.Vector3(), []);
   const worldNormal = React.useMemo(() => new THREE.Vector3(), []);
@@ -449,7 +461,7 @@ export default function SelectionBox({
     };
   }, []);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (groupRef.current) {
       if (usesSubtleOutlineRef.current) {
         if (!visibilityRef.current) {
@@ -476,6 +488,8 @@ export default function SelectionBox({
         if (Math.abs(next - animationProgressRef.current) > 1e-3) {
           animationProgressRef.current = next;
           setAnimationProgress(next);
+          // Keep a demand-rendered canvas alive until the reveal finishes.
+          state.invalidate();
         }
       }
     }
@@ -496,7 +510,7 @@ export default function SelectionBox({
           lineWidth={outlineLineWidth}
           renderOrder={1001}
           depthWrite={false}
-          depthTest={true}
+          depthTest={!renderMotifOutlineAboveSurface}
           transparent
           opacity={outlineOpacity}
           raycast={disableRaycast}

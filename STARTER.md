@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-29
+**Last Updated:** 2026-08-31
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -93,6 +93,8 @@
 85. [August 26 Traditional Engraved Headstone Shape-to-Material Flow](#current-status-2026-08-26--traditional-engraved-headstone-shape-to-material-flow)
 86. [August 27 Mobile Designer Bottom Sheets and Inscription Editor](#current-status-2026-08-27--mobile-designer-bottom-sheets-and-inscription-editor)
 87. [August 29 Granite Colour-Space and Preview Brightness Alignment](#current-status-2026-08-29--granite-colour-space-and-preview-brightness-alignment)
+88. [August 29 Bronze Plaque Mobile Flow, Camera, and Fastenings](#current-status-2026-08-29--bronze-plaque-mobile-flow-camera-and-fastenings)
+89. [August 31 Designer Additions, Mini Headstones, and Theme Reliability](#current-status-2026-08-31--designer-additions-mini-headstones-and-theme-reliability)
 
 ---
 
@@ -14264,3 +14266,82 @@ git diff --check
 ```
 
 Targeted ESLint has no errors; legacy warnings may remain. `screen.png` is user-provided visual acceptance evidence and must not be overwritten.
+
+---
+
+## Current Status (2026-08-29) — Bronze Plaque Mobile Flow, Camera, and Fastenings
+
+### Guided flow and mobile wording
+
+Primary files: `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, and `app/select-material/_ui/MaterialSelectionGrid.tsx`.
+
+- Bronze Plaque (product ID `5`) setup order is **Select Border → Select Background → Select Size → Fastening Type**. `navigablePanelSlugs` derives this sequence from `menuItems`, so menu order and guided Previous/Next actions stay aligned.
+- For Bronze Plaque, Full Colour Plaque, and Urns, the material step is customer-facing **Select Background**. Bronze Plaque receives that label in the desktop menu, mobile sheet title, material grid, and guided CTA.
+- Guided action labels use direct destinations: **`Next: Select Background`**, not **`Next: Go to Select Background`**. Do not reintroduce the `Go to` prefix.
+- Slider interactions compact the rich Headstone/Base mobile size sheet while dragging and restore it on pointer release/cancel/blur. Plaques are deliberately excluded: their Width/Height switch and single active slider already fit in the complete sheet, so compacting it hides useful context without gaining space.
+
+### Plaque camera and top chip
+
+Primary files: `components/three/AutoFit.tsx` and `components/ThreeScene.tsx`.
+
+- Mobile plaques have a separate `AutoFit` composition. Do not classify them as tall Headstone/Base size targets: that former path used the tight `0.82` margin and made a wide plaque fill the viewport, obscuring the meadow. The accepted plaque margins are `1.08` with the normal sheet and `1.04` if the sheet is compact; vertical shifts are `0.44` and `0.20` radii.
+- Keep the automatic camera front-facing for every fastening option. Selecting rear lugs must not rotate the view; the user can inspect the rear manually with orbit controls.
+- `ProductNameHeader` labels plaque products **Plaque** in the top dimensions/price chip, rather than the generic default **Headstone**. Use the resolved product type, with product ID `5` as the loading fallback.
+
+### Bronze plaque fastening geometry
+
+Primary files: `components/three/headstone/PlaqueFixings.tsx` and `components/three/headstone/ShapeSwapper.tsx`.
+
+- `PlaqueFixings` is rendered only for Bronze Plaque and reads Zustand's `fixingType`: `flat-back` renders nothing, `screws` renders four flush metallic screw heads on the front, and `lugs-with-studs` renders four rear lugs with short studs.
+- The component is nested inside `SvgHeadstone`'s scaled child wrapper. `worldWidth`/`worldHeight` and physical hardware sizes (millimetres expressed as metres) must be converted with `unitsPerMeter`; the plaque extrusion `depth` is already in that wrapper's local coordinates and must **not** be multiplied by `unitsPerMeter`. Multiplying it placed rear hardware far behind the plaque.
+- The approved lug proportions are a `5 mm` lug depth, `3.5 mm` stud radius, and `12 mm` stud length. Screws are flush face discs with a shallow slot, not visible rods projecting from the plaque.
+
+### Verification
+
+```bash
+pnpm exec eslint components/ThreeScene.tsx components/three/AutoFit.tsx components/three/headstone/PlaqueFixings.tsx components/three/headstone/ShapeSwapper.tsx
+git diff --check
+```
+
+Targeted ESLint must have no errors. Existing warnings in the legacy `AutoFit`, `ThreeScene`, and `ShapeSwapper` code are pre-existing. `screen.png` is user-provided visual acceptance evidence and must never be overwritten.
+
+---
+
+## Current Status (2026-08-31) — Designer Additions, Mini Headstones, and Theme Reliability
+
+### Product routes, Mini Headstones, and default granite
+
+Primary files: `lib/designer-product-routes.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/three/Scene.tsx`, and `lib/headstone-store.ts`.
+
+- Product ID `22` (**Laser Etched Black Granite Mini Headstone**) must retain its Mini Headstone route when selected; do not send it to the standard Headstone URL. Its shape picker intentionally exposes only the first 11 shapes, ending at **Square**.
+- Mini Headstone keeps a compact concrete foundation. Use the smaller `0.04 m` pad margin in `Scene.tsx`; standard standalone headstones retain the `0.16 m` margin.
+- Products `8` (**Laser Etched Black Granite Pet Mini Headstone**) and `9` (**Laser Etched Black Granite Pet Plaque**) intentionally default to the same `Glory-Black-2.webp` texture as product `4` (**Laser Etched Black Granite Headstone**). Apply it through `headstoneMaterialUrl`; product 8 must also use it for its Base. This overrides the legacy XML `18.webp` texture only on product selection, without preventing later user material changes.
+
+### Additions: XML data, rendering, foundation, and duplication
+
+Primary files: `app/_internal/_additions-loader.ts`, `components/AdditionSelector.tsx`, `components/DesignerNav.tsx`, `components/three/AdditionModel.tsx`, `components/three/Scene.tsx`, and `lib/headstone-store.ts`.
+
+- Addition dimensions and retail prices must come from the parsed XML size variant. K2213 is `140 × 270 × 140 mm`, retail `$382.20`; K2254 is `145 × 240 × 145 mm`, retail `$423.80`.
+- K2254 has no committed `public/additions/2254/2254.glb` (only legacy 3DS/MAX assets). `AdditionModel` therefore resolves K2254 to the compatible K2213 GLB and texture as a temporary visual fallback, while preserving K2254's own XML dimensions and price. Do not restore the missing K2254 GLB URL or the R3F scene will throw a 404 and hit the error boundary. Replace the fallback once an exported K2254 GLB is supplied.
+- Addition cards and the **Selected Addition** summary both display `width × height × depth` using `formatDimensionTriplet(...)`, so the text follows the global MM/IN toggle. Keep stored values in millimetres.
+- A base-mounted vase or statue expands the granite Base by `30%` in width and `50%` in depth. The standalone concrete foundation and its contact shadow must use that same footprint and centre, otherwise the granite Base visibly overhangs the pad.
+- `duplicateAddition()` must treat `footprintWidth` as metres and translate the physical separation into the Base unit-cube local coordinate system. For a base-mounted item, move the copy to the free side of the Base; using raw `20`/`120` offsets sends the duplicate outside the scene.
+
+### Motifs, images, selection, and day mode
+
+Primary files: `components/MotifSelectorPanel.tsx`, `components/SelectionBox.tsx`, `components/three/MotifModel.tsx`, `components/ImageSelector.tsx`, `components/three/ImageModel.tsx`, `components/DesignerNav.tsx`, and `styles/globals.css`.
+
+- The Motifs catalogue excludes **Flower Inserts**, **2 Colour Motifs**, and **1 Colour Motifs**. Its list button restores the last opened motif category. While thumbnails load, show both the existing loading text and a centred loading animation.
+- Australian Flora thumbnails and models require their original gold treatment and alpha-aware rendering. Do not tint transparent SVG bounds into opaque rectangles; the thumbnail and on-stone result must preserve transparent backgrounds.
+- Newly added motifs must become selected immediately and show a persistent outline. Selection rendering is demand-driven, so invalidate after selection changes; do not let the outline flicker out after one frame.
+- Image rotation controls are expressed in degrees in the UI and converted to radians only at storage/render boundaries. The image selection box lives inside the already-rotated parent group, so it must not receive the image rotation a second time.
+- In day mode, selected motif/addition CTA controls, fixed-size image controls, and the pulsing Next button need explicit contrast classes. The Position section for Images is mobile-only.
+
+### Verification and evidence
+
+```bash
+pnpm exec eslint components/AdditionSelector.tsx components/DesignerNav.tsx components/three/AdditionModel.tsx components/three/Scene.tsx lib/headstone-store.ts
+git diff --check
+```
+
+Targeted lint checks currently have no errors; legacy warnings remain in some large designer/store components. `screen.png` is user-provided acceptance evidence: inspect it when asked, but never overwrite it.

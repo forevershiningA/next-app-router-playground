@@ -216,9 +216,15 @@ function AdditionModelInner({
   const ref = React.useRef<THREE.Group>(null!);
   const [dragging, setDragging] = React.useState(false);
 
-  // Load the GLB file path
-  const glbPath = `/additions/${addition.file}`;
-  const dirNum = addition.file.split('/')[0];
+  // K2254 was supplied only as a legacy 3DS/MAX asset, so there is no GLB at
+  // its catalog path. Use the matching Tedesche GLB until its own model is
+  // exported, while retaining K2254's XML dimensions and price elsewhere.
+  const modelFile =
+    addition.id === 'K2254' ? '2213/2213.glb' : addition.file;
+
+  // Load GLB and its matching texture path.
+  const glbPath = `/additions/${modelFile}`;
+  const dirNum = modelFile.split('/')[0];
 
   // Load GLB and texture - these must be called unconditionally
   const gltf = useGLTF(glbPath);
@@ -546,12 +552,16 @@ function AdditionModelInner({
     sizeVariantHeightMm ??
     TARGET_HEIGHTS[additionKind] ??
     TARGET_HEIGHTS.application;
-  const targetHeightWorld = usesMetricUnits
+  // Base and ledger meshes use metres, while additions on the upright live
+  // inside SvgHeadstone's local coordinate system. Convert XML millimetres to
+  // that local system just as motifs and inscriptions do; using raw millimetres
+  // here made applications grow with the SVG shape's scale.
+  const targetHeightInSurfaceUnits = usesMetricUnits
     ? targetHeightMm * MM
-    : targetHeightMm;
+    : targetHeightMm * (headstone?.unitsPerMeter ?? 1000) * MM;
   const dominantDimension = Math.max(size.x, size.y, size.z);
   const modelHeight = Math.max(1e-6, dominantDimension);
-  const auto = targetHeightWorld / modelHeight;
+  const auto = targetHeightInSurfaceUnits / modelHeight;
   const user = Math.max(0.05, Math.min(5, offset.scale ?? 1));
   const finalScale = auto * user;
   const wantsFullDepth =

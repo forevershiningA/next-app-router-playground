@@ -200,7 +200,7 @@ export default function MotifSelectionGrid({
                         <img
                           src={motif.img}
                           alt={getMotifCategoryName(motif.name)}
-                          className="max-h-full max-w-full object-contain transition-transform group-hover:scale-105"
+                          className="day:brightness-0 max-h-full max-w-full object-contain transition-transform group-hover:scale-105"
                         />
                       )}
                     </div>
@@ -344,7 +344,7 @@ export default function MotifSelectionGrid({
                               <img
                                 src={motif.path}
                                 alt={motif.name}
-                                className="max-h-full max-w-full object-contain transition-transform group-hover:scale-105"
+                                className="day:brightness-0 max-h-full max-w-full object-contain transition-transform group-hover:scale-105"
                               />
                             )}
                           </div>

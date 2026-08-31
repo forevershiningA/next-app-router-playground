@@ -823,7 +823,13 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
     selectedImage &&
     !(showCropSection && updatingImageId)
   ) {
-    const imageRotationDeg = selectedImage.rotationZ || 0;
+    // ImageModel stores Three.js radians; the editor controls are labelled and
+    // ranged in degrees.
+    const imageRotationDeg = normalizeSignedRotation(
+      ((selectedImage.rotationZ || 0) * 180) / Math.PI,
+    );
+    const updateImageRotationDegrees = (degrees: number) =>
+      updateImageRotation(selectedImageId, (degrees * Math.PI) / 180);
     const imagePositionStep =
       selectedImage.coordinateSpace === 'mm-center'
         ? nudgeStepMm
@@ -910,16 +916,16 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             </div>
             {imagePrice !== null && <div className="shrink-0 text-sm font-semibold text-[#D7B356]">${imagePrice.toFixed(2)}</div>}
           </div>
-          <div className="mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
+          <div className="day:border-gray-200 mt-3 flex items-center gap-2 border-t border-white/10 pt-3">
             {hasFixedSizes ? (
-              <select value={currentSizeVariant} onChange={(e) => applyFixedSizeVariant(Number(e.target.value))} className="min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]">
+              <select value={currentSizeVariant} onChange={(e) => applyFixedSizeVariant(Number(e.target.value))} className="day:border-gray-300 day:bg-gray-100 day:text-gray-900 min-w-0 flex-1 rounded-md border border-white/10 bg-[#121212] px-3 py-2 text-sm font-semibold text-white outline-none focus:border-[#D7B356]">
                 {sizeOptions.map((size, index) => (
                   <option key={size.label} value={index + 1}>
                     {formatImageSize(size.height * aspectRatio, size.height)}
                   </option>
                 ))}
               </select>
-            ) : <span className="min-w-0 flex-1 text-sm font-medium text-white/65">{formatImageSize(selectedImage.widthMm, selectedImage.heightMm)}</span>}
+            ) : <span className="day:text-gray-600 min-w-0 flex-1 text-sm font-medium text-white/65">{formatImageSize(selectedImage.widthMm, selectedImage.heightMm)}</span>}
             <button type="button" onClick={() => { removeImage(selectedImageId); setSelectedImageId(null); setActivePanel(null); }} aria-label="Remove image" className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-red-400/35 text-red-200 transition-colors hover:bg-red-500/15">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.9 12.1A2 2 0 0116.1 21H7.9a2 2 0 01-2-1.9L5 7m4 4v6m6-6v6m-7-10V4h8v3M4 7h16" /></svg>
             </button>
@@ -1222,7 +1228,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
             )}
           </div>
 
-          <div className={sectionCardClass}>
+          <div className={`${sectionCardClass} md:hidden`}>
             <label className={labelClass}>Position</label>
             <button
               type="button"
@@ -1261,7 +1267,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 {imageRotationDeg !== 0 && (
                   <button
                     type="button"
-                    onClick={() => updateImageRotation(selectedImageId, 0)}
+                    onClick={() => updateImageRotationDegrees(0)}
                     className="rounded border border-[#D7B356]/60 px-2 py-1 text-xs font-semibold text-[#F2D58B] hover:bg-[#D7B356]/15"
                   >
                     Reset 0°
@@ -1273,7 +1279,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   type="button"
                   onClick={() => {
                     const newVal = snapImageRotation(Math.max(-180, imageRotationDeg - 1));
-                    updateImageRotation(selectedImageId, newVal);
+                    updateImageRotationDegrees(newVal);
                   }}
                   className={controlButtonClass}
                   aria-label="Decrease rotation by 1 degree"
@@ -1299,17 +1305,16 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   step={1}
                   value={Math.round(imageRotationDeg)}
                   onChange={(e) => {
-                    updateImageRotation(
-                      selectedImageId,
+                    updateImageRotationDegrees(
                       snapImageRotation(Number(e.target.value)),
                     );
                   }}
                   onBlur={(e) => {
                     const val = Number(e.target.value);
                     if (val < -180) {
-                      updateImageRotation(selectedImageId, -180);
+                      updateImageRotationDegrees(-180);
                     } else if (val > 180) {
-                      updateImageRotation(selectedImageId, 180);
+                      updateImageRotationDegrees(180);
                     }
                   }}
                   className={`${numberInputBaseClass} w-16`}
@@ -1318,7 +1323,7 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                   type="button"
                   onClick={() => {
                     const newVal = snapImageRotation(Math.min(180, imageRotationDeg + 1));
-                    updateImageRotation(selectedImageId, newVal);
+                    updateImageRotationDegrees(newVal);
                   }}
                   className={controlButtonClass}
                   aria-label="Increase rotation by 1 degree"
@@ -1350,7 +1355,9 @@ export default function ImageSelector({ onImageSelect }: ImageSelectorProps) {
                 step={1}
                 value={imageRotationDeg}
                 onChange={(e) => {
-                  updateImageRotation(selectedImageId, snapImageRotation(Number(e.target.value)));
+                  updateImageRotationDegrees(
+                    snapImageRotation(Number(e.target.value)),
+                  );
                 }}
                 className={rangeInputClass}
               />

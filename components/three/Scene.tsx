@@ -7,6 +7,7 @@ import HeadstoneAssembly from './headstone/HeadstoneAssembly';
 import SunRays from './SunRays';
 import AtmosphericSky from './AtmosphericSky';
 import { useHeadstoneStore } from '#/lib/headstone-store';
+import { data } from '#/app/_internal/_data';
 
 import { useFrame, useThree, ThreeEvent } from '@react-three/fiber';
 import { useRef, Suspense, useEffect, useMemo } from 'react';
@@ -659,8 +660,11 @@ export default function Scene({
   const setSelectedImageId = useHeadstoneStore((s) => s.setSelectedImageId);
   const setSelectedEmblemId = useHeadstoneStore((s) => s.setSelectedEmblemId);
   const productType = useHeadstoneStore((s) => s.catalog?.product.type);
+  const productId = useHeadstoneStore((s) => s.productId);
   const widthMm = useHeadstoneStore((s) => s.widthMm);
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
+  const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
+  const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
@@ -670,6 +674,7 @@ export default function Scene({
   const isFullMonument = productType === 'full-monument';
   const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
   const isUrn = productType === 'urn';
+  const isMiniHeadstone = productId === '22';
   const assemblyZOffset = -(ledgerDepthMm / 1000);
   // Extend from behind the upright/base to just beyond the kerb's front edge;
   // a full monument's foundation must support both, not only the grave slab.
@@ -682,13 +687,39 @@ export default function Scene({
     0.08;
   const foundationCenterZ = (foundationRearZ + foundationFrontZ) / 2;
   const foundationDepth = foundationFrontZ - foundationRearZ;
-  const contactWidth = (showBase ? baseWidthMm : widthMm) / 1000;
-  const contactDepth = (showBase ? baseThickness : uprightThickness) / 1000;
+  const hasBaseMountedStatueOrVase = useMemo(
+    () =>
+      selectedAdditions.some((instanceId) => {
+        if ((additionOffsets[instanceId]?.targetSurface ?? 'headstone') !== 'base') {
+          return false;
+        }
+
+        const baseId = instanceId.replace(/_\d+$/, '');
+        const type = data.additions.find((addition) => addition.id === baseId)?.type;
+        return type === 'statue' || type === 'vase';
+      }),
+    [additionOffsets, selectedAdditions],
+  );
+  // HeadstoneBaseAuto expands the granite base by 30% for a base-mounted vase
+  // or statue, and makes it 50% deeper. The concrete pad must use the same
+  // footprint and alignment.
+  const baseFootprintWidth =
+    (baseWidthMm / 1000) * (hasBaseMountedStatueOrVase ? 1.3 : 1);
+  const baseFootprintDepth =
+    (baseThickness / 1000) * (hasBaseMountedStatueOrVase ? 1.5 : 1);
+  const contactWidth = showBase ? baseFootprintWidth : widthMm / 1000;
+  const contactDepth = showBase ? baseFootprintDepth : uprightThickness / 1000;
   const contactCenterZ = showBase
     ? -(uprightThickness / 1000) / 2 + contactDepth / 2
     : 0;
+  const standaloneFoundationPadding = isMiniHeadstone ? 0.04 : 0.16;
   const hasStandaloneHeadstoneFoundation =
-    !isFullMonument && !isPlaque && !isUrn && showBase && contactWidth > 0 && contactDepth > 0;
+    !isFullMonument &&
+    !isPlaque &&
+    !isUrn &&
+    showBase &&
+    contactWidth > 0 &&
+    contactDepth > 0;
 
   // For full monument the whole assembly is shifted back by ledgerDepthMm/1000 in Z.
   // The camera target needs to follow: lower Y (ledger is at ground level, not 3.8m up)
@@ -835,13 +866,13 @@ export default function Scene({
         {hasStandaloneHeadstoneFoundation && (
           <>
             <FoundationContactShadow
-              width={contactWidth + 0.16}
-              depth={contactDepth + 0.16}
+              width={contactWidth + standaloneFoundationPadding}
+              depth={contactDepth + standaloneFoundationPadding}
               centerZ={contactCenterZ}
             />
             <MemorialFoundation
-              width={contactWidth + 0.16}
-              depth={contactDepth + 0.16}
+              width={contactWidth + standaloneFoundationPadding}
+              depth={contactDepth + standaloneFoundationPadding}
               centerZ={contactCenterZ}
             />
           </>

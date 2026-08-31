@@ -45,12 +45,18 @@ export default function AutoFit({
   const baseThickness = useHeadstoneStore((s: any) => s.baseThickness);
   const showBase = useHeadstoneStore((s: any) => s.showBase);
   const editingObject = useHeadstoneStore((s: any) => s.editingObject);
+  const productType = useHeadstoneStore((s: any) => s.catalog?.product.type);
   const pathname = usePathname();
+  const designerStepSlug = getDesignerStepSlug(pathname);
+  const isPlaque = productType === 'plaque' || productType === 'bronze_plaque';
   const isMobileDesignerStep =
-    getDesignerStepSlug(pathname) !== null && size.width < 768;
+    designerStepSlug !== null && size.width < 768;
   const isMobileUprightOrBaseSizeSelection =
     isMobileDesignerStep &&
+    !isPlaque &&
     (editingObject === 'headstone' || editingObject === 'base');
+  const isMobilePlaqueSizeSelection =
+    isMobileDesignerStep && isPlaque && editingObject === 'headstone';
   const isSizeAdjustmentCompact = useMobileNavStore(
     (s) => s.isSizeAdjustmentCompact,
   );
@@ -115,6 +121,8 @@ export default function AutoFit({
       toTgt.y -= sphere.radius * (
         isMobileUprightOrBaseSizeSelection
           ? (isMobileSheetCompact ? 0.42 : 0.74)
+          : isMobilePlaqueSizeSelection
+            ? (isMobileSheetCompact ? 0.2 : 0.44)
           : (isMobileSheetCompact ? 0.26 : 0.52)
       );
     }
@@ -130,11 +138,16 @@ export default function AutoFit({
     const sheetMargin = isMobileDesignerStep
       ? isMobileUprightOrBaseSizeSelection
         ? (isMobileSheetCompact ? 0.88 : 0.82)
+        : isMobilePlaqueSizeSelection
+          // A plaque is wide and shallow. Its size must not be framed using
+          // the tight upright-headstone margin, otherwise a width change can
+          // consume the whole viewport and hide the grass behind it.
+          ? (isMobileSheetCompact ? 1.04 : 1.08)
         : (isMobileSheetCompact ? 1.2 : 1.85)
       : 1;
     const dist = Math.max(dX, dY) * Math.max(1, margin) * sheetMargin + pad;
 
-    const dir = new THREE.Vector3(0, 0, 1); // Front view
+    const dir = new THREE.Vector3(0, 0, 1);
     dir.normalize();
 
     const toPos = toTgt.clone().addScaledVector(dir, dist);
@@ -175,6 +188,7 @@ export default function AutoFit({
     invalidate,
     isMobileDesignerStep,
     isMobileUprightOrBaseSizeSelection,
+    isMobilePlaqueSizeSelection,
     isMobileSheetCompact,
   ]);
 

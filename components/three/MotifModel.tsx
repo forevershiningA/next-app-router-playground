@@ -916,8 +916,9 @@ export default function MotifModel({
             unitsPerMeter={headstone.unitsPerMeter}
             currentSizeMm={offset.heightMm ?? 100}
             objectType="motif"
-            animateOnShow
-            animationDuration={520}
+            // Keep motif selection static: this canvas is demand-rendered and
+            // a reveal animation could otherwise stop after its first frame.
+            animateOnShow={false}
             onUpdate={(data) => {
               if (data.scaleFactor !== undefined) {
                 // Update heightMm based on scale factor

@@ -18,6 +18,7 @@ import { BronzeBorder } from '../BronzeBorder';
 import InsetContourLine, { isContourSupported } from '../InsetContourLine';
 import UrnEnamelInlay from './UrnEnamelInlay';
 import { SsPlaqueHoles } from './SsPlaqueHoles';
+import { PlaqueFixings } from './PlaqueFixings';
 import { useHeadstoneStore, Line } from '#/lib/headstone-store';
 import { DEFAULT_SHAPE_URL } from '#/lib/headstone-constants';
 import { data } from '#/app/_internal/_data';
@@ -259,6 +260,7 @@ export default function ShapeSwapper({
   const showStainlessRim = catalog?.product.id === '1' || catalog?.product.id === '23';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
+  const fixingType = useHeadstoneStore((s) => s.fixingType);
   const ssFinish: 'brushed' | 'polished' =
     headstoneMaterialUrl?.includes('high-polished-ss-swatch') ? 'polished' : 'brushed';
   const bronzeBorderColor = '#FFDFA3';
@@ -794,6 +796,16 @@ export default function ShapeSwapper({
                     />
                   </React.Suspense>
                 </ErrorBoundary>
+              )}
+
+              {isBronzePlaque && (
+                <PlaqueFixings
+                  fixingType={fixingType}
+                  worldWidth={api.worldWidth}
+                  worldHeight={api.worldHeight}
+                  depth={headstoneDepth}
+                  unitsPerMeter={api.unitsPerMeter}
+                />
               )}
 
               {/* Mounting holes for SS plaque (product 52) */}

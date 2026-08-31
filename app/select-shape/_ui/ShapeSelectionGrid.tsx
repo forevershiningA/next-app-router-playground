@@ -87,6 +87,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const isPetPlaqueProduct = productId === '9' || productId === '135';
   const isPetRock = productId === '135';
   const isPetMiniHeadstone = productId === '8';
+  const isMiniHeadstone = productId === '22';
+  const isTraditionalShapesOnly = isPetMiniHeadstone || isMiniHeadstone;
   const designerHref = (
     stepSlug: Parameters<typeof getDesignerProductStepHref>[0],
   ) => getDesignerProductStepHref(stepSlug, productId);
@@ -480,7 +482,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       shouldInclude = isRectangleShape;
     } else if (isPlaque) {
       shouldInclude = isPlaqueShape;
-    } else if (isPetMiniHeadstone) {
+    } else if (isTraditionalShapesOnly) {
       shouldInclude = !isPlaqueShape && shape.category === 'traditional';
     } else {
       shouldInclude = !isPlaqueShape;
@@ -499,7 +501,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       return matchesCategory;
     }),
   );
-  const visibleShapeCategories = isPetMiniHeadstone
+  const visibleShapeCategories = isTraditionalShapesOnly
     ? petMiniHeadstoneShapeCategories
     : shapeCategories;
   const selectedCategoryDetails = visibleShapeCategories.find(
@@ -528,8 +530,10 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
               </h2>
             )}
             <p className="day:text-gray-600 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
-              {isPetMiniHeadstone
-                ? 'Choose from the traditional basic shapes available for this pet mini headstone.'
+              {isTraditionalShapesOnly
+                ? `Choose from the first 11 traditional shapes available for this${
+                    isPetMiniHeadstone ? ' pet' : ''
+                  } mini headstone.`
                 : 'Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.'}
             </p>
           </div>
@@ -662,7 +666,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                       aria-pressed={isSelected}
                       className="flex w-full flex-1 cursor-pointer flex-col text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#cfac6c]"
                     >
-                      <div className="day:border-gray-200 day:bg-gray-100 relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_35%_20%,#4a4a4a_0%,#2b2b2b_44%,#151515_100%)]">
+                      <div className="day:border-gray-200 day:bg-gray-100 day:bg-none relative aspect-square w-full overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_35%_20%,#4a4a4a_0%,#2b2b2b_44%,#151515_100%)]">
                         <Image
                           src={shapeUrl}
                           alt={shape.name}

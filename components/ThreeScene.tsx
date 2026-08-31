@@ -148,6 +148,10 @@ function ProductNameHeader() {
     [productId],
   );
   const activeCatalog = catalog ?? resolvedCatalog;
+  const isPlaqueProduct =
+    activeCatalog?.product.type === 'plaque' ||
+    activeCatalog?.product.type === 'bronze_plaque' ||
+    productId === '5';
   const selectedShape = useMemo(
     () =>
       activeCatalog?.product.shapes.find((shape) => shape.url === shapeUrl) ??
@@ -334,7 +338,7 @@ function ProductNameHeader() {
           heightMm: kerbHeightMm,
         };
       default:
-        return { label: 'Headstone', widthMm, heightMm };
+        return { label: isPlaqueProduct ? 'Plaque' : 'Headstone', widthMm, heightMm };
     }
   }, [
     editingObject,
@@ -346,6 +350,7 @@ function ProductNameHeader() {
     kerbHeightMm,
     widthMm,
     heightMm,
+    isPlaqueProduct,
   ]);
   const sizeLabel = useMemo(
     () =>

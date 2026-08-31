@@ -754,7 +754,10 @@ export default function ImageModel({
           objectId={id}
           position={new THREE.Vector3(0, 0, selectionZ)}
           bounds={{ width: displayWidth, height: displayHeight }}
-          rotation={isLedgerSurface ? 0 : rotationZ}
+          // The SelectionBox is a child of the already-rotated image group.
+          // Applying rotationZ again here made its corners rotate twice as far
+          // as the image itself.
+          rotation={0}
           unitsPerMeter={headstone?.unitsPerMeter ?? 1}
           currentSizeMm={widthMm}
           objectType="motif"

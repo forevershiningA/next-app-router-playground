@@ -56,6 +56,7 @@ import ConfirmModal from './ConfirmModal';
 import {
   displayLengthValueFromMm,
   formatDimensionPair,
+  formatDimensionTriplet,
   formatImperialFractionFromMm,
   getLengthUnitLabel,
   lengthValueToMm,
@@ -84,14 +85,14 @@ const menuGroups = [
         icon: RectangleStackIcon,
         requiresBorder: true,
       },
+      { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
+      { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
       {
         slug: 'select-fastening',
         name: 'Fastening Type',
         icon: RectangleStackIcon,
         requiresBronzePlaque: true,
       },
-      { slug: 'select-material', name: 'Select Material', icon: SwatchIcon },
-      { slug: 'select-size', name: 'Select Size', icon: ArrowsPointingOutIcon },
       {
         slug: 'corners',
         name: 'Corners',
@@ -627,6 +628,7 @@ export default function DesignerNav() {
   const [showCanvas, setShowCanvas] = React.useState(false);
   const [isLoadingPanel, setIsLoadingPanel] = React.useState(false);
   const [motifHeightStepIndex, setMotifHeightStepIndex] = React.useState(0);
+  const [lastMotifCategoryId, setLastMotifCategoryId] = React.useState<string | null>(null);
 
   const motifOffsets = useHeadstoneStore((s) => s.motifOffsets);
   const setMotifOffset = useHeadstoneStore((s) => s.setMotifOffset);
@@ -739,12 +741,12 @@ export default function DesignerNav() {
     (slug: string | null) =>
       slug === 'select-material' &&
       (productId === '5' || productId === '32' || isUrn)
-        ? 'Background'
+        ? 'Select Background'
         : menuItems.find((item) => item.slug === slug)?.name,
     [productId, isUrn],
   );
   const nextPanelTitle = nextPanelSlug
-    ? `Go to ${getPanelDisplayName(nextPanelSlug)}`
+    ? getPanelDisplayName(nextPanelSlug)
     : undefined;
 
   const handleNavigateToPanel = React.useCallback(
@@ -1029,6 +1031,14 @@ export default function DesignerNav() {
     );
     const activeAdditionSize =
       additionSizes[selectedSizeVariant - 1] ?? additionSizes[0] ?? null;
+    const activeAdditionDimensions = activeAdditionSize
+      ? formatDimensionTriplet(
+          activeAdditionSize.width,
+          activeAdditionSize.height,
+          activeAdditionSize.depth,
+          unitSystem,
+        )
+      : null;
     const isStatueOrVase =
       activeAddition?.type === 'statue' || activeAddition?.type === 'vase';
     const activeAdditionDisplayName =
@@ -1087,6 +1097,11 @@ export default function DesignerNav() {
                     <div className="day:text-gray-900 mt-0.5 truncate text-sm font-semibold text-white">
                       {activeAdditionDisplayName}
                     </div>
+                    {activeAdditionDimensions && (
+                      <div className="day:text-gray-500 mt-0.5 text-[11px] font-medium text-white/45">
+                        {activeAdditionDimensions}
+                      </div>
+                    )}
                     <div className="day:text-gray-500 mt-1 text-xs font-medium text-white/45">
                       <span className="capitalize">{activeAddition.type}</span>
                     </div>
@@ -1556,13 +1571,13 @@ export default function DesignerNav() {
                     </span>
                   )}
                 </div>
-                <div className="mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
+                <div className="day:border-gray-200 mt-3 grid grid-cols-2 gap-2 border-t border-white/10 pt-3">
                   <button
                     type="button"
                     onClick={() =>
                       selectedMotifId && duplicateMotif(selectedMotifId)
                     }
-                    className="rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
+                    className="day:border-[#D7B356]/60 day:bg-amber-50 day:text-[#76530c] day:hover:bg-amber-100 rounded-md border border-white/10 bg-white/[0.06] px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
                   >
                     Duplicate
                   </button>
@@ -1573,7 +1588,7 @@ export default function DesignerNav() {
                       setSelectedMotifId(null);
                       setActivePanel(null);
                     }}
-                    className="rounded-md border border-red-400/35 px-3 py-2 text-xs font-semibold text-red-200 transition-colors hover:bg-red-500/15"
+                    className="day:border-red-300 day:bg-red-50 day:text-red-700 day:hover:bg-red-100 rounded-md border border-red-400/35 px-3 py-2 text-xs font-semibold text-red-200 transition-colors hover:bg-red-500/15"
                   >
                     Remove
                   </button>
@@ -1586,7 +1601,7 @@ export default function DesignerNav() {
                         flipX: !activeOffset.flipX,
                       })
                     }
-                    className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
+                    className="day:border-gray-300 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
                   >
                     Flip X
                   </button>
@@ -1599,7 +1614,7 @@ export default function DesignerNav() {
                         flipY: !activeOffset.flipY,
                       })
                     }
-                    className="rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
+                    className="day:border-gray-300 day:bg-gray-50 day:text-gray-700 day:hover:bg-gray-100 rounded-md border border-white/10 px-3 py-2 text-xs font-semibold text-white/80 transition-colors hover:border-[#D7B356]/50"
                   >
                     Flip Y
                   </button>
@@ -1956,7 +1971,11 @@ export default function DesignerNav() {
 
         {showMotifCatalog && (
           <div className="day:border-gray-200 day:bg-white min-h-[calc(44dvh-128px)] flex-1 overflow-hidden rounded-lg border border-white/10 bg-[#171717] p-3.5 shadow-lg shadow-black/15 md:min-h-0">
-            <MotifSelectorPanel motifs={motifCatalog} />
+            <MotifSelectorPanel
+              motifs={motifCatalog}
+              initialCategoryId={lastMotifCategoryId}
+              onCategoryOpen={setLastMotifCategoryId}
+            />
           </div>
         )}
       </div>
@@ -2638,13 +2657,28 @@ export default function DesignerNav() {
     const rangeBoundsClass =
       'mt-1 flex h-4 w-full justify-between text-xs leading-4 text-white/35 day:text-gray-400';
     const startCompactSizeAdjustment = () => {
-      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      // Plaques only expose the dimension tabs and one active slider. Keeping
+      // the full sheet visible preserves the Width/Height switch; compact mode
+      // is useful only for the richer headstone/base sizing panels.
+      if (
+        !isPlaque &&
+        typeof window !== 'undefined' &&
+        window.innerWidth < 768
+      ) {
         setSizeAdjustmentCompact(true);
+      }
+    };
+    const endCompactSizeAdjustment = () => {
+      if (typeof window !== 'undefined' && window.innerWidth < 768) {
+        setSizeAdjustmentCompact(false);
       }
     };
     const compactSizeRangeProps = {
       onFocus: startCompactSizeAdjustment,
       onPointerDown: startCompactSizeAdjustment,
+      onPointerUp: endCompactSizeAdjustment,
+      onPointerCancel: endCompactSizeAdjustment,
+      onBlur: endCompactSizeAdjustment,
     };
 
     // Which dimension controls exist for the current editing target. Width and
@@ -3684,7 +3718,7 @@ export default function DesignerNav() {
                   disabled={!prevPanelSlug}
                   title={
                     prevPanelSlug
-                      ? `Go to ${getPanelDisplayName(prevPanelSlug)}`
+                      ? getPanelDisplayName(prevPanelSlug)
                       : undefined
                   }
                   className="day:border-gray-300 day:bg-gray-100 day:text-gray-700 day:hover:border-gray-400 day:hover:bg-gray-200 day:hover:text-gray-900 inline-flex items-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/80 transition-colors duration-200 hover:border-white/50 hover:bg-white/15 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
@@ -4741,7 +4775,7 @@ export default function DesignerNav() {
                                 : productId === '5' ||
                                     productId === '32' ||
                                     isUrn
-                                  ? 'Background'
+                                  ? 'Select Background'
                                   : item.name;
                             const forcedMaterialTarget =
                               canSelectStainlessGraniteBaseMaterial

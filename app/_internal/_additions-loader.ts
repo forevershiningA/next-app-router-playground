@@ -47,6 +47,35 @@ const FALLBACK_SIZES: Record<
       notes: 'white',
     },
   ],
+  // motifs-biondan.xml: base-mounted Vase Tedesche variants.
+  K2213: [
+    {
+      variant: 1,
+      code: 'K2213',
+      width: 140,
+      height: 270,
+      depth: 140,
+      weight: 1,
+      availability: true,
+      wholesalePrice: 147,
+      retailPrice: 382.2,
+      notes: '',
+    },
+  ],
+  K2254: [
+    {
+      variant: 1,
+      code: 'K2254',
+      width: 145,
+      height: 240,
+      depth: 145,
+      weight: 1,
+      availability: true,
+      wholesalePrice: 163,
+      retailPrice: 423.8,
+      notes: '',
+    },
+  ],
   B1134S: [
     {
       variant: 1,

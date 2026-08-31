@@ -4,6 +4,8 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useHeadstoneStore } from '#/lib/headstone-store';
 import { useMobileNavStore } from '#/lib/mobile-nav-store';
+import { formatDimensionTriplet } from '#/lib/unit-system';
+import { useUnitSystem } from '#/lib/use-unit-system';
 
 type Addition = {
   id: string;
@@ -11,6 +13,12 @@ type Addition = {
   image: string;
   type: string;
   file?: string | null;
+  sizes?: Array<{
+    width: number;
+    height: number;
+    depth: number;
+    availability: boolean;
+  }>;
 };
 
 const CATEGORY_FILTERS = [
@@ -34,6 +42,7 @@ function getAdditionDisplayName(name: string) {
 
 export default function AdditionSelector({ additions }: Props) {
   const [category, setCategory] = useState<(typeof CATEGORY_FILTERS)[number]['id']>('all');
+  const unitSystem = useUnitSystem();
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const currentSelectedAdditionId = useHeadstoneStore((s) => s.selectedAdditionId);
   const addAddition = useHeadstoneStore((s) => s.addAddition);
@@ -101,6 +110,10 @@ export default function AdditionSelector({ additions }: Props) {
           const dirName = addition.file?.split('/')?.[0] || '';
           const imagePath = `/additions/${dirName}/${addition.image}`;
           const displayName = getAdditionDisplayName(addition.name);
+          const size = addition.sizes?.find((variant) => variant.availability) ?? addition.sizes?.[0];
+          const dimensions = size
+            ? formatDimensionTriplet(size.width, size.height, size.depth, unitSystem)
+            : null;
 
           return (
             <button
@@ -128,9 +141,16 @@ export default function AdditionSelector({ additions }: Props) {
                 )}
               </div>
               <div className="flex min-h-[74px] flex-1 flex-col justify-between gap-2 p-2.5">
-                <span className="text-center text-xs leading-snug font-semibold break-words text-white day:text-gray-900">
-                  {displayName}
-                </span>
+                <div className="space-y-1 text-center">
+                  <span className="block text-xs leading-snug font-semibold break-words text-white day:text-gray-900">
+                    {displayName}
+                  </span>
+                  {dimensions && (
+                    <span className="block text-[10px] leading-snug text-slate-400 day:text-gray-500">
+                      {dimensions}
+                    </span>
+                  )}
+                </div>
                 <span className="text-[11px] font-semibold text-[#D7B356]">
                   {isSelected ? 'Remove' : 'Add'} →
                 </span>

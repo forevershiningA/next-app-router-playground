@@ -69,6 +69,8 @@ const isDesktopViewport = () => {
   return window.innerWidth >= 1024;
 };
 const stainlessSteelHeadstoneProductIds = new Set(['1', '23']);
+const LASER_ETCHED_BLACK_GRANITE_TEXTURE =
+  '/textures/forever/l/Glory-Black-2.webp';
 const isStainlessSteelHeadstone = (state: Pick<HeadstoneState, 'productId' | 'catalog'>) =>
   stainlessSteelHeadstoneProductIds.has(state.productId ?? '') ||
   (state.catalog?.product?.type === 'headstone' &&
@@ -947,15 +949,20 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
           });
         }
 
+        const usesStandardLaserEtchedBlackGranite = id === '8' || id === '9';
         if (isUrnProduct) {
           // Urns always default to white inlay (color #34 = white)
           set({ headstoneMaterialUrl: '/jpg/backgrounds/colors/l/34.jpg' });
+        } else if (usesStandardLaserEtchedBlackGranite) {
+          set({ headstoneMaterialUrl: LASER_ETCHED_BLACK_GRANITE_TEXTURE });
         } else if (shape.table.color) {
           const texturePath = normalizeTextureUrl(shape.table.color);
           if (texturePath) set({ headstoneMaterialUrl: texturePath });
         }
-        if (shape.stand?.color) {
-          const baseTexturePath = normalizeTextureUrl(shape.stand.color);
+        if (shape.stand?.color || usesStandardLaserEtchedBlackGranite) {
+          const baseTexturePath = usesStandardLaserEtchedBlackGranite
+            ? LASER_ETCHED_BLACK_GRANITE_TEXTURE
+            : normalizeTextureUrl(shape.stand?.color);
           if (baseTexturePath) {
             set({
               baseMaterialUrl: baseTexturePath,
@@ -1794,11 +1801,22 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
     const isBase = surface === 'base';
     const isLedger = surface === 'ledger';
     const footprintWidth = currentOffset.footprintWidth;
-    const widthDelta = footprintWidth && footprintWidth > 0 ? footprintWidth : isBase ? 120 : 30;
-    const margin = isBase ? Math.max(widthDelta * 0.25, 20) : 0;
+    // footprintWidth is measured in world metres. Base addition offsets live
+    // in the base mesh's local unit-cube space, so convert the desired
+    // physical separation before applying it.
+    const widthDelta = footprintWidth && footprintWidth > 0 ? footprintWidth : isBase ? 0.12 : 30;
+    const margin = isBase ? Math.max(widthDelta * 0.25, 0.02) : 0;
     const ledgerShiftX = Math.max(Math.min(((get().ledgerWidthMm ?? 1000) / 1000) * 0.1, 0.2), 0.02);
     const ledgerShiftZ = Math.max(Math.min(((get().ledgerDepthMm ?? 2000) / 1000) * 0.1, 0.2), 0.02);
-    const deltaX = isLedger ? ledgerShiftX : isBase ? widthDelta + margin : 30;
+    const expandedBaseWidth = (get().baseWidthMm / 1000) * 1.3;
+    const baseLocalShift = (widthDelta + margin) / Math.max(expandedBaseWidth, 1e-6);
+    const deltaX = isLedger
+      ? ledgerShiftX
+      : isBase
+        ? (currentOffset.xPos ?? 0) >= 0
+          ? -baseLocalShift
+          : baseLocalShift
+        : 30;
     const deltaY = isLedger ? ledgerShiftZ : isBase ? 0 : 30;
 
     set((s) => {

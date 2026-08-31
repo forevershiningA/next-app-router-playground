@@ -68,6 +68,7 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const setBottomSheetCollapsed = useMobileNavStore(
     (s) => s.setBottomSheetCollapsed,
   );
+  const productId = useHeadstoneStore((s) => s.productId);
   const isImageCropActive = useHeadstoneStore((s) => Boolean(s.cropCanvasData));
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
@@ -94,6 +95,8 @@ export default function ConditionalNav({ items }: { items: DemoCategory[] }) {
   const mobileSheetTitle =
     designerStepSlug === 'select-images' && isImageCropActive
       ? 'Image Crop Section'
+      : designerStepSlug === 'select-material' && productId === '5'
+        ? 'Select Background'
       : designerStepSlug != null
         ? (DRAWER_PANEL_TITLES[designerStepSlug] ?? 'Designer')
         : 'Designer';

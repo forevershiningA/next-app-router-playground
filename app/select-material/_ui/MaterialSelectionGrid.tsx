@@ -64,7 +64,7 @@ export default function MaterialSelectionGrid({ materials }: { materials: Materi
   const isUrn = catalog?.product.type === 'urn';
   const usesBackgrounds = isFullColourPlaque || isUrn;
   const headingText = isBronzePlaque
-    ? 'Background'
+    ? 'Select Background'
     : usesBackgrounds
       ? 'Select Background'
       : 'Select Your Material';

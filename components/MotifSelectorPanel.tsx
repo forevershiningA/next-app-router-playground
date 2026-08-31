@@ -26,25 +26,60 @@ type MotifCategoryGroup = {
 
 interface MotifSelectorPanelProps {
   motifs: MotifCatalogItem[];
+  initialCategoryId?: string | null;
+  onCategoryOpen?: (categoryId: string) => void;
+}
+
+const HIDDEN_MOTIF_CATEGORIES = new Set([
+  'flower inserts',
+  '1 colour motifs',
+  '2 colour motifs',
+]);
+const AUSTRALIAN_FLORA_CATEGORY_IDS = new Set([
+  'australianflora',
+  'australianaflora',
+  'ausflora',
+]);
+
+function isVisibleMotifCategory(name: string) {
+  return !HIDDEN_MOTIF_CATEGORIES.has(
+    getMotifCategoryName(name).toLowerCase(),
+  );
+}
+
+function isAustralianFloraCategory(...categoryNames: string[]) {
+  return categoryNames.some((name) =>
+    AUSTRALIAN_FLORA_CATEGORY_IDS.has(
+      name.toLowerCase().replace(/[^a-z0-9]+/g, ''),
+    ),
+  );
+}
+
+function toCssMaskUrl(path: string) {
+  return `url("${path.replace(/"/g, '%22')}")`;
 }
 
 export default function MotifSelectorPanel({
   motifs,
+  initialCategoryId = null,
+  onCategoryOpen,
 }: MotifSelectorPanelProps) {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
-    null,
+    initialCategoryId,
   );
 
   const categories = useMemo<MotifCategoryGroup[]>(() => {
     if (motifs.length === 0) {
-      return data.motifs.map((motif, index) => ({
-        id: String(motif.id),
-        name: motif.name,
-        previewUrl: motif.img ?? null,
-        category: motif.src ?? motif.name,
-        motifs: [],
-        sourceIndex: index,
-      }));
+      return data.motifs
+        .map((motif, index) => ({
+          id: String(motif.id),
+          name: motif.name,
+          previewUrl: motif.img ?? null,
+          category: motif.src ?? motif.name,
+          motifs: [],
+          sourceIndex: index,
+        }))
+        .filter((category) => isVisibleMotifCategory(category.name));
     }
 
     const categoryMap = new Map<string, MotifCategoryGroup>();
@@ -72,7 +107,8 @@ export default function MotifSelectorPanel({
         return true;
       })
       .map((cat) => categoryMap.get(cat)!)
-      .filter(Boolean);
+      .filter(Boolean)
+      .filter((category) => isVisibleMotifCategory(category.name));
   }, [motifs]);
 
   const selectedCategory =
@@ -104,6 +140,10 @@ export default function MotifSelectorPanel({
   });
 
   const individualMotifs = selectedCategory?.motifs ?? [];
+  const isAustralianFlora = isAustralianFloraCategory(
+    selectedCategory?.name ?? '',
+    selectedCategory?.category ?? '',
+  );
   const cardClass =
     'group flex flex-col overflow-hidden rounded-lg border text-left shadow-lg shadow-black/15 transition-all';
   const inactiveCardClass =
@@ -117,6 +157,7 @@ export default function MotifSelectorPanel({
 
   const handleCategorySelect = (categoryId: string) => {
     setSelectedCategoryId(categoryId);
+    onCategoryOpen?.(categoryId);
   };
 
   const handleBackToCategories = () => {
@@ -146,12 +187,19 @@ export default function MotifSelectorPanel({
           <div className="custom-scrollbar min-h-0 flex-1 overflow-y-auto pr-1">
             <div className="grid grid-cols-3 gap-2.5 pb-24">
               {categories.map((category) => {
+                const isAustralianFlora = isAustralianFloraCategory(
+                  category.name,
+                  category.category,
+                );
                 const categoryImgSrc = getMotifCategoryImage({
                   name: category.name,
                   category: category.category || category.id,
                   src: category.id,
                   previewUrl: category.previewUrl,
                 });
+                const categoryMaskSrc = isAustralianFlora
+                  ? getMotifSvgPath('banksiarufa')
+                  : categoryImgSrc;
                 return (
                   <button
                     key={category.id}
@@ -166,8 +214,8 @@ export default function MotifSelectorPanel({
                             className="absolute inset-4"
                             style={{
                               backgroundColor: motifPreviewColor,
-                              WebkitMaskImage: `url(${categoryImgSrc})`,
-                              maskImage: `url(${categoryImgSrc})`,
+                              WebkitMaskImage: toCssMaskUrl(categoryMaskSrc),
+                              maskImage: toCssMaskUrl(categoryMaskSrc),
                               WebkitMaskRepeat: 'no-repeat',
                               maskRepeat: 'no-repeat',
                               WebkitMaskSize: 'contain',
@@ -180,7 +228,7 @@ export default function MotifSelectorPanel({
                           <img
                             src={categoryImgSrc}
                             alt={getMotifCategoryName(category.name)}
-                            className="max-h-full max-w-full object-contain brightness-0 invert"
+                            className="day:invert-0 max-h-full max-w-full object-contain brightness-0 invert"
                             loading="lazy"
                           />
                         )}
@@ -227,7 +275,15 @@ export default function MotifSelectorPanel({
                     Error loading motifs: {lazyMotifsError.message}
                   </div>
                 )}
-                {lazyMotifFiles.length === 0 && !lazyMotifsLoading ? (
+                {lazyMotifFiles.length === 0 && lazyMotifsLoading ? (
+                  <div className="day:border-gray-200 day:bg-gray-50 flex min-h-48 items-center justify-center rounded-lg border border-dashed border-white/10 bg-[#171717]">
+                    <div
+                      role="status"
+                      aria-label="Loading motif thumbnails"
+                      className="day:border-gray-300 day:border-t-[#a87618] h-9 w-9 animate-spin rounded-full border-2 border-white/30 border-t-[#D7B356]"
+                    />
+                  </div>
+                ) : lazyMotifFiles.length === 0 ? (
                   <div className="day:border-gray-200 day:bg-gray-50 day:text-gray-500 rounded-lg border border-dashed border-white/10 bg-[#171717] p-6 text-center text-xs text-gray-400">
                     No motifs available in this category yet.
                   </div>
@@ -236,6 +292,9 @@ export default function MotifSelectorPanel({
                     {lazyMotifFiles.map((fileName) => {
                       const svgPath = getMotifSvgPath(fileName);
                       const thumbnailPath = getMotifThumbnailPath(fileName);
+                      const thumbnailMaskPath = isAustralianFlora
+                        ? svgPath
+                        : thumbnailPath;
                       const isSelected = selectedMotifs.some(
                         (m) => m.svgPath === svgPath,
                       );
@@ -265,8 +324,8 @@ export default function MotifSelectorPanel({
                                   className="absolute inset-4"
                                   style={{
                                     backgroundColor: motifPreviewColor,
-                                    WebkitMaskImage: `url(${thumbnailPath})`,
-                                    maskImage: `url(${thumbnailPath})`,
+                                    WebkitMaskImage: toCssMaskUrl(thumbnailMaskPath),
+                                    maskImage: toCssMaskUrl(thumbnailMaskPath),
                                     WebkitMaskRepeat: 'no-repeat',
                                     maskRepeat: 'no-repeat',
                                     WebkitMaskSize: 'contain',
@@ -279,7 +338,7 @@ export default function MotifSelectorPanel({
                                 <img
                                   src={thumbnailPath}
                                   alt={fileName}
-                                  className="max-h-full max-w-full object-contain brightness-0 invert"
+                                  className="day:invert-0 max-h-full max-w-full object-contain brightness-0 invert"
                                   loading="lazy"
                                 />
                               )}
@@ -337,8 +396,8 @@ export default function MotifSelectorPanel({
                               className="absolute inset-4"
                               style={{
                                 backgroundColor: motifPreviewColor,
-                                WebkitMaskImage: `url(${coverSrc})`,
-                                maskImage: `url(${coverSrc})`,
+                                WebkitMaskImage: toCssMaskUrl(coverSrc),
+                                maskImage: toCssMaskUrl(coverSrc),
                                 WebkitMaskRepeat: 'no-repeat',
                                 maskRepeat: 'no-repeat',
                                 WebkitMaskSize: 'contain',
@@ -351,7 +410,7 @@ export default function MotifSelectorPanel({
                             <img
                               src={coverSrc}
                               alt={motif.name}
-                              className="max-h-full max-w-full object-contain brightness-0 invert"
+                              className="day:invert-0 max-h-full max-w-full object-contain brightness-0 invert"
                               loading="lazy"
                             />
                           ) : null}

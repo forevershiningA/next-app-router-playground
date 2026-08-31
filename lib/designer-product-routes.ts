@@ -8,7 +8,7 @@ const PRODUCT_SLUG_OVERRIDES: Record<string, string> = {
   '5': 'bronze-plaque',
   '8': 'laser-etched-pet-mini-headstone',
   '9': 'laser-etched-pet-plaque',
-  '22': 'laser-etched-black-granite-headstone',
+  '22': 'laser-etched-black-granite-mini-headstone',
   '23': 'stainless-steel-light-reflective-headstone',
   '30': 'laser-etched-black-granite-plaque',
   '32': 'full-colour-plaque',
