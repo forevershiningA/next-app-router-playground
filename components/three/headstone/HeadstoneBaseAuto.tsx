@@ -480,6 +480,8 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
     const baseHeightMm = useHeadstoneStore((s) => s.baseHeightMm);
     const baseThickness = useHeadstoneStore((s) => s.baseThickness);
     const baseFinish = useHeadstoneStore((s) => s.baseFinish);
+    const baseOption = useHeadstoneStore((s) => s.baseOption);
+    const baseLidFinish = useHeadstoneStore((s) => s.baseLidFinish);
     const headstoneStyle = useHeadstoneStore((s) => s.headstoneStyle);
     const uprightThickness = useHeadstoneStore((s) => s.uprightThickness);
     const slantThickness = useHeadstoneStore((s) => s.slantThickness);
@@ -580,8 +582,9 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
       const baseD = baseThickness / 1000; // Convert mm to meters
 
       const statuePresent = hasStatue();
-      const baseWTotal = statuePresent ? baseW * 1.3 : baseW; // widen by 30%
-      const baseDTotal = statuePresent ? baseD * 1.5 : baseD; // 75% of previous doubling
+      const needsWideBase = statuePresent || baseOption === 'flower-pots';
+      const baseWTotal = needsWideBase ? baseW * 1.3 : baseW; // widen by 30%
+      const baseDTotal = needsWideBase ? baseD * 1.5 : baseD; // 75% of previous doubling
 
       // CRITICAL: Align base back edge with headstone back edge
       // Both upright and slant headstones have their backs at: -(uprightThickness / 2 / 1000)
@@ -657,6 +660,44 @@ const HeadstoneBaseAuto = forwardRef<THREE.Mesh, HeadstoneBaseAutoProps>(
             stainlessFinish={stainlessBaseFinish}
           />
         </Suspense>
+
+        {baseOption === 'flower-pots' && (
+          <group>
+            {[-1, 1].map((side) => {
+              const lidColor =
+                baseLidFinish === 'gold'
+                  ? '#cda94c'
+                  : baseLidFinish === 'silver'
+                    ? '#c6c9cc'
+                    : '#151515';
+              const x = side * baseDimensions.width * 0.36;
+              const z =
+                -(uprightThickness / 1000) / 2 +
+                baseDimensions.depth * 0.62;
+              return (
+                <group key={side} position={[x, 0.011, z]}>
+                  <mesh castShadow receiveShadow>
+                    <cylinderGeometry args={[0.068, 0.068, 0.014, 32]} />
+                    <meshStandardMaterial color={lidColor} metalness={0.8} roughness={0.25} />
+                  </mesh>
+                  <mesh position={[0, 0.008, 0]}>
+                    <cylinderGeometry args={[0.053, 0.053, 0.003, 32]} />
+                    <meshStandardMaterial color={lidColor} metalness={0.75} roughness={0.28} />
+                  </mesh>
+                  {Array.from({ length: 8 }, (_, index) => {
+                    const angle = (index / 8) * Math.PI * 2;
+                    return (
+                      <mesh key={index} position={[Math.cos(angle) * 0.032, 0.011, Math.sin(angle) * 0.032]}>
+                        <cylinderGeometry args={[0.009, 0.009, 0.004, 12]} />
+                        <meshStandardMaterial color="#050505" roughness={0.8} />
+                      </mesh>
+                    );
+                  })}
+                </group>
+              );
+            })}
+          </group>
+        )}
 
         {/* Render inscriptions that belong to the base */}
         {inscriptions

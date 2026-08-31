@@ -14314,6 +14314,7 @@ Targeted ESLint must have no errors. Existing warnings in the legacy `AutoFit`, 
 Primary files: `lib/designer-product-routes.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/three/Scene.tsx`, and `lib/headstone-store.ts`.
 
 - Product ID `22` (**Laser Etched Black Granite Mini Headstone**) must retain its Mini Headstone route when selected; do not send it to the standard Headstone URL. Its shape picker intentionally exposes only the first 11 shapes, ending at **Square**.
+- Products `1` and `23` (**Stainless Steel Headstones**) follow the same 11-shape restriction: only the traditional shapes are visible and **Square** is last.
 - Mini Headstone keeps a compact concrete foundation. Use the smaller `0.04 m` pad margin in `Scene.tsx`; standard standalone headstones retain the `0.16 m` margin.
 - Products `8` (**Laser Etched Black Granite Pet Mini Headstone**) and `9` (**Laser Etched Black Granite Pet Plaque**) intentionally default to the same `Glory-Black-2.webp` texture as product `4` (**Laser Etched Black Granite Headstone**). Apply it through `headstoneMaterialUrl`; product 8 must also use it for its Base. This overrides the legacy XML `18.webp` texture only on product selection, without preventing later user material changes.
 
@@ -14326,6 +14327,8 @@ Primary files: `app/_internal/_additions-loader.ts`, `components/AdditionSelecto
 - Addition cards and the **Selected Addition** summary both display `width × height × depth` using `formatDimensionTriplet(...)`, so the text follows the global MM/IN toggle. Keep stored values in millimetres.
 - A base-mounted vase or statue expands the granite Base by `30%` in width and `50%` in depth. The standalone concrete foundation and its contact shadow must use that same footprint and centre, otherwise the granite Base visibly overhangs the pad.
 - `duplicateAddition()` must treat `footprintWidth` as metres and translate the physical separation into the Base unit-cube local coordinate system. For a base-mounted item, move the copy to the free side of the Base; using raw `20`/`120` offsets sends the duplicate outside the scene.
+- The **Flower Pots** Base option is available only on ordinary `headstone` products, not Mini Headstones. It renders two lightweight procedural flower-pot inserts with black flower holes and selectable Black/Silver/Gold finish for all other insert surfaces. Flower Pots use exactly the same widened Base and concrete-foundation footprint as a base-mounted vase/statue: `+30%` width and `+50%` depth.
+- On `/select-product`, the selected-card CTA is **Continue**, matching the Shape-picker CTA; do not restore the longer `Continue with this product` label.
 
 ### Motifs, images, selection, and day mode
 
@@ -14336,6 +14339,7 @@ Primary files: `components/MotifSelectorPanel.tsx`, `components/SelectionBox.tsx
 - Newly added motifs must become selected immediately and show a persistent outline. Selection rendering is demand-driven, so invalidate after selection changes; do not let the outline flicker out after one frame.
 - Image rotation controls are expressed in degrees in the UI and converted to radians only at storage/render boundaries. The image selection box lives inside the already-rotated parent group, so it must not receive the image rotation a second time.
 - In day mode, selected motif/addition CTA controls, fixed-size image controls, and the pulsing Next button need explicit contrast classes. The Position section for Images is mobile-only.
+- The home Hero (`app/_ui/HomeSplash.tsx`) is deliberately night-themed in both global theme modes. Keep its dark image overlay, white Hero copy, dark navigation controls, and dark mobile drawer; only the sections below it switch to day mode.
 
 ### Verification and evidence
 

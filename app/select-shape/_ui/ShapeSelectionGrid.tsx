@@ -88,7 +88,6 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
   const isPetRock = productId === '135';
   const isPetMiniHeadstone = productId === '8';
   const isMiniHeadstone = productId === '22';
-  const isTraditionalShapesOnly = isPetMiniHeadstone || isMiniHeadstone;
   const designerHref = (
     stepSlug: Parameters<typeof getDesignerProductStepHref>[0],
   ) => getDesignerProductStepHref(stepSlug, productId);
@@ -108,6 +107,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
     productId === '23' ||
     (catalog?.product?.type === 'headstone' &&
       catalog.product.name.toLowerCase().includes('stainless steel'));
+  const isTraditionalShapesOnly =
+    isPetMiniHeadstone || isMiniHeadstone || isStainlessSteelHeadstone;
   const hasBorder =
     catalog?.product?.border === '1' || (catalog === null && productId === '5');
   const productName = catalog?.product?.name ?? fallbackProduct?.name;
@@ -532,8 +533,8 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
             <p className="day:text-gray-600 mt-3 max-w-3xl text-base leading-6 text-gray-100 sm:mx-auto">
               {isTraditionalShapesOnly
                 ? `Choose from the first 11 traditional shapes available for this${
-                    isPetMiniHeadstone ? ' pet' : ''
-                  } mini headstone.`
+                    isPetMiniHeadstone ? ' pet mini' : isMiniHeadstone ? ' mini' : ' stainless steel'
+                  } headstone.`
                 : 'Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.'}
             </p>
           </div>

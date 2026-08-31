@@ -665,6 +665,7 @@ export default function Scene({
   const baseWidthMm = useHeadstoneStore((s) => s.baseWidthMm);
   const selectedAdditions = useHeadstoneStore((s) => s.selectedAdditions);
   const additionOffsets = useHeadstoneStore((s) => s.additionOffsets);
+  const baseOption = useHeadstoneStore((s) => s.baseOption);
   const showBase = useHeadstoneStore((s) => s.showBase);
   const ledgerDepthMm = useHeadstoneStore((s) => s.ledgerDepthMm);
   const kerbWidthMm = useHeadstoneStore((s) => s.kerbWidthMm);
@@ -704,9 +705,9 @@ export default function Scene({
   // or statue, and makes it 50% deeper. The concrete pad must use the same
   // footprint and alignment.
   const baseFootprintWidth =
-    (baseWidthMm / 1000) * (hasBaseMountedStatueOrVase ? 1.3 : 1);
+    (baseWidthMm / 1000) * (hasBaseMountedStatueOrVase || baseOption === 'flower-pots' ? 1.3 : 1);
   const baseFootprintDepth =
-    (baseThickness / 1000) * (hasBaseMountedStatueOrVase ? 1.5 : 1);
+    (baseThickness / 1000) * (hasBaseMountedStatueOrVase || baseOption === 'flower-pots' ? 1.5 : 1);
   const contactWidth = showBase ? baseFootprintWidth : widthMm / 1000;
   const contactDepth = showBase ? baseFootprintDepth : uprightThickness / 1000;
   const contactCenterZ = showBase

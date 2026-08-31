@@ -307,7 +307,7 @@ export default function HomeSplash() {
   return (
     <div
       className="min-h-screen"
-      style={{ background: isDayMode ? '#f9fafb' : 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}
+      style={{ background: 'radial-gradient(circle at 50% 100%, #3E3020 0%, #121212 60%)' }}
     >
       
       {/* Hero Section - Full Viewport Layout */}
@@ -335,29 +335,29 @@ export default function HomeSplash() {
           </div>
 
           <nav
-            className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs font-medium text-white/85 xl:flex day:text-gray-700"
+            className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs font-medium text-white/85 xl:flex"
             aria-label="Memorial product pages"
           >
-            <span className="font-semibold tracking-[0.18em] text-[#f3d48f] uppercase day:text-amber-700">
+            <span className="font-semibold tracking-[0.18em] text-[#f3d48f] uppercase">
               Memorials:
             </span>
-            <Link href="/memorials/headstones" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+            <Link href="/memorials/headstones" className="transition-colors hover:text-[#f3d48f]">
               Headstones
             </Link>
-            <span className="text-white/35 day:text-gray-300">/</span>
-            <Link href="/memorials/plaques" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+            <span className="text-white/35">/</span>
+            <Link href="/memorials/plaques" className="transition-colors hover:text-[#f3d48f]">
               Plaques
             </Link>
-            <span className="text-white/35 day:text-gray-300">/</span>
-            <Link href="/memorials/full-monuments" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+            <span className="text-white/35">/</span>
+            <Link href="/memorials/full-monuments" className="transition-colors hover:text-[#f3d48f]">
               Full Monuments
             </Link>
-            <span className="text-white/35 day:text-gray-300">/</span>
-            <Link href="/memorials/urns" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+            <span className="text-white/35">/</span>
+            <Link href="/memorials/urns" className="transition-colors hover:text-[#f3d48f]">
               Urns
             </Link>
-            <span className="text-white/35 day:text-gray-300">/</span>
-            <Link href="/memorials/pet-memorials" className="transition-colors hover:text-[#f3d48f] day:hover:text-amber-700">
+            <span className="text-white/35">/</span>
+            <Link href="/memorials/pet-memorials" className="transition-colors hover:text-[#f3d48f]">
               Pet Memorials
             </Link>
           </nav>
@@ -370,7 +370,7 @@ export default function HomeSplash() {
               role="search"
             >
               <svg
-                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50 day:text-gray-400"
+                className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/50"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -384,13 +384,13 @@ export default function HomeSplash() {
                 value={heroSearchQuery}
                 onChange={(e) => setHeroSearchQuery(e.target.value)}
                 placeholder="Search Designs"
-                className="min-h-10 w-full rounded-lg border border-white/15 bg-transparent py-2.5 pl-9 pr-3 text-sm font-semibold text-white placeholder-white/60 transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 focus:border-[#cfac6c]/60 focus:bg-white/5 focus:outline-none day:border-gray-300 day:text-gray-800 day:placeholder-gray-500 day:hover:bg-white day:focus:bg-white"
+                className="min-h-10 w-full rounded-lg border border-white/15 bg-transparent py-2.5 pl-9 pr-3 text-sm font-semibold text-white placeholder-white/60 transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 focus:border-[#cfac6c]/60 focus:bg-white/5 focus:outline-none"
                 aria-label="Search memorial designs"
               />
             </form>
             <Link
               href="/designs"
-              className="w-40 pl-9 text-left text-sm font-medium leading-5 text-white/40 transition-colors hover:text-[#f3d48f] day:text-gray-500 day:hover:text-amber-700"
+              className="w-40 pl-9 text-left text-sm font-medium leading-5 text-white/40 transition-colors hover:text-[#f3d48f]"
             >
               Browse Designs
             </Link>
@@ -400,7 +400,7 @@ export default function HomeSplash() {
           <button
             type="button"
             onClick={() => setMobileMenuOpen(true)}
-            className="shrink-0 rounded-lg border border-white/15 bg-white/[0.06] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/60 md:hidden day:border-gray-300 day:bg-white/70 day:text-gray-800"
+            className="shrink-0 rounded-lg border border-white/15 bg-white/[0.06] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/60 md:hidden"
             aria-label="Open menu"
             aria-expanded={mobileMenuOpen}
           >
@@ -416,7 +416,7 @@ export default function HomeSplash() {
               onClick={() => setMobileMenuOpen(false)}
               aria-hidden="true"
             />
-            <div className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto border-b border-[#d4af37]/25 bg-[#0d0a06]/95 pb-6 shadow-2xl backdrop-blur-md day:border-gray-200 day:bg-white/95">
+            <div className="absolute inset-x-0 top-0 max-h-[100dvh] overflow-y-auto border-b border-[#d4af37]/25 bg-[#0d0a06]/95 pb-6 shadow-2xl backdrop-blur-md">
               {/* Match the home header so the logo and close button stay in
                   exactly the same place when the mobile menu opens. */}
               <div className="flex items-center justify-between gap-5 px-4 py-3">
@@ -434,14 +434,14 @@ export default function HomeSplash() {
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="shrink-0 rounded-lg border border-white/15 bg-white/[0.06] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/60 day:border-gray-300 day:bg-white/70 day:text-gray-800"
+                  className="shrink-0 rounded-lg border border-white/15 bg-white/[0.06] p-2 text-white backdrop-blur-sm transition-colors hover:border-[#cfac6c]/60"
                   aria-label="Close menu"
                 >
                   <XMarkIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
               </div>
 
-              <p className="mt-6 px-5 text-[11px] font-semibold tracking-[0.24em] text-[#f3d48f] uppercase day:text-amber-700">
+              <p className="mt-6 px-5 text-[11px] font-semibold tracking-[0.24em] text-[#f3d48f] uppercase">
                 Memorials
               </p>
               <nav className="mt-2 flex flex-col px-5" aria-label="Memorial product pages">
@@ -450,7 +450,7 @@ export default function HomeSplash() {
                     key={link.href}
                     href={link.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="rounded-lg px-1 py-3 text-base font-medium text-white/85 transition-colors hover:text-[#f3d48f] day:text-gray-700 day:hover:text-amber-700"
+                    className="rounded-lg px-1 py-3 text-base font-medium text-white/85 transition-colors hover:text-[#f3d48f]"
                   >
                     {link.label}
                   </Link>
@@ -469,7 +469,7 @@ export default function HomeSplash() {
                 <Link
                   href="/designs"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-lg border border-white/15 px-5 py-3 text-center text-base font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5 day:border-gray-300 day:text-gray-800 day:hover:bg-white"
+                  className="rounded-lg border border-white/15 px-5 py-3 text-center text-base font-semibold text-white transition-colors hover:border-[#cfac6c]/60 hover:bg-white/5"
                 >
                   Browse Designs
                 </Link>
@@ -489,7 +489,7 @@ export default function HomeSplash() {
           role="presentation"
           aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/10 day:from-white/50 day:via-white/30 day:to-white/10" aria-hidden="true" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/10" aria-hidden="true" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(212,175,55,0.25),transparent_55%)] opacity-70" aria-hidden="true" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:140px_140px] opacity-20 mix-blend-screen" aria-hidden="true" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/20" aria-hidden="true" />
@@ -503,8 +503,8 @@ export default function HomeSplash() {
               <span
                 className="inline-block font-semibold text-[2rem] sm:text-5xl mx-auto"
                 style={{ 
-                  color: isDayMode ? '#1a1a1a' : '#FFFEF8',
-                  textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,2), 0 4px 24px rgba(0,0,0,0)'
+                  color: '#FFFEF8',
+                  textShadow: '0 1px 1px rgba(0,0,0,2), 0 4px 24px rgba(0,0,0,0)'
                 }}
               >
                 Create the Perfect Tribute
@@ -513,8 +513,8 @@ export default function HomeSplash() {
             <p
               className="order-2 mx-auto mt-3 max-w-2xl text-base font-light leading-snug sm:text-xl md:mb-6"
               style={{ 
-                color: isDayMode ? '#374151' : '#FFFFFF',
-                textShadow: isDayMode ? 'none' : '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
+                color: '#FFFFFF',
+                textShadow: '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
               }}
             >
               Design a beautiful tribute in real-time 3D.
@@ -530,7 +530,7 @@ export default function HomeSplash() {
               
               {/* Soft product lift without darkening the stone preview */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="w-[62vh] h-[62vh] bg-gradient-radial from-white/16 via-white/5 to-transparent rounded-full blur-3xl day:from-white/45 day:via-white/20"></div>
+                <div className="w-[62vh] h-[62vh] bg-gradient-radial from-white/16 via-white/5 to-transparent rounded-full blur-3xl"></div>
               </div>
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="w-[44vh] h-[44vh] bg-gradient-radial from-[#cfac6c]/22 via-[#cfac6c]/8 to-transparent rounded-full blur-2xl"></div>
@@ -560,7 +560,7 @@ export default function HomeSplash() {
                   <>
                     <button 
                       onClick={rotateLeft}
-                      className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-270px)] top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
+                      className="absolute left-[5%] sm:left-[15%] md:left-[calc(50%-270px)] top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950"
                       aria-label="Rotate headstone left to view different angles"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
@@ -569,7 +569,7 @@ export default function HomeSplash() {
                     </button>
                     <button 
                       onClick={rotateRight}
-                      className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-270px)] top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950 day:border-gray-300 day:bg-white/80 day:text-gray-600"
+                      className="absolute right-[5%] sm:right-[15%] md:right-[calc(50%-270px)] top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg border border-white/15 bg-[#171717]/70 text-white/75 opacity-90 backdrop-blur-md transition-colors hover:border-[#cfac6c]/60 hover:bg-[#cfac6c] hover:text-slate-950"
                       aria-label="Rotate headstone right to view different angles"
                     >
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>

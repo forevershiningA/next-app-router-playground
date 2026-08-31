@@ -335,7 +335,7 @@ export default function ProductSelectionGrid({
                               >
                                 <span>
                                   {isSelected
-                                    ? 'Continue with this product'
+                                    ? 'Continue'
                                     : 'Select product'}
                                 </span>
                                 <ArrowRightIcon className="h-4 w-4" />

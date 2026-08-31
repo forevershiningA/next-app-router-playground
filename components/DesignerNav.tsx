@@ -386,6 +386,8 @@ export default function DesignerNav() {
     stainlessSteelHeadstoneProductIds.has(productId ?? '') ||
     (catalog?.product?.type === 'headstone' &&
       catalog.product.name.toLowerCase().includes('stainless steel'));
+  const supportsFlowerPots =
+    catalog?.product.type === 'headstone' && productId !== '8' && productId !== '22';
   const ssCorners = useHeadstoneStore((s) => s.ssCorners);
   const setSsCorners = useHeadstoneStore((s) => s.setSsCorners);
   const ssHoles = useHeadstoneStore((s) => s.ssHoles);
@@ -2797,6 +2799,7 @@ export default function DesignerNav() {
               )}
             </div>
             <div className="-mx-3 border-t border-white/10 md:-mx-3.5"></div>
+            {supportsFlowerPots && (
             <div className="order-last space-y-3 md:order-none">
               <div className="-mx-3.5 border-t border-white/10"></div>
               <fieldset className="space-y-2 text-sm">
@@ -2854,6 +2857,7 @@ export default function DesignerNav() {
                 </fieldset>
               )}
             </div>
+            )}
           </div>
         )}
 
