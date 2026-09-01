@@ -147,8 +147,18 @@ export default function AutoFit({
       : 1;
     const dist = Math.max(dX, dY) * Math.max(1, margin) * sheetMargin + pad;
 
+    // The first fit deliberately starts en face. Later fits — after changing
+    // either Headstone or Base dimensions — must not discard the angle the
+    // customer chose with OrbitControls. Reuse the current camera direction
+    // around the previous orbit target, while recalculating its distance
+    // against the new bounding box.
     const dir = new THREE.Vector3(0, 0, 1);
-    dir.normalize();
+    if (didFirst.current && controls?.target) {
+      const currentDirection = camera.position.clone().sub(controls.target);
+      if (currentDirection.lengthSq() > 1e-8) {
+        dir.copy(currentDirection).normalize();
+      }
+    }
 
     const toPos = toTgt.clone().addScaledVector(dir, dist);
 
@@ -174,6 +184,7 @@ export default function AutoFit({
     camera.far = far;
     camera.updateProjectionMatrix();
     invalidate();
+    didFirst.current = true;
     return true;
   }, [
     target,

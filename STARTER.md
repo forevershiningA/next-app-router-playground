@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-08-31
+**Last Updated:** 2026-09-01
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -95,6 +95,7 @@
 87. [August 29 Granite Colour-Space and Preview Brightness Alignment](#current-status-2026-08-29--granite-colour-space-and-preview-brightness-alignment)
 88. [August 29 Bronze Plaque Mobile Flow, Camera, and Fastenings](#current-status-2026-08-29--bronze-plaque-mobile-flow-camera-and-fastenings)
 89. [August 31 Designer Additions, Mini Headstones, and Theme Reliability](#current-status-2026-08-31--designer-additions-mini-headstones-and-theme-reliability)
+90. [September 1 Home Refresh, Studio Designer Scenery, and Hydration Reliability](#current-status-2026-09-01--home-refresh-studio-designer-scenery-and-hydration-reliability)
 
 ---
 
@@ -14341,6 +14342,12 @@ Primary files: `components/MotifSelectorPanel.tsx`, `components/SelectionBox.tsx
 - In day mode, selected motif/addition CTA controls, fixed-size image controls, and the pulsing Next button need explicit contrast classes. The Position section for Images is mobile-only.
 - The home Hero (`app/_ui/HomeSplash.tsx`) is deliberately night-themed in both global theme modes. Keep its dark image overlay, white Hero copy, dark navigation controls, and dark mobile drawer; only the sections below it switch to day mode.
 
+### Camera fit after dimension changes
+
+Primary file: `components/three/AutoFit.tsx`.
+
+- The first automatic fit intentionally uses the en-face view. After that, changing either **Headstone** (`widthMm` / `heightMm`) or **Base** (`baseWidthMm` / `baseHeightMm` / `baseThickness`) dimensions must preserve the user's current OrbitControls azimuth and elevation. Recalculate the camera distance and target for the new bounds, but derive the next camera position from its current direction relative to the previous orbit target; do not snap back to en face.
+
 ### Verification and evidence
 
 ```bash
@@ -14349,3 +14356,50 @@ git diff --check
 ```
 
 Targeted lint checks currently have no errors; legacy warnings remain in some large designer/store components. `screen.png` is user-provided acceptance evidence: inspect it when asked, but never overwrite it.
+
+---
+
+## Current Status (2026-09-01) — Home Refresh, Studio Designer Scenery, and Hydration Reliability
+
+### Homepage narrative and visual assets
+
+Primary file: `app/_ui/HomeSplash.tsx`. Related public assets: `public/screenshots/designer-3d-preview.webp` and `public/visuals/`.
+
+- The home Hero remains a dark, high-contrast introduction with the message **“You design it. We craft it.”** Its desktop header uses conventional product navigation, a compact search icon, and a single **Browse Designs** action. Do not restore the former slash-separated menu or the duplicate “Designed by you” strapline.
+- The dark section immediately below the Hero is a two-column proof point: compassionate copy, benefits, and the single gold **Start Designing in 3D** CTA on the left; a clickable, real Designer preview on the right. Do not add a second CTA or explanatory headline on top of the image.
+- The Designer preview is always sourced from `public/screenshots/designer-3d-preview.webp`. Optimise a newly approved `screen.png` to WebP before replacing this file. The preview needs its **Live 3D preview** badge in the upper-right, a rounded frame, `border-white/25`, and `ring-white/[0.1]` so its dark left tool panel does not blend into the dark section background.
+- The personalisation showcase below uses the three coherent studio assets in `public/visuals/`: `memorial-shape-studio.webp`, `memorial-photo-detail-studio.webp`, and `memorial-finishes-studio.webp`. They deliberately use a neutral, warm studio treatment; do not substitute inconsistent outdoor renders or technical CAD drawings for the material/finish card.
+- The final dark home CTA is assistance-led (**Contact us** primary, **Browse Designs** secondary), not another duplicate Designer launch.
+
+### Hero grounding and inscription contrast
+
+Primary files: `components/HeroCanvas.tsx` and `app/_ui/HomeSplash.tsx`.
+
+- The Hero memorial uses a soft contact/grounding shadow to prevent the granite Base from appearing to float over the meadow. Preserve the shadow when adjusting product positioning or camera framing.
+- Hero inscription rendering has a subtle dark edge/shadow treatment for legibility over light, speckled granite. This is visual support for the preview only; it should not reduce contrast or depth in the editable Designer inscription workflow.
+
+### Studio scenery in the live 3D Designer
+
+Primary files: `components/SceneryToggleButton.tsx`, `components/ThreeScene.tsx`, and `components/three/Scene.tsx`. Backdrop asset: `public/visuals/designer-studio-cyclorama.webp`.
+
+- The scenery selector presents six studio-oriented choices: **Gallery White**, **Soft Gray**, **Warm Stone**, **Slate Studio**, **Charcoal**, and **Midnight**. Their swatches use gradients, not flat colour chips, to communicate the intended photographic/studio mood.
+- **Warm Stone** (`#d4c5a9`, the third studio choice) is the default for a new Designer session. Existing saved scenery preferences in local storage intentionally continue to take precedence.
+- Studio mode is a real warm cyclorama image behind a transparent Canvas, colour-graded with the selected studio tone. Do not regress it to a CSS-only flat fill: the backdrop must retain visible floor, wall, and soft texture.
+- In studio mode, `Scene.tsx` uses a contact shadow only. It intentionally omits the outdoor standalone-headstone concrete foundation, which otherwise becomes an oversized dark pad beneath the Base. The real granite Base remains visible and grounded. Outdoor meadow mode retains its concrete foundation.
+- `StudioScenery` in `Scene.tsx` is intentionally minimal; the CSS backdrop in `ThreeScene.tsx` provides the scenery image while Three.js supplies the product lighting and grounding shadow.
+
+### Unit-toggle hydration reliability
+
+Primary file: `lib/use-unit-system.ts`.
+
+- SSR and the initial client render must always start with the same default unit system: `imperial`. The saved MM/IN preference is read only after hydration in `useEffect`, then shared through the existing browser event.
+- Do not initialise React state from `document.cookie` during render. That caused an SSR/client mismatch where the server rendered **IN** while a client cookie rendered **MM**, triggering React hydration recovery. Persist preference changes to the cookie as before; only the initial read timing changed.
+
+### Verification
+
+```bash
+pnpm exec eslint app/_ui/HomeSplash.tsx
+git diff --check
+```
+
+The HomeSplash lint check and diff check pass. In restricted Windows sandboxes, `pnpm` may require elevated execution because it resolves `C:\\Users\\polcr`; this is an environment permission issue, not a project error. `screen.png` remains user-provided acceptance evidence and must never be overwritten.

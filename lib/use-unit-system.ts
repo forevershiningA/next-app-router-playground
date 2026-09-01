@@ -15,13 +15,17 @@ function readUnitSystemCookie(): UnitSystem {
 }
 
 export function useUnitSystem(): UnitSystem {
-  const [unitSystem, setUnitSystemState] = useState<UnitSystem>(readUnitSystemCookie);
+  // The server cannot read document.cookie, so the first client render must
+  // use the same stable default as SSR. Apply a saved preference only after
+  // hydration to avoid rendering different unit labels on either side.
+  const [unitSystem, setUnitSystemState] = useState<UnitSystem>('imperial');
 
   useEffect(() => {
     const handleUnitSystemChanged = () => {
       setUnitSystemState(readUnitSystemCookie());
     };
 
+    handleUnitSystemChanged();
     window.addEventListener(UNIT_SYSTEM_CHANGED_EVENT, handleUnitSystemChanged);
     return () => {
       window.removeEventListener(UNIT_SYSTEM_CHANGED_EVENT, handleUnitSystemChanged);

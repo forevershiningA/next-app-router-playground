@@ -407,6 +407,24 @@ function OutbackTreeline() {
   );
 }
 
+// The cyclorama itself is rendered in the transparent canvas container so it
+// stays crisp behind the model. This mesh contributes only the live contact
+// shadow, letting the real studio floor texture remain visible underneath.
+function StudioScenery() {
+  return (
+    <ContactShadows
+      position={[0, 0.002, 0]}
+      scale={14}
+      blur={2.4}
+      opacity={0.52}
+      far={1.5}
+      color="#17130f"
+      resolution={256}
+      frames={2}
+    />
+  );
+}
+
 // A subtle, low silhouette band breaks the perfectly straight meadow horizon
 // without loading a tree model or adding per-object draw calls.
 function MeadowHorizon() {
@@ -629,6 +647,7 @@ export default function Scene({
 
   // Any mode that suppresses the outdoor scene (screenshot capture or user toggle)
   const noScenery = screenshotMode || hideScenery;
+  const isStudio = hideScenery && !screenshotMode;
 
   // Expose scene, renderer & camera for external tools (batch screenshot, save thumbnail)
   useEffect(() => {
@@ -870,12 +889,16 @@ export default function Scene({
               width={contactWidth + standaloneFoundationPadding}
               depth={contactDepth + standaloneFoundationPadding}
               centerZ={contactCenterZ}
+              padding={isStudio ? 0.08 : undefined}
+              opacity={isStudio ? 0.46 : undefined}
             />
-            <MemorialFoundation
-              width={contactWidth + standaloneFoundationPadding}
-              depth={contactDepth + standaloneFoundationPadding}
-              centerZ={contactCenterZ}
-            />
+            {!isStudio && (
+              <MemorialFoundation
+                width={contactWidth + standaloneFoundationPadding}
+                depth={contactDepth + standaloneFoundationPadding}
+                centerZ={contactCenterZ}
+              />
+            )}
           </>
         )}
 
@@ -909,6 +932,8 @@ export default function Scene({
           {sceneryVariant === 'day' && <MeadowHorizon />}
         </group>
       </group>
+
+      {isStudio && <StudioScenery />}
 
       {/* Sparkles / clouds / sky gradient — toggle visibility directly on the group */}
       <group visible={!is2DMode && !noScenery} onClick={handleSceneryClick}>

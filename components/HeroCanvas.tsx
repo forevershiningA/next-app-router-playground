@@ -169,7 +169,7 @@ function InscriptionMesh({
     if (!ctx) return null;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = '#FFDF73';
+    ctx.fillStyle = '#FFE68A';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
@@ -177,10 +177,14 @@ function InscriptionMesh({
     const horizontalPadding = Math.round(canvas.width * 0.12);
     fitCanvasText(ctx, text, canvas.width - horizontalPadding * 2, fontSize, Math.floor(canvas.height * 0.36));
 
-    ctx.shadowColor = 'rgba(0,0,0,0.8)';
-    ctx.shadowBlur = 4;
+    ctx.shadowColor = 'rgba(0,0,0,0.95)';
+    ctx.shadowBlur = 6;
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
+    ctx.strokeStyle = 'rgba(4,3,2,0.96)';
+    ctx.lineWidth = Math.max(4, Math.round(canvas.height * 0.034));
+    ctx.lineJoin = 'round';
+    ctx.strokeText(text, canvas.width / 2, canvas.height / 2);
     ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
     const texture = new THREE.CanvasTexture(canvas);
@@ -215,6 +219,47 @@ function InscriptionMesh({
         emissive="#4a3600"
         emissiveIntensity={0.7}
         envMapIntensity={1.2}
+      />
+    </mesh>
+  );
+}
+
+// A lightweight, scene-local grounding shadow keeps the transparent 3D canvas
+// visually connected to the photographic hero background.
+function GroundingShadow() {
+  const texture = React.useMemo(() => {
+    if (typeof document === 'undefined') return null;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+
+    const gradient = context.createRadialGradient(128, 128, 20, 128, 128, 124);
+    gradient.addColorStop(0, 'rgba(0, 0, 0, 0.72)');
+    gradient.addColorStop(0.42, 'rgba(0, 0, 0, 0.42)');
+    gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    context.fillStyle = gradient;
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    const shadowTexture = new THREE.CanvasTexture(canvas);
+    shadowTexture.colorSpace = THREE.SRGBColorSpace;
+    shadowTexture.needsUpdate = true;
+    return shadowTexture;
+  }, []);
+
+  React.useEffect(() => () => texture?.dispose(), [texture]);
+
+  return (
+    <mesh position={[0, -1.07, 0]} rotation={[-Math.PI / 2, 0, 0]} renderOrder={1}>
+      <planeGeometry args={[3.5, 1.15]} />
+      <meshBasicMaterial
+        map={texture ?? undefined}
+        transparent
+        depthWrite={false}
+        toneMapped={false}
+        opacity={0.95}
       />
     </mesh>
   );
@@ -666,11 +711,12 @@ const SceneContent = ({ targetRotation, onReady }: { targetRotation: number; onR
         </group>
       </group>
       
+      <GroundingShadow />
       <ContactShadows 
-        position={[0, -1.22, 0]}
-        opacity={0.38}
-        scale={13}
-        blur={3.6}
+        position={[0, -1.06, 0]}
+        opacity={0.62}
+        scale={6.5}
+        blur={2.2}
         far={2.5}
         resolution={512}
         color="#15110d"

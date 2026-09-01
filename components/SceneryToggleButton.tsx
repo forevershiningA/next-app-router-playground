@@ -13,12 +13,12 @@ interface StoredPref {
 }
 
 const COLORS = [
-  { label: 'Pure White',    value: '#f8f8f8' },
-  { label: 'Light Gray',    value: '#d8d8d8' },
-  { label: 'Warm Beige',    value: '#d4c5a9' },
-  { label: 'Medium Gray',   value: '#787878' },
-  { label: 'Dark Charcoal', value: '#2c2c2c' },
-  { label: 'Deep Navy',     value: '#0d1b2a' },
+  { label: 'Gallery White', value: '#f8f8f8', preview: 'linear-gradient(135deg, #ffffff, #d7d2c9)' },
+  { label: 'Soft Gray',     value: '#d8d8d8', preview: 'linear-gradient(135deg, #f0f0ee, #a8a8a5)' },
+  { label: 'Warm Stone',    value: '#d4c5a9', preview: 'linear-gradient(135deg, #eee4d4, #a99779)' },
+  { label: 'Slate Studio',  value: '#787878', preview: 'linear-gradient(135deg, #a6a6a3, #4d4d4a)' },
+  { label: 'Charcoal',      value: '#2c2c2c', preview: 'linear-gradient(135deg, #55524e, #191817)' },
+  { label: 'Midnight',      value: '#0d1b2a', preview: 'linear-gradient(135deg, #28435a, #09121e)' },
 ] as const;
 
 const SCENERY_OPTIONS = [
@@ -138,15 +138,19 @@ export default function SceneryToggleButton() {
             })}
           </div>
 
-          {/* Solid colour swatches */}
+          {/* Studio backdrops */}
+          <p className="mb-1.5 px-0.5 text-[10px] font-semibold uppercase tracking-widest text-white/50">
+            Studio backdrop
+          </p>
           <div className="flex gap-1.5">
-            {COLORS.map(({ label, value }) => (
+            {COLORS.map(({ label, value, preview }) => (
               <button
                 key={value}
                 onClick={() => selectColor(value)}
                 title={label}
-                style={{ backgroundColor: value }}
-                className={`h-7 w-7 rounded-full transition-transform hover:scale-110 ${
+                aria-label={`Select ${label} studio backdrop`}
+                style={{ background: preview }}
+                className={`h-7 w-7 rounded-full border border-white/15 transition-transform hover:scale-110 ${
                   hideScenery && solidBgColor === value
                     ? 'ring-2 ring-[#d4af37] ring-offset-1 ring-offset-black/50'
                     : ''

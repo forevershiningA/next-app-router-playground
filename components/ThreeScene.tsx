@@ -655,7 +655,13 @@ export default function ThreeScene() {
         <div
           ref={containerRef}
           className="relative h-dvh w-full"
-          style={hideScenery ? { backgroundColor: solidBgColor } : undefined}
+          style={hideScenery ? {
+            backgroundColor: solidBgColor,
+            backgroundImage: `linear-gradient(${solidBgColor}88, ${solidBgColor}88), url('/visuals/designer-studio-cyclorama.webp')`,
+            backgroundPosition: 'center',
+            backgroundSize: 'cover',
+            backgroundBlendMode: 'soft-light, normal',
+          } : undefined}
         >
           {/* Product Name Overlay (above canvas) */}
           <ProductNameHeader />
