@@ -2106,7 +2106,7 @@ export const useHeadstoneStore = create<HeadstoneState>()((set, get) => ({
   /* user-facing scenery toggle — persisted in localStorage via SceneryToggleButton */
   hideScenery: true,
   setHideScenery: (v) => set({ hideScenery: v }),
-  solidBgColor: '#d4c5a9',
+  solidBgColor: '#787878',
   setSolidBgColor: (color) => set({ solidBgColor: color }),
   sceneryVariant: 'day',
   setSceneryVariant: (v) => set({ sceneryVariant: v }),

@@ -299,7 +299,7 @@ export default function HomeSplash() {
             />
           </div>
 
-            <nav className="hidden flex-1 xl:block" aria-label="Memorial product pages">
+            <nav className="absolute left-1/2 hidden -translate-x-1/2 xl:block" aria-label="Memorial product pages">
               <ul className="flex items-center justify-center gap-5 whitespace-nowrap text-sm font-semibold text-white/90">
                 {MEMORIAL_LINKS.map((link) => (
                   <li key={link.href}>

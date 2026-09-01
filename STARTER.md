@@ -14383,8 +14383,8 @@ Primary files: `components/HeroCanvas.tsx` and `app/_ui/HomeSplash.tsx`.
 Primary files: `components/SceneryToggleButton.tsx`, `components/ThreeScene.tsx`, and `components/three/Scene.tsx`. Backdrop asset: `public/visuals/designer-studio-cyclorama.webp`.
 
 - The scenery selector presents six studio-oriented choices: **Gallery White**, **Soft Gray**, **Warm Stone**, **Slate Studio**, **Charcoal**, and **Midnight**. Their swatches use gradients, not flat colour chips, to communicate the intended photographic/studio mood.
-- **Warm Stone** (`#d4c5a9`, the third studio choice) is the default for a new Designer session. Existing saved scenery preferences in local storage intentionally continue to take precedence.
-- Studio mode is a real warm cyclorama image behind a transparent Canvas, colour-graded with the selected studio tone. Do not regress it to a CSS-only flat fill: the backdrop must retain visible floor, wall, and soft texture.
+- **Slate Studio** (`#787878`, the fourth studio choice) is the default for a new Designer session. Existing saved scenery preferences in local storage intentionally continue to take precedence.
+- Studio mode is a real cyclorama image behind a transparent Canvas. Every studio choice uses a dedicated backdrop in `public/visuals/` — `designer-studio-cyclorama-{gallery-white,soft-gray,warm-stone,slate-studio,charcoal,midnight}.webp` — rather than a CSS colour overlay on a shared scene. Do not regress this to a CSS-only flat fill: each backdrop must retain its own visible floor, wall, texture, and lighting character.
 - In studio mode, `Scene.tsx` uses a contact shadow only. It intentionally omits the outdoor standalone-headstone concrete foundation, which otherwise becomes an oversized dark pad beneath the Base. The real granite Base remains visible and grounded. Outdoor meadow mode retains its concrete foundation.
 - `StudioScenery` in `Scene.tsx` is intentionally minimal; the CSS backdrop in `ThreeScene.tsx` provides the scenery image while Three.js supplies the product lighting and grounding shadow.
 
@@ -14394,6 +14394,23 @@ Primary file: `lib/use-unit-system.ts`.
 
 - SSR and the initial client render must always start with the same default unit system: `imperial`. The saved MM/IN preference is read only after hydration in `useEffect`, then shared through the existing browser event.
 - Do not initialise React state from `document.cookie` during render. That caused an SSR/client mismatch where the server rendered **IN** while a client cookie rendered **MM**, triggering React hydration recovery. Persist preference changes to the cookie as before; only the initial read timing changed.
+
+### Material-preview feedback
+
+Primary file: `components/ThreeScene.tsx`.
+
+- On the product-prefixed or root **Select Material** step, a material change shows a compact, non-blocking **Loading material…** spinner in the centre of the canvas. It is driven by the existing `isMaterialChange` / scene-loading state and does not obscure or disable the surrounding Designer controls.
+- Keep this distinct from the general scene loader used for initial model/shape changes: texture preview feedback belongs inside the canvas only while the Material step is active.
+
+### Modern headstone SVG face textures
+
+Primary file: `components/SvgHeadstone.tsx`.
+
+- **Open issue — not resolved as of 2026-09-01:** all modern SVG Headstone forms after **Square** still show severe, triangle-like striped/faceted artefacts on their front and back faces. The left and right extrusion sides render correctly. User evidence includes `headstone_2`, `headstone_18`, and the Heart / **Headstone 22** screen captures. Do not present the current implementation as a completed texture fix.
+- The catalogue SVGs often contain a filled silhouette plus a `fill="none"` outline, including paths resolved through `<use>`. The current code excludes explicitly stroke-only paths, selects the largest filled shape, and retains explicit holes only. This was a reasonable experiment to prevent duplicate cap geometry, but it did **not** remove the user-visible artefacts. Re-evaluate it against the actual parsed `SVGLoader` paths rather than assuming all secondary shapes are disposable.
+- Current experiments also bake cap repeats into UVs, keep face/back texture-map repeats at `repeat(1, 1)`, and apply `applyPlanarCapProjection(...)` for local X/Y cap coordinates. These changes likewise did not remove the artefact in the browser. Treat them as diagnostic code, not a verified solution; simplify or replace them once the actual geometry/material cause is proven.
+- A further experiment assigns exact `+Z`/`-Z` normals to cap vertices after conversion to non-indexed geometry, because disconnected triangles otherwise receive separate normals under studio lights. It is guarded by `GEOMETRY_BUILD_VERSION` so Fast Refresh rebuilds the mesh. This also did **not** resolve the reported visual issue, so the next investigation must inspect the raw loaded shapes, material groups, and any overlapping cap geometry.
+- **Heart consistency:** the selected **Headstone 22** thumbnail uses `headstone_27.svg`, and the Designer resolves the Heart shape to that same SVG. The canvas was nevertheless reported as visually different. Verify the parsed geometry against that exact source asset before changing the thumbnail or adding a separate Heart model.
 
 ### Verification
 

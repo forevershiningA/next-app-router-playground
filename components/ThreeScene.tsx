@@ -35,6 +35,15 @@ import {
 import { logger } from '#/lib/logger';
 import { getDesignerStepSlug } from '#/lib/designer-route-state';
 
+const STUDIO_BACKDROP_PATHS: Record<string, string> = {
+  '#f8f8f8': '/visuals/designer-studio-cyclorama-gallery-white.webp',
+  '#d8d8d8': '/visuals/designer-studio-cyclorama-soft-gray.webp',
+  '#d4c5a9': '/visuals/designer-studio-cyclorama-warm-stone.webp',
+  '#787878': '/visuals/designer-studio-cyclorama-slate-studio.webp',
+  '#2c2c2c': '/visuals/designer-studio-cyclorama-charcoal.webp',
+  '#0d1b2a': '/visuals/designer-studio-cyclorama-midnight.webp',
+};
+
 function CameraController() {
   const { controls, camera, size } = useThree();
   const pathname = usePathname();
@@ -484,11 +493,15 @@ function ProductNameHeader() {
 export default function ThreeScene() {
   const is2DMode = useHeadstoneStore((s) => s.is2DMode);
   const loading = useHeadstoneStore((s) => s.loading);
+  const isMaterialChange = useHeadstoneStore((s) => s.isMaterialChange);
   const shapeUrl = useHeadstoneStore((s) => s.shapeUrl);
   const hideScenery = useHeadstoneStore((s) => s.hideScenery);
   const solidBgColor = useHeadstoneStore((s) => s.solidBgColor);
+  const studioBackdropPath = STUDIO_BACKDROP_PATHS[solidBgColor]
+    ?? '/visuals/designer-studio-cyclorama-warm-stone.webp';
   const pathname = usePathname();
   const isSelectSizeStep = getDesignerStepSlug(pathname) === 'select-size';
+  const isMaterialStep = getDesignerStepSlug(pathname) === 'select-material';
   const isDesignsPage = pathname?.startsWith('/designs/');
 
   const [isVisible, setIsVisible] = useState(true);
@@ -640,7 +653,7 @@ export default function ThreeScene() {
 
   return (
     <>
-      {showLoader && (
+      {showLoader && !isMaterialStep && (
         <div className="absolute inset-0 z-50 grid place-items-center bg-transparent">
           <div className="flex flex-col items-center gap-4 text-white">
             <div className="h-16 w-16 animate-spin rounded-full border-[6px] border-white/30 border-t-white" />
@@ -657,14 +670,27 @@ export default function ThreeScene() {
           className="relative h-dvh w-full"
           style={hideScenery ? {
             backgroundColor: solidBgColor,
-            backgroundImage: `linear-gradient(${solidBgColor}88, ${solidBgColor}88), url('/visuals/designer-studio-cyclorama.webp')`,
+            backgroundImage: `url('${studioBackdropPath}')`,
             backgroundPosition: 'center',
             backgroundSize: 'cover',
-            backgroundBlendMode: 'soft-light, normal',
           } : undefined}
         >
           {/* Product Name Overlay (above canvas) */}
           <ProductNameHeader />
+
+          {isMaterialStep && (isMaterialChange || showLoader) && (
+            <div
+              className="pointer-events-none absolute inset-0 z-40 grid place-items-center"
+              role="status"
+              aria-live="polite"
+              aria-label="Loading material preview"
+            >
+              <div className="flex items-center gap-3 rounded-full border border-white/15 bg-black/65 px-4 py-3 text-sm font-medium text-white shadow-xl backdrop-blur-md">
+                <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/25 border-t-[#cfac6c]" aria-hidden="true" />
+                Loading material…
+              </div>
+            </div>
+          )}
 
           <div
             className={`h-full w-full transition-opacity duration-500 ${sceneReady ? 'opacity-100' : 'opacity-0'}`}
