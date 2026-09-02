@@ -462,8 +462,14 @@ export default function ShapeSwapper({
     return resolvedTex;
   }, [isUrn, headstoneMaterialUrl, resolvedTex]);
 
-  const builtinPedestalShapes = React.useMemo(
-    () => new Set(['headstone_3.svg', 'headstone_5.svg']),
+  const fixedShapeSlugs = React.useMemo(
+    () =>
+      new Set([
+        'headstone_3.svg',
+        'headstone_5.svg',
+        'ferry.svg',
+        'war-tank.svg',
+      ]),
     []
   );
   const currentShapeSlug = React.useMemo(() => {
@@ -475,9 +481,9 @@ export default function ShapeSwapper({
     resolvedUrl.startsWith('data:image/svg+xml') || resolvedUrl.startsWith('blob:');
   const isFixedHeadstoneAsset = React.useMemo(() => {
     if (!currentShapeSlug) return false;
-    if (builtinPedestalShapes.has(currentShapeSlug)) return true;
+    if (fixedShapeSlugs.has(currentShapeSlug)) return true;
     return currentShapeSlug.includes('headstone_');
-  }, [currentShapeSlug, builtinPedestalShapes]);
+  }, [currentShapeSlug, fixedShapeSlugs]);
   const preserveTopForShape =
     !isFixedHeadstoneAsset &&
     !isUrn &&

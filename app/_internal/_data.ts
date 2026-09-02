@@ -291,6 +291,9 @@ const shapes: Shape[] = [
   { id: '53', name: 'Headstone 37', image: 'headstone_44.svg', category: 'modern' },
   { id: '54', name: 'Headstone 38', image: 'headstone_45.svg', category: 'modern' },
   { id: '55', name: 'Headstone 39', image: 'headstone_46.svg', category: 'modern' },
+  { id: '56', name: 'Military Pentagon', image: 'military/pentagon.svg', category: 'military' },
+  { id: '57', name: 'Military Naval Ship', image: 'military/ferry.svg', category: 'military' },
+  { id: '58', name: 'Military Tank', image: 'military/war-tank.svg', category: 'military' },
   
   // Plaques (kept for other uses)
   { id: '67', name: 'Rectangle (Landscape)', image: 'landscape.svg', category: '1' },

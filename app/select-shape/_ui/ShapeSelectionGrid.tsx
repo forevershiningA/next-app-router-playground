@@ -26,6 +26,11 @@ const shapeCategories: ShapeCategory[] = [
     description: 'Classic headstone shapes',
   },
   { id: 'modern', name: 'Modern', description: 'Contemporary designs' },
+  {
+    id: 'military',
+    name: 'Military',
+    description: 'Military-inspired memorial shapes',
+  },
   { id: 'custom', name: 'Custom', description: 'Upload your own SVG shape' },
 ];
 
@@ -535,7 +540,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 ? `Choose from the first 11 traditional shapes available for this${
                     isPetMiniHeadstone ? ' pet mini' : isMiniHeadstone ? ' mini' : ' stainless steel'
                   } headstone.`
-                : 'Choose the perfect shape for your memorial. Browse our collection of traditional and modern designs, or upload your own custom SVG shape.'}
+                : 'Choose the perfect shape for your memorial. Browse our traditional, modern, and military designs, or upload your own custom SVG shape.'}
             </p>
           </div>
         </div>

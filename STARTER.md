@@ -14445,3 +14445,29 @@ git diff --check
 ```
 
 TypeScript and diff checks pass. Existing ESLint warnings in `SvgHeadstone.tsx` pre-date this change; the two unused-variable warnings introduced during the correction were removed. `screen.png` remains user-provided evidence and must never be overwritten.
+
+---
+
+## Current Status (2026-09-02) — Military Headstone Category Started
+
+Primary files: `app/_internal/_data.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, and `components/ShapeSelector.tsx`. Source assets are under `public/shapes/headstones/military/`.
+
+- The Headstone catalogue now has a `military` category alongside `traditional` and `modern`. It is available in both the full Select Shape page and the repeat-selection panel in the Designer's left column.
+- **Military Pentagon** is the first enabled design. Its catalogue image is `military/pentagon.svg`, which resolves to `/shapes/headstones/military/pentagon.svg` for both its preview and `SvgHeadstone` geometry.
+- **Military Naval Ship** (`military/ferry.svg`) and **Military Tank** (`military/war-tank.svg`) are the next enabled designs. Each has one connected main silhouette. Their internal window/wheel cut-outs are intentionally removed by the existing solid-outline conversion so the structural stone remains a single full cap.
+- Wide pictorial Military silhouettes such as Tank and Naval Ship must be treated as fixed-shape assets in `ShapeSwapper`. Allowing `preserveTop` to force them to the configured target height adds a separate rectangular band below the source outline. The derived cap mesh then shows that band's front while the outline-based replacement wall has no matching sides, producing the apparent unsupported plate seen under Military Tank. Both filenames are included in the fixed-shape set, which disables that extension and enables the same bevel path used by modern fixed SVG Headstones. Pentagon is intentionally unchanged because its accepted upright proportions already render correctly.
+- The Pentagon source is suitable because it contains one closed, filled outer path. Most remaining Military SVGs are multi-part pictograms and must not be added directly as Headstone shapes: the current loader deliberately selects one largest filled silhouette and would discard their other disconnected parts.
+- Products already restricted to traditional-only shapes retain that restriction on the full selection page. Military is an additive category for products that support the general Headstone catalogue.
+- Before enabling more Military entries, create a single connected memorial outline with a stable bottom edge and sufficient front area for inscriptions. Preserve internal soldier, medal, chevron, or vehicle details as separate motifs/reliefs rather than disconnected pieces of the structural stone geometry.
+
+---
+
+## Current Status (2026-09-02) — Guitar 1 SVG Union Validation
+
+Primary asset: `public/shapes/headstones/headstone_3.svg` (catalogue name: **Guitar 1**).
+
+- Guitar 1 was initially authored as two independent filled silhouettes: the guitar and a plaque with a guitar-shaped recess. `SvgHeadstone` intentionally selects the largest filled `Shape` as its structural outline, so the original asset rendered the recess but omitted the guitar.
+- One XML `<path>` element is **not** sufficient validation. A `d` attribute can contain several `M…Z` subpaths; `SVGLoader.createShapes()` still returns one `Shape` for each disconnected positive contour. Groups and compound-path wrappers likewise do not turn disconnected geometry into a single solid for extrusion.
+- The accepted source now parses as exactly one SVG path and **one** Three.js `Shape`, with no holes: `{ paths: 1, shapes: 1, holes: [0] }`. Its viewBox is `0 0 387.65 398.06` and it has no stroke. Guitar and plaque are therefore one closed, connected solid suitable for the current cap/wall pipeline.
+- Illustrator procedure for comparable assets: ensure the decorative silhouette physically overlaps the plaque by a small amount, use **Pathfinder → Unite**, then **Expand**. Export as a filled SVG with no stroke, clipping/masks, or merely grouped paths. Verify using the parser before marking the asset ready.
+- Guitar 2–5 were identified as similarly multi-part source assets. Audit each individually before enabling an equivalent union; do not weaken the general “largest structural shape only” rule, as it prevents overlapping cap geometry and texture artefacts in the wider catalogue.

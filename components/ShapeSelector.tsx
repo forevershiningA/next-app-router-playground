@@ -14,6 +14,13 @@ type ShapeSelectorProps = {
   navigateAfterSelect?: boolean;
 };
 
+const headstoneShapeCategories = [
+  { id: 'all', label: 'All' },
+  { id: 'traditional', label: 'Traditional' },
+  { id: 'modern', label: 'Modern' },
+  { id: 'military', label: 'Military' },
+] as const;
+
 const filenameFromCatalogUrl = (url?: string) => url?.split('/').pop() ?? '';
 
 const getPetRockPreviewSrc = (code?: string, url?: string) => {
@@ -60,6 +67,7 @@ export default function ShapeSelector({
   navigateAfterSelect = true,
 }: ShapeSelectorProps) {
   const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = React.useState('all');
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
   const setWidthMm = useHeadstoneStore((s) => s.setWidthMm);
   const setHeightMm = useHeadstoneStore((s) => s.setHeightMm);
@@ -98,15 +106,18 @@ export default function ShapeSelector({
       'oval_vertical.svg',
       'circle.svg',
     ];
-    return putSerpentineFirst(
-      shapes.filter((shape) => {
-        const img = shape.image ?? '';
-        if (isFullColourPlaque) return rectangleShapes.includes(img);
-        if (isPlaque) return allPlaqueShapes.includes(img);
-        return !allPlaqueShapes.includes(img);
-      }),
-    );
-  }, [shapes, isPlaque, isFullColourPlaque]);
+    const productShapes = shapes.filter((shape) => {
+      const img = shape.image ?? '';
+      if (isFullColourPlaque) return rectangleShapes.includes(img);
+      if (isPlaque) return allPlaqueShapes.includes(img);
+      return !allPlaqueShapes.includes(img);
+    });
+    const categoryShapes =
+      !isPlaque && selectedCategory !== 'all'
+        ? productShapes.filter((shape) => shape.category === selectedCategory)
+        : productShapes;
+    return putSerpentineFirst(categoryShapes);
+  }, [shapes, isPlaque, isFullColourPlaque, selectedCategory]);
 
   // Urn and pet rock products use catalog shapes from XML, not the static DB list.
   if (isUrn || isPetRock) {
@@ -243,6 +254,24 @@ export default function ShapeSelector({
 
   return (
     <div className="space-y-3">
+      {!isPlaque && (
+        <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {headstoneShapeCategories.map((category) => (
+            <button
+              key={category.id}
+              type="button"
+              onClick={() => setSelectedCategory(category.id)}
+              className={`shrink-0 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                selectedCategory === category.id
+                  ? 'border-[#D7B356] bg-[#D7B356] text-slate-950'
+                  : 'border-white/15 text-slate-300 hover:border-[#D7B356]/60 hover:text-white'
+              }`}
+            >
+              {category.label}
+            </button>
+          ))}
+        </div>
+      )}
       {/* Inset contour border toggle — headstones with supported shapes only */}
       {!isPlaque && isContourSupported(currentShapeUrl) && (
         <div className="rounded-xl border border-white/10 bg-[#0f0a07] p-4">
