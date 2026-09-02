@@ -3922,7 +3922,7 @@ export default function DesignerNav() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  <ShapeSelector shapes={shapes} />
+                  <ShapeSelector shapes={shapes} navigateAfterSelect={false} />
                 </div>
               ))}
             {activeFullscreenPanel === 'select-material' &&

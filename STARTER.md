@@ -14420,3 +14420,28 @@ git diff --check
 ```
 
 The HomeSplash lint check and diff check pass. In restricted Windows sandboxes, `pnpm` may require elevated execution because it resolves `C:\\Users\\polcr`; this is an environment permission issue, not a project error. `screen.png` remains user-provided acceptance evidence and must never be overwritten.
+
+---
+
+## Current Status (2026-09-02) — Headstone Cap and Wall Rendering Resolved
+
+Primary file: `components/SvgHeadstone.tsx`.
+
+- User evidence in `screen.png` shows **Headstone 1** with severe diagonal/triangular granite bands across the front face. This is a texture-coordinate/material-region defect, not merely studio lighting or a normal-map issue. The extrusion sides themselves were rendering as expected.
+- The prior `z`-tolerance heuristic classified every triangle independently from its post-transform coordinates. On complex extruded SVG outlines, that could classify portions of a front/back cap as the continuous perimeter wall. The wall material uses perimeter UVs, which produced the conspicuous diagonal bands on a nominally planar face.
+- Preserving `ExtrudeGeometry` groups with `mergeGeometries(geoms, true)` was not sufficient. User evidence proved that some textured extrusion-wall triangles were still copied into the derived cap geometry and overlapped the replacement wall.
+- Cap extraction accepts only triangles whose three vertices lie on an actual outer cap plane, with an epsilon of `depth * 1e-6`. Wall and bevel triangles are excluded even if their source group claims they belong to a cap. The same strict classification drives cap material groups, normals, and UVs. For non-bevelled classic forms these planes are effectively `+depth/2` and `-depth/2`; bevelled modern forms must use the transformed geometry's `boundingBox.max.z` and `boundingBox.min.z`.
+- The side UV depth calculation uses `zBack` and `zFront` derived from the final geometry bounding box. This was restored after the first change briefly caused `ReferenceError: zBack is not defined` at runtime.
+- Follow-up evidence showed that classic shapes (except Cropped Peak) could still split their **side and top-edge** granite into triangular bands. This was not fixed by a more exhaustive perimeter projection or by smoothing the side normals. A local X/Y-only wall projection was also rejected: wall vertices at the front and back have identical X/Y values, creating degenerate UV triangles and temporal mip-map noise while orbiting. The extrusion wall is removed after cap extraction and replaced by one indexed wall mesh built from the outline, with a single continuous contour/depth UV layout and shared normals. Its index order is selected from the transformed contour's signed area because SVG assets do not all share the same winding; assuming one order made the wall inward-facing and invisible under back-face culling. A temporary dark untextured wall proved that replacement geometry was visible, but also made every upright Headstone lose the selected side texture. The isolated wall now receives the selected granite colour map again, while bump and roughness detail maps stay disabled on that narrow surface to avoid reintroducing temporal orbit noise. Slant headstones retain their separate geometry path. Side-material revision is `3`.
+- Do not revert to cap classification based only on a nominal Z value or restore the original extrusion-wall triangles alongside the replacement wall. Those approaches caused missing caps, overlapping geometry, triangular texture bands, or temporal orbit noise.
+- **Headstone 2 missing-cap diagnosis (2026-09-02):** modern forms enable `ExtrudeGeometry` bevels. Their outer front/back cap planes therefore lie at the transformed geometry's actual Z extrema, not at the nominal `+depth/2` and `-depth/2`. The strict classifier was consequently rejecting every cap triangle while the replacement perimeter wall remained visible as a hollow ribbon. Cap extraction, wall depth, and the child/decal wrapper now use `boundingBox.max.z` / `boundingBox.min.z` measured after transformation. Geometry build version is `11`. Classic non-bevelled forms keep the same effective planes.
+- **Acceptance:** the user visually confirmed the final result as correct after the bounding-box cap-plane correction. Headstone 2 regained both front and back faces, while classic Headstones retained correctly textured side walls. Treat the geometry/material issue as resolved unless new evidence shows a regression on another specific SVG.
+
+### Verification
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+TypeScript and diff checks pass. Existing ESLint warnings in `SvgHeadstone.tsx` pre-date this change; the two unused-variable warnings introduced during the correction were removed. `screen.png` remains user-provided evidence and must never be overwritten.

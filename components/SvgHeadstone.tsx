@@ -173,10 +173,10 @@ export type HeadstoneAPI = {
 const EPS = 1e-9;
 // Keep Fast Refresh from retaining geometry built by an older contour or
 // normal-generation implementation in the live 3D Designer.
-const GEOMETRY_BUILD_VERSION = 2;
+const GEOMETRY_BUILD_VERSION = 11;
 // Bump this when changing cap shader construction so Fast Refresh does not
 // preserve a previously compiled material in the live Designer canvas.
-const CAP_PROJECTION_VERSION = 1;
+const CAP_PROJECTION_VERSION = 3;
 
 function applyPlanarCapProjection(
   material: THREE.MeshPhysicalMaterial,
@@ -294,69 +294,6 @@ function spacedOutline(shape: THREE.Shape, segments = 2048) {
   }
   L += pts[0].distanceTo(pts[pts.length - 1]);
   return { pts, cum, total: L };
-}
-
-// Helper to calculate distance from point P to segment AB
-function distToSegmentSquared(p: THREE.Vector2, a: THREE.Vector2, b: THREE.Vector2) {
-  const l2 = a.distanceToSquared(b);
-  if (l2 === 0) return p.distanceToSquared(a);
-  let t = ((p.x - a.x) * (b.x - a.x) + (p.y - a.y) * (b.y - a.y)) / l2;
-  t = Math.max(0, Math.min(1, t));
-  const px = a.x + t * (b.x - a.x);
-  const py = a.y + t * (b.y - a.y);
-  return (p.x - px) ** 2 + (p.y - py) ** 2;
-}
-
-// Robust projection function that avoids "stepping" artifacts
-function getProjectedPerimeter(x: number, y: number, pts: THREE.Vector2[], cum: number[], total: number) {
-  let bi = 0, bd2 = Infinity;
-  
-  // 1. Find approximate nearest point index
-  for (let i = 0; i < pts.length; i++) {
-    const dx = x - pts[i].x, dy = y - pts[i].y;
-    const d2 = dx * dx + dy * dy;
-    if (d2 < bd2) { bd2 = d2; bi = i; }
-  }
-
-  // 2. Interpolate between segments (Prev vs Next)
-  const iPrev = (bi - 1 + pts.length) % pts.length;
-  const iNext = (bi + 1) % pts.length;
-  const v = new THREE.Vector2(x, y);
-
-  // Dist to PREVIOUS segment (bi-1 -> bi)
-  const dPrevSq = distToSegmentSquared(v, pts[iPrev], pts[bi]);
-  
-  // Dist to NEXT segment (bi -> bi+1)
-  const dNextSq = distToSegmentSquared(v, pts[bi], pts[iNext]);
-
-  let baseIndex = bi;
-  let nextIndex = iNext;
-  
-  // Choose the closer segment
-  if (dPrevSq < dNextSq) {
-    baseIndex = iPrev;
-    nextIndex = bi;
-  }
-
-  // Project onto the chosen segment to get exact T
-  const p1 = pts[baseIndex];
-  const p2 = pts[nextIndex];
-  const seg = new THREE.Vector2().subVectors(p2, p1);
-  const len = seg.length();
-  
-  if (len < EPS) return cum[baseIndex] / total;
-
-  const rel = new THREE.Vector2().subVectors(v, p1);
-  const proj = rel.dot(seg.normalize()); // Distance along segment
-  
-  const startDist = cum[baseIndex];
-  let finalDist = startDist + proj;
-  
-  // Normalize 0..1
-  if (finalDist < 0) finalDist += total;
-  if (finalDist > total) finalDist -= total;
-
-  return total > 0 ? finalDist / total : 0;
 }
 
 function isLargeCircularOverlayLine(points: THREE.Vector3[], bounds: SvgLineOverlay['bounds']) {
@@ -1334,7 +1271,10 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     // Merge geometries if needed
     let merged: THREE.BufferGeometry;
     if (geoms.length > 1) {
-      merged = BufferGeometryUtils.mergeGeometries(geoms);
+      // Preserve ExtrudeGeometry's cap/wall groups when a height extension
+      // adds a second geometry. Without this, its front cap was later
+      // indistinguishable from the perimeter wall.
+      merged = BufferGeometryUtils.mergeGeometries(geoms, true);
     } else {
       merged = geoms[0];
     }
@@ -1371,9 +1311,6 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
        posAttr.setXYZ(i + 2, x1, y1, z1);
     }
     
-    // Recompute normals for correct lighting
-    merged.computeVertexNormals();
-
     // FINAL ALIGNMENT: ensure headstone always rests on the ground plane (Y = 0)
     merged.computeBoundingBox();
     const finalBB = merged.boundingBox;
@@ -1384,15 +1321,32 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     // =========================================================
     // MATERIAL GROUPS
     // =========================================================
-    // Front face is at +depth/2 (since we centered Z at step 1)
-    const zFront = depth / 2;
-    const zBack = -depth / 2;
-    const zTol = Math.max(0.25, Math.abs(depth) * 0.01);
-    
     merged.clearGroups();
     const pos = merged.getAttribute('position') as THREE.BufferAttribute;
     const triCount = Math.floor(pos.count / 3);
     let currentMat = -1, start = 0, count = 0;
+
+    // Bevelled ExtrudeGeometry extends beyond the nominal 0..depth range.
+    // Read the actual outer cap planes after every transform; using
+    // +/-depth/2 discarded both caps for modern (bevelled) SVG headstones.
+    merged.computeBoundingBox();
+    const capBounds = merged.boundingBox;
+    const capFrontZ = capBounds?.max.z ?? depth / 2;
+    const capBackZ = capBounds?.min.z ?? -depth / 2;
+    const capPlaneEpsilon = Math.max(EPS, Math.abs(depth) * 1e-6);
+    const getCapMaterialIndex = (vertexIndex: number) => {
+      const z0 = pos.getZ(vertexIndex);
+      const z1 = pos.getZ(vertexIndex + 1);
+      const z2 = pos.getZ(vertexIndex + 2);
+      const liesOnPlane = (planeZ: number) =>
+        Math.abs(z0 - planeZ) <= capPlaneEpsilon &&
+        Math.abs(z1 - planeZ) <= capPlaneEpsilon &&
+        Math.abs(z2 - planeZ) <= capPlaneEpsilon;
+
+      if (liesOnPlane(capFrontZ)) return 0;
+      if (liesOnPlane(capBackZ)) return 2;
+      return 1;
+    };
 
     const flush = () => {
       if (count > 0) {
@@ -1403,43 +1357,76 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     };
 
     for (let t = 0; t < triCount; t++) {
-      const i0 = t * 3, i1 = i0 + 1, i2 = i0 + 2;
-      // Check if all three vertices are at the front or back cap.
-      const z0 = pos.getZ(i0), z1 = pos.getZ(i1), z2 = pos.getZ(i2);
-      const isFront = Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol && Math.abs(z2 - zFront) <= zTol;
-      const isBack = Math.abs(z0 - zBack) <= zTol && Math.abs(z1 - zBack) <= zTol && Math.abs(z2 - zBack) <= zTol;
-      
+      const i0 = t * 3;
       // Material 0 = front, 1 = continuous sides, 2 = back cap.
-      const matIndex = isFront ? 0 : isBack ? 2 : 1;
+      const matIndex = getCapMaterialIndex(i0);
       if (currentMat === -1) currentMat = matIndex;
       if (matIndex !== currentMat) { flush(); currentMat = matIndex; }
       count += 3;
     }
     flush();
 
-    // `toNonIndexed()` is useful for assigning the three material regions,
-    // but it also disconnects every cap triangle. A subsequent
-    // `computeVertexNormals()` therefore makes a nominally flat face look
-    // faceted under the studio lights (especially on concave modern SVGs).
-    // The front and back of a headstone are planar surfaces, so give their
-    // vertices their exact shared face normal. Leave the side normals intact
-    // so the depth and contour keep their natural shading.
+    // `toNonIndexed()` disconnects the triangles along a curved extrusion.
+    // Restore smooth wall normals by welding side vertices logically by their
+    // position, while retaining exact flat normals for the front and back caps.
     const normal = merged.getAttribute('normal') as THREE.BufferAttribute;
+    const sideNormalSums = new Map<string, THREE.Vector3>();
+    const sideVertexKeys = new Array<string | null>(pos.count).fill(null);
+
     for (let t = 0; t < triCount; t++) {
       const i0 = t * 3;
-      const z0 = pos.getZ(i0), z1 = pos.getZ(i0 + 1), z2 = pos.getZ(i0 + 2);
-      const isFront =
-        Math.abs(z0 - zFront) <= zTol &&
-        Math.abs(z1 - zFront) <= zTol &&
-        Math.abs(z2 - zFront) <= zTol;
-      const isBack =
-        Math.abs(z0 - zBack) <= zTol &&
-        Math.abs(z1 - zBack) <= zTol &&
-        Math.abs(z2 - zBack) <= zTol;
+      if (getCapMaterialIndex(i0) !== 1) continue;
 
-      if (!isFront && !isBack) continue;
+      const a = new THREE.Vector3(pos.getX(i0), pos.getY(i0), pos.getZ(i0));
+      const b = new THREE.Vector3(
+        pos.getX(i0 + 1),
+        pos.getY(i0 + 1),
+        pos.getZ(i0 + 1),
+      );
+      const c = new THREE.Vector3(
+        pos.getX(i0 + 2),
+        pos.getY(i0 + 2),
+        pos.getZ(i0 + 2),
+      );
+      const faceNormal = new THREE.Vector3()
+        .subVectors(b, a)
+        .cross(new THREE.Vector3().subVectors(c, a))
+        .normalize();
 
-      const normalZ = isFront ? 1 : -1;
+      for (let vertexIndex = i0; vertexIndex < i0 + 3; vertexIndex++) {
+        const key = `${pos.getX(vertexIndex).toFixed(6)}:${pos
+          .getY(vertexIndex)
+          .toFixed(6)}:${pos.getZ(vertexIndex).toFixed(6)}`;
+        sideVertexKeys[vertexIndex] = key;
+        const sum = sideNormalSums.get(key);
+        if (sum) {
+          sum.add(faceNormal);
+        } else {
+          sideNormalSums.set(key, faceNormal.clone());
+        }
+      }
+    }
+
+    for (let vertexIndex = 0; vertexIndex < pos.count; vertexIndex++) {
+      const key = sideVertexKeys[vertexIndex];
+      if (!key) continue;
+      const smoothedNormal = sideNormalSums.get(key)?.normalize();
+      if (smoothedNormal) {
+        normal.setXYZ(
+          vertexIndex,
+          smoothedNormal.x,
+          smoothedNormal.y,
+          smoothedNormal.z,
+        );
+      }
+    }
+
+    for (let t = 0; t < triCount; t++) {
+      const i0 = t * 3;
+      const capMaterialIndex = getCapMaterialIndex(i0);
+      if (capMaterialIndex === 1) continue;
+
+      const normalZ = capMaterialIndex === 0 ? 1 : -1;
       normal.setXYZ(i0, 0, 0, normalZ);
       normal.setXYZ(i0 + 1, 0, 0, normalZ);
       normal.setXYZ(i0 + 2, 0, 0, normalZ);
@@ -1453,17 +1440,17 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     const bb = merged.boundingBox!;
     const x0 = bb.min.x, dxU = bb.max.x - bb.min.x;
     const y0 = bb.min.y, dyU = bb.max.y - bb.min.y;
+    const centerX = (minX + maxX) / 2;
+    const zBack = capBackZ;
+    const zFront = capFrontZ;
     
     const uvArr = new Float32Array(pos.count * 2);
-    const centerX = (minX + maxX) / 2;
-    const svgTotalHeight = bottomTarget_SV - minY;
-
     // Calculate Physical World Dimensions (Used for Repeats, not UV baking)
     const worldW = (maxX - minX) * Math.abs(scale) * sCore;
     const worldH = (bottomTarget_SV - minY) * Math.abs(scale) * sCore;
     const worldPerimeterLen = outline.total * Math.abs(scale) * sCore;
     // Important: worldDepth is physical thickness
-    const worldZDepth = Math.abs(depth * scale); 
+    const worldZDepth = Math.abs((capFrontZ - capBackZ) * scale);
     const usePhysicalCapRepeat = autoRepeat || tileSize != null || sideTileSize != null;
     const faceTileSize = Math.max(0.001, tileSize ?? 0.1);
     const backTileSize = Math.max(0.001, sideTileSize ?? tileSize ?? 0.1);
@@ -1481,10 +1468,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       : (sideRepeatY ?? 1);
 
     for (let i = 0; i < pos.count; i += 3) {
-      const z0 = pos.getZ(i), z1 = pos.getZ(i+1), z2 = pos.getZ(i+2);
-      const isFrontCap = Math.abs(z0 - zFront) <= zTol && Math.abs(z1 - zFront) <= zTol && Math.abs(z2 - zFront) <= zTol;
-      const isBackCap = Math.abs(z0 - zBack) <= zTol && Math.abs(z1 - zBack) <= zTol && Math.abs(z2 - zBack) <= zTol;
-      const isCap = isFrontCap || isBackCap;
+      const capMaterialIndex = getCapMaterialIndex(i);
+      const isFrontCap = capMaterialIndex === 0;
+      const isCap = capMaterialIndex !== 1;
       
       if (isCap) {
         // Front/back cap texture density is baked directly into the planar
@@ -1499,43 +1485,173 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           uvArr[2 * (i + j) + 1] = v;
         }
       } else {
-        // Sides: Normalized 0..1
-        // U = Perimeter Fraction
-        // V = Depth Fraction
-        const rawUVs: {s: number, v: number}[] = [];
-        
-        for (let j = 0; j < 3; j++) {
-          const px = pos.getX(i + j);
-          const py = pos.getY(i + j);
-          const pz = pos.getZ(i + j);
-          
-          const originalSvgY = svgTotalHeight - py + minY;
-          const s = getProjectedPerimeter(px + centerX, originalSvgY, outline.pts, outline.cum, outline.total);
-          
-          // Map depth to 0..1
-          const v = (pz - zBack) / (zFront - zBack);
-          
-          rawUVs.push({ s, v });
-        }
+        // A wall needs one coordinate along its outline and the other through
+        // its Z depth. X/Y-only UVs collapse the front and back vertices onto
+        // each other, causing mip-map noise while OrbitControls moves.
+        const edgeX = pos.getX(i + 1) - pos.getX(i);
+        const edgeY = pos.getY(i + 1) - pos.getY(i);
+        const alternateEdgeX = pos.getX(i + 2) - pos.getX(i);
+        const alternateEdgeY = pos.getY(i + 2) - pos.getY(i);
+        const useXAxis =
+          Math.abs(edgeX) + Math.abs(alternateEdgeX) >=
+          Math.abs(edgeY) + Math.abs(alternateEdgeY);
+        const sideDepthRepeat = usePhysicalCapRepeat
+          ? Math.max(1, worldZDepth / backTileSize)
+          : (sideRepeatY ?? 1);
 
-        // Seam Fix: If we cross the 1.0 -> 0.0 boundary
-        const s0 = rawUVs[0].s;
-        const s1 = rawUVs[1].s;
-        const s2 = rawUVs[2].s;
-        if (Math.abs(s0 - s1) > 0.5 || Math.abs(s1 - s2) > 0.5 || Math.abs(s2 - s0) > 0.5) {
-           if (s0 < 0.5) rawUVs[0].s += 1;
-           if (s1 < 0.5) rawUVs[1].s += 1;
-           if (s2 < 0.5) rawUVs[2].s += 1;
-        }
-
-        // Write UVs (NO SCALE APPLIED HERE)
         for (let j = 0; j < 3; j++) {
-           uvArr[2 * (i + j)] = rawUVs[j].s;
-           uvArr[2 * (i + j) + 1] = rawUVs[j].v;
+          const u = useXAxis
+            ? ((pos.getX(i + j) - x0) / dxU) * faceUvRepeatX
+            : ((pos.getY(i + j) - y0) / dyU) * faceUvRepeatY;
+          const v =
+            ((pos.getZ(i + j) - zBack) / (zFront - zBack)) *
+            sideDepthRepeat;
+          uvArr[2 * (i + j)] = u;
+          uvArr[2 * (i + j) + 1] = v;
         }
       }
     }
     merged.setAttribute('uv', new THREE.BufferAttribute(uvArr, 2));
+
+    // Keep the two planar caps separate from the extrusion wall. In particular,
+    // do not render ExtrudeGeometry's wall triangles: curved outlines could
+    // leave overlapping bevel/wall faces that flickered during camera orbit.
+    const capPositions: number[] = [];
+    const capNormals: number[] = [];
+    const capUvs: number[] = [];
+    const capGroups: Array<{ start: number; count: number; materialIndex: number }> = [];
+    let capGroupStart = 0;
+    let capGroupCount = 0;
+    let activeCapMaterial = -1;
+
+    const appendCapGroup = () => {
+      if (capGroupCount > 0) {
+        capGroups.push({
+          start: capGroupStart,
+          count: capGroupCount,
+          materialIndex: activeCapMaterial,
+        });
+        capGroupStart += capGroupCount;
+        capGroupCount = 0;
+      }
+    };
+
+    for (let triangleStart = 0; triangleStart < pos.count; triangleStart += 3) {
+      const capMaterialIndex = getCapMaterialIndex(triangleStart);
+      if (capMaterialIndex === 1) continue;
+      if (
+        activeCapMaterial !== -1 &&
+        capMaterialIndex !== activeCapMaterial
+      ) {
+        appendCapGroup();
+      }
+      activeCapMaterial = capMaterialIndex;
+
+      for (let vertexIndex = triangleStart; vertexIndex < triangleStart + 3; vertexIndex++) {
+        capPositions.push(
+          pos.getX(vertexIndex),
+          pos.getY(vertexIndex),
+          pos.getZ(vertexIndex),
+        );
+        capNormals.push(
+          normal.getX(vertexIndex),
+          normal.getY(vertexIndex),
+          normal.getZ(vertexIndex),
+        );
+        capUvs.push(uvArr[vertexIndex * 2], uvArr[vertexIndex * 2 + 1]);
+      }
+      capGroupCount += 3;
+    }
+    appendCapGroup();
+
+    const capGeometry = new THREE.BufferGeometry();
+    capGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(capPositions, 3),
+    );
+    capGeometry.setAttribute(
+      'normal',
+      new THREE.Float32BufferAttribute(capNormals, 3),
+    );
+    capGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(capUvs, 2));
+    capGroups.forEach((group) =>
+      capGeometry.addGroup(group.start, group.count, group.materialIndex),
+    );
+    capGeometry.computeBoundingBox();
+
+    // Generate one indexed, non-overlapping wall from the same contour. Shared
+    // front/back vertices give a continuous normal around curves, while U is
+    // measured along the contour and V across the physical stone depth.
+    const wallPointLimit = 320;
+    const wallPointStep = Math.max(1, Math.ceil(outline.pts.length / wallPointLimit));
+    const wallPoints = outline.pts.filter(
+      (_, index) => index % wallPointStep === 0,
+    );
+    if (
+      wallPoints.length > 2 &&
+      wallPoints[0].distanceToSquared(wallPoints[wallPoints.length - 1]) < EPS
+    ) {
+      wallPoints.pop();
+    }
+
+    const wallPositions: number[] = [];
+    const wallUvs: number[] = [];
+    const wallIndices: number[] = [];
+    let wallLength = 0;
+    const wallDepthRepeat = usePhysicalCapRepeat
+      ? Math.max(1, worldZDepth / backTileSize)
+      : (sideRepeatY ?? 1);
+
+    wallPoints.forEach((point, index) => {
+      if (index > 0) {
+        wallLength += point.distanceTo(wallPoints[index - 1]);
+      }
+      const x = point.x - centerX;
+      const y = bottomTarget_SV - point.y;
+      const u =
+        (wallLength * Math.abs(scale) * sCore) /
+        Math.max(EPS, sideTileSize ?? tileSize ?? 0.1);
+      wallPositions.push(x, y, zFront, x, y, zBack);
+      wallUvs.push(u, 0, u, wallDepthRepeat);
+    });
+
+    let transformedSignedArea = 0;
+    for (let index = 0; index < wallPoints.length; index++) {
+      const point = wallPoints[index];
+      const nextPoint = wallPoints[(index + 1) % wallPoints.length];
+      const x = point.x - centerX;
+      const y = bottomTarget_SV - point.y;
+      const nextX = nextPoint.x - centerX;
+      const nextY = bottomTarget_SV - nextPoint.y;
+      transformedSignedArea += x * nextY - nextX * y;
+    }
+    const wallOutlineIsCounterClockwise = transformedSignedArea > 0;
+
+    for (let index = 0; index < wallPoints.length; index++) {
+      const nextIndex = (index + 1) % wallPoints.length;
+      const front = index * 2;
+      const back = front + 1;
+      const nextFront = nextIndex * 2;
+      const nextBack = nextFront + 1;
+      if (wallOutlineIsCounterClockwise) {
+        wallIndices.push(front, back, nextFront, nextFront, back, nextBack);
+      } else {
+        wallIndices.push(front, nextFront, back, nextFront, nextBack, back);
+      }
+    }
+
+    const wallGeometry = new THREE.BufferGeometry();
+    wallGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(wallPositions, 3),
+    );
+    wallGeometry.setAttribute('uv', new THREE.Float32BufferAttribute(wallUvs, 2));
+    wallGeometry.setIndex(wallIndices);
+    wallGeometry.computeVertexNormals();
+    wallGeometry.addGroup(0, wallIndices.length, 1);
+    wallGeometry.computeBoundingBox();
+
+    merged.dispose();
 
     // Stats & Output
     const worldPerim = worldPerimeterLen;
@@ -1552,7 +1668,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     
     const wrapperX = 0;  
     const wrapperY = 0;  
-    const wrapperZ = (depth / 2) * scale; // Position wrapper at front face
+    const wrapperZ = capFrontZ * scale; // Position wrapper at the actual front cap
 
     // Compute outline points in child coordinate space (centered X, Y-flipped, bottom at 0)
     const outlinePoints = outline.pts.map((p) =>
@@ -1560,7 +1676,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     );
 
     return {
-      geometries: [merged],
+      geometries: [capGeometry, wallGeometry],
       dims: { worldW, worldH, worldPerim, worldDepth },
       meshScale: finalScale,
       apiData: {
@@ -1596,11 +1712,17 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     faceDetailMap.needsUpdate = true;
 
     if (clonedSideMap) {
-      clonedSideMap.repeat.set(repSideX, repSideY);
+      clonedSideMap.repeat.set(
+        headstoneStyle === 'slant' ? repSideX : 1,
+        headstoneStyle === 'slant' ? repSideY : 1,
+      );
       clonedSideMap.needsUpdate = true;
     }
     if (sideDetailMap) {
-      sideDetailMap.repeat.set(repSideX, repSideY);
+      sideDetailMap.repeat.set(
+        headstoneStyle === 'slant' ? repSideX : 1,
+        headstoneStyle === 'slant' ? repSideY : 1,
+      );
       sideDetailMap.needsUpdate = true;
     }
 
@@ -1790,14 +1912,16 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       polygonOffsetUnits: 1,
     });
 
-    // Side material: use the continuous perimeter texture strip.
-    const sideMat = clonedSideMap
+    // Side material: use the continuous perimeter texture strip. Upright
+    // headstones now have their own indexed wall geometry, so the selected
+    // granite map can be restored without sharing triangles with the caps.
+    // Keep detail maps off this narrow surface: using the colour raster as a
+    // bump/roughness source caused temporal noise while orbiting.
+    const useTexturedSideMaterial = Boolean(clonedSideMap);
+    const sideMat = useTexturedSideMaterial
       ? new THREE.MeshPhysicalMaterial({ 
           ...common, 
-          map: clonedSideMap,
-          bumpMap: isSlant ? undefined : sideDetailMap,
-          bumpScale: isSlant ? undefined : 0.2,
-          roughnessMap: isSlant ? undefined : sideDetailMap,
+          map: clonedSideMap ?? undefined,
           roughness: isSlant ? 0.1 : 0.24,
           envMapIntensity: isSlant ? 1.7 : 0.85,
           ...(isSlant && rockNormalTexture ? {
@@ -1811,12 +1935,13 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
           polygonOffsetUnits: 1,
         })
       : new THREE.MeshPhysicalMaterial({
-          color: new THREE.Color(0xeeeeee),
-          roughness: 0.4,
+          color: new THREE.Color('#16202c'),
+          roughness: 0.28,
           metalness: 0.0,
           side: doubleSided ? THREE.DoubleSide : THREE.FrontSide,
-          clearcoat: 0.3,
-          clearcoatRoughness: 0.3,
+          envMapIntensity: 0.85,
+          clearcoat: 0.75,
+          clearcoatRoughness: 0.16,
           polygonOffset: true,
           polygonOffsetFactor: 1,
           polygonOffsetUnits: 1,
@@ -1850,7 +1975,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     }
 
     return [faceMat, sideMat, backMat];
-  }, [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, sideDetailMap, backDetailMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, showStainlessRim, ssFinish, stainlessMaps, geometries, dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, CAP_PROJECTION_VERSION]);
+  }, [clonedFaceMap, clonedSideMap, clonedBackMap, faceDetailMap, backDetailMap, doubleSided, headstoneStyle, rockNormalTexture, isFullColourPlaque, isUrn, isStainlessSteel, showStainlessRim, ssFinish, stainlessMaps, geometries, dims, autoRepeat, tileSize, sideTileSize, faceRepeatX, faceRepeatY, stretchFace, sideRepeatX, sideRepeatY, CAP_PROJECTION_VERSION]);
 
   // 5a. Dispose geometries and materials on cleanup
   React.useEffect(() => {

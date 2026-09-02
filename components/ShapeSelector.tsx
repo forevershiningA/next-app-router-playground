@@ -11,6 +11,7 @@ import { getDesignerProductStepHref } from '#/lib/designer-product-routes';
 type ShapeSelectorProps = {
   shapes: ShapeOption[];
   disableInternalScroll?: boolean;
+  navigateAfterSelect?: boolean;
 };
 
 const filenameFromCatalogUrl = (url?: string) => url?.split('/').pop() ?? '';
@@ -56,6 +57,7 @@ const getPetRockShapeUrl = (code?: string, url?: string) => {
 export default function ShapeSelector({
   shapes,
   disableInternalScroll = false,
+  navigateAfterSelect = true,
 }: ShapeSelectorProps) {
   const router = useRouter();
   const setShapeUrl = useHeadstoneStore((s) => s.setShapeUrl);
@@ -132,20 +134,22 @@ export default function ShapeSelector({
                   setShapeUrl(svgPath);
                   setWidthMm(catalogShape.table.initWidth);
                   setHeightMm(catalogShape.table.initHeight);
-                  // Navigate to select-material so the canvas is visible when the
-                  // background panel opens. Without this, arriving from /select-shape
-                  // (which is NOT in canvasVisiblePages) causes the panel to be
-                  // immediately closed by the isCanvasVisible guard in DesignerNav.
-                  const nextStep = isPetRock
-                    ? 'select-size'
-                    : 'select-material';
-                  router.push(designerHref(nextStep));
-                  if (!isPetRock && typeof window !== 'undefined') {
-                    window.dispatchEvent(
-                      new CustomEvent('openFullscreenPanel', {
-                        detail: { panel: nextStep },
-                      }),
-                    );
+                  if (navigateAfterSelect) {
+                    // Navigate to select-material so the canvas is visible when the
+                    // background panel opens. Without this, arriving from /select-shape
+                    // (which is NOT in canvasVisiblePages) causes the panel to be
+                    // immediately closed by the isCanvasVisible guard in DesignerNav.
+                    const nextStep = isPetRock
+                      ? 'select-size'
+                      : 'select-material';
+                    router.push(designerHref(nextStep));
+                    if (!isPetRock && typeof window !== 'undefined') {
+                      window.dispatchEvent(
+                        new CustomEvent('openFullscreenPanel', {
+                          detail: { panel: nextStep },
+                        }),
+                      );
+                    }
                   }
                 }}
                 className="group relative cursor-pointer"
@@ -213,7 +217,10 @@ export default function ShapeSelector({
       return;
     }
     setShapeUrl(shapeUrl);
-    if (isFullColourPlaque || isTraditionalEngravedHeadstone) {
+    if (
+      navigateAfterSelect &&
+      (isFullColourPlaque || isTraditionalEngravedHeadstone)
+    ) {
       router.push(designerHref('select-material'));
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
@@ -222,7 +229,7 @@ export default function ShapeSelector({
           }),
         );
       }
-    } else if (hasBorder) {
+    } else if (navigateAfterSelect && hasBorder) {
       router.push(designerHref('select-border'));
       if (typeof window !== 'undefined') {
         window.dispatchEvent(
