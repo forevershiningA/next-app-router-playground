@@ -299,7 +299,10 @@ export default function HomeSplash() {
             />
           </div>
 
-            <nav className="absolute left-1/2 hidden -translate-x-1/2 xl:block" aria-label="Memorial product pages">
+            <nav className="absolute left-1/2 hidden -translate-x-1/2 text-center xl:block" aria-label="Memorial product pages">
+              <p className="mb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#f3d48f]">
+                You design it. We craft it.
+              </p>
               <ul className="flex items-center justify-center gap-5 whitespace-nowrap text-sm font-semibold text-white/90">
                 {MEMORIAL_LINKS.map((link) => (
                   <li key={link.href}>
@@ -437,7 +440,8 @@ export default function HomeSplash() {
                   textShadow: '0 1px 1px rgba(0,0,0,2), 0 4px 24px rgba(0,0,0,0)'
                 }}
               >
-                You design it. We craft it.
+                Custom Headstones, Monuments<br className="hidden lg:block" />{' '}
+                &amp; Memorial Plaques
               </span>
             </h1>
             <p
@@ -447,7 +451,7 @@ export default function HomeSplash() {
                 textShadow: '0 1px 1px rgba(0,0,0,0.2), 0 4px 20px rgba(0,0,0,0)'
               }}
             >
-              Design a lasting memorial online.
+              You Can Design Online a lasting memorial.
               <br />
               See every detail in 3D before we craft it.
             </p>
