@@ -14448,17 +14448,19 @@ TypeScript and diff checks pass. Existing ESLint warnings in `SvgHeadstone.tsx` 
 
 ---
 
-## Current Status (2026-09-02) — Military Headstone Category Started
+## Current Status (2026-09-03) — Military Headstone Category Expanded
 
 Primary files: `app/_internal/_data.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, and `components/ShapeSelector.tsx`. Source assets are under `public/shapes/headstones/military/`.
 
 - The Headstone catalogue now has a `military` category alongside `traditional` and `modern`. It is available in both the full Select Shape page and the repeat-selection panel in the Designer's left column.
 - **Military Pentagon** is the first enabled design. Its catalogue image is `military/pentagon.svg`, which resolves to `/shapes/headstones/military/pentagon.svg` for both its preview and `SvgHeadstone` geometry.
-- **Military Naval Ship** (`military/ferry.svg`) and **Military Tank** (`military/war-tank.svg`) are the next enabled designs. Each has one connected main silhouette. Their internal window/wheel cut-outs are intentionally removed by the existing solid-outline conversion so the structural stone remains a single full cap.
-- Wide pictorial Military silhouettes such as Tank and Naval Ship must be treated as fixed-shape assets in `ShapeSwapper`. Allowing `preserveTop` to force them to the configured target height adds a separate rectangular band below the source outline. The derived cap mesh then shows that band's front while the outline-based replacement wall has no matching sides, producing the apparent unsupported plate seen under Military Tank. Both filenames are included in the fixed-shape set, which disables that extension and enables the same bevel path used by modern fixed SVG Headstones. Pentagon is intentionally unchanged because its accepted upright proportions already render correctly.
-- The Pentagon source is suitable because it contains one closed, filled outer path. Most remaining Military SVGs are multi-part pictograms and must not be added directly as Headstone shapes: the current loader deliberately selects one largest filled silhouette and would discard their other disconnected parts.
+- The enabled designs are **Military Pentagon** (`military/pentagon.svg`), **Military Naval Ship** (`military/ferry.svg`), **Military Tank** (`military/war-tank.svg`), **Military Boot** (`military/military-boot.svg`), **Military Guard** (`military/palace-guards-with-machine-gun-variant.svg`), **Military Communications Soldier** (`military/communications-soldier.svg`), and **Military Paratrooper** (`military/paratrooper.svg`).
+- `SvgHeadstone` now supports a pictogram composed of multiple filled SVG paths. The largest path remains the editable face outline; filled paths from separate SVG elements are emitted as additional complete stone pieces, each with front, back, and indexed perimeter walls. Nested subpaths belonging to that same SVG element are not promoted to detached pieces, preventing decorative cut-outs from becoming stray solids.
+- Component placement, scale, and ground alignment are derived from the shared bounds of every filled SVG part. This is essential for Paratrooper: its body extends below the canopy's bounds, so using the canopy alone placed the body below the base and broke its apparent side walls.
+- Wide pictorial silhouettes must be fixed-shape assets in `ShapeSwapper`. This prevents `preserveTop` from adding a rectangular band below the original outline. Naval Ship, Tank, Boot, Guard, Communications Soldier, and Paratrooper are all in the fixed set. Tank, Boot, Guard, Communications Soldier, and Paratrooper also skip the broad bevel: their detailed contours otherwise make the front cap look offset from the outer walls. Pentagon retains the normal bevel path.
+- For future assets, use filled SVG paths only. Separate paths are supported when they are genuine, detached pieces of one memorial; nested contour detail and intentional voids must remain in their original parent path. Verify a complex shape in the 3D Designer before enabling it.
 - Products already restricted to traditional-only shapes retain that restriction on the full selection page. Military is an additive category for products that support the general Headstone catalogue.
-- Before enabling more Military entries, create a single connected memorial outline with a stable bottom edge and sufficient front area for inscriptions. Preserve internal soldier, medal, chevron, or vehicle details as separate motifs/reliefs rather than disconnected pieces of the structural stone geometry.
+- Before enabling more Military entries, check that the combined silhouette has a stable ground line and enough usable front area for inscriptions. Prefer a single connected outline where possible; use separate filled paths only for intentional detached structural pieces.
 
 ---
 

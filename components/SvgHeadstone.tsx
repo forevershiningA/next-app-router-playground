@@ -173,7 +173,7 @@ export type HeadstoneAPI = {
 const EPS = 1e-9;
 // Keep Fast Refresh from retaining geometry built by an older contour or
 // normal-generation implementation in the live 3D Designer.
-const GEOMETRY_BUILD_VERSION = 11;
+const GEOMETRY_BUILD_VERSION = 13;
 // Bump this when changing cap shader construction so Fast Refresh does not
 // preserve a previously compiled material in the live Designer canvas.
 const CAP_PROJECTION_VERSION = 3;
@@ -763,27 +763,37 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
   // 3. Pre-calculate shape bounds and parameters
   const shapeParams = useMemo(() => {
-    const shapes: THREE.Shape[] = [];
-    svgData.paths.forEach((path: any) => {
+    const shapes: Array<{ shape: THREE.Shape; pathIndex: number }> = [];
+    svgData.paths.forEach((path: any, pathIndex: number) => {
       // SVG catalogue files commonly include a second path solely for the
       // 2D outline (`fill="none"`, `stroke=...`). Extruding that path turns
       // the outline into a duplicate solid, which overlays the front/back
       // caps and corrupts their planar granite texture mapping.
       if (path.userData?.style?.fill === 'none') return;
-      shapes.push(...SVGLoader.createShapes(path));
+      shapes.push(
+        ...SVGLoader.createShapes(path).map((shape) => ({ shape, pathIndex })),
+      );
     });
     
     if (!shapes.length) {
       return null;
     }
 
-    const shapesWithBounds = shapes.map((shape) => ({ shape, bounds: shapeBounds(shape) }));
+    const shapesWithBounds = shapes.map(({ shape, pathIndex }) => ({
+      shape,
+      pathIndex,
+      bounds: shapeBounds(shape),
+    }));
     const primary = shapesWithBounds.reduce((best, entry) => {
       if (!best) return entry;
       const bestArea = best.bounds.dx * best.bounds.dy;
       const area = entry.bounds.dx * entry.bounds.dy;
       return area > bestArea ? entry : best;
-    }, null as { shape: THREE.Shape; bounds: ReturnType<typeof shapeBounds> } | null);
+    }, null as {
+      shape: THREE.Shape;
+      pathIndex: number;
+      bounds: ReturnType<typeof shapeBounds>;
+    } | null);
 
     if (!primary) {
       return null;
@@ -807,7 +817,24 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     });
 
     const base = cloneSolid(primary.shape);
-    const { minX, maxX, minY, maxY, dx, dy } = primary.bounds;
+    // Preserve detached filled pieces too (for example, a soldier's head
+    // above the body). They are separate contours in the SVG, not decorative
+    // strokes, so they need their own caps and perimeter walls.
+    const additionalSolidShapes = shapesWithBounds
+      // A single SVG path can contain nested subpaths for decorative cut-outs.
+      // Only independent SVG paths are separate stone components.
+      .filter(({ pathIndex }) => pathIndex !== primary.pathIndex)
+      .map(({ shape }) => cloneSolid(shape));
+    // The primary shape supplies the editable face outline, while detached
+    // filled paths still belong to the same physical headstone. Normalize all
+    // pieces against their shared bounds so a lower component cannot sink
+    // below the base (as happened with the paratrooper's body).
+    const minX = Math.min(...shapesWithBounds.map(({ bounds }) => bounds.minX));
+    const maxX = Math.max(...shapesWithBounds.map(({ bounds }) => bounds.maxX));
+    const minY = Math.min(...shapesWithBounds.map(({ bounds }) => bounds.minY));
+    const maxY = Math.max(...shapesWithBounds.map(({ bounds }) => bounds.maxY));
+    const dx = Math.max(EPS, maxX - minX);
+    const dy = Math.max(EPS, maxY - minY);
 
     const widthW = dx * Math.abs(scale);
     const heightW = dy * Math.abs(scale);
@@ -834,9 +861,12 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     // paths (often nested through <use>). Those outlines are not separate
     // stone pieces and must never be extruded over the front/back cap.
     // Explicit holes remain meaningful geometry, so retain only those.
-    const additionalShapes = holeShapeEntries;
+    const additionalShapes = [
+      ...additionalSolidShapes.map((shape) => ({ shape, isRelief: false })),
+      ...holeShapeEntries,
+    ];
 
-    return { base: baseShape, additionalShapes, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV, cornerRadius };
+    return { base: baseShape, additionalShapes, additionalSolidShapes, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV, cornerRadius };
   }, [svgData, scale, targetWidth, targetHeight, preserveTop, cornerRadius]);
 
   // 3a. Calculate outline (now at top level)
@@ -914,7 +944,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
       };
     }
 
-    const { base, additionalShapes, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
+    const { base, additionalShapes, additionalSolidShapes, minX, maxX, minY, maxY, dx, dy, sCore, bottomTarget_SV, wantH, coreH_world } = shapeParams;
 
     // FOR SLANT: Create trapezoidal prism geometry
     if (headstoneStyle === 'slant') {
@@ -1582,63 +1612,69 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
     // Generate one indexed, non-overlapping wall from the same contour. Shared
     // front/back vertices give a continuous normal around curves, while U is
     // measured along the contour and V across the physical stone depth.
-    const wallPointLimit = 320;
-    const wallPointStep = Math.max(1, Math.ceil(outline.pts.length / wallPointLimit));
-    const wallPoints = outline.pts.filter(
-      (_, index) => index % wallPointStep === 0,
-    );
-    if (
-      wallPoints.length > 2 &&
-      wallPoints[0].distanceToSquared(wallPoints[wallPoints.length - 1]) < EPS
-    ) {
-      wallPoints.pop();
-    }
-
     const wallPositions: number[] = [];
     const wallUvs: number[] = [];
     const wallIndices: number[] = [];
-    let wallLength = 0;
     const wallDepthRepeat = usePhysicalCapRepeat
       ? Math.max(1, worldZDepth / backTileSize)
       : (sideRepeatY ?? 1);
+    const wallPointLimit = 320;
+    const wallOutlines = [
+      outline.pts,
+      ...additionalSolidShapes.map((shape) => spacedOutline(shape, 1024).pts),
+    ];
 
-    wallPoints.forEach((point, index) => {
-      if (index > 0) {
-        wallLength += point.distanceTo(wallPoints[index - 1]);
+    wallOutlines.forEach((sourcePoints) => {
+      const wallPointStep = Math.max(1, Math.ceil(sourcePoints.length / wallPointLimit));
+      const wallPoints = sourcePoints.filter(
+        (_, index) => index % wallPointStep === 0,
+      );
+      if (
+        wallPoints.length > 2 &&
+        wallPoints[0].distanceToSquared(wallPoints[wallPoints.length - 1]) < EPS
+      ) {
+        wallPoints.pop();
       }
-      const x = point.x - centerX;
-      const y = bottomTarget_SV - point.y;
-      const u =
-        (wallLength * Math.abs(scale) * sCore) /
-        Math.max(EPS, sideTileSize ?? tileSize ?? 0.1);
-      wallPositions.push(x, y, zFront, x, y, zBack);
-      wallUvs.push(u, 0, u, wallDepthRepeat);
+      if (wallPoints.length <= 2) return;
+
+      const vertexOffset = wallPositions.length / 3;
+      let wallLength = 0;
+      wallPoints.forEach((point, index) => {
+        if (index > 0) wallLength += point.distanceTo(wallPoints[index - 1]);
+        const x = point.x - centerX;
+        const y = bottomTarget_SV - point.y;
+        const u =
+          (wallLength * Math.abs(scale) * sCore) /
+          Math.max(EPS, sideTileSize ?? tileSize ?? 0.1);
+        wallPositions.push(x, y, zFront, x, y, zBack);
+        wallUvs.push(u, 0, u, wallDepthRepeat);
+      });
+
+      let transformedSignedArea = 0;
+      for (let index = 0; index < wallPoints.length; index++) {
+        const point = wallPoints[index];
+        const nextPoint = wallPoints[(index + 1) % wallPoints.length];
+        const x = point.x - centerX;
+        const y = bottomTarget_SV - point.y;
+        const nextX = nextPoint.x - centerX;
+        const nextY = bottomTarget_SV - nextPoint.y;
+        transformedSignedArea += x * nextY - nextX * y;
+      }
+      const wallOutlineIsCounterClockwise = transformedSignedArea > 0;
+
+      for (let index = 0; index < wallPoints.length; index++) {
+        const nextIndex = (index + 1) % wallPoints.length;
+        const front = vertexOffset + index * 2;
+        const back = front + 1;
+        const nextFront = vertexOffset + nextIndex * 2;
+        const nextBack = nextFront + 1;
+        if (wallOutlineIsCounterClockwise) {
+          wallIndices.push(front, back, nextFront, nextFront, back, nextBack);
+        } else {
+          wallIndices.push(front, nextFront, back, nextFront, nextBack, back);
+        }
+      }
     });
-
-    let transformedSignedArea = 0;
-    for (let index = 0; index < wallPoints.length; index++) {
-      const point = wallPoints[index];
-      const nextPoint = wallPoints[(index + 1) % wallPoints.length];
-      const x = point.x - centerX;
-      const y = bottomTarget_SV - point.y;
-      const nextX = nextPoint.x - centerX;
-      const nextY = bottomTarget_SV - nextPoint.y;
-      transformedSignedArea += x * nextY - nextX * y;
-    }
-    const wallOutlineIsCounterClockwise = transformedSignedArea > 0;
-
-    for (let index = 0; index < wallPoints.length; index++) {
-      const nextIndex = (index + 1) % wallPoints.length;
-      const front = index * 2;
-      const back = front + 1;
-      const nextFront = nextIndex * 2;
-      const nextBack = nextFront + 1;
-      if (wallOutlineIsCounterClockwise) {
-        wallIndices.push(front, back, nextFront, nextFront, back, nextBack);
-      } else {
-        wallIndices.push(front, nextFront, back, nextFront, nextBack, back);
-      }
-    }
 
     const wallGeometry = new THREE.BufferGeometry();
     wallGeometry.setAttribute(

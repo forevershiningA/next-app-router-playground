@@ -469,6 +469,10 @@ export default function ShapeSwapper({
         'headstone_5.svg',
         'ferry.svg',
         'war-tank.svg',
+        'military-boot.svg',
+        'palace-guards-with-machine-gun-variant.svg',
+        'communications-soldier.svg',
+        'paratrooper.svg',
       ]),
     []
   );
@@ -629,6 +633,14 @@ export default function ShapeSwapper({
             preserveTop={preserveTopForShape}
             bevel={
               isFixedHeadstoneAsset &&
+              // The tank has a detailed, concave outline. A broad bevel pulls
+              // its front cap inward from the perimeter and makes the right
+              // wall look offset from the face.
+              currentShapeSlug !== 'war-tank.svg' &&
+              currentShapeSlug !== 'military-boot.svg' &&
+              currentShapeSlug !== 'palace-guards-with-machine-gun-variant.svg' &&
+              currentShapeSlug !== 'communications-soldier.svg' &&
+              currentShapeSlug !== 'paratrooper.svg' &&
               !isPlaque &&
               !isUrn &&
               !isStainlessSteel &&

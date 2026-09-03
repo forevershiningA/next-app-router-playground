@@ -294,6 +294,10 @@ const shapes: Shape[] = [
   { id: '56', name: 'Military Pentagon', image: 'military/pentagon.svg', category: 'military' },
   { id: '57', name: 'Military Naval Ship', image: 'military/ferry.svg', category: 'military' },
   { id: '58', name: 'Military Tank', image: 'military/war-tank.svg', category: 'military' },
+  { id: '59', name: 'Military Boot', image: 'military/military-boot.svg', category: 'military' },
+  { id: '60', name: 'Military Guard', image: 'military/palace-guards-with-machine-gun-variant.svg', category: 'military' },
+  { id: '61', name: 'Military Communications Soldier', image: 'military/communications-soldier.svg', category: 'military' },
+  { id: '62', name: 'Military Paratrooper', image: 'military/paratrooper.svg', category: 'military' },
   
   // Plaques (kept for other uses)
   { id: '67', name: 'Rectangle (Landscape)', image: 'landscape.svg', category: '1' },
