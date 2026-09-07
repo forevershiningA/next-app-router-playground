@@ -719,14 +719,14 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
       </div>
 
       {selectedCategory !== 'custom' && (
-        <div className="fixed right-0 bottom-0 left-0 z-20 border-t border-white/10 bg-[#121212]/95 px-6 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur md:hidden">
+        <div className="fixed right-0 bottom-0 left-0 z-50 border-t border-white/10 bg-[#121212]/95 px-6 pt-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[0_-12px_30px_rgba(0,0,0,0.35)] backdrop-blur md:hidden">
           <button
             type="button"
             onClick={handleSelectedShapeContinue}
             disabled={!currentShapeUrl}
             className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-[#cfac6c] px-5 py-3 text-sm font-semibold text-slate-950 transition-colors hover:bg-[#d7b979] disabled:cursor-not-allowed disabled:bg-white/15 disabled:text-white/45"
           >
-            Continue
+            Continue with this shape
             <ArrowRightIcon className="h-4 w-4" />
           </button>
         </div>
