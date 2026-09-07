@@ -31,6 +31,11 @@ const shapeCategories: ShapeCategory[] = [
     name: 'Military',
     description: 'Military-inspired memorial shapes',
   },
+  {
+    id: 'first-responders',
+    name: 'First Responders',
+    description: 'Memorial shapes honoring firefighters, police officers, and emergency medical responders',
+  },
   { id: 'custom', name: 'Custom', description: 'Upload your own SVG shape' },
 ];
 
@@ -540,7 +545,7 @@ export default function ShapeSelectionGrid({ shapes }: { shapes: Shape[] }) {
                 ? `Choose from the first 11 traditional shapes available for this${
                     isPetMiniHeadstone ? ' pet mini' : isMiniHeadstone ? ' mini' : ' stainless steel'
                   } headstone.`
-                : 'Choose the perfect shape for your memorial. Browse our traditional, modern, and military designs, or upload your own custom SVG shape.'}
+                : 'Choose the perfect shape for your memorial. Browse our traditional, modern, military, and first responder designs, or upload your own custom SVG shape.'}
             </p>
           </div>
         </div>

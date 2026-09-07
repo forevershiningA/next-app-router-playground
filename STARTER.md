@@ -14448,9 +14448,23 @@ TypeScript and diff checks pass. Existing ESLint warnings in `SvgHeadstone.tsx` 
 
 ---
 
-## Current Status (2026-09-03) — Military Headstone Category Expanded
+## Current Status (2026-09-07) — Military and First Responders Shape Catalogues
 
-Primary files: `app/_internal/_data.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, and `components/ShapeSelector.tsx`. Source assets are under `public/shapes/headstones/military/`.
+Primary implementation files are `app/_internal/_data.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/three/headstone/ShapeSwapper.tsx`, and `components/SvgHeadstone.tsx`. Source assets are in `public/shapes/headstones/military/` and `public/shapes/headstones/first-responders/`.
+
+- The general Headstone catalogue has four visible categories: Traditional, Modern, Military, and First Responders. Both new categories appear on the full Select Shape page and in the Designer's repeat-selection panel. Traditional-only products still expose only their permitted shapes.
+- Military has ten enabled shapes: Pentagon, Naval Ship, Tank, Boot, Guard, Communications Soldier, Paratrooper, Pledge Soldier, Soldier, and Saluting Soldier (catalogue IDs 56–65).
+- First Responders has six enabled shapes: Fire Engine (`firefighters.svg`, ID 66), Firefighter (`firemen.svg`, ID 72), Flame (`fire.svg`, ID 73), First Aid Kit (`first-aid-kit.svg`, ID 74), Helmet (`helmet.svg`, ID 75), and Doctor (`medical-doctor-profession-specialist-medic.svg`, ID 76). The folder contains 15 source assets; the remaining nine require individual validation before enablement.
+- All enabled pictorial Military and First Responder assets are fixed shapes in `ShapeSwapper`. They do not use `preserveTop`, preventing a rectangular band being added beneath the original silhouette. Detailed pictograms also skip the broad bevel so their front caps stay aligned with the contour.
+- The optional `sandblastedBorders: true` field on a shape definition controls its front-facing SVG engraving layer; omission disables it. `ShapeSwapper` resolves the selected catalogue shape from its SVG URL, so no separate list of engraving slugs is maintained. The original solid stone remains intact and source vector paths supply only the front detail.
+- For Traditional Engraved products, `ShapeSwapper` reads the inscription addition's parsed `minHeight` from the active product catalogue and passes it to `SvgHeadstone` as `engravingStrokeWidthMm`. `SvgHeadstone` converts that millimetre value to the current SVG/world scale and uses `SVGLoader.pointsToStroke` to create a flat, painted contour with a physical width. The current Traditional Engraved inscription configuration is `min_height="10"`, so its sandblasted contour is 10 mm wide. Do not hard-code 10 mm: another product may define a different minimum. Laser Etched products leave this width unset and retain fine line detail.
+- `SvgHeadstone` supports genuine multi-part SVG artwork. The largest filled path forms the editable face; filled paths from other SVG elements are preserved as complete stone pieces. Nested subpaths stay as holes or relief detail, rather than becoming detached solids. Parts are normalized against common bounds for stable scale and ground contact.
+- Each enabled asset was checked with `SVGLoader` and extrusion for finite geometry, then selected through its catalogue category into the 3D Designer using Playwright. TypeScript and `git diff --check` pass. `ShapeSwapper.tsx` continues to have 14 pre-existing ESLint warnings.
+- When enabling another asset, retain filled paths and intended holes, add its catalogue entry and fixed-shape handling, then verify the SVG parser, 3D ground contact, and the category-to-Designer flow.
+
+The Doctor source originally kept its head, medical cross, and body as disconnected subpaths in one SVG `<path>`. It is intentionally split into three filled SVG elements so `SvgHeadstone` preserves every genuine part while retaining the head's opening and the body collar as holes.
+
+### Military implementation notes
 
 - The Headstone catalogue now has a `military` category alongside `traditional` and `modern`. It is available in both the full Select Shape page and the repeat-selection panel in the Designer's left column.
 - **Military Pentagon** is the first enabled design. Its catalogue image is `military/pentagon.svg`, which resolves to `/shapes/headstones/military/pentagon.svg` for both its preview and `SvgHeadstone` geometry.

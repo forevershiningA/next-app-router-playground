@@ -19,6 +19,7 @@ const headstoneShapeCategories = [
   { id: 'traditional', label: 'Traditional' },
   { id: 'modern', label: 'Modern' },
   { id: 'military', label: 'Military' },
+  { id: 'first-responders', label: 'First Responders' },
 ] as const;
 
 const filenameFromCatalogUrl = (url?: string) => url?.split('/').pop() ?? '';

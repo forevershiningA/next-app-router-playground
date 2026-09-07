@@ -26,6 +26,8 @@ export type Shape = {
   name: string;
   image: string;
   category: string;
+  /** Show the source SVG's interior contours as a sandblasted, painted front detail. */
+  sandblastedBorders?: boolean;
 };
 
 export type Material = {
@@ -291,13 +293,17 @@ const shapes: Shape[] = [
   { id: '53', name: 'Headstone 37', image: 'headstone_44.svg', category: 'modern' },
   { id: '54', name: 'Headstone 38', image: 'headstone_45.svg', category: 'modern' },
   { id: '55', name: 'Headstone 39', image: 'headstone_46.svg', category: 'modern' },
-  { id: '56', name: 'Military Pentagon', image: 'military/pentagon.svg', category: 'military' },
-  { id: '57', name: 'Military Naval Ship', image: 'military/ferry.svg', category: 'military' },
-  { id: '58', name: 'Military Tank', image: 'military/war-tank.svg', category: 'military' },
-  { id: '59', name: 'Military Boot', image: 'military/military-boot.svg', category: 'military' },
-  { id: '60', name: 'Military Guard', image: 'military/palace-guards-with-machine-gun-variant.svg', category: 'military' },
-  { id: '61', name: 'Military Communications Soldier', image: 'military/communications-soldier.svg', category: 'military' },
-  { id: '62', name: 'Military Paratrooper', image: 'military/paratrooper.svg', category: 'military' },
+  { id: '56', name: 'Military Pentagon', image: 'military/pentagon.svg', category: 'military', sandblastedBorders: true },
+  { id: '57', name: 'Military Naval Ship', image: 'military/ferry.svg', category: 'military', sandblastedBorders: true },
+  { id: '58', name: 'Military Tank', image: 'military/war-tank.svg', category: 'military', sandblastedBorders: true },
+  { id: '59', name: 'Military Boot', image: 'military/military-boot.svg', category: 'military', sandblastedBorders: true },
+  { id: '60', name: 'Military Guard', image: 'military/palace-guards-with-machine-gun-variant.svg', category: 'military', sandblastedBorders: true },
+  { id: '61', name: 'Military Communications Soldier', image: 'military/communications-soldier.svg', category: 'military', sandblastedBorders: true },
+  { id: '62', name: 'Military Paratrooper', image: 'military/paratrooper.svg', category: 'military', sandblastedBorders: true },
+  { id: '63', name: 'Military Pledge Soldier', image: 'military/pledge-soldier.svg', category: 'military', sandblastedBorders: true },
+  { id: '64', name: 'Military Soldier', image: 'military/soldier.svg', category: 'military', sandblastedBorders: true },
+  { id: '65', name: 'Military Saluting Soldier', image: 'military/soldier (1).svg', category: 'military', sandblastedBorders: true },
+  { id: '66', name: 'First Responder Fire Engine', image: 'first-responders/firefighters.svg', category: 'first-responders', sandblastedBorders: true },
   
   // Plaques (kept for other uses)
   { id: '67', name: 'Rectangle (Landscape)', image: 'landscape.svg', category: '1' },
@@ -305,6 +311,11 @@ const shapes: Shape[] = [
   { id: '69', name: 'Oval (Landscape)', image: 'oval_horizontal.svg', category: '1' },
   { id: '70', name: 'Oval (Portrait)', image: 'oval_vertical.svg', category: '1' },
   { id: '71', name: 'Circle', image: 'circle.svg', category: '1' },
+  { id: '72', name: 'First Responder Firefighter', image: 'first-responders/firemen.svg', category: 'first-responders', sandblastedBorders: true },
+  { id: '73', name: 'First Responder Flame', image: 'first-responders/fire.svg', category: 'first-responders', sandblastedBorders: true },
+  { id: '74', name: 'First Responder First Aid Kit', image: 'first-responders/first-aid-kit.svg', category: 'first-responders', sandblastedBorders: true },
+  { id: '75', name: 'First Responder Helmet', image: 'first-responders/helmet.svg', category: 'first-responders', sandblastedBorders: true },
+  { id: '76', name: 'First Responder Doctor', image: 'first-responders/medical-doctor-profession-specialist-medic.svg', category: 'first-responders', sandblastedBorders: true },
 ];
 
 const materials: Material[] = [

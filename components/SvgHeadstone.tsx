@@ -233,6 +233,10 @@ type Props = {
   targetHeight?: number;
   targetWidth?: number;
   sourceSvgOverlayUrl?: string | null;
+  showSvgEngraving?: boolean;
+  engravingColor?: THREE.ColorRepresentation;
+  /** Physical width for a sandblasted engraving contour; omitted for fine laser detail. */
+  engravingStrokeWidthMm?: number;
   preserveTop?: boolean;
   bevel?: boolean;
   doubleSided?: boolean;
@@ -567,6 +571,9 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
   targetHeight,
   targetWidth,
   sourceSvgOverlayUrl = null,
+  showSvgEngraving = false,
+  engravingColor = '#e8e2d6',
+  engravingStrokeWidthMm,
   preserveTop = true,
   bevel = false,
   doubleSided = false,
@@ -868,6 +875,46 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
 
     return { base: baseShape, additionalShapes, additionalSolidShapes, minX, maxX, minY, maxY, dx, dy, widthW, heightW, wantW, wantH, sCore, coreH_world, bottomTarget_SV, targetH_SV, cornerRadius };
   }, [svgData, scale, targetWidth, targetHeight, preserveTop, cornerRadius]);
+
+  const engravingLineGeometries = useMemo(() => {
+    if (!showSvgEngraving || !shapeParams) return [];
+
+    const centerX = (shapeParams.minX + shapeParams.maxX) / 2;
+    const strokeWidth = engravingStrokeWidthMm
+      ? (engravingStrokeWidthMm / 1000) / Math.max(EPS, Math.abs(scale) * shapeParams.sCore)
+      : null;
+    return svgData.paths.flatMap((path) =>
+      path.subPaths
+        .map((subPath) => {
+          const sourcePoints = subPath.getPoints(160);
+          if (sourcePoints.length < 2) return null;
+          const points = sourcePoints.map(
+            (point) => new THREE.Vector2(
+              point.x - centerX,
+              shapeParams.bottomTarget_SV - point.y,
+            ),
+          );
+          if (strokeWidth) {
+            return SVGLoader.pointsToStroke(points, {
+              strokeColor: '#ffffff',
+              strokeWidth,
+              strokeLineJoin: 'round',
+              strokeLineCap: 'round',
+              strokeMiterLimit: 4,
+            });
+          }
+          return new THREE.BufferGeometry().setFromPoints(
+            points.map((point) => new THREE.Vector3(point.x, point.y, 0)),
+          );
+        })
+        .filter((geometry): geometry is THREE.BufferGeometry => geometry !== null),
+    );
+  }, [showSvgEngraving, shapeParams, svgData, engravingStrokeWidthMm, scale]);
+
+  React.useEffect(
+    () => () => engravingLineGeometries.forEach((geometry) => geometry.dispose()),
+    [engravingLineGeometries],
+  );
 
   // 3a. Calculate outline (now at top level)
   const outline = useMemo(() => {
@@ -2094,6 +2141,36 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         </group>
       </group>
     ) : null;
+  const svgEngraving = engravingLineGeometries.length > 0 ? (
+    <group renderOrder={12}>
+      {engravingLineGeometries.map((geometry, index) => (
+        engravingStrokeWidthMm ? (
+          <mesh key={`svg-engraving-${index}`} geometry={geometry} renderOrder={12}>
+            <meshBasicMaterial
+              color={engravingColor}
+              transparent
+              opacity={0.9}
+              depthTest={false}
+              depthWrite={false}
+              toneMapped={false}
+              side={THREE.DoubleSide}
+            />
+          </mesh>
+        ) : (
+          <lineLoop key={`svg-engraving-${index}`} geometry={geometry} renderOrder={12}>
+            <lineBasicMaterial
+              color={engravingColor}
+              transparent
+              opacity={0.9}
+              depthTest={false}
+              depthWrite={false}
+              toneMapped={false}
+            />
+          </lineLoop>
+        )
+      ))}
+    </group>
+  ) : null;
   const sourceSvgOverlay =
     !sourceSvgLineOverlayMesh && sourceSvgOverlayTexture && shapeParams && overlayHeight > 0 ? (
       <mesh
@@ -2113,7 +2190,7 @@ const SvgHeadstone = React.forwardRef<THREE.Group, Props>(({
         />
       </mesh>
     ) : null;
-  const sourceOverlay = sourceSvgLineOverlayMesh ?? sourceSvgOverlay;
+  const sourceOverlay = svgEngraving ?? sourceSvgLineOverlayMesh ?? sourceSvgOverlay;
 
   // 6. Return JSX (FIX: JSX in return, not useMemo)
   // CRITICAL FIX: Move scale from group to individual meshes to prevent base inheritance

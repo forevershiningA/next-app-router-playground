@@ -473,6 +473,15 @@ export default function ShapeSwapper({
         'palace-guards-with-machine-gun-variant.svg',
         'communications-soldier.svg',
         'paratrooper.svg',
+        'pledge-soldier.svg',
+        'soldier.svg',
+        'soldier (1).svg',
+        'firefighters.svg',
+        'firemen.svg',
+        'fire.svg',
+        'first-aid-kit.svg',
+        'helmet.svg',
+        'medical-doctor-profession-specialist-medic.svg',
       ]),
     []
   );
@@ -488,6 +497,17 @@ export default function ShapeSwapper({
     if (fixedShapeSlugs.has(currentShapeSlug)) return true;
     return currentShapeSlug.includes('headstone_');
   }, [currentShapeSlug, fixedShapeSlugs]);
+  const selectedCatalogShape = React.useMemo(() => {
+    const pathname = resolvedUrl.split(/[?#]/)[0];
+    return data.shapes.find((shape) => pathname === `/shapes/headstones/${shape.image}`);
+  }, [resolvedUrl]);
+  const showSvgEngraving = selectedCatalogShape?.sandblastedBorders === true;
+  const isTraditionalEngraved = Boolean(
+    catalog?.product.name.toLowerCase().includes('traditional engraved'),
+  );
+  const engravingStrokeWidthMm = isTraditionalEngraved
+    ? catalog?.product.additions.find((addition) => addition.type === 'inscription')?.minHeight
+    : undefined;
   const preserveTopForShape =
     !isFixedHeadstoneAsset &&
     !isUrn &&
@@ -630,6 +650,8 @@ export default function ShapeSwapper({
             targetHeight={targetHeightForShape}
             targetWidth={targetWidthForShape}
             sourceSvgOverlayUrl={bowlArtworkOverlayUrl ?? (isCustomUploadedShape ? resolvedUrl : null)}
+            showSvgEngraving={showSvgEngraving}
+            engravingStrokeWidthMm={engravingStrokeWidthMm}
             preserveTop={preserveTopForShape}
             bevel={
               isFixedHeadstoneAsset &&
@@ -641,6 +663,15 @@ export default function ShapeSwapper({
               currentShapeSlug !== 'palace-guards-with-machine-gun-variant.svg' &&
               currentShapeSlug !== 'communications-soldier.svg' &&
               currentShapeSlug !== 'paratrooper.svg' &&
+              currentShapeSlug !== 'pledge-soldier.svg' &&
+              currentShapeSlug !== 'soldier.svg' &&
+              currentShapeSlug !== 'soldier (1).svg' &&
+              currentShapeSlug !== 'firefighters.svg' &&
+              currentShapeSlug !== 'firemen.svg' &&
+              currentShapeSlug !== 'fire.svg' &&
+              currentShapeSlug !== 'first-aid-kit.svg' &&
+              currentShapeSlug !== 'helmet.svg' &&
+              currentShapeSlug !== 'medical-doctor-profession-specialist-medic.svg' &&
               !isPlaque &&
               !isUrn &&
               !isStainlessSteel &&
