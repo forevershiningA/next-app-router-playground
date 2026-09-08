@@ -48,14 +48,14 @@ export default function MobileHeader() {
 
   return (
     <header
-      className="fixed top-0 right-0 left-0 z-[9999] block h-14 border-b border-[#3a2a1c] bg-[#120c08]/95 px-3.5 shadow-xl shadow-black/25 backdrop-blur-md md:hidden"
+      className="day:border-[#ddd2c2] day:bg-[#f4f1eb]/95 fixed top-0 right-0 left-0 z-[9999] block h-14 border-b border-[#3a2a1c] bg-[#120c08]/95 px-3.5 shadow-xl shadow-black/25 backdrop-blur-md md:hidden"
     >
       {/* Left padding leaves room for the floating hamburger (see ConditionalNav) */}
       <div className="grid h-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 pl-12">
-        <h1 className="truncate text-sm font-semibold leading-tight text-white !m-0 !p-0">
+        <h1 className="day:text-[#1d1a17] truncate text-sm font-semibold leading-tight text-white !m-0 !p-0">
           {displayProductName}
         </h1>
-        <div className="flex rounded-full border border-white/10 bg-black/35 p-0.5">
+        <div className="day:border-[#ddd2c2] day:bg-[#eee6d9] flex rounded-full border border-white/10 bg-black/35 p-0.5">
           {[
             { value: 'metric' as const, label: 'mm' },
             { value: 'imperial' as const, label: 'in' },
@@ -68,7 +68,7 @@ export default function MobileHeader() {
               className={`h-7 min-w-9 rounded-full px-2 text-[10px] font-semibold tracking-wide uppercase transition-colors ${
                 unitSystem === option.value
                   ? 'bg-[#cfac6c] text-slate-950'
-                  : 'text-white/65 hover:bg-white/10 hover:text-white'
+                  : 'day:text-[#625a51] day:hover:bg-[#fbf9f5] day:hover:text-[#1d1a17] text-white/65 hover:bg-white/10 hover:text-white'
               }`}
             >
               {option.label}

@@ -294,7 +294,7 @@ function renderDesignerSidebar(
   const sheetHeightClass = useBottomSheet && isBottomSheetCollapsed
     ? 'h-[52px] max-h-[52px]'
     : isFixedSizeSheet && isSizeAdjustmentCompact
-    ? 'h-[26dvh] max-h-[26dvh]'
+    ? 'h-40 max-h-40'
     : useBottomSheet
     ? 'h-[44dvh] max-h-[44dvh]'
     : 'h-[100dvh]';
@@ -309,7 +309,7 @@ function renderDesignerSidebar(
           onClick={() => setIsMobileMenuOpen(true)}
           aria-label="Open navigation"
           aria-expanded={false}
-          className="fixed top-7 left-4 z-[10000] flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#3a2a1c] bg-[#1a1208] text-white shadow-none ring-0 transition-colors outline-none hover:border-[#D4A84F]/55 hover:bg-[#21160d] focus-visible:border-[#D4A84F] focus-visible:ring-2 focus-visible:ring-[#D4A84F]/35 md:hidden"
+          className="day:border-[#cdbb9f] day:bg-[#fbf9f5] day:text-[#302719] day:hover:bg-[#eee6d9] fixed top-7 left-4 z-[10000] flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full border border-[#3a2a1c] bg-[#1a1208] text-white shadow-none ring-0 transition-colors outline-none hover:border-[#D4A84F]/55 hover:bg-[#21160d] focus-visible:border-[#D4A84F] focus-visible:ring-2 focus-visible:ring-[#D4A84F]/35 md:hidden"
         >
           <Bars3Icon className="h-5 w-5" aria-hidden="true" />
         </button>
@@ -322,7 +322,7 @@ function renderDesignerSidebar(
           // Mobile: bottom sheet docked to the bottom edge so the 3D product
           // stays visible above it (editing sub-panels), or a full-height drawer
           // for the main menu. Desktop (md+): permanent left column.
-          'fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 md:pointer-events-auto md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:shadow-none',
+          'day:border-[#ddd2c2] day:bg-[#f4f1eb] fixed inset-x-0 bottom-0 z-40 flex w-full flex-col overflow-hidden rounded-t-3xl bg-[#1b1511] shadow-2xl transition-all duration-300 md:pointer-events-auto md:inset-auto md:top-0 md:left-0 md:z-10 md:h-full md:max-h-none md:w-[400px] md:translate-y-0 md:rounded-none md:border-r md:border-slate-200 md:bg-white md:shadow-none',
           isMobileMenuOpen
             ? 'pointer-events-auto translate-y-0'
             : 'pointer-events-none translate-y-full',
@@ -338,10 +338,10 @@ function renderDesignerSidebar(
             aria-label="Expand size controls"
             className="mx-auto mt-2 mb-1 block h-4 w-16 flex-none rounded-full p-1.5 md:hidden"
           >
-            <span className="block h-1 w-full rounded-full bg-white/35" />
+            <span className="day:bg-[#8c7657] block h-1 w-full rounded-full bg-white/35" />
           </button>
         ) : (
-          <div className="day:bg-[#ece7de] flex-none rounded-t-lg bg-[#1b1511] md:hidden">
+          <div className="day:bg-[#f4f1eb] flex-none rounded-t-lg bg-[#1b1511] md:hidden">
             {isFixedSizeSheet ? (
               <button
                 type="button"
@@ -349,12 +349,12 @@ function renderDesignerSidebar(
                 aria-label="Collapse size controls"
                 className="mx-auto mt-2 block h-4 w-16 rounded-full p-1.5"
               >
-                <span className="block h-1 w-full rounded-full bg-white/25" />
+                <span className="day:bg-[#8c7657] block h-1 w-full rounded-full bg-white/25" />
               </button>
             ) : null}
             {isFixedSizeSheet ? (
               <div className="min-h-9 px-4 pt-1.5 pb-0.5">
-                <p className="day:text-gray-800 min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
+                <p className="day:text-[#302719] min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
                   {mobileSheetTitle}
                 </p>
               </div>
@@ -378,10 +378,10 @@ function renderDesignerSidebar(
                   className="mx-auto mt-2 block h-4 w-16 rounded-full p-1.5"
                   aria-hidden="true"
                 >
-                  <span className="block h-1 w-full rounded-full bg-white/25" />
+                  <span className="day:bg-[#8c7657] block h-1 w-full rounded-full bg-white/25" />
                 </span>
                 <span className="block min-h-9 px-4 pt-1.5 pb-0.5">
-                  <span className="day:text-gray-800 block min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
+                  <span className="day:text-[#302719] block min-w-0 truncate text-sm font-semibold tracking-wide text-white/85">
                     {mobileSheetTitle}
                   </span>
                 </span>

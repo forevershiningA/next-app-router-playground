@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-01
+**Last Updated:** 2026-09-08
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -96,6 +96,7 @@
 88. [August 29 Bronze Plaque Mobile Flow, Camera, and Fastenings](#current-status-2026-08-29--bronze-plaque-mobile-flow-camera-and-fastenings)
 89. [August 31 Designer Additions, Mini Headstones, and Theme Reliability](#current-status-2026-08-31--designer-additions-mini-headstones-and-theme-reliability)
 90. [September 1 Home Refresh, Studio Designer Scenery, and Hydration Reliability](#current-status-2026-09-01--home-refresh-studio-designer-scenery-and-hydration-reliability)
+91. [September 8 Mobile Designer Day Mode and Size Sheet Polish](#current-status-2026-09-08--mobile-designer-day-mode-and-size-sheet-polish)
 
 ---
 
@@ -14487,3 +14488,31 @@ Primary asset: `public/shapes/headstones/headstone_3.svg` (catalogue name: **Gui
 - The accepted source now parses as exactly one SVG path and **one** Three.js `Shape`, with no holes: `{ paths: 1, shapes: 1, holes: [0] }`. Its viewBox is `0 0 387.65 398.06` and it has no stroke. Guitar and plaque are therefore one closed, connected solid suitable for the current cap/wall pipeline.
 - Illustrator procedure for comparable assets: ensure the decorative silhouette physically overlaps the plaque by a small amount, use **Pathfinder → Unite**, then **Expand**. Export as a filled SVG with no stroke, clipping/masks, or merely grouped paths. Verify using the parser before marking the asset ready.
 - Guitar 2–5 were identified as similarly multi-part source assets. Audit each individually before enabling an equivalent union; do not weaken the general “largest structural shape only” rule, as it prevents overlapping cap geometry and texture artefacts in the wider catalogue.
+
+---
+
+## Current Status (2026-09-08) — Mobile Designer Day Mode and Size Sheet Polish
+
+Primary files: `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, `components/MobileHeader.tsx`, and `styles/globals.css`. The reference palette is the final personalisation section of `app/_ui/HomeSplash.tsx`.
+
+### Day mode
+
+- `ThemeProvider` persists the `fs_ui_theme` preference and applies `data-theme="day"` to `<html>`. The Tailwind `day:` variant therefore also applies to portal content rendered under `document.body`; do not depend on inheritance from the Designer drawer.
+- Day mode uses the Home personalisation palette: warm paper `#f4f1eb`, ink `#1d1a17`, muted copy `#625a51`, warm borders around `#ddd2c2`, and restrained gold accents. `styles/globals.css` sets the day-mode body background to `#f4f1eb`.
+- The mobile step header, standard `MobileHeader`, persistent Previous/Next portal, collapsed sheet, and mobile hamburger all need explicit `day:` classes because they sit outside, or above, the normal Designer content tree.
+- The selected size-panel option style (`styleTabClass`) has an explicit day active state: gold `#dfb858` with `#1d1a17` text. This covers Base options such as **Polished**, **Flower Pots**, and the selected lid finish; legends such as **Base option** and **Lid finish** use the muted day copy colour.
+
+### Mobile Select Size sheet
+
+- `ConditionalNav` owns the sheet geometry. Normal editing sheets use `44dvh`; a generic collapsed bottom sheet uses `52px`; the compact size-slider sheet is a fixed `h-40 max-h-40`. Do not restore its prior `26dvh` height: it left a conspicuous empty area below the single slider on taller phones.
+- `isSizeAdjustmentCompact` is the sole source of truth for the compact slider mode. It hides the persistent Previous/Next portal and leaves one active dimension card plus an expand handle. When it is false, the navigation portal is visible.
+- In `DesignerNav`, scrollable full-screen panel content reserves `calc(4rem + env(safe-area-inset-bottom))` on mobile whenever the persistent navigation is present, and only `pb-3` in compact mode. This keeps the final slider/option interactive above Previous/Next without creating an oversized blank gap. Desktop resets this padding to `pb-4`.
+- The compact and collapsed sheet shells themselves also carry day-mode background, border, handle, and label styles. Do not style only `DesignerNav`: compact/collapsed modes can bypass its visible header/content.
+
+### Verification
+
+```bash
+git diff --check
+```
+
+Use the user-supplied `screen.png` for visual acceptance and do not overwrite it while verifying changes.
