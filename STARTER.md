@@ -1,6 +1,6 @@
 # Next-DYO (Design Your Own) Headstone Application
 
-**Last Updated:** 2026-09-08
+**Last Updated:** 2026-09-09
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -97,6 +97,7 @@
 89. [August 31 Designer Additions, Mini Headstones, and Theme Reliability](#current-status-2026-08-31--designer-additions-mini-headstones-and-theme-reliability)
 90. [September 1 Home Refresh, Studio Designer Scenery, and Hydration Reliability](#current-status-2026-09-01--home-refresh-studio-designer-scenery-and-hydration-reliability)
 91. [September 8 Mobile Designer Day Mode and Size Sheet Polish](#current-status-2026-09-08--mobile-designer-day-mode-and-size-sheet-polish)
+92. [September 9 GSC Audit and Design Gallery SEO](#current-status-2026-09-09--gsc-audit-and-design-gallery-seo)
 
 ---
 
@@ -10741,6 +10742,8 @@ apiData: {
 
 ## Design Gallery & SEO
 
+For the current category indexing exceptions, metadata changes, and GSC evidence, see [September 9 GSC Audit and Design Gallery SEO](#current-status-2026-09-09--gsc-audit-and-design-gallery-seo). The historical five-design cutoff is now a default with explicit search-validated exceptions; use `isIndexableCategoryDesignSet()` rather than duplicating the cutoff.
+
 ### Overview
 The design gallery system (`/designs/*`) provides a three-level hierarchy for browsing saved memorial designs with comprehensive SEO optimization:
 
@@ -14516,3 +14519,51 @@ git diff --check
 ```
 
 Use the user-supplied `screen.png` for visual acceptance and do not overwrite it while verifying changes.
+
+---
+
+## Current Status (2026-09-09) — GSC Audit and Design Gallery SEO
+
+### Evidence and scope
+
+The current `gsc/` CSV export covers June 7–September 6, 2026, with search type Web. `Strony.csv` contains exactly 1,000 URL rows and is not a complete inventory or an indexing report. Its page aggregates differ from the property-level daily totals; do not combine them or treat these figures as proof of a before/after improvement.
+
+| URL group | Rows | Clicks | Impressions |
+| --- | ---: | ---: | ---: |
+| `/designs` | 1 | 4 | 97 |
+| Product collections | 4 | 1 | 21 |
+| Theme categories | 68 | 17 | 619 |
+| Individual designs | 910 | 94 | 5,286 |
+| Design guides | 2 | 0 | 14 |
+| Other pages | 15 | 29 | 1,778 |
+
+The gallery accounts for 116 of 145 page-attributed clicks in this export. `Wykres.csv` totals 139 clicks and 6,758 impressions across 92 days. Of the 910 individual design rows, 837 have no clicks; this alone does not justify deletion or `noindex`. Visible queries include flower engraving, butterflies, horses, and doves. Query and page exports are separate aggregates, not query-to-URL attribution.
+
+At audit time, the local catalog contained 3,114 designs, of which 2,967 passed `getSeoReadyDesigns()`. These formed 210 product/category collections; 102 were below the default five-design threshold. Before the title changes, 1,724 eligible headstones shared only 360 shape/category combinations. These are catalog snapshots, not indexed-page counts.
+
+### Implemented behavior
+
+- `app/designs/[productType]/[category]/[slug]/page.tsx`: title and H1 now include the simplified product technology, cleaned shape, and a descriptive slug phrase, falling back to motifs or category. Trailing numeric duplicate suffixes are removed from the title detail. Generic shape identifiers are cleaned consistently in metadata and page content, and shape-prefix matching normalizes underscores as well as spaces. Similar variants can still share titles; this is not a guarantee of uniqueness.
+- Descriptions now put the design title and motif information before general personalisation copy. Slug labels are described as layouts rather than asserted to be literal inscriptions. Meta descriptions still truncate at 160 characters, so long labels can still be cut off.
+- `lib/design-seo.ts`: `isIndexableCategoryDesignSet()` rejects empty or non-curated product collections, then accepts either at least five designs or an explicit `SEARCH_VALIDATED_CATEGORIES` exception. Call it with one product/category group. The exception list records 11 eligible category paths with clicks in this GSC export; it is maintained in code, not loaded dynamically from CSV. Retired `legacy-*` products were not re-enabled.
+- A concrete exception is `stainless-steel-plaque/teacher-memorial`: one local design, but 3 clicks, 108 impressions, and position 8.06 in the export. Do not restore blanket `noindex` solely because this collection has fewer than five designs.
+- Category metadata, product collection cards, and `app/sitemap.ts` use the shared category predicate. Sitemap generation no longer independently compares counts to five.
+- `components/ServerDesignsTreeNav.tsx` now uses `getSeoReadyDesigns()` instead of all saved designs, avoiding navigation into excluded product buckets. It intentionally retains eligible small category links even when those categories remain `noindex`, so their designs remain browsable. Navigation and sitemap therefore share the eligible design catalog, not an identical set of category URLs.
+- `/designs` popular-theme cards link to the largest product collection for each theme and display that destination's actual design count and product label instead of an aggregate count spanning several destinations.
+- Category guidance was expanded for butterflies, flowers, doves, and pets, and added for teacher memorials. The category count label now says “design templates to personalise” instead of “crawlable design templates”.
+
+### Preserved architecture and remaining checks
+
+Keep the existing `/designs/[productType]/[category]/[slug]` URL structure, self-referencing design canonicals, and permanent redirects for mismatched design paths. Canonical gallery/category content and links render on the server; search results with `?q=` remain `noindex`. Category grids expose all their eligible design links without requiring search interaction. Detail pages continue to use on-demand rendering with 24-hour ISR.
+
+`getSeoReadyDesigns()` checks the curated product set and full-size regenerated screenshot IDs; its existing fallback permits all curated designs when the screenshot ID set is empty. The detail-page robots rule still checks product eligibility rather than screenshot eligibility. Neither behavior was changed in this pass.
+
+The changes were made locally; no production deployment or production HTML parity was verified in this session. After deployment, check representative titles, canonical tags, and robots directives, especially the teacher category, and compare later GSC periods. Obtain URL inspection/indexing data and query-by-page data before proposing consolidation or mass removal. Do not infer measured ranking gains from these code changes.
+
+### Verification
+
+- `pnpm type-check` passed for the implementation.
+- Targeted ESLint passed for the six changed implementation files; `git diff --check` passed.
+- `pnpm test -- tests/unit/design-seo.test.ts` passed all three tests: the teacher exception, rejection of empty/retired collections, and sitemap parity with category indexing policy plus inclusion of eligible design URLs.
+- Tests required an approved run outside the sandbox after pnpm hit an `EPERM` reading the user path. No production build or browser validation was run for this SEO pass.
+- Existing user changes under `gsc/`, including replaced/deleted export files, were preserved.

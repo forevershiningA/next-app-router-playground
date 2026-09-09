@@ -73,20 +73,20 @@ function buildDesignSeoTitle({
   categoryTitle,
   simplifiedProduct,
   productTypeDisplay,
+  phraseFromSlug,
+  motifList,
 }: {
   shapeName: string | null;
   categoryTitle: string;
   simplifiedProduct: string;
   productTypeDisplay: string;
+  phraseFromSlug: string | null;
+  motifList: string | null;
 }): string {
-  const productDescriptor =
-    productTypeDisplay === 'Headstone'
-      ? productTypeDisplay
-      : `${simplifiedProduct} ${productTypeDisplay}`;
-
-  return shapeName
-    ? `${shapeName} ${categoryTitle} ${productDescriptor} Design`
-    : `${categoryTitle} ${productDescriptor} Design`;
+  const productDescriptor = `${simplifiedProduct} ${productTypeDisplay}`;
+  // Slugs are privacy-safe catalog labels; remove numeric duplicate suffixes.
+  const detail = phraseFromSlug?.replace(/\s+\d+$/, '') || motifList || categoryTitle;
+  return `${shapeName ? `${shapeName} ` : ''}${productDescriptor} – ${detail}`;
 }
 
 function buildDesignDescription({
@@ -98,9 +98,10 @@ function buildDesignDescription({
   phraseFromSlug: string | null;
   motifList: string | null;
 }): string {
-  const motifText = motifList ? ` Features decorative motifs including ${motifList}.` : '';
-  const phraseText = phraseFromSlug ? ` Inspired by the wording "${phraseFromSlug}".` : '';
-  return `${seoTitle}. Personalise this memorial online with inscriptions, photos, motifs and a live 3D preview before proofing and manufacture.${motifText}${phraseText}`;
+  const motifText = motifList ? ` Motifs: ${motifList}.` : '';
+  const phraseText = phraseFromSlug && !seoTitle.includes(phraseFromSlug)
+    ? ` Layout: ${phraseFromSlug.replace(/\s+\d+$/, '')}.` : '';
+  return `${seoTitle}.${motifText}${phraseText} Personalise inscriptions and preview your memorial online before requesting a proof.`;
 }
 
 function truncateMetaDescription(description: string): string {
@@ -151,14 +152,12 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
                             design.productType === 'plaque' ? 'Plaque' : 'Monument';
 
   // Use shapeName directly from design metadata (no extra fetch needed)
-  const shapeDisplay = design.shapeName
-    ? design.shapeName.split(' ').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')
-    : null;
+  const shapeDisplay = formatShapeName(design.shapeName);
 
   // Extract the unique verse/phrase from the slug by stripping the shape prefix
   // e.g. "curved-gable-may-heavens-eternal-happiness-be-thine" → "May Heavens Eternal Happiness Be Thine"
   const shapeSlugPrefix = design.shapeName
-    ? design.shapeName.toLowerCase().replace(/\s+/g, '-') + '-'
+    ? design.shapeName.toLowerCase().replace(/[\s_]+/g, '-') + '-'
     : '';
   const phraseFromSlug = slug.startsWith(shapeSlugPrefix) && shapeSlugPrefix
     ? formatSlugForDisplay(slug.slice(shapeSlugPrefix.length))
@@ -174,6 +173,8 @@ export async function generateMetadata({ params }: SavedDesignPageProps): Promis
     categoryTitle,
     simplifiedProduct,
     productTypeDisplay,
+    phraseFromSlug,
+    motifList,
   });
   const description = truncateMetaDescription(
     buildDesignDescription({
@@ -266,7 +267,7 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
 
   // Extract verse/phrase from slug by stripping shape prefix
   const shapeSlugPrefix = design.shapeName
-    ? design.shapeName.toLowerCase().replace(/\s+/g, '-') + '-'
+    ? design.shapeName.toLowerCase().replace(/[\s_]+/g, '-') + '-'
     : '';
   const phraseFromSlug = slug.startsWith(shapeSlugPrefix) && shapeSlugPrefix
     ? formatSlugForDisplay(slug.slice(shapeSlugPrefix.length))
@@ -303,6 +304,8 @@ export default async function SavedDesignPage({ params }: SavedDesignPageProps) 
     categoryTitle,
     simplifiedProduct,
     productTypeDisplay,
+    phraseFromSlug,
+    motifList,
   });
   const shortDesignName = shapeName && phraseFromSlug
     ? `${shapeName} – ${phraseFromSlug}`

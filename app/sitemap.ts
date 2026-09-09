@@ -5,7 +5,7 @@ import {
   getSeoReadyDesigns,
   groupDesignsByCategory,
   groupDesignsByProduct,
-  MIN_INDEXABLE_CATEGORY_DESIGNS,
+  isIndexableCategoryDesignSet,
 } from '#/lib/design-seo';
 
 const BASE_URL = 'https://forevershining.org';
@@ -71,16 +71,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       categoryLatest.set(key, designDate);
     }
   }
-  const categoryDesignCounts = new Map<string, number>(
+  const indexableCategories = new Map<string, boolean>(
     productGroups.flatMap(([productSlug, productDesigns]) =>
       groupDesignsByCategory(productDesigns).map(([category, categoryDesigns]) => [
         `${productSlug}/${category}`,
-        categoryDesigns.length,
+        isIndexableCategoryDesignSet(categoryDesigns),
       ] as const),
     ),
   );
   const categoryPages: MetadataRoute.Sitemap = Array.from(categoryLatest.entries())
-    .filter(([key]) => (categoryDesignCounts.get(key) ?? 0) >= MIN_INDEXABLE_CATEGORY_DESIGNS)
+    .filter(([key]) => indexableCategories.get(key))
     .map(([key, date]) => ({
       url: `${BASE_URL}/designs/${key}`,
       lastModified: date,

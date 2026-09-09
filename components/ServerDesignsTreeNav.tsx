@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getAllSavedDesigns } from '#/lib/saved-designs-data';
+import { getSeoReadyDesigns } from '#/lib/design-seo';
 
 interface DesignTreeNode {
   productType: string;
@@ -58,7 +58,7 @@ function buildDesignTitle(shapeName: string | undefined, slug: string): string {
 function buildTreeData(): DesignTreeNode[] {
   const tree: Record<string, DesignTreeNode> = {};
 
-  for (const design of getAllSavedDesigns()) {
+  for (const design of getSeoReadyDesigns()) {
     const productSlug = design.productSlug || 'uncategorized';
     const productType = design.productType || 'uncategorized';
     const category = design.category || 'uncategorized';

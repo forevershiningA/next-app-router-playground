@@ -235,7 +235,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               dates, verses, motifs and photos before ordering.
             </p>
             <p className="text-sm text-stone-500 mt-5 font-light">
-              {designs.length.toLocaleString()} crawlable design templates
+              {designs.length.toLocaleString()} design templates to personalise
             </p>
           </header>
 

@@ -23,6 +23,22 @@ export const INDEXABLE_PRODUCT_SLUGS = new Set([
 
 export const MIN_INDEXABLE_CATEGORY_DESIGNS = 5;
 
+// Categories with clicks in the June 7–September 6, 2026 GSC export.
+// Keep the product eligibility check: retired products are not revived here.
+const SEARCH_VALIDATED_CATEGORIES = new Set([
+  'stainless-steel-plaque/teacher-memorial',
+  'laser-etched-headstone/nurse-memorial',
+  'bronze-plaque/dove-memorial',
+  'laser-etched-headstone/teacher-memorial',
+  'traditional-headstone/psalm-23-memorial',
+  'traditional-headstone/dove-memorial',
+  'traditional-headstone/doctor-memorial',
+  'laser-etched-headstone/dove-memorial',
+  'mini-headstone/maori-memorial',
+  'laser-monument/butterfly-memorial',
+  'bronze-plaque/jewish-memorial',
+]);
+
 type ProductSeoInfo = {
   name: string;
   shortName: string;
@@ -38,11 +54,22 @@ type CategorySeoCopy = {
 };
 
 const categorySeoCopy: Record<string, CategorySeoCopy> = {
+  'teacher-memorial': {
+    description:
+      'Teacher memorial plaque and headstone layouts for remembering an educator, colleague or mentor.',
+    intro:
+      'Start with the wording that matters most: the teacher’s name, years of service and a short tribute from pupils or colleagues. Compare the space needed for a dedication before choosing a decorative motif or portrait.',
+    points: [
+      'For a school or garden dedication, confirm the mounting location and available plaque dimensions before personalising.',
+      'Keep a longer message separate from the name so both remain easy to read at the intended viewing distance.',
+      'Check names, dates and any school emblem permissions before approving the final proof.',
+    ],
+  },
   'butterfly-memorial': {
     description:
       'Butterfly headstone and plaque designs for granite memorials, photo etching and engraved remembrance layouts.',
     intro:
-      'Compare butterfly headstone designs across black granite, engraved stone and plaque formats. These layouts are suited to families looking for butterfly engraving, symbolic transformation motifs, photo panels and soft floral detail.',
+      'Compare butterfly headstone designs by the placement of the wings, the space around the inscription and the balance with any portrait. A single butterfly can leave more room for wording; paired butterflies can frame a name or photograph. Check the selected product’s engraving options before choosing fine detail.',
     points: [
       'Butterfly motifs can be placed beside portraits, above inscriptions or as paired corner details.',
       'Laser-etched black granite works well for detailed butterfly artwork and fine wing texture.',
@@ -53,7 +80,7 @@ const categorySeoCopy: Record<string, CategorySeoCopy> = {
     description:
       'Flower headstone engraving designs with roses, sprays and botanical details for granite memorials and plaques.',
     intro:
-      'Browse flower headstone engraving designs with roses, sprays, borders and botanical motifs. These templates help compare how floral artwork balances with names, dates, verses and photo areas before personalisation.',
+      'Compare roses, flower sprays and botanical borders by how much inscription space they leave. Corner flowers can suit a longer verse, while a side spray can frame a portrait. Review the design at the intended memorial size so small petals and lettering do not compete for space.',
     points: [
       'Rose and flower sprays are useful for corners, side panels and gentle inscription framing.',
       'Laser etching supports detailed petals and shaded floral artwork on polished black granite.',
@@ -64,7 +91,7 @@ const categorySeoCopy: Record<string, CategorySeoCopy> = {
     description:
       'Dove headstone engraving and memorial plaque designs with peaceful bird motifs, scripture and remembrance wording.',
     intro:
-      'Explore dove memorial designs for headstones and plaques, including peaceful bird motifs, scripture-led layouts and gentle remembrance wording. Dove artwork can suit religious, biblical and non-denominational tributes.',
+      'Compare a single dove, paired birds and dove motifs combined with scripture or flowers. Look at the direction of the bird and its position relative to the name: artwork above the inscription creates a different balance from a small corner motif. Leave enough space for the full wording before adding further symbols.',
     points: [
       'Dove motifs pair well with crosses, clouds, open sky artwork and short memorial verses.',
       'Bird engraving can be kept minimal for traditional stone or more detailed for laser-etched granite.',
@@ -75,7 +102,7 @@ const categorySeoCopy: Record<string, CategorySeoCopy> = {
     description:
       'Pet memorial headstone and plaque designs for dogs, cats and companion animals, including horse memorial layouts.',
     intro:
-      'Choose pet memorial designs for dogs, cats, horses and companion animals. The templates include black granite pet headstones, pet plaques and layouts with photos, paw prints, landscape artwork and animal motifs.',
+      'Compare pet memorial layouts for dogs, cats and horses by the image you want to preserve. A horse silhouette or landscape needs different space from a close portrait of a dog or cat. Start with the name and short tribute, then check how the image fits the available memorial dimensions.',
     points: [
       'Photo-led layouts are useful when the pet portrait is the main remembrance detail.',
       'Horse memorial designs can use landscape, pasture or silhouette artwork alongside the inscription.',
@@ -252,5 +279,8 @@ export function groupDesignsByCategory(designs: SavedDesignMetadata[]) {
 }
 
 export function isIndexableCategoryDesignSet(designs: SavedDesignMetadata[]) {
-  return designs.length >= MIN_INDEXABLE_CATEGORY_DESIGNS;
+  const first = designs[0];
+  if (!first || !INDEXABLE_PRODUCT_SLUGS.has(first.productSlug)) return false;
+  return designs.length >= MIN_INDEXABLE_CATEGORY_DESIGNS ||
+    SEARCH_VALIDATED_CATEGORIES.has(`${first.productSlug}/${first.category}`);
 }

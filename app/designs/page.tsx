@@ -485,11 +485,12 @@ export default async function DesignsPage({
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {topCategories.map(([category, categoryDesigns]) => {
-                const firstDesign = categoryDesigns[0];
+                // Link to the largest collection for the theme, with its actual count.
+                const [productSlug, linkedDesigns] = groupDesignsByProduct(categoryDesigns)[0];
                 return (
                   <Link
                     key={category}
-                    href={`/designs/${firstDesign.productSlug}/${category}`}
+                    href={`/designs/${productSlug}/${category}`}
                     className="group bg-white border border-stone-200 rounded-lg p-5 hover:border-[#d8c487] hover:shadow-md transition-all"
                   >
                     <h3 className="font-serif text-xl font-light text-stone-950 group-hover:text-[#8a6b1f] transition-colors mb-1">
@@ -497,7 +498,7 @@ export default async function DesignsPage({
                     </h3>
                     <div className="mt-3 flex items-center justify-between gap-4">
                       <p className="text-sm text-stone-600 font-light">
-                        {categoryDesigns.length.toLocaleString()} matching designs
+                        {linkedDesigns.length.toLocaleString()} {getProductSeoInfo(productSlug).shortName.toLowerCase()} designs
                       </p>
                       <span className="inline-flex items-center text-sm font-medium text-[#8a6b1f]">
                         View
