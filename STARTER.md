@@ -1,6 +1,8 @@
 # Next-DYO (Design Your Own) Headstone Application
 
 **Last Updated:** 2026-09-09
+
+**Status entry order:** Add new dated status entries immediately after the table of contents, before the existing status entries. Keep status entries in reverse chronological order (newest first); do not append them to the end of this file.
 **Tech Stack:** Next.js 15.5.7, React 19, Three.js, R3F (React Three Fiber), Zustand, TypeScript, Tailwind CSS, PostgreSQL (local PostgreSQL + remote home.pl PostgreSQL), Nodemailer + React Email (email system), Playwright (dev screenshots), **Vitest 4.1.8** (unit tests), **Playwright 1.59.1** (E2E tests)
 
 ---
@@ -101,78 +103,122 @@
 
 ---
 
-## Current Status (2026-08-24) — Mobile Size Sheet and Headstone Camera
+## Current Status (2026-09-09) — GSC Audit and Design Gallery SEO
 
-### Mobile `/select-size` sheet
+### Evidence and scope
 
-Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
+The current `gsc/` CSV export covers June 7–September 6, 2026, with search type Web. `Strony.csv` contains exactly 1,000 URL rows and is not a complete inventory or an indexing report. Its page aggregates differ from the property-level daily totals; do not combine them or treat these figures as proof of a before/after improvement.
 
-- On mobile, `/select-size` opens as a fixed bottom sheet. Its normal height is `44dvh`; its compact height is `26dvh`.
-- `useMobileNavStore` owns `isSizeAdjustmentCompact` and `setSizeAdjustmentCompact`. Reset compact mode when leaving `/select-size` or switching to desktop (`>= 768px`). Do not add a competing local state, otherwise the sheet and its contents can become out of sync.
-- Starting interaction with any size range input enters compact mode. The compact panel keeps only the active dimension card (label, minus/value/plus controls, range input, and bounds); product target, base, style, and dimension tabs are hidden.
-- The sheet handle toggles both ways: in normal mode it collapses the panel; in compact mode it restores the complete panel. In compact mode, hide only the sheet header and persistent **Previous / Next** bar. The global mobile step/menu header must remain visible.
-- Switching Headstone/Base/Ledger/Kerbset or another dimension must return the sheet to normal mode before applying the change. The fixed-size plaque range follows the same compact interaction, while its price card is hidden only in compact mode.
+| URL group | Rows | Clicks | Impressions |
+| --- | ---: | ---: | ---: |
+| `/designs` | 1 | 4 | 97 |
+| Product collections | 4 | 1 | 21 |
+| Theme categories | 68 | 17 | 619 |
+| Individual designs | 910 | 94 | 5,286 |
+| Design guides | 2 | 0 | 14 |
+| Other pages | 15 | 29 | 1,778 |
 
-### Mobile camera composition in the size step
+The gallery accounts for 116 of 145 page-attributed clicks in this export. `Wykres.csv` totals 139 clicks and 6,758 impressions across 92 days. Of the 910 individual design rows, 837 have no clicks; this alone does not justify deletion or `noindex`. Visible queries include flower engraving, butterflies, horses, and doves. Query and page exports are separate aggregates, not query-to-URL attribution.
 
-Primary files: `components/three/AutoFit.tsx`, `components/three/FullMonumentFit.tsx`, and `components/three/headstone/ShapeSwapper.tsx`.
+At audit time, the local catalog contained 3,114 designs, of which 2,967 passed `getSeoReadyDesigns()`. These formed 210 product/category collections; 102 were below the default five-design threshold. Before the title changes, 1,724 eligible headstones shared only 360 shape/category combinations. These are catalog snapshots, not indexed-page counts.
 
-- `ShapeSwapper` targets the isolated headstone mesh in `/select-size` when `editingObject` is `headstone` or `base`; all other standard products use the usual fit target. This keeps the mobile Headstone and Base tabs at the same camera scale.
-- `AutoFit` detects a mobile Headstone or Base sizing selection and uses a tighter fit plus a stronger upward composition shift than Ledger/Kerbset. Current mobile headstone/base sheet multipliers are `0.82` (normal sheet) and `0.88` (compact sheet), with vertical target shifts `0.74` and `0.42` radii respectively. These values deliberately reclaim horizontal whitespace while keeping the stone above the panel.
-- `FullMonumentFit` retains separate framing for close upright/headstone work versus full-plot Ledger/Kerbset work. Its mobile Headstone margins are tighter (`1.32` normal, `1.02` compact); do not apply them to Ledger or Kerbset because the full plot must stay visible.
-- Both fit components depend on `isSizeAdjustmentCompact`, so camera framing recomputes whenever the sheet changes height. Keep camera animation / `frameloop` ownership in `FullMonumentFit`; do not introduce a second camera controller for this state.
-- Product-prefixed routes (for example `/traditional-engraved-headstone/select-size`) must be treated as the same designer step as `/select-size`. Use `getDesignerStepSlug(pathname) === 'select-size'`, not exact pathname matching. Exact checks caused the generic camera controller to overwrite `AutoFit` and left the mobile price pill visible on product-prefixed size routes.
-- The close mobile framing was verified for both `/select-size` and `/traditional-engraved-headstone/select-size` at `390×844`.
+### Implemented behavior
+
+- `app/designs/[productType]/[category]/[slug]/page.tsx`: title and H1 now include the simplified product technology, cleaned shape, and a descriptive slug phrase, falling back to motifs or category. Trailing numeric duplicate suffixes are removed from the title detail. Generic shape identifiers are cleaned consistently in metadata and page content, and shape-prefix matching normalizes underscores as well as spaces. Similar variants can still share titles; this is not a guarantee of uniqueness.
+- Descriptions now put the design title and motif information before general personalisation copy. Slug labels are described as layouts rather than asserted to be literal inscriptions. Meta descriptions still truncate at 160 characters, so long labels can still be cut off.
+- `lib/design-seo.ts`: `isIndexableCategoryDesignSet()` rejects empty or non-curated product collections, then accepts either at least five designs or an explicit `SEARCH_VALIDATED_CATEGORIES` exception. Call it with one product/category group. The exception list records 11 eligible category paths with clicks in this GSC export; it is maintained in code, not loaded dynamically from CSV. Retired `legacy-*` products were not re-enabled.
+- A concrete exception is `stainless-steel-plaque/teacher-memorial`: one local design, but 3 clicks, 108 impressions, and position 8.06 in the export. Do not restore blanket `noindex` solely because this collection has fewer than five designs.
+- Category metadata, product collection cards, and `app/sitemap.ts` use the shared category predicate. Sitemap generation no longer independently compares counts to five.
+- `components/ServerDesignsTreeNav.tsx` now uses `getSeoReadyDesigns()` instead of all saved designs, avoiding navigation into excluded product buckets. It intentionally retains eligible small category links even when those categories remain `noindex`, so their designs remain browsable. Navigation and sitemap therefore share the eligible design catalog, not an identical set of category URLs.
+- `/designs` popular-theme cards link to the largest product collection for each theme and display that destination's actual design count and product label instead of an aggregate count spanning several destinations.
+- Category guidance was expanded for butterflies, flowers, doves, and pets, and added for teacher memorials. The category count label now says “design templates to personalise” instead of “crawlable design templates”.
+
+### Preserved architecture and remaining checks
+
+Keep the existing `/designs/[productType]/[category]/[slug]` URL structure, self-referencing design canonicals, and permanent redirects for mismatched design paths. Canonical gallery/category content and links render on the server; search results with `?q=` remain `noindex`. Category grids expose all their eligible design links without requiring search interaction. Detail pages continue to use on-demand rendering with 24-hour ISR.
+
+`getSeoReadyDesigns()` checks the curated product set and full-size regenerated screenshot IDs; its existing fallback permits all curated designs when the screenshot ID set is empty. The detail-page robots rule still checks product eligibility rather than screenshot eligibility. Neither behavior was changed in this pass.
+
+The changes were made locally; no production deployment or production HTML parity was verified in this session. After deployment, check representative titles, canonical tags, and robots directives, especially the teacher category, and compare later GSC periods. Obtain URL inspection/indexing data and query-by-page data before proposing consolidation or mass removal. Do not infer measured ranking gains from these code changes.
+
+### Verification
+
+- `pnpm type-check` passed for the implementation.
+- Targeted ESLint passed for the six changed implementation files; `git diff --check` passed.
+- `pnpm test -- tests/unit/design-seo.test.ts` passed all three tests: the teacher exception, rejection of empty/retired collections, and sitemap parity with category indexing policy plus inclusion of eligible design URLs.
+- Tests required an approved run outside the sandbox after pnpm hit an `EPERM` reading the user path. No production build or browser validation was run for this SEO pass.
+- Existing user changes under `gsc/`, including replaced/deleted export files, were preserved.
+## Current Status (2026-09-08) — Mobile Designer Day Mode and Size Sheet Polish
+
+Primary files: `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, `components/MobileHeader.tsx`, and `styles/globals.css`. The reference palette is the final personalisation section of `app/_ui/HomeSplash.tsx`.
+
+### Day mode
+
+- `ThemeProvider` persists the `fs_ui_theme` preference and applies `data-theme="day"` to `<html>`. The Tailwind `day:` variant therefore also applies to portal content rendered under `document.body`; do not depend on inheritance from the Designer drawer.
+- Day mode uses the Home personalisation palette: warm paper `#f4f1eb`, ink `#1d1a17`, muted copy `#625a51`, warm borders around `#ddd2c2`, and restrained gold accents. `styles/globals.css` sets the day-mode body background to `#f4f1eb`.
+- The mobile step header, standard `MobileHeader`, persistent Previous/Next portal, collapsed sheet, and mobile hamburger all need explicit `day:` classes because they sit outside, or above, the normal Designer content tree.
+- The selected size-panel option style (`styleTabClass`) has an explicit day active state: gold `#dfb858` with `#1d1a17` text. This covers Base options such as **Polished**, **Flower Pots**, and the selected lid finish; legends such as **Base option** and **Lid finish** use the muted day copy colour.
+
+### Mobile Select Size sheet
+
+- `ConditionalNav` owns the sheet geometry. Normal editing sheets use `44dvh`; a generic collapsed bottom sheet uses `52px`; the compact size-slider sheet is a fixed `h-40 max-h-40`. Do not restore its prior `26dvh` height: it left a conspicuous empty area below the single slider on taller phones.
+- `isSizeAdjustmentCompact` is the sole source of truth for the compact slider mode. It hides the persistent Previous/Next portal and leaves one active dimension card plus an expand handle. When it is false, the navigation portal is visible.
+- In `DesignerNav`, scrollable full-screen panel content reserves `calc(4rem + env(safe-area-inset-bottom))` on mobile whenever the persistent navigation is present, and only `pb-3` in compact mode. This keeps the final slider/option interactive above Previous/Next without creating an oversized blank gap. Desktop resets this padding to `pb-4`.
+- The compact and collapsed sheet shells themselves also carry day-mode background, border, handle, and label styles. Do not style only `DesignerNav`: compact/collapsed modes can bypass its visible header/content.
 
 ### Verification
 
 ```bash
-pnpm type-check
 git diff --check
 ```
 
-Do not use Playwright for this visual work: the user explicitly checks the UI manually. `screen.png` is user-provided evidence; never overwrite it.
+Use the user-supplied `screen.png` for visual acceptance and do not overwrite it while verifying changes.
 
 ---
 
-## Current Status (2026-08-22) — Designer Flow: Camera, Inscriptions, and Images
+## Current Status (2026-09-07) — Military and First Responders Shape Catalogues
 
-### Camera, top bar, and size panel
+Primary implementation files are `app/_internal/_data.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/three/headstone/ShapeSwapper.tsx`, and `components/SvgHeadstone.tsx`. Source assets are in `public/shapes/headstones/military/` and `public/shapes/headstones/first-responders/`.
 
-Primary files: `components/three/FullMonumentFit.tsx`, `components/ThreeScene.tsx`, and `components/DesignerNav.tsx`.
+- The general Headstone catalogue has four visible categories: Traditional, Modern, Military, and First Responders. Both new categories appear on the full Select Shape page and in the Designer's repeat-selection panel. Traditional-only products still expose only their permitted shapes.
+- Military has ten enabled shapes: Pentagon, Naval Ship, Tank, Boot, Guard, Communications Soldier, Paratrooper, Pledge Soldier, Soldier, and Saluting Soldier (catalogue IDs 56–65).
+- First Responders has six enabled shapes: Fire Engine (`firefighters.svg`, ID 66), Firefighter (`firemen.svg`, ID 72), Flame (`fire.svg`, ID 73), First Aid Kit (`first-aid-kit.svg`, ID 74), Helmet (`helmet.svg`, ID 75), and Doctor (`medical-doctor-profession-specialist-medic.svg`, ID 76). The folder contains 15 source assets; the remaining nine require individual validation before enablement.
+- All enabled pictorial Military and First Responder assets are fixed shapes in `ShapeSwapper`. They do not use `preserveTop`, preventing a rectangular band being added beneath the original silhouette. Detailed pictograms also skip the broad bevel so their front caps stay aligned with the contour.
+- The optional `sandblastedBorders: true` field on a shape definition controls its front-facing SVG engraving layer; omission disables it. `ShapeSwapper` resolves the selected catalogue shape from its SVG URL, so no separate list of engraving slugs is maintained. The original solid stone remains intact and source vector paths supply only the front detail.
+- For Traditional Engraved products, `ShapeSwapper` reads the inscription addition's parsed `minHeight` from the active product catalogue and passes it to `SvgHeadstone` as `engravingStrokeWidthMm`. `SvgHeadstone` converts that millimetre value to the current SVG/world scale and uses `SVGLoader.pointsToStroke` to create a flat, painted contour with a physical width. The current Traditional Engraved inscription configuration is `min_height="10"`, so its sandblasted contour is 10 mm wide. Do not hard-code 10 mm: another product may define a different minimum. Laser Etched products leave this width unset and retain fine line detail.
+- `SvgHeadstone` supports genuine multi-part SVG artwork. The largest filled path forms the editable face; filled paths from other SVG elements are preserved as complete stone pieces. Nested subpaths stay as holes or relief detail, rather than becoming detached solids. Parts are normalized against common bounds for stable scale and ground contact.
+- Each enabled asset was checked with `SVGLoader` and extrusion for finite geometry, then selected through its catalogue category into the 3D Designer using Playwright. TypeScript and `git diff --check` pass. `ShapeSwapper.tsx` continues to have 14 pre-existing ESLint warnings.
+- When enabling another asset, retain filled paths and intended holes, add its catalogue entry and fixed-shape handling, then verify the SVG parser, 3D ground contact, and the category-to-Designer flow.
 
-- Switching the size-panel target between **Headstone**, **Base**, **Ledger**, and **Kerbset** must use `FullMonumentFit`'s animated pose transition. Do not reintroduce an immediate pose when leaving the close view: it causes the visible rigid camera jump.
-- During a camera animation, switch the R3F Canvas from `frameloop="demand"` to `always`, then restore `demand` on completion/cancellation. This is required for smooth transitions without permanently rendering the static designer.
-- The black price pill identifies the currently edited part and displays that part's dimensions; it must not continue showing headstone dimensions while Base/Ledger/Kerbset is being edited.
-- On mobile, Base finish buttons stay above its sliders. Base-specific options that need more room remain after the sliders with sufficient bottom padding above the persistent navigation bar.
+The Doctor source originally kept its head, medical cross, and body as disconnected subpaths in one SVG `<path>`. It is intentionally split into three filled SVG elements so `SvgHeadstone` preserves every genuine part while retaining the head's opening and the body collar as holes.
 
-### Inscriptions
+### Military implementation notes
 
-Primary files: `components/InscriptionEditPanel.tsx`, `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, and `components/HeadstoneInscription.tsx`.
+- The Headstone catalogue now has a `military` category alongside `traditional` and `modern`. It is available in both the full Select Shape page and the repeat-selection panel in the Designer's left column.
+- **Military Pentagon** is the first enabled design. Its catalogue image is `military/pentagon.svg`, which resolves to `/shapes/headstones/military/pentagon.svg` for both its preview and `SvgHeadstone` geometry.
+- The enabled designs are **Military Pentagon** (`military/pentagon.svg`), **Military Naval Ship** (`military/ferry.svg`), **Military Tank** (`military/war-tank.svg`), **Military Boot** (`military/military-boot.svg`), **Military Guard** (`military/palace-guards-with-machine-gun-variant.svg`), **Military Communications Soldier** (`military/communications-soldier.svg`), and **Military Paratrooper** (`military/paratrooper.svg`).
+- `SvgHeadstone` now supports a pictogram composed of multiple filled SVG paths. The largest path remains the editable face outline; filled paths from separate SVG elements are emitted as additional complete stone pieces, each with front, back, and indexed perimeter walls. Nested subpaths belonging to that same SVG element are not promoted to detached pieces, preventing decorative cut-outs from becoming stray solids.
+- Component placement, scale, and ground alignment are derived from the shared bounds of every filled SVG part. This is essential for Paratrooper: its body extends below the canopy's bounds, so using the canopy alone placed the body below the base and broke its apparent side walls.
+- Wide pictorial silhouettes must be fixed-shape assets in `ShapeSwapper`. This prevents `preserveTop` from adding a rectangular band below the original outline. Naval Ship, Tank, Boot, Guard, Communications Soldier, and Paratrooper are all in the fixed set. Tank, Boot, Guard, Communications Soldier, and Paratrooper also skip the broad bevel: their detailed contours otherwise make the front cap look offset from the outer walls. Pentagon retains the normal bevel path.
+- For future assets, use filled SVG paths only. Separate paths are supported when they are genuine, detached pieces of one memorial; nested contour detail and intentional voids must remain in their original parent path. Verify a complex shape in the 3D Designer before enabling it.
+- Products already restricted to traditional-only shapes retain that restriction on the full selection page. Military is an additive category for products that support the general Headstone catalogue.
+- Before enabling more Military entries, check that the combined silhouette has a stable ground line and enough usable front area for inscriptions. Prefer a single connected outline where possible; use separate filled paths only for intentional detached structural pieces.
 
-- On the first entry to `/inscriptions`, select **Headstone** as the default inscription target, unless an existing inscription was deliberately selected.
-- The editor has one auto-growing `textarea`; there is no separate single-line/multiple-line mode. It starts at approximately three lines high, and alignment controls share its label row.
-- Inscription tabs (pills) and `+ Add Inscription` form a single horizontally scrollable row inside the editor. Do not place the add action in a second mobile-sheet header row: that pushes font controls out of view.
-- Font and Size form one visual typography card. Font options use a horizontally scrollable, hidden-scrollbar rail on mobile; Size is joined beneath it by a divider.
-- The D-pad is unit-aware: metric users cycle `1 / 5 / 10 mm`; imperial users cycle `¼ / ½ / 1 in`. The Position module offers both horizontal (`xPos: 0`) and vertical (`yPos: 0`) centring.
-- Gold and Silver Gilding use explicit active-card styling. The custom colour rail remains touch-scrollable with hidden system scrollbars, and the selected swatch has a high-contrast gold ring.
-- `SelectionBox` handles are currently intentionally visible while an inscription is selected for direct manipulation. Entering `/select-images` clears `selectedInscriptionId`, so text handles do not leak into the photo workflow.
+---
 
-### Images
+## Current Status (2026-09-02) — Headstone Cap and Wall Rendering Resolved
 
-Primary files: `components/ImageSelector.tsx` and `components/DesignerNav.tsx`.
+Primary file: `components/SvgHeadstone.tsx`.
 
-- A photo is optional. With no added image, the primary mobile CTA is **`Skip / Next →`**. After an image is added it becomes **`Next: Additions →`**.
-- Image type selection opens the existing upload/crop flow; the selected type then has an upload action and is represented on the 3D model after cropping is completed.
-- `ImageSelector` loads image pricing from `public/xml/en_EN/images.xml` through `lib/image-pricing.ts`. Prices depend on image type, selected physical size, and finish; do not display invented fixed `From` prices without a product-specific pricing rule.
-- The portrait thumbnails are source images. Any white vertical element baked into a thumbnail must be corrected in its source asset, not hidden with an arbitrary crop that could remove portrait content.
-
-### Local Three.js cloud texture and WebGL
-
-Primary file: `components/three/AtmosphericSky.tsx`.
-
-- Drei `Clouds` uses the committed local raster texture `public/three-assets/cloud.png`, not `cloud.svg`. The SVG was capable of reaching WebGL before reliable bitmap decode and produced `WebGL: INVALID_VALUE: texSubImage2D: bad image data` on `/inscriptions`.
-- Keep the PNG local; this avoids both that upload issue and a runtime remote texture request. `cloud.svg` is retained only as source/reference material.
+- User evidence in `screen.png` shows **Headstone 1** with severe diagonal/triangular granite bands across the front face. This is a texture-coordinate/material-region defect, not merely studio lighting or a normal-map issue. The extrusion sides themselves were rendering as expected.
+- The prior `z`-tolerance heuristic classified every triangle independently from its post-transform coordinates. On complex extruded SVG outlines, that could classify portions of a front/back cap as the continuous perimeter wall. The wall material uses perimeter UVs, which produced the conspicuous diagonal bands on a nominally planar face.
+- Preserving `ExtrudeGeometry` groups with `mergeGeometries(geoms, true)` was not sufficient. User evidence proved that some textured extrusion-wall triangles were still copied into the derived cap geometry and overlapped the replacement wall.
+- Cap extraction accepts only triangles whose three vertices lie on an actual outer cap plane, with an epsilon of `depth * 1e-6`. Wall and bevel triangles are excluded even if their source group claims they belong to a cap. The same strict classification drives cap material groups, normals, and UVs. For non-bevelled classic forms these planes are effectively `+depth/2` and `-depth/2`; bevelled modern forms must use the transformed geometry's `boundingBox.max.z` and `boundingBox.min.z`.
+- The side UV depth calculation uses `zBack` and `zFront` derived from the final geometry bounding box. This was restored after the first change briefly caused `ReferenceError: zBack is not defined` at runtime.
+- Follow-up evidence showed that classic shapes (except Cropped Peak) could still split their **side and top-edge** granite into triangular bands. This was not fixed by a more exhaustive perimeter projection or by smoothing the side normals. A local X/Y-only wall projection was also rejected: wall vertices at the front and back have identical X/Y values, creating degenerate UV triangles and temporal mip-map noise while orbiting. The extrusion wall is removed after cap extraction and replaced by one indexed wall mesh built from the outline, with a single continuous contour/depth UV layout and shared normals. Its index order is selected from the transformed contour's signed area because SVG assets do not all share the same winding; assuming one order made the wall inward-facing and invisible under back-face culling. A temporary dark untextured wall proved that replacement geometry was visible, but also made every upright Headstone lose the selected side texture. The isolated wall now receives the selected granite colour map again, while bump and roughness detail maps stay disabled on that narrow surface to avoid reintroducing temporal orbit noise. Slant headstones retain their separate geometry path. Side-material revision is `3`.
+- Do not revert to cap classification based only on a nominal Z value or restore the original extrusion-wall triangles alongside the replacement wall. Those approaches caused missing caps, overlapping geometry, triangular texture bands, or temporal orbit noise.
+- **Headstone 2 missing-cap diagnosis (2026-09-02):** modern forms enable `ExtrudeGeometry` bevels. Their outer front/back cap planes therefore lie at the transformed geometry's actual Z extrema, not at the nominal `+depth/2` and `-depth/2`. The strict classifier was consequently rejecting every cap triangle while the replacement perimeter wall remained visible as a hollow ribbon. Cap extraction, wall depth, and the child/decal wrapper now use `boundingBox.max.z` / `boundingBox.min.z` measured after transformation. Geometry build version is `11`. Classic non-bevelled forms keep the same effective planes.
+- **Acceptance:** the user visually confirmed the final result as correct after the bounding-box cap-plane correction. Headstone 2 regained both front and back faces, while classic Headstones retained correctly textured side walls. Treat the geometry/material issue as resolved unless new evidence shows a regression on another specific SVG.
 
 ### Verification
 
@@ -181,7 +227,336 @@ pnpm type-check
 git diff --check
 ```
 
-`screen.png` is user-provided visual acceptance evidence. Never overwrite it while testing.
+TypeScript and diff checks pass. Existing ESLint warnings in `SvgHeadstone.tsx` pre-date this change; the two unused-variable warnings introduced during the correction were removed. `screen.png` remains user-provided evidence and must never be overwritten.
+
+---
+
+## Current Status (2026-09-02) — Guitar 1 SVG Union Validation
+
+Primary asset: `public/shapes/headstones/headstone_3.svg` (catalogue name: **Guitar 1**).
+
+- Guitar 1 was initially authored as two independent filled silhouettes: the guitar and a plaque with a guitar-shaped recess. `SvgHeadstone` intentionally selects the largest filled `Shape` as its structural outline, so the original asset rendered the recess but omitted the guitar.
+- One XML `<path>` element is **not** sufficient validation. A `d` attribute can contain several `M…Z` subpaths; `SVGLoader.createShapes()` still returns one `Shape` for each disconnected positive contour. Groups and compound-path wrappers likewise do not turn disconnected geometry into a single solid for extrusion.
+- The accepted source now parses as exactly one SVG path and **one** Three.js `Shape`, with no holes: `{ paths: 1, shapes: 1, holes: [0] }`. Its viewBox is `0 0 387.65 398.06` and it has no stroke. Guitar and plaque are therefore one closed, connected solid suitable for the current cap/wall pipeline.
+- Illustrator procedure for comparable assets: ensure the decorative silhouette physically overlaps the plaque by a small amount, use **Pathfinder → Unite**, then **Expand**. Export as a filled SVG with no stroke, clipping/masks, or merely grouped paths. Verify using the parser before marking the asset ready.
+- Guitar 2–5 were identified as similarly multi-part source assets. Audit each individually before enabling an equivalent union; do not weaken the general “largest structural shape only” rule, as it prevents overlapping cap geometry and texture artefacts in the wider catalogue.
+
+---
+
+## Current Status (2026-09-01) — Home Refresh, Studio Designer Scenery, and Hydration Reliability
+
+### Homepage narrative and visual assets
+
+Primary file: `app/_ui/HomeSplash.tsx`. Related public assets: `public/screenshots/designer-3d-preview.webp` and `public/visuals/`.
+
+- The home Hero remains a dark, high-contrast introduction with the message **“You design it. We craft it.”** Its desktop header uses conventional product navigation, a compact search icon, and a single **Browse Designs** action. Do not restore the former slash-separated menu or the duplicate “Designed by you” strapline.
+- The dark section immediately below the Hero is a two-column proof point: compassionate copy, benefits, and the single gold **Start Designing in 3D** CTA on the left; a clickable, real Designer preview on the right. Do not add a second CTA or explanatory headline on top of the image.
+- The Designer preview is always sourced from `public/screenshots/designer-3d-preview.webp`. Optimise a newly approved `screen.png` to WebP before replacing this file. The preview needs its **Live 3D preview** badge in the upper-right, a rounded frame, `border-white/25`, and `ring-white/[0.1]` so its dark left tool panel does not blend into the dark section background.
+- The personalisation showcase below uses the three coherent studio assets in `public/visuals/`: `memorial-shape-studio.webp`, `memorial-photo-detail-studio.webp`, and `memorial-finishes-studio.webp`. They deliberately use a neutral, warm studio treatment; do not substitute inconsistent outdoor renders or technical CAD drawings for the material/finish card.
+- The final dark home CTA is assistance-led (**Contact us** primary, **Browse Designs** secondary), not another duplicate Designer launch.
+
+### Hero grounding and inscription contrast
+
+Primary files: `components/HeroCanvas.tsx` and `app/_ui/HomeSplash.tsx`.
+
+- The Hero memorial uses a soft contact/grounding shadow to prevent the granite Base from appearing to float over the meadow. Preserve the shadow when adjusting product positioning or camera framing.
+- Hero inscription rendering has a subtle dark edge/shadow treatment for legibility over light, speckled granite. This is visual support for the preview only; it should not reduce contrast or depth in the editable Designer inscription workflow.
+
+### Studio scenery in the live 3D Designer
+
+Primary files: `components/SceneryToggleButton.tsx`, `components/ThreeScene.tsx`, and `components/three/Scene.tsx`. Backdrop asset: `public/visuals/designer-studio-cyclorama.webp`.
+
+- The scenery selector presents six studio-oriented choices: **Gallery White**, **Soft Gray**, **Warm Stone**, **Slate Studio**, **Charcoal**, and **Midnight**. Their swatches use gradients, not flat colour chips, to communicate the intended photographic/studio mood.
+- **Slate Studio** (`#787878`, the fourth studio choice) is the default for a new Designer session. Existing saved scenery preferences in local storage intentionally continue to take precedence.
+- Studio mode is a real cyclorama image behind a transparent Canvas. Every studio choice uses a dedicated backdrop in `public/visuals/` — `designer-studio-cyclorama-{gallery-white,soft-gray,warm-stone,slate-studio,charcoal,midnight}.webp` — rather than a CSS colour overlay on a shared scene. Do not regress this to a CSS-only flat fill: each backdrop must retain its own visible floor, wall, texture, and lighting character.
+- In studio mode, `Scene.tsx` uses a contact shadow only. It intentionally omits the outdoor standalone-headstone concrete foundation, which otherwise becomes an oversized dark pad beneath the Base. The real granite Base remains visible and grounded. Outdoor meadow mode retains its concrete foundation.
+- `StudioScenery` in `Scene.tsx` is intentionally minimal; the CSS backdrop in `ThreeScene.tsx` provides the scenery image while Three.js supplies the product lighting and grounding shadow.
+
+### Unit-toggle hydration reliability
+
+Primary file: `lib/use-unit-system.ts`.
+
+- SSR and the initial client render must always start with the same default unit system: `imperial`. The saved MM/IN preference is read only after hydration in `useEffect`, then shared through the existing browser event.
+- Do not initialise React state from `document.cookie` during render. That caused an SSR/client mismatch where the server rendered **IN** while a client cookie rendered **MM**, triggering React hydration recovery. Persist preference changes to the cookie as before; only the initial read timing changed.
+
+### Material-preview feedback
+
+Primary file: `components/ThreeScene.tsx`.
+
+- On the product-prefixed or root **Select Material** step, a material change shows a compact, non-blocking **Loading material…** spinner in the centre of the canvas. It is driven by the existing `isMaterialChange` / scene-loading state and does not obscure or disable the surrounding Designer controls.
+- Keep this distinct from the general scene loader used for initial model/shape changes: texture preview feedback belongs inside the canvas only while the Material step is active.
+
+### Modern headstone SVG face textures
+
+Primary file: `components/SvgHeadstone.tsx`.
+
+- **Open issue — not resolved as of 2026-09-01:** all modern SVG Headstone forms after **Square** still show severe, triangle-like striped/faceted artefacts on their front and back faces. The left and right extrusion sides render correctly. User evidence includes `headstone_2`, `headstone_18`, and the Heart / **Headstone 22** screen captures. Do not present the current implementation as a completed texture fix.
+- The catalogue SVGs often contain a filled silhouette plus a `fill="none"` outline, including paths resolved through `<use>`. The current code excludes explicitly stroke-only paths, selects the largest filled shape, and retains explicit holes only. This was a reasonable experiment to prevent duplicate cap geometry, but it did **not** remove the user-visible artefacts. Re-evaluate it against the actual parsed `SVGLoader` paths rather than assuming all secondary shapes are disposable.
+- Current experiments also bake cap repeats into UVs, keep face/back texture-map repeats at `repeat(1, 1)`, and apply `applyPlanarCapProjection(...)` for local X/Y cap coordinates. These changes likewise did not remove the artefact in the browser. Treat them as diagnostic code, not a verified solution; simplify or replace them once the actual geometry/material cause is proven.
+- A further experiment assigns exact `+Z`/`-Z` normals to cap vertices after conversion to non-indexed geometry, because disconnected triangles otherwise receive separate normals under studio lights. It is guarded by `GEOMETRY_BUILD_VERSION` so Fast Refresh rebuilds the mesh. This also did **not** resolve the reported visual issue, so the next investigation must inspect the raw loaded shapes, material groups, and any overlapping cap geometry.
+- **Heart consistency:** the selected **Headstone 22** thumbnail uses `headstone_27.svg`, and the Designer resolves the Heart shape to that same SVG. The canvas was nevertheless reported as visually different. Verify the parsed geometry against that exact source asset before changing the thumbnail or adding a separate Heart model.
+
+### Verification
+
+```bash
+pnpm exec eslint app/_ui/HomeSplash.tsx
+git diff --check
+```
+
+The HomeSplash lint check and diff check pass. In restricted Windows sandboxes, `pnpm` may require elevated execution because it resolves `C:\\Users\\polcr`; this is an environment permission issue, not a project error. `screen.png` remains user-provided acceptance evidence and must never be overwritten.
+
+---
+
+## Current Status (2026-08-31) — Designer Additions, Mini Headstones, and Theme Reliability
+
+### Product routes, Mini Headstones, and default granite
+
+Primary files: `lib/designer-product-routes.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/three/Scene.tsx`, and `lib/headstone-store.ts`.
+
+- Product ID `22` (**Laser Etched Black Granite Mini Headstone**) must retain its Mini Headstone route when selected; do not send it to the standard Headstone URL. Its shape picker intentionally exposes only the first 11 shapes, ending at **Square**.
+- Products `1` and `23` (**Stainless Steel Headstones**) follow the same 11-shape restriction: only the traditional shapes are visible and **Square** is last.
+- Mini Headstone keeps a compact concrete foundation. Use the smaller `0.04 m` pad margin in `Scene.tsx`; standard standalone headstones retain the `0.16 m` margin.
+- Products `8` (**Laser Etched Black Granite Pet Mini Headstone**) and `9` (**Laser Etched Black Granite Pet Plaque**) intentionally default to the same `Glory-Black-2.webp` texture as product `4` (**Laser Etched Black Granite Headstone**). Apply it through `headstoneMaterialUrl`; product 8 must also use it for its Base. This overrides the legacy XML `18.webp` texture only on product selection, without preventing later user material changes.
+
+### Additions: XML data, rendering, foundation, and duplication
+
+Primary files: `app/_internal/_additions-loader.ts`, `components/AdditionSelector.tsx`, `components/DesignerNav.tsx`, `components/three/AdditionModel.tsx`, `components/three/Scene.tsx`, and `lib/headstone-store.ts`.
+
+- Addition dimensions and retail prices must come from the parsed XML size variant. K2213 is `140 × 270 × 140 mm`, retail `$382.20`; K2254 is `145 × 240 × 145 mm`, retail `$423.80`.
+- K2254 has no committed `public/additions/2254/2254.glb` (only legacy 3DS/MAX assets). `AdditionModel` therefore resolves K2254 to the compatible K2213 GLB and texture as a temporary visual fallback, while preserving K2254's own XML dimensions and price. Do not restore the missing K2254 GLB URL or the R3F scene will throw a 404 and hit the error boundary. Replace the fallback once an exported K2254 GLB is supplied.
+- Addition cards and the **Selected Addition** summary both display `width × height × depth` using `formatDimensionTriplet(...)`, so the text follows the global MM/IN toggle. Keep stored values in millimetres.
+- A base-mounted vase or statue expands the granite Base by `30%` in width and `50%` in depth. The standalone concrete foundation and its contact shadow must use that same footprint and centre, otherwise the granite Base visibly overhangs the pad.
+- `duplicateAddition()` must treat `footprintWidth` as metres and translate the physical separation into the Base unit-cube local coordinate system. For a base-mounted item, move the copy to the free side of the Base; using raw `20`/`120` offsets sends the duplicate outside the scene.
+- The **Flower Pots** Base option is available only on ordinary `headstone` products, not Mini Headstones. It renders two lightweight procedural flower-pot inserts with black flower holes and selectable Black/Silver/Gold finish for all other insert surfaces. Flower Pots use exactly the same widened Base and concrete-foundation footprint as a base-mounted vase/statue: `+30%` width and `+50%` depth.
+- On `/select-product`, the selected-card CTA is **Continue**, matching the Shape-picker CTA; do not restore the longer `Continue with this product` label.
+
+### Motifs, images, selection, and day mode
+
+Primary files: `components/MotifSelectorPanel.tsx`, `components/SelectionBox.tsx`, `components/three/MotifModel.tsx`, `components/ImageSelector.tsx`, `components/three/ImageModel.tsx`, `components/DesignerNav.tsx`, and `styles/globals.css`.
+
+- The Motifs catalogue excludes **Flower Inserts**, **2 Colour Motifs**, and **1 Colour Motifs**. Its list button restores the last opened motif category. While thumbnails load, show both the existing loading text and a centred loading animation.
+- Australian Flora thumbnails and models require their original gold treatment and alpha-aware rendering. Do not tint transparent SVG bounds into opaque rectangles; the thumbnail and on-stone result must preserve transparent backgrounds.
+- Newly added motifs must become selected immediately and show a persistent outline. Selection rendering is demand-driven, so invalidate after selection changes; do not let the outline flicker out after one frame.
+- Image rotation controls are expressed in degrees in the UI and converted to radians only at storage/render boundaries. The image selection box lives inside the already-rotated parent group, so it must not receive the image rotation a second time.
+- In day mode, selected motif/addition CTA controls, fixed-size image controls, and the pulsing Next button need explicit contrast classes. The Position section for Images is mobile-only.
+- The home Hero (`app/_ui/HomeSplash.tsx`) is deliberately night-themed in both global theme modes. Keep its dark image overlay, white Hero copy, dark navigation controls, and dark mobile drawer; only the sections below it switch to day mode.
+
+### Camera fit after dimension changes
+
+Primary file: `components/three/AutoFit.tsx`.
+
+- The first automatic fit intentionally uses the en-face view. After that, changing either **Headstone** (`widthMm` / `heightMm`) or **Base** (`baseWidthMm` / `baseHeightMm` / `baseThickness`) dimensions must preserve the user's current OrbitControls azimuth and elevation. Recalculate the camera distance and target for the new bounds, but derive the next camera position from its current direction relative to the previous orbit target; do not snap back to en face.
+
+### Verification and evidence
+
+```bash
+pnpm exec eslint components/AdditionSelector.tsx components/DesignerNav.tsx components/three/AdditionModel.tsx components/three/Scene.tsx lib/headstone-store.ts
+git diff --check
+```
+
+Targeted lint checks currently have no errors; legacy warnings remain in some large designer/store components. `screen.png` is user-provided acceptance evidence: inspect it when asked, but never overwrite it.
+
+---
+
+## Current Status (2026-08-29) — Granite Colour-Space and Preview Brightness Alignment
+
+### Same granite must render the same on the upright and Base
+
+Primary files: `components/SvgHeadstone.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, and `lib/granite-material.ts`.
+
+- Granite colour/albedo maps on both `SvgHeadstone` and `HeadstoneBaseAuto` must use `THREE.SRGBColorSpace`. The matching cloned detail maps used for bump and roughness must use `THREE.NoColorSpace`. Treating the upright albedo clone as linear made the exact same swatch appear brighter and less saturated than on the Base.
+- `POLISHED_GRANITE_TINT` is the shared neutral (`0xffffff`) material multiplier. Do not restore the previous grey tint (`0xa6a6a6`): it darkened both correctly decoded granite maps well below the selector thumbnail, notably Blue Pearl.
+- The selector thumbnail is the visual brightness reference for the raw granite swatch. Verify a large front-facing Headstone and Base with the same selected material after changing colour space, tint, texture loading, or PBR maps.
+- Base and Headstone are lit by the same scene ambient, hemisphere, sun, rim, and HDRI lights. If their matching swatches diverge, inspect per-material texture colour space, tint, emissive settings, bump/roughness maps, and UV/repeat settings before adding object-specific lights.
+- The Base's front/back polished material matches the upright face for colour multiplier, roughness (`0.18`), environment intensity (`1.1`), clearcoat roughness (`0.08`), emissive intensity (`0.055`), and bump scale (`0.16`). Its top remains orientation-dependent and may catch a real specular highlight.
+
+### Verification
+
+```bash
+pnpm exec eslint components/SvgHeadstone.tsx components/three/headstone/HeadstoneBaseAuto.tsx lib/granite-material.ts
+git diff --check
+```
+
+Targeted ESLint has no errors; legacy warnings may remain. `screen.png` is user-provided visual acceptance evidence and must not be overwritten.
+
+---
+
+## Current Status (2026-08-29) — Bronze Plaque Mobile Flow, Camera, and Fastenings
+
+### Guided flow and mobile wording
+
+Primary files: `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, and `app/select-material/_ui/MaterialSelectionGrid.tsx`.
+
+- Bronze Plaque (product ID `5`) setup order is **Select Border → Select Background → Select Size → Fastening Type**. `navigablePanelSlugs` derives this sequence from `menuItems`, so menu order and guided Previous/Next actions stay aligned.
+- For Bronze Plaque, Full Colour Plaque, and Urns, the material step is customer-facing **Select Background**. Bronze Plaque receives that label in the desktop menu, mobile sheet title, material grid, and guided CTA.
+- Guided action labels use direct destinations: **`Next: Select Background`**, not **`Next: Go to Select Background`**. Do not reintroduce the `Go to` prefix.
+- Slider interactions compact the rich Headstone/Base mobile size sheet while dragging and restore it on pointer release/cancel/blur. Plaques are deliberately excluded: their Width/Height switch and single active slider already fit in the complete sheet, so compacting it hides useful context without gaining space.
+
+### Plaque camera and top chip
+
+Primary files: `components/three/AutoFit.tsx` and `components/ThreeScene.tsx`.
+
+- Mobile plaques have a separate `AutoFit` composition. Do not classify them as tall Headstone/Base size targets: that former path used the tight `0.82` margin and made a wide plaque fill the viewport, obscuring the meadow. The accepted plaque margins are `1.08` with the normal sheet and `1.04` if the sheet is compact; vertical shifts are `0.44` and `0.20` radii.
+- Keep the automatic camera front-facing for every fastening option. Selecting rear lugs must not rotate the view; the user can inspect the rear manually with orbit controls.
+- `ProductNameHeader` labels plaque products **Plaque** in the top dimensions/price chip, rather than the generic default **Headstone**. Use the resolved product type, with product ID `5` as the loading fallback.
+
+### Bronze plaque fastening geometry
+
+Primary files: `components/three/headstone/PlaqueFixings.tsx` and `components/three/headstone/ShapeSwapper.tsx`.
+
+- `PlaqueFixings` is rendered only for Bronze Plaque and reads Zustand's `fixingType`: `flat-back` renders nothing, `screws` renders four flush metallic screw heads on the front, and `lugs-with-studs` renders four rear lugs with short studs.
+- The component is nested inside `SvgHeadstone`'s scaled child wrapper. `worldWidth`/`worldHeight` and physical hardware sizes (millimetres expressed as metres) must be converted with `unitsPerMeter`; the plaque extrusion `depth` is already in that wrapper's local coordinates and must **not** be multiplied by `unitsPerMeter`. Multiplying it placed rear hardware far behind the plaque.
+- The approved lug proportions are a `5 mm` lug depth, `3.5 mm` stud radius, and `12 mm` stud length. Screws are flush face discs with a shallow slot, not visible rods projecting from the plaque.
+
+### Verification
+
+```bash
+pnpm exec eslint components/ThreeScene.tsx components/three/AutoFit.tsx components/three/headstone/PlaqueFixings.tsx components/three/headstone/ShapeSwapper.tsx
+git diff --check
+```
+
+Targeted ESLint must have no errors. Existing warnings in the legacy `AutoFit`, `ThreeScene`, and `ShapeSwapper` code are pre-existing. `screen.png` is user-provided visual acceptance evidence and must never be overwritten.
+
+---
+
+## Current Status (2026-08-28) — 3D Meadow Scene, Grounding, and Selection Polish
+
+### Interaction and selection
+
+Primary file: `components/three/Scene.tsx`.
+
+- Clicking scenery now clears the selected headstone/base and editable-element selections. The same handler is attached to the invisible ground hit-plane, the textured ground group, and the sky/cloud group, so clicks on grass, sky, or clouds behave consistently.
+- The handler ignores drag gestures (`delta > 4`) so rotating or panning with `OrbitControls` does not deselect an object.
+
+### Product grounding and granite consistency
+
+Primary files: `components/three/Scene.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, `components/SvgHeadstone.tsx`, and `lib/granite-material.ts`.
+
+- Standalone Headstones that have a Base use the same visible concrete pad and soft contact-shadow approach as Full Monuments. The pad extends `80 mm` around the Base and is intentionally absent for products without a granite base.
+- Granite maps now influence bump and roughness response on the upright and Base. Detail-map clones use `NoColorSpace`; do not reuse the sRGB albedo texture directly as a linear detail map.
+- Base texture repeats are clamped to at least one full tile on every axis. This is important for low bases: a repeat below `1` used to stretch one dark strip of a granite swatch across the entire front face.
+- Base and upright front faces use the same restrained emissive fill (`0.055`) and bump response (`0.16`) for polished granite. Keep this parity when changing either material; top faces may still appear naturally lighter because of their orientation.
+
+### Meadow environment
+
+Primary files: `components/three/Scene.tsx`, `components/three/AtmosphericSky.tsx`, `components/three/SunRays.tsx`, and `components/ThreeScene.tsx`.
+
+- Meadow grass is less saturated and has lower normal-map strength. Its material applies broad world-space colour variation in `onBeforeCompile`, keeping the scene to one ground material/draw call while reducing visible texture tiling.
+- `MeadowHorizon` is a single instanced mesh of low, irregular shrub silhouettes. It exists solely to break the straight grass/sky boundary; keep it subtle, dark, wide, and low. Do not restore the earlier cone-shaped tree silhouettes.
+- Meadow clouds use a muted off-white and lower opacity. The central cloud is weaker and further away so inscriptions and the headstone retain a quiet background.
+- SunRays remain a Forever Shining brand cue. They are intentionally warm gold-white, but now use lower opacity, fewer/broader rays, and a source offset toward the upper-right. Do not remove them merely as scenery noise.
+- The main 3D canvas deliberately has no CSS `filter`. Global contrast/saturation/brightness adjustment made material comparisons unreliable because it altered the rendered image rather than a single material.
+
+### Selection outline
+
+Primary files: `components/three/RotatingBoxOutline.tsx` and `components/three/headstone/HeadstoneAssembly.tsx`.
+
+- `RotatingBoxOutline` accepts an `opacity` prop. Headstone and Base outlines use shorter arms, smaller padding, muted off-white, and `opacity={0.76}`.
+- Those outlines use `frontFacingOnly`, which hides projected rear corners that previously appeared detached above the top edge in perspective.
+
+### Verification and visual acceptance
+
+```bash
+pnpm exec tsc --noEmit
+pnpm exec eslint components/ThreeScene.tsx components/three/AtmosphericSky.tsx components/three/RotatingBoxOutline.tsx components/three/Scene.tsx components/three/SunRays.tsx components/three/headstone/HeadstoneAssembly.tsx components/three/headstone/HeadstoneBaseAuto.tsx components/SvgHeadstone.tsx lib/granite-material.ts
+git diff --check
+```
+
+The TypeScript and diff checks pass. Targeted ESLint runs have only pre-existing warnings in legacy components. `screen.png` is user-provided visual acceptance evidence and must not be overwritten during testing.
+
+### Related public-page and product-flow decisions (2026-08-28)
+
+- In `app/memorials/[type]/page.tsx`, each product image links to the same `productDesignerUrl(product.id)` destination as that card's **Design Your Own** CTA. Keep the image link and CTA destination aligned.
+- Urns do not receive the standalone Headstone concrete foundation. `hasStandaloneHeadstoneFoundation` in `components/three/Scene.tsx` must continue to exclude urn products; their compact contact shadow remains sufficient.
+- In the standard shape picker, the desktop card CTA and the mobile sticky CTA both use the label **Continue**, matching the urn flow. Urn cards retain their existing direct, whole-card selection action and visual CTA treatment.
+
+---
+
+## Current Status (2026-08-27) — Mobile Designer Bottom Sheets and Inscription Editor
+
+### Generic mobile bottom sheets
+
+Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
+
+- The generic mobile designer panel now follows the interaction established by `/select-size`: tapping anywhere on its top bar, including the small grey handle, collapses or restores the panel.
+- The generic sheet has no separate **X** close button. Its collapsed state is a `52px`-high visible tab; never hide the entire sheet when collapsing it, because the top bar is the affordance used to restore it.
+- `useMobileNavStore.isBottomSheetCollapsed` is the single source of truth for generic-sheet collapse state. Reset it when the active designer step changes. Keep `/select-size` on its separate `isSizeAdjustmentCompact` behaviour because that compact mode also changes which sizing controls are rendered.
+- The generic top bar uses the same handle geometry and spacing as the size sheet: a `64px × 16px` handle hit area with the centred grey indicator. Keep the hit area above the content layer so the indicator itself does not intercept the toggle click.
+- Hide the fixed mobile **Previous / Next** navigation while the generic sheet is collapsed, but keep the collapsed top bar visible.
+- Direct mobile entry or browser refresh must open every route that uses a bottom sheet, including `inscriptions`, `select-images`, `select-additions`, and product-prefixed routes. This also covers **Back to My Design** returning from authentication to `select-motifs`.
+- `AutoFit` and `FullMonumentFit` treat either `isSizeAdjustmentCompact` or `isBottomSheetCollapsed` as a compact mobile viewport. Collapsing and restoring any bottom sheet must therefore refit both the distance and vertical camera target, not only change the panel height.
+- The full-height `design-menu` must never use the generic `52px` collapsed state. Before navigating to it, `DesignerNav` stores the complete source pathname in `sessionStorage` under `designer:return-from-menu`. Closing Menu replaces the route with that pathname, preserving both the previous step and product prefix; for example, `/traditional-engraved-headstone/select-images` returns to that exact step.
+
+### Step labels, additions layout, and price chip
+
+- When the next step is motifs, the mobile CTA label is **`Next: Motifs`**. From motifs to the authentication/save flow it is **`Next: Save Design`**.
+- On mobile `/select-additions`, the catalogue wrapper has a viewport-relative minimum height so its scrollable image list reaches the fixed CTA area instead of ending early and leaving an empty band.
+- The additions category rail uses proportionally sized grid columns and `overflow-hidden`: the longer **Applications** label receives more width and cannot paint outside the rounded container.
+- The mobile size/price chip keeps the price on one line and prevents it from shrinking. It uses `calc(100vw - 2rem)`, `16px` horizontal padding, compact internal gaps, and no spaces around `×`, allowing labels such as `600×600 mm` to fit while retaining 14px dimension text and 16px price text.
+- The mobile step header is a symmetric `1fr / auto / 1fr` grid: **Menu** on the left, the genuinely viewport-centred **STEP X OF Y** block in the middle, and the **MM / IN** switch on the right. The separate canvas unit switch is desktop-only. `MobileHeader` contains the same unit switch when the bottom sheet is not open.
+
+### Inscription editor layout
+
+Primary file: `components/InscriptionEditPanel.tsx`.
+
+- Do not render inscription chips at the top of the editor; they consume scarce sheet height and duplicate selection context.
+- The redundant **Inscription Text** label is removed. The textarea is followed immediately by **`+ Add Inscription`**.
+- The alignment row has no redundant **Align** label. Left, Center, and Right occupy the left portion; while the textarea is focused, **Done** appears on the right in the same row and calls `blur()` to dismiss the virtual keyboard without moving the content below it.
+- **`+ Add Inscription`** is a full-width gold primary action.
+- Inscription Size offers selectable `1/8 in`, `1/4 in`, and `1/2 in` increments in imperial mode (`1 mm`, `5 mm`, and `10 mm` in metric). The selected increment drives minus, plus, and the range input; stored values remain millimetres.
+
+### Motif and image units
+
+Primary files: `components/DesignerNav.tsx` and `components/ImageSelector.tsx`.
+
+- Motif Height respects the active unit system in the selected-item summary, editable value, unit suffix, slider bounds, and controls. Imperial values use nearest-eighth formatting and selectable `1/8 in`, `1/4 in`, and `1/2 in` increments; metric uses `1 mm`, `5 mm`, and `10 mm`.
+- Image fixed-size options and selected-image dimensions use fractional inches in imperial mode. Flexible image height, slider bounds, and position nudge labels also follow the active unit system. The store continues to use millimetres and `mm-center` coordinates internally.
+
+### Mobile Check Price quote
+
+Primary file: `components/CheckPricePanel.tsx`. Related but independent output files: `lib/pdf-generator.ts`, `lib/design-quote.ts`, and `lib/email/templates/components/QuoteTable.tsx`.
+
+- On mobile, do not squeeze Product, Qty, Price, and Item Total into four columns. Each quote item uses the legacy-inspired stacked layout: a full-width Product/details block followed by separate labelled Qty, Price, and Item Total rows. Monetary values use `whitespace-nowrap`, and Item Total receives the gold emphasis.
+- Desktop retains the four-column table. The responsive modal markup is screen-only; PDF generation and React Email use separate renderers and were deliberately not changed. Keep the information order consistent across all three outputs even when their layouts differ.
+
+### Verification
+
+```bash
+pnpm exec eslint components/AdditionSelector.tsx components/CheckPricePanel.tsx components/ConditionalNav.tsx components/DesignerNav.tsx components/ImageSelector.tsx components/InscriptionEditPanel.tsx components/MobileHeader.tsx components/ThreeScene.tsx components/three/AutoFit.tsx components/three/FullMonumentFit.tsx lib/mobile-nav-store.ts
+git diff --check
+```
+
+The targeted ESLint runs have no errors; existing warnings in the legacy designer components are unrelated. `screen.png` remains the user-provided visual reference and must not be overwritten.
+
+---
+
+## Current Status (2026-08-26) — Traditional Engraved Headstone Shape-to-Material Flow
+
+### Required workflow
+
+Primary files: `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
+
+- Product ID `124` is **Traditional Engraved Headstone**. After its shape is confirmed, the next route must be `/traditional-engraved-headstone/select-material`; do not send this product directly to `select-size`.
+- Resolve this product from either the Zustand `productId` or `catalog.product.id`. During desktop catalog hydration those values can briefly differ; relying on only `productId` can incorrectly skip the material step.
+- Apply the same rule in both shape picker variants: the full-page grid (`ShapeSelectionGrid`) and the in-designer selector (`ShapeSelector`). Custom SVG uploads in the full-page picker follow the same flow.
+- The material route must open its material controls automatically. `ShapeSelectionGrid` stores the intended fullscreen panel in `sessionStorage` (`designer:pending-fullscreen-panel`); `DesignerNav` consumes it after the target route becomes active. This avoids losing the open-panel event during navigation.
+- On mobile, do **not** open the drawer before the route transition: it briefly shows the main menu while the material route loads. `useMobileNavStore.pendingPanel` carries the target panel, and `ConditionalNav` opens the bottom sheet only once `getDesignerStepSlug(pathname)` equals that pending panel.
+- The mobile material sheet's primary bottom CTA, when the next step is size, is exactly **`Next: Select Size`**. It continues to navigate to the existing `select-size` step.
+
+### Shape-card layout
+
+Primary files: `app/select-shape/_ui/ShapeSelectionGrid.tsx` and `components/ShapeSelector.tsx`.
+
+- Shape names must use their natural content height. Do not restore `min-h-10` on full-page card headings or `h-12` on the sidebar selector labels; those fixed heights created unnecessary blank space for one-line names.
+
+### Verification
+
+```bash
+pnpm exec eslint lib/mobile-nav-store.ts app/select-shape/_ui/ShapeSelectionGrid.tsx components/ConditionalNav.tsx components/DesignerNav.tsx components/ShapeSelector.tsx
+git diff --check
+```
+
+The ESLint run has no errors; `DesignerNav.tsx` has pre-existing warnings. `screen.png` remains user-provided visual acceptance evidence and must not be overwritten.
 
 ---
 
@@ -236,6 +611,123 @@ git diff --check
 ```
 
 The affected Three.js files have pre-existing ESLint warnings, but no ESLint errors. Visual verification succeeded at `390×844` for both generic and product-prefixed size routes. Never overwrite the user-provided `screen.png` while testing.
+
+---
+
+## Current Status (2026-08-24) — Mobile Size Sheet and Headstone Camera
+
+### Mobile `/select-size` sheet
+
+Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
+
+- On mobile, `/select-size` opens as a fixed bottom sheet. Its normal height is `44dvh`; its compact height is `26dvh`.
+- `useMobileNavStore` owns `isSizeAdjustmentCompact` and `setSizeAdjustmentCompact`. Reset compact mode when leaving `/select-size` or switching to desktop (`>= 768px`). Do not add a competing local state, otherwise the sheet and its contents can become out of sync.
+- Starting interaction with any size range input enters compact mode. The compact panel keeps only the active dimension card (label, minus/value/plus controls, range input, and bounds); product target, base, style, and dimension tabs are hidden.
+- The sheet handle toggles both ways: in normal mode it collapses the panel; in compact mode it restores the complete panel. In compact mode, hide only the sheet header and persistent **Previous / Next** bar. The global mobile step/menu header must remain visible.
+- Switching Headstone/Base/Ledger/Kerbset or another dimension must return the sheet to normal mode before applying the change. The fixed-size plaque range follows the same compact interaction, while its price card is hidden only in compact mode.
+
+### Mobile camera composition in the size step
+
+Primary files: `components/three/AutoFit.tsx`, `components/three/FullMonumentFit.tsx`, and `components/three/headstone/ShapeSwapper.tsx`.
+
+- `ShapeSwapper` targets the isolated headstone mesh in `/select-size` when `editingObject` is `headstone` or `base`; all other standard products use the usual fit target. This keeps the mobile Headstone and Base tabs at the same camera scale.
+- `AutoFit` detects a mobile Headstone or Base sizing selection and uses a tighter fit plus a stronger upward composition shift than Ledger/Kerbset. Current mobile headstone/base sheet multipliers are `0.82` (normal sheet) and `0.88` (compact sheet), with vertical target shifts `0.74` and `0.42` radii respectively. These values deliberately reclaim horizontal whitespace while keeping the stone above the panel.
+- `FullMonumentFit` retains separate framing for close upright/headstone work versus full-plot Ledger/Kerbset work. Its mobile Headstone margins are tighter (`1.32` normal, `1.02` compact); do not apply them to Ledger or Kerbset because the full plot must stay visible.
+- Both fit components depend on `isSizeAdjustmentCompact`, so camera framing recomputes whenever the sheet changes height. Keep camera animation / `frameloop` ownership in `FullMonumentFit`; do not introduce a second camera controller for this state.
+- Product-prefixed routes (for example `/traditional-engraved-headstone/select-size`) must be treated as the same designer step as `/select-size`. Use `getDesignerStepSlug(pathname) === 'select-size'`, not exact pathname matching. Exact checks caused the generic camera controller to overwrite `AutoFit` and left the mobile price pill visible on product-prefixed size routes.
+- The close mobile framing was verified for both `/select-size` and `/traditional-engraved-headstone/select-size` at `390×844`.
+
+### Verification
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+Do not use Playwright for this visual work: the user explicitly checks the UI manually. `screen.png` is user-provided evidence; never overwrite it.
+
+---
+
+## Current Status (2026-08-23) — Mobile Memorial Pages and Home Hero
+
+### Public memorial product pages
+
+Primary files: `app/memorials/[type]/page.tsx`, `app/memorials/[type]/MemorialHeaderGallery.tsx`, `app/memorials/[type]/MemorialThemeToggle.tsx`, `components/ThemeToggle.tsx`, and `styles/globals.css`.
+
+- All public memorial category URLs share the dynamic route `/memorials/[type]` (including Headstones, Plaques, Full Monuments, Urns, and Pet Memorials). Mobile visual decisions in this route apply to every category.
+- On mobile, `PublicHeader` uses a compact native `details` menu. Do not restore the old wrapped row of category chips: it consumed too much of the first viewport. Desktop keeps the full inline navigation.
+- The global floating `ThemeToggle` is hidden below `md` on memorial routes. `MemorialThemeToggle` is rendered beside the breadcrumb instead; keep it there so it neither overlaps the logo nor competes with the Menu button. Desktop retains the global fixed toggle.
+- The hero CTA is **Browse Models** and links to `#choose-product`; memorial pages use smooth scrolling to this anchor. The intended funnel is: category context → real-gallery inspiration → buying guidance → product choice. Do not move the product grid above gallery or guidance.
+- `MemorialHeaderGallery` is a horizontally swipeable, snap-aligned carousel on mobile with a visible next-image peek. It reverts to the three-column thumbnail grid at `sm` and above. It deliberately has no custom arrow buttons; interaction is touch swipe or horizontal scroll.
+- Product cards on these public pages are intentionally minimal: product image, product description, and the single **Design Your Own** CTA. Do not reintroduce product ID, title, dimensions, shape tags, an extra `View all products` link, or helper copy under `Choose a product` without a new UX decision.
+- Mobile product images use a more prominent `object-cover` treatment; desktop continues to use contained images with padding. This is intentional to make memorial details legible on narrow screens.
+- `styles/globals.css` has a broad legacy `h1 { padding: 40px 0; }` rule. Memorial route roots carry `data-memorials-page`, which scopes an override to remove this padding. Keep that scope; removing the global rule can alter unrelated pages.
+
+### Home page mobile hero
+
+Primary files: `app/_ui/HomeSplash.tsx` and `components/ThemeToggle.tsx`.
+
+- The home hero no longer forces viewport height on mobile; it ends shortly below **Start Your Free Design**. From `sm` upward it remains full viewport height.
+- On mobile home, the floating theme toggle is hidden and an inline version appears alongside **Created from experience**. The Forever Shining logo is left-aligned.
+
+### Verification
+
+```bash
+pnpm exec eslint 'app/memorials/[type]/page.tsx' 'app/memorials/[type]/MemorialHeaderGallery.tsx' 'app/memorials/[type]/MemorialThemeToggle.tsx' components/ThemeToggle.tsx
+git diff --check
+```
+
+`screen.png` is user-provided visual acceptance evidence. Never overwrite it during testing.
+
+---
+
+## Current Status (2026-08-22) — Designer Flow: Camera, Inscriptions, and Images
+
+### Camera, top bar, and size panel
+
+Primary files: `components/three/FullMonumentFit.tsx`, `components/ThreeScene.tsx`, and `components/DesignerNav.tsx`.
+
+- Switching the size-panel target between **Headstone**, **Base**, **Ledger**, and **Kerbset** must use `FullMonumentFit`'s animated pose transition. Do not reintroduce an immediate pose when leaving the close view: it causes the visible rigid camera jump.
+- During a camera animation, switch the R3F Canvas from `frameloop="demand"` to `always`, then restore `demand` on completion/cancellation. This is required for smooth transitions without permanently rendering the static designer.
+- The black price pill identifies the currently edited part and displays that part's dimensions; it must not continue showing headstone dimensions while Base/Ledger/Kerbset is being edited.
+- On mobile, Base finish buttons stay above its sliders. Base-specific options that need more room remain after the sliders with sufficient bottom padding above the persistent navigation bar.
+
+### Inscriptions
+
+Primary files: `components/InscriptionEditPanel.tsx`, `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, and `components/HeadstoneInscription.tsx`.
+
+- On the first entry to `/inscriptions`, select **Headstone** as the default inscription target, unless an existing inscription was deliberately selected.
+- The editor has one auto-growing `textarea`; there is no separate single-line/multiple-line mode. It starts at approximately three lines high, and alignment controls share its label row.
+- Inscription tabs (pills) and `+ Add Inscription` form a single horizontally scrollable row inside the editor. Do not place the add action in a second mobile-sheet header row: that pushes font controls out of view.
+- Font and Size form one visual typography card. Font options use a horizontally scrollable, hidden-scrollbar rail on mobile; Size is joined beneath it by a divider.
+- The D-pad is unit-aware: metric users cycle `1 / 5 / 10 mm`; imperial users cycle `¼ / ½ / 1 in`. The Position module offers both horizontal (`xPos: 0`) and vertical (`yPos: 0`) centring.
+- Gold and Silver Gilding use explicit active-card styling. The custom colour rail remains touch-scrollable with hidden system scrollbars, and the selected swatch has a high-contrast gold ring.
+- `SelectionBox` handles are currently intentionally visible while an inscription is selected for direct manipulation. Entering `/select-images` clears `selectedInscriptionId`, so text handles do not leak into the photo workflow.
+
+### Images
+
+Primary files: `components/ImageSelector.tsx` and `components/DesignerNav.tsx`.
+
+- A photo is optional. With no added image, the primary mobile CTA is **`Skip / Next →`**. After an image is added it becomes **`Next: Additions →`**.
+- Image type selection opens the existing upload/crop flow; the selected type then has an upload action and is represented on the 3D model after cropping is completed.
+- `ImageSelector` loads image pricing from `public/xml/en_EN/images.xml` through `lib/image-pricing.ts`. Prices depend on image type, selected physical size, and finish; do not display invented fixed `From` prices without a product-specific pricing rule.
+- The portrait thumbnails are source images. Any white vertical element baked into a thumbnail must be corrected in its source asset, not hidden with an arbitrary crop that could remove portrait content.
+
+### Local Three.js cloud texture and WebGL
+
+Primary file: `components/three/AtmosphericSky.tsx`.
+
+- Drei `Clouds` uses the committed local raster texture `public/three-assets/cloud.png`, not `cloud.svg`. The SVG was capable of reaching WebGL before reliable bitmap decode and produced `WebGL: INVALID_VALUE: texSubImage2D: bad image data` on `/inscriptions`.
+- Keep the PNG local; this avoids both that upload issue and a runtime remote texture request. `cloud.svg` is retained only as source/reference material.
+
+### Verification
+
+```bash
+pnpm type-check
+git diff --check
+```
+
+`screen.png` is user-provided visual acceptance evidence. Never overwrite it while testing.
 
 ---
 
@@ -2828,6 +3320,55 @@ pnpm lint
 Known screenshot gap:
 - A fresh automated Playwright screenshot was not captured in the latest pass because `localhost:3001` did not respond within the short timeout.
 - Manual screenshot review drove the rim tuning.
+
+---
+
+## Current Status (2026-06-28) — Select Product UI Refinements
+
+### Select Product Page
+
+- **Route**: `/select-product`
+- **Primary file**: `app/select-product/_ui/ProductSelectionGrid.tsx`
+- **Current layout**:
+  - Desktop/wide viewport uses a 5-column product grid (`xl:grid-cols-5`).
+  - Product cards keep compact spacing so the primary CTA is visible in the first viewport at ~1574×907.
+  - Product thumbnails use `object-contain` to show the full source image instead of cropping important memorial details.
+  - Thumbnail frame is square (`aspect-square`) with an even image inset (`p-2`) so empty space appears balanced around full-image thumbnails.
+  - Product cards show title, short 2-line description, starting price, max-size price, and a visible `Select product` CTA.
+  - Selected product state shows a stronger CTA style and selected badge.
+- **Design tradeoff**:
+  - `object-contain` preserves full product visibility but can reveal empty space when image aspect ratios differ.
+  - The current square thumbnail frame with inset was chosen to make that spacing intentional and consistent rather than left/right-only.
+
+### Designer Sidebar Progress
+
+- **Primary file**: `components/DesignerNav.tsx`
+- Workflow groups now show clearer progress labels:
+  - `Current`
+  - `Complete`
+  - `Upcoming`
+- The active workflow roman numeral badge keeps white text instead of switching to black.
+- Sidebar width was intentionally left unchanged.
+
+### Verification
+
+Commands run successfully after the UI changes:
+
+```bash
+pnpm exec tsc --noEmit
+pnpm lint
+```
+
+Screenshots captured during refinement:
+
+- `C:\tmp\select-product-compact.png`
+- `C:\tmp\select-product-contain.png`
+- `C:\tmp\select-product-5col.png`
+- `C:\tmp\select-product-square-thumbs.png`
+
+---
+
+
 
 ---
 
@@ -5708,6 +6249,16 @@ Note: `components/three/BronzeBorde_gpt5.tsx` is an **unused backup** — do not
 
 
 
+## Current Status (2026-04-24) — STARTER extraction; Bronze Plaque border fixes & store reset
+
+- Created `starter-short.md`: extracted dated "Status (YYYY-MM-DD) — Title" entries from STARTER.md into concise 1–2 sentence summaries (includes older dates). File created at `starter-short.md`.
+- Fixed New Design behavior for Bronze Plaque: `lib/headstone-store.ts` (`resetDesign`) updated to preserve product-specific defaults (plaque dimensions and visibility) when a catalog/product is loaded so "New Design" no longer resets Bronze Plaque to headstone defaults (900×900) or adds a granite Base.
+- Investigated and updated Bronze border sizing (`components/three/BronzeBorder.tsx`): switched to prefer width-based scaling, removed a global multiplier that caused sudden size jumps at ~400mm, added conservative clamping for extreme dimensions, and (per user request) applied a 3× scale multiplier to integrated and non-integrated border geometry to increase visual thickness.
+- Build validated: `pnpm run build` completed successfully after these edits.
+- Next steps: Visual QA on plaque sizes (300×200, 560×200, 560×400). If border still needs tuning, will implement legacy ratio-based behavior from `createJS/dyo/Monument.getRatio()` to match historical visuals precisely.
+
+---
+
 ## Current Status (2026-04-22) — Multiple Line Inscriptions
 
 - Added support for multiple inscription lines: users can add, duplicate, edit, and position multiple lines independently.
@@ -5822,16 +6373,6 @@ Cold-cache build ≈ 24 min total: 4:51 clone, 2 min vercelignore processing, 30
 - **Country hardcoded:** `countryCode: 'au'` in `app/api/projects/route.ts:189` — all save-design emails currently route through `au` → PL mailbox fallback regardless of user country.
 - **Never embed large data URIs in email `<img src>`.** Gmail clips messages >102 KB and strips/sanitizes `data:` URIs. Always use nodemailer CID inline attachments (`cid:some-id` + `attachments: [{ cid, content, contentDisposition: 'inline' }]`). Data URIs remain fine for PDF generation via `jsPDF.addImage()` because that path doesn't go through an SMTP body.
 - **Data flow after this fix:** `app/api/projects/route.ts` stores screenshot as data URL (`screenshotPath`) on Vercel (ephemeral FS). `sendEmail()` now converts that data URI once — PDF attachment still gets the raw data URI, while the HTML body gets `cid:design-screenshot` and the binary is attached inline.
-
-## Current Status (2026-04-24) — STARTER extraction; Bronze Plaque border fixes & store reset
-
-- Created `starter-short.md`: extracted dated "Status (YYYY-MM-DD) — Title" entries from STARTER.md into concise 1–2 sentence summaries (includes older dates). File created at `starter-short.md`.
-- Fixed New Design behavior for Bronze Plaque: `lib/headstone-store.ts` (`resetDesign`) updated to preserve product-specific defaults (plaque dimensions and visibility) when a catalog/product is loaded so "New Design" no longer resets Bronze Plaque to headstone defaults (900×900) or adds a granite Base.
-- Investigated and updated Bronze border sizing (`components/three/BronzeBorder.tsx`): switched to prefer width-based scaling, removed a global multiplier that caused sudden size jumps at ~400mm, added conservative clamping for extreme dimensions, and (per user request) applied a 3× scale multiplier to integrated and non-integrated border geometry to increase visual thickness.
-- Build validated: `pnpm run build` completed successfully after these edits.
-- Next steps: Visual QA on plaque sizes (300×200, 560×200, 560×400). If border still needs tuning, will implement legacy ratio-based behavior from `createJS/dyo/Monument.getRatio()` to match historical visuals precisely.
-
----
 
 ## Current Status (2026-04-20, Part 2) — Screenshot Fix, Login→Save Flow, SMTP Guard
 
@@ -8871,6 +9412,18 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
 ### ⚠️ Known Issues (February 23, 2026)
 - None currently reported.
 
+## Current Status (2026-02-23)
+
+### ✅ Recent Changes (February 23, 2026)
+1. **Granite Image Flexible Sizing UI**
+   - Granite/YAG image products (IDs 21, 135, 136, 137) now detect their `min_height`, `max_height`, and `init_height` directly from `public/xml/*/images.xml` via the new `getFlexibleImageBounds()` helper.
+   - `ImageSelector` switches from the discrete “Size 1-4” variant slider to a millimeter-based height slider/input when a flexible product is selected, clamping values to the XML bounds (30–1200 mm for Granite) and auto-deriving width from the stored aspect ratio.
+   - Fixed-size ceramic/vitreous items keep the existing variant slider, so established workflows remain unchanged.
+   - Files: `lib/image-size-config.ts`, `components/ImageSelector.tsx`.
+
+### ⚠️ Known Issues (February 23, 2026)
+- None currently reported.
+
 ## Current Status (2026-02-22)
 
 ### ✅ Recent Changes (February 22, 2026)
@@ -9140,18 +9693,6 @@ Comprehensive debugging of legacy saved design loading across both **forevershin
    - Front-facing logic now uses a real clipping plane derived from the active camera normal (via R3F local clipping) instead of heuristic dot products, which keeps bottom edges visible while allowing the renderer to trim any geometry physically behind the headstone.
 
 ### ⚠️ Known Issues (February 7, 2026)
-- None currently reported.
-
-## Current Status (2026-02-23)
-
-### ✅ Recent Changes (February 23, 2026)
-1. **Granite Image Flexible Sizing UI**
-   - Granite/YAG image products (IDs 21, 135, 136, 137) now detect their `min_height`, `max_height`, and `init_height` directly from `public/xml/*/images.xml` via the new `getFlexibleImageBounds()` helper.
-   - `ImageSelector` switches from the discrete “Size 1-4” variant slider to a millimeter-based height slider/input when a flexible product is selected, clamping values to the XML bounds (30–1200 mm for Granite) and auto-deriving width from the stored aspect ratio.
-   - Fixed-size ceramic/vitreous items keep the existing variant slider, so established workflows remain unchanged.
-   - Files: `lib/image-size-config.ts`, `components/ImageSelector.tsx`.
-
-### ⚠️ Known Issues (February 23, 2026)
 - None currently reported.
 
 ## Current Status (2026-02-06)
@@ -13991,55 +14532,6 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/headstonesdesigner
 
 ---
 
-## Current Status (2026-06-28) — Select Product UI Refinements
-
-### Select Product Page
-
-- **Route**: `/select-product`
-- **Primary file**: `app/select-product/_ui/ProductSelectionGrid.tsx`
-- **Current layout**:
-  - Desktop/wide viewport uses a 5-column product grid (`xl:grid-cols-5`).
-  - Product cards keep compact spacing so the primary CTA is visible in the first viewport at ~1574×907.
-  - Product thumbnails use `object-contain` to show the full source image instead of cropping important memorial details.
-  - Thumbnail frame is square (`aspect-square`) with an even image inset (`p-2`) so empty space appears balanced around full-image thumbnails.
-  - Product cards show title, short 2-line description, starting price, max-size price, and a visible `Select product` CTA.
-  - Selected product state shows a stronger CTA style and selected badge.
-- **Design tradeoff**:
-  - `object-contain` preserves full product visibility but can reveal empty space when image aspect ratios differ.
-  - The current square thumbnail frame with inset was chosen to make that spacing intentional and consistent rather than left/right-only.
-
-### Designer Sidebar Progress
-
-- **Primary file**: `components/DesignerNav.tsx`
-- Workflow groups now show clearer progress labels:
-  - `Current`
-  - `Complete`
-  - `Upcoming`
-- The active workflow roman numeral badge keeps white text instead of switching to black.
-- Sidebar width was intentionally left unchanged.
-
-### Verification
-
-Commands run successfully after the UI changes:
-
-```bash
-pnpm exec tsc --noEmit
-pnpm lint
-```
-
-Screenshots captured during refinement:
-
-- `C:\tmp\select-product-compact.png`
-- `C:\tmp\select-product-contain.png`
-- `C:\tmp\select-product-5col.png`
-- `C:\tmp\select-product-square-thumbs.png`
-
----
-
-
-
----
-
 ## Heart Urn Legacy M3D Reference and Inlay Geometry (2026-08-12)
 
 ### Legacy model findings
@@ -14076,494 +14568,3 @@ Both commands pass. Browser rendering still needs to be checked after the next l
 *End of STARTER.md - Last updated: 2026-08-21*
 
 ---
-
-## Current Status (2026-08-23) — Mobile Memorial Pages and Home Hero
-
-### Public memorial product pages
-
-Primary files: `app/memorials/[type]/page.tsx`, `app/memorials/[type]/MemorialHeaderGallery.tsx`, `app/memorials/[type]/MemorialThemeToggle.tsx`, `components/ThemeToggle.tsx`, and `styles/globals.css`.
-
-- All public memorial category URLs share the dynamic route `/memorials/[type]` (including Headstones, Plaques, Full Monuments, Urns, and Pet Memorials). Mobile visual decisions in this route apply to every category.
-- On mobile, `PublicHeader` uses a compact native `details` menu. Do not restore the old wrapped row of category chips: it consumed too much of the first viewport. Desktop keeps the full inline navigation.
-- The global floating `ThemeToggle` is hidden below `md` on memorial routes. `MemorialThemeToggle` is rendered beside the breadcrumb instead; keep it there so it neither overlaps the logo nor competes with the Menu button. Desktop retains the global fixed toggle.
-- The hero CTA is **Browse Models** and links to `#choose-product`; memorial pages use smooth scrolling to this anchor. The intended funnel is: category context → real-gallery inspiration → buying guidance → product choice. Do not move the product grid above gallery or guidance.
-- `MemorialHeaderGallery` is a horizontally swipeable, snap-aligned carousel on mobile with a visible next-image peek. It reverts to the three-column thumbnail grid at `sm` and above. It deliberately has no custom arrow buttons; interaction is touch swipe or horizontal scroll.
-- Product cards on these public pages are intentionally minimal: product image, product description, and the single **Design Your Own** CTA. Do not reintroduce product ID, title, dimensions, shape tags, an extra `View all products` link, or helper copy under `Choose a product` without a new UX decision.
-- Mobile product images use a more prominent `object-cover` treatment; desktop continues to use contained images with padding. This is intentional to make memorial details legible on narrow screens.
-- `styles/globals.css` has a broad legacy `h1 { padding: 40px 0; }` rule. Memorial route roots carry `data-memorials-page`, which scopes an override to remove this padding. Keep that scope; removing the global rule can alter unrelated pages.
-
-### Home page mobile hero
-
-Primary files: `app/_ui/HomeSplash.tsx` and `components/ThemeToggle.tsx`.
-
-- The home hero no longer forces viewport height on mobile; it ends shortly below **Start Your Free Design**. From `sm` upward it remains full viewport height.
-- On mobile home, the floating theme toggle is hidden and an inline version appears alongside **Created from experience**. The Forever Shining logo is left-aligned.
-
-### Verification
-
-```bash
-pnpm exec eslint 'app/memorials/[type]/page.tsx' 'app/memorials/[type]/MemorialHeaderGallery.tsx' 'app/memorials/[type]/MemorialThemeToggle.tsx' components/ThemeToggle.tsx
-git diff --check
-```
-
-`screen.png` is user-provided visual acceptance evidence. Never overwrite it during testing.
-
----
-
-## Current Status (2026-08-26) — Traditional Engraved Headstone Shape-to-Material Flow
-
-### Required workflow
-
-Primary files: `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
-
-- Product ID `124` is **Traditional Engraved Headstone**. After its shape is confirmed, the next route must be `/traditional-engraved-headstone/select-material`; do not send this product directly to `select-size`.
-- Resolve this product from either the Zustand `productId` or `catalog.product.id`. During desktop catalog hydration those values can briefly differ; relying on only `productId` can incorrectly skip the material step.
-- Apply the same rule in both shape picker variants: the full-page grid (`ShapeSelectionGrid`) and the in-designer selector (`ShapeSelector`). Custom SVG uploads in the full-page picker follow the same flow.
-- The material route must open its material controls automatically. `ShapeSelectionGrid` stores the intended fullscreen panel in `sessionStorage` (`designer:pending-fullscreen-panel`); `DesignerNav` consumes it after the target route becomes active. This avoids losing the open-panel event during navigation.
-- On mobile, do **not** open the drawer before the route transition: it briefly shows the main menu while the material route loads. `useMobileNavStore.pendingPanel` carries the target panel, and `ConditionalNav` opens the bottom sheet only once `getDesignerStepSlug(pathname)` equals that pending panel.
-- The mobile material sheet's primary bottom CTA, when the next step is size, is exactly **`Next: Select Size`**. It continues to navigate to the existing `select-size` step.
-
-### Shape-card layout
-
-Primary files: `app/select-shape/_ui/ShapeSelectionGrid.tsx` and `components/ShapeSelector.tsx`.
-
-- Shape names must use their natural content height. Do not restore `min-h-10` on full-page card headings or `h-12` on the sidebar selector labels; those fixed heights created unnecessary blank space for one-line names.
-
-### Verification
-
-```bash
-pnpm exec eslint lib/mobile-nav-store.ts app/select-shape/_ui/ShapeSelectionGrid.tsx components/ConditionalNav.tsx components/DesignerNav.tsx components/ShapeSelector.tsx
-git diff --check
-```
-
-The ESLint run has no errors; `DesignerNav.tsx` has pre-existing warnings. `screen.png` remains user-provided visual acceptance evidence and must not be overwritten.
-
----
-
-## Current Status (2026-08-27) — Mobile Designer Bottom Sheets and Inscription Editor
-
-### Generic mobile bottom sheets
-
-Primary files: `components/ConditionalNav.tsx`, `components/DesignerNav.tsx`, and `lib/mobile-nav-store.ts`.
-
-- The generic mobile designer panel now follows the interaction established by `/select-size`: tapping anywhere on its top bar, including the small grey handle, collapses or restores the panel.
-- The generic sheet has no separate **X** close button. Its collapsed state is a `52px`-high visible tab; never hide the entire sheet when collapsing it, because the top bar is the affordance used to restore it.
-- `useMobileNavStore.isBottomSheetCollapsed` is the single source of truth for generic-sheet collapse state. Reset it when the active designer step changes. Keep `/select-size` on its separate `isSizeAdjustmentCompact` behaviour because that compact mode also changes which sizing controls are rendered.
-- The generic top bar uses the same handle geometry and spacing as the size sheet: a `64px × 16px` handle hit area with the centred grey indicator. Keep the hit area above the content layer so the indicator itself does not intercept the toggle click.
-- Hide the fixed mobile **Previous / Next** navigation while the generic sheet is collapsed, but keep the collapsed top bar visible.
-- Direct mobile entry or browser refresh must open every route that uses a bottom sheet, including `inscriptions`, `select-images`, `select-additions`, and product-prefixed routes. This also covers **Back to My Design** returning from authentication to `select-motifs`.
-- `AutoFit` and `FullMonumentFit` treat either `isSizeAdjustmentCompact` or `isBottomSheetCollapsed` as a compact mobile viewport. Collapsing and restoring any bottom sheet must therefore refit both the distance and vertical camera target, not only change the panel height.
-- The full-height `design-menu` must never use the generic `52px` collapsed state. Before navigating to it, `DesignerNav` stores the complete source pathname in `sessionStorage` under `designer:return-from-menu`. Closing Menu replaces the route with that pathname, preserving both the previous step and product prefix; for example, `/traditional-engraved-headstone/select-images` returns to that exact step.
-
-### Step labels, additions layout, and price chip
-
-- When the next step is motifs, the mobile CTA label is **`Next: Motifs`**. From motifs to the authentication/save flow it is **`Next: Save Design`**.
-- On mobile `/select-additions`, the catalogue wrapper has a viewport-relative minimum height so its scrollable image list reaches the fixed CTA area instead of ending early and leaving an empty band.
-- The additions category rail uses proportionally sized grid columns and `overflow-hidden`: the longer **Applications** label receives more width and cannot paint outside the rounded container.
-- The mobile size/price chip keeps the price on one line and prevents it from shrinking. It uses `calc(100vw - 2rem)`, `16px` horizontal padding, compact internal gaps, and no spaces around `×`, allowing labels such as `600×600 mm` to fit while retaining 14px dimension text and 16px price text.
-- The mobile step header is a symmetric `1fr / auto / 1fr` grid: **Menu** on the left, the genuinely viewport-centred **STEP X OF Y** block in the middle, and the **MM / IN** switch on the right. The separate canvas unit switch is desktop-only. `MobileHeader` contains the same unit switch when the bottom sheet is not open.
-
-### Inscription editor layout
-
-Primary file: `components/InscriptionEditPanel.tsx`.
-
-- Do not render inscription chips at the top of the editor; they consume scarce sheet height and duplicate selection context.
-- The redundant **Inscription Text** label is removed. The textarea is followed immediately by **`+ Add Inscription`**.
-- The alignment row has no redundant **Align** label. Left, Center, and Right occupy the left portion; while the textarea is focused, **Done** appears on the right in the same row and calls `blur()` to dismiss the virtual keyboard without moving the content below it.
-- **`+ Add Inscription`** is a full-width gold primary action.
-- Inscription Size offers selectable `1/8 in`, `1/4 in`, and `1/2 in` increments in imperial mode (`1 mm`, `5 mm`, and `10 mm` in metric). The selected increment drives minus, plus, and the range input; stored values remain millimetres.
-
-### Motif and image units
-
-Primary files: `components/DesignerNav.tsx` and `components/ImageSelector.tsx`.
-
-- Motif Height respects the active unit system in the selected-item summary, editable value, unit suffix, slider bounds, and controls. Imperial values use nearest-eighth formatting and selectable `1/8 in`, `1/4 in`, and `1/2 in` increments; metric uses `1 mm`, `5 mm`, and `10 mm`.
-- Image fixed-size options and selected-image dimensions use fractional inches in imperial mode. Flexible image height, slider bounds, and position nudge labels also follow the active unit system. The store continues to use millimetres and `mm-center` coordinates internally.
-
-### Mobile Check Price quote
-
-Primary file: `components/CheckPricePanel.tsx`. Related but independent output files: `lib/pdf-generator.ts`, `lib/design-quote.ts`, and `lib/email/templates/components/QuoteTable.tsx`.
-
-- On mobile, do not squeeze Product, Qty, Price, and Item Total into four columns. Each quote item uses the legacy-inspired stacked layout: a full-width Product/details block followed by separate labelled Qty, Price, and Item Total rows. Monetary values use `whitespace-nowrap`, and Item Total receives the gold emphasis.
-- Desktop retains the four-column table. The responsive modal markup is screen-only; PDF generation and React Email use separate renderers and were deliberately not changed. Keep the information order consistent across all three outputs even when their layouts differ.
-
-### Verification
-
-```bash
-pnpm exec eslint components/AdditionSelector.tsx components/CheckPricePanel.tsx components/ConditionalNav.tsx components/DesignerNav.tsx components/ImageSelector.tsx components/InscriptionEditPanel.tsx components/MobileHeader.tsx components/ThreeScene.tsx components/three/AutoFit.tsx components/three/FullMonumentFit.tsx lib/mobile-nav-store.ts
-git diff --check
-```
-
-The targeted ESLint runs have no errors; existing warnings in the legacy designer components are unrelated. `screen.png` remains the user-provided visual reference and must not be overwritten.
-
----
-
-## Current Status (2026-08-28) — 3D Meadow Scene, Grounding, and Selection Polish
-
-### Interaction and selection
-
-Primary file: `components/three/Scene.tsx`.
-
-- Clicking scenery now clears the selected headstone/base and editable-element selections. The same handler is attached to the invisible ground hit-plane, the textured ground group, and the sky/cloud group, so clicks on grass, sky, or clouds behave consistently.
-- The handler ignores drag gestures (`delta > 4`) so rotating or panning with `OrbitControls` does not deselect an object.
-
-### Product grounding and granite consistency
-
-Primary files: `components/three/Scene.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, `components/SvgHeadstone.tsx`, and `lib/granite-material.ts`.
-
-- Standalone Headstones that have a Base use the same visible concrete pad and soft contact-shadow approach as Full Monuments. The pad extends `80 mm` around the Base and is intentionally absent for products without a granite base.
-- Granite maps now influence bump and roughness response on the upright and Base. Detail-map clones use `NoColorSpace`; do not reuse the sRGB albedo texture directly as a linear detail map.
-- Base texture repeats are clamped to at least one full tile on every axis. This is important for low bases: a repeat below `1` used to stretch one dark strip of a granite swatch across the entire front face.
-- Base and upright front faces use the same restrained emissive fill (`0.055`) and bump response (`0.16`) for polished granite. Keep this parity when changing either material; top faces may still appear naturally lighter because of their orientation.
-
-### Meadow environment
-
-Primary files: `components/three/Scene.tsx`, `components/three/AtmosphericSky.tsx`, `components/three/SunRays.tsx`, and `components/ThreeScene.tsx`.
-
-- Meadow grass is less saturated and has lower normal-map strength. Its material applies broad world-space colour variation in `onBeforeCompile`, keeping the scene to one ground material/draw call while reducing visible texture tiling.
-- `MeadowHorizon` is a single instanced mesh of low, irregular shrub silhouettes. It exists solely to break the straight grass/sky boundary; keep it subtle, dark, wide, and low. Do not restore the earlier cone-shaped tree silhouettes.
-- Meadow clouds use a muted off-white and lower opacity. The central cloud is weaker and further away so inscriptions and the headstone retain a quiet background.
-- SunRays remain a Forever Shining brand cue. They are intentionally warm gold-white, but now use lower opacity, fewer/broader rays, and a source offset toward the upper-right. Do not remove them merely as scenery noise.
-- The main 3D canvas deliberately has no CSS `filter`. Global contrast/saturation/brightness adjustment made material comparisons unreliable because it altered the rendered image rather than a single material.
-
-### Selection outline
-
-Primary files: `components/three/RotatingBoxOutline.tsx` and `components/three/headstone/HeadstoneAssembly.tsx`.
-
-- `RotatingBoxOutline` accepts an `opacity` prop. Headstone and Base outlines use shorter arms, smaller padding, muted off-white, and `opacity={0.76}`.
-- Those outlines use `frontFacingOnly`, which hides projected rear corners that previously appeared detached above the top edge in perspective.
-
-### Verification and visual acceptance
-
-```bash
-pnpm exec tsc --noEmit
-pnpm exec eslint components/ThreeScene.tsx components/three/AtmosphericSky.tsx components/three/RotatingBoxOutline.tsx components/three/Scene.tsx components/three/SunRays.tsx components/three/headstone/HeadstoneAssembly.tsx components/three/headstone/HeadstoneBaseAuto.tsx components/SvgHeadstone.tsx lib/granite-material.ts
-git diff --check
-```
-
-The TypeScript and diff checks pass. Targeted ESLint runs have only pre-existing warnings in legacy components. `screen.png` is user-provided visual acceptance evidence and must not be overwritten during testing.
-
-### Related public-page and product-flow decisions (2026-08-28)
-
-- In `app/memorials/[type]/page.tsx`, each product image links to the same `productDesignerUrl(product.id)` destination as that card's **Design Your Own** CTA. Keep the image link and CTA destination aligned.
-- Urns do not receive the standalone Headstone concrete foundation. `hasStandaloneHeadstoneFoundation` in `components/three/Scene.tsx` must continue to exclude urn products; their compact contact shadow remains sufficient.
-- In the standard shape picker, the desktop card CTA and the mobile sticky CTA both use the label **Continue**, matching the urn flow. Urn cards retain their existing direct, whole-card selection action and visual CTA treatment.
-
----
-
-## Current Status (2026-08-29) — Granite Colour-Space and Preview Brightness Alignment
-
-### Same granite must render the same on the upright and Base
-
-Primary files: `components/SvgHeadstone.tsx`, `components/three/headstone/HeadstoneBaseAuto.tsx`, and `lib/granite-material.ts`.
-
-- Granite colour/albedo maps on both `SvgHeadstone` and `HeadstoneBaseAuto` must use `THREE.SRGBColorSpace`. The matching cloned detail maps used for bump and roughness must use `THREE.NoColorSpace`. Treating the upright albedo clone as linear made the exact same swatch appear brighter and less saturated than on the Base.
-- `POLISHED_GRANITE_TINT` is the shared neutral (`0xffffff`) material multiplier. Do not restore the previous grey tint (`0xa6a6a6`): it darkened both correctly decoded granite maps well below the selector thumbnail, notably Blue Pearl.
-- The selector thumbnail is the visual brightness reference for the raw granite swatch. Verify a large front-facing Headstone and Base with the same selected material after changing colour space, tint, texture loading, or PBR maps.
-- Base and Headstone are lit by the same scene ambient, hemisphere, sun, rim, and HDRI lights. If their matching swatches diverge, inspect per-material texture colour space, tint, emissive settings, bump/roughness maps, and UV/repeat settings before adding object-specific lights.
-- The Base's front/back polished material matches the upright face for colour multiplier, roughness (`0.18`), environment intensity (`1.1`), clearcoat roughness (`0.08`), emissive intensity (`0.055`), and bump scale (`0.16`). Its top remains orientation-dependent and may catch a real specular highlight.
-
-### Verification
-
-```bash
-pnpm exec eslint components/SvgHeadstone.tsx components/three/headstone/HeadstoneBaseAuto.tsx lib/granite-material.ts
-git diff --check
-```
-
-Targeted ESLint has no errors; legacy warnings may remain. `screen.png` is user-provided visual acceptance evidence and must not be overwritten.
-
----
-
-## Current Status (2026-08-29) — Bronze Plaque Mobile Flow, Camera, and Fastenings
-
-### Guided flow and mobile wording
-
-Primary files: `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, and `app/select-material/_ui/MaterialSelectionGrid.tsx`.
-
-- Bronze Plaque (product ID `5`) setup order is **Select Border → Select Background → Select Size → Fastening Type**. `navigablePanelSlugs` derives this sequence from `menuItems`, so menu order and guided Previous/Next actions stay aligned.
-- For Bronze Plaque, Full Colour Plaque, and Urns, the material step is customer-facing **Select Background**. Bronze Plaque receives that label in the desktop menu, mobile sheet title, material grid, and guided CTA.
-- Guided action labels use direct destinations: **`Next: Select Background`**, not **`Next: Go to Select Background`**. Do not reintroduce the `Go to` prefix.
-- Slider interactions compact the rich Headstone/Base mobile size sheet while dragging and restore it on pointer release/cancel/blur. Plaques are deliberately excluded: their Width/Height switch and single active slider already fit in the complete sheet, so compacting it hides useful context without gaining space.
-
-### Plaque camera and top chip
-
-Primary files: `components/three/AutoFit.tsx` and `components/ThreeScene.tsx`.
-
-- Mobile plaques have a separate `AutoFit` composition. Do not classify them as tall Headstone/Base size targets: that former path used the tight `0.82` margin and made a wide plaque fill the viewport, obscuring the meadow. The accepted plaque margins are `1.08` with the normal sheet and `1.04` if the sheet is compact; vertical shifts are `0.44` and `0.20` radii.
-- Keep the automatic camera front-facing for every fastening option. Selecting rear lugs must not rotate the view; the user can inspect the rear manually with orbit controls.
-- `ProductNameHeader` labels plaque products **Plaque** in the top dimensions/price chip, rather than the generic default **Headstone**. Use the resolved product type, with product ID `5` as the loading fallback.
-
-### Bronze plaque fastening geometry
-
-Primary files: `components/three/headstone/PlaqueFixings.tsx` and `components/three/headstone/ShapeSwapper.tsx`.
-
-- `PlaqueFixings` is rendered only for Bronze Plaque and reads Zustand's `fixingType`: `flat-back` renders nothing, `screws` renders four flush metallic screw heads on the front, and `lugs-with-studs` renders four rear lugs with short studs.
-- The component is nested inside `SvgHeadstone`'s scaled child wrapper. `worldWidth`/`worldHeight` and physical hardware sizes (millimetres expressed as metres) must be converted with `unitsPerMeter`; the plaque extrusion `depth` is already in that wrapper's local coordinates and must **not** be multiplied by `unitsPerMeter`. Multiplying it placed rear hardware far behind the plaque.
-- The approved lug proportions are a `5 mm` lug depth, `3.5 mm` stud radius, and `12 mm` stud length. Screws are flush face discs with a shallow slot, not visible rods projecting from the plaque.
-
-### Verification
-
-```bash
-pnpm exec eslint components/ThreeScene.tsx components/three/AutoFit.tsx components/three/headstone/PlaqueFixings.tsx components/three/headstone/ShapeSwapper.tsx
-git diff --check
-```
-
-Targeted ESLint must have no errors. Existing warnings in the legacy `AutoFit`, `ThreeScene`, and `ShapeSwapper` code are pre-existing. `screen.png` is user-provided visual acceptance evidence and must never be overwritten.
-
----
-
-## Current Status (2026-08-31) — Designer Additions, Mini Headstones, and Theme Reliability
-
-### Product routes, Mini Headstones, and default granite
-
-Primary files: `lib/designer-product-routes.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/three/Scene.tsx`, and `lib/headstone-store.ts`.
-
-- Product ID `22` (**Laser Etched Black Granite Mini Headstone**) must retain its Mini Headstone route when selected; do not send it to the standard Headstone URL. Its shape picker intentionally exposes only the first 11 shapes, ending at **Square**.
-- Products `1` and `23` (**Stainless Steel Headstones**) follow the same 11-shape restriction: only the traditional shapes are visible and **Square** is last.
-- Mini Headstone keeps a compact concrete foundation. Use the smaller `0.04 m` pad margin in `Scene.tsx`; standard standalone headstones retain the `0.16 m` margin.
-- Products `8` (**Laser Etched Black Granite Pet Mini Headstone**) and `9` (**Laser Etched Black Granite Pet Plaque**) intentionally default to the same `Glory-Black-2.webp` texture as product `4` (**Laser Etched Black Granite Headstone**). Apply it through `headstoneMaterialUrl`; product 8 must also use it for its Base. This overrides the legacy XML `18.webp` texture only on product selection, without preventing later user material changes.
-
-### Additions: XML data, rendering, foundation, and duplication
-
-Primary files: `app/_internal/_additions-loader.ts`, `components/AdditionSelector.tsx`, `components/DesignerNav.tsx`, `components/three/AdditionModel.tsx`, `components/three/Scene.tsx`, and `lib/headstone-store.ts`.
-
-- Addition dimensions and retail prices must come from the parsed XML size variant. K2213 is `140 × 270 × 140 mm`, retail `$382.20`; K2254 is `145 × 240 × 145 mm`, retail `$423.80`.
-- K2254 has no committed `public/additions/2254/2254.glb` (only legacy 3DS/MAX assets). `AdditionModel` therefore resolves K2254 to the compatible K2213 GLB and texture as a temporary visual fallback, while preserving K2254's own XML dimensions and price. Do not restore the missing K2254 GLB URL or the R3F scene will throw a 404 and hit the error boundary. Replace the fallback once an exported K2254 GLB is supplied.
-- Addition cards and the **Selected Addition** summary both display `width × height × depth` using `formatDimensionTriplet(...)`, so the text follows the global MM/IN toggle. Keep stored values in millimetres.
-- A base-mounted vase or statue expands the granite Base by `30%` in width and `50%` in depth. The standalone concrete foundation and its contact shadow must use that same footprint and centre, otherwise the granite Base visibly overhangs the pad.
-- `duplicateAddition()` must treat `footprintWidth` as metres and translate the physical separation into the Base unit-cube local coordinate system. For a base-mounted item, move the copy to the free side of the Base; using raw `20`/`120` offsets sends the duplicate outside the scene.
-- The **Flower Pots** Base option is available only on ordinary `headstone` products, not Mini Headstones. It renders two lightweight procedural flower-pot inserts with black flower holes and selectable Black/Silver/Gold finish for all other insert surfaces. Flower Pots use exactly the same widened Base and concrete-foundation footprint as a base-mounted vase/statue: `+30%` width and `+50%` depth.
-- On `/select-product`, the selected-card CTA is **Continue**, matching the Shape-picker CTA; do not restore the longer `Continue with this product` label.
-
-### Motifs, images, selection, and day mode
-
-Primary files: `components/MotifSelectorPanel.tsx`, `components/SelectionBox.tsx`, `components/three/MotifModel.tsx`, `components/ImageSelector.tsx`, `components/three/ImageModel.tsx`, `components/DesignerNav.tsx`, and `styles/globals.css`.
-
-- The Motifs catalogue excludes **Flower Inserts**, **2 Colour Motifs**, and **1 Colour Motifs**. Its list button restores the last opened motif category. While thumbnails load, show both the existing loading text and a centred loading animation.
-- Australian Flora thumbnails and models require their original gold treatment and alpha-aware rendering. Do not tint transparent SVG bounds into opaque rectangles; the thumbnail and on-stone result must preserve transparent backgrounds.
-- Newly added motifs must become selected immediately and show a persistent outline. Selection rendering is demand-driven, so invalidate after selection changes; do not let the outline flicker out after one frame.
-- Image rotation controls are expressed in degrees in the UI and converted to radians only at storage/render boundaries. The image selection box lives inside the already-rotated parent group, so it must not receive the image rotation a second time.
-- In day mode, selected motif/addition CTA controls, fixed-size image controls, and the pulsing Next button need explicit contrast classes. The Position section for Images is mobile-only.
-- The home Hero (`app/_ui/HomeSplash.tsx`) is deliberately night-themed in both global theme modes. Keep its dark image overlay, white Hero copy, dark navigation controls, and dark mobile drawer; only the sections below it switch to day mode.
-
-### Camera fit after dimension changes
-
-Primary file: `components/three/AutoFit.tsx`.
-
-- The first automatic fit intentionally uses the en-face view. After that, changing either **Headstone** (`widthMm` / `heightMm`) or **Base** (`baseWidthMm` / `baseHeightMm` / `baseThickness`) dimensions must preserve the user's current OrbitControls azimuth and elevation. Recalculate the camera distance and target for the new bounds, but derive the next camera position from its current direction relative to the previous orbit target; do not snap back to en face.
-
-### Verification and evidence
-
-```bash
-pnpm exec eslint components/AdditionSelector.tsx components/DesignerNav.tsx components/three/AdditionModel.tsx components/three/Scene.tsx lib/headstone-store.ts
-git diff --check
-```
-
-Targeted lint checks currently have no errors; legacy warnings remain in some large designer/store components. `screen.png` is user-provided acceptance evidence: inspect it when asked, but never overwrite it.
-
----
-
-## Current Status (2026-09-01) — Home Refresh, Studio Designer Scenery, and Hydration Reliability
-
-### Homepage narrative and visual assets
-
-Primary file: `app/_ui/HomeSplash.tsx`. Related public assets: `public/screenshots/designer-3d-preview.webp` and `public/visuals/`.
-
-- The home Hero remains a dark, high-contrast introduction with the message **“You design it. We craft it.”** Its desktop header uses conventional product navigation, a compact search icon, and a single **Browse Designs** action. Do not restore the former slash-separated menu or the duplicate “Designed by you” strapline.
-- The dark section immediately below the Hero is a two-column proof point: compassionate copy, benefits, and the single gold **Start Designing in 3D** CTA on the left; a clickable, real Designer preview on the right. Do not add a second CTA or explanatory headline on top of the image.
-- The Designer preview is always sourced from `public/screenshots/designer-3d-preview.webp`. Optimise a newly approved `screen.png` to WebP before replacing this file. The preview needs its **Live 3D preview** badge in the upper-right, a rounded frame, `border-white/25`, and `ring-white/[0.1]` so its dark left tool panel does not blend into the dark section background.
-- The personalisation showcase below uses the three coherent studio assets in `public/visuals/`: `memorial-shape-studio.webp`, `memorial-photo-detail-studio.webp`, and `memorial-finishes-studio.webp`. They deliberately use a neutral, warm studio treatment; do not substitute inconsistent outdoor renders or technical CAD drawings for the material/finish card.
-- The final dark home CTA is assistance-led (**Contact us** primary, **Browse Designs** secondary), not another duplicate Designer launch.
-
-### Hero grounding and inscription contrast
-
-Primary files: `components/HeroCanvas.tsx` and `app/_ui/HomeSplash.tsx`.
-
-- The Hero memorial uses a soft contact/grounding shadow to prevent the granite Base from appearing to float over the meadow. Preserve the shadow when adjusting product positioning or camera framing.
-- Hero inscription rendering has a subtle dark edge/shadow treatment for legibility over light, speckled granite. This is visual support for the preview only; it should not reduce contrast or depth in the editable Designer inscription workflow.
-
-### Studio scenery in the live 3D Designer
-
-Primary files: `components/SceneryToggleButton.tsx`, `components/ThreeScene.tsx`, and `components/three/Scene.tsx`. Backdrop asset: `public/visuals/designer-studio-cyclorama.webp`.
-
-- The scenery selector presents six studio-oriented choices: **Gallery White**, **Soft Gray**, **Warm Stone**, **Slate Studio**, **Charcoal**, and **Midnight**. Their swatches use gradients, not flat colour chips, to communicate the intended photographic/studio mood.
-- **Slate Studio** (`#787878`, the fourth studio choice) is the default for a new Designer session. Existing saved scenery preferences in local storage intentionally continue to take precedence.
-- Studio mode is a real cyclorama image behind a transparent Canvas. Every studio choice uses a dedicated backdrop in `public/visuals/` — `designer-studio-cyclorama-{gallery-white,soft-gray,warm-stone,slate-studio,charcoal,midnight}.webp` — rather than a CSS colour overlay on a shared scene. Do not regress this to a CSS-only flat fill: each backdrop must retain its own visible floor, wall, texture, and lighting character.
-- In studio mode, `Scene.tsx` uses a contact shadow only. It intentionally omits the outdoor standalone-headstone concrete foundation, which otherwise becomes an oversized dark pad beneath the Base. The real granite Base remains visible and grounded. Outdoor meadow mode retains its concrete foundation.
-- `StudioScenery` in `Scene.tsx` is intentionally minimal; the CSS backdrop in `ThreeScene.tsx` provides the scenery image while Three.js supplies the product lighting and grounding shadow.
-
-### Unit-toggle hydration reliability
-
-Primary file: `lib/use-unit-system.ts`.
-
-- SSR and the initial client render must always start with the same default unit system: `imperial`. The saved MM/IN preference is read only after hydration in `useEffect`, then shared through the existing browser event.
-- Do not initialise React state from `document.cookie` during render. That caused an SSR/client mismatch where the server rendered **IN** while a client cookie rendered **MM**, triggering React hydration recovery. Persist preference changes to the cookie as before; only the initial read timing changed.
-
-### Material-preview feedback
-
-Primary file: `components/ThreeScene.tsx`.
-
-- On the product-prefixed or root **Select Material** step, a material change shows a compact, non-blocking **Loading material…** spinner in the centre of the canvas. It is driven by the existing `isMaterialChange` / scene-loading state and does not obscure or disable the surrounding Designer controls.
-- Keep this distinct from the general scene loader used for initial model/shape changes: texture preview feedback belongs inside the canvas only while the Material step is active.
-
-### Modern headstone SVG face textures
-
-Primary file: `components/SvgHeadstone.tsx`.
-
-- **Open issue — not resolved as of 2026-09-01:** all modern SVG Headstone forms after **Square** still show severe, triangle-like striped/faceted artefacts on their front and back faces. The left and right extrusion sides render correctly. User evidence includes `headstone_2`, `headstone_18`, and the Heart / **Headstone 22** screen captures. Do not present the current implementation as a completed texture fix.
-- The catalogue SVGs often contain a filled silhouette plus a `fill="none"` outline, including paths resolved through `<use>`. The current code excludes explicitly stroke-only paths, selects the largest filled shape, and retains explicit holes only. This was a reasonable experiment to prevent duplicate cap geometry, but it did **not** remove the user-visible artefacts. Re-evaluate it against the actual parsed `SVGLoader` paths rather than assuming all secondary shapes are disposable.
-- Current experiments also bake cap repeats into UVs, keep face/back texture-map repeats at `repeat(1, 1)`, and apply `applyPlanarCapProjection(...)` for local X/Y cap coordinates. These changes likewise did not remove the artefact in the browser. Treat them as diagnostic code, not a verified solution; simplify or replace them once the actual geometry/material cause is proven.
-- A further experiment assigns exact `+Z`/`-Z` normals to cap vertices after conversion to non-indexed geometry, because disconnected triangles otherwise receive separate normals under studio lights. It is guarded by `GEOMETRY_BUILD_VERSION` so Fast Refresh rebuilds the mesh. This also did **not** resolve the reported visual issue, so the next investigation must inspect the raw loaded shapes, material groups, and any overlapping cap geometry.
-- **Heart consistency:** the selected **Headstone 22** thumbnail uses `headstone_27.svg`, and the Designer resolves the Heart shape to that same SVG. The canvas was nevertheless reported as visually different. Verify the parsed geometry against that exact source asset before changing the thumbnail or adding a separate Heart model.
-
-### Verification
-
-```bash
-pnpm exec eslint app/_ui/HomeSplash.tsx
-git diff --check
-```
-
-The HomeSplash lint check and diff check pass. In restricted Windows sandboxes, `pnpm` may require elevated execution because it resolves `C:\\Users\\polcr`; this is an environment permission issue, not a project error. `screen.png` remains user-provided acceptance evidence and must never be overwritten.
-
----
-
-## Current Status (2026-09-02) — Headstone Cap and Wall Rendering Resolved
-
-Primary file: `components/SvgHeadstone.tsx`.
-
-- User evidence in `screen.png` shows **Headstone 1** with severe diagonal/triangular granite bands across the front face. This is a texture-coordinate/material-region defect, not merely studio lighting or a normal-map issue. The extrusion sides themselves were rendering as expected.
-- The prior `z`-tolerance heuristic classified every triangle independently from its post-transform coordinates. On complex extruded SVG outlines, that could classify portions of a front/back cap as the continuous perimeter wall. The wall material uses perimeter UVs, which produced the conspicuous diagonal bands on a nominally planar face.
-- Preserving `ExtrudeGeometry` groups with `mergeGeometries(geoms, true)` was not sufficient. User evidence proved that some textured extrusion-wall triangles were still copied into the derived cap geometry and overlapped the replacement wall.
-- Cap extraction accepts only triangles whose three vertices lie on an actual outer cap plane, with an epsilon of `depth * 1e-6`. Wall and bevel triangles are excluded even if their source group claims they belong to a cap. The same strict classification drives cap material groups, normals, and UVs. For non-bevelled classic forms these planes are effectively `+depth/2` and `-depth/2`; bevelled modern forms must use the transformed geometry's `boundingBox.max.z` and `boundingBox.min.z`.
-- The side UV depth calculation uses `zBack` and `zFront` derived from the final geometry bounding box. This was restored after the first change briefly caused `ReferenceError: zBack is not defined` at runtime.
-- Follow-up evidence showed that classic shapes (except Cropped Peak) could still split their **side and top-edge** granite into triangular bands. This was not fixed by a more exhaustive perimeter projection or by smoothing the side normals. A local X/Y-only wall projection was also rejected: wall vertices at the front and back have identical X/Y values, creating degenerate UV triangles and temporal mip-map noise while orbiting. The extrusion wall is removed after cap extraction and replaced by one indexed wall mesh built from the outline, with a single continuous contour/depth UV layout and shared normals. Its index order is selected from the transformed contour's signed area because SVG assets do not all share the same winding; assuming one order made the wall inward-facing and invisible under back-face culling. A temporary dark untextured wall proved that replacement geometry was visible, but also made every upright Headstone lose the selected side texture. The isolated wall now receives the selected granite colour map again, while bump and roughness detail maps stay disabled on that narrow surface to avoid reintroducing temporal orbit noise. Slant headstones retain their separate geometry path. Side-material revision is `3`.
-- Do not revert to cap classification based only on a nominal Z value or restore the original extrusion-wall triangles alongside the replacement wall. Those approaches caused missing caps, overlapping geometry, triangular texture bands, or temporal orbit noise.
-- **Headstone 2 missing-cap diagnosis (2026-09-02):** modern forms enable `ExtrudeGeometry` bevels. Their outer front/back cap planes therefore lie at the transformed geometry's actual Z extrema, not at the nominal `+depth/2` and `-depth/2`. The strict classifier was consequently rejecting every cap triangle while the replacement perimeter wall remained visible as a hollow ribbon. Cap extraction, wall depth, and the child/decal wrapper now use `boundingBox.max.z` / `boundingBox.min.z` measured after transformation. Geometry build version is `11`. Classic non-bevelled forms keep the same effective planes.
-- **Acceptance:** the user visually confirmed the final result as correct after the bounding-box cap-plane correction. Headstone 2 regained both front and back faces, while classic Headstones retained correctly textured side walls. Treat the geometry/material issue as resolved unless new evidence shows a regression on another specific SVG.
-
-### Verification
-
-```bash
-pnpm type-check
-git diff --check
-```
-
-TypeScript and diff checks pass. Existing ESLint warnings in `SvgHeadstone.tsx` pre-date this change; the two unused-variable warnings introduced during the correction were removed. `screen.png` remains user-provided evidence and must never be overwritten.
-
----
-
-## Current Status (2026-09-07) — Military and First Responders Shape Catalogues
-
-Primary implementation files are `app/_internal/_data.ts`, `app/select-shape/_ui/ShapeSelectionGrid.tsx`, `components/ShapeSelector.tsx`, `components/three/headstone/ShapeSwapper.tsx`, and `components/SvgHeadstone.tsx`. Source assets are in `public/shapes/headstones/military/` and `public/shapes/headstones/first-responders/`.
-
-- The general Headstone catalogue has four visible categories: Traditional, Modern, Military, and First Responders. Both new categories appear on the full Select Shape page and in the Designer's repeat-selection panel. Traditional-only products still expose only their permitted shapes.
-- Military has ten enabled shapes: Pentagon, Naval Ship, Tank, Boot, Guard, Communications Soldier, Paratrooper, Pledge Soldier, Soldier, and Saluting Soldier (catalogue IDs 56–65).
-- First Responders has six enabled shapes: Fire Engine (`firefighters.svg`, ID 66), Firefighter (`firemen.svg`, ID 72), Flame (`fire.svg`, ID 73), First Aid Kit (`first-aid-kit.svg`, ID 74), Helmet (`helmet.svg`, ID 75), and Doctor (`medical-doctor-profession-specialist-medic.svg`, ID 76). The folder contains 15 source assets; the remaining nine require individual validation before enablement.
-- All enabled pictorial Military and First Responder assets are fixed shapes in `ShapeSwapper`. They do not use `preserveTop`, preventing a rectangular band being added beneath the original silhouette. Detailed pictograms also skip the broad bevel so their front caps stay aligned with the contour.
-- The optional `sandblastedBorders: true` field on a shape definition controls its front-facing SVG engraving layer; omission disables it. `ShapeSwapper` resolves the selected catalogue shape from its SVG URL, so no separate list of engraving slugs is maintained. The original solid stone remains intact and source vector paths supply only the front detail.
-- For Traditional Engraved products, `ShapeSwapper` reads the inscription addition's parsed `minHeight` from the active product catalogue and passes it to `SvgHeadstone` as `engravingStrokeWidthMm`. `SvgHeadstone` converts that millimetre value to the current SVG/world scale and uses `SVGLoader.pointsToStroke` to create a flat, painted contour with a physical width. The current Traditional Engraved inscription configuration is `min_height="10"`, so its sandblasted contour is 10 mm wide. Do not hard-code 10 mm: another product may define a different minimum. Laser Etched products leave this width unset and retain fine line detail.
-- `SvgHeadstone` supports genuine multi-part SVG artwork. The largest filled path forms the editable face; filled paths from other SVG elements are preserved as complete stone pieces. Nested subpaths stay as holes or relief detail, rather than becoming detached solids. Parts are normalized against common bounds for stable scale and ground contact.
-- Each enabled asset was checked with `SVGLoader` and extrusion for finite geometry, then selected through its catalogue category into the 3D Designer using Playwright. TypeScript and `git diff --check` pass. `ShapeSwapper.tsx` continues to have 14 pre-existing ESLint warnings.
-- When enabling another asset, retain filled paths and intended holes, add its catalogue entry and fixed-shape handling, then verify the SVG parser, 3D ground contact, and the category-to-Designer flow.
-
-The Doctor source originally kept its head, medical cross, and body as disconnected subpaths in one SVG `<path>`. It is intentionally split into three filled SVG elements so `SvgHeadstone` preserves every genuine part while retaining the head's opening and the body collar as holes.
-
-### Military implementation notes
-
-- The Headstone catalogue now has a `military` category alongside `traditional` and `modern`. It is available in both the full Select Shape page and the repeat-selection panel in the Designer's left column.
-- **Military Pentagon** is the first enabled design. Its catalogue image is `military/pentagon.svg`, which resolves to `/shapes/headstones/military/pentagon.svg` for both its preview and `SvgHeadstone` geometry.
-- The enabled designs are **Military Pentagon** (`military/pentagon.svg`), **Military Naval Ship** (`military/ferry.svg`), **Military Tank** (`military/war-tank.svg`), **Military Boot** (`military/military-boot.svg`), **Military Guard** (`military/palace-guards-with-machine-gun-variant.svg`), **Military Communications Soldier** (`military/communications-soldier.svg`), and **Military Paratrooper** (`military/paratrooper.svg`).
-- `SvgHeadstone` now supports a pictogram composed of multiple filled SVG paths. The largest path remains the editable face outline; filled paths from separate SVG elements are emitted as additional complete stone pieces, each with front, back, and indexed perimeter walls. Nested subpaths belonging to that same SVG element are not promoted to detached pieces, preventing decorative cut-outs from becoming stray solids.
-- Component placement, scale, and ground alignment are derived from the shared bounds of every filled SVG part. This is essential for Paratrooper: its body extends below the canopy's bounds, so using the canopy alone placed the body below the base and broke its apparent side walls.
-- Wide pictorial silhouettes must be fixed-shape assets in `ShapeSwapper`. This prevents `preserveTop` from adding a rectangular band below the original outline. Naval Ship, Tank, Boot, Guard, Communications Soldier, and Paratrooper are all in the fixed set. Tank, Boot, Guard, Communications Soldier, and Paratrooper also skip the broad bevel: their detailed contours otherwise make the front cap look offset from the outer walls. Pentagon retains the normal bevel path.
-- For future assets, use filled SVG paths only. Separate paths are supported when they are genuine, detached pieces of one memorial; nested contour detail and intentional voids must remain in their original parent path. Verify a complex shape in the 3D Designer before enabling it.
-- Products already restricted to traditional-only shapes retain that restriction on the full selection page. Military is an additive category for products that support the general Headstone catalogue.
-- Before enabling more Military entries, check that the combined silhouette has a stable ground line and enough usable front area for inscriptions. Prefer a single connected outline where possible; use separate filled paths only for intentional detached structural pieces.
-
----
-
-## Current Status (2026-09-02) — Guitar 1 SVG Union Validation
-
-Primary asset: `public/shapes/headstones/headstone_3.svg` (catalogue name: **Guitar 1**).
-
-- Guitar 1 was initially authored as two independent filled silhouettes: the guitar and a plaque with a guitar-shaped recess. `SvgHeadstone` intentionally selects the largest filled `Shape` as its structural outline, so the original asset rendered the recess but omitted the guitar.
-- One XML `<path>` element is **not** sufficient validation. A `d` attribute can contain several `M…Z` subpaths; `SVGLoader.createShapes()` still returns one `Shape` for each disconnected positive contour. Groups and compound-path wrappers likewise do not turn disconnected geometry into a single solid for extrusion.
-- The accepted source now parses as exactly one SVG path and **one** Three.js `Shape`, with no holes: `{ paths: 1, shapes: 1, holes: [0] }`. Its viewBox is `0 0 387.65 398.06` and it has no stroke. Guitar and plaque are therefore one closed, connected solid suitable for the current cap/wall pipeline.
-- Illustrator procedure for comparable assets: ensure the decorative silhouette physically overlaps the plaque by a small amount, use **Pathfinder → Unite**, then **Expand**. Export as a filled SVG with no stroke, clipping/masks, or merely grouped paths. Verify using the parser before marking the asset ready.
-- Guitar 2–5 were identified as similarly multi-part source assets. Audit each individually before enabling an equivalent union; do not weaken the general “largest structural shape only” rule, as it prevents overlapping cap geometry and texture artefacts in the wider catalogue.
-
----
-
-## Current Status (2026-09-08) — Mobile Designer Day Mode and Size Sheet Polish
-
-Primary files: `components/DesignerNav.tsx`, `components/ConditionalNav.tsx`, `components/MobileHeader.tsx`, and `styles/globals.css`. The reference palette is the final personalisation section of `app/_ui/HomeSplash.tsx`.
-
-### Day mode
-
-- `ThemeProvider` persists the `fs_ui_theme` preference and applies `data-theme="day"` to `<html>`. The Tailwind `day:` variant therefore also applies to portal content rendered under `document.body`; do not depend on inheritance from the Designer drawer.
-- Day mode uses the Home personalisation palette: warm paper `#f4f1eb`, ink `#1d1a17`, muted copy `#625a51`, warm borders around `#ddd2c2`, and restrained gold accents. `styles/globals.css` sets the day-mode body background to `#f4f1eb`.
-- The mobile step header, standard `MobileHeader`, persistent Previous/Next portal, collapsed sheet, and mobile hamburger all need explicit `day:` classes because they sit outside, or above, the normal Designer content tree.
-- The selected size-panel option style (`styleTabClass`) has an explicit day active state: gold `#dfb858` with `#1d1a17` text. This covers Base options such as **Polished**, **Flower Pots**, and the selected lid finish; legends such as **Base option** and **Lid finish** use the muted day copy colour.
-
-### Mobile Select Size sheet
-
-- `ConditionalNav` owns the sheet geometry. Normal editing sheets use `44dvh`; a generic collapsed bottom sheet uses `52px`; the compact size-slider sheet is a fixed `h-40 max-h-40`. Do not restore its prior `26dvh` height: it left a conspicuous empty area below the single slider on taller phones.
-- `isSizeAdjustmentCompact` is the sole source of truth for the compact slider mode. It hides the persistent Previous/Next portal and leaves one active dimension card plus an expand handle. When it is false, the navigation portal is visible.
-- In `DesignerNav`, scrollable full-screen panel content reserves `calc(4rem + env(safe-area-inset-bottom))` on mobile whenever the persistent navigation is present, and only `pb-3` in compact mode. This keeps the final slider/option interactive above Previous/Next without creating an oversized blank gap. Desktop resets this padding to `pb-4`.
-- The compact and collapsed sheet shells themselves also carry day-mode background, border, handle, and label styles. Do not style only `DesignerNav`: compact/collapsed modes can bypass its visible header/content.
-
-### Verification
-
-```bash
-git diff --check
-```
-
-Use the user-supplied `screen.png` for visual acceptance and do not overwrite it while verifying changes.
-
----
-
-## Current Status (2026-09-09) — GSC Audit and Design Gallery SEO
-
-### Evidence and scope
-
-The current `gsc/` CSV export covers June 7–September 6, 2026, with search type Web. `Strony.csv` contains exactly 1,000 URL rows and is not a complete inventory or an indexing report. Its page aggregates differ from the property-level daily totals; do not combine them or treat these figures as proof of a before/after improvement.
-
-| URL group | Rows | Clicks | Impressions |
-| --- | ---: | ---: | ---: |
-| `/designs` | 1 | 4 | 97 |
-| Product collections | 4 | 1 | 21 |
-| Theme categories | 68 | 17 | 619 |
-| Individual designs | 910 | 94 | 5,286 |
-| Design guides | 2 | 0 | 14 |
-| Other pages | 15 | 29 | 1,778 |
-
-The gallery accounts for 116 of 145 page-attributed clicks in this export. `Wykres.csv` totals 139 clicks and 6,758 impressions across 92 days. Of the 910 individual design rows, 837 have no clicks; this alone does not justify deletion or `noindex`. Visible queries include flower engraving, butterflies, horses, and doves. Query and page exports are separate aggregates, not query-to-URL attribution.
-
-At audit time, the local catalog contained 3,114 designs, of which 2,967 passed `getSeoReadyDesigns()`. These formed 210 product/category collections; 102 were below the default five-design threshold. Before the title changes, 1,724 eligible headstones shared only 360 shape/category combinations. These are catalog snapshots, not indexed-page counts.
-
-### Implemented behavior
-
-- `app/designs/[productType]/[category]/[slug]/page.tsx`: title and H1 now include the simplified product technology, cleaned shape, and a descriptive slug phrase, falling back to motifs or category. Trailing numeric duplicate suffixes are removed from the title detail. Generic shape identifiers are cleaned consistently in metadata and page content, and shape-prefix matching normalizes underscores as well as spaces. Similar variants can still share titles; this is not a guarantee of uniqueness.
-- Descriptions now put the design title and motif information before general personalisation copy. Slug labels are described as layouts rather than asserted to be literal inscriptions. Meta descriptions still truncate at 160 characters, so long labels can still be cut off.
-- `lib/design-seo.ts`: `isIndexableCategoryDesignSet()` rejects empty or non-curated product collections, then accepts either at least five designs or an explicit `SEARCH_VALIDATED_CATEGORIES` exception. Call it with one product/category group. The exception list records 11 eligible category paths with clicks in this GSC export; it is maintained in code, not loaded dynamically from CSV. Retired `legacy-*` products were not re-enabled.
-- A concrete exception is `stainless-steel-plaque/teacher-memorial`: one local design, but 3 clicks, 108 impressions, and position 8.06 in the export. Do not restore blanket `noindex` solely because this collection has fewer than five designs.
-- Category metadata, product collection cards, and `app/sitemap.ts` use the shared category predicate. Sitemap generation no longer independently compares counts to five.
-- `components/ServerDesignsTreeNav.tsx` now uses `getSeoReadyDesigns()` instead of all saved designs, avoiding navigation into excluded product buckets. It intentionally retains eligible small category links even when those categories remain `noindex`, so their designs remain browsable. Navigation and sitemap therefore share the eligible design catalog, not an identical set of category URLs.
-- `/designs` popular-theme cards link to the largest product collection for each theme and display that destination's actual design count and product label instead of an aggregate count spanning several destinations.
-- Category guidance was expanded for butterflies, flowers, doves, and pets, and added for teacher memorials. The category count label now says “design templates to personalise” instead of “crawlable design templates”.
-
-### Preserved architecture and remaining checks
-
-Keep the existing `/designs/[productType]/[category]/[slug]` URL structure, self-referencing design canonicals, and permanent redirects for mismatched design paths. Canonical gallery/category content and links render on the server; search results with `?q=` remain `noindex`. Category grids expose all their eligible design links without requiring search interaction. Detail pages continue to use on-demand rendering with 24-hour ISR.
-
-`getSeoReadyDesigns()` checks the curated product set and full-size regenerated screenshot IDs; its existing fallback permits all curated designs when the screenshot ID set is empty. The detail-page robots rule still checks product eligibility rather than screenshot eligibility. Neither behavior was changed in this pass.
-
-The changes were made locally; no production deployment or production HTML parity was verified in this session. After deployment, check representative titles, canonical tags, and robots directives, especially the teacher category, and compare later GSC periods. Obtain URL inspection/indexing data and query-by-page data before proposing consolidation or mass removal. Do not infer measured ranking gains from these code changes.
-
-### Verification
-
-- `pnpm type-check` passed for the implementation.
-- Targeted ESLint passed for the six changed implementation files; `git diff --check` passed.
-- `pnpm test -- tests/unit/design-seo.test.ts` passed all three tests: the teacher exception, rejection of empty/retired collections, and sitemap parity with category indexing policy plus inclusion of eligible design URLs.
-- Tests required an approved run outside the sandbox after pnpm hit an `EPERM` reading the user path. No production build or browser validation was run for this SEO pass.
-- Existing user changes under `gsc/`, including replaced/deleted export files, were preserved.
